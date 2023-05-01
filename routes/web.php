@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -9,6 +11,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SalaryAdjustmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkingHourController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +25,13 @@ use App\Http\Controllers\WorkingHourController;
 */
 
 
+Auth::routes();
+
+// Guest-only routes
+Route::group(['middleware' => 'guest'], function () {
+    // Route::get('/', 'Auth\RegisterController@showRegistrationForm');
+    Route::get('/', [LoginController::class, "showLoginForm"]);
+});
 
 Route::prefix("dashboard")->name("dashboard.")->group(function () {
     Route::get('', [DashboardController::class, "index"])->name("index");
@@ -42,6 +52,7 @@ Route::prefix("setting")->name("setting.")->group(function () {
     });
     Route::prefix('role-permission/{roleId}')->name("rolePermission.")->group(function () {
         Route::get('', [RolePermissionController::class, "index"])->name("index");
+        Route::get('show', [RolePermissionController::class, "show"])->name("show");
     });
     Route::prefix('permission')->name("permission.")->group(function () {
         Route::get('', [PermissionController::class, "index"])->name("index");
@@ -51,3 +62,10 @@ Route::prefix("setting")->name("setting.")->group(function () {
         });
     });
 });
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

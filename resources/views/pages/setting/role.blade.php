@@ -34,7 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th></th>
+                                <th width="10"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,12 +65,11 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            _findData();
-            _send();
+            send();
         });
 
         function onCreate() {
-            _clearForm();
+            clearForm();
             $("#titleForm").html("Tambah Grup Pengguna");
             $("#formModal").modal("show");
         }
@@ -79,11 +78,7 @@
             $("#formDetailModal").modal("show");
         }
 
-        function _findData() {
-            console.info("find data permission");
-        }
-
-        function _send() {
+        function send() {
             $("#form").submit(function(e) {
                 e.preventDefault();
                 let fd = new FormData(this);
@@ -92,7 +87,7 @@
             });
         }
 
-        function _clearForm() {
+        function clearForm() {
             //
         }
     </script>

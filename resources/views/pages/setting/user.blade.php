@@ -72,17 +72,17 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            _setupSelect();
-            _send();
+            setupSelect();
+            send();
         });
 
         function onCreate() {
-            _clearForm();
+            clearForm();
             $("#titleForm").html("Tambah Pengguna");
             $("#formModal").modal("show");
         }
 
-        function _send() {
+        function send() {
             $("#form").submit(function(e) {
                 e.preventDefault();
                 let fd = new FormData(this);
@@ -91,7 +91,7 @@
             });
         }
 
-        function _setupSelect() {
+        function setupSelect() {
             let choices = document.querySelectorAll(".choices")
             let initChoice
             for (let i = 0; i < choices.length; i++) {
@@ -109,7 +109,7 @@
 
         }
 
-        function _clearForm() {
+        function clearForm() {
             //
         }
     </script>

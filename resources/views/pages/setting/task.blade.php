@@ -67,16 +67,16 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            _send();
+            send();
         });
 
         function onCreate() {
-            _clearForm();
+            clearForm();
             $("#titleForm").html("Tambah Fitur");
             $("#formModal").modal("show");
         }
 
-        function _send() {
+        function send() {
             $("#form").submit(function(e) {
                 e.preventDefault();
                 let fd = new FormData(this);
@@ -85,7 +85,7 @@
             });
         }
 
-        function _clearForm() {
+        function clearForm() {
             //
         }
     </script>

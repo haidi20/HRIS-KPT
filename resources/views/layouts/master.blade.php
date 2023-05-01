@@ -44,7 +44,9 @@
             </footer> --}}
         </div>
     </div>
-    <script src="{{ asset('js/app.js') }}"></script>
+    @isset($vue)
+        <script src="{{ asset('js/app.js') }}"></script>
+    @endisset
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <script src="{{ asset('assets/compiled/js/app.js') }}"></script>

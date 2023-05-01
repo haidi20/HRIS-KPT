@@ -43,7 +43,6 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-
                 <li class="sidebar-item {{ isActive('dashboard') }} ">
                     <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
@@ -80,6 +79,17 @@
                         <i class="bi bi-grid-fill"></i>
                         <span>Hak Akses</span>
                     </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ route('logout') }}" class='sidebar-link'
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Keluar</span>
+                    </a>
+                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display:none">
+                        @csrf
+                        <button type="submit" class="">Logout</button>
+                    </form>
                 </li>
             </ul>
         </div>

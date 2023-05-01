@@ -12,7 +12,7 @@
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                            <li class="breadcrumb-item"><a href="{{ route('setting.role.index') }}">Grup Pengguna</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Hak Akses</li>
                         </ol>
                     </nav>
@@ -22,7 +22,11 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data Fitur
+                    Data
+                    <a href="{{ route('setting.permission.index') }}" class="btn btn-sm btn-success shadow-sm float-right"
+                        id="addData" data-toggle="modal">
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Hak Akses
+                    </a>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
@@ -71,7 +75,8 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            _send();
+            findData();
+            send();
         });
 
         function onEdit(id) {
@@ -80,7 +85,24 @@
             $("#formModal").modal("show");
         }
 
-        function _send() {
+        function findData() {
+            $.ajax({
+                url: "{{ route('setting.rolePermission.show', ['roleId' => $roleId]) }}",
+                method: 'GET',
+                data: {
+                    role_id: "{{ $roleId }}"
+                },
+                beforeSend: function() {
+                    // empty view
+                },
+                success: function(responses) {
+                    console.info(responses);
+                },
+                error: function(err) {}
+            });
+        }
+
+        function send() {
             $("#form").submit(function(e) {
                 e.preventDefault();
                 let fd = new FormData(this);
@@ -89,7 +111,7 @@
             });
         }
 
-        function _clearForm() {
+        function clearForm() {
             //
         }
     </script>
