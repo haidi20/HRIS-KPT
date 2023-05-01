@@ -3,7 +3,8 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html"><img src="./assets/compiled/svg/logo.svg" alt="Logo" srcset=""></a>
+                    {{-- <a href="index.html"><img src="./assets/compiled/svg/logo.svg" alt="Logo" srcset=""></a> --}}
+                    <h4>HRIS - KPT</h4>
                 </div>
                 {{-- <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -43,33 +44,33 @@
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
 
-                <li class="sidebar-item active ">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ isActive('dashboard') }} ">
+                    <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="sidebar-title has-sub">Pengaturan</li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ isActive('setting/salary-adjustment') }}">
                     <a href="{{ route('setting.salaryAdjustment.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Penyesuaian Gaji</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ isActive('setting/work-hour') }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Jam Kerja</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <li class="sidebar-item {{ isActive('setting/user') }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Pengguna</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ isActive('setting/permission') }}">
+                    <a href="{{ route('setting.permission.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Hak Akses</span>
                     </a>

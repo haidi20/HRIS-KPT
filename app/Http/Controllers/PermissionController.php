@@ -8,6 +8,6 @@ class PermissionController extends Controller
 {
     public function index()
     {
-        return "permission controller";
+        return view("pages.setting.permission");
     }
 }

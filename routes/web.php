@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SalaryAdjustmentController;
 use App\Http\Controllers\UserController;
@@ -18,8 +19,10 @@ use App\Http\Controllers\WorkingHourController;
 |
 */
 
-Route::get('/', function () {
-    return view('modules/dashboard/index');
+
+
+Route::prefix("dashboard")->name("dashboard.")->group(function () {
+    Route::get('', [DashboardController::class, "index"])->name("index");
 });
 
 Route::prefix("setting")->name("setting.")->group(function () {

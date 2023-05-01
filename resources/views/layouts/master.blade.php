@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     <div id="app">
         @include('layouts.sidebar')
         <div id="main">
@@ -43,7 +43,7 @@
             </footer> --}}
         </div>
     </div>
-    <script src="assets/compiled/js/app.js"></script>
+    <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('script')
