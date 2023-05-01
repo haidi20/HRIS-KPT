@@ -44,14 +44,36 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item active ">
-                    <a href="index.html" class='sidebar-link'>
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
-
-
                 </li>
-
+                <li class="sidebar-title has-sub">Pengaturan</li>
+                <li class="sidebar-item">
+                    <a href="{{ route('setting.salaryAdjustment.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Penyesuaian Gaji</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Jam Kerja</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Pengguna</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Hak Akses</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
