@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-
+use App\Models\Feature;
 use App\Models\Task;
 use Illuminate\Database\Seeder;
 
-class TaskSeeder extends Seeder
+class FeatureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class TaskSeeder extends Seeder
      */
     public function run()
     {
-        Task::insert([
+        Feature::insert([
             ["title" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
             ["title" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
             ["title" => "Pengguna", "description" => "Manajemen Data Pengguna"],

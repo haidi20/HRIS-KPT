@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SalaryAdjustmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkingHourController;
@@ -35,7 +37,17 @@ Route::prefix("setting")->name("setting.")->group(function () {
     Route::prefix('user')->name("user.")->group(function () {
         Route::get('', [UserController::class, "index"])->name("index");
     });
+    Route::prefix('role')->name("role.")->group(function () {
+        Route::get('', [RoleController::class, "index"])->name("index");
+    });
+    Route::prefix('role-permission/{roleId}')->name("rolePermission.")->group(function () {
+        Route::get('', [RolePermissionController::class, "index"])->name("index");
+    });
     Route::prefix('permission')->name("permission.")->group(function () {
         Route::get('', [PermissionController::class, "index"])->name("index");
+
+        Route::prefix("task")->name("task.")->group(function () {
+            Route::get('task/{featureId}', [PermissionController::class, "task"])->name("index");
+        });
     });
 });
