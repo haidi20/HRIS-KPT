@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.setting.partials.feature-modal')
+    @include('pages.setting.partials.role-modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -44,8 +44,9 @@
                                         {{ $role->name }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('setting.permission.rolePermission.index', ['roleId' => $role->id]) }}"
-                                            class="btn btn-sm btn-primary">Detail
+                                        <a href="{{ route('setting.rolePermission.index', ['roleId' => $role->id]) }}"
+                                            class="btn btn-sm btn-primary">
+                                            Detail
                                         </a>
                                     </td>
                                 </tr>
@@ -64,13 +65,22 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
+            _findData();
             _send();
         });
 
         function onCreate() {
             _clearForm();
-            $("#titleForm").html("Tambah Fitur");
+            $("#titleForm").html("Tambah Grup Pengguna");
             $("#formModal").modal("show");
+        }
+
+        function onDetail(id) {
+            $("#formDetailModal").modal("show");
+        }
+
+        function _findData() {
+            console.info("find data permission");
         }
 
         function _send() {

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+
+    @yield('style')
 </head>
 
 <body>

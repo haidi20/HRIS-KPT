@@ -13,13 +13,13 @@ class PermissionController extends Controller
     {
         $features = Feature::all();
 
-        return view("pages.setting.feature", compact("features"));
+        return view("pages.setting.permission", compact("features"));
     }
 
     public function task($featureId)
     {
         $permissions = Permission::where("task_id", $featureId)->get();
 
-        return view("pages.setting.permission", compact("permissions"));
+        return view("pages.setting.task", compact("permissions"));
     }
 }

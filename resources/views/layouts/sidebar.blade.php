@@ -57,16 +57,22 @@
                         <span>Penyesuaian Gaji</span>
                     </a>
                 </li>
-                <li class="sidebar-item {{ isActive('setting/work-hour') }}">
-                    <a href="#" class='sidebar-link'>
+                <li class="sidebar-item {{ isActive('setting/working-hour') }}">
+                    <a href="{{ route('setting.workingHour.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Jam Kerja</span>
                     </a>
                 </li>
                 <li class="sidebar-item {{ isActive('setting/user') }}">
-                    <a href="#" class='sidebar-link'>
+                    <a href="{{ route('setting.user.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Pengguna</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ isActive('setting/role') }}">
+                    <a href="{{ route('setting.role.index') }}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Grup Pengguna</span>
                     </a>
                 </li>
                 <li class="sidebar-item {{ isActive('setting/permission') }}">
