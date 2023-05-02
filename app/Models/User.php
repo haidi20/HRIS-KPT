@@ -53,7 +53,7 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'permission', "name_role",
+        'permission',
     ];
 
     public function role()

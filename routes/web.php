@@ -63,12 +63,12 @@ Route::prefix("setting")->name("setting.")->group(function () {
         Route::post('store', [RolePermissionController::class, "store"])->name("store");
     });
     Route::prefix('feature')->name("feature.")->group(function () {
-        Route::get('', [FeatureController::class, "feature"])->name("index");
+        Route::get('', [FeatureController::class, "index"])->name("index");
         Route::post('store', [FeatureController::class, "store"])->name("store");
         Route::delete('delete', [FeatureController::class, "destroy"])->name("delete");
     });
     Route::prefix("permission")->name("permission.")->group(function () {
-        Route::get('permission/{featureId}', [PermissionController::class, "permission"])->name("index");
+        Route::get('permission/{featureId}', [PermissionController::class, "index"])->name("index");
         Route::post('store', [PermissionController::class, "store"])->name("store");
         Route::delete('delete', [PermissionController::class, "destroy"])->name("delete");
     });

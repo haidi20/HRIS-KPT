@@ -85,7 +85,7 @@
         function onCreate() {
             clearForm();
             $("#titleForm").html("Tambah Hak Akses");
-            $("#formModal").modal("show");
+            onModalAction("formModal", "show");
         }
 
         function onEdit(data) {
@@ -96,7 +96,7 @@
             $("#description").val(data.description);
 
             $("#titleForm").html("Ubah Hak Akses");
-            $("#formModal").modal("show");
+            onModalAction("formModal", "show");
         }
 
         function onDelete(data) {

@@ -36,8 +36,11 @@ class UserController extends Controller
                 $message = "dikirim";
             }
 
+            if (request("password") != null) {
+                $user->password = bcrypt(request("password"));
+            }
+
             $user->name = request("name");
-            $user->password = bcrypt(request("password"));
             $user->email = request("email");
             $user->role_id = request("role_id");
             $user->save();

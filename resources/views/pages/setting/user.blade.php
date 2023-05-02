@@ -29,12 +29,12 @@
                             <i class="fas fa-plus fa-sm text-white-50"></i> Grup Pengguna
                         </a>
                     @endcan
-                    {{-- @can('tambah pengguna')
+                    @can('tambah pengguna')
                         <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
                             data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah User
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Pengguna
                         </button>
-                    @endcan --}}
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -61,13 +61,13 @@
                                     </td>
                                     <td class="flex flex-row justify-content-around ">
                                         @can('ubah pengguna')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $user->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $user }})"
                                                 class="btn btn-sm btn-primary">
                                                 Ubah
                                             </a>
                                         @endcan
                                         @can('hapus pengguna')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $user->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $user }})"
                                                 class="btn btn-sm btn-danger">
                                                 Hapus
                                             </a>
@@ -94,18 +94,22 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            setupSelect();
             send();
         });
 
         function onCreate() {
             clearForm();
             $("#titleForm").html("Tambah Pengguna");
-            $("#formModal").modal("show");
+            onModalAction("formModal", "show");
         }
 
-        function onEdit(id) {
-            console.info(id);
+        function onEdit(data) {
+            $("#name").val(data.name);
+            $("#email").val(data.email);
+            $("#role_id").val(data.role_id);
+
+            $("#titleForm").html("Ubah Pengguna");
+            onModalAction("formModal", "show");
         }
 
         function onDelete(id) {
@@ -122,25 +126,11 @@
         }
 
         function setupSelect() {
-            let choices = document.querySelectorAll(".choices")
-            let initChoice
-            for (let i = 0; i < choices.length; i++) {
-                if (choices[i].classList.contains("multiple-remove")) {
-                    initChoice = new Choices(choices[i], {
-                        delimiter: ",",
-                        editItems: true,
-                        maxItemCount: -1,
-                        removeItemButton: true,
-                    })
-                } else {
-                    initChoice = new Choices(choices[i])
-                }
-            }
-
+            $(".select2").select2();
         }
 
         function clearForm() {
-            //
+            setupSelect();
         }
     </script>
 @endsection

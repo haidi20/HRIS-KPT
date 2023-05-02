@@ -86,7 +86,7 @@
         function onCreate() {
             clearForm();
             $("#titleForm").html("Tambah Fitur");
-            $("#formModal").modal("show");
+            onModalAction("formModal", "show");
         }
 
         function onEdit(data) {
@@ -97,7 +97,7 @@
             $("#description").val(data.description);
 
             $("#titleForm").html("Ubah Fitur");
-            $("#formModal").modal("show");
+            onModalAction("formModal", "show");
         }
 
         function onDelete(data) {

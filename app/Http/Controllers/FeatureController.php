@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Permission;
 
 class FeatureController extends Controller
 {
-    public function feature()
+    public function index()
     {
         $features = Feature::all();
 

@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-    public function permission($featureId)
+    public function index($featureId)
     {
         $permissions = Permission::where("feature_id", $featureId)->get();
 

@@ -141,7 +141,7 @@
             });
 
             $("#titleForm").html(`Ubah Hak Akses - ${feature.name}`);
-            $("#formModal").modal("show");
+            onModalAction("formModal", "show");
         }
 
         function onChange(id) {
@@ -193,7 +193,7 @@
                             title: responses.message
                         });
 
-                        $("#formModal").modal("hide");
+                        onModalAction("formModal", "show");
                     }
                 },
                 error: function(err) {

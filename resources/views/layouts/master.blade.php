@@ -14,6 +14,7 @@
 
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link href="{{ asset('assets\vendors\select2\css\select2.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 
     @yield('style')
@@ -46,18 +47,31 @@
         </div>
     </div>
     @isset($vue)
-        <script src="{{ asset('js/app.js') }}"></script>
+        {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     @endisset
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets\vendors\select2\js\select2.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
-    <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
+    {{-- <script src="{{ asset('assets/compiled/js/app.js') }}"></script> --}}
     <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        function onModalAction(id, type) {
+            const myModal = new bootstrap.Modal(document.getElementById(id), {});
+
+            if (type == "show") {
+                myModal.show();
+            } else {
+                myModal.hide();
+            }
+        }
     </script>
 
     @yield('script')
