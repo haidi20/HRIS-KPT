@@ -20,13 +20,14 @@ class PermissionSeeder extends Seeder
         $features = Feature::all();
 
         foreach ($features as $index => $feature) {
-            $featureDescription = str_replace('-', ' ', $feature->name);
+            $name = strtolower($feature->name);
+            $featureDescription = str_replace('-', ' ', strtolower($feature->name));
 
             Permission::insert([
-                ["name" => "lihat {$feature->name}",  "description" => "lihat {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
-                ["name" => "tambah {$feature->name}", "description" => "tambah {$featureDescription}", "guard_name" => "web", "feature_id" => $feature->id],
-                ["name" => "edit {$feature->name}",   "description" => "edit {$featureDescription}",   "guard_name" => "web", "feature_id" => $feature->id],
-                ["name" => "hapus {$feature->name}",  "description" => "hapus {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "lihat {$name}",  "description" => "lihat {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "tambah {$name}", "description" => "tambah {$featureDescription}", "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "edit {$name}",   "description" => "edit {$featureDescription}",   "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "hapus {$name}",  "description" => "hapus {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
             ]);
         }
     }

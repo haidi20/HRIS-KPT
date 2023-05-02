@@ -61,6 +61,13 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function getGroupNameAttribute()
+    {
+        if ($this->role) {
+            return $this->role->name;
+        }
+    }
+
     public function getPermissionAttribute()
     {
         return $this->getAllPermissions();

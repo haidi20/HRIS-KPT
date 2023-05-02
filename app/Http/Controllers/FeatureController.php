@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feature;
-use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 
-class PermissionController extends Controller
+class FeatureController extends Controller
 {
-    public function permission($featureId)
+    public function feature()
     {
-        $permissions = Permission::where("feature_id", $featureId)->get();
+        $features = Feature::all();
 
-        return view("pages.setting.permission", compact("permissions", "featureId"));
+        return view("pages.setting.feature", compact("features"));
     }
 
     public function store(Request $request)
@@ -27,19 +26,38 @@ class PermissionController extends Controller
             DB::beginTransaction();
 
             if (request("id")) {
-                $permission = Permission::find(request("id"));
+                $feature = Feature::find(request("id"));
+                $feature->updated_by = Auth::user()->id;
 
                 $message = "diperbaharui";
             } else {
-                $permission = new Permission;
+                $feature = new Feature;
+                $feature->created_by = Auth::user()->id;
 
                 $message = "dikirim";
             }
 
-            $permission->name = request("name");
-            $permission->feature_id = request("feature_id");
-            $permission->description = request("description");
-            $permission->save();
+            $feature->name = request("name");
+            $feature->description = request("description");
+            $feature->save();
+
+            $tasks = ["lihat", "tambah", "edit", "hapus"];
+
+            foreach ($tasks as $task) {
+                $name = strtolower($feature->name);
+                $featureDescription = str_replace('-', ' ', strtolower($feature->name));
+
+                Permission::updateOrCreate(
+                    [
+                        "feature_id" => $feature->id,
+                        "name" => "{$task} {$name}",
+                    ],
+                    [
+                        "description" => "{$task} {$featureDescription}",
+                        "guard_name" => "web",
+                    ]
+                );
+            }
 
             DB::commit();
 
@@ -65,11 +83,14 @@ class PermissionController extends Controller
         try {
             DB::beginTransaction();
 
-            $permission = Permission::find(request("id"));
-            $permission->update([
+            $feature = Feature::find(request("id"));
+            $feature->update([
                 'deleted_by' => Auth::user()->id,
             ]);
-            $permission->delete();
+            $feature->delete();
+
+            Permission::where("feature_id", request("id"))
+                ->delete();
 
             DB::commit();
 

@@ -13,21 +13,16 @@ class RoleController extends Controller
     public function index()
     {
         $userRoleId = auth()->user()->role_id;
-        $isShowSuperAdmin = $userRoleId == 1 ? true : false;
 
         $roles = new Role;
 
-        if (!$isShowSuperAdmin) {
+        if ($userRoleId != 1) {
             $roles = $roles->where("id", "!=", 1);
         }
 
         $roles = $roles->get();
 
         return view("pages.setting.role", compact("roles"));
-    }
-
-    public function create()
-    {
     }
 
     public function store(Request $request)
@@ -51,26 +46,6 @@ class RoleController extends Controller
 
             Log::error($e);
             return response()->json(['success' => false, 'message' => 'Maaf, gagal kirim data'], 500);
-        }
-    }
-
-    public function edit()
-    {
-        try {
-            $findData = Role::find(request('id'));
-
-            return response()->json([
-                'success' => false,
-                'data' => $findData,
-                'message' => "Berhasil, data tersedia",
-            ], 201);
-        } catch (\Exception $e) {
-            Log::error($e);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal dapatkan data',
-            ], 500);
         }
     }
 

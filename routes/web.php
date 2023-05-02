@@ -5,6 +5,7 @@ use App\Http\Controllers;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
@@ -56,10 +57,13 @@ Route::prefix("setting")->name("setting.")->group(function () {
         Route::post('store', [RolePermissionController::class, "store"])->name("store");
     });
     Route::prefix('feature')->name("feature.")->group(function () {
-        Route::get('', [PermissionController::class, "feature"])->name("index");
+        Route::get('', [FeatureController::class, "feature"])->name("index");
+        Route::post('store', [FeatureController::class, "store"])->name("store");
+        Route::delete('delete', [FeatureController::class, "destroy"])->name("delete");
     });
     Route::prefix("permission")->name("permission.")->group(function () {
         Route::get('permission/{featureId}', [PermissionController::class, "permission"])->name("index");
+        Route::post('store', [PermissionController::class, "store"])->name("store");
     });
 });
 

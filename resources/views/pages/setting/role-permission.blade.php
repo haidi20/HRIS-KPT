@@ -23,9 +23,13 @@
             <div class="card">
                 <div class="card-header">
                     Data
-                    <a href="{{ route('setting.feature.index') }}" class="btn btn-sm btn-success shadow-sm float-right"
-                        id="addData" data-toggle="modal">
+                    <a href="{{ route('setting.feature.index') }}"
+                        class="btn btn-sm btn-success shadow-sm  ml-2 float-right" id="addData" data-toggle="modal">
                         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Fitur
+                    </a>
+                    <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-right"
+                        data-toggle="modal">
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Kembali
                     </a>
                 </div>
                 <div class="card-body">

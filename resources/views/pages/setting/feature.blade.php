@@ -34,7 +34,7 @@
                             <tr>
                                 <th>Nama</th>
                                 <th>Deskripsi</th>
-                                <th></th>
+                                <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,9 +46,15 @@
                                     <td>
                                         {{ $feature->description }}
                                     </td>
-                                    <td>
+                                    <td class="flex flex-row justify-content-around">
                                         <a href="{{ route('setting.permission.index', ['featureId' => $feature->id]) }}"
                                             class="btn btn-sm btn-primary">Detail
+                                        </a>
+                                        <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
+                                            class="btn btn-sm btn-info">Ubah
+                                        </a>
+                                        <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
+                                            class="btn btn-sm btn-danger">Hapus
                                         </a>
                                     </td>
                                 </tr>
@@ -83,17 +89,144 @@
             $("#formModal").modal("show");
         }
 
+        function onEdit(data) {
+            clearForm();
+
+            $("#id").val(data.id);
+            $("#name").val(data.name);
+            $("#description").val(data.description);
+
+            $("#titleForm").html("Ubah Fitur");
+            $("#formModal").modal("show");
+        }
+
+        function onDelete(data) {
+            Swal.fire({
+                title: 'Perhatian!!!',
+                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('setting.feature.delete') }}",
+                        method: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                            id: data.id
+                        },
+                        success: function(responses) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+                            if (responses.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: responses.message
+                                });
+
+                                window.location.reload();
+                            }
+                        },
+                        error: function(err) {
+                            // console.log(err.responseJSON.message);
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: err.responseJSON.message
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
         function send() {
             $("#form").submit(function(e) {
                 e.preventDefault();
                 let fd = new FormData(this);
 
-                console.info(fd);
+                $.ajax({
+                    url: "{{ route('setting.feature.store') }}",
+                    method: 'POST',
+                    data: fd,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(responses) {
+
+                        // console.info(responses);
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        if (responses.success == true) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
+
+                            window.location.reload();
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err.responseJSON.message);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: err.responseJSON.message
+                        });
+                    }
+                });
             });
         }
 
         function clearForm() {
-            //
+            $("#id").val("");
+            $("#name").val("");
+            $("#description").val("");
         }
     </script>
 @endsection

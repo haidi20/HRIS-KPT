@@ -23,14 +23,18 @@
             <div class="card">
                 <div class="card-header">
                     Data
-                    <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-right ml-2"
-                        id="addData" data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Menu Grup Pengguna
-                    </a>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah User
-                    </button>
+                    @can('lihat grup pengguna')
+                        <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-right ml-2"
+                            id="addData" data-toggle="modal">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Menu Grup Pengguna
+                        </a>
+                    @endcan
+                    @can('tambah pengguna')
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
+                            data-toggle="modal">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah User
+                        </button>
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -38,8 +42,9 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
+                                <th>Grup Pengguna</th>
                                 <th>Email</th>
-                                {{-- <th></th> --}}
+                                <th width="10%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +54,20 @@
                                         {{ $user->name }}
                                     </td>
                                     <td>
+                                        {{ $user->group_name }}
+                                    </td>
+                                    <td>
                                         {{ $user->email }}
+                                    </td>
+                                    <td class="flex flex-row justify-content-around ">
+                                        <a href="javascript:void(0)" onclick="onEdit({{ $user->id }})"
+                                            class="btn btn-sm btn-primary">
+                                            Ubah
+                                        </a>
+                                        <a href="javascript:void(0)" onclick="onDelete({{ $user->id }})"
+                                            class="btn btn-sm btn-danger">
+                                            Hapus
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -80,6 +98,14 @@
             clearForm();
             $("#titleForm").html("Tambah Pengguna");
             $("#formModal").modal("show");
+        }
+
+        function onEdit(id) {
+            console.info(id);
+        }
+
+        function onDelete(id) {
+            console.info(id);
         }
 
         function send() {
