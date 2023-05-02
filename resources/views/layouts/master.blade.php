@@ -47,7 +47,7 @@
         </div>
     </div>
     @isset($vue)
-        {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+        <script src="{{ asset('js/app.js') }}"></script>
     @endisset
 
     <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
