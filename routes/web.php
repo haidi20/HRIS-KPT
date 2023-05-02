@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SalaryAdjustmentController;
@@ -38,6 +39,11 @@ Route::prefix("dashboard")->name("dashboard.")->group(function () {
     Route::get('', [DashboardController::class, "index"])->name("index");
 });
 
+Route::prefix("master")->name("master.")->group(function () {
+    Route::prefix('position')->name("position.")->group(function () {
+        Route::get('', [PositionController::class, "index"])->name("index");
+    });
+});
 Route::prefix("setting")->name("setting.")->group(function () {
     Route::prefix('salary-adjusment')->name("salaryAdjustment.")->group(function () {
         Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");

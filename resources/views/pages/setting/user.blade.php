@@ -26,15 +26,15 @@
                     @can('lihat grup pengguna')
                         <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-right ml-2"
                             id="addData" data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Menu Grup Pengguna
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Grup Pengguna
                         </a>
                     @endcan
-                    @can('tambah pengguna')
+                    {{-- @can('tambah pengguna')
                         <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
                             data-toggle="modal">
                             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah User
                         </button>
-                    @endcan
+                    @endcan --}}
                 </div>
 
                 <div class="card-body">
@@ -44,7 +44,7 @@
                                 <th>Nama</th>
                                 <th>Grup Pengguna</th>
                                 <th>Email</th>
-                                <th width="10%"></th>
+                                <th width="15%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,14 +60,18 @@
                                         {{ $user->email }}
                                     </td>
                                     <td class="flex flex-row justify-content-around ">
-                                        <a href="javascript:void(0)" onclick="onEdit({{ $user->id }})"
-                                            class="btn btn-sm btn-primary">
-                                            Ubah
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="onDelete({{ $user->id }})"
-                                            class="btn btn-sm btn-danger">
-                                            Hapus
-                                        </a>
+                                        @can('ubah pengguna')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $user->id }})"
+                                                class="btn btn-sm btn-primary">
+                                                Ubah
+                                            </a>
+                                        @endcan
+                                        @can('hapus pengguna')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $user->id }})"
+                                                class="btn btn-sm btn-danger">
+                                                Hapus
+                                            </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

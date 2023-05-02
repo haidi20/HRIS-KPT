@@ -26,9 +26,13 @@ class PermissionSeeder extends Seeder
             Permission::insert([
                 ["name" => "lihat {$name}",  "description" => "lihat {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
                 ["name" => "tambah {$name}", "description" => "tambah {$featureDescription}", "guard_name" => "web", "feature_id" => $feature->id],
-                ["name" => "edit {$name}",   "description" => "edit {$featureDescription}",   "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "ubah {$name}",   "description" => "ubah {$featureDescription}",   "guard_name" => "web", "feature_id" => $feature->id],
                 ["name" => "hapus {$name}",  "description" => "hapus {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
             ]);
         }
+
+        Permission::insert([
+            "name" => "detail grup pengguna",  "description" => "detail grup pengguna",  "guard_name" => "web", "feature_id" => $feature->id,
+        ]);
     }
 }

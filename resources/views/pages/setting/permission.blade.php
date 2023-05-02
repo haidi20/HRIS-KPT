@@ -52,13 +52,17 @@
                                         {{ $permission->description }}
                                     </td>
                                     <td class="flex flex-row justify-content-around">
-                                        <a href="javascript:void(0)" onclick="onEdit({{ $permission }})"
-                                            class="btn btn-sm btn-info">Ubah
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="onDelete({{ $permission }})"
-                                            class="btn btn-sm btn-danger">Hapus
-                                        </a>
-                                    </td>
+                                        @can('ubah hak akses')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $permission }})"
+                                                class="btn btn-sm btn-info">Ubah
+                                            </a>
+                                        @endcan
+                                        @can('hapus hak akses')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $permission }})"
+                                                class="btn btn-sm btn-danger">Hapus
+                                            </a>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>
@@ -173,7 +177,7 @@
                     dataType: 'json',
                     success: function(responses) {
 
-                        console.info(responses);
+                        // console.info(responses);
 
                         const Toast = Swal.mixin({
                             toast: true,

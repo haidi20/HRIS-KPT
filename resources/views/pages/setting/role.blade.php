@@ -23,10 +23,12 @@
             <div class="card">
                 <div class="card-header">
                     Data
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Grup User
-                    </button>
+                    @can('tambah grup pengguna')
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
+                            data-toggle="modal">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Grup User
+                        </button>
+                    @endcan
                 </div>
 
                 <div class="card-body">
@@ -44,10 +46,12 @@
                                         {{ $role->name }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('setting.rolePermission.index', ['roleId' => $role->id]) }}"
-                                            class="btn btn-sm btn-primary">
-                                            Detail
-                                        </a>
+                                        @can('detail grup pengguna')
+                                            <a href="{{ route('setting.rolePermission.index', ['roleId' => $role->id]) }}"
+                                                class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

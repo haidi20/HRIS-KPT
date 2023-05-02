@@ -42,44 +42,80 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item {{ isActive('dashboard') }} ">
-                    <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="sidebar-title has-sub">Pengaturan</li>
-                <li class="sidebar-item {{ isActive('setting/salary-adjustment') }}">
-                    <a href="{{ route('setting.salaryAdjustment.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Penyesuaian Gaji</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('setting/working-hour') }}">
-                    <a href="{{ route('setting.workingHour.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Jam Kerja</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('setting/user') }}">
-                    <a href="{{ route('setting.user.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Pengguna</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('setting/role') }}">
-                    <a href="{{ route('setting.role.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Grup Pengguna</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('setting/feature') }}">
-                    <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Fitur</span>
-                    </a>
-                </li>
+                @php
+                    $allPermissionSetting = ['lihat dashboard'];
+                @endphp
+                @can($allPermissionSetting)
+                    <li class="sidebar-title">Menu</li>
+                @endcan
+                @can('lihat dashboard')
+                    <li class="sidebar-item {{ isActive('dashboard') }} ">
+                        <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                @endcan
+                @php
+                    $allPermissionSetting = ['lihat jabatan'];
+                @endphp
+                @can($allPermissionSetting)
+                    <li class="sidebar-title has-sub">Master</li>
+                @endcan
+                @can('lihat jabatan')
+                    <li class="sidebar-item {{ isActive('master/position') }}">
+                        <a href="{{ route('master.position.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Jabatan</span>
+                        </a>
+                    </li>
+                @endcan
+                @php
+                    $allPermissionSetting = ['lihat penyesuaian gaji', 'lihat jam kerja', 'lihat pengguna', 'lihat grup pengguna', 'lihat fitur'];
+                @endphp
+                @can($allPermissionSetting)
+                    <li class="sidebar-title has-sub">Pengaturan</li>
+                @endcan
+                @can('lihat penyesuaian gaji')
+                    <li class="sidebar-item {{ isActive('setting/salary-adjustment') }}">
+                        <a href="{{ route('setting.salaryAdjustment.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Penyesuaian Gaji</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat jam kerja')
+                    <li class="sidebar-item {{ isActive('setting/working-hour') }}">
+                        <a href="{{ route('setting.workingHour.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Jam Kerja</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat pengguna')
+                    <li class="sidebar-item {{ isActive('setting/user') }}">
+                        <a href="{{ route('setting.user.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Pengguna</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat grup pengguna')
+                    <li class="sidebar-item {{ isActive('setting/role') }}">
+                        <a href="{{ route('setting.role.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Grup Pengguna</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat fitur')
+                    <li class="sidebar-item {{ isActive('setting/feature') }}">
+                        <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Fitur</span>
+                        </a>
+                    </li>
+                @endcan
                 <li class="sidebar-item">
                     <a href="{{ route('logout') }}" class='sidebar-link'
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

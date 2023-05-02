@@ -28,8 +28,7 @@ class RolePermissionController extends Controller
         $permissionsByFeature = Permission::where("feature_id", $featureId)->get();
         $getAllPermissions = Auth::user()->getAllPermissions();
         $permissionsByUser = collect($getAllPermissions)
-            ->where("feature_id", $featureId)
-            ->where("id", "!=", 8);
+            ->where("feature_id", $featureId);
 
         return response()->json([
             "permissionsByUser" => $permissionsByUser,
