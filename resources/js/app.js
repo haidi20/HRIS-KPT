@@ -5,7 +5,6 @@ import Vue from "vue";
 
 import BootstrapVue from "bootstrap-vue";
 import VueSweetalert2 from "vue-sweetalert2";
-import VueExcelEditor from "vue-excel-editor";
 import VueEvents from "vue-events";
 import { ServerTable, ClientTable, Event } from "vue-tables-2";
 // import clickOutside from './vue-directive-clickOutside';
@@ -39,7 +38,6 @@ Vue.config.productionTip = false;
 
 Vue.use(VueEvents);
 Vue.use(BootstrapVue);
-Vue.use(VueExcelEditor);
 Vue.use(VueSweetalert2);
 Vue.use(ServerTable);
 Vue.use(ClientTable);
