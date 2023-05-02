@@ -23,9 +23,9 @@
             <div class="card">
                 <div class="card-header">
                     Data
-                    <a href="{{ route('setting.permission.index') }}" class="btn btn-sm btn-success shadow-sm float-right"
+                    <a href="{{ route('setting.feature.index') }}" class="btn btn-sm btn-success shadow-sm float-right"
                         id="addData" data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Hak Akses
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Fitur
                     </a>
                 </div>
                 <div class="card-body">
@@ -41,13 +41,13 @@
                             @foreach ($features as $feature)
                                 <tr>
                                     <td>
-                                        {{ $feature->title }}
+                                        {{ $feature->name }}
                                     </td>
                                     <td>
                                         {{ $feature->description }}
                                     </td>
                                     <td>
-                                        <a href="javascript:void(0)" onclick="onEdit({{ $feature->id }})"
+                                        <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
                                             class="btn btn-sm btn-primary">
                                             Ubah
                                         </a>
@@ -72,47 +72,149 @@
     <script src="assets/static/js/pages/dashboard.js"></script> --}}
 
     <script>
-        $(document).ready(function() {
-            $('.dataTable').DataTable();
-
-            findData();
-            send();
-        });
-
-        function onEdit(id) {
-            console.info(id);
-            $("#titleForm").html("Ubah Hak Akses");
-            $("#formModal").modal("show");
+        const initialState = {
+            role: [],
+            permissions_by_user: [],
+            permissions_by_feature: [],
         }
 
-        function findData() {
+        let state = {
+            ...initialState
+        };
+
+        $(document).ready(function() {
+            $('.dataTable').DataTable();
+        });
+
+        function onEdit(feature) {
             $.ajax({
                 url: "{{ route('setting.rolePermission.show', ['roleId' => $roleId]) }}",
                 method: 'GET',
                 data: {
-                    role_id: "{{ $roleId }}"
+                    role_id: "{{ $roleId }}",
+                    feature_id: feature.id,
                 },
                 beforeSend: function() {
                     // empty view
+
+                    state.permission_by_user = [];
+                    state.permission_by_feature = [];
                 },
                 success: function(responses) {
-                    console.info(responses);
+                    // console.info(responses);
+                    state = {
+                        permissions_by_user: changeToArray(responses.permissionsByUser),
+                        permissions_by_feature: changeToArray(responses.permissionsByFeature),
+                    }
+
+                    // console.info(state.permission_by_user);
+
+                    // memunculkan list checkbox permissions
+                    let li = "";
+                    state.permissions_by_feature.map((item, index) => {
+                        // console.info(state.role.permissions[index]?.id, item.id);
+                        let checked = null;
+
+                        checked = state.permissions_by_user.some(permission => permission.id == item
+                            .id);
+                        checked = checked && "checked";
+
+                        let radio =
+                            `<input class="form-check-input" type="checkbox" id="checkbox_${item.id}" ${checked}>
+                            <span for="checkbox_${item.id}">${item.name}</span>`;
+                        li += `<li onchange="onChange(${item.id})"> ${radio} </li>`;
+                    });
+                    $('#listPermissions').empty();
+                    $('#listPermissions').append(li);
                 },
                 error: function(err) {}
             });
+
+            $("#titleForm").html(`Ubah Hak Akses - ${feature.name}`);
+            $("#formModal").modal("show");
         }
 
-        function send() {
-            $("#form").submit(function(e) {
-                e.preventDefault();
-                let fd = new FormData(this);
+        function onChange(id) {
+            let checkCheckbox = $("#checkbox_" + id).prop('checked');
+            let getPermission = state.permissions_by_feature.filter((item, index) => item.id == id)[0];
+            let stateRolePermissions = state.permissions_by_user;
 
-                console.info(fd);
+            if (checkCheckbox) {
+                stateRolePermissions.push(getPermission);
+            } else {
+                // hapus kembali jika di uncentang checkboxnya
+                stateRolePermissions.splice(stateRolePermissions.findIndex(e => e.id == id), 1);
+            }
+        }
+
+        function onSend() {
+            const csrf_token = $('meta[name="csrf-token"]').attr('content');
+            console.info(state);
+            const data = {
+                _token: csrf_token,
+                role_id: "{{ $roleId }}",
+                ...state,
+            };
+            $.ajax({
+                url: "{{ route('setting.rolePermission.store', ['roleId' => $roleId]) }}",
+                method: 'POST',
+                data: data,
+                // cache: false,
+                success: function(responses) {
+                    console.info(responses);
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        customClass: {
+                            width: '4000px' // set the width to 400 pixels
+                        },
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    if (responses.success == true) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
+
+                        $("#formModal").modal("hide");
+                    }
+                },
+                error: function(err) {
+                    console.log(err.responseJSON.message);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: err.responseJSON.message
+                    });
+                }
             });
         }
 
         function clearForm() {
             //
+        }
+
+        function changeToArray(value) {
+            return Array.isArray(value) ? value : Object.keys(value).map(key =>
+                value[key]);
         }
     </script>
 @endsection

@@ -27,7 +27,7 @@ class CreatePermissionTables extends Migration
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->bigIncrements('id'); // permission id
-            $table->foreignId('task_id'); // task id
+            $table->foreignId('feature_id'); // feature id
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->text('description')->nullable();       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);

@@ -65,11 +65,4 @@ class User extends Authenticatable
     {
         return $this->getAllPermissions();
     }
-
-    public function getNameRoleAttribute()
-    {
-        if ($this->role) {
-            return $this->role->name;
-        }
-    }
 }

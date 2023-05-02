@@ -12,7 +12,16 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
+        $userRoleId = auth()->user()->role_id;
+        $isShowSuperAdmin = $userRoleId == 1 ? true : false;
+
+        $roles = new Role;
+
+        if (!$isShowSuperAdmin) {
+            $roles = $roles->where("id", "!=", 1);
+        }
+
+        $roles = $roles->get();
 
         return view("pages.setting.role", compact("roles"));
     }

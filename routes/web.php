@@ -53,13 +53,13 @@ Route::prefix("setting")->name("setting.")->group(function () {
     Route::prefix('role-permission/{roleId}')->name("rolePermission.")->group(function () {
         Route::get('', [RolePermissionController::class, "index"])->name("index");
         Route::get('show', [RolePermissionController::class, "show"])->name("show");
+        Route::post('store', [RolePermissionController::class, "store"])->name("store");
     });
-    Route::prefix('permission')->name("permission.")->group(function () {
-        Route::get('', [PermissionController::class, "index"])->name("index");
-
-        Route::prefix("task")->name("task.")->group(function () {
-            Route::get('task/{featureId}', [PermissionController::class, "task"])->name("index");
-        });
+    Route::prefix('feature')->name("feature.")->group(function () {
+        Route::get('', [PermissionController::class, "feature"])->name("index");
+    });
+    Route::prefix("permission")->name("permission.")->group(function () {
+        Route::get('permission/{featureId}', [PermissionController::class, "permission"])->name("index");
     });
 });
 

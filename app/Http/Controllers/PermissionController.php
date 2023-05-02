@@ -9,17 +9,17 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function feature()
     {
         $features = Feature::all();
 
-        return view("pages.setting.permission", compact("features"));
+        return view("pages.setting.feature", compact("features"));
     }
 
-    public function task($featureId)
+    public function permission($featureId)
     {
-        $permissions = Permission::where("task_id", $featureId)->get();
+        $permissions = Permission::where("feature_id", $featureId)->get();
 
-        return view("pages.setting.task", compact("permissions"));
+        return view("pages.setting.permission", compact("permissions"));
     }
 }

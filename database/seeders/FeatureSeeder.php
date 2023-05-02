@@ -16,10 +16,10 @@ class FeatureSeeder extends Seeder
     public function run()
     {
         Feature::insert([
-            ["title" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
-            ["title" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
-            ["title" => "Pengguna", "description" => "Manajemen Data Pengguna"],
-            ["title" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
+            ["name" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
+            ["name" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
+            ["name" => "Pengguna", "description" => "Manajemen Data Pengguna"],
+            ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
         ]);
     }
 }

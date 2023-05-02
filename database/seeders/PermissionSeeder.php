@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Feature;
 use Illuminate\Database\Seeder;
 
 use Spatie\Permission\Models\Role;
@@ -16,18 +17,16 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [
-            "penyesuaian gaji", "jam kerja", "pengguna", "hak akses",
-        ];
+        $features = Feature::all();
 
-        foreach ($permissions as $index => $permission) {
-            $permissionDescription = str_replace('-', ' ', $permission);
+        foreach ($features as $index => $feature) {
+            $featureDescription = str_replace('-', ' ', $feature->name);
 
             Permission::insert([
-                ["name" => "lihat {$permission}",  "description" => "lihat {$permissionDescription}",  "guard_name" => "web", "task_id" => ($index + 1)],
-                ["name" => "tambah {$permission}", "description" => "tambah {$permissionDescription}", "guard_name" => "web", "task_id" => ($index + 1)],
-                ["name" => "edit {$permission}",   "description" => "edit {$permissionDescription}",   "guard_name" => "web", "task_id" => ($index + 1)],
-                ["name" => "hapus {$permission}",  "description" => "hapus {$permissionDescription}",  "guard_name" => "web", "task_id" => ($index + 1)],
+                ["name" => "lihat {$feature->name}",  "description" => "lihat {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "tambah {$feature->name}", "description" => "tambah {$featureDescription}", "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "edit {$feature->name}",   "description" => "edit {$featureDescription}",   "guard_name" => "web", "feature_id" => $feature->id],
+                ["name" => "hapus {$feature->name}",  "description" => "hapus {$featureDescription}",  "guard_name" => "web", "feature_id" => $feature->id],
             ]);
         }
     }
