@@ -55,6 +55,9 @@
                                         <a href="javascript:void(0)" onclick="onEdit({{ $permission }})"
                                             class="btn btn-sm btn-info">Ubah
                                         </a>
+                                        <a href="javascript:void(0)" onclick="onDelete({{ $permission }})"
+                                            class="btn btn-sm btn-danger">Hapus
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -90,6 +93,69 @@
 
             $("#titleForm").html("Ubah Hak Akses");
             $("#formModal").modal("show");
+        }
+
+        function onDelete(data) {
+            Swal.fire({
+                title: 'Perhatian!!!',
+                html: `Anda yakin ingin hapus data hak akses <h2><b> ${data.name} </b> ?</h2>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('setting.permission.delete') }}",
+                        method: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                            id: data.id
+                        },
+                        success: function(responses) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+                            if (responses.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: responses.message
+                                });
+
+                                window.location.reload();
+                            }
+                        },
+                        error: function(err) {
+                            // console.log(err.responseJSON.message);
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: err.responseJSON.message
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function send() {

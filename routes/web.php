@@ -64,6 +64,7 @@ Route::prefix("setting")->name("setting.")->group(function () {
     Route::prefix("permission")->name("permission.")->group(function () {
         Route::get('permission/{featureId}', [PermissionController::class, "permission"])->name("index");
         Route::post('store', [PermissionController::class, "store"])->name("store");
+        Route::delete('delete', [PermissionController::class, "destroy"])->name("delete");
     });
 });
 
