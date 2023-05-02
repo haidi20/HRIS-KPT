@@ -45,6 +45,10 @@ class UserController extends Controller
             $user->role_id = request("role_id");
             $user->save();
 
+            $role = Role::find(request("role_id"));
+
+            $user->assignRole($role->name);
+
             DB::commit();
 
             return response()->json([

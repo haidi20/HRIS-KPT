@@ -59,9 +59,9 @@
                 @php
                     $allPermissionSetting = ['lihat jabatan'];
                 @endphp
-                @can($allPermissionSetting)
+                @canany($allPermissionSetting)
                     <li class="sidebar-title has-sub">Master</li>
-                @endcan
+                @endcanany
                 @can('lihat jabatan')
                     <li class="sidebar-item {{ isActive('master/position') }}">
                         <a href="{{ route('master.position.index') }}" class='sidebar-link'>
@@ -73,9 +73,9 @@
                 @php
                     $allPermissionSetting = ['lihat penyesuaian gaji', 'lihat jam kerja', 'lihat pengguna', 'lihat grup pengguna', 'lihat fitur'];
                 @endphp
-                @can($allPermissionSetting)
+                @canany($allPermissionSetting)
                     <li class="sidebar-title has-sub">Pengaturan</li>
-                @endcan
+                @endcanany
                 @can('lihat penyesuaian gaji')
                     <li class="sidebar-item {{ isActive('setting/salary-adjustment') }}">
                         <a href="{{ route('setting.salaryAdjustment.index') }}" class='sidebar-link'>

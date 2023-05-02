@@ -53,9 +53,13 @@ Route::prefix("setting")->name("setting.")->group(function () {
     });
     Route::prefix('user')->name("user.")->group(function () {
         Route::get('', [UserController::class, "index"])->name("index");
+        Route::post('store', [UserController::class, "store"])->name("store");
+        Route::delete('delete', [UserController::class, "destroy"])->name("delete");
     });
     Route::prefix('role')->name("role.")->group(function () {
         Route::get('', [RoleController::class, "index"])->name("index");
+        Route::post('store', [RoleController::class, "store"])->name("store");
+        Route::delete('delete', [RoleController::class, "destroy"])->name("delete");
     });
     Route::prefix('role-permission/{roleId}')->name("rolePermission.")->group(function () {
         Route::get('', [RolePermissionController::class, "index"])->name("index");
@@ -68,7 +72,7 @@ Route::prefix("setting")->name("setting.")->group(function () {
         Route::delete('delete', [FeatureController::class, "destroy"])->name("delete");
     });
     Route::prefix("permission")->name("permission.")->group(function () {
-        Route::get('permission/{featureId}', [PermissionController::class, "index"])->name("index");
+        Route::get('{featureId}', [PermissionController::class, "index"])->name("index");
         Route::post('store', [PermissionController::class, "store"])->name("store");
         Route::delete('delete', [PermissionController::class, "destroy"])->name("delete");
     });

@@ -47,16 +47,22 @@
                                         {{ $feature->description }}
                                     </td>
                                     <td class="flex flex-row justify-content-around">
+                                        {{-- @can('detail fitur') --}}
                                         <a href="{{ route('setting.permission.index', ['featureId' => $feature->id]) }}"
                                             class="btn btn-sm btn-primary">Detail
                                         </a>
-                                        <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
-                                            class="btn btn-sm btn-info">Ubah
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
-                                            class="btn btn-sm btn-danger">Hapus
-                                        </a>
-                                    </td>
+                                        {{-- @endcan --}}
+                                        @can('ubah fitur')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
+                                                class="btn btn-sm btn-info">Ubah
+                                            </a>
+                                        @endcan
+                                        @can('hapus fitur')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
+                                                class="btn btn-sm btn-danger">Hapus
+                                            </a>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>
@@ -108,7 +114,8 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                onfirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({

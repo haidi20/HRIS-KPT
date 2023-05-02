@@ -13,6 +13,8 @@ class DashboardController extends Controller
 
     public function index()
     {
+        // return auth()->user()->getAllPermissions();
+
         $vue = true;
         return view("pages.dashboard.index", compact("vue"));
     }

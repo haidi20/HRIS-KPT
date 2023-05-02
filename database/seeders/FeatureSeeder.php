@@ -20,9 +20,9 @@ class FeatureSeeder extends Seeder
             ["name" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
             ["name" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
             ["name" => "Pengguna", "description" => "Manajemen Data Pengguna"],
-            ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
             ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
             ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
+            ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
         ]);
     }
 }

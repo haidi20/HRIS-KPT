@@ -94,6 +94,7 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
+            setupSelect();
             send();
         });
 
@@ -104,16 +105,14 @@
         }
 
         function onEdit(data) {
+            clearForm();
+            $("#id").val(data.id);
             $("#name").val(data.name);
             $("#email").val(data.email);
-            $("#role_id").val(data.role_id);
+            $("#role_id").val(data.role_id).trigger("change");
 
             $("#titleForm").html("Ubah Pengguna");
             onModalAction("formModal", "show");
-        }
-
-        function onDelete(id) {
-            console.info(id);
         }
 
         function send() {
@@ -121,7 +120,122 @@
                 e.preventDefault();
                 let fd = new FormData(this);
 
-                console.info(fd);
+                $.ajax({
+                    url: "{{ route('setting.user.store') }}",
+                    method: 'POST',
+                    data: fd,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(responses) {
+
+                        // console.info(responses);
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        if (responses.success == true) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
+
+                            window.location.reload();
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err.responseJSON.message);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: err.responseJSON.message
+                        });
+                    }
+                });
+            });
+        }
+
+        function onDelete(data) {
+            Swal.fire({
+                title: 'Perhatian!!!',
+                html: `Anda yakin ingin hapus data pengguna <h2><b> ${data.name} </b> ?</h2>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                onfirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('setting.user.delete') }}",
+                        method: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                            id: data.id
+                        },
+                        success: function(responses) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+                            if (responses.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: responses.message
+                                });
+
+                                window.location.reload();
+                            }
+                        },
+                        error: function(err) {
+                            // console.log(err.responseJSON.message);
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: err.responseJSON.message
+                            });
+                        }
+                    });
+                }
             });
         }
 
@@ -130,7 +244,11 @@
         }
 
         function clearForm() {
-            setupSelect();
+
+            $("#name").val("");
+            $("#email").val("");
+            $("#role_id").val("").trigger("change");
+
         }
     </script>
 @endsection

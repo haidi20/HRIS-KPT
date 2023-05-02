@@ -32,7 +32,7 @@ class PermissionSeeder extends Seeder
         }
 
         Permission::insert([
-            "name" => "detail grup pengguna",  "description" => "detail grup pengguna",  "guard_name" => "web", "feature_id" => $feature->id,
+            "name" => "detail grup pengguna",  "description" => "detail grup pengguna",  "guard_name" => "web", "feature_id" => 7,
         ]);
     }
 }

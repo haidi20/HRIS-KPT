@@ -84,7 +84,7 @@
     <script>
         const initialState = {
             role: [],
-            permissions_by_user: [],
+            permissions_by_role: [],
             permissions_by_feature: [],
         }
 
@@ -113,7 +113,7 @@
                 success: function(responses) {
                     // console.info(responses);
                     state = {
-                        permissions_by_user: changeToArray(responses.permissionsByUser),
+                        permissions_by_role: changeToArray(responses.permissionsByRole),
                         permissions_by_feature: changeToArray(responses.permissionsByFeature),
                     }
 
@@ -125,7 +125,7 @@
                         // console.info(state.role.permissions[index]?.id, item.id);
                         let checked = null;
 
-                        checked = state.permissions_by_user.some(permission => permission.id == item
+                        checked = state.permissions_by_role.some(permission => permission.id == item
                             .id);
                         checked = checked && "checked";
 
@@ -147,7 +147,7 @@
         function onChange(id) {
             let checkCheckbox = $("#checkbox_" + id).prop('checked');
             let getPermission = state.permissions_by_feature.filter((item, index) => item.id == id)[0];
-            let stateRolePermissions = state.permissions_by_user;
+            let stateRolePermissions = state.permissions_by_role;
 
             if (checkCheckbox) {
                 stateRolePermissions.push(getPermission);
@@ -158,10 +158,8 @@
         }
 
         function onSend() {
-            const csrf_token = $('meta[name="csrf-token"]').attr('content');
             // console.info(state);
             const data = {
-                _token: csrf_token,
                 role_id: "{{ $roleId }}",
                 ...state,
             };
@@ -193,7 +191,9 @@
                             title: responses.message
                         });
 
-                        onModalAction("formModal", "show");
+                        window.location.reload();
+
+                        // onModalAction("formModal", "hide");
                     }
                 },
                 error: function(err) {

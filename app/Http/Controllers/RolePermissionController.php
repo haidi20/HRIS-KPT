@@ -24,14 +24,14 @@ class RolePermissionController extends Controller
     public function show()
     {
         $featureId = request("feature_id");
+        $roleId = request("role_id");
+        // masih bermasalah
 
         $permissionsByFeature = Permission::where("feature_id", $featureId)->get();
-        $getAllPermissions = Auth::user()->getAllPermissions();
-        $permissionsByUser = collect($getAllPermissions)
-            ->where("feature_id", $featureId);
+        $permissionsByRole = Role::findById($roleId)->permissions;
 
         return response()->json([
-            "permissionsByUser" => $permissionsByUser,
+            "permissionsByRole" => $permissionsByRole,
             "permissionsByFeature" => $permissionsByFeature,
         ]);
     }
@@ -42,18 +42,18 @@ class RolePermissionController extends Controller
             DB::beginTransaction();
 
             $roleId = request("role_id");
-            $permissionsByUserId = [];
+            $permissionsByRoleId = [];
 
-            if ($request->permissions_by_user != null) {
-                foreach ($request->permissions_by_user as $index => $permission) {
-                    array_push($permissionsByUserId, $permission["id"]);
+            if ($request->permissions_by_role != null) {
+                foreach ($request->permissions_by_role as $index => $permission) {
+                    array_push($permissionsByRoleId, $permission["id"]);
                 }
             }
 
             foreach ($request->permissions_by_feature as $index => $permission) {
                 $role = Role::findById($roleId);
 
-                if (in_array($permission["id"], $permissionsByUserId)) {
+                if (in_array($permission["id"], $permissionsByRoleId)) {
                     $role->givePermissionTo($permission["name"]);
                 } else {
                     $role->revokePermissionTo($permission["name"]);

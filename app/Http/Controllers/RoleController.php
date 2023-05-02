@@ -31,16 +31,31 @@ class RoleController extends Controller
 
         try {
             DB::beginTransaction();
-            Role::updateOrCreate(
-                ["id" => $request->id],
-                [
-                    "name" => $request->name,
-                    "guard_name" => "web",
-                ]
-            );
+
+            // Role::updateOrCreate(
+            //     ["id" => $request->id],
+            //     [
+            //         "name" => $request->name,
+            //         "guard_name" => "web",
+            //     ]
+            // );
+
+            if (request("id")) {
+                $role = Role::find(request("id"));
+
+                $message = "diperbaharui";
+            } else {
+                $role = new Role;
+
+                $message = "dikirim";
+            }
+
+            $role->name = request("name");
+            $role->guard_name = "web";
+            $role->save();
 
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Berhasil'], 200);
+            return response()->json(['success' => true, 'message' => 'Berhasil Kirim Data'], 200);
         } catch (\Exception $e) {
             DB::rollback();
 
