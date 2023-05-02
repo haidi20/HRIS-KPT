@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.setting.partials.adjustment-salary-modal')
+    @include('pages.setting.partials.salary-adjustment-modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -40,6 +40,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($salaryAdjustments as $index => $data)
+                                <tr>
+                                    <td>{{ $data->name }}</td>
+                                    <td class="flex flex-row justify-content-around ">
+                                        @can('ubah penyesuaian gaji')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $data->id }})"
+                                                class="btn btn-sm btn-primary">
+                                                Ubah
+                                            </a>
+                                        @endcan
+                                        @can('hapus penyesuaian gaji')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $data->id }})"
+                                                class="btn btn-sm btn-danger">
+                                                Hapus
+                                            </a>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
 
                         </tbody>
                     </table>
@@ -51,14 +70,25 @@
 @endsection
 
 @section('style')
-    <link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
 @endsection
 
 @section('script')
-    <script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
     <script>
+        const initialState = {
+            salaryAdjustments: [],
+        };
+
+        let state = {
+            ...initialState
+        };
+
         $(document).ready(function() {
             $('.dataTable').DataTable();
+
+            state.salaryAdjustments = {!! json_encode($salaryAdjustments) !!};
+            // state.salaryAdjustments = JSON.parse(salaryAdjustments.replace(/&quot;/g, '"'));
+
+            console.info(state);
 
             setupSelect();
             send();
@@ -71,7 +101,10 @@
         }
 
         function onEdit(id) {
-            console.info(id);
+            // console.info(id);
+            const findData = state.salaryAdjustments.find(data => data.id = id);
+
+            console.info(findData);
         }
 
         function onDelete(id) {
@@ -88,21 +121,7 @@
         }
 
         function setupSelect() {
-            let choices = document.querySelectorAll(".choices")
-            let initChoice
-            for (let i = 0; i < choices.length; i++) {
-                if (choices[i].classList.contains("multiple-remove")) {
-                    initChoice = new Choices(choices[i], {
-                        delimiter: ",",
-                        editItems: true,
-                        maxItemCount: -1,
-                        removeItemButton: true,
-                    })
-                } else {
-                    initChoice = new Choices(choices[i])
-                }
-            }
-
+            $(".select2").select2();
         }
 
         function clearForm() {

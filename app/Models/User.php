@@ -72,4 +72,16 @@ class User extends Authenticatable
     {
         return $this->getAllPermissions();
     }
+
+    public function getDataParsingAttribute()
+    {
+        $data = collect([
+            "id" => $this->id,
+            "name" => $this->name,
+            "email" => $this->email,
+            "role_id" => $this->role_id,
+        ]);
+
+        return $data;
+    }
 }

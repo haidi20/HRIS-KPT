@@ -12,9 +12,11 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama Pengguna </label>
+                        <label for="name" class="col-sm-4 col-form-label">Nama Penambahan / Pengurangan
+                        </label>
                         <div class="col-sm-8">
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="name" name="name" class="form-control"
+                                placeholder="contoh: naik kapal">
                         </div>
                     </div>
                 </div>

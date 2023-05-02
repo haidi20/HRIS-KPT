@@ -61,13 +61,13 @@
                                     </td>
                                     <td class="flex flex-row justify-content-around ">
                                         @can('ubah pengguna')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $user }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $user->data_parsing }})"
                                                 class="btn btn-sm btn-primary">
                                                 Ubah
                                             </a>
                                         @endcan
                                         @can('hapus pengguna')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $user }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $user->data_parsing }})"
                                                 class="btn btn-sm btn-danger">
                                                 Hapus
                                             </a>

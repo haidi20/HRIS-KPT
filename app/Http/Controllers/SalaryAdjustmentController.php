@@ -10,9 +10,17 @@ class SalaryAdjustmentController extends Controller
 {
     public function index()
     {
-        $salaryAdjustments = [];
+        $salaryAdjustments = [
+            (object)[
+                "id" => 1,
+                "name" => "Naik Kapal",
+            ],
+        ];
+        // $salaryAdjustments = $salaryAdjustments->toJson();
 
-        return view("pages.setting.role", compact("salaryAdjustments"));
+        // return $salaryAdjustments;
+
+        return view("pages.setting.salary-adjustment", compact("salaryAdjustments"));
     }
 
     public function store(Request $request)
