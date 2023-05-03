@@ -75,7 +75,7 @@
                     </li>
                 @endcan
                 @can('lihat job order')
-                    <li class="sidebar-item {{ isActive('jobOrder') }} ">
+                    <li class="sidebar-item {{ isActive('job-order') }} ">
                         <a href="{{ route('jobOrder.index') }}" class='sidebar-link'>
                             <i class="bi bi-pencil-square"></i>
                             <span>Job Order</span>

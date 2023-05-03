@@ -23,7 +23,7 @@
             <div class="card">
                 <div class="card-header">
                     Data
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right" id="addData"
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
                         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Proyek
                     </button>
@@ -51,6 +51,21 @@
                                         {{ $project->total_job_order }}
                                     </td>
                                     <td>
+                                        <div class="btn-group dropdown me-1 mb-1">
+                                            <button type="button"
+                                                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                data-reference="parent">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Option 1</a>
+                                                <a class="dropdown-item active" href="#">Option 2</a>
+                                                <a class="dropdown-item" href="#">Option 3</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">Separated link</a>
+                                            </div>
+                                        </div>
                                         @can('detail proyek')
                                             <a href="javascript:void(0)" onclick="onDetail({{ $project->id }})"
                                                 class="btn btn-sm btn-primary">
