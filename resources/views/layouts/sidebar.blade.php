@@ -101,7 +101,7 @@
                         <i class="bi bi-people"></i>
                         <span>Karyawan</span>
                     </a>
-                    <ul class="submenu {{ isActive('master/employee') }}" style="display: block;">
+                    <ul class="submenu {{ isActive('master/employee') }}" style="{{ (Request::is('master/employee') || Request::is('master/typeEmployee')) ? 'display: block;' : 'display: none;' }}">
                         @can('lihat karyawan')
                         <li class="submenu-item {{ isActive('master/employee') }}">
                             <a href="{{ route('master.employee.index') }}">Daftar Karyawan</a>
@@ -124,7 +124,7 @@
                         <i class="bi bi-folder-check"></i>
                         <span>Pekerjaan</span>
                     </a>
-                    <ul class="submenu {{ isActive('master/employee') }}" style="display: block;">
+                    <ul class="submenu {{ isActive('master/employee') }}" style="{{ (Request::is('master/job') || Request::is('master/schedule')) ? 'display: block;' : 'display: none;' }}">
                        @can('lihat daftar pekerjaan')
                         <li class="submenu-item {{ isActive('master/job') }}">
                             <a href="{{ route('master.job.index') }}">Daftar Pekerjaan</a>
@@ -142,7 +142,7 @@
                         <i class="bi bi-cash-coin"></i>
                         <span>Gaji</span>
                     </a>
-                    <ul class="submenu {{ isActive('master/employee') }}" style="display: block;">
+                    <ul class="submenu {{ isActive('master/employee') }}" style="{{ (Request::is('payslip') || Request::is('payroll')) ? 'display: block;' : 'display: none;' }}">
                        @can('lihat slip gaji karyawan')
                         <li class="submenu-item {{ isActive('payslip') }}">
                             <a href="{{ route('payslip.index') }}">Daftar Pekerjaan</a>
