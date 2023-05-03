@@ -60,8 +60,40 @@
                     $allPermissionSetting = ['lihat jabatan'];
                 @endphp
                 @canany($allPermissionSetting)
-                    <li class="sidebar-title has-sub">Master</li>
+                    <li class="sidebar-title has-sub">Data Utama</li>
                 @endcanany
+                @can('lihat perusahaan')
+                    <li class="sidebar-item {{ isActive('master/company') }}">
+                        <a href="{{ route('master.company.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Perusahaan</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat jenis karyawan')
+                    <li class="sidebar-item {{ isActive('master/typeEmployee') }}">
+                        <a href="{{ route('master.typeEmployee.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Jenis Karyawan</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat kapal')
+                    <li class="sidebar-item {{ isActive('master/barge') }}">
+                        <a href="{{ route('master.barge.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Kapal</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat daftar pekerjaan')
+                    <li class="sidebar-item {{ isActive('master/job') }}">
+                        <a href="{{ route('master.job.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Daftar Pekerjaan</span>
+                        </a>
+                    </li>
+                @endcan
                 @can('lihat jabatan')
                     <li class="sidebar-item {{ isActive('master/position') }}">
                         <a href="{{ route('master.position.index') }}" class='sidebar-link'>

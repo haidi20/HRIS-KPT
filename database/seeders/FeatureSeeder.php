@@ -23,6 +23,12 @@ class FeatureSeeder extends Seeder
             ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
             ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
             ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
+            ["name" => "Jabatan", "description" => ""],
+            ["name" => "Perusahaan", "description" => ""],
+            ["name" => "Jenis Karyawan", "description" => ""],
+            ["name" => "Kapal", "description" => ""],
+            ["name" => "Daftar Pekerjaan", "description" => ""],
+            ["name" => "Karyawan", "description" => ""],
         ]);
     }
 }

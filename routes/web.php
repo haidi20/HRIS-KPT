@@ -4,13 +4,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BargeController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\SalaryAdjustmentController;
+use App\Http\Controllers\TypeEmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkingHourController;
 use Illuminate\Support\Facades\Auth;
@@ -40,8 +45,24 @@ Route::prefix("dashboard")->name("dashboard.")->group(function () {
 });
 
 Route::prefix("master")->name("master.")->group(function () {
+    Route::prefix('company')->name("company.")->group(function () {
+        Route::get('', [CompanyController::class, "index"])->name("index");
+    });
+    Route::prefix('type-employee')->name("typeEmployee.")->group(function () {
+        Route::get('', [TypeEmployeeController::class, "index"])->name("index");
+    });
+    // barge = kapal tongkang
+    Route::prefix('barge')->name("barge.")->group(function () {
+        Route::get('', [BargeController::class, "index"])->name("index");
+    });
+    Route::prefix('job')->name("job.")->group(function () {
+        Route::get('', [JobController::class, "index"])->name("index");
+    });
     Route::prefix('position')->name("position.")->group(function () {
         Route::get('', [PositionController::class, "index"])->name("index");
+    });
+    Route::prefix('employee')->name("employee.")->group(function () {
+        Route::get('', [EmployeeController::class, "index"])->name("index");
     });
 });
 Route::prefix("setting")->name("setting.")->group(function () {

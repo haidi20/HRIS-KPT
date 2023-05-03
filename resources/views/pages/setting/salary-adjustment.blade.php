@@ -88,7 +88,7 @@
             state.salaryAdjustments = {!! json_encode($salaryAdjustments) !!};
             // state.salaryAdjustments = JSON.parse(salaryAdjustments.replace(/&quot;/g, '"'));
 
-            console.info(state);
+            // console.info(state);
 
             setupSelect();
             send();
