@@ -14,7 +14,9 @@
 
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
     <link href="{{ asset('assets\vendors\select2\css\select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css\custom.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 
     @yield('style')
@@ -24,38 +26,62 @@
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     <div id="app">
         @include('layouts.sidebar')
-        <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
-            </header>
+        <div id="main" class='layout-navbar'>
+            @include('layouts.header')
+            <div id="main-content" class="pt-0">
 
-            @yield('content')
+                @yield('content')
+            </div>
+        </div>
+    </div>
 
-            {{-- <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2023 &copy; Mazer</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                            by <a href="https://saugi.me">Saugi</a></p>
-                    </div>
+    <div class="modal fade text-left" id="logout" tabindex="-1" aria-labelledby="logout" style="display: none;"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logout">Logout</h5>
+                    <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-x">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
                 </div>
-            </footer> --}}
+                <div class="modal-body">
+                    <p>
+                        Apakah anda yakin ingin keluar?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a href="/logout" class="btn btn-danger ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block"><i class="fas fa-door-open"></i>&nbsp; Keluar</span>
+                    </a>
+                    <button type="button" class="btn" data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Tutup</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     @isset($vue)
-        <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     @endisset
 
-    <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
+    <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script>
+    <script src="{{ asset('assets/compiled/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script>
+    {{-- <script src="{{ asset('js/bootstrap.js') }}" defer></script> --}}
     <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script> --}}
     <script src="{{ asset('assets\vendors\select2\js\select2.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js">
+    </script>
     <script>
         $.ajaxSetup({
             headers: {
