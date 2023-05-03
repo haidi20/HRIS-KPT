@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BargeController;
@@ -10,10 +11,16 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\OvertimeController;
+use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\RosterController;
 use App\Http\Controllers\SalaryAdjustmentController;
 use App\Http\Controllers\TypeEmployeeController;
 use App\Http\Controllers\UserController;
@@ -43,6 +50,30 @@ Route::group(['middleware' => 'guest'], function () {
 Route::prefix("dashboard")->name("dashboard.")->group(function () {
     Route::get('', [DashboardController::class, "index"])->name("index");
 });
+Route::prefix("attendance")->name("attendance.")->group(function () {
+    Route::get('', [AttendanceController::class, "index"])->name("index");
+});
+Route::prefix("roster")->name("roster.")->group(function () {
+    Route::get('', [RosterController::class, "index"])->name("index");
+});
+Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
+    Route::get('', [RosterController::class, "index"])->name("index");
+});
+Route::prefix("overtime")->name("overtime.")->group(function () {
+    Route::get('', [OvertimeController::class, "index"])->name("index");
+});
+Route::prefix("payslip")->name("payslip.")->group(function () {
+    Route::get('', [PayslipController::class, "index"])->name("index");
+});
+Route::prefix("payroll")->name("payroll.")->group(function () {
+    Route::get('', [PayrollController::class, "index"])->name("index");
+});
+Route::prefix("project")->name("project.")->group(function () {
+    Route::get('', [ProjectController::class, "index"])->name("index");
+});
+Route::prefix("job-order")->name("jobOrder.")->group(function () {
+    Route::get('', [JobOrderController::class, "index"])->name("index");
+});
 
 Route::prefix("master")->name("master.")->group(function () {
     Route::prefix('company')->name("company.")->group(function () {
@@ -66,7 +97,7 @@ Route::prefix("master")->name("master.")->group(function () {
     });
 });
 Route::prefix("setting")->name("setting.")->group(function () {
-    Route::prefix('salary-adjusment')->name("salaryAdjustment.")->group(function () {
+    Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
         Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
     });
     Route::prefix('working-hour')->name("workingHour.")->group(function () {

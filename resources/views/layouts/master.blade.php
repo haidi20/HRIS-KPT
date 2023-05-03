@@ -50,12 +50,12 @@
         <script src="{{ asset('js/app.js') }}"></script>
     @endisset
 
+    <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
     <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
     <script src="{{ asset('assets\vendors\select2\js\select2.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
-    {{-- <script src="{{ asset('assets/compiled/js/app.js') }}"></script> --}}
     <script>
         $.ajaxSetup({
             headers: {

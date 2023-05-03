@@ -17,18 +17,29 @@ class FeatureSeeder extends Seeder
     {
         Feature::insert([
             ["name" => "Dashboard", "description" => "Manajemen Data Dashboard"],
-            ["name" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
-            ["name" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
-            ["name" => "Pengguna", "description" => "Manajemen Data Pengguna"],
-            ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
-            ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
-            ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
+            ["name" => "Absensi", "description" => ""],
+            ["name" => "Roster", "description" => ""],
+            ["name" => "Kasbon", "description" => ""],
+            ["name" => "Surat Perintah Lembur", "description" => ""],
+            ["name" => "Slip Gaji", "description" => ""],
+            ["name" => "Penggajian", "description" => ""],
+            ["name" => "Proyek", "description" => ""],
+            ["name" => "Job Order", "description" => ""],
+            // master
             ["name" => "Jabatan", "description" => ""],
             ["name" => "Perusahaan", "description" => ""],
             ["name" => "Jenis Karyawan", "description" => ""],
             ["name" => "Kapal", "description" => ""],
             ["name" => "Daftar Pekerjaan", "description" => ""],
             ["name" => "Karyawan", "description" => ""],
+            // setting
+            ["name" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
+            ["name" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
+            ["name" => "Pengguna", "description" => "Manajemen Data Pengguna"],
+            ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
+            ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
+            ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
+
         ]);
     }
 }

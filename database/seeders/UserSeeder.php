@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         $superadmin = User::create([
             'name' => 'super admin',
             'email' => 'superadmin@email.com',
-            'password' => Hash::make('Samarinda123'),
+            'password' => Hash::make('samarinda'),
             'role_id' => 1,
             'status' => true,
         ]);
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         $superadmin = User::create([
             'name' => 'admin',
             'email' => 'admin@addmin.com',
-            'password' => Hash::make('Samarinda123'),
+            'password' => Hash::make('samarinda'),
             'role_id' => 2,
             'status' => true,
         ]);

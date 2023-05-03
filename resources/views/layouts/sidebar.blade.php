@@ -56,6 +56,70 @@
                         </a>
                     </li>
                 @endcan
+                @can('lihat absensi')
+                    <li class="sidebar-item {{ isActive('attendance') }} ">
+                        <a href="{{ route('attendance.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Absensi</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat roster')
+                    <li class="sidebar-item {{ isActive('roster') }} ">
+                        <a href="{{ route('roster.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Roster</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat kasbon')
+                    <li class="sidebar-item {{ isActive('salaryAdvance') }} ">
+                        <a href="{{ route('salaryAdvance.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Kasbon</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat surat perintah lembur')
+                    <li class="sidebar-item {{ isActive('overtime') }} ">
+                        <a href="{{ route('overtime.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Surat Perintah Lembur</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat slip gaji karyawan')
+                    <li class="sidebar-item {{ isActive('payslip') }} ">
+                        <a href="{{ route('payslip.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Slip Gaji</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat penggajian')
+                    <li class="sidebar-item {{ isActive('payroll') }} ">
+                        <a href="{{ route('payroll.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Penggajian</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat proyek')
+                    <li class="sidebar-item {{ isActive('project') }} ">
+                        <a href="{{ route('project.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Proyek</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat job order')
+                    <li class="sidebar-item {{ isActive('jobOrder') }} ">
+                        <a href="{{ route('jobOrder.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Job Order</span>
+                        </a>
+                    </li>
+                @endcan
                 @php
                     $allPermissionSetting = ['lihat jabatan'];
                 @endphp
