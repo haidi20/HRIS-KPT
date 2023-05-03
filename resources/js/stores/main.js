@@ -3,11 +3,13 @@ import Vuex from 'vuex';
 import axios from "axios";
 import moment from "moment";
 
+import JobOrder from "./JobOrder";
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
-        // roster: Roster,
+        jobOrder: JobOrder,
     },
     state: {
         user: {},

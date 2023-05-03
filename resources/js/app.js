@@ -3,9 +3,10 @@ import store from "./stores/main";
 
 import Vue from "vue";
 
+import VueEvents from "vue-events";
 import BootstrapVue from "bootstrap-vue";
 import VueSweetalert2 from "vue-sweetalert2";
-import VueEvents from "vue-events";
+import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import { ServerTable, ClientTable, Event } from "vue-tables-2";
 // import clickOutside from './vue-directive-clickOutside';
 
@@ -25,6 +26,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component("dashboard", require("./modules/dashboard/Dashboard.vue").default);
+Vue.component("job-order", require("./modules/job-order/JobOrder.vue").default);
 
 // Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;
@@ -35,7 +37,7 @@ Vue.config.productionTip = false;
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
+Vue.use(VueBottomSheet);
 Vue.use(VueEvents);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);

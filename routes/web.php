@@ -14,6 +14,7 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderCategoryController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobOrderReportController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\OvertimeController;
@@ -77,6 +78,9 @@ Route::prefix("project")->name("project.")->group(function () {
 });
 Route::prefix("job-order")->name("jobOrder.")->group(function () {
     Route::get('', [JobOrderController::class, "index"])->name("index");
+});
+Route::prefix("job-order-report")->name("jobOrderReport.")->group(function () {
+    Route::get('', [JobOrderReportController::class, "index"])->name("index");
 });
 
 Route::prefix("master")->name("master.")->group(function () {

@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.7.14"
     },
     "dependencies": {
+        "@webzlodimir/vue-bottom-sheet": "1.3.0",
         "babel-preset-es2015": "^6.24.1",
         "bootstrap-vue": "^2.23.1",
         "litepicker": "^2.0.12",
