@@ -10,8 +10,8 @@
       <b-col class="place-data">
         <b-row v-for="i in 3" :key="i">
           <b-col class="place-item" @click="onOpenAction(i)">
-            <h4>Perbaikan Kapal Bagian Belakang</h4>
-            <h5>Total Karyawan : 5</h5>
+            <h5>Perbaikan Kapal Bagian Belakang</h5>
+            <h6>Total Karyawan : 5</h6>
             <!--  -->
           </b-col>
         </b-row>

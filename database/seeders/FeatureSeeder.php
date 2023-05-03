@@ -25,6 +25,7 @@ class FeatureSeeder extends Seeder
             ["name" => "Penggajian", "description" => ""],
             ["name" => "Proyek", "description" => ""],
             ["name" => "Job Order", "description" => ""],
+            ["name" => "Laporan Job Order", "description" => ""],
             // master
             ["name" => "Jabatan", "description" => ""],
             ["name" => "Perusahaan", "description" => ""],

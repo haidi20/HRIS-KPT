@@ -29,6 +29,9 @@ export default {
     Form,
     VueBottomSheet,
   },
+  mounted() {
+    this.$bvModal.show("form_job_order");
+  },
   methods: {
     onCreate() {
       //   console.info("create");

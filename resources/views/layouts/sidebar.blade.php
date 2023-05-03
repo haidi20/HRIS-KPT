@@ -92,6 +92,20 @@
                     </li>
                 @endcan
                 @php
+                    $allPermissionSetting = ['lihat laporan job order'];
+                @endphp
+                @canany($allPermissionSetting)
+                    <li class="sidebar-title has-sub">Data Laporan</li>
+                @endcanany
+                @can('lihat laporan job order')
+                    <li class="sidebar-item {{ isActive('jobOrderReport') }} ">
+                        <a href="{{ route('jobOrderReport.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Laporan Job Order</span>
+                        </a>
+                    </li>
+                @endcan
+                @php
                     $allPermissionSetting = ['lihat jabatan'];
                 @endphp
                 @canany($allPermissionSetting)
