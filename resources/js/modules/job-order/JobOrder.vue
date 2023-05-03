@@ -3,16 +3,20 @@
     <b-row>
       <b-col v-if="!isMobile()" col md="3" class></b-col>
       <b-col col :md="isMobile() ? 12 : 6">
-        <b-button variant="success" size="sm" @click="onOpen">show / hide</b-button>
-        <vue-bottom-sheet ref="myBottomSheet">actions</vue-bottom-sheet>
+        <h3 style="display: inline">Job Order</h3>
+        <b-button variant="success" size="sm" class="float-end" @click="onCreate()">Tambah</b-button>
+        <Table />
       </b-col>
       <b-col v-if="!isMobile()" col md="3" class></b-col>
     </b-row>
+    <Form />
   </div>
 </template>
 
 <script>
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
+import Table from "./Table";
+import Form from "./Form";
 
 export default {
   data() {
@@ -21,21 +25,24 @@ export default {
     };
   },
   components: {
+    Table,
+    Form,
     VueBottomSheet,
   },
   methods: {
+    onCreate() {
+      //   console.info("create");
+      this.$bvModal.show("form_job_order");
+    },
+    onClose() {
+      this.$refs.myBottomSheet.close();
+    },
     isMobile() {
       if (screen.width <= 760) {
         return true;
       } else {
         return false;
       }
-    },
-    onOpen() {
-      this.$refs.myBottomSheet.open();
-    },
-    onClose() {
-      this.$refs.myBottomSheet.close();
     },
   },
 };
