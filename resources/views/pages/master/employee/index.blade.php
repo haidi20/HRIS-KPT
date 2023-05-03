@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.project.partials.modal')
+    @include('pages.master.position.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Proyek</h3>
+                    <h3>Jabatan</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Proyek</li>
+                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,10 +22,10 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data
+                    Data Jabatan
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Proyek
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
                     </button>
                 </div>
                 <div class="card-body">
@@ -33,42 +33,23 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th>Perusahaan</th>
-                                <th>Total Job Order</th>
-                                <th width="25%"></th>
+                                <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($projects as $project)
+                            @foreach ($positions as $position)
                                 <tr>
                                     <td>
-                                        {{ $project->name }}
+                                        {{ $position->name }}
                                     </td>
                                     <td>
-                                        {{ $project->company_name }}
-                                    </td>
-                                    <td>
-                                        {{ $project->total_job_order }}
-                                    </td>
-                                    <td>
-                                        @can('detail proyek')
-                                            <a href="javascript:void(0)" onclick="onDetail({{ $project->id }})"
-                                                class="btn btn-sm btn-primary">
-                                                Detail
-                                            </a>
-                                        @endcan
-                                        @can('proyek job order')
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-warning">
-                                                Job Order
-                                            </a>
-                                        @endcan
-                                        @can('ubah proyek')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $project->id }})"
+                                        @can('ubah jabatan')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $position->id }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus proyek')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $project->id }})"
+                                        @can('hapus jabatan')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $position->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -94,7 +75,7 @@
 
     <script>
         const initialState = {
-            projects: [],
+            positions: [],
         };
 
         let state = {
@@ -104,18 +85,13 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.projects = {!! json_encode($projects) !!};
-            setupSelect();
+            state.positions = {!! json_encode($positions) !!};
             send();
         });
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Proyek");
-            onModalAction("formModal", "show");
-        }
-
-        function onDetail(id) {
+            $("#titleForm").html("Tambah Fitur");
             onModalAction("formModal", "show");
         }
 
@@ -126,14 +102,14 @@
             $("#name").val(data.name);
             $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Proyek");
+            $("#titleForm").html("Ubah Fitur");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data Proyek <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -252,10 +228,6 @@
                     }
                 });
             });
-        }
-
-        function setupSelect() {
-            $(".select2").select2();
         }
 
         function clearForm() {

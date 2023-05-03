@@ -34,5 +34,11 @@ class PermissionSeeder extends Seeder
         Permission::insert([
             "name" => "detail grup pengguna",  "description" => "detail grup pengguna",  "guard_name" => "web", "feature_id" => 7,
         ]);
+        Permission::insert([
+            "name" => "detail proyek",  "description" => "",  "guard_name" => "web", "feature_id" => 8,
+        ]);
+        Permission::insert([
+            "name" => "proyek job order",  "description" => "",  "guard_name" => "web", "feature_id" => 8,
+        ]);
     }
 }
