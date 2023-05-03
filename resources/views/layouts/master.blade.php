@@ -77,7 +77,7 @@
     @endisset
 
     <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script>
-    {{-- not found bootstrap --}}
+    {{-- bootstrap.js not found --}}
     {{-- <script src="{{ asset('assets/compiled/js/bootstrap.js') }}"></script> --}}
     <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script>
     {{-- <script src="{{ asset('js/bootstrap.js') }}" defer></script> --}}

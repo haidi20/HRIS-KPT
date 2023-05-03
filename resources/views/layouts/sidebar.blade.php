@@ -231,14 +231,25 @@
                         @endcan
                     </ul>
                 </li>
-                {{-- @can('lihat fitur')
-                <li class="sidebar-item {{ isActive('setting/feature') }}">
-                    <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
+                @can('lihat fitur')
+                    <li class="sidebar-item {{ isActive('setting/feature') }}">
+                        <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Fitur</span>
+                        </a>
+                    </li>
+                @endcan
+                <li class="sidebar-item">
+                    <a href="{{ route('logout') }}" class='sidebar-link'
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="bi bi-grid-fill"></i>
-                        <span>Fitur</span>
+                        <span>Keluar</span>
                     </a>
+                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display:none">
+                        @csrf
+                        <button type="submit" class="">Logout</button>
+                    </form>
                 </li>
-                @endcan --}}
             </ul>
         </div>
     </div>

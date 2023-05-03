@@ -4,7 +4,7 @@
       id="data_employee"
       ref="data_employee"
       :title="getTitleForm"
-      size="md"
+      size="lg"
       class="modal-custom"
       hide-footer
     >
