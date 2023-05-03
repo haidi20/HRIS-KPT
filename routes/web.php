@@ -9,9 +9,13 @@ use App\Http\Controllers\BargeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeTypeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobOrderCategoryController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PayslipController;
@@ -22,7 +26,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\SalaryAdjustmentController;
-use App\Http\Controllers\TypeEmployeeController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkingHourController;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +84,7 @@ Route::prefix("master")->name("master.")->group(function () {
         Route::get('', [CompanyController::class, "index"])->name("index");
     });
     Route::prefix('type-employee')->name("typeEmployee.")->group(function () {
-        Route::get('', [TypeEmployeeController::class, "index"])->name("index");
+        Route::get('', [EmployeeTypeController::class, "index"])->name("index");
     });
     // barge = kapal tongkang
     Route::prefix('barge')->name("barge.")->group(function () {
@@ -91,6 +95,18 @@ Route::prefix("master")->name("master.")->group(function () {
     });
     Route::prefix('position')->name("position.")->group(function () {
         Route::get('', [PositionController::class, "index"])->name("index");
+    });
+    Route::prefix('location')->name("location.")->group(function () {
+        Route::get('', [LocationController::class, "index"])->name("index");
+    });
+    Route::prefix('material')->name("material.")->group(function () {
+        Route::get('', [MaterialController::class, "index"])->name("index");
+    });
+    Route::prefix("job-order-category")->name("jobOrderCategory.")->group(function () {
+        Route::get('', [JobOrderCategoryController::class, "index"])->name("index");
+    });
+    Route::prefix("schedule")->name("schedule.")->group(function () {
+        Route::get('', [ScheduleController::class, "index"])->name("index");
     });
     Route::prefix('employee')->name("employee.")->group(function () {
         Route::get('', [EmployeeController::class, "index"])->name("index");

@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.setting.partials.feature-modal')
+    @include('pages.master.position.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Fitur</h3>
+                    <h3>Jabatan</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Fitur</li>
+                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,10 +22,10 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data Fitur
+                    Data Jabatan
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Fitur
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
                     </button>
                 </div>
                 <div class="card-body">
@@ -33,32 +33,23 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th>Deskripsi</th>
                                 <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($features as $feature)
+                            @foreach ($positions as $position)
                                 <tr>
                                     <td>
-                                        {{ $feature->name }}
+                                        {{ $position->name }}
                                     </td>
                                     <td>
-                                        {{ $feature->description }}
-                                    </td>
-                                    <td class="flex flex-row justify-content-around">
-                                        @can('detail fitur')
-                                            <a href="{{ route('setting.permission.index', ['featureId' => $feature->id]) }}"
-                                                class="btn btn-sm btn-primary">Detail
-                                            </a>
-                                        @endcan
-                                        @can('ubah fitur')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
+                                        @can('ubah jabatan')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $position->id }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus fitur')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
+                                        @can('hapus jabatan')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $position->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -83,9 +74,18 @@
     <script src="assets/static/js/pages/dashboard.js"></script> --}}
 
     <script>
+        const initialState = {
+            positions: [],
+        };
+
+        let state = {
+            ...initialState
+        };
+
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
+            state.positions = {!! json_encode($positions) !!};
             send();
         });
 

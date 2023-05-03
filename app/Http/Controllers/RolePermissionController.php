@@ -6,6 +6,7 @@ use App\Models\Feature;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
@@ -16,7 +17,9 @@ class RolePermissionController extends Controller
     public function index($roleId)
     {
         $nameGroupUser = Role::find($roleId)->name;
-        $features = Feature::all();
+
+        $names = Config("library.feature_private");
+        $features = Feature::whereNotIn("name", $names)->get();
 
         return view("pages.setting.role-permission", compact("features", "nameGroupUser", "roleId"));
     }

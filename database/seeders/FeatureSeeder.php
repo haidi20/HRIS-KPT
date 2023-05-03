@@ -30,6 +30,10 @@ class FeatureSeeder extends Seeder
             ["name" => "Perusahaan", "description" => ""],
             ["name" => "Jenis Karyawan", "description" => ""],
             ["name" => "Kapal", "description" => ""],
+            ["name" => "Lokasi", "description" => ""],
+            ["name" => "Bahan", "description" => ""],
+            ["name" => "Kategori Job Order", "description" => ""],
+            ["name" => "Jadwal Kerja", "description" => ""],
             ["name" => "Daftar Pekerjaan", "description" => ""],
             ["name" => "Karyawan", "description" => ""],
             // setting

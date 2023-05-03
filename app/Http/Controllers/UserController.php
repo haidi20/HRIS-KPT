@@ -13,8 +13,18 @@ class UserController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
-        $users = User::all();
+        $userRoleId = auth()->user()->role_id;
+
+        $roles = new Role;
+        $users = new User;
+
+        if ($userRoleId != 1) {
+            $roles = $roles->where("id", "!=", 1);
+            $users = $users->where("id", "!=", 1);
+        }
+
+        $roles = $roles->get();
+        $users = $users->get();
 
         return view("pages.setting.user", compact("users", "roles"));
     }
