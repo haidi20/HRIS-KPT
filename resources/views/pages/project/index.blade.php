@@ -51,7 +51,7 @@
                                         {{ $project->total_job_order }}
                                     </td>
                                     <td>
-                                        <div class="btn-group dropdown me-1 mb-1">
+                                        {{-- <div class="btn-group dropdown me-1 mb-1">
                                             <button type="button"
                                                 class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -65,7 +65,7 @@
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#">Separated link</a>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         @can('detail proyek')
                                             <a href="javascript:void(0)" onclick="onDetail({{ $project->id }})"
                                                 class="btn btn-sm btn-primary">
