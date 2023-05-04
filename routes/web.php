@@ -27,6 +27,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\SalaryAdjustmentController;
+use App\Http\Controllers\SalaryAdvanceController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkingHourController;
@@ -62,7 +63,7 @@ Route::prefix("roster")->name("roster.")->group(function () {
     Route::get('', [RosterController::class, "index"])->name("index");
 });
 Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
-    Route::get('', [RosterController::class, "index"])->name("index");
+    Route::get('', [SalaryAdvanceController::class, "index"])->name("index");
 });
 Route::prefix("overtime")->name("overtime.")->group(function () {
     Route::get('', [OvertimeController::class, "index"])->name("index");

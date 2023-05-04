@@ -24,7 +24,7 @@
                 <div class="card-header">
                     Data
                     @can('tambah penyesuaian gaji')
-                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end ml-2" id="addData"
                             data-toggle="modal">
                             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Penyesuaian Gaji
                         </button>

@@ -40,6 +40,12 @@
                         </div>
                         <div class="col-md-2" style="align-self: center">
                             <button type="button" onclick="onFilter()" class="btn btn-sm btn-success">Kirim</button>
+                            @can('ekspor surat perintah lembur')
+                                <button type="button" id="btn_export" onclick="onExport()"
+                                    class="btn btn-sm btn-success mt-2 ml-4 mt-md-0">
+                                    <i class="fas fa-file-excel"></i> Export
+                                </button>
+                            @endcan
                         </div>
                     </div>
                     <br>
@@ -58,7 +64,7 @@
                             @foreach ($overtimes as $overtime)
                                 <tr>
                                     <td>
-                                        {{ $overtime->name }}
+                                        {{ $overtime->employee_name }}
                                     </td>
                                     <td>
                                         {{ $overtime->job_order_name }}
@@ -118,6 +124,10 @@
         });
 
         function onFilter() {
+            console.info("filter data");
+        }
+
+        function onExport() {
             console.info("filter data");
         }
 

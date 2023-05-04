@@ -11,7 +11,7 @@ class OvertimeController extends Controller
         $overtimes = [
             (object)[
                 "id" => 1,
-                "name" => "Muhammad Adi",
+                "employee_name" => "Muhammad Adi",
                 "job_order_name" => "Perbaikan Mesin",
                 "duration" => "3 Jam",
                 "date_time_start" => "Jum'at, 05 Mei 2023 17:00",

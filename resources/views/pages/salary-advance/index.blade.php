@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.project.partials.modal')
+    @include('pages.master.position.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Proyek</h3>
+                    <h3>Kasbon</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Proyek</li>
+                            <li class="breadcrumb-item active" aria-current="page">Kasbon</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,11 +22,13 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Proyek
-                    </button>
+                    Data Kasbon
+                    @can('tambah kasbon')
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                            data-toggle="modal">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Kasbon
+                        </button>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -51,57 +53,43 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th>Perusahaan</th>
-                                <th>Total Job Order</th>
-                                <th width="25%"></th>
+                                <th>Total Kasbon</th>
+                                <th>Potongan Per Bulan</th>
+                                <th>Durasi</th>
+                                <th>Sisa Gaji</th>
+                                <th>Tanggal</th>
+                                <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($projects as $project)
+                            @foreach ($salaryAdvances as $salaryAdvance)
                                 <tr>
                                     <td>
-                                        {{ $project->name }}
+                                        {{ $salaryAdvance->employee_name }}
                                     </td>
                                     <td>
-                                        {{ $project->company_name }}
+                                        {{ $salaryAdvance->amount }}
                                     </td>
                                     <td>
-                                        {{ $project->total_job_order }}
+                                        {{ $salaryAdvance->monthly_deduction }}
                                     </td>
                                     <td>
-                                        {{-- <div class="btn-group dropdown me-1 mb-1">
-                                            <button type="button"
-                                                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                data-reference="parent">
-                                                <span class="sr-only">Toggle Dropdown</span>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Option 1</a>
-                                                <a class="dropdown-item active" href="#">Option 2</a>
-                                                <a class="dropdown-item" href="#">Option 3</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Separated link</a>
-                                            </div>
-                                        </div> --}}
-                                        @can('detail proyek')
-                                            <a href="javascript:void(0)" onclick="onDetail({{ $project->id }})"
-                                                class="btn btn-sm btn-primary">
-                                                Detail
-                                            </a>
-                                        @endcan
-                                        @can('proyek job order')
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-warning">
-                                                Job Order
-                                            </a>
-                                        @endcan
-                                        @can('ubah proyek')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $project->id }})"
+                                        {{ $salaryAdvance->duration }}
+                                    </td>
+                                    <td>
+                                        {{ $salaryAdvance->net_salary }}
+                                    </td>
+                                    <td>
+                                        {{ $salaryAdvance->date }}
+                                    </td>
+                                    <td>
+                                        @can('ubah kasbon')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $salaryAdvance->id }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus proyek')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $project->id }})"
+                                        @can('hapus kasbon')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $salaryAdvance->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -125,7 +113,7 @@
 
     <script>
         const initialState = {
-            projects: [],
+            salaryAdvances: [],
         };
 
         let state = {
@@ -135,20 +123,14 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.projects = {!! json_encode($projects) !!};
-            setupSelect();
+            state.salaryAdvances = {!! json_encode($salaryAdvances) !!};
             setupDateFilter();
             send();
         });
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Proyek");
-            onModalAction("formModal", "show");
-            // $("#formModal").modal("show");
-        }
-
-        function onDetail(id) {
+            $("#titleForm").html("Tambah Fitur");
             onModalAction("formModal", "show");
         }
 
@@ -157,16 +139,15 @@
 
             $("#id").val(data.id);
             $("#name").val(data.name);
-            $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Proyek");
+            $("#titleForm").html("Ubah Fitur");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data Proyek <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -285,10 +266,6 @@
                     }
                 });
             });
-        }
-
-        function setupSelect() {
-            $(".select2").select2();
         }
 
         function setupDateFilter() {
