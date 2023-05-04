@@ -11,7 +11,7 @@
         <b-row v-for="i in 3" :key="i">
           <b-col class="place-item" @click="onOpenAction(i)">
             <h5>Perbaikan Kapal Bagian Belakang</h5>
-            <h6>Total Karyawan : 5</h6>
+            <span>Total Karyawan : 5</span>
             <!--  -->
           </b-col>
         </b-row>

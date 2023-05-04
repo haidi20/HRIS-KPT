@@ -23,7 +23,7 @@
             <div class="card">
                 <div class="card-header">
                     Data Jabatan
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right" id="addData"
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
                         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
                     </button>

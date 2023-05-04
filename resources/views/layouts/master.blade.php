@@ -73,7 +73,7 @@
         </div>
     </div>
     @isset($vue)
-        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ asset('js/app040523.js') }}"></script>
     @endisset
 
     <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script>

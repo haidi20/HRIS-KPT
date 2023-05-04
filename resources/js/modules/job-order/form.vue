@@ -132,13 +132,7 @@
       <b-row>
         <b-col cols>
           <b-form-group label="Masukkan Foto" label-for="image" class>
-            <b-form-file
-              id="image"
-              v-model="form.image"
-              :state="Boolean(form.image)"
-              placeholder="Pilih Foto"
-              drop-placeholder="taruh disini"
-            ></b-form-file>
+            <b-form-file id="image" v-model="form.image"></b-form-file>
           </b-form-group>
         </b-col>
       </b-row>
@@ -180,6 +174,9 @@ export default {
       getTitleForm: "Tambah Job Order",
     };
   },
+  mounted() {
+    // this.$bvModal.show("data_employee");
+  },
   components: {
     VueSelect,
     Employee,
@@ -210,6 +207,9 @@ export default {
     },
     onShowEmployee() {
       this.$bvModal.show("data_employee");
+    },
+    onSend() {
+      this.$bvModal.hide("form_job_order");
     },
   },
 };

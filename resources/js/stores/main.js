@@ -4,12 +4,14 @@ import axios from "axios";
 import moment from "moment";
 
 import JobOrder from "./JobOrder";
+import Employee from "./Employee";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
         jobOrder: JobOrder,
+        employee: Employee,
     },
     state: {
         user: {},

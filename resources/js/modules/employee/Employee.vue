@@ -8,14 +8,18 @@
       class="modal-custom"
       hide-footer
     >
-      data Karyawan
-      <!--  -->
+      <Form />
+      <br />
+      <Table />
     </b-modal>
   </div>
 </template>
 
 <script>
+import Form from "./Form.vue";
+import Table from "./Table.vue";
 export default {
+  components: { Table, Form },
   data() {
     return {
       getTitleForm: "Data Karyawan",
