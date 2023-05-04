@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.position.partials.modal')
+    @include('pages.overtime.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Jabatan</h3>
+                    <h3>Surat Perintah Lembur</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
+                            <li class="breadcrumb-item active" aria-current="page">SPL</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,10 +22,10 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data Jabatan
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right" id="addData"
+                    Data SPL
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah SPL
                     </button>
                 </div>
                 <div class="card-body">
@@ -33,23 +33,39 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
+                                <th>Job Order</th>
+                                <th>Durasi</th>
+                                <th>Waktu Mulai</th>
+                                <th>Waktu Selesai</th>
                                 <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($positions as $position)
+                            @foreach ($overtimes as $overtime)
                                 <tr>
                                     <td>
-                                        {{ $position->name }}
+                                        {{ $overtime->name }}
+                                    </td>
+                                    <td>
+                                        {{ $overtime->job_order_name }}
+                                    </td>
+                                    <td>
+                                        {{ $overtime->duration }}
+                                    </td>
+                                    <td>
+                                        {{ $overtime->date_time_start }}
+                                    </td>
+                                    <td>
+                                        {{ $overtime->date_time_end }}
                                     </td>
                                     <td>
                                         @can('ubah jabatan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $position->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $overtime->id }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
                                         @can('hapus jabatan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $position->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $overtime->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -75,7 +91,7 @@
 
     <script>
         const initialState = {
-            positions: [],
+            overtimes: [],
         };
 
         let state = {
@@ -85,7 +101,7 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.positions = {!! json_encode($positions) !!};
+            state.overtimes = {!! json_encode($overtimes) !!};
             send();
         });
 
