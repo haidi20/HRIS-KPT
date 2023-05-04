@@ -261,3 +261,17 @@ body {
 .border-dotted {
     border-style: dotted;
 }
+.badge-success {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.375rem;
+  color: #fff;
+  background-color: #157347;
+}
+

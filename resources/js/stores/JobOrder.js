@@ -19,6 +19,7 @@ const JobOrder = {
         params: {
             date: new Date(),
             data_type: 1,
+            data_by_type: 1,
         },
         form: { ...defaultForm },
         options: {
@@ -88,6 +89,16 @@ const JobOrder = {
                 {
                     id: 3,
                     name: "aktif",
+                },
+            ],
+            data_by_types: [
+                {
+                    id: 1,
+                    name: "diri anda",
+                },
+                {
+                    id: 2,
+                    name: "pengawas lain",
                 },
             ],
         },

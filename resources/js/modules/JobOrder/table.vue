@@ -14,6 +14,11 @@
         <b-row v-for="i in 3" :key="i">
           <b-col class="place-item" @click="onOpenAction(i)">
             <h5>Perbaikan Kapal Bagian Belakang</h5>
+            <span>
+              Status :
+              <div class="badge-success">Aktif</div>
+            </span>
+            <br />
             <span>Total Karyawan : 5</span>
             <br />
             <span>Total Karyawan Aktif: 4</span>
@@ -27,6 +32,7 @@
             <div class="action-item">selesai</div>
             <div class="action-item">perbaikan</div>
             <div class="action-item">ubah</div>
+            <div class="action-item">detail</div>
             <div class="action-item">penilaian</div>
           </div>
         </vue-bottom-sheet>

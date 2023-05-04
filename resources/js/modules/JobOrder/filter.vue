@@ -16,7 +16,24 @@
               class="cursor-pointer"
               v-model="params.data_type"
               placeholder="Pilih Jenis Data"
-              :options="getOptionTypeData"
+              :options="getOptionDataType"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Pilih Data Berdasarkan" label-for="data_by_type" class>
+            <VueSelect
+              id="data_by_type"
+              class="cursor-pointer"
+              v-model="params.data_by_type"
+              placeholder="Pilih Data Berdasarkan"
+              :options="getOptionDataByType"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -27,7 +44,9 @@
       </b-row>
       <b-row>
         <b-col>
-          <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
+          <b-form-group label="Kata Kunci" label-for="data_by_type" class>
+            <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
+          </b-form-group>
         </b-col>
       </b-row>
       <br />
@@ -53,8 +72,11 @@ export default {
     VueSelect,
   },
   computed: {
-    getOptionTypeData() {
+    getOptionDataType() {
       return this.$store.state.jobOrder.options.data_types;
+    },
+    getOptionDataByType() {
+      return this.$store.state.jobOrder.options.data_by_types;
     },
     params() {
       return this.$store.state.jobOrder.params;
