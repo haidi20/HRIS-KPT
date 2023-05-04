@@ -21,16 +21,14 @@
           </b-col>
         </b-row>
         <vue-bottom-sheet ref="myBottomSheet">
-          <b-row class="place-action">
-            <b-col class="flex flex-col">
-              <div class="action-item">tunda</div>
-              <div class="action-item">mulai</div>
-              <div class="action-item">selesai</div>
-              <div class="action-item">perbaikan</div>
-              <div class="action-item">ubah</div>
-              <div class="action-item">penilaian</div>
-            </b-col>
-          </b-row>
+          <div class="flex flex-col">
+            <div class="action-item">tunda</div>
+            <div class="action-item">mulai</div>
+            <div class="action-item">selesai</div>
+            <div class="action-item">perbaikan</div>
+            <div class="action-item">ubah</div>
+            <div class="action-item">penilaian</div>
+          </div>
         </vue-bottom-sheet>
       </b-col>
     </b-row>
@@ -72,11 +70,8 @@ export default {
   border-bottom: 1px solid #dbdfea;
   padding: 0.5rem;
 }
-.place-action {
-  padding: 10px;
-}
 .action-item {
-  margin: 10px 0px 10px 0px;
-  padding-left: 10px;
+  padding: 25px 0px 25px 20px;
+  border-bottom: 1px solid #dbdfea;
 }
 </style>

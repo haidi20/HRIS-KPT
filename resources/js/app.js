@@ -27,9 +27,10 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component("roster", require("./modules/Roster/roster.vue").default);
-Vue.component("joborder", require("./modules/JobOrder/jobOrder.vue").default);
-Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);
+Vue.component("job-order", require("./modules/JobOrder/jobOrder.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
+Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);
+Vue.component("job-order-report", require("./modules/JobOrderReport/jobOrderReport.vue").default);
 
 // Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;

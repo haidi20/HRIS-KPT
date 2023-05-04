@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="root">
-        <joborder />
+        <job-order />
     </div>
 @endsection
 

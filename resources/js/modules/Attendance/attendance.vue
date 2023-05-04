@@ -11,7 +11,7 @@
         </b-row>
         <br />
         <b-tabs content-class="mt-3" active>
-          <b-tab title="Main">
+          <b-tab title="Utama">
             <Main />
           </b-tab>
         </b-tabs>
