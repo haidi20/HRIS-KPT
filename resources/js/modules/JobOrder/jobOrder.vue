@@ -30,12 +30,12 @@ export default {
     VueBottomSheet,
   },
   mounted() {
-    // this.$bvModal.show("form_job_order");
+    // this.$bvModal.show("job_order_form");
   },
   methods: {
     onCreate() {
       //   console.info("create");
-      this.$bvModal.show("form_job_order");
+      this.$bvModal.show("job_order_form");
     },
     onClose() {
       this.$refs.myBottomSheet.close();

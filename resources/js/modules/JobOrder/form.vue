@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-modal
-      id="form_job_order"
-      ref="form_job_order"
+      id="job_order_form"
+      ref="job_order_form"
       :title="getTitleForm"
       size="lg"
       class="modal-custom"
@@ -203,13 +203,13 @@ export default {
   },
   methods: {
     onCloseModal() {
-      this.$bvModal.hide("form_job_order");
+      this.$bvModal.hide("job_order_form");
     },
     onShowEmployee() {
       this.$bvModal.show("data_employee");
     },
     onSend() {
-      this.$bvModal.hide("form_job_order");
+      this.$bvModal.hide("job_order_form");
     },
   },
 };

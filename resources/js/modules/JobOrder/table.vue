@@ -2,7 +2,7 @@
   <div>
     <b-row style="margin-top: 10px">
       <b-col cols>
-        <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
+        <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
       </b-col>
     </b-row>
     <br />
@@ -26,43 +26,31 @@
               <div class="action-item">perbaikan</div>
               <div class="action-item">ubah</div>
               <div class="action-item">penilaian</div>
-              <!-- <b-row>
-                <b-col>tunda</b-col>
-              </b-row>
-              <b-row>
-                <b-col>mulai</b-col>
-              </b-row>
-              <b-row>
-                <b-col>selesai</b-col>
-              </b-row>
-              <b-row>
-                <b-col>perbaikan</b-col>
-              </b-row>
-              <b-row>
-                <b-col>ubah</b-col>
-              </b-row>
-              <b-row>
-                <b-col>penilaian</b-col>
-              </b-row>-->
             </b-col>
           </b-row>
         </vue-bottom-sheet>
       </b-col>
     </b-row>
+    <FilterData />
   </div>
 </template>
 
 <script>
+import FilterData from "./filter.vue";
 export default {
   data() {
     return {
       title: "",
     };
   },
+  components: { FilterData },
   methods: {
     onOpenAction(i) {
       //   console.info(i);
       this.$refs.myBottomSheet.open();
+    },
+    onFilter() {
+      this.$bvModal.show("job_order_filter");
     },
   },
 };
@@ -82,5 +70,6 @@ export default {
 }
 .action-item {
   margin: 10px 0px 10px 0px;
+  padding-left: 10px;
 }
 </style>
