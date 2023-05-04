@@ -6,6 +6,7 @@ import moment from "moment";
 import Roster from "./Roster";
 import JobOrder from "./JobOrder";
 import Employee from "./Employee";
+import Attendance from "./Attendance";
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
         roster: Roster,
         jobOrder: JobOrder,
         employee: Employee,
+        attendance: Attendance,
     },
     state: {
         user: {},

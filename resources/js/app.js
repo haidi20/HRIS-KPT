@@ -28,6 +28,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 
 Vue.component("roster", require("./modules/Roster/roster.vue").default);
 Vue.component("joborder", require("./modules/JobOrder/jobOrder.vue").default);
+Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
 
 // Vue.directive('click-outside', clickOutside);

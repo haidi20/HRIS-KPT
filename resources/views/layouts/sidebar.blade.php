@@ -143,7 +143,7 @@
                         style="{{ Request::is('master/job') || Request::is('master/schedule') ? 'display: block;' : 'display: none;' }}">
                         @can('lihat daftar pekerjaan')
                             <li class="submenu-item {{ isActive('master/job') }}">
-                                <a href="{{ route('master.job.index') }}">Daftar Pekerjaan</a>
+                                <a href="{{ route('master.job.index') }}">Daftar Jenis Pekerjaan</a>
                             </li>
                         @endcan
                         @can('lihat jadwal kerja')
