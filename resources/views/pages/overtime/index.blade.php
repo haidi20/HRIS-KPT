@@ -23,12 +23,26 @@
             <div class="card">
                 <div class="card-header">
                     Data SPL
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah SPL
-                    </button>
+                    @can('tambah jabatan')
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                            data-toggle="modal">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah SPL
+                        </button>
+                    @endcan
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="basicInput">Pilih Tanggal</label>
+                                <input type="text" class="form-control" id="date_filter" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="align-self: center">
+                            <button type="button" onclick="onFilter()" class="btn btn-sm btn-success">Kirim</button>
+                        </div>
+                    </div>
+                    <br>
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
@@ -81,14 +95,11 @@
     </div>
 @endsection
 
+@section('style')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+@endsection
 @section('script')
-    {{-- <script src="assets/static/js/components/dark.js"></script>
-    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script> --}}
-
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
     <script>
         const initialState = {
             overtimes: [],
@@ -102,8 +113,13 @@
             $('.dataTable').DataTable();
 
             state.overtimes = {!! json_encode($overtimes) !!};
+            setupDateFilter();
             send();
         });
+
+        function onFilter() {
+            console.info("filter data");
+        }
 
         function onCreate() {
             clearForm();
@@ -243,6 +259,29 @@
                         });
                     }
                 });
+            });
+        }
+
+        function setupDateFilter() {
+            new Litepicker({
+                element: document.getElementById('date_filter'),
+                singleMode: false,
+                tooltipText: {
+                    one: 'night',
+                    other: 'nights'
+                },
+                tooltipNumber: (totalDays) => {
+                    return totalDays - 1;
+                },
+                setup: (picker) => {
+                    picker.on('selected', (startDate, endDate) => {
+                        startDate = moment(startDate.dateInstance).format("yyyy-MM-DD");
+                        endDate = moment(endDate.dateInstance).format("yyyy-MM-DD");
+
+                        state.date_start_filter = startDate;
+                        state.date_end_filter = endDate;
+                    });
+                },
             });
         }
 
