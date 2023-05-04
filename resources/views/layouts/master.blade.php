@@ -76,11 +76,9 @@
             </div>
         </div>
     </div>
-    @isset($vue)
-        <script src="{{ asset('js/app040523.js') }}"></script>
-    @endisset
 
-    <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script>
+
+    {{-- <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script> --}}
     {{-- bootstrap.js not found --}}
     {{-- <script src="{{ asset('assets/compiled/js/bootstrap.js') }}"></script> --}}
     <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script>
@@ -91,6 +89,9 @@
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    @isset($vue)
+        <script src="{{ asset('js/app.js') }}"></script>
+    @endisset
     <script>
         $.ajaxSetup({
             headers: {

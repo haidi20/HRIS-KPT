@@ -1,3 +1,8 @@
+html, body, #app, #main, #main-content, #root{
+    height: 100%;
+     overflow: hidden;
+}
+
 #main #main-content {
     padding-left: 2rem !important;
 }

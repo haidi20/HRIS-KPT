@@ -26,7 +26,7 @@
                     @can('tambah jabatan')
                         <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                             data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah SPL
+                            <i class="fas fa-plus text-white-50"></i> Tambah SPL
                         </button>
                     @endcan
                 </div>

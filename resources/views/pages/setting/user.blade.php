@@ -24,15 +24,15 @@
                 <div class="card-header">
                     Data
                     @can('lihat grup pengguna')
-                        <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-right ml-2"
+                        <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-end ml-2"
                             id="addData" data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Grup Pengguna
+                            Grup Pengguna
                         </a>
                     @endcan
                     @can('tambah pengguna')
-                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end ml-2" id="addData"
                             data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Pengguna
+                            <i class="fas fa-plus text-white-50"></i> Tambah Pengguna
                         </button>
                     @endcan
                 </div>

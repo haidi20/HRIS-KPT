@@ -34,8 +34,16 @@
         </section>
     </div> --}}
     <div id="root">
-        <job-order />
+        <joborder />
     </div>
+@endsection
+
+@section('style')
+    <style>
+        #root {
+            /* background-color: white; */
+        }
+    </style>
 @endsection
 
 @section('script')

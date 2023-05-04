@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -105,5 +106,35 @@ class UserController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    private function index_backup()
+    {
+        // Define the data
+        $usersData = [
+            [
+                'name' => 'John Doe',
+                'role_id' => 2,
+                'email' => 'john@example.com',
+                'password' => bcrypt('secret'),
+            ],
+            [
+                'name' => 'Jane Doe',
+                'role_id' => 2,
+                'email' => 'jane@example.com',
+                'password' => bcrypt('secret'),
+            ],
+        ];
+
+        // Create a collection of data
+        $users = new Collection();
+
+        foreach ($usersData as $data) {
+            $user = new User();
+            $user->fill($data);
+            $users->add($user);
+        }
+
+        // return $user;
     }
 }

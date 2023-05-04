@@ -26,7 +26,7 @@
                     @can('tambah grup pengguna')
                         <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end ml-2" id="addData"
                             data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Grup User
+                            <i class="fas fa-plus text-white-50"></i> Tambah Grup User
                         </button>
                     @endcan
                 </div>

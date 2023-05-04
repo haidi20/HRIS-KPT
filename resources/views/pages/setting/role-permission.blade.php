@@ -26,13 +26,13 @@
                     @can('tambah fitur')
                         <a href="{{ route('setting.feature.index') }}" class="btn btn-sm btn-success shadow-sm  ml-2 float-end"
                             id="addData" data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Fitur
+                            <i class="fas fa-plus text-white-50"></i> Tambah Fitur
                         </a>
                     @endcan
                     @can('lihat grup pengguna')
-                        <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-end"
-                            data-toggle="modal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Kembali
+                        <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-end">
+                            <i class="fas fa-angle-left text-white-50"></i>
+                            Kembali
                         </a>
                     </div>
                 @endcan

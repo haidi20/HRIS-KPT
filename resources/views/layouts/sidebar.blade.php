@@ -51,7 +51,7 @@
                     </li>
                 @endcan
                 @can('lihat kasbon')
-                    <li class="sidebar-item {{ isActive('salaryAdvance') }} ">
+                    <li class="sidebar-item {{ isActive('salary-advance') }} ">
                         <a href="{{ route('salaryAdvance.index') }}" class='sidebar-link'>
                             <i class="bi bi-receipt"></i>
                             <span>Kasbon</span>
