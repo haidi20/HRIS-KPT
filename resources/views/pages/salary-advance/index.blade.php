@@ -53,7 +53,7 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th>Total Kasbon</th>
+                                <th>Jumlah Kasbon</th>
                                 <th>Potongan Per Bulan</th>
                                 <th>Durasi</th>
                                 <th>Sisa Gaji</th>
