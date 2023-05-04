@@ -4,7 +4,7 @@
       id="job_order_filter"
       ref="job_order_filter"
       :title="getTitleForm"
-      size="lg"
+      size="md"
       class="modal-custom"
       hide-footer
     >

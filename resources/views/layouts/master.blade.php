@@ -78,7 +78,7 @@
     </div>
 
 
-    {{-- <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script> --}}
+    <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script>
     {{-- bootstrap.js not found --}}
     {{-- <script src="{{ asset('assets/compiled/js/bootstrap.js') }}"></script> --}}
     <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script>

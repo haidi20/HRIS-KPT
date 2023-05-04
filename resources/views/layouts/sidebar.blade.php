@@ -34,19 +34,19 @@
                         </a>
                     </li>
                 @endcan
-                @can('lihat absensi')
-                    <li class="sidebar-item {{ isActive('attendance') }} ">
-                        <a href="{{ route('attendance.index') }}" class='sidebar-link'>
-                            <i class="bi bi-fingerprint"></i>
-                            <span>Absensi</span>
+                @can('lihat proyek')
+                    <li class="sidebar-item {{ isActive('project') }} ">
+                        <a href="{{ route('project.index') }}" class='sidebar-link'>
+                            <i class="bi bi-check-all"></i>
+                            <span>Proyek</span>
                         </a>
                     </li>
                 @endcan
-                @can('lihat roster')
-                    <li class="sidebar-item {{ isActive('roster') }} ">
-                        <a href="{{ route('roster.index') }}" class='sidebar-link'>
-                            <i class="bi bi-list-check"></i>
-                            <span>Roster</span>
+                @can('lihat job order')
+                    <li class="sidebar-item {{ isActive('job-order') }} ">
+                        <a href="{{ route('jobOrder.index') }}" class='sidebar-link'>
+                            <i class="bi bi-pencil-square"></i>
+                            <span>Job Order</span>
                         </a>
                     </li>
                 @endcan
@@ -66,19 +66,19 @@
                         </a>
                     </li>
                 @endcan
-                @can('lihat proyek')
-                    <li class="sidebar-item {{ isActive('project') }} ">
-                        <a href="{{ route('project.index') }}" class='sidebar-link'>
-                            <i class="bi bi-check-all"></i>
-                            <span>Proyek</span>
+                @can('lihat roster')
+                    <li class="sidebar-item {{ isActive('roster') }} ">
+                        <a href="{{ route('roster.index') }}" class='sidebar-link'>
+                            <i class="bi bi-list-check"></i>
+                            <span>Roster</span>
                         </a>
                     </li>
                 @endcan
-                @can('lihat job order')
-                    <li class="sidebar-item {{ isActive('job-order') }} ">
-                        <a href="{{ route('jobOrder.index') }}" class='sidebar-link'>
-                            <i class="bi bi-pencil-square"></i>
-                            <span>Job Order</span>
+                @can('lihat absensi')
+                    <li class="sidebar-item {{ isActive('attendance') }} ">
+                        <a href="{{ route('attendance.index') }}" class='sidebar-link'>
+                            <i class="bi bi-fingerprint"></i>
+                            <span>Absensi</span>
                         </a>
                     </li>
                 @endcan

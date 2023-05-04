@@ -10,6 +10,7 @@ import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import { ServerTable, ClientTable, Event } from "vue-tables-2";
 // import clickOutside from './vue-directive-clickOutside';
 
+import 'vue2-datepicker/index.css';
 import "vue-select/dist/vue-select.css";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -25,8 +26,9 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
+Vue.component("roster", require("./modules/Roster/roster.vue").default);
 Vue.component("joborder", require("./modules/JobOrder/jobOrder.vue").default);
+Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
 
 // Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;

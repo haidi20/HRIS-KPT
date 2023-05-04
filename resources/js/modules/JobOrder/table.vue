@@ -4,6 +4,9 @@
       <b-col cols>
         <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
       </b-col>
+      <b-col cols style="align-item: right">
+        <b-button variant="success" size="sm" class="float-end" @click="onCreate()">Tambah</b-button>
+      </b-col>
     </b-row>
     <br />
     <b-row>
@@ -48,6 +51,10 @@ export default {
     onOpenAction(i) {
       //   console.info(i);
       this.$refs.myBottomSheet.open();
+    },
+    onCreate() {
+      //   console.info("create");
+      this.$bvModal.show("job_order_form");
     },
     onFilter() {
       this.$bvModal.show("job_order_filter");

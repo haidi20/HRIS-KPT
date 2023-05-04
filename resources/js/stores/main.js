@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import axios from "axios";
 import moment from "moment";
 
+import Roster from "./Roster";
 import JobOrder from "./JobOrder";
 import Employee from "./Employee";
 
@@ -10,6 +11,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
+        roster: Roster,
         jobOrder: JobOrder,
         employee: Employee,
     },

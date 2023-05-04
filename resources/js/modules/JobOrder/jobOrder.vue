@@ -4,7 +4,6 @@
       <b-col v-if="!isMobile()" col md="3" class></b-col>
       <b-col col :md="isMobile() ? 12 : 6" id="main-content">
         <h3 style="display: inline">Job Order</h3>
-        <b-button variant="success" size="sm" class="float-end" @click="onCreate()">Tambah</b-button>
         <Table />
       </b-col>
       <b-col v-if="!isMobile()" col md="3" class></b-col>
@@ -33,10 +32,6 @@ export default {
     // this.$bvModal.show("job_order_form");
   },
   methods: {
-    onCreate() {
-      //   console.info("create");
-      this.$bvModal.show("job_order_form");
-    },
     onClose() {
       this.$refs.myBottomSheet.close();
     },
@@ -56,5 +51,8 @@ export default {
   background-color: white;
   height: 100%;
   padding-top: 20px;
+  border-radius: 30px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 </style>

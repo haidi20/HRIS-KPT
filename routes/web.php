@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("roster")->name("roster.")->group(function () {
         Route::get('', [RosterController::class, "index"])->name("index");
+        Route::get('fetch-data', [RosterController::class, "fetchData"])->name("fetchData");
     });
     Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
         Route::get('', [SalaryAdvanceController::class, "index"])->name("index");
