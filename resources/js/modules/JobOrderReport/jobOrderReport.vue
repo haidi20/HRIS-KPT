@@ -11,7 +11,16 @@
         </b-row>
         <br />
         <b-tabs content-class="mt-3" active>
+          <!-- semua data -->
           <b-tab title="Utama">
+            <Main />
+          </b-tab>
+          <!-- data yang statusnya tunda -->
+          <b-tab title="Tunda">
+            <Main />
+          </b-tab>
+          <!-- data yang di lanjutkan lembur -->
+          <b-tab title="Lembur">
             <Main />
           </b-tab>
         </b-tabs>

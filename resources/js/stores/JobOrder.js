@@ -8,6 +8,7 @@ const defaultForm = {
     type_job_id: "",
     type_job_note: "",
     image: null,
+    type_time: 1,
 }
 
 const JobOrder = {
@@ -16,7 +17,8 @@ const JobOrder = {
         base_url: null,
         data: [],
         params: {
-            date_filter: new Date(),
+            date: new Date(),
+            data_type: 1,
         },
         form: { ...defaultForm },
         options: {
@@ -72,6 +74,20 @@ const JobOrder = {
                 {
                     id: 3,
                     name: "Borongan",
+                },
+            ],
+            data_types: [
+                {
+                    id: 1,
+                    name: "utama",
+                },
+                {
+                    id: 2,
+                    name: "tunda",
+                },
+                {
+                    id: 3,
+                    name: "aktif",
                 },
             ],
         },
