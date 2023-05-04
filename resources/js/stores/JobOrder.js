@@ -80,7 +80,7 @@ const JobOrder = {
             data_types: [
                 {
                     id: 1,
-                    name: "utama",
+                    name: "semua",
                 },
                 {
                     id: 2,

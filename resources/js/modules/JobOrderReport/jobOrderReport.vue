@@ -12,16 +12,16 @@
         <br />
         <b-tabs content-class="mt-3" active>
           <!-- semua data -->
-          <b-tab title="Utama">
-            <Main />
+          <b-tab title="Semua">
+            <All />
           </b-tab>
           <!-- data yang statusnya tunda -->
           <b-tab title="Tunda">
-            <Main />
+            <All />
           </b-tab>
           <!-- data yang di lanjutkan lembur -->
           <b-tab title="Lembur">
-            <Main />
+            <All />
           </b-tab>
         </b-tabs>
       </div>
@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import Main from "./main.vue";
+import All from "./all.vue";
 export default {
-  components: { Main },
+  components: { All },
   data() {
     return {
       title: "Laporan Job Order",

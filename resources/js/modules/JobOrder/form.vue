@@ -152,9 +152,14 @@
       </b-row>
       <br />
       <b-row>
-        <b-col class style="text-align: end">
+        <b-col>
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-          <b-button variant="success" @click="onSend()" :disabled="is_loading">Simpan</b-button>
+          <b-button
+            style="float: right"
+            variant="success"
+            @click="onSend()"
+            :disabled="is_loading"
+          >Simpan</b-button>
           <span v-if="is_loading">Loading...</span>
         </b-col>
       </b-row>

@@ -32,7 +32,7 @@
             <div class="action-item">selesai</div>
             <div class="action-item">perbaikan</div>
             <div class="action-item">ubah</div>
-            <div class="action-item">detail</div>
+            <div class="action-item" @click="onCreate">detail</div>
             <div class="action-item">penilaian</div>
           </div>
         </vue-bottom-sheet>
@@ -58,6 +58,7 @@ export default {
     },
     onCreate() {
       //   console.info("create");
+      this.$refs.myBottomSheet.close();
       this.$bvModal.show("job_order_form");
     },
     onFilter() {

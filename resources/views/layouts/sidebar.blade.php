@@ -29,7 +29,7 @@
                 @can('lihat dashboard')
                     <li class="sidebar-item {{ isActive('dashboard') }} ">
                         <a href="{{ route('dashboard.index') }}" class='sidebar-link'>
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-file-bar-graph"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -37,7 +37,7 @@
                 @can('lihat proyek')
                     <li class="sidebar-item {{ isActive('project') }} ">
                         <a href="{{ route('project.index') }}" class='sidebar-link'>
-                            <i class="bi bi-check-all"></i>
+                            <i class="bi bi-pencil"></i>
                             <span>Proyek</span>
                         </a>
                     </li>
@@ -91,7 +91,7 @@
                 @can('lihat laporan job order')
                     <li class="sidebar-item {{ isActive('jobOrderReport') }} ">
                         <a href="{{ route('jobOrderReport.index') }}" class='sidebar-link'>
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-file-earmark-bar-graph"></i>
                             <span>Laporan Job Order</span>
                         </a>
                     </li>
@@ -158,30 +158,35 @@
                         @endcan
                     </ul>
                 </li>
-                <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-cash-coin"></i>
-                        <span>Gaji</span>
-                    </a>
-                    <ul class="submenu {{ isActive('master/employee') }}"
-                        style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat slip gaji karyawan')
-                            <li class="submenu-item {{ isActive('payslip') }}">
-                                <a href="{{ route('payslip.index') }}">Slip Gaji Karyawan</a>
-                            </li>
-                        @endcan
-                        @can('lihat penggajian')
-                            <li class="submenu-item {{ isActive('payroll') }}">
-                                <a href="{{ route('payroll.index') }}">Penggajian</a>
-                            </li>
-                        @endcan
-                        @can('lihat penyesuaian gaji')
-                            <li class="submenu-item {{ isActive('setting/salary-adjustment') }}">
-                                <a href="{{ route('setting.salaryAdjustment.index') }}">Penyesuaian Gaji</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
+                @php
+                    $allPermissionSalary = ['lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
+                @endphp
+                @canany($allPermissionSalary)
+                    <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-cash-coin"></i>
+                            <span>Gaji</span>
+                        </a>
+                        <ul class="submenu {{ isActive('master/employee') }}"
+                            style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat slip gaji')
+                                <li class="submenu-item {{ isActive('payslip') }}">
+                                    <a href="{{ route('payslip.index') }}">Slip Gaji Karyawan</a>
+                                </li>
+                            @endcan
+                            @can('lihat penggajian')
+                                <li class="submenu-item {{ isActive('payroll') }}">
+                                    <a href="{{ route('payroll.index') }}">Penggajian</a>
+                                </li>
+                            @endcan
+                            @can('lihat penyesuaian gaji')
+                                <li class="submenu-item {{ isActive('setting/salary-adjustment') }}">
+                                    <a href="{{ route('setting.salaryAdjustment.index') }}">Penyesuaian Gaji</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
                 @can('lihat kapal')
                     <li class="sidebar-item {{ isActive('master/barge') }}">
                         <a href="{{ route('master.barge.index') }}" class='sidebar-link'>
@@ -207,34 +212,37 @@
                     </li>
                 @endcan
                 @php
+                    $allPermissionUser = ['lihat pengguna', 'lihat grup pengguna'];
                     $allPermissionSetting = ['lihat penyesuaian gaji', 'lihat jam kerja', 'lihat pengguna', 'lihat grup pengguna', 'lihat fitur'];
                 @endphp
                 @canany($allPermissionSetting)
                     <li class="sidebar-title has-sub">Pengaturan</li>
                 @endcanany
-                <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-people"></i>
-                        <span>Pengguna</span>
-                    </a>
-                    <ul class="submenu {{ isActive('master/employee') }}"
-                        style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat pengguna')
-                            <li class="submenu-item {{ isActive('setting/user') }}">
-                                <a href="{{ route('setting.user.index') }}">Pengguna</a>
-                            </li>
-                        @endcan
-                        @can('lihat grup pengguna')
-                            <li class="submenu-item {{ isActive('setting/role') }}">
-                                <a href="{{ route('setting.role.index') }}">Grup Pengguna</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
+                @canany($allPermissionUser)
+                    <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-people"></i>
+                            <span>Pengguna</span>
+                        </a>
+                        <ul class="submenu {{ isActive('master/employee') }}"
+                            style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat pengguna')
+                                <li class="submenu-item {{ isActive('setting/user') }}">
+                                    <a href="{{ route('setting.user.index') }}">Pengguna</a>
+                                </li>
+                            @endcan
+                            @can('lihat grup pengguna')
+                                <li class="submenu-item {{ isActive('setting/role') }}">
+                                    <a href="{{ route('setting.role.index') }}">Grup Pengguna</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
                 @can('lihat fitur')
                     <li class="sidebar-item {{ isActive('setting/feature') }}">
                         <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-menu-up"></i>
                             <span>Fitur</span>
                         </a>
                     </li>
@@ -242,7 +250,7 @@
                 <li class="sidebar-item">
                     <a href="{{ route('logout') }}" class='sidebar-link'
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="bi bi-grid-fill"></i>
+                        <i class="bi bi-box-arrow-left"></i>
                         <span>Keluar</span>
                     </a>
                     <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display:none">

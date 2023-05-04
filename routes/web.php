@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -122,6 +123,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
     Route::prefix("setting")->name("setting.")->group(function () {
+        Route::prefix('approval-level')->name("approvalLevel.")->group(function () {
+            Route::get('', [ApprovalLevelController::class, "index"])->name("index");
+        });
         Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
             Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
         });
