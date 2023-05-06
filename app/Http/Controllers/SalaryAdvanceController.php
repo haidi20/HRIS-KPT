@@ -14,6 +14,15 @@ class SalaryAdvanceController extends Controller
 
     public function index()
     {
+
+
+        $vue = true;
+
+        return view("pages.salary-advance.index", compact("vue"));
+    }
+
+    public function fetchData()
+    {
         $salaryAdvances = [
             (object)[
                 "id" => 1,
@@ -26,8 +35,8 @@ class SalaryAdvanceController extends Controller
             ]
         ];
 
-        $vue = true;
-
-        return view("pages.salary-advance.index", compact("salaryAdvances", "vue"));
+        return response()->json([
+            "salaryAdvances" => $salaryAdvances,
+        ]);
     }
 }

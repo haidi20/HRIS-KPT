@@ -39,7 +39,7 @@ class FeatureSeeder extends Seeder
             ["name" => "Bahan", "description" => ""],
             ["name" => "Kategori Job Order", "description" => ""],
             ["name" => "Jadwal Kerja", "description" => ""],
-            ["name" => "Daftar Pekerjaan", "description" => ""],
+            ["name" => "Jenis Pekerjaan", "description" => ""],
             ["name" => "Karyawan", "description" => ""],
             // setting
             ["name" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],

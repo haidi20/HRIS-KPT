@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Feature;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\Config;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -31,21 +31,7 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        $listAdds = [
-            [
-                "name" => "detail grup pengguna",
-                "featurer_id" => 7,
-            ],
-            [
-                "name" => "detail proyek",
-                "featurer_id" => 8,
-            ],
-            [
-                // untuk tombol detail job order di proyek
-                "name" => "proyek job order",
-                "featurer_id" => 8,
-            ],
-        ];
+        $listAdds = Config("library.permission_added");
 
         foreach ($listAdds as $index => $add) {
             Permission::insert([

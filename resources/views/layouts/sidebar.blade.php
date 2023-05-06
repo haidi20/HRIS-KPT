@@ -183,7 +183,7 @@
                     </ul>
                 </li>
                 @php
-                    $allPermissionWork = ['lihat daftar pekerjaan', 'lihat jadwal kerja', 'lihat jam kerja'];
+                    $allPermissionWork = ['lihat jenis pekerjaan', 'lihat jadwal kerja', 'lihat jam kerja'];
                 @endphp
                 @canany($allPermissionWork)
                     <li
@@ -195,9 +195,9 @@
 
                         <ul class="submenu {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }}"
                             style="{{ Request::is('master/job') || Request::is('master/schedule') ? 'display: block;' : 'display: none;' }}">
-                            @can('lihat daftar pekerjaan')
+                            @can('lihat jenis pekerjaan')
                                 <li class="submenu-item {{ isActive('master/job') }}">
-                                    <a href="{{ route('master.job.index') }}">Daftar Jenis Pekerjaan</a>
+                                    <a href="{{ route('master.job.index') }}">Jenis Pekerjaan</a>
                                 </li>
                             @endcan
                             @can('lihat jadwal kerja')

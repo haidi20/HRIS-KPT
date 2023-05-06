@@ -27,18 +27,31 @@ const SalaryAdvance = {
         ],
         params: {
             date_filter: new Date(),
-            type: "belum lunas",
+            type: "accept",
         },
         form: { ...defaultForm },
         options: {
             types: [
+                // (opsional)
+                // {
+                //     id: "settled",
+                //     name: "lunas",
+                // },
+                // {
+                //     id: "unpaid",
+                //     name: "belum lunas",
+                // },
                 {
-                    id: "lunas",
-                    name: "lunas",
+                    id: "waiting",
+                    name: "menunggu persetujuan",
                 },
                 {
-                    id: "belum lunas",
-                    name: "belum lunas",
+                    id: "reject",
+                    name: "ditolak",
+                },
+                {
+                    id: "accept",
+                    name: "diterima",
                 },
             ],
         },

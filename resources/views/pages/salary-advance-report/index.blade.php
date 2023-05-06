@@ -38,6 +38,19 @@
                                 <input type="text" class="form-control" id="date_filter" autocomplete="off">
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="basicInput">Pilih Status</label>
+                                <select name="status" id="status" class="form-control select2" style="width: 100%;">
+                                    <option value="">Semua</option>
+                                    <option value="settled">Lunas</option>
+                                    <option value="unpaid">Belum Lunas</option>
+                                    <option value="accept">Diterima
+                                    <option value="reject">Ditolak
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-2" style="align-self: center">
                             <button type="button" onclick="onFilter()" class="btn btn-sm btn-success">Kirim</button>
                             @can('ekspor project')
@@ -52,12 +65,13 @@
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
-                                <th>Nama</th>
+                                <th>Nama karyawan</th>
                                 <th>Jumlah Kasbon</th>
                                 <th>Potongan Per Bulan</th>
                                 <th>Durasi</th>
                                 <th>Sisa Gaji</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Disetujui</th>
+                                <th>Sisa Hutang</th>
                                 <th width="20%"></th>
                             </tr>
                         </thead>
@@ -68,21 +82,39 @@
                                         {{ $salaryAdvance->employee_name }}
                                     </td>
                                     <td>
-                                        {{ $salaryAdvance->amount }}
+                                        Rp. {{ $salaryAdvance->amount }}
                                     </td>
                                     <td>
-                                        {{ $salaryAdvance->monthly_deduction }}
+                                        Rp. {{ $salaryAdvance->monthly_deduction }}
                                     </td>
                                     <td>
                                         {{ $salaryAdvance->duration }}
                                     </td>
                                     <td>
-                                        {{ $salaryAdvance->net_salary }}
+                                        Rp. {{ $salaryAdvance->net_salary }}
                                     </td>
                                     <td>
                                         {{ $salaryAdvance->date }}
                                     </td>
                                     <td>
+                                        Rp. {{ $salaryAdvance->remaining_debt }}
+                                    </td>
+                                    <td>
+                                        @can('persetujuan kasbon')
+                                            <a href="javascript:void(0)" onclick="onApprove({{ $salaryAdvance->id }})"
+                                                class="btn btn-sm btn-success">Terima
+                                            </a>
+                                            <a href="javascript:void(0)" onclick="onReject({{ $salaryAdvance->id }})"
+                                                class="btn btn-sm btn-danger">Tolak
+                                            </a>
+                                        @endcan
+                                        @can('perwakilan persetujuan kasbon')
+                                            @if ($salaryAdvance->status == 'accept')
+                                                <a href="javascript:void(0)" onclick="onEdit({{ $salaryAdvance->id }})"
+                                                    class="btn btn-sm btn-primary">Terima Perwakilan
+                                                </a>
+                                            @endif
+                                        @endcan
                                         @can('ubah kasbon')
                                             <a href="javascript:void(0)" onclick="onEdit({{ $salaryAdvance->id }})"
                                                 class="btn btn-sm btn-info">Ubah
