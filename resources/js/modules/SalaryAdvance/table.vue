@@ -11,49 +11,35 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <b-row v-for="i in 3" :key="i">
-          <b-col class="place-item" @click="onOpenAction(i)">
-            <h5>Muhammad Adi - Welder</h5>
+        <b-row v-for="(data, index) in getData" :key="index">
+          <b-col class="place-item" @click="onOpenAction(data.id)">
+            <h5>{{data.name}} - {{data.position_name}}</h5>
             <div class="flex flex-row">
               <div class="flex-grow-2 flex flex-col">
-                <span>Jumlah Kasbon :</span>
-                <span>Rp. 1.500.000</span>
-                <span class="title-item">Potongan Setiap Bulan :</span>
-                <span>Rp. 500.000</span>
-                <span class="title-item">Sudah Terbayarkan :</span>
+                <span>
+                  <b>Jumlah Kasbon :</b>
+                </span>
+                <span>{{data.amount}}</span>
+                <span class="title-item">
+                  <b>Potongan Setiap Bulan :</b>
+                </span>
+                <span>{{data.monthly_deduction}}</span>
+                <span class="title-item">
+                  <b>Keterangan :</b>
+                </span>
+                <span>{{data.note}}</span>
+                <!-- <span class="title-item">Sudah Terbayarkan :</span>
                 <span>Rp. 500.000</span>
                 <span class="title-item">Belum Terbayarkan :</span>
-                <span>Rp. 1.000.000</span>
+                <span>Rp. 1.000.000</span>-->
               </div>
               <div class="flex-grow flex flex-col">
-                <span>Durasi :</span>
-                <span>3 Bulan</span>
+                <span>
+                  <b>Durasi :</b>
+                </span>
+                <span>{{data.duration}}</span>
               </div>
             </div>
-            <!-- <b-row>
-              <b-col col sm="10">
-                <span>Jumlah Kasbon :</span>
-                <br />
-                <span>Rp. 1.500.000</span>
-                <br />
-                <span>Potongan Setiap Bulan :</span>
-                <br />
-                <span>Rp. 500.000</span>
-                <br />
-                <span>Sudah Terbayarkan :</span>
-                <br />
-                <span>Rp. 500.000</span>
-                <br />
-                <span>Belum Terbayarkan :</span>
-                <br />
-                <span>Rp. 1.000.000</span>
-              </b-col>
-              <b-col col sm="1">
-                <span>Durasi :</span>
-                <br />
-                <span>3 Bulan</span>
-              </b-col>
-            </b-row>-->
           </b-col>
         </b-row>
         <vue-bottom-sheet ref="myBottomSheet" max-height="20%">
@@ -64,18 +50,25 @@
       </b-col>
     </b-row>
     <FilterData />
+    <Form />
   </div>
 </template>
 
 <script>
-import FilterData from "./filter.vue";
+import Form from "./form";
+import FilterData from "./filter";
 export default {
   data() {
     return {
       title: "",
     };
   },
-  components: { FilterData },
+  components: { FilterData, Form },
+  computed: {
+    getData() {
+      return this.$store.state.salaryAdvance.data;
+    },
+  },
   methods: {
     onOpenAction(i) {
       //   console.info(i);
