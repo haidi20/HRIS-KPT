@@ -35,6 +35,11 @@
               </div>
               <div class="flex-grow flex flex-col">
                 <span>
+                  <b>Status :</b>
+                </span>
+                <div class="badge-success" style="width:5rem">{{data.status_readable}}</div>
+                <br />
+                <span>
                   <b>Durasi :</b>
                 </span>
                 <span>{{data.duration}}</span>

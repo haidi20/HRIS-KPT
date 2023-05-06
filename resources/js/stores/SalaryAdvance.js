@@ -22,12 +22,14 @@ const SalaryAdvance = {
                 amount: "Rp. 1.500.000",
                 monthly_deduction: "Rp. 500.000",
                 duration: "3 Bulan",
+                status: "accept",
+                status_readable: "Diterima",
                 note: "catatan kecil",
             }
         ],
         params: {
             date_filter: new Date(),
-            type: "accept",
+            type: "",
         },
         form: { ...defaultForm },
         options: {
@@ -41,6 +43,10 @@ const SalaryAdvance = {
                 //     id: "unpaid",
                 //     name: "belum lunas",
                 // },
+                {
+                    id: "",
+                    name: "semua",
+                },
                 {
                     id: "waiting",
                     name: "menunggu persetujuan",
