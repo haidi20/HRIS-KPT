@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class SalaryAdvanceController extends Controller
 {
+    // KASBON
     public function index()
     {
         $salaryAdvances = [
@@ -20,6 +21,8 @@ class SalaryAdvanceController extends Controller
             ]
         ];
 
-        return view("pages.salary-advance.index", compact("salaryAdvances"));
+        $vue = true;
+
+        return view("pages.salary-advance.index", compact("salaryAdvances", "vue"));
     }
 }

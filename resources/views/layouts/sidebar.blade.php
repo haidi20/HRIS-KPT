@@ -21,9 +21,9 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 @php
-                    $allPermissionSetting = ['lihat dashboard'];
+                    $allPermissionMenus = ['lihat dashboard', 'lihat proyek', 'lihat job order', 'lihat roster', 'lihat absensi'];
                 @endphp
-                @can($allPermissionSetting)
+                @can($allPermissionMenus)
                     <li class="sidebar-title">Menu</li>
                 @endcan
                 @can('lihat dashboard')
@@ -58,14 +58,14 @@
                         </a>
                     </li>
                 @endcan
-                @can('lihat surat perintah lembur')
+                {{-- @can('lihat surat perintah lembur')
                     <li class="sidebar-item {{ isActive('overtime') }} ">
                         <a href="{{ route('overtime.index') }}" class='sidebar-link'>
                             <i class="bi bi-cloud-moon"></i>
                             <span>Surat Perintah Lembur</span>
                         </a>
                     </li>
-                @endcan
+                @endcan --}}
                 @can('lihat roster')
                     <li class="sidebar-item {{ isActive('roster') }} ">
                         <a href="{{ route('roster.index') }}" class='sidebar-link'>
@@ -113,23 +113,40 @@
                     </li>
                 @endcanany
                 @php
-                    $allPermissionSetting = ['lihat laporan job order'];
+                    $allPermissionReports = ['lihat laporan job order', 'lihat laporan kasbon', 'lihat surat perintah lembur'];
                 @endphp
-                @canany($allPermissionSetting)
+                @canany($allPermissionReports)
                     <li class="sidebar-title has-sub">Laporan</li>
                 @endcanany
                 @can('lihat laporan job order')
-                    <li class="sidebar-item {{ isActive('jobOrderReport') }} ">
-                        <a href="{{ route('jobOrderReport.index') }}" class='sidebar-link'>
+                    <li class="sidebar-item {{ isActive('job-order-report') }} ">
+                        <a href="{{ route('report.jobOrder.index') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-bar-graph"></i>
                             <span>Laporan Job Order</span>
                         </a>
                     </li>
                 @endcan
+                @can('lihat laporan kasbon')
+                    <li class="sidebar-item {{ isActive('salary-advance-report') }} ">
+                        <a href="{{ route('report.salaryAdvance.index') }}" class='sidebar-link'>
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                            <span>Laporan Kasbon</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat laporan surat perintah lembur')
+                    <li class="sidebar-item {{ isActive('overtime-report') }} ">
+                        <a href="{{ route('report.overtime.index') }}" class='sidebar-link'>
+                            {{-- <i class="bi bi-cloud-moon"></i> --}}
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                            <span>Laporan Surat Perintah Lembur</span>
+                        </a>
+                    </li>
+                @endcan
                 @php
-                    $allPermissionSetting = ['lihat jabatan'];
+                    $allPermissionMains = ['lihat jabatan'];
                 @endphp
-                @canany($allPermissionSetting)
+                @canany($allPermissionMains)
                     <li class="sidebar-title has-sub">Utama</li>
                 @endcanany
                 @can('lihat perusahaan')
@@ -194,7 +211,7 @@
                             @endcan
                         </ul>
                     </li>
-                @endcan
+                @endcanany
                 @can('lihat kapal')
                     <li class="sidebar-item {{ isActive('master/barge') }}">
                         <a href="{{ route('master.barge.index') }}" class='sidebar-link'>

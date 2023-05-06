@@ -19,6 +19,8 @@ class OvertimeController extends Controller
             ]
         ];
 
-        return view("pages.overtime.index", compact("overtimes"));
+        $vue = true;
+
+        return view("pages.overtime.index", compact("overtimes", "vue"));
     }
 }

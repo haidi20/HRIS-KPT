@@ -20,12 +20,15 @@ class FeatureSeeder extends Seeder
             ["name" => "Absensi", "description" => ""],
             ["name" => "Roster", "description" => ""],
             ["name" => "Kasbon", "description" => ""],
-            ["name" => "Surat Perintah Lembur", "description" => ""],
+            // ["name" => "Surat Perintah Lembur", "description" => ""],
             ["name" => "Slip Gaji", "description" => ""],
             ["name" => "Penggajian", "description" => ""],
             ["name" => "Proyek", "description" => ""],
             ["name" => "Job Order", "description" => ""],
+            // laporan
             ["name" => "Laporan Job Order", "description" => ""],
+            ["name" => "Laporan Kasbon", "description" => ""],
+            ["name" => "Laporan Surat Perintah Lembur", "description" => ""],
             // master
             ["name" => "Jabatan", "description" => ""],
             ["name" => "Perusahaan", "description" => ""],

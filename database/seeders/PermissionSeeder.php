@@ -31,14 +31,26 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        Permission::insert([
-            "name" => "detail grup pengguna",  "description" => "detail grup pengguna",  "guard_name" => "web", "feature_id" => 7,
-        ]);
-        Permission::insert([
-            "name" => "detail proyek",  "description" => "",  "guard_name" => "web", "feature_id" => 8,
-        ]);
-        Permission::insert([
-            "name" => "proyek job order",  "description" => "",  "guard_name" => "web", "feature_id" => 8,
-        ]);
+        $listAdds = [
+            [
+                "name" => "detail grup pengguna",
+                "featurer_id" => 7,
+            ],
+            [
+                "name" => "detail proyek",
+                "featurer_id" => 8,
+            ],
+            [
+                // untuk tombol detail job order di proyek
+                "name" => "proyek job order",
+                "featurer_id" => 8,
+            ],
+        ];
+
+        foreach ($listAdds as $index => $add) {
+            Permission::insert([
+                "name" => $add["name"],  "description" => "",  "guard_name" => "web", "feature_id" => $add["featurer_id"],
+            ]);
+        }
     }
 }

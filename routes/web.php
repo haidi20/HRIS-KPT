@@ -19,6 +19,7 @@ use App\Http\Controllers\JobOrderReportController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\OvertimeController;
+use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\PermissionController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\SalaryAdjustmentController;
 use App\Http\Controllers\SalaryAdvanceController;
+use App\Http\Controllers\SalaryAdvanceReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkingHourController;
@@ -85,8 +87,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
     });
-    Route::prefix("job-order-report")->name("jobOrderReport.")->group(function () {
-        Route::get('', [JobOrderReportController::class, "index"])->name("index");
+
+    Route::prefix("report")->name("report.")->group(function () {
+        Route::prefix("job-order")->name("jobOrder.")->group(function () {
+            Route::get('', [JobOrderReportController::class, "index"])->name("index");
+        });
+        Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
+            Route::get('', [SalaryAdvanceReportController::class, "index"])->name("index");
+        });
+        Route::prefix("overtime")->name("overtime.")->group(function () {
+            Route::get('', [OvertimeReportController::class, "index"])->name("index");
+        });
     });
 
     Route::prefix("master")->name("master.")->group(function () {
