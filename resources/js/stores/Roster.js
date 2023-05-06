@@ -9,7 +9,12 @@ const Roster = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [],
+        data: [
+            {
+                id: "001-050523",
+                name: "perbaikan mesin kapal",
+            }
+        ],
         params: {
             date_filter: new Date(),
         },

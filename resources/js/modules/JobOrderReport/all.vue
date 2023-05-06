@@ -37,6 +37,13 @@
       <!-- <template v-slot:thead>
         <b-th v-for="i in 30" :key="`thead-${i}`" style="width: 30px">{{onCustomLabelNameDate(i)}}</b-th>
       </template>-->
+      <template v-slot:tbody="{ filteredData, currentPage }">
+        <b-tr v-for="(item, index) in filteredData" :key="index">
+          <template v-for="(column, index) in columns">
+            <b-td :key="`col-${index}`">{{ item[column] }}</b-td>
+          </template>
+        </b-tr>
+      </template>
     </DatatableClientSide>
   </div>
 </template>
