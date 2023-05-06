@@ -176,7 +176,8 @@
                         @endcan
                         @can('lihat jabatan')
                             <li class="submenu-item {{ isActive('master/position') }}">
-                                <a href="{{ route('master.position.index') }}">Jabatan</a>
+                                {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
+                                <a href="{{ route('master.position.index') }}">Departemen</a>
                             </li>
                         @endcan
                     </ul>

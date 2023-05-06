@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 
 class SalaryAdvanceController extends Controller
 {
-    // KASBON
+
+    /* KASBON
+        Salary advance adalah istilah yang digunakan untuk merujuk pada uang yang diberikan kepada karyawan sebelum tanggal gajian mereka,
+        yang nantinya akan dikurangi dari gaji mereka pada tanggal gajian selanjutnya.
+    */
+
     public function index()
     {
         $salaryAdvances = [

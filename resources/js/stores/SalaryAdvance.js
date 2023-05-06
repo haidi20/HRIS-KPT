@@ -12,10 +12,20 @@ const SalaryAdvance = {
         data: [],
         params: {
             date_filter: new Date(),
+            type: "belum lunas",
         },
         form: { ...defaultForm },
         options: {
-            //
+            types: [
+                {
+                    id: "lunas",
+                    name: "lunas",
+                },
+                {
+                    id: "belum lunas",
+                    name: "belum lunas",
+                },
+            ],
         },
         loading: {
             table: false,

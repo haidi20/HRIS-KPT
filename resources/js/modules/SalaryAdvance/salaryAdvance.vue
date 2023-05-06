@@ -15,7 +15,7 @@
 <script>
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import Table from "./table";
-import Form from "./form";
+// import Form from "./form";
 
 export default {
   data() {
@@ -25,7 +25,7 @@ export default {
   },
   components: {
     Table,
-    Form,
+    // Form,
     VueBottomSheet,
   },
   mounted() {
