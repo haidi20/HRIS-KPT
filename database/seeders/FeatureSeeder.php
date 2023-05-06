@@ -30,7 +30,8 @@ class FeatureSeeder extends Seeder
             ["name" => "Laporan Kasbon", "description" => ""],
             ["name" => "Laporan Surat Perintah Lembur", "description" => ""],
             // master
-            ["name" => "Jabatan", "description" => ""],
+            // ["name" => "Jabatan", "description" => ""],
+            ["name" => "Departemen", "description" => ""],
             ["name" => "Perusahaan", "description" => ""],
             ["name" => "Jenis Karyawan", "description" => ""],
             ["name" => "Kapal", "description" => ""],

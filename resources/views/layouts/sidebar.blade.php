@@ -144,7 +144,7 @@
                     </li>
                 @endcan
                 @php
-                    $allPermissionMains = ['lihat jabatan'];
+                    $allPermissionMains = ['lihat departemen', 'lihat karyawan', 'lihat jenis karyawan'];
                 @endphp
                 @canany($allPermissionMains)
                     <li class="sidebar-title has-sub">Utama</li>
@@ -174,7 +174,7 @@
                                 <a href="{{ route('master.typeEmployee.index') }}">Jenis Karyawan</a>
                             </li>
                         @endcan
-                        @can('lihat jabatan')
+                        @can('lihat departemen')
                             <li class="submenu-item {{ isActive('master/position') }}">
                                 {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
                                 <a href="{{ route('master.position.index') }}">Departemen</a>

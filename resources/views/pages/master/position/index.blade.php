@@ -6,14 +6,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Jabatan</h3>
+                    <h3>Departemen</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Departemen</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,10 +22,10 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data Jabatan
+                    Data Departemen
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Departemen
                     </button>
                 </div>
                 <div class="card-body">
@@ -43,12 +43,12 @@
                                         {{ $position->name }}
                                     </td>
                                     <td>
-                                        @can('ubah jabatan')
+                                        @can('ubah departemen')
                                             <a href="javascript:void(0)" onclick="onEdit({{ $position->id }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus jabatan')
+                                        @can('hapus departemen')
                                             <a href="javascript:void(0)" onclick="onDelete({{ $position->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
@@ -91,7 +91,7 @@
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Fitur");
+            $("#titleForm").html("Tambah Departemen");
             onModalAction("formModal", "show");
         }
 
@@ -102,14 +102,14 @@
             $("#name").val(data.name);
             $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Fitur");
+            $("#titleForm").html("Ubah Departemen");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data Departemen <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

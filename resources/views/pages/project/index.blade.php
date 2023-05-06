@@ -66,7 +66,15 @@
                                         {{ $project->company_name }}
                                     </td>
                                     <td>
-                                        {{ $project->total_job_order }}
+                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="belum selesai"
+                                            class="cursor-pointer">
+                                            {{ $project->total_job_order }}
+                                        </span>
+                                        /
+                                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="selesai"
+                                            class="cursor-pointer">
+                                            {{ $project->total_job_order_finish }}
+                                        </span>
                                     </td>
                                     <td>
                                         {{-- <div class="btn-group dropdown me-1 mb-1">
