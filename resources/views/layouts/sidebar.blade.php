@@ -206,8 +206,8 @@
                                 </li>
                             @endcan
                             @can('lihat jam kerja')
-                                <li class="submenu-item {{ isActive('setting/working-hour') }}">
-                                    <a href="{{ route('setting.workingHour.index') }}">Jam Kerja</a>
+                                <li class="submenu-item {{ isActive('master/working-hour') }}">
+                                    <a href="{{ route('master.workingHour.index') }}">Jam Kerja</a>
                                 </li>
                             @endcan
                         </ul>

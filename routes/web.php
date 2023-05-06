@@ -134,6 +134,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('store', [EmployeeController::class, "store"])->name("store");
             Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
         });
+        Route::prefix('working-hour')->name("workingHour.")->group(function () {
+            Route::get('', [WorkingHourController::class, "index"])->name("index");
+        });
     });
     Route::prefix("setting")->name("setting.")->group(function () {
         Route::prefix('approval-level')->name("approvalLevel.")->group(function () {
@@ -141,9 +144,6 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
             Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
-        });
-        Route::prefix('working-hour')->name("workingHour.")->group(function () {
-            Route::get('', [WorkingHourController::class, "index"])->name("index");
         });
         Route::prefix('user')->name("user.")->group(function () {
             Route::get('', [UserController::class, "index"])->name("index");
