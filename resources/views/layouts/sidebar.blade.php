@@ -83,6 +83,36 @@
                     </li>
                 @endcan
                 @php
+                    $allPermissionSalary = ['lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
+                @endphp
+                @canany($allPermissionSalary)
+                    <li
+                        class="sidebar-item {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-cash-coin"></i>
+                            <span>Gaji</span>
+                        </a>
+                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }}"
+                            style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat slip gaji')
+                                <li class="submenu-item {{ isActive('payslip') }}">
+                                    <a href="{{ route('payslip.index') }}">Slip Gaji Karyawan</a>
+                                </li>
+                            @endcan
+                            @can('lihat penggajian')
+                                <li class="submenu-item {{ isActive('payroll') }}">
+                                    <a href="{{ route('payroll.index') }}">Penggajian</a>
+                                </li>
+                            @endcan
+                            @can('lihat penyesuaian gaji')
+                                <li class="submenu-item {{ isActive('setting/salary-adjustment') }}">
+                                    <a href="{{ route('setting.salaryAdjustment.index') }}">Penyesuaian Gaji</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
+                @php
                     $allPermissionSetting = ['lihat laporan job order'];
                 @endphp
                 @canany($allPermissionSetting)
@@ -134,66 +164,50 @@
                         @endcan
                     </ul>
                 </li>
-                <li
-                    class="sidebar-item {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-folder-check"></i>
-                        <span>Pekerjaan</span>
-                    </a>
-                    <ul class="submenu {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }}"
-                        style="{{ Request::is('master/job') || Request::is('master/schedule') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat daftar pekerjaan')
-                            <li class="submenu-item {{ isActive('master/job') }}">
-                                <a href="{{ route('master.job.index') }}">Daftar Jenis Pekerjaan</a>
-                            </li>
-                        @endcan
-                        @can('lihat jadwal kerja')
-                            <li class="submenu-item {{ isActive('master/schedule') }}">
-                                <a href="{{ route('master.schedule.index') }}">Jadwal Kerja</a>
-                            </li>
-                        @endcan
-                        @can('lihat jam kerja')
-                            <li class="submenu-item {{ isActive('setting/working-hour') }}">
-                                <a href="{{ route('setting.workingHour.index') }}">Jam Kerja</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
                 @php
-                    $allPermissionSalary = ['lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
+                    $allPermissionWork = ['lihat daftar pekerjaan', 'lihat jadwal kerja', 'lihat jam kerja'];
                 @endphp
-                @canany($allPermissionSalary)
+                @canany($allPermissionWork)
                     <li
-                        class="sidebar-item {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }} has-sub">
+                        class="sidebar-item {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }} has-sub">
                         <a href="#" class="sidebar-link">
-                            <i class="bi bi-cash-coin"></i>
-                            <span>Gaji</span>
+                            <i class="bi bi-folder-check"></i>
+                            <span>Pekerjaan</span>
                         </a>
-                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }}"
-                            style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
-                            @can('lihat slip gaji')
-                                <li class="submenu-item {{ isActive('payslip') }}">
-                                    <a href="{{ route('payslip.index') }}">Slip Gaji Karyawan</a>
+
+                        <ul class="submenu {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }}"
+                            style="{{ Request::is('master/job') || Request::is('master/schedule') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat daftar pekerjaan')
+                                <li class="submenu-item {{ isActive('master/job') }}">
+                                    <a href="{{ route('master.job.index') }}">Daftar Jenis Pekerjaan</a>
                                 </li>
                             @endcan
-                            @can('lihat penggajian')
-                                <li class="submenu-item {{ isActive('payroll') }}">
-                                    <a href="{{ route('payroll.index') }}">Penggajian</a>
+                            @can('lihat jadwal kerja')
+                                <li class="submenu-item {{ isActive('master/schedule') }}">
+                                    <a href="{{ route('master.schedule.index') }}">Jadwal Kerja</a>
                                 </li>
                             @endcan
-                            @can('lihat penyesuaian gaji')
-                                <li class="submenu-item {{ isActive('setting/salary-adjustment') }}">
-                                    <a href="{{ route('setting.salaryAdjustment.index') }}">Penyesuaian Gaji</a>
+                            @can('lihat jam kerja')
+                                <li class="submenu-item {{ isActive('setting/working-hour') }}">
+                                    <a href="{{ route('setting.workingHour.index') }}">Jam Kerja</a>
                                 </li>
                             @endcan
                         </ul>
                     </li>
-                @endcanany
+                @endcan
                 @can('lihat kapal')
                     <li class="sidebar-item {{ isActive('master/barge') }}">
                         <a href="{{ route('master.barge.index') }}" class='sidebar-link'>
                             <i class="bi bi-wrench-adjustable-circle"></i>
                             <span>Kapal</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat pelanggan')
+                    <li class="sidebar-item {{ isActive('master/customer') }}">
+                        <a href="{{ route('master.customer.index') }}" class='sidebar-link'>
+                            <i class="bi bi-wrench-adjustable-circle"></i>
+                            <span>Pelanggan</span>
                         </a>
                     </li>
                 @endcan
