@@ -37,8 +37,8 @@
         <div id="main" class='layout-navbar'>
             @include('layouts.header')
             <div id="main-content" class="pt-0">
-
                 @yield('content')
+                @include('layouts.footer')
             </div>
         </div>
     </div>
@@ -64,10 +64,19 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a href="/logout" class="btn btn-danger ml-1">
+                    {{-- <a href="/logout" class="btn btn-danger ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block"><i class="fas fa-door-open"></i>&nbsp; Keluar</span>
+                    </a> --}}
+                    <a href="{{ route('logout') }}" class="btn btn-danger ml-1"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block"><i class="fas fa-door-open"></i>&nbsp; Keluar</span>
                     </a>
+                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display:none">
+                        @csrf
+                        <button type="submit" class="">Logout</button>
+                    </form>
                     <button type="button" class="btn" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Tutup</span>
@@ -84,7 +93,7 @@
     <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script>
     {{-- <script src="{{ asset('js/bootstrap.js') }}" defer></script> --}}
     <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
     <script src="{{ asset('assets\vendors\select2\js\select2.full.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

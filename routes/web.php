@@ -120,6 +120,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('employee')->name("employee.")->group(function () {
             Route::get('', [EmployeeController::class, "index"])->name("index");
+            Route::post('store', [EmployeeController::class, "store"])->name("store");
+            Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
         });
     });
     Route::prefix("setting")->name("setting.")->group(function () {

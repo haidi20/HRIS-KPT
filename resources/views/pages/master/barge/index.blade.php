@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.position.partials.modal')
+    @include('pages.master.barge.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Jabatan</h3>
+                    <h3>Kapal</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Kapal</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,10 +22,9 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data Jabatan
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
+                    <span class="fs-4 fw-bold">Data Kapal</span>
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData" data-toggle="modal">
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Kapal
                     </button>
                 </div>
                 <div class="card-body">
@@ -33,23 +32,27 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
+                                <th>Keterangan</th>
                                 <th width="20%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($positions as $position)
+                            @foreach ($barges as $barge)
                                 <tr>
                                     <td>
-                                        {{ $position->name }}
+                                        {{ $barge->nama }}
+                                    </td>
+                                    <td>
+                                        {{ $barge->keterangan }}
                                     </td>
                                     <td>
                                         @can('ubah jabatan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $position->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $barge->id }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
                                         @can('hapus jabatan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $position->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $barge->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -75,7 +78,7 @@
 
     <script>
         const initialState = {
-            positions: [],
+            barges: [],
         };
 
         let state = {
@@ -85,13 +88,13 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.positions = {!! json_encode($positions) !!};
+            state.barges = {!! json_encode($barges) !!};
             send();
         });
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Fitur");
+            $("#titleForm").html("Tambah Kapal");
             onModalAction("formModal", "show");
         }
 
@@ -102,14 +105,14 @@
             $("#name").val(data.name);
             $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Fitur");
+            $("#titleForm").html("Ubah Kapal");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data kapal <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

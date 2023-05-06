@@ -1,104 +1,98 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.job.partials.modal')
-    <div class="page-heading">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Pekerjaan</h3>
-                    {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
-                </div>
-                <div class="col-12 col-md-6 order-md-2 order-first">
-                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                        <ol class="breadcrumb">
-                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Pekerjaan</li>
-                        </ol>
-                    </nav>
-                </div>
+@include('pages.position.partials.position-modal')
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Jabatan Karyawan</h3>
+                {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                        <li class="breadcrumb-item active" aria-current="page">Jabatan Karyawan</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-        <section class="section">
-            <div class="card">
-               <div class="card-header">
-                    Data Jenis Pekerjaan
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData" data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jenis Pekerjaan
-                    </button>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped dataTable" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Keterangan</th>
-                                <th width="20%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($jobs as $job)
-                                <tr>
-                                    <td>
-                                        {{ $job->kode }}
-                                    </td>
-                                    <td>
-                                        {{ $job->nama_job }}
-                                    </td>
-                                    <td>
-                                        {{ $job->keterangan }}
-                                    </td>
-                                    <td>
-                                        @can('ubah kategori job')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $job->id }})"
-                                                class="btn btn-sm btn-info">Ubah
-                                            </a>
-                                        @endcan
-                                        @can('hapus kategori job')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $job->id }})"
-                                                class="btn btn-sm btn-danger">Hapus
-                                            </a>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </section>
     </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                Data Jabatan Karyawan
+                <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                    data-toggle="modal">
+                    <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan Karyawan
+                </button>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped dataTable" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Nama Jenis</th>
+                            <th width="20%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($employes_type as $employe_type)
+                        <tr>
+                            <td>
+                                {{ $employe_type->nama_jenis }}
+                            </td>
+                            <td class="flex flex-row justify-content-around">
+                                @can('detail jenis karyawan')
+                                <a href="{{ route('permission.index', ['employeId' => $employe_type->id]) }}"
+                                    class="btn btn-sm btn-primary">Detail
+                                </a>
+                                @endcan
+                                @can('ubah jenis karyawan')
+                                <a href="javascript:void(0)" onclick="onEdit({{ $employe_type->id }})"
+                                    class="btn btn-sm btn-info">Ubah
+                                </a>
+                                @endcan
+                                @can('hapus jenis karyawan')
+                                <a href="javascript:void(0)" onclick="onDelete({{ $employe_type->id }})"
+                                    class="btn btn-sm btn-danger">Hapus
+                                </a>
+                                @endcan
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+</div>
 @endsection
 
 @section('script')
-    {{-- <script src="assets/static/js/components/dark.js"></script>
+{{-- <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
     <!-- Need: Apexcharts -->
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script> --}}
+@section('style')
+<link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
+@endsection
 
-    <script>
-        const initialState = {
-            jobs: [],
-        };
-
-        let state = {
-            ...initialState
-        };
-
-        $(document).ready(function() {
+@section('script')
+<script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.jobs = {!! json_encode($jobs) !!};
             send();
         });
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Jenis Pekerjaan");
+            $("#titleForm").html("Tambah Jabatan Karyawan");
             onModalAction("formModal", "show");
         }
 
@@ -109,14 +103,14 @@
             $("#name").val(data.name);
             $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Jenis Pekerjaan");
+            $("#titleForm").html("Ubah Jabatan Karyawan");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data jenis karyawan <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -126,7 +120,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('setting.feature.delete') }}",
+                        url: "{{ route('master.employee.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -183,7 +177,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('setting.feature.store') }}",
+                    url: "{{ route('master.employee.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,
@@ -237,10 +231,15 @@
             });
         }
 
+        function setupSelect() {
+        $(".select2").select2();
+        }
+
         function clearForm() {
             $("#id").val("");
             $("#name").val("");
             $("#description").val("");
         }
-    </script>
+
+</script>
 @endsection

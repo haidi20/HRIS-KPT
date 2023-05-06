@@ -12,9 +12,21 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama Posisi </label>
+                        <label for="name" class="col-sm-4 col-form-label">Kode </label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-4 col-form-label">Nama </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="keterangan" class="col-sm-4 col-form-label">Keterangan </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="keterangan" name="keterangan" class="form-control">
                         </div>
                     </div>
                 </div>
