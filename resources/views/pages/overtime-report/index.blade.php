@@ -63,7 +63,7 @@
                                         {{ $overtime->position_name }}
                                     </td>
                                     <td>
-                                        {{ $overtime->job_order_code }} - {{ $overtime->job_order_name }}
+                                        {{ $overtime->job_order_code }} | {{ $overtime->job_order_name }}
                                     </td>
                                     <td>
                                         {{ $overtime->date_time_start }}

@@ -25,7 +25,7 @@
                     <span class="fs-4 fw-bold">Data Departemen</span>
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Departemen
+                        <i class="fas fa-plus text-white-50"></i> Tambah Departemen
                     </button>
                 </div>
                 <div class="card-body">
@@ -35,7 +35,7 @@
                                 <th width="5%">No.</th>
                                 <th>Nama</th>
                                 <th>Keterangan</th>
-                                <th width="20%">Aksi</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

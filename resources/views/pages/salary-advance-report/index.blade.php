@@ -58,12 +58,12 @@
                         <thead>
                             <tr>
                                 <th>Nama karyawan</th>
-                                <th>Jumlah Kasbon</th>
+                                <th>Jumlah Nominal</th>
                                 <th>Potongan Per Bulan</th>
-                                <th>Lama Waktu Kasbon</th>
+                                <th>Lama Waktu</th>
                                 <th>Sisa Gaji</th>
-                                <th>Tanggal Disetujui</th>
                                 <th>Sisa Hutang</th>
+                                <th>Tanggal Disetujui</th>
                                 <th width="15%"></th>
                             </tr>
                         </thead>
@@ -86,10 +86,10 @@
                                         Rp. {{ $salaryAdvance->net_salary }}
                                     </td>
                                     <td>
-                                        {{ $salaryAdvance->date }}
+                                        Rp. {{ $salaryAdvance->remaining_debt }}
                                     </td>
                                     <td>
-                                        Rp. {{ $salaryAdvance->remaining_debt }}
+                                        {{ $salaryAdvance->date }}
                                     </td>
                                     <td>
                                         @can('persetujuan kasbon')
