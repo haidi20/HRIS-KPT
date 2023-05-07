@@ -15,6 +15,85 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Pilih Jenis Waktu" label-for="type_time" class>
+            <VueSelect
+              id="type_time"
+              class="cursor-pointer"
+              v-model="form.type_time"
+              placeholder="Pilih Kategori"
+              :options="getOptionTypeTimes"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row v-if="form.type_time == 'base time'">
+        <b-col cols>
+          <label for="scope_id" style="display:inline-block">
+            <span>Pilih Bulan</span>
+          </label>
+          <DatePicker
+            id="date_start"
+            v-model="form.date_start"
+            format="YYYY-MM"
+            type="month"
+            placeholder="pilih bulan"
+          />
+        </b-col>
+        <b-col cols>
+          <label for="scope_id" style="display:inline-block">
+            <b-form-checkbox style="display: inline" v-model="is_date_end"></b-form-checkbox>
+            <span @click="onActiveDateEnd">Lebih dari 1 bulan</span>
+          </label>
+          <DatePicker
+            v-if="is_date_end"
+            id="date_end"
+            v-model="form.date_end"
+            format="YYYY-MM"
+            type="month"
+            placeholder="pilih bulan"
+          />
+        </b-col>
+      </b-row>
+      <br />
+      <b-row>
+        <b-col cols>
+          <b-form-group
+            label="Pilih Jumlah Uang / Persentase dari Gaji Karyawan"
+            label-for="type_amount"
+            class
+          >
+            <VueSelect
+              id="type_amount"
+              class="cursor-pointer"
+              v-model="form.type_amount"
+              placeholder="Pilih Kategori"
+              :options="getOptionTypeAmount"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="6">
+          <b-form-group label="nilai" label-for="amount" class>
+            <b-form-input
+              v-model="amount"
+              id="amount"
+              name="amount"
+              @keypress="onReplaceAmount($event)"
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
       <br />
       <b-row class="float-end">
         <b-col>
@@ -28,16 +107,66 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
+import DatePicker from "vue2-datepicker";
+import VueSelect from "vue-select";
+
 export default {
   data() {
     return {
       is_loading: false,
+      is_date_end: false,
       getTitleForm: "Tambah Penyesuaian Gaji",
     };
   },
+  components: {
+    VueSelect,
+    DatePicker,
+  },
   computed: {
+    getOptionTypeTimes() {
+      return this.$store.state.salaryAdjustment.options.type_times;
+    },
+    getOptionTypeAmount() {
+      return this.$store.state.salaryAdjustment.options.type_amount;
+    },
+    amount: {
+      get() {
+        return this.$store.state.salaryAdjustment.form.amount_readable;
+      },
+      set(value) {
+        this.$store.commit("salaryAdjustment/INSERT_FORM_AMOUNT", {
+          amount: value,
+        });
+      },
+    },
     form() {
       return this.$store.state.salaryAdjustment.form;
+    },
+  },
+  methods: {
+    onCloseModal() {
+      this.$bvModal.hide("salary_adjustment_form");
+    },
+    onChangeRangeMonth() {
+      //
+    },
+    onActiveDateEnd() {
+      this.is_date_end = !this.is_date_end;
+    },
+    onReplaceAmount($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      //   console.info(keyCode);
+
+      //   this.amount = this.amount.replace(/[^\d.:]/g, "");
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 44) {
+        // 46 is dot
+        $event.preventDefault();
+      }
+    },
+    onSend() {
+      this.$bvModal.hide("salary_adjustment_form");
     },
   },
 };
