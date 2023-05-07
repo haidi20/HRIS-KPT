@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     getOptionEmployees() {
-      return this.$store.state.employee.data;
+      return this.$store.state.employee.data.main;
     },
     form() {
       return this.$store.state.employee.form;

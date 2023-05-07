@@ -8,6 +8,14 @@ class JobOrderController extends Controller
 {
     public function index()
     {
+        $vue = true;
+
+        return view("pages.job-order.index", compact("vue"));
+    }
+
+    public function fetchData()
+    {
+
         $jobOrders = [
             (object)[
                 "id" => 1,
@@ -15,8 +23,8 @@ class JobOrderController extends Controller
             ]
         ];
 
-        $vue = true;
-
-        return view("pages.job-order.index", compact("vue", "jobOrders"));
+        return response()->json([
+            "jobOrders" => $jobOrders,
+        ]);
     }
 }

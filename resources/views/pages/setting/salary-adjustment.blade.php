@@ -96,7 +96,7 @@
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Pengguna");
+            $("#titleForm").html("Tambah Penyesuaian Gaji");
             onModalAction("formModal", "show");
         }
 

@@ -9,12 +9,14 @@ const Employee = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                name: "Muhammad Adi",
-            }
-        ],
+        data: {
+            main: [
+                {
+                    id: 1,
+                    name: "Muhammad Adi",
+                }
+            ]
+        },
         params: {
             date_filter: new Date(),
         },

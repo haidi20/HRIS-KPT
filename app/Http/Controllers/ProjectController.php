@@ -13,7 +13,8 @@ class ProjectController extends Controller
                 "id" => 1,
                 "name" => "Kapal A",
                 "company_name" => "PT. Maju Jaya",
-                "total_job_order" => 5,
+                "total_job_order" => 4,
+                "total_job_order_finish" => 5,
             ]
         ];
 

@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Kapal </label>
+                        <label for="barge_id" class="col-sm-4 col-form-label">Kapal </label>
                         <div class="col-sm-8">
                             <select name="barge_id" id="barge_id" class="form-control select2" style="width: 100%">
                                 <option value="">Kapal A</option>
@@ -26,32 +26,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Kepala Pemborong </label>
-                        <div class="col-sm-8">
-                            <select name="supervisor_id" id="supervisor_id" class="form-control select2"
-                                style="width: 100%">
-                                <option value="">Rudi</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Pengawas </label>
-                        <div class="col-sm-8">
-                            <select name="foreman_id" id="foreman_id" class="form-control select2" style="width: 100%">
-                                <option value="">Samsu</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Perusahaan </label>
-                        <div class="col-sm-8">
-                            <select name="company_id" id="company_id" class="form-control select2" style="width: 100%">
-                                <option value="">PT. Maju Jaya</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Jenis Proyek </label>
+                        <label for="type" class="col-sm-4 col-form-label">Jenis Proyek </label>
                         <div class="col-sm-8">
                             <select name="type" id="type" class="form-control select2" style="width: 100%">
                                 <option value="">Harian</option>
@@ -60,9 +35,34 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Jenis Pekerjaan </label>
+                        <label for="supervisor_id" class="col-sm-4 col-form-label">Kepala Pemborong </label>
                         <div class="col-sm-8">
-                            <select name="type" id="type" class="form-control select2" style="width: 100%">
+                            <select name="supervisor_id" id="supervisor_id" class="form-control select2"
+                                style="width: 100%">
+                                <option value="">Rudi</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="foreman_id" class="col-sm-4 col-form-label">Pengawas </label>
+                        <div class="col-sm-8">
+                            <select name="foreman_id" id="foreman_id" class="form-control select2" style="width: 100%">
+                                <option value="">Samsu</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="company_id" class="col-sm-4 col-form-label">Perusahaan </label>
+                        <div class="col-sm-8">
+                            <select name="company_id" id="company_id" class="form-control select2" style="width: 100%">
+                                <option value="">PT. Maju Jaya</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="work_type" class="col-sm-4 col-form-label">Jenis Pekerjaan </label>
+                        <div class="col-sm-8">
+                            <select name="work_type" id="work_type" class="form-control select2" style="width: 100%">
                                 <option value="">Produksi (pembuatan dari awal)</option>
                                 <option value="">Maintenance (Perbaikan)</option>
                             </select>
@@ -75,26 +75,26 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="price" class="col-sm-4 col-form-label">biaya </label>
+                        <label for="price" class="col-sm-4 col-form-label">Biaya </label>
                         <div class="col-sm-8">
                             <input type="text" id="price" name="price" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="down_payment" class="col-sm-4 col-form-label">DP (down payment) </label>
+                        <label for="down_payment" class="col-sm-4 col-form-label">DP (Down Payment) </label>
                         <div class="col-sm-8">
                             <input type="text" id="down_payment" name="down_payment" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="remaining_payment" class="col-sm-4 col-form-label">Sisa yang dibayarkan</label>
+                        <label for="remaining_payment" class="col-sm-4 col-form-label">Sisa Yang Dibayarkan</label>
                         <div class="col-sm-8">
                             <input type="text" id="remaining_payment" name="remaining_payment"
-                                class="form-control" readonly>
+                                class="form-control" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="note" class="col-sm-4 col-form-label">keterangan </label>
+                        <label for="note" class="col-sm-4 col-form-label">Keterangan </label>
                         <div class="col-sm-8">
                             <input type="text" id="note" name="note" class="form-control">
                         </div>

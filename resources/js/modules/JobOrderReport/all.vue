@@ -37,6 +37,13 @@
       <!-- <template v-slot:thead>
         <b-th v-for="i in 30" :key="`thead-${i}`" style="width: 30px">{{onCustomLabelNameDate(i)}}</b-th>
       </template>-->
+      <template v-slot:tbody="{ filteredData, currentPage }">
+        <b-tr v-for="(item, index) in filteredData" :key="index">
+          <template v-for="(column, index) in columns">
+            <b-td :key="`col-${index}`">{{ item[column] }}</b-td>
+          </template>
+        </b-tr>
+      </template>
     </DatatableClientSide>
   </div>
 </template>
@@ -72,6 +79,41 @@ export default {
         {
           label: "Nama Job Order",
           field: "name",
+          width: "40px",
+          rowspan: 2,
+          class: "",
+        },
+        {
+          label: "Nama Proyek",
+          field: "project_name",
+          width: "40px",
+          rowspan: 2,
+          class: "",
+        },
+        {
+          label: "Kategori",
+          field: "job_order_category_name",
+          width: "40px",
+          rowspan: 2,
+          class: "",
+        },
+        {
+          label: "Jenis Pekerjaan",
+          field: "job_name",
+          width: "40px",
+          rowspan: 2,
+          class: "",
+        },
+        {
+          label: "Tingkat Kesusahan",
+          field: "level",
+          width: "40px",
+          rowspan: 2,
+          class: "",
+        },
+        {
+          label: "",
+          field: "action",
           width: "40px",
           rowspan: 2,
           class: "",

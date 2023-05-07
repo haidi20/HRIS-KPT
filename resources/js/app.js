@@ -30,6 +30,7 @@ Vue.component("roster", require("./modules/Roster/roster.vue").default);
 Vue.component("job-order", require("./modules/JobOrder/jobOrder.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
 Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);
+Vue.component("salary-advance", require("./modules/SalaryAdvance/salaryAdvance.vue").default);
 Vue.component("job-order-report", require("./modules/JobOrderReport/jobOrderReport.vue").default);
 
 // Vue.directive('click-outside', clickOutside);

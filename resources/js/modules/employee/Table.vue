@@ -8,7 +8,7 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <b-row v-for="i in 3" :key="i">
+        <b-row v-for="i in 3" :key="i" @click="onOpenAction(i)">
           <b-col class="place-item">
             <b-row>
               <b-col cols>
@@ -16,10 +16,10 @@
                 <h6>Muhammad Adi</h6>
                 <span>Aktif: Ya</span>
               </b-col>
-              <b-col cols class="place-action">
+              <!-- <b-col cols class="place-action">
                 <b-button variant="warning" size="sm" @click="onPause(i)">Tunda</b-button>
                 <b-button variant="success" size="sm" @click="onPause(i)">Aktifkan</b-button>
-              </b-col>
+              </b-col>-->
             </b-row>
             <!-- <b-row>
               <b-col>
@@ -31,6 +31,13 @@
         </b-row>
       </b-col>
     </b-row>
+    <vue-bottom-sheet ref="myBottomSheetEmployee">
+      <div class="flex flex-col">
+        <div class="action-item">tunda</div>
+        <div class="action-item">aktifkan</div>
+        <div class="action-item">hapus</div>
+      </div>
+    </vue-bottom-sheet>
   </div>
 </template>
 
@@ -38,7 +45,7 @@
 export default {
   methods: {
     onOpenAction(i) {
-      console.info(i);
+      this.$refs.myBottomSheetEmployee.open();
     },
     onPause(i) {
       console.info(`pause ${i}`);
@@ -59,5 +66,9 @@ export default {
 .place-action {
   text-align: right;
   align-self: center;
+}
+.action-item {
+  padding: 25px 0px 25px 20px;
+  border-bottom: 1px solid #dbdfea;
 }
 </style>

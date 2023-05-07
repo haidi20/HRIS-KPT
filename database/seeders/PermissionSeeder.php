@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Feature;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\Config;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -31,14 +31,12 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        Permission::insert([
-            "name" => "detail grup pengguna",  "description" => "detail grup pengguna",  "guard_name" => "web", "feature_id" => 7,
-        ]);
-        Permission::insert([
-            "name" => "detail proyek",  "description" => "",  "guard_name" => "web", "feature_id" => 8,
-        ]);
-        Permission::insert([
-            "name" => "proyek job order",  "description" => "",  "guard_name" => "web", "feature_id" => 8,
-        ]);
+        $listAdds = Config("library.permission_added");
+
+        foreach ($listAdds as $index => $add) {
+            Permission::insert([
+                "name" => $add["name"],  "description" => "",  "guard_name" => "web", "feature_id" => $add["featurer_id"],
+            ]);
+        }
     }
 }

@@ -10,13 +10,13 @@
     >
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Jenis Data" label-for="data_type" class>
+          <b-form-group label="Pilih Jenis Data" label-for="type" class>
             <VueSelect
-              id="data_type"
+              id="type"
               class="cursor-pointer"
-              v-model="params.data_type"
+              v-model="params.type"
               placeholder="Pilih Jenis Data"
-              :options="getOptionDataType"
+              :options="getOptionType"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -27,13 +27,13 @@
       </b-row>
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Data Berdasarkan" label-for="data_by_type" class>
+          <b-form-group label="Pilih Data Berdasarkan" label-for="type_by" class>
             <VueSelect
-              id="data_by_type"
+              id="type_by"
               class="cursor-pointer"
-              v-model="params.data_by_type"
+              v-model="params.type_by"
               placeholder="Pilih Data Berdasarkan"
-              :options="getOptionDataByType"
+              :options="getOptionTypeBy"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -44,7 +44,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-form-group label="Kata Kunci" label-for="data_by_type" class>
+          <b-form-group label="Kata Kunci" label-for="type_by" class>
             <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
           </b-form-group>
         </b-col>
@@ -72,11 +72,11 @@ export default {
     VueSelect,
   },
   computed: {
-    getOptionDataType() {
-      return this.$store.state.jobOrder.options.data_types;
+    getOptionType() {
+      return this.$store.state.jobOrder.options.types;
     },
-    getOptionDataByType() {
-      return this.$store.state.jobOrder.options.data_by_types;
+    getOptionTypeBy() {
+      return this.$store.state.jobOrder.options.type_bys;
     },
     params() {
       return this.$store.state.jobOrder.params;

@@ -16,9 +16,9 @@
             <All />
           </b-tab>
           <!-- data yang statusnya tunda -->
-          <b-tab title="Tunda">
+          <!-- <b-tab title="Tunda">
             <All />
-          </b-tab>
+          </b-tab>-->
           <!-- data yang di lanjutkan lembur -->
           <b-tab title="Lembur">
             <All />

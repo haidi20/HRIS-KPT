@@ -21,9 +21,9 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 @php
-                    $allPermissionSetting = ['lihat dashboard'];
+                    $allPermissionMenus = ['lihat dashboard', 'lihat proyek', 'lihat job order', 'lihat roster', 'lihat absensi'];
                 @endphp
-                @can($allPermissionSetting)
+                @can($allPermissionMenus)
                     <li class="sidebar-title">Menu</li>
                 @endcan
                 @can('lihat dashboard')
@@ -58,14 +58,14 @@
                         </a>
                     </li>
                 @endcan
-                @can('lihat surat perintah lembur')
+                {{-- @can('lihat surat perintah lembur')
                     <li class="sidebar-item {{ isActive('overtime') }} ">
                         <a href="{{ route('overtime.index') }}" class='sidebar-link'>
                             <i class="bi bi-cloud-moon"></i>
                             <span>Surat Perintah Lembur</span>
                         </a>
                     </li>
-                @endcan
+                @endcan --}}
                 @can('lihat roster')
                     <li class="sidebar-item {{ isActive('roster') }} ">
                         <a href="{{ route('roster.index') }}" class='sidebar-link'>
@@ -83,83 +83,16 @@
                     </li>
                 @endcan
                 @php
-                    $allPermissionSetting = ['lihat laporan job order'];
-                @endphp
-                @canany($allPermissionSetting)
-                    <li class="sidebar-title has-sub">Data Laporan</li>
-                @endcanany
-                @can('lihat laporan job order')
-                    <li class="sidebar-item {{ isActive('jobOrderReport') }} ">
-                        <a href="{{ route('jobOrderReport.index') }}" class='sidebar-link'>
-                            <i class="bi bi-file-earmark-bar-graph"></i>
-                            <span>Laporan Job Order</span>
-                        </a>
-                    </li>
-                @endcan
-                @php
-                    $allPermissionSetting = ['lihat jabatan'];
-                @endphp
-                @canany($allPermissionSetting)
-                    <li class="sidebar-title has-sub">Data Utama</li>
-                @endcanany
-                <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-people"></i>
-                        <span>Karyawan</span>
-                    </a>
-                    <ul class="submenu {{ isActive('master/employee') }}"
-                        style="{{ Request::is('master/employee') || Request::is('master/typeEmployee') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat karyawan')
-                            <li class="submenu-item {{ isActive('master/employee') }}">
-                                <a href="{{ route('master.employee.index') }}">Daftar Karyawan</a>
-                            </li>
-                        @endcan
-                        @can('lihat jenis karyawan')
-                            <li class="submenu-item {{ isActive('master/typeEmployee') }}">
-                                <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
-                            </li>
-                        @endcan
-                        @can('lihat jabatan')
-                            <li class="submenu-item {{ isActive('master/position') }}">
-                                <a href="{{ route('master.position.index') }}">Jabatan</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-                <li class="sidebar-item {{isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour')}} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-folder-check"></i>
-                        <span>Pekerjaan</span>
-                    </a>
-                    <ul class="submenu {{isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour')}}"
-                        style="{{ Request::is('master/job') || Request::is('master/schedule') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat daftar pekerjaan')
-                            <li class="submenu-item {{ isActive('master/job') }}">
-                                <a href="{{ route('master.job.index') }}">Daftar Jenis Pekerjaan</a>
-                            </li>
-                        @endcan
-                        @can('lihat jadwal kerja')
-                            <li class="submenu-item {{ isActive('master/schedule') }}">
-                                <a href="{{ route('master.schedule.index') }}">Jadwal Kerja</a>
-                            </li>
-                        @endcan
-                        @can('lihat jam kerja')
-                            <li class="submenu-item {{ isActive('setting/working-hour') }}">
-                                <a href="{{ route('setting.workingHour.index') }}">Jam Kerja</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-                @php
                     $allPermissionSalary = ['lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
                 @endphp
                 @canany($allPermissionSalary)
-                    <li class="sidebar-item {{ isActive('payslip') || isActive('payroll') ||  isActive('setting/salary-adjustment') }} has-sub">
+                    <li
+                        class="sidebar-item {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }} has-sub">
                         <a href="#" class="sidebar-link">
                             <i class="bi bi-cash-coin"></i>
                             <span>Gaji</span>
                         </a>
-                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') ||  isActive('setting/salary-adjustment') }}"
+                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }}"
                             style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
                             @can('lihat slip gaji')
                                 <li class="submenu-item {{ isActive('payslip') }}">
@@ -179,6 +112,99 @@
                         </ul>
                     </li>
                 @endcanany
+                @php
+                    $allPermissionReports = ['lihat laporan job order', 'lihat laporan kasbon', 'lihat surat perintah lembur'];
+                @endphp
+                @canany($allPermissionReports)
+                    <li class="sidebar-title has-sub">Laporan</li>
+                @endcanany
+                @can('lihat laporan job order')
+                    <li class="sidebar-item {{ isActive('job-order-report') }} ">
+                        <a href="{{ route('report.jobOrder.index') }}" class='sidebar-link'>
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                            <span>Laporan Job Order</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat laporan kasbon')
+                    <li class="sidebar-item {{ isActive('salary-advance-report') }} ">
+                        <a href="{{ route('report.salaryAdvance.index') }}" class='sidebar-link'>
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                            <span>Laporan Kasbon</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat laporan surat perintah lembur')
+                    <li class="sidebar-item {{ isActive('overtime-report') }} ">
+                        <a href="{{ route('report.overtime.index') }}" class='sidebar-link'>
+                            {{-- <i class="bi bi-cloud-moon"></i> --}}
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                            <span>Laporan Surat Perintah Lembur</span>
+                        </a>
+                    </li>
+                @endcan
+                @php
+                    $allPermissionMains = ['lihat departemen', 'lihat karyawan', 'lihat jenis karyawan'];
+                @endphp
+                @canany($allPermissionMains)
+                    <li class="sidebar-title has-sub">Utama</li>
+                @endcanany
+                <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="bi bi-people"></i>
+                        <span>Karyawan</span>
+                    </a>
+                    <ul class="submenu {{ isActive('master/employee') }}"
+                        style="{{ Request::is('master/employee') || Request::is('master/typeEmployee') ? 'display: block;' : 'display: none;' }}">
+                        @can('lihat karyawan')
+                            <li class="submenu-item {{ isActive('master/employee') }}">
+                                <a href="{{ route('master.employee.index') }}">Daftar Karyawan</a>
+                            </li>
+                        @endcan
+                        @can('lihat jenis karyawan')
+                            <li class="submenu-item {{ isActive('master/typeEmployee') }}">
+                                <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
+                            </li>
+                        @endcan
+                        @can('lihat departemen')
+                            <li class="submenu-item {{ isActive('master/position') }}">
+                                {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
+                                <a href="{{ route('master.position.index') }}">Departemen</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+                @php
+                    $allPermissionWork = ['lihat jenis pekerjaan', 'lihat jadwal kerja', 'lihat jam kerja'];
+                @endphp
+                @canany($allPermissionWork)
+                    <li
+                        class="sidebar-item {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-folder-check"></i>
+                            <span>Pekerjaan</span>
+                        </a>
+
+                        <ul class="submenu {{ isActive('master/job') || isActive('master/schedule') || isActive('setting/working-hour') }}"
+                            style="{{ Request::is('master/job') || Request::is('master/schedule') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat jenis pekerjaan')
+                                <li class="submenu-item {{ isActive('master/job') }}">
+                                    <a href="{{ route('master.job.index') }}">Jenis Pekerjaan</a>
+                                </li>
+                            @endcan
+                            @can('lihat jadwal kerja')
+                                <li class="submenu-item {{ isActive('master/schedule') }}">
+                                    <a href="{{ route('master.schedule.index') }}">Jadwal Kerja</a>
+                                </li>
+                            @endcan
+                            @can('lihat jam kerja')
+                                <li class="submenu-item {{ isActive('master/working-hour') }}">
+                                    <a href="{{ route('master.workingHour.index') }}">Jam Kerja</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
                 @can('lihat perusahaan')
                 <li class="sidebar-item {{ isActive('master/company') }}">
                     <a href="{{ route('master.company.index') }}" class='sidebar-link'>
@@ -192,6 +218,14 @@
                         <a href="{{ route('master.barge.index') }}" class='sidebar-link'>
                             <i class="bi bi-wrench-adjustable-circle"></i>
                             <span>Kapal</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat pelanggan')
+                    <li class="sidebar-item {{ isActive('master/customer') }}">
+                        <a href="{{ route('master.customer.index') }}" class='sidebar-link'>
+                            <i class="bi bi-wrench-adjustable-circle"></i>
+                            <span>Pelanggan</span>
                         </a>
                     </li>
                 @endcan
