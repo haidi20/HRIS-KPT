@@ -13,15 +13,15 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama </label>
+                        <label for="name" class="col-sm-4 col-form-label">Nama Perusahaan</label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="keterangan" class="col-sm-4 col-form-label">Keterangan </label>
+                        <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
                         <div class="col-sm-8">
-                            <input type="text" id="keterangan" name="keterangan" class="form-control">
+                            <input type="text" id="description" name="description" class="form-control">
                         </div>
                     </div>
                 </div>

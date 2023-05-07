@@ -14,7 +14,7 @@
                     <div class="form-group row">
                         <label for="name" class="col-sm-4 col-form-label">Kode </label>
                         <div class="col-sm-8">
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="name" name="name" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group row">

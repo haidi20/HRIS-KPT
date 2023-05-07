@@ -92,19 +92,29 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("master")->name("master.")->group(function () {
         Route::prefix('company')->name("company.")->group(function () {
             Route::get('', [CompanyController::class, "index"])->name("index");
+            Route::post('store', [CompanyController::class, "store"])->name("store");
+            Route::delete('delete', [CompanyController::class, "destroy"])->name("delete");
         });
-        Route::prefix('type-employee')->name("typeEmployee.")->group(function () {
+        Route::prefix('employee-type')->name("employeeType.")->group(function () {
             Route::get('', [EmployeeTypeController::class, "index"])->name("index");
+            Route::post('store', [PositionController::class, "store"])->name("store");
+            Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
         });
         // barge = kapal tongkang
         Route::prefix('barge')->name("barge.")->group(function () {
             Route::get('', [BargeController::class, "index"])->name("index");
+            Route::post('store', [BargeController::class, "store"])->name("store");
+            Route::delete('delete', [BargeController::class, "destroy"])->name("delete");
         });
         Route::prefix('job')->name("job.")->group(function () {
             Route::get('', [JobController::class, "index"])->name("index");
+            Route::post('store', [BargeController::class, "store"])->name("store");
+            Route::delete('delete', [BargeController::class, "destroy"])->name("delete");
         });
         Route::prefix('position')->name("position.")->group(function () {
             Route::get('', [PositionController::class, "index"])->name("index");
+            Route::post('store', [PositionController::class, "store"])->name("store");
+            Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
         });
         Route::prefix('location')->name("location.")->group(function () {
             Route::get('', [LocationController::class, "index"])->name("index");

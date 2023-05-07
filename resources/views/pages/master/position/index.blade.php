@@ -12,7 +12,7 @@
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                            <li class="breadcrumb-item"><a href="#">Karyawan</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
                         </ol>
                     </nav>
@@ -22,7 +22,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data Jabatan
+                    <span class="fs-4 fw-bold">Data Jabatan</span>
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
                         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
@@ -31,25 +31,33 @@
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
-                            <tr>
+                          <tr>
+                                <th>No.</th>
                                 <th>Nama</th>
-                                <th width="20%"></th>
+                                <th>Keterangan</th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($positions as $position)
                                 <tr>
                                     <td>
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td>
                                         {{ $position->name }}
                                     </td>
                                     <td>
+                                        {{ $position->description }}
+                                    </td>
+                                    <td>
                                         @can('ubah jabatan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $position->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $position }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
                                         @can('hapus jabatan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $position->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $position }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -91,7 +99,7 @@
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Fitur");
+            $("#titleForm").html("Tambah Jabatan");
             onModalAction("formModal", "show");
         }
 
@@ -102,14 +110,14 @@
             $("#name").val(data.name);
             $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Fitur");
+            $("#titleForm").html("Ubah Jabatan");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data jabatan <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -119,7 +127,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('setting.feature.delete') }}",
+                        url: "{{ route('master.position.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -176,7 +184,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('setting.feature.store') }}",
+                    url: "{{ route('master.position.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,

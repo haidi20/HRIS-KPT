@@ -22,7 +22,7 @@
         <section class="section">
             <div class="card">
                <div class="card-header">
-                    Data Jenis Pekerjaan
+                    <span class="fs-4 fw-bold">Data Jenis Pekerjaan</span>
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData" data-toggle="modal">
                         <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jenis Pekerjaan
                     </button>
@@ -41,22 +41,22 @@
                             @foreach ($jobs as $job)
                                 <tr>
                                     <td>
-                                        {{ $job->kode }}
+                                        {{ $job->job_code }}
                                     </td>
                                     <td>
-                                        {{ $job->nama_job }}
+                                        {{ $job->name }}
                                     </td>
                                     <td>
-                                        {{ $job->keterangan }}
+                                        {{ $job->description }}
                                     </td>
                                     <td>
                                         @can('ubah kategori job')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $job->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $job }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
                                         @can('hapus kategori job')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $job->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $job }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -116,7 +116,7 @@
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data job <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -126,7 +126,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('setting.feature.delete') }}",
+                        url: "{{ route('master.job.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -183,7 +183,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('setting.feature.store') }}",
+                    url: "{{ route('master.job.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,

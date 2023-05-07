@@ -102,14 +102,6 @@
                 @canany($allPermissionSetting)
                     <li class="sidebar-title has-sub">Data Utama</li>
                 @endcanany
-                @can('lihat perusahaan')
-                    <li class="sidebar-item {{ isActive('master/company') }}">
-                        <a href="{{ route('master.company.index') }}" class='sidebar-link'>
-                            <i class="bi bi-building"></i>
-                            <span>Perusahaan</span>
-                        </a>
-                    </li>
-                @endcan
                 <li class="sidebar-item {{ isActive('master/employee') }} has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-people"></i>
@@ -124,7 +116,7 @@
                         @endcan
                         @can('lihat jenis karyawan')
                             <li class="submenu-item {{ isActive('master/typeEmployee') }}">
-                                <a href="{{ route('master.typeEmployee.index') }}">Jenis Karyawan</a>
+                                <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
                             </li>
                         @endcan
                         @can('lihat jabatan')
@@ -187,6 +179,14 @@
                         </ul>
                     </li>
                 @endcanany
+                @can('lihat perusahaan')
+                <li class="sidebar-item {{ isActive('master/company') }}">
+                    <a href="{{ route('master.company.index') }}" class='sidebar-link'>
+                        <i class="bi bi-building"></i>
+                        <span>Perusahaan</span>
+                    </a>
+                </li>
+                @endcan
                 @can('lihat kapal')
                     <li class="sidebar-item {{ isActive('master/barge') }}">
                         <a href="{{ route('master.barge.index') }}" class='sidebar-link'>
@@ -247,17 +247,6 @@
                         </a>
                     </li>
                 @endcan
-                <li class="sidebar-item">
-                    <a href="{{ route('logout') }}" class='sidebar-link'
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="bi bi-box-arrow-left"></i>
-                        <span>Keluar</span>
-                    </a>
-                    <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display:none">
-                        @csrf
-                        <button type="submit" class="">Logout</button>
-                    </form>
-                </li>
             </ul>
         </div>
     </div>

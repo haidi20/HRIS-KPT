@@ -29,30 +29,34 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Keterangan</th>
-                                <th width="20%"></th>
-                            </tr>
-                        </thead>
+                      <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama</th>
+                            <th>Keterangan</th>
+                            <th width="20%">Aksi</th>
+                        </tr>
+                    </thead>
                         <tbody>
                             @foreach ($barges as $barge)
                                 <tr>
                                     <td>
-                                        {{ $barge->nama }}
+                                        {{ $loop->iteration }}
                                     </td>
                                     <td>
-                                        {{ $barge->keterangan }}
+                                        {{ $barge->name }}
+                                    </td>
+                                    <td>
+                                        {{ $barge->description }}
                                     </td>
                                     <td>
                                         @can('ubah jabatan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $barge->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $barge }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
                                         @can('hapus jabatan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $barge->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $barge }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -69,13 +73,6 @@
 @endsection
 
 @section('script')
-    {{-- <script src="assets/static/js/components/dark.js"></script>
-    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script> --}}
-
     <script>
         const initialState = {
             barges: [],
@@ -122,7 +119,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('setting.feature.delete') }}",
+                        url: "{{ route('master.barge.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -179,7 +176,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('setting.feature.store') }}",
+                    url: "{{ route('master.barge.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,

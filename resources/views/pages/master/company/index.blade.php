@@ -31,28 +31,32 @@
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
+                                <th>No.</th>
                                 <th>Nama</th>
                                 <th>Keterangan</th>
-                                <th width="20%"></th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($companys as $company)
                                 <tr>
                                     <td>
-                                        {{ $company->nama }}
+                                        {{ $loop->iteration }}
                                     </td>
                                     <td>
-                                        {{ $company->keterangan }}
+                                        {{ $company->name }}
+                                    </td>
+                                    <td>
+                                        {{ $company->description }}
                                     </td>
                                     <td>
                                         @can('ubah perusahaan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $company->id }})"
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $company }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
                                         @can('hapus perusahaan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $company->id }})"
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $company }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
                                         @endcan
@@ -122,7 +126,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('setting.feature.delete') }}",
+                        url: "{{ route('master.company.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -179,7 +183,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('setting.feature.store') }}",
+                    url: "{{ route('master.company.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,

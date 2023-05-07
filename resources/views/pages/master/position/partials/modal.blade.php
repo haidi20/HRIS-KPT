@@ -1,4 +1,5 @@
-<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,15 +13,15 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Kode </label>
+                        <label for="name" class="col-sm-4 col-form-label">Nama Jabatan</label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama </label>
+                        <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
                         <div class="col-sm-8">
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input type="text" id="description" name="description" class="form-control">
                         </div>
                     </div>
                 </div>

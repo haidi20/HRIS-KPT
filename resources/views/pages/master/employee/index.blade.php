@@ -106,7 +106,8 @@
 <script>
     $(document).ready(function() {
             $('.dataTable').DataTable();
-
+            setupSelect();
+            setupDateFilter();
             send();
         });
 

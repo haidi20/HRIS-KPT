@@ -22,7 +22,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                Data Jenis Karyawan
+                 <span class="fs-4 fw-bold">Data Jenis Karyawan</span>
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                     data-toggle="modal">
                     <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jenis Karyawan
@@ -31,30 +31,33 @@
             <div class="card-body">
                 <table class="table table-striped dataTable" id="table1">
                     <thead>
-                        <tr>
-                            <th>Nama Jenis</th>
-                            <th width="20%"></th>
+                       <tr>
+                            <th>No.</th>
+                            <th>Nama</th>
+                            <th>Keterangan</th>
+                            <th width="20%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($employes_type as $employe_type)
+                        @foreach ($employeetypes as $employeetype)
                         <tr>
                             <td>
-                                {{ $employe_type->nama_jenis }}
+                                {{ $loop->iteration }}
+                            </td>
+                            <td>
+                                {{ $employeetype->name }}
+                            </td>
+                            <td>
+                                {{ $employeetype->description }}
                             </td>
                             <td class="flex flex-row justify-content-around">
-                                @can('detail jenis karyawan')
-                                <a href="{{ route('permission.index', ['employeId' => $employe_type->id]) }}"
-                                    class="btn btn-sm btn-primary">Detail
-                                </a>
-                                @endcan
                                 @can('ubah jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $employe_type->id }})"
+                                <a href="javascript:void(0)" onclick="onEdit({{ $employetype }})"
                                     class="btn btn-sm btn-info">Ubah
                                 </a>
                                 @endcan
                                 @can('hapus jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $employe_type->id }})"
+                                <a href="javascript:void(0)" onclick="onDelete({{ $employetype }})"
                                     class="btn btn-sm btn-danger">Hapus
                                 </a>
                                 @endcan
@@ -71,12 +74,6 @@
 @endsection
 
 @section('script')
-{{-- <script src="assets/static/js/components/dark.js"></script>
-    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script> --}}
 @section('style')
 <link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
 @endsection
@@ -120,7 +117,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('master.employee.delete') }}",
+                        url: "{{ route('master.employeeType.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -177,7 +174,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('master.employee.store') }}",
+                    url: "{{ route('master.employeeType.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,

@@ -19,9 +19,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="keterangan" class="col-sm-4 col-form-label">Keterangan </label>
+                       <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
                         <div class="col-sm-8">
-                            <input type="text" id="keterangan" name="keterangan" class="form-control">
+                            <input type="text" id="description" name="description" class="form-control">
                         </div>
                     </div>
                 </div>
