@@ -1,110 +1,102 @@
 @extends('layouts.master')
 
 @section('content')
-@include('pages.master.employee.partials.employee-modal')
-<div class="page-heading">
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Karyawan</h3>
-                {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                        <li class="breadcrumb-item active" aria-current="page">Karyawan</li>
-                    </ol>
-                </nav>
+    @include('pages.master.employee.partials.employee-modal')
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Karyawan</h3>
+                    {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                            <li class="breadcrumb-item active" aria-current="page">Karyawan</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
         </div>
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                    Data Karyawan
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                        data-toggle="modal">
+                        <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
+                    </button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped dataTable" id="table1">
+                        <thead>
+                            <tr>
+                                <th>NIP</th>
+                                <th>Nama</th>
+                                <th>Jabatan</th>
+                                <th>Lokasi Kerja</th>
+                                <th>Kapal</th>
+                                <th>Status</th>
+                                <th width="20%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($employes as $employe)
+                                <tr>
+                                    <td>
+                                        {{ $employe->nip }}
+                                    </td>
+                                    <td>
+                                        {{ $employe->name }}
+                                    </td>
+                                    <td>
+                                        {{ $employe->jabatan }}
+                                    </td>
+                                    <td>
+                                        {{ $employe->lokasi_kerja }}
+                                    </td>
+                                    <td>
+                                        {{ $employe->kapal }}
+                                    </td>
+                                    <td>
+                                        {{ $employe->status }}
+                                    </td>
+                                    <td class="flex flex-row justify-content-around">
+                                        @can('detail karyawan')
+                                            <a href="{{ route('permission.index', ['employeId' => $employe->id]) }}"
+                                                class="btn btn-sm btn-primary">Detail
+                                            </a>
+                                        @endcan
+                                        @can('ubah karyawan')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $employe->id }})"
+                                                class="btn btn-sm btn-info">Ubah
+                                            </a>
+                                        @endcan
+                                        @can('hapus karyawan')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $employe->id }})"
+                                                class="btn btn-sm btn-danger">Hapus
+                                            </a>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
     </div>
-    <section class="section">
-        <div class="card">
-            <div class="card-header">
-                Data Karyawan
-                <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                    data-toggle="modal">
-                    <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Karyawan
-                </button>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped dataTable" id="table1">
-                    <thead>
-                        <tr>
-                            <th>NIP</th>
-                            <th>Nama</th>
-                            <th>Jabatan</th>
-                            <th>Lokasi Kerja</th>
-                            <th>Kapal</th>
-                            <th>Status</th>
-                            <th width="20%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($employes as $employe)
-                        <tr>
-                            <td>
-                                {{ $employe->nip }}
-                            </td>
-                            <td>
-                                {{ $employe->name }}
-                            </td>
-                            <td>
-                                {{ $employe->jabatan }}
-                            </td>
-                            <td>
-                                {{ $employe->lokasi_kerja }}
-                            </td>
-                            <td>
-                                {{ $employe->kapal }}
-                            </td>
-                            <td>
-                                {{ $employe->status }}
-                            </td>
-                            <td class="flex flex-row justify-content-around">
-                                @can('detail karyawan')
-                                <a href="{{ route('permission.index', ['employeId' => $employe->id]) }}"
-                                    class="btn btn-sm btn-primary">Detail
-                                </a>
-                                @endcan
-                                @can('ubah karyawan')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $employe->id }})"
-                                    class="btn btn-sm btn-info">Ubah
-                                </a>
-                                @endcan
-                                @can('hapus karyawan')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $employe->id }})"
-                                    class="btn btn-sm btn-danger">Hapus
-                                </a>
-                                @endcan
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </section>
-</div>
 @endsection
 
-@section('script')
-{{-- <script src="assets/static/js/components/dark.js"></script>
-    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script> --}}
 @section('style')
-<link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
 @endsection
-
 @section('script')
-<script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
-<script>
-    $(document).ready(function() {
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
+    <script>
+        $(document).ready(function() {
             $('.dataTable').DataTable();
             setupSelect();
             setupDateFilter();
@@ -253,7 +245,30 @@
         }
 
         function setupSelect() {
-        $(".select2").select2();
+            $(".select2").select2();
+        }
+
+        function setupDateFilter() {
+            new Litepicker({
+                element: document.getElementById('date_filter'),
+                singleMode: false,
+                tooltipText: {
+                    one: 'night',
+                    other: 'nights'
+                },
+                tooltipNumber: (totalDays) => {
+                    return totalDays - 1;
+                },
+                setup: (picker) => {
+                    picker.on('selected', (startDate, endDate) => {
+                        startDate = moment(startDate.dateInstance).format("yyyy-MM-DD");
+                        endDate = moment(endDate.dateInstance).format("yyyy-MM-DD");
+
+                        state.date_start_filter = startDate;
+                        state.date_end_filter = endDate;
+                    });
+                },
+            });
         }
 
         function clearForm() {
@@ -261,6 +276,5 @@
             $("#name").val("");
             $("#description").val("");
         }
-
-</script>
+    </script>
 @endsection

@@ -1,5 +1,4 @@
-<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel"
-    aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,12 +18,12 @@
                                 role="tab" aria-controls="personal" aria-selected="true">Data Personal</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="keluarga-tab" data-bs-toggle="tab" href="#keluarga" role="tab"
-                                aria-controls="keluarga" aria-selected="false">Data Keluarga</a>
+                            <a class="nav-link" id="kepegawaian-tab" data-bs-toggle="tab" href="#kepegawaian"
+                                role="tab" aria-controls="kepegawaian" aria-selected="false">Data Kepegawaian</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="kepegawaian-tab" data-bs-toggle="tab" href="#kepegawaian" role="tab"
-                                aria-controls="kepegawaian" aria-selected="false">Data Kepegawaian</a>
+                            <a class="nav-link" id="keluarga-tab" data-bs-toggle="tab" href="#keluarga" role="tab"
+                                aria-controls="keluarga" aria-selected="false">Data Keluarga</a>
                         </li>
                         {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link" id="rekening-tab" data-bs-toggle="tab" href="#rekening" role="tab"
@@ -41,8 +40,8 @@
                             <div class="form-group row">
                                 <label for="name" class="col-sm-4 col-form-label">NIP</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="nik" name="nik" class="form-control" value="KPT0123"
-                                        disabled>
+                                    <input type="text" id="nik" name="nik" class="form-control"
+                                        value="KPT0123" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -78,7 +77,8 @@
                             <div class="form-group row">
                                 <label for="agama" class="col-sm-4 col-form-label">Agama </label>
                                 <div class="col-sm-8">
-                                    <select id="agama" name="agama" class="select2 form-select" style="width: 100%">
+                                    <select id="agama" name="agama" class="select2 form-select"
+                                        style="width: 100%">
                                         <option value="">Pilih Agama</option>
                                         <option value="islam">Islam
                                         </option>
@@ -94,9 +94,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="alamat" class="col-sm-4 col-form-label">Alamat</label>
+                                <label for="address" class="col-sm-4 col-form-label">Alamat</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="alamat" name="alamat" class="form-control">
+                                    {{-- <input type="text" id="alamat" name="alamat" class="form-control"> --}}
+                                    <textarea name="address" id="addreess" cols="60" rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +115,8 @@
                             <div class="form-group row">
                                 <label for="telepon_ayah" class="col-sm-4 col-form-label">Telepon Ayah</label>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" name="telepon_ayah" id="telepon_ayah">
+                                    <input type="number" class="form-control" name="telepon_ayah"
+                                        id="telepon_ayah">
                                 </div>
                             </div>
 
@@ -135,7 +137,8 @@
                             <div class="form-group row">
                                 <label for="nama_saudara" class="col-sm-4 col-form-label">Nama Saudara</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="nama_saudara" name="nama_saudara">
+                                    <input type="text" class="form-control" id="nama_saudara"
+                                        name="nama_saudara">
                                 </div>
                             </div>
 
@@ -157,25 +160,34 @@
                             <div class="form-group row">
                                 <label for="telepon_istri" class="col-sm-4 col-form-label">Telepon Istri</label>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" id="telepon_istri" name="telepon_istri">
+                                    <input type="number" class="form-control" id="telepon_istri"
+                                        name="telepon_istri">
                                 </div>
                             </div>
                         </div>
 
                         {{-- KEPEGAWAIAN --}}
-                        <div class="tab-pane fade" id="kepegawaian" role="tabpanel" aria-labelledby="kepegawaian-tab">
+                        <div class="tab-pane fade" id="kepegawaian" role="tabpanel"
+                            aria-labelledby="kepegawaian-tab">
+                            <div class="form-group row">
+                                <label for="agama" class="col-sm-4 col-form-label"> Jenis Kepegawaian </label>
+                                <div class="col-sm-8">
+                                    <select id="agama" name="agama" class="select2 form-select" required
+                                        style="width: 100%">
+                                        <option value="6,1">
+                                            6 - 1 (6 hari kerja 1 hari off)
+                                        </option>
+                                        <option value="5,2">
+                                            5 - 2 (5 hari kerja 2 hari off)
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label for="tanggal_masuk" class="col-sm-4 col-form-label">Tanggal Masuk</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control datepicker" id="tanggal_masuk"
                                         name="tanggal_masuk">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="nip" class="col-sm-4 col-form-label">NIP</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="nip" id="nip" readonly>
                                 </div>
                             </div>
 
@@ -234,12 +246,13 @@
                             <div class="form-group row">
                                 <label for="lokasi" class="col-sm-4 col-form-label">Lokasi Pegawai</label>
                                 <div class="col-sm-8">
-                                    <select name="lokasi" id="lokasi" class="form-control select2" style="width: 100%;">
+                                    <select name="lokasi" id="lokasi" class="form-control select2"
+                                        style="width: 100%;">
                                         <option value="">-- Pilih Lokasi --</option>
                                         {{-- @foreach ($lokasis as $lokasi)
                                     <option value="{{ $lokasi->id }}"
                                         <?php if ($pegawai->lokasi_id == $lokasi->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $lokasi->nama_lokasi }}
                                         </option>
@@ -252,12 +265,13 @@
                             <div class="form-group row" id="form-kapal">
                                 <label for="lokasi" class="col-sm-4 col-form-label">Pilih Kapal</label>
                                 <div class="col-sm-8">
-                                    <select name="kapal" id="kapal" class="form-control select2" style="width: 100%;">
+                                    <select name="kapal" id="kapal" class="form-control select2"
+                                        style="width: 100%;">
                                         <option value="">-- Pilih Kapal --</option>
                                         {{-- @foreach ($kapals as $kapal)
                                     <option value="{{ $kapal->id }}"
                                         <?php if ($pegawai->kapal_id == $kapal->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $kapal->nama_kapal }}
                                         </option>
@@ -276,7 +290,7 @@
                                         {{-- @foreach ($departemens as $departemen)
                                     <option value="{{ $departemen->id }}"
                                         <?php if ($pegawai->departemen_id == $departemen->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $departemen->nama_departemen }}
                                         </option>
@@ -295,7 +309,7 @@
                                         {{-- @foreach ($jabatans as $jabatan)
                                     <option value="{{ $jabatan->id }}"
                                         <?php if ($pegawai->jabatan_id == $jabatan->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $jabatan->nama_jabatan }}
                                         </option>
@@ -314,7 +328,7 @@
                                         {{-- @foreach ($status_pegawais as $status_pegawai)
                                     <option value="{{ $status_pegawai->id }}"
                                         <?php if ($pegawai->status_pegawai_id == $status_pegawai->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $status_pegawai->nama_status_pegawai }}
                                         </option>
@@ -327,12 +341,13 @@
                             <div class="form-group row">
                                 <label for="kawin" class="col-sm-4 col-form-label">Kawin</label>
                                 <div class="col-sm-8">
-                                    <select name="kawin" id="kawin" class="form-control select2" style="width: 100%;">
+                                    <select name="kawin" id="kawin" class="form-control select2"
+                                        style="width: 100%;">
                                         <option value="">-- Pilih Kawin --</option>
                                         {{-- @foreach ($kawins as $kawin)
                                     <option value="{{ $kawin->id }}"
                                         <?php if ($pegawai->kawin_id == $kawin->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $kawin->status_perkawinan }}
                                         </option>
@@ -351,7 +366,7 @@
                                         {{-- @foreach ($lokasi_pajaks as $lokasi_pajak)
                                     <option value="{{ $lokasi_pajak->id }}"
                                         <?php if ($pegawai->lokasi_pajak_id == $lokasi_pajak->id) {
-                                        echo 'selected';
+                                            echo 'selected';
                                         } ?>>
                                         {{ $lokasi_pajak->nama_lokasi_pajak }}
                                         </option>
@@ -364,11 +379,10 @@
                             <div class="form-group row">
                                 <label for="status" class="col-sm-4 col-form-label">Status Pegawai</label>
                                 <div class="col-sm-8">
-                                    <select name="status" id="status" class="form-control select2" style="width: 100%;">
+                                    <select name="status" id="status" class="form-control select2"
+                                        style="width: 100%;">
                                         <option value="">-- Pilih Status --</option>
                                         <option value="aktif">Aktif</option>
-                                        <option value="meninggal">Meninggal
-                                        </option>
                                         <option value="keluar">Keluar</option>
                                     </select>
                                 </div>
@@ -388,12 +402,12 @@
                                         <label for="bpjs">BPJS</label><br>
                                         <div class="form-check form-switch">
                                             <form>
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : BPJS"
-                                                    for="flexSwitchCheckChecked">
+                                                <label class="switch form-check-label"
+                                                    title="Aktif / Non-Aktif : BPJS" for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="toggle"
                                                         class="form-check-input bpjsCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="1"
-                                                        data-on="Enabled">
+                                                        id="flexSwitchCheckChecked" data-off="Disabled"
+                                                        data-target="1" data-on="Enabled">
                                             </form>
                                             </label>
                                         </div>
@@ -409,8 +423,8 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="toggle"
                                                         class="form-check-input jkkCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="2"
-                                                        data-on="Enabled">
+                                                        id="flexSwitchCheckChecked" data-off="Disabled"
+                                                        data-target="2" data-on="Enabled">
                                             </form>
                                             </label>
                                         </div>
@@ -425,8 +439,8 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="toggle"
                                                         class="form-check-input jkmCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="3"
-                                                        data-on="Enabled">
+                                                        id="flexSwitchCheckChecked" data-off="Disabled"
+                                                        data-target="3" data-on="Enabled">
                                             </form>
                                             </label>
                                         </div>
@@ -442,8 +456,8 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="toggle"
                                                         class="form-check-input jhtCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="4"
-                                                        data-on="Enabled">
+                                                        id="flexSwitchCheckChecked" data-off="Disabled"
+                                                        data-target="4" data-on="Enabled">
                                             </form>
                                             </label>
                                         </div>
@@ -459,8 +473,8 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="toggle"
                                                         class="form-check-input ipCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="5"
-                                                        data-on="Enabled">
+                                                        id="flexSwitchCheckChecked" data-off="Disabled"
+                                                        data-target="5" data-on="Enabled">
                                             </form>
                                             </label>
                                         </div>

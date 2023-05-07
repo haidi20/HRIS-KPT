@@ -20,7 +20,7 @@ class SalaryAdvanceReportController extends Controller
                 "remaining_debt" => "1.200.000",
                 "date" => "Jum'at, 5 Mei 2023",
                 "status" => "accept",
-            ]
+            ],
         ];
 
         return view("pages.salary-advance-report.index", compact("salaryAdvances"));
