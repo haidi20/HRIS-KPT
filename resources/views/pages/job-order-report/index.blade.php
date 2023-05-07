@@ -31,8 +31,8 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="basicInput">Pilih Proyek</label>
-                                <select name="status" id="status" class="form-control select2" style="width: 100%;">
+                                <label for="project">Pilih Proyek</label>
+                                <select name="project" id="project" class="form-control select2" style="width: 100%;">
                                     <option value="" selected>Semua</option>
                                     <option value="1">Kapal A</option>
                                 </select>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="basicInput">Pilih Status</label>
+                                <label for="status">Pilih Status</label>
                                 <select name="status" id="status" class="form-control select2" style="width: 100%;">
                                     <option value="" selected>Semua</option>
                                     <option value="repair">Perbaikan</option>
@@ -141,6 +141,7 @@
             $('.dataTable').DataTable();
 
             state.jobOrders = {!! json_encode($jobOrders) !!};
+            setupSelect();
             setupDateFilter();
             send();
         });
@@ -315,6 +316,10 @@
                     });
                 },
             });
+        }
+
+        function setupSelect() {
+            $(".select2").select2();
         }
 
         function clearForm() {

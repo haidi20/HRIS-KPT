@@ -51,5 +51,9 @@ return [
         ],
 
         // end SPL
+        [
+            "name" => "ekspor laporan job order",
+            "featurer_id" => 9,
+        ],
     ],
 ];
