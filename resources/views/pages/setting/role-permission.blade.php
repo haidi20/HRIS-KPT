@@ -158,11 +158,20 @@
         }
 
         function onSend() {
+            const getFeatureId = state.permissions_by_feature[0].feature_id;
+            const getPermissionsByRole = state.permissions_by_role.filter(item => item.feature_id == getFeatureId);
+
             // console.info(state);
             const data = {
-                role_id: "{{ $roleId }}",
                 ...state,
+                role_id: "{{ $roleId }}",
+                permissions_by_role: getPermissionsByRole,
             };
+
+            // console.info(data);
+
+            // return false;
+
             $.ajax({
                 url: "{{ route('setting.rolePermission.store', ['roleId' => $roleId]) }}",
                 method: 'POST',

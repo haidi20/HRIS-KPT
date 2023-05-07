@@ -175,11 +175,29 @@
                                     <select id="agama" name="agama" class="select2 form-select" required
                                         style="width: 100%">
                                         <option value="6,1">
-                                            6 - 1 (6 hari kerja 1 hari off)
+                                            6 - 1 (6 hari kerja dan 1 hari off)
                                         </option>
                                         <option value="5,2">
-                                            5 - 2 (5 hari kerja 2 hari off)
+                                            5 - 2 (5 hari kerja dan 2 hari off)
                                         </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="departemen" class="col-sm-4 col-form-label">Departemen</label>
+                                <div class="col-sm-8">
+                                    <select name="departemen" id="departemen" class="form-control select2"
+                                        style="width: 100%;">
+                                        <option value="">-- Pilih Departemen --</option>
+                                        {{-- @foreach ($departemens as $departemen)
+                                    <option value="{{ $departemen->id }}"
+                                        <?php if ($pegawai->departemen_id == $departemen->id) {
+                                            echo 'selected';
+                                        } ?>>
+                                        {{ $departemen->nama_departemen }}
+                                        </option>
+                                        @endforeach --}}
+                                        <option value="aktif">HSE</option>
                                     </select>
                                 </div>
                             </div>
@@ -239,82 +257,6 @@
                                             }}>SD
                                         </option> --}}
                                         <option value="s3">S3</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="lokasi" class="col-sm-4 col-form-label">Lokasi Pegawai</label>
-                                <div class="col-sm-8">
-                                    <select name="lokasi" id="lokasi" class="form-control select2"
-                                        style="width: 100%;">
-                                        <option value="">-- Pilih Lokasi --</option>
-                                        {{-- @foreach ($lokasis as $lokasi)
-                                    <option value="{{ $lokasi->id }}"
-                                        <?php if ($pegawai->lokasi_id == $lokasi->id) {
-                                            echo 'selected';
-                                        } ?>>
-                                        {{ $lokasi->nama_lokasi }}
-                                        </option>
-                                        @endforeach --}}
-                                        <option value="aktif">CREWING</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row" id="form-kapal">
-                                <label for="lokasi" class="col-sm-4 col-form-label">Pilih Kapal</label>
-                                <div class="col-sm-8">
-                                    <select name="kapal" id="kapal" class="form-control select2"
-                                        style="width: 100%;">
-                                        <option value="">-- Pilih Kapal --</option>
-                                        {{-- @foreach ($kapals as $kapal)
-                                    <option value="{{ $kapal->id }}"
-                                        <?php if ($pegawai->kapal_id == $kapal->id) {
-                                            echo 'selected';
-                                        } ?>>
-                                        {{ $kapal->nama_kapal }}
-                                        </option>
-                                        @endforeach --}}
-                                        <option value="aktif">TB. SATRIA 1</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="departemen" class="col-sm-4 col-form-label">Departemen</label>
-                                <div class="col-sm-8">
-                                    <select name="departemen" id="departemen" class="form-control select2"
-                                        style="width: 100%;">
-                                        <option value="">-- Pilih Departemen --</option>
-                                        {{-- @foreach ($departemens as $departemen)
-                                    <option value="{{ $departemen->id }}"
-                                        <?php if ($pegawai->departemen_id == $departemen->id) {
-                                            echo 'selected';
-                                        } ?>>
-                                        {{ $departemen->nama_departemen }}
-                                        </option>
-                                        @endforeach --}}
-                                        <option value="aktif">HSE</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="jabatan" class="col-sm-4 col-form-label">Jabatan</label>
-                                <div class="col-sm-8">
-                                    <select name="jabatan" id="jabatan" class="form-control select2"
-                                        style="width: 100%;">
-                                        <option value="">-- Pilih Jabatan --</option>
-                                        {{-- @foreach ($jabatans as $jabatan)
-                                    <option value="{{ $jabatan->id }}"
-                                        <?php if ($pegawai->jabatan_id == $jabatan->id) {
-                                            echo 'selected';
-                                        } ?>>
-                                        {{ $jabatan->nama_jabatan }}
-                                        </option>
-                                        @endforeach --}}
-                                        <option value="aktif">Juru Minyak</option>
                                     </select>
                                 </div>
                             </div>

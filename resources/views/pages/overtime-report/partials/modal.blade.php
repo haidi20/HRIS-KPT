@@ -1,4 +1,5 @@
-<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="detailModal" role="dialog" aria-labelledby="addModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

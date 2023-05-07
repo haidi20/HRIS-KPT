@@ -6,14 +6,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Jabatan</h3>
+                    <h3>Departemen</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Karyawan</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Departemen</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,17 +22,17 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <span class="fs-4 fw-bold">Data Jabatan</span>
+                    <span class="fs-4 fw-bold">Data Departemen</span>
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jabatan
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Departemen
                     </button>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
-                          <tr>
-                                <th>No.</th>
+                            <tr>
+                                <th width="5%">No.</th>
                                 <th>Nama</th>
                                 <th>Keterangan</th>
                                 <th width="20%">Aksi</th>
@@ -51,12 +51,12 @@
                                         {{ $position->description }}
                                     </td>
                                     <td>
-                                        @can('ubah jabatan')
+                                        @can('ubah departemen')
                                             <a href="javascript:void(0)" onclick="onEdit({{ $position }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus jabatan')
+                                        @can('hapus departemen')
                                             <a href="javascript:void(0)" onclick="onDelete({{ $position }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>

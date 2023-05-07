@@ -21,15 +21,6 @@
         </div>
         <section class="section">
             <div class="card">
-                <div class="card-header">
-                    Data Kasbon
-                    {{-- @can('tambah kasbon')
-                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                            data-toggle="modal">
-                            <i class="fas fa-plus text-white-50"></i> Tambah Kasbon
-                        </button>
-                    @endcan --}}
-                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -43,6 +34,7 @@
                                 <label for="basicInput">Pilih Status</label>
                                 <select name="status" id="status" class="form-control select2" style="width: 100%;">
                                     <option value="">Semua</option>
+                                    <option value="waiting" selected>Menunggu Persetujuan</option>
                                     <option value="settled">Lunas</option>
                                     <option value="unpaid">Belum Lunas</option>
                                     <option value="accept">Diterima
@@ -53,7 +45,7 @@
                         </div>
                         <div class="col-md-2" style="align-self: center">
                             <button type="button" onclick="onFilter()" class="btn btn-sm btn-success">Kirim</button>
-                            @can('ekspor project')
+                            @can('ekspor laporan kasbon')
                                 <button type="button" id="btn_export" onclick="onExport()"
                                     class="btn btn-sm btn-success mt-2 ml-4 mt-md-0">
                                     <i class="fas fa-file-excel"></i> Export
@@ -68,11 +60,11 @@
                                 <th>Nama karyawan</th>
                                 <th>Jumlah Kasbon</th>
                                 <th>Potongan Per Bulan</th>
-                                <th>Durasi</th>
+                                <th>Lama Waktu Kasbon</th>
                                 <th>Sisa Gaji</th>
                                 <th>Tanggal Disetujui</th>
                                 <th>Sisa Hutang</th>
-                                <th width="20%"></th>
+                                <th width="15%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -111,7 +103,7 @@
                                         @can('perwakilan persetujuan kasbon')
                                             @if ($salaryAdvance->status == 'accept')
                                                 <a href="javascript:void(0)" onclick="onEdit({{ $salaryAdvance->id }})"
-                                                    class="btn btn-sm btn-primary">Terima Perwakilan
+                                                    class="btn btn-sm btn-primary">Terima Sebagai Perwakilan
                                                 </a>
                                             @endif
                                         @endcan
@@ -120,11 +112,11 @@
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus kasbon')
+                                        {{-- @can('hapus kasbon')
                                             <a href="javascript:void(0)" onclick="onDelete({{ $salaryAdvance->id }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
-                                        @endcan
+                                        @endcan --}}
                                     </td>
                                 </tr>
                             @endforeach

@@ -33,7 +33,23 @@ return [
             "name" => "perwakilan persetujuan kasbon",
             "featurer_id" => 4,
         ],
+        [
+            "name" => "ekspor laporan kasbon",
+            "featurer_id" => 4,
+        ],
 
         // end kasbon
+
+        // start SPL
+        [
+            "name" => "detail laporan surat perintah lembur",
+            "featurer_id" => 11,
+        ],
+        [
+            "name" => "ekspor laporan surat perintah lembur",
+            "featurer_id" => 11,
+        ],
+
+        // end SPL
     ],
 ];
