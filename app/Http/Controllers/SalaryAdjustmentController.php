@@ -20,7 +20,9 @@ class SalaryAdjustmentController extends Controller
 
         // return $salaryAdjustments;
 
-        return view("pages.setting.salary-adjustment", compact("salaryAdjustments"));
+        $vue = true;
+
+        return view("pages.setting.salary-adjustment", compact("salaryAdjustments", "vue"));
     }
 
     public function store(Request $request)

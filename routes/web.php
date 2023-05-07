@@ -73,6 +73,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
         Route::get('', [SalaryAdvanceController::class, "index"])->name("index");
     });
+    // salary adjustment = penyesuaian gaji
+    Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
+        Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
+    });
     Route::prefix("overtime")->name("overtime.")->group(function () {
         Route::get('', [OvertimeController::class, "index"])->name("index");
     });
@@ -152,9 +156,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("setting")->name("setting.")->group(function () {
         Route::prefix('approval-level')->name("approvalLevel.")->group(function () {
             Route::get('', [ApprovalLevelController::class, "index"])->name("index");
-        });
-        Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
-            Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
         });
         Route::prefix('user')->name("user.")->group(function () {
             Route::get('', [UserController::class, "index"])->name("index");

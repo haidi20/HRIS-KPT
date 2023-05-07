@@ -105,8 +105,8 @@
                                 </li>
                             @endcan
                             @can('lihat penyesuaian gaji')
-                                <li class="submenu-item {{ isActive('setting/salary-adjustment') }}">
-                                    <a href="{{ route('setting.salaryAdjustment.index') }}">Penyesuaian Gaji</a>
+                                <li class="submenu-item {{ isActive('salary-adjustment') }}">
+                                    <a href="{{ route('salaryAdjustment.index') }}">Penyesuaian Gaji</a>
                                 </li>
                             @endcan
                         </ul>
@@ -206,12 +206,12 @@
                     </li>
                 @endcanany
                 @can('lihat perusahaan')
-                <li class="sidebar-item {{ isActive('master/company') }}">
-                    <a href="{{ route('master.company.index') }}" class='sidebar-link'>
-                        <i class="bi bi-building"></i>
-                        <span>Perusahaan</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item {{ isActive('master/company') }}">
+                        <a href="{{ route('master.company.index') }}" class='sidebar-link'>
+                            <i class="bi bi-building"></i>
+                            <span>Perusahaan</span>
+                        </a>
+                    </li>
                 @endcan
                 @can('lihat kapal')
                     <li class="sidebar-item {{ isActive('master/barge') }}">
