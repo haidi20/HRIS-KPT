@@ -34,7 +34,7 @@
     <vue-bottom-sheet ref="myBottomSheetEmployee">
       <div class="flex flex-col">
         <div class="action-item">tunda</div>
-        <div class="action-item">aktifkan kembali</div>
+        <div class="action-item">mulai kembali</div>
         <div class="action-item">lembur</div>
         <div class="action-item">selesai lembur</div>
         <div class="action-item">hapus</div>

@@ -52,6 +52,24 @@
             style="min-width: 180px"
           />
         </b-form-group>
+        <b-form-group
+          v-if="form.data_base == 'job_order'"
+          label="Job Order"
+          label-for="job_order_id"
+          class
+        >
+          <VueSelect
+            id="job_order_id"
+            class="cursor-pointer"
+            v-model="form.job_order_id"
+            placeholder="Pilih Job Order"
+            :options="getOptionJobOrders"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row v-if="form.data_base == 'employee'">
@@ -79,12 +97,18 @@ export default {
     getOptionPositions() {
       return this.$store.state.employee.data.positions;
     },
+    getOptionJobOrders() {
+      return this.$store.state.jobOrder.data.map((item) => ({
+        ...item,
+        name: item.project_name,
+      }));
+    },
     form() {
       return this.$store.state.employee.form;
     },
   },
   methods: {
-    onSen() {
+    onSend() {
       console.info(this.form.employee_id);
     },
   },

@@ -58,6 +58,14 @@
                         </a>
                     </li>
                 @endcan
+                @can('lihat cuti')
+                    <li class="sidebar-item {{ isActive('vacation') }} ">
+                        <a href="{{ route('vacation.index') }}" class='sidebar-link'>
+                            <i class="bi bi-arrow-up-left-circle"></i>
+                            <span>Cuti</span>
+                        </a>
+                    </li>
+                @endcan
                 {{-- @can('lihat surat perintah lembur')
                     <li class="sidebar-item {{ isActive('overtime') }} ">
                         <a href="{{ route('overtime.index') }}" class='sidebar-link'>
