@@ -84,7 +84,6 @@ export default {
   data() {
     return {
       title: "",
-      getDataBaseClick: null,
     };
   },
   components: { FilterData },
@@ -99,11 +98,9 @@ export default {
   methods: {
     onOpenAction(id) {
       //   console.info(id);
-      this.getDataBaseClick = id;
       this.$refs.myBottomSheet.open();
     },
     onDetail() {
-      console.info(this.getDataBaseClick);
       this.$refs.myBottomSheet.close();
       this.$bvModal.show("job_order_form");
     },
