@@ -91,6 +91,34 @@
               name="amount"
               @keypress="onReplaceAmount($event)"
             ></b-form-input>
+            <span class="note">catatan: hanya berupa angka saja</span>
+          </b-form-group>
+        </b-col>
+        <b-col cols="6">
+          <b-form-group label="." label-for="type_adjustment">
+            <VueSelect
+              id="type_adjustment"
+              class="cursor-pointer"
+              v-model="form.type_adjustment"
+              placeholder="Pilih Jenis Penyesuaian"
+              :options="getOptionTypeAdjustments"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="8">
+          <b-form-group label="Keterangan" label-for="note" class>
+            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col cols="4">
+          <b-form-group label="Pilih Karyawan" label-for="image" class>
+            <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>
           </b-form-group>
         </b-col>
       </b-row>
@@ -103,6 +131,7 @@
         </b-col>
       </b-row>
     </b-modal>
+    <Employee />
   </div>
 </template>
 
@@ -111,6 +140,8 @@ import axios from "axios";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
 import VueSelect from "vue-select";
+
+import Employee from "../employee/view/employee";
 
 export default {
   data() {
@@ -123,13 +154,22 @@ export default {
   components: {
     VueSelect,
     DatePicker,
+    Employee,
+  },
+  mounted() {
+    this.$store.commit("employee/UPDATE_IS_FORM_MOBILE", {
+      value: false,
+    });
   },
   computed: {
     getOptionTypeTimes() {
       return this.$store.state.salaryAdjustment.options.type_times;
     },
     getOptionTypeAmount() {
-      return this.$store.state.salaryAdjustment.options.type_amount;
+      return this.$store.state.salaryAdjustment.options.type_amounts;
+    },
+    getOptionTypeAdjustments() {
+      return this.$store.state.salaryAdjustment.options.type_adjustments;
     },
     amount: {
       get() {
@@ -155,6 +195,9 @@ export default {
     onActiveDateEnd() {
       this.is_date_end = !this.is_date_end;
     },
+    onShowEmployee() {
+      this.$bvModal.show("data_employee");
+    },
     onReplaceAmount($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       //   console.info(keyCode);
@@ -173,4 +216,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.note {
+  color: red;
+  font-size: 12px;
+}
 </style>

@@ -170,7 +170,7 @@
 
 <script>
 import VueSelect from "vue-select";
-import Employee from "../employee/employee";
+import Employee from "../employee/view/employee";
 
 export default {
   data() {
@@ -181,6 +181,9 @@ export default {
   },
   mounted() {
     // this.$bvModal.show("data_employee");
+    this.$store.commit("employee/UPDATE_IS_FORM_MOBILE", {
+      value: true,
+    });
   },
   components: {
     VueSelect,

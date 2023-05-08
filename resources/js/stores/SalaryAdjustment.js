@@ -11,6 +11,8 @@ const defaultForm = {
     amount_readable: null,
     date_start: new Date(),
     date_end: new Date(moment().add({ month: 1 })),
+    type_adjustment: "deduction",
+    note: null,
 }
 
 const SalaryAdjustment = {
@@ -34,7 +36,7 @@ const SalaryAdjustment = {
                 }
             ],
             // jenis jumlah dalam bentuk persen atau angka
-            type_amount: [
+            type_amounts: [
                 {
                     id: "nominal",
                     name: "jumlah uang",
@@ -42,6 +44,16 @@ const SalaryAdjustment = {
                 {
                     id: "percent",
                     name: "presentase dari gaji karyawan",
+                },
+            ],
+            type_adjustments: [
+                {
+                    id: "deduction",
+                    name: "pengurangan",
+                },
+                {
+                    id: "addition",
+                    name: "penambahan",
                 },
             ],
         },
