@@ -27,7 +27,7 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
-                        style="min-width: 11rem; margin-top: 40%;">
+                        style="min-width: 11rem; margin-top: 20%;">
                         {{-- <li><a class="dropdown-item" href="{% url 'profil' %}"><i
                                     class="icon-mid bi bi-person me-2"></i>
                                 Profil</a></li>

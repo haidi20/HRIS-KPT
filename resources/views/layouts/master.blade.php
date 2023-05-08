@@ -78,10 +78,11 @@
     </div>
 
 
-    <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script>
+    {{-- <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script> --}}
     {{-- bootstrap.js not found --}}
     {{-- <script src="{{ asset('assets/compiled/js/bootstrap.js') }}"></script> --}}
-    <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script>
+    {{-- <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script> --}}
+    <script src="{{ asset('assets-mazer/js/app.js') }}"></script>
     {{-- <script src="{{ asset('js/bootstrap.js') }}" defer></script> --}}
     <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
