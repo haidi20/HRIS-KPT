@@ -19,7 +19,6 @@
               format="YYYY-MM"
               type="month"
               placeholder="pilih Tanggal"
-              @input="onChangeDateFilter"
               range
             />
           </b-form-group>
@@ -122,9 +121,6 @@ export default {
     },
   },
   methods: {
-    onChangeDateFilter() {
-      //
-    },
     onExport() {
       //
     },
