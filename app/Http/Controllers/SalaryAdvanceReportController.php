@@ -9,6 +9,8 @@ class SalaryAdvanceReportController extends Controller
     // LAPORAN KASBON
     public function index()
     {
+
+        // selanjutnya pindah ke fetchData dapatkan datanya.
         $salaryAdvances = [
             (object)[
                 "id" => 1,
@@ -20,6 +22,7 @@ class SalaryAdvanceReportController extends Controller
                 "remaining_debt" => "1.200.000",
                 "date" => "Jum'at, 5 Mei 2023",
                 "status" => "accept",
+                "reason" => "kebutuhan beli handphone baru",
             ],
         ];
 

@@ -63,7 +63,8 @@
                                 <th>Lama Waktu</th>
                                 <th>Sisa Gaji</th>
                                 <th>Sisa Hutang</th>
-                                <th>Tanggal Disetujui</th>
+                                {{-- <th>Tanggal Disetujui</th> --}}
+                                <th>Alasan</th>
                                 <th width="15%"></th>
                             </tr>
                         </thead>
@@ -89,7 +90,7 @@
                                         Rp. {{ $salaryAdvance->remaining_debt }}
                                     </td>
                                     <td>
-                                        {{ $salaryAdvance->date }}
+                                        {{ $salaryAdvance->reason }}
                                     </td>
                                     <td>
                                         @can('persetujuan kasbon')
