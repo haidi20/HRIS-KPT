@@ -33,7 +33,8 @@
                     <span>Total Karyawan Aktif: {{item.employee_active_total}}</span>
                   </b-col>
                   <b-col cols="5">
-                    <span>Penilaian : {{item.count_assessment}} / 2</span>
+                    <span>Penilaian :</span>
+                    <span>{{item.count_assessment}}/2</span>
                     <br />
                     <div>
                       <b-form-checkbox
@@ -121,6 +122,7 @@ export default {
 <style lang="scss" scoped>
 .place-data {
   max-height: 500px;
+  //max-height: 20%;
   overflow-y: scroll;
 }
 .place-data::-webkit-scrollbar {

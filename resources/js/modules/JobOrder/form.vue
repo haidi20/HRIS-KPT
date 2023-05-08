@@ -48,7 +48,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols>
+        <b-col cols sm="12" md="6">
           <b-form-group label="Pekerjaan" label-for="job_id" class>
             <VueSelect
               id="job_id"
@@ -63,9 +63,7 @@
             />
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols>
+        <b-col cols sm="12" md="6">
           <b-form-group label="Keterangan Jenis Pekerjaan" label-for="type_job_note" class>
             <b-form-input v-model="form.type_job_note" id="type_job_note" name="type_job_note"></b-form-input>
           </b-form-group>

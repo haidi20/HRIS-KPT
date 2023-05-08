@@ -48,7 +48,7 @@ export default {
 <style lang="scss" scoped>
 #main-content {
   background-color: white;
-  height: 100%;
+  max-height: 90%;
   padding-top: 20px;
   border-radius: 30px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
