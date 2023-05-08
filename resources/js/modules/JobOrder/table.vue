@@ -5,7 +5,7 @@
         <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
       </b-col>
       <b-col cols style="align-item: right">
-        <b-button variant="success" size="sm" class="float-end" @click="onCreate()">Tambah</b-button>
+        <b-button variant="success" size="sm" class="float-end" @click="onDetail()">Tambah</b-button>
       </b-col>
     </b-row>
     <br />
@@ -61,11 +61,13 @@
         <vue-bottom-sheet ref="myBottomSheet">
           <div class="flex flex-col">
             <div class="action-item">tunda</div>
-            <div class="action-item">mulai</div>
+            <div class="action-item">mulai kembali</div>
             <div class="action-item">selesai</div>
+            <div class="action-item">lembur</div>
+            <div class="action-item">selesai lembur</div>
             <div class="action-item">perbaikan</div>
             <div class="action-item">ubah</div>
-            <div class="action-item" @click="onCreate">detail</div>
+            <div class="action-item" @click="onDetail">detail</div>
             <div class="action-item">penilaian</div>
           </div>
         </vue-bottom-sheet>
@@ -82,6 +84,7 @@ export default {
   data() {
     return {
       title: "",
+      getDataBaseClick: null,
     };
   },
   components: { FilterData },
@@ -94,12 +97,13 @@ export default {
     },
   },
   methods: {
-    onOpenAction(i) {
-      //   console.info(i);
+    onOpenAction(id) {
+      //   console.info(id);
+      this.getDataBaseClick = id;
       this.$refs.myBottomSheet.open();
     },
-    onCreate() {
-      //   console.info("create");
+    onDetail() {
+      console.info(this.getDataBaseClick);
       this.$refs.myBottomSheet.close();
       this.$bvModal.show("job_order_form");
     },
