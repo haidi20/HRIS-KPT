@@ -19,7 +19,16 @@ const SalaryAdjustment = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [],
+        data: [
+            {
+                id: 1,
+                name: "Turun Kapal",
+                time: "Mei 2023",
+                amount: "1.000.000",
+                type_adjustment_name: "penambahan",
+                note: "bonus turun kapal",
+            },
+        ],
         params: {
             date_filter: new Date(),
         },

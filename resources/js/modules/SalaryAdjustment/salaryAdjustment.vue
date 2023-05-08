@@ -43,7 +43,7 @@ import Table from "./table";
 export default {
   components: { Table, Form },
   mounted() {
-    this.$bvModal.show("salary_adjustment_form");
+    // this.$bvModal.show("salary_adjustment_form");
   },
   methods: {
     onCreate() {

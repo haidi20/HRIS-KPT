@@ -111,14 +111,14 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols="8">
-          <b-form-group label="Keterangan" label-for="note" class>
-            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
-          </b-form-group>
-        </b-col>
         <b-col cols="4">
           <b-form-group label="Pilih Karyawan" label-for="image" class>
             <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>
+          </b-form-group>
+        </b-col>
+        <b-col cols="8">
+          <b-form-group label="Keterangan" label-for="note" class>
+            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
           </b-form-group>
         </b-col>
       </b-row>

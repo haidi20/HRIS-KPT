@@ -67,7 +67,7 @@
       <b-col></b-col>
       <b-col col md="3" sm="12">
         <b-pagination
-          class="float-right"
+          class="float-end"
           v-model="currentPage"
           :total-rows="countData"
           :per-page="options.perPage"
