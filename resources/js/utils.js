@@ -31,3 +31,11 @@ export const convertMonthToRoman = (month) => {
     const romanNumerals = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
     return romanNumerals[month];
 }
+
+export const isMobile = () => {
+    if (screen.width <= 760) {
+        return true;
+    } else {
+        return false;
+    }
+}

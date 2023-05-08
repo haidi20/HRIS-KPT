@@ -11,18 +11,50 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <b-row v-for="i in 3" :key="i">
-          <b-col class="place-item" @click="onOpenAction(i)">
-            <h5>Perbaikan Kapal Bagian Belakang</h5>
-            <span>
-              Status :
-              <div class="badge-success">Aktif</div>
-            </span>
-            <br />
-            <span>Total Karyawan : 5</span>
-            <br />
-            <span>Total Karyawan Aktif: 4</span>
-            <!--  -->
+        <b-row v-for="(item, index) in getData" :key="index">
+          <b-col class="place-item">
+            <b-row>
+              <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item.id)">
+                <h6>
+                  <b>{{item.project_name}}</b>
+                </h6>
+                <span>catatan:</span>
+                <br />
+                <span>{{onLimitSentence(item.project_note)}}</span>
+                <b-row class="place-content">
+                  <b-col cols="7">
+                    <span>
+                      Status :
+                      <div :class="`badge-${item.status_color}`">{{item.status}}</div>
+                    </span>
+                    <br />
+                    <span>Total Karyawan : {{item.employee_total}}</span>
+                    <br />
+                    <span>Total Karyawan Aktif: {{item.employee_active_total}}</span>
+                  </b-col>
+                  <b-col cols="5">
+                    <span>Penilaian : {{item.count_assessment}} / 2</span>
+                    <br />
+                    <div>
+                      <b-form-checkbox
+                        class="display-inline"
+                        v-model="item.is_assessment_quality_control"
+                        disabled
+                      ></b-form-checkbox>
+                      <span>QC</span>
+                    </div>
+                    <div>
+                      <b-form-checkbox
+                        class="display-inline"
+                        v-model="item.is_assessment_foreman"
+                        disabled
+                      ></b-form-checkbox>
+                      <span>Pengawas</span>
+                    </div>
+                  </b-col>
+                </b-row>
+              </b-col>
+            </b-row>
           </b-col>
         </b-row>
         <vue-bottom-sheet ref="myBottomSheet">
@@ -43,6 +75,7 @@
 </template>
 
 <script>
+import { isMobile } from "../../utils";
 import FilterData from "./filter.vue";
 export default {
   data() {
@@ -51,6 +84,14 @@ export default {
     };
   },
   components: { FilterData },
+  computed: {
+    getData() {
+      return this.$store.state.jobOrder.data;
+    },
+    getIsMobile() {
+      return isMobile();
+    },
+  },
   methods: {
     onOpenAction(i) {
       //   console.info(i);
@@ -64,6 +105,15 @@ export default {
     onFilter() {
       this.$bvModal.show("job_order_filter");
     },
+    onLimitSentence(sentence) {
+      const maxLength = 35;
+
+      if (sentence.length > maxLength) {
+        sentence = sentence.substring(0, maxLength) + "...";
+      }
+
+      return sentence;
+    },
   },
 };
 </script>
@@ -73,12 +123,22 @@ export default {
   max-height: 500px;
   overflow-y: scroll;
 }
+.place-data::-webkit-scrollbar {
+  display: none;
+}
 .place-item {
   border-bottom: 1px solid #dbdfea;
   padding: 0.5rem;
 }
+.place-content {
+  font-size: 15px;
+  margin-top: 10px;
+}
 .action-item {
   padding: 25px 0px 25px 20px;
   border-bottom: 1px solid #dbdfea;
+}
+.badge-success {
+  padding: 0.115rem 0.5rem;
 }
 </style>

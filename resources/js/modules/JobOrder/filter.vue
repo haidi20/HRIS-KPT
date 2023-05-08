@@ -52,7 +52,8 @@
       <br />
       <b-row>
         <b-col>
-          <b-button variant="info" size="sm" class="float-end" @click="onFilter()">Kirim</b-button>
+          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+          <b-button variant="success" size="sm" class="float-end" @click="onSend()">Kirim</b-button>
         </b-col>
       </b-row>
     </b-modal>
@@ -83,7 +84,10 @@ export default {
     },
   },
   methods: {
-    onFilter() {
+    onSend() {
+      this.$bvModal.hide("job_order_filter");
+    },
+    onCloseModal() {
       this.$bvModal.hide("job_order_filter");
     },
   },
@@ -91,4 +95,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#job_order_filter {
+  //z-index: 10;
+}
 </style>

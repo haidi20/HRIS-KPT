@@ -1,18 +1,19 @@
 <template>
   <div style="height: 100%">
     <b-row style="height: 100%">
-      <b-col v-if="!isMobile()" col md="3" class></b-col>
-      <b-col col :md="isMobile() ? 12 : 6" id="main-content">
+      <b-col v-if="!getIsMobile" col md="3" class></b-col>
+      <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
         <h3 style="display: inline">Job Order</h3>
         <Table />
       </b-col>
-      <b-col v-if="!isMobile()" col md="3" class></b-col>
+      <b-col v-if="!getIsMobile" col md="3" class></b-col>
     </b-row>
     <Form />
   </div>
 </template>
 
 <script>
+import { isMobile } from "../../utils";
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import Table from "./table";
 import Form from "./form";
@@ -31,16 +32,14 @@ export default {
   mounted() {
     // this.$bvModal.show("job_order_form");
   },
+  computed: {
+    getIsMobile() {
+      return isMobile();
+    },
+  },
   methods: {
     onClose() {
       this.$refs.myBottomSheet.close();
-    },
-    isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
-      }
     },
   },
 };
