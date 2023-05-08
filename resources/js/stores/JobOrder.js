@@ -8,7 +8,7 @@ const defaultForm = {
     type_job_id: "",
     type_job_note: "",
     image: null,
-    type_time: 1,
+    type_time: "hour",
 }
 
 const JobOrder = {
@@ -86,15 +86,15 @@ const JobOrder = {
             ],
             type_times: [
                 {
-                    id: 1,
+                    id: "minute",
                     name: "Menit",
                 },
                 {
-                    id: 2,
+                    id: "hour",
                     name: "Jam",
                 },
                 {
-                    id: 3,
+                    id: "day",
                     name: "Hari",
                 },
             ],

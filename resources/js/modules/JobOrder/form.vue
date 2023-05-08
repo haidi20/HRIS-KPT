@@ -105,8 +105,9 @@
           </b-form-group>
         </b-col>
         <b-col col sm="6">
-          <b-form-group label="Waktu Selesai" label-for="type_time" class>
-            <span>Senin, 25 Mei 2023 13:00</span>
+          <b-form-group label="Waktu Selesai : " label-for="type_time" class>
+            <span style="font-size: 15px">Senin, 25 Mei 2023</span>
+            <span v-if="form.type_time != 'day'">13:00</span>
           </b-form-group>
         </b-col>
       </b-row>
