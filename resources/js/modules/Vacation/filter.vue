@@ -10,13 +10,13 @@
     >
       <b-row>
         <b-col>
-          <b-form-group label="Tanggal" label-for="month">
+          <b-form-group label="Bulan" label-for="month">
             <DatePicker
               id="month"
               v-model="params.month"
               format="YYYY-MM"
               type="month"
-              placeholder="pilih Tanggal"
+              placeholder="pilih Bulan"
             />
           </b-form-group>
         </b-col>

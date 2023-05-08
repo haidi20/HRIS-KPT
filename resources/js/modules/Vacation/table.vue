@@ -21,14 +21,25 @@
                 <h6>
                   <b>{{item.employee_name}}</b>
                 </h6>
+                <b-row>
+                  <b-col cols>
+                    <span>Waktu :</span>
+                  </b-col>
+                  <b-col cols>
+                    <span>Tanggal :</span>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols>
+                    <span>{{item.duration_readable}}</span>
+                  </b-col>
+                  <b-col cols>
+                    <span>{{item.date_start}}</span>
+                    <br />
+                    <span>{{item.date_end}}</span>
+                  </b-col>
+                </b-row>
                 <div>
-                  <span>Waktu :</span>
-                  <br />
-                  <span>{{item.duration_readable}}</span>
-                  <br />
-                  <span>{{item.date_start}} - {{item.date_end}}</span>
-                </div>
-                <div style="margin-top: 10px">
                   <span>Pengawas :</span>
                   <br />
                   <span>{{item.created_by_name}}</span>

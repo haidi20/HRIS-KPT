@@ -25,6 +25,36 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Tanggal Awal Cuti" label-for="date_start">
+            <DatePicker
+              id="date_start"
+              v-model="form.date_start"
+              format="YYYY-MM-DD"
+              type="date"
+              placeholder="pilih tanggal"
+              style="width: 100%"
+              :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Tanggal Selesai Cuti" label-for="date_end">
+            <DatePicker
+              id="date_end"
+              v-model="form.date_end"
+              format="YYYY-MM-DD"
+              type="date"
+              placeholder="pilih tanggal"
+              style="width: 100%"
+              :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
       <br />
       <b-row class="float-end">
         <b-col>
@@ -65,6 +95,9 @@ export default {
     onSend() {
       console.info(this.form.employee_id);
       this.$bvModal.hide("vacation_form");
+    },
+    disabledDate(date, currentValue) {
+      return date <= moment();
     },
   },
 };
