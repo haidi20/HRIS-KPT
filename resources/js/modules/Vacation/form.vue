@@ -93,7 +93,7 @@ export default {
       this.$bvModal.hide("vacation_form");
     },
     onSend() {
-      console.info(this.form.employee_id);
+      console.info(this.form);
       this.$bvModal.hide("vacation_form");
     },
     disabledDate(date, currentValue) {

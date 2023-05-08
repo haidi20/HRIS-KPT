@@ -17,6 +17,7 @@
               format="YYYY-MM"
               type="month"
               placeholder="pilih Bulan"
+              style="width: 100%"
             />
           </b-form-group>
         </b-col>

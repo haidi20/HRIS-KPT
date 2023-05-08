@@ -22,6 +22,7 @@ const Vacation = {
         ],
         params: {
                 month: new Date(),
+                search: null,
         },
         form: { ...defaultForm },
         options: {
