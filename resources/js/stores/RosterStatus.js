@@ -5,7 +5,7 @@ const defaultForm = {
     name: null,
     initial: null,
     note: null,
-    color: null,
+    color: "#FFFFFF",
 }
 
 const RosterStatus = {
@@ -34,6 +34,10 @@ const RosterStatus = {
         INSERT_FORM(state, payload) {
             state.form = { ...payload.form };
         },
+        CLEAR_FORM(state, payload) {
+            // console.info(defaultForm);
+            state.form = { ...defaultForm };
+        },
     },
     actions: {
         fetchData: async (context, payload) => {
@@ -46,7 +50,7 @@ const RosterStatus = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

@@ -24,8 +24,8 @@
             <p :style="{ color: item.color }">.</p>
           </b-td>
           <b-td>
-            <b-button variant="info" size="sm" @click="onEdit(item.id)">Ubah</b-button>
-            <b-button variant="danger" size="sm" @click="onDelete(item.id)">Hapus</b-button>
+            <b-button variant="info" size="sm" @click="onEdit(item)">Ubah</b-button>
+            <b-button variant="danger" size="sm" @click="onDelete(item)">Hapus</b-button>
           </b-td>
         </b-tr>
       </template>
@@ -88,19 +88,91 @@ export default {
     DatatableClient,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getData() {
       return this.$store.state.rosterStatus.data;
     },
   },
   methods: {
-    onEdit(id) {
+    onEdit(form) {
       this.$store.commit("rosterStatus/INSERT_FORM", {
-        form: { ...this.getData.find((item) => item.id == id) },
+        form: form,
       });
       this.$bvModal.show("roster_status_form");
     },
     onCreate() {
       this.$bvModal.show("roster_status_form");
+    },
+    async onDelete(data) {
+      const Swal = this.$swal;
+      await Swal.fire({
+        title: "Perhatian!!!",
+        html: `Anda yakin ingin hapus Status <h2><b>${data.name}</b> ?</h2>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .post(`${this.getBaseUrl}/api/v1/roster-status/delete`, {
+              id: data.id,
+              user_id: this.getUserId,
+            })
+            .then((responses) => {
+              //   console.info(responses);
+              const data = responses.data;
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              if (data.success == true) {
+                Toast.fire({
+                  icon: "success",
+                  title: data.message,
+                });
+
+                this.$store.dispatch("rosterStatus/fetchData");
+              }
+            })
+            .catch((err) => {
+              console.info(err);
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              Toast.fire({
+                icon: "error",
+                title: err.response.data.message,
+              });
+            });
+        }
+      });
     },
     customLabel(color) {
       return {

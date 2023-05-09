@@ -166,13 +166,8 @@ class RosterStatusController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\RosterStatus  $rosterStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(RosterStatus $rosterStatus)
+
+    public function destroy()
     {
         try {
             DB::beginTransaction();

@@ -14,8 +14,6 @@
             <b-form-input v-model="form.name" id="name" name="name"></b-form-input>
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
         <b-col cols>
           <b-form-group label="Nama Inisial" label-for="initial" class>
             <b-form-input v-model="form.initial" id="initial" name="initial"></b-form-input>
@@ -54,6 +52,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 import { Chrome } from "vue-color";
 
 export default {
@@ -67,16 +67,81 @@ export default {
     Chrome,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     form() {
       return this.$store.state.rosterStatus.form;
     },
   },
   methods: {
     onCloseModal() {
+      this.$store.commit("rosterStatus/CLEAR_FORM");
       this.$bvModal.hide("roster_status_form");
     },
-    onSend() {
-      this.$bvModal.hide("roster_status_form");
+    async onSend() {
+      const Swal = this.$swal;
+
+      // mengambil data hexa saja
+      const request = {
+        ...this.form,
+        color: this.form.color.hex ? this.form.color.hex : this.form.color,
+      };
+
+      // console.info(request);
+
+      await axios
+        .post(`${this.getBaseUrl}/api/v1/roster-status/store`, request)
+        .then((responses) => {
+          // console.info(responses);
+          const data = responses.data;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          if (data.success == true) {
+            Toast.fire({
+              icon: "success",
+              title: data.message,
+            });
+
+            this.$bvModal.hide("roster_status_form");
+            this.$store.dispatch("rosterStatus/fetchData");
+            this.$store.commit("rosterStatus/CLEAR_FORM");
+          }
+        })
+        .catch((err) => {
+          console.info(err);
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
   },
 };
