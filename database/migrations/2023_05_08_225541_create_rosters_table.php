@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRosterDailiesTable extends Migration
+class CreateRostersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateRosterDailiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roster_dailies', function (Blueprint $table) {
+        Schema::create('rosters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attendance_employee_id');
+            $table->foreignId('employee_id');
             $table->foreignId('roster_status_id');
             $table->date('date');
-            $table->string('type'); // actual atau plan
+            // $table->string('type'); // actual atau plan
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
@@ -34,6 +34,6 @@ class CreateRosterDailiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roster_dailies');
+        Schema::dropIfExists('rosters');
     }
 }

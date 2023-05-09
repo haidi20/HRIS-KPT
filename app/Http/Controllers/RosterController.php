@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Roster;
 use App\Models\RosterStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,8 +24,8 @@ class RosterController extends Controller
     public function fetchData()
     {
         $result = [];
-        $date = Carbon::parse(request("date_filter"));
-        $dateRange = $this->dateRange($date->format("Y-m"));
+        $monthFilter = Carbon::parse(request("month_filter"));
+        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
 
         $rosters = [
             (object)[
@@ -44,10 +45,11 @@ class RosterController extends Controller
 
             foreach ($dateRange as $index => $date) {
                 $mainData[$date] = (object) [
-                    "hour_start" => "08:00",
-                    "hour_end" => "16:30",
+                    "roster_status_initial" => "M",
                 ];
             }
+
+            array_push($result, $mainData);
         }
 
         return response()->json([
@@ -70,7 +72,32 @@ class RosterController extends Controller
 
             $rosterStatusId = RosterStatus::where("initial", $getData->roster_status)->first()->id;
 
+            $rosterDailyData = [];
 
+            for ($i = 1; $i < count(request("date")); $i++) {
+                $start = Carbon::parse($getData->date_start);
+                $end = Carbon::parse($getData->date_end);
+
+                while ($start->lte($end)) {
+                    $rosterDailyData[] = ["date" => $start->format('Y-m-d'), "roster_status" => request("roster_status")[$i]];
+                    $start->addDay();
+                }
+            }
+
+            foreach ($rosterDailyData as $index => $item) {
+                $rosterStatusId = RosterStatus::where("initial", $item["roster_status"])->first()->id;
+
+                Roster::updateOrCreate(
+                    [
+                        "employee_id" => request("employee_id"),
+                        "date" => $item["date"],
+                    ],
+                    [
+                        "roster_status_id" => $rosterStatusId,
+                        // "created_by" => request("user_id"),
+                    ]
+                );
+            }
 
             DB::commit();
 

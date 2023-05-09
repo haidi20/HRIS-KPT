@@ -10,11 +10,11 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3">
+        <b-tabs content-class="mt-3" active>
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <b-tab title="Status" active>
+          <b-tab title="Status">
             <Status />
           </b-tab>
         </b-tabs>
@@ -49,6 +49,7 @@ export default {
       base_url: this.baseUrl,
     });
 
+    this.$store.dispatch("roster/fetchData");
     this.$store.dispatch("rosterStatus/fetchData");
   },
 };

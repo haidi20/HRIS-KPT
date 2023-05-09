@@ -11,18 +11,25 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="date" class="place_filter_table">
+          <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
             <DatePicker
-              id="date"
-              v-model="params.date"
+              id="month_filter"
+              v-model="params.month_filter"
               format="YYYY-MM"
               type="month"
               placeholder="pilih bulan"
-              @input="onChangeDateFilter"
             />
           </b-form-group>
           <b-button
             class="place_filter_table"
+            variant="success"
+            size="sm"
+            @click="onFilter()"
+            :disabled="getIsLoadingFilter"
+          >Kirim</b-button>
+          <span v-if="getIsLoadingFilter">Loading...</span>
+          <b-button
+            class="place_filter_table ml-4"
             variant="success"
             size="sm"
             @click="onExport()"
@@ -87,13 +94,16 @@ export default {
     getData() {
       return this.$store.state.roster.data;
     },
+    getIsLoadingFilter() {
+      return this.$store.state.roster.loading.table;
+    },
     params() {
       return this.$store.state.roster.params;
     },
   },
   methods: {
-    onChangeDateFilter() {
-      //
+    onFilter() {
+      this.$store.dispatch("roster/fetchData");
     },
     onCustomLabelDate(date) {
       return moment(date).format("DD");
