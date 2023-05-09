@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="root">
-        <roster />
+        <roster base-url="{{ $baseUrl }}" user="{{ $user }}" />
     </div>
 @endsection
 

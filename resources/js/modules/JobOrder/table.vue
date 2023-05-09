@@ -5,7 +5,7 @@
         <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
       </b-col>
       <b-col cols style="align-item: right">
-        <b-button variant="success" size="sm" class="float-end" @click="onDetail()">Tambah</b-button>
+        <b-button variant="success" size="sm" class="float-end" @click="onCreate()">Tambah</b-button>
       </b-col>
     </b-row>
     <br />
@@ -99,6 +99,9 @@ export default {
     onOpenAction(id) {
       //   console.info(id);
       this.$refs.myBottomSheet.open();
+    },
+    onCreate() {
+      this.$bvModal.show("job_order_form");
     },
     onDetail() {
       this.$refs.myBottomSheet.close();

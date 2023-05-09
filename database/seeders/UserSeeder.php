@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Panlak;
-use App\Models\Panggar;
-use App\Models\Media;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;

@@ -8,6 +8,7 @@ import Vacation from "./Vacation";
 import JobOrder from "./JobOrder";
 import Employee from "./Employee";
 import Attendance from "./Attendance";
+import RosterStatus from "./RosterStatus";
 import SalaryAdvance from './SalaryAdvance';
 import SalaryAdjustment from './SalaryAdjustment';
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
         jobOrder: JobOrder,
         employee: Employee,
         attendance: Attendance,
+        rosterStatus: RosterStatus,
         salaryAdvance: SalaryAdvance,
         salaryAdjustment: SalaryAdjustment,
     },

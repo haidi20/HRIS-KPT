@@ -41,7 +41,7 @@ export default {
     },
   },
   methods: {
-    onSen() {
+    onSend() {
       console.info(this.form.employee_id);
     },
   },

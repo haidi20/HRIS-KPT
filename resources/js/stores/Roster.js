@@ -27,7 +27,9 @@ const Roster = {
         },
     },
     mutations: {
-
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
     },
     actions: {
         // onIncrement: (context, payload) => {

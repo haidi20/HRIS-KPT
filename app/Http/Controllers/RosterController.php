@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RosterStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class RosterController extends Controller
 {
     public function index()
     {
         $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
 
-        return view("pages.roster.index", compact("vue"));
+        return view("pages.roster.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()
@@ -46,6 +52,50 @@ class RosterController extends Controller
 
         return response()->json([
             "data" => $result,
+        ]);
+    }
+
+    public function store()
+    {
+        $getData = (object) [
+            "user_id" => request("user_id"),
+            "date_start" => request("date_start"),
+            "date_end" => request("date_end"),
+            "employee_id" => request("employee_id"),
+            "roster_status" => request("roster_status"),
+        ];
+
+        try {
+            DB::beginTransaction();
+
+            $rosterStatusId = RosterStatus::where("initial", $getData->roster_status)->first()->id;
+
+
+
+            DB::commit();
+
+            // create roster history
+
+            return response()->json([
+                'success' => true,
+                'data' => request()->all(),
+                'message' => "Berhasil ditambahkan",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            // create roster history
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal ditambahkan',
+            ], 500);
+        }
+
+        return response()->json([
+            "request" => $getData,
         ]);
     }
 }
