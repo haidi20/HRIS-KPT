@@ -18,6 +18,7 @@
               type="month"
               placeholder="pilih bulan"
               style="width: 100%"
+              :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
             />
           </b-form-group>
         </b-col>
@@ -131,7 +132,7 @@ export default {
       //   return false;
 
       const getDateVacation =
-        this.form.date_vacation.length > 0
+        this.form.date_vacation[0] != null
           ? [
               moment(this.form.date_vacation[0]).format("Y-MM-DD"),
               moment(this.form.date_vacation[1]).format("Y-MM-DD"),

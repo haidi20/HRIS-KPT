@@ -14,7 +14,7 @@
           <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
             <DatePicker
               id="month_filter"
-              v-model="form.month_filter"
+              v-model="params.month_filter"
               format="YYYY-MM"
               type="month"
               placeholder="pilih bulan"
@@ -138,8 +138,8 @@ export default {
     getIsLoadingFilter() {
       return this.$store.state.roster.loading.table;
     },
-    form() {
-      return this.$store.state.roster.form;
+    params() {
+      return this.$store.state.roster.params;
     },
   },
   methods: {
@@ -155,6 +155,9 @@ export default {
     },
     onCustomLabelNameDate(date) {
       return moment(date).format("dddd");
+    },
+    onExport() {
+      console.info(this.params);
     },
     getNoTable(index, currentPage, perPage) {
       return index + 1 + (currentPage - 1) * perPage;

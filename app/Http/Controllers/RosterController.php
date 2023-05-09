@@ -35,20 +35,16 @@ class RosterController extends Controller
                 "id_finger" => 04,
                 "employee_name" => "Muhammad Adi",
                 "department_name" => "Welder",
-                "work_schedule" => "5,2",
+                "work_schedule" => "6,1",
             ]
         ];
 
         foreach ($employees as $key => $item) {
-            $roster = (object) [
-                "day_off_one" => "Monday",
-                "day_off_two" => "Tuesday",
-                "month" => "2023-05",
-                "date_vacation" => [
-                    Carbon::now(),
-                    Carbon::now(),
-                ],
-            ];
+            $roster = Roster::where([
+                "employee_id" => $item->id,
+            ])->whereYear("month", $monthFilter->format("Y"))
+                ->whereMonth("month", $monthFilter->format("m"))
+                ->first();
 
             $mainData = [];
             $mainData['id'] = $item->id;
@@ -57,10 +53,18 @@ class RosterController extends Controller
             $mainData['employee_name'] = $item->employee_name;
             $mainData['department_name'] = $item->department_name;
             $mainData['work_schedule'] = $item->work_schedule;
-            $mainData['day_off_one'] = $roster->day_off_one;
-            $mainData['day_off_two'] = $roster->day_off_two;
-            $mainData['month'] = $roster->month;
-            $mainData['date_vacation'] = $roster->date_vacation;
+            $mainData['day_off_one'] = $roster ? $roster->day_off_one : null;
+            $mainData['day_off_two'] = $roster ? $roster->day_off_two : null;
+            $mainData['month'] = $roster ? $roster->month : null;
+
+            if ($roster) {
+                $mainData['date_vacation'] = [
+                    $roster->date_vacation_start,
+                    $roster->date_vacation_end,
+                ];
+            } else {
+                $mainData['date_vacation'] = [null, null];
+            }
 
             foreach ($dateRanges as $index => $date) {
                 $rosterDaily = RosterDaily::where(["employee_id" => $item->id])
@@ -105,24 +109,29 @@ class RosterController extends Controller
         // ], 200);
 
         try {
-            // DB::beginTransaction();
+            DB::beginTransaction();
 
-            // store work day
+            // store hari kerja
             $this->storeWorkDay($getData);
 
-            // store off one
+            // store off pertama
             $this->storeOff($getData, "day_off_one");
 
+            // store off kedua
             if ($getData->day_off_two != null) {
                 $this->storeOff($getData, "day_off_two");
             }
 
-            if ($getData->date_vacation != "") {
-                // insert data cuti
+
+            // insert data cuti
+            if ($getData->date_vacation != null) {
                 $this->storeVacation($getData);
             }
 
-            // DB::commit();
+
+            $this->storeRoster($getData);
+
+            DB::commit();
 
             // create roster history
 
@@ -132,7 +141,7 @@ class RosterController extends Controller
                 'message' => "Berhasil ditambahkan",
             ], 200);
         } catch (\Exception $e) {
-            // DB::rollback();
+            DB::rollback();
 
             Log::error($e);
 
@@ -209,13 +218,25 @@ class RosterController extends Controller
             RosterDaily::updateOrCreate(
                 [
                     "employee_id" => $getData->employee_id,
-                    "date" =>
-                    Carbon::parse($item["date"])->format("Y-m-d"),
+                    "date" => Carbon::parse($item["date"])->format("Y-m-d"),
                 ],
                 [
                     "roster_status_id" => $rosterStatusId,
                 ]
             );
         }
+    }
+
+    private function storeRoster($getData)
+    {
+        $roster = Roster::updateOrCreate([
+            "employee_id" => $getData->employee_id,
+            "month" => Carbon::parse($getData->month),
+        ], [
+            "day_off_one" => $getData->day_off_one,
+            "day_off_two" => $getData->day_off_two,
+            "date_vacation_start" => $getData->date_vacation != null ? $getData->date_vacation[0] : null,
+            "date_vacation_end" => $getData->date_vacation != null ? $getData->date_vacation[1] : null,
+        ]);
     }
 }

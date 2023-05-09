@@ -25,7 +25,7 @@ const Roster = {
             }
         ],
         params: {
-            month_filter: new Date,
+            month_filter: new Date(),
         },
         form: { ...defaultForm },
         options: {
@@ -57,7 +57,15 @@ const Roster = {
         },
         INSERT_FORM(state, payload) {
             const getForm = state.data.find(item => item.id == payload.id);
-            // console.info(getForm);
+            console.info(getForm);
+
+            const dateVacation = getForm.date_vacation[0] != null ? [
+                new Date(getForm.date_vacation[0]),
+                new Date(getForm.date_vacation[1]),
+            ] : [
+                null, null
+            ];
+
             state.get_title_form = "Ubah Roster - " + getForm.employee_name;
             state.form = {
                 ...state.form,
@@ -67,10 +75,7 @@ const Roster = {
                 day_off_one: getForm.day_off_one,
                 day_off_two: getForm.day_off_two,
                 month: new Date(getForm.month),
-                date_vacation: [
-                    new Date(getForm.date_vacation[0]),
-                    new Date(getForm.date_vacation[1]),
-                ],
+                date_vacation: dateVacation,
             };
         },
         UPDATE_LOADING_TABLE(state, payload) {
