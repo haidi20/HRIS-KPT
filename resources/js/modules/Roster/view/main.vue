@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DatatableClientSide
+    <DatatableClient
       :data="getData"
       :columns="columns"
       :options="options"
@@ -14,7 +14,7 @@
           <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
             <DatePicker
               id="month_filter"
-              v-model="params.month_filter"
+              v-model="form.month_filter"
               format="YYYY-MM"
               type="month"
               placeholder="pilih bulan"
@@ -41,10 +41,40 @@
           <span v-if="is_loading_export">Loading...</span>
         </b-col>
       </template>
-      <!-- <template v-slot:thead>
-        <b-th v-for="i in 30" :key="`thead-${i}`" style="width: 30px">{{onCustomLabelNameDate(i)}}</b-th>
-      </template>-->
-    </DatatableClientSide>
+      <template v-slot:thead>
+        <b-th
+          v-for="(item, index) in getDateRanges"
+          v-bind:key="`thead-${index}`"
+          style="width: 30px"
+        >{{ onCustomLabelDate(item) }}</b-th>
+      </template>
+      <template v-slot:theadSecond>
+        <b-th
+          v-for="(item, index) in getDateRanges"
+          v-bind:key="`thead-${index}`"
+          style="text-align-last: center"
+        >{{ onCustomLabelNameDate(item) }}</b-th>
+      </template>
+      <template v-slot:tbody="{ filteredData, currentPage }">
+        <b-tr v-for="(item, index) in filteredData" :key="index">
+          <b-td nowrap>
+            <b-button variant="info" size="sm" @click="onEdit(item.id)">Ubah</b-button>
+          </b-td>
+          <b-td nowrap>{{ item.employee_name }}</b-td>
+          <b-td
+            class="cursor-pointer text-center"
+            v-for="(date, subIndex) in getDateRanges"
+            :key="`date-${subIndex}`"
+            :style="setStyling(
+                getNoTable(index, currentPage, options.perPage),
+                date,
+                item[date]?.color
+            )"
+          >{{ item[date]?.value }}</b-td>
+        </b-tr>
+      </template>
+    </DatatableClient>
+    <Form />
   </div>
 </template>
 
@@ -53,7 +83,8 @@ import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
-import DatatableClientSide from "../../../components/DatatableClient";
+import DatatableClient from "../../../components/DatatableClient";
+import Form from "./form";
 
 export default {
   data() {
@@ -70,8 +101,8 @@ export default {
       },
       columns: [
         {
-          label: "No.",
-          field: "no",
+          label: "",
+          field: "actions",
           width: "10px",
           rowspan: 2,
           class: "",
@@ -79,7 +110,7 @@ export default {
         {
           label: "Nama Karyawan",
           field: "employee_name",
-          width: "40px",
+          width: "100px",
           rowspan: 2,
           class: "",
         },
@@ -87,29 +118,57 @@ export default {
     };
   },
   components: {
+    Form,
     DatePicker,
-    DatatableClientSide,
+    DatatableClient,
   },
   computed: {
     getData() {
       return this.$store.state.roster.data;
     },
+    getDateRanges() {
+      return this.$store.state.roster.date_ranges;
+    },
     getIsLoadingFilter() {
       return this.$store.state.roster.loading.table;
     },
-    params() {
-      return this.$store.state.roster.params;
+    form() {
+      return this.$store.state.roster.form;
     },
   },
   methods: {
     onFilter() {
       this.$store.dispatch("roster/fetchData");
     },
+    onEdit(id) {
+      this.$store.commit("roster/INSERT_FORM", { id: id });
+      this.$bvModal.show("roster_form");
+    },
     onCustomLabelDate(date) {
       return moment(date).format("DD");
     },
     onCustomLabelNameDate(date) {
       return moment(date).format("dddd");
+    },
+    getNoTable(index, currentPage, perPage) {
+      return index + 1 + (currentPage - 1) * perPage;
+    },
+    setStyling(index, date, color) {
+      // console.info(index, date);
+      let style = {};
+
+      if (color != null) {
+        style = {
+          backgroundColor: color,
+        };
+      } else {
+        // style = this.getBackgroundColor(index, date);
+        style = {
+          backgroundColor: "white",
+        };
+      }
+
+      return style;
     },
   },
 };

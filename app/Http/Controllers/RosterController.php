@@ -25,27 +25,38 @@ class RosterController extends Controller
     {
         $result = [];
         $monthFilter = Carbon::parse(request("month_filter"));
-        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
+        $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
+        $dateRanges = $this->dateRanges($monthFilter->format("Y-m"));
 
-        $rosters = [
+        $employees = [
             (object)[
                 "id" => 1,
                 "id_finger" => 04,
                 "employee_name" => "Muhammad Adi",
                 "department_name" => "Welder",
+                "work_schedule" => "5,2",
             ]
         ];
 
-        foreach ($rosters as $key => $item) {
+        foreach ($employees as $key => $item) {
             $mainData = [];
             $mainData['id'] = $item->id;
             $mainData['id_finger'] = $item->id_finger;
             $mainData['employee_name'] = $item->employee_name;
             $mainData['department_name'] = $item->department_name;
+            $mainData['work_schedule'] = $item->work_schedule;
 
-            foreach ($dateRange as $index => $date) {
-                $mainData[$date] = (object) [
-                    "roster_status_initial" => "M",
+            foreach ($dateRanges as $index => $date) {
+                $rosterDaily = Roster::where(["employee_id" => $item->id])
+                    ->whereDate("date", $date)
+                    ->orderBy("created_at", "desc")
+                    ->first();
+
+                $mainData[$date] = [
+                    "value" => $rosterDaily != null ? $rosterDaily->roster_status_initial : null,
+                    "color" => $rosterDaily != null ? $rosterDaily->roster_status_color : null,
+                    "date_start" => $rosterDaily != null ? $rosterDaily->date_start : null,
+                    "date_end" => $rosterDaily != null ? $rosterDaily->date_end : null,
                 ];
             }
 
@@ -54,6 +65,8 @@ class RosterController extends Controller
 
         return response()->json([
             "data" => $result,
+            "dateRanges" => $dateRanges,
+            "monthReadAble" => $monthReadAble,
         ]);
     }
 

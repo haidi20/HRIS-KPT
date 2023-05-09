@@ -2,12 +2,15 @@ import axios from "axios";
 import moment from "moment";
 
 const defaultForm = {
-    date_start: moment(),
-    date_end: moment(),
     employee_id: null,
-    date_offs: [],
-    date_vacation_start: null,
-    date_vacation_end: null,
+    employee_name: null,
+    work_schedule: null,
+    date_off_one: null,
+    date_off_two: null,
+    date_vacation: [
+        null,
+        null,
+    ],
     roster_statuses: [],
 }
 
@@ -27,22 +30,44 @@ const Roster = {
         form: { ...defaultForm },
         options: {
             list_days: [
-                { text: "Senin", value: "Monday" },
-                { text: "Selasa", value: "Tuesday" },
-                { text: "Rabu", value: "Wednesday" },
-                { text: "Kamis", value: "Thursday" },
-                { text: "Jumat", value: "Friday" },
-                { text: "Sabtu", value: "Saturday" },
-                { text: "Minggu", value: "Sunday" },
+                { name: "Senin", id: "Monday" },
+                { name: "Selasa", id: "Tuesday" },
+                { name: "Rabu", id: "Wednesday" },
+                { name: "Kamis", id: "Thursday" },
+                { name: "Jumat", id: "Friday" },
+                { name: "Sabtu", id: "Saturday" },
+                { name: "Minggu", id: "Sunday" },
             ],
         },
         loading: {
             table: false,
         },
+        date_ranges: [],
+        get_title_form: [],
     },
     mutations: {
         INSERT_BASE_URL(state, payload) {
             state.base_url = payload.base_url;
+        },
+        INSERT_DATA(state, payload) {
+            state.data = payload.data;
+        },
+        INSERT_DATE_RANGES(state, payload) {
+            state.date_ranges = payload.date_ranges;
+        },
+        INSERT_FORM(state, payload) {
+            const getForm = state.data.find(item => item.id == payload.id);
+            console.info(getForm);
+            state.get_title_form = "Ubah Roster - " + getForm.employee_name;
+            state.form = {
+                ...state.form,
+                employee_id: getForm.employee_id,
+                employee_name: getForm.employee_name,
+                work_schedule: getForm.work_schedule,
+                date_off_one: getForm.date_off_one,
+                date_off_two: getForm.date_off_two,
+                date_vacation: getForm.date_vacation,
+            };
         },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
@@ -67,9 +92,12 @@ const Roster = {
                     console.info(responses);
                     const data = responses.data;
 
-                    // context.commit("INSERT_DATA", {
-                    //     data: data.data,
-                    // });
+                    context.commit("INSERT_DATA", {
+                        data: data.data,
+                    });
+                    context.commit("INSERT_DATE_RANGES", {
+                        date_ranges: data.dateRanges,
+                    });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })
                 .catch((err) => {

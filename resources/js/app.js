@@ -3,6 +3,7 @@ import store from "./stores/main";
 
 import Vue from "vue";
 
+import moment from "moment";
 import VueEvents from "vue-events";
 import BootstrapVue from "bootstrap-vue";
 import VueSweetalert2 from "vue-sweetalert2";
@@ -14,6 +15,8 @@ import 'vue2-datepicker/index.css';
 import "vue-select/dist/vue-select.css";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+
+moment.locale("id");
 
 /**
  * The following block of code may be used to automatically register your
