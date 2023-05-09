@@ -5,13 +5,13 @@ const defaultForm = {
     employee_id: null,
     employee_name: null,
     work_schedule: null,
-    date_off_one: null,
-    date_off_two: null,
+    day_off_one: null,
+    day_off_two: null,
+    month: new Date,
     date_vacation: [
         null,
         null,
     ],
-    roster_statuses: [],
 }
 
 const Roster = {
@@ -25,7 +25,7 @@ const Roster = {
             }
         ],
         params: {
-            month_filter: new Date(),
+            month_filter: new Date,
         },
         form: { ...defaultForm },
         options: {
@@ -57,7 +57,7 @@ const Roster = {
         },
         INSERT_FORM(state, payload) {
             const getForm = state.data.find(item => item.id == payload.id);
-            console.info(getForm);
+            // console.info(getForm);
             state.get_title_form = "Ubah Roster - " + getForm.employee_name;
             state.form = {
                 ...state.form,
@@ -89,7 +89,7 @@ const Roster = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

@@ -11,15 +11,16 @@ class Roster extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
     protected $appends = ["roster_status_initial", "roster_status_color"];
+    protected $fillable = [
+        'employee_id',
+        'roster_status_id',
+        'date',
+        'created_by',
+        'updated_by',
+        'deleted_by'
+    ];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->fillable = Schema::getColumnListing($this->getTable());
-    }
 
     protected static function boot()
     {
@@ -33,24 +34,5 @@ class Roster extends Model
         static::updating(function ($model) {
             $model->updated_by = request("user_id");
         });
-    }
-
-    public function rosterStatus()
-    {
-        return $this->belongsTo(RosterStatus::class, "roster_status_id", "id");
-    }
-
-    public function getRosterStatusInitialAttribute()
-    {
-        if ($this->rosterStatus) {
-            return $this->rosterStatus->initial;
-        }
-    }
-
-    public function getRosterStatusColorAttribute()
-    {
-        if ($this->rosterStatus) {
-            return $this->rosterStatus->color;
-        }
     }
 }

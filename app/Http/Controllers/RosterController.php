@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Roster;
+use App\Models\RosterDaily;
 use App\Models\RosterStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class RosterController extends Controller
             $mainData = [];
             $mainData['id'] = $item->id;
             $mainData['id_finger'] = $item->id_finger;
+            $mainData['employee_id'] = $item->id;
             $mainData['employee_name'] = $item->employee_name;
             $mainData['department_name'] = $item->department_name;
             $mainData['work_schedule'] = $item->work_schedule;
@@ -73,44 +75,29 @@ class RosterController extends Controller
     public function store()
     {
         $getData = (object) [
-            "user_id" => request("user_id"),
-            "date_start" => request("date_start"),
-            "date_end" => request("date_end"),
             "employee_id" => request("employee_id"),
-            "roster_status" => request("roster_status"),
+            "employee_name" => request("employee_name"),
+            "work_schedule" => request("work_schedule"),
+            "day_off_one" => request("day_off_one"),
+            "day_off_two" => request("day_off_two"),
+            "month" => request("month"),
+            "date_vacation" => request("date_vacation"),
         ];
+
+        // return response()->json([
+        //     'success' => true,
+        //     'getData' => $getData,
+        //     'message' => "Berhasil ditambahkan",
+        // ], 200);
 
         try {
             DB::beginTransaction();
 
-            $rosterStatusId = RosterStatus::where("initial", $getData->roster_status)->first()->id;
+            // store off one
+            $this->storeOff($getData, "day_off_one");
 
-            $rosterDailyData = [];
-
-            for ($i = 1; $i < count(request("date")); $i++) {
-                $start = Carbon::parse($getData->date_start);
-                $end = Carbon::parse($getData->date_end);
-
-                while ($start->lte($end)) {
-                    $rosterDailyData[] = ["date" => $start->format('Y-m-d'), "roster_status" => request("roster_status")[$i]];
-                    $start->addDay();
-                }
-            }
-
-            foreach ($rosterDailyData as $index => $item) {
-                $rosterStatusId = RosterStatus::where("initial", $item["roster_status"])->first()->id;
-
-                Roster::updateOrCreate(
-                    [
-                        "employee_id" => request("employee_id"),
-                        "date" => $item["date"],
-                    ],
-                    [
-                        "roster_status_id" => $rosterStatusId,
-                        // "created_by" => request("user_id"),
-                    ]
-                );
-            }
+            // insert data cuti
+            $this->storeVacation($getData);
 
             DB::commit();
 
@@ -137,5 +124,49 @@ class RosterController extends Controller
         return response()->json([
             "request" => $getData,
         ]);
+    }
+
+    private function storeVacation($getData)
+    {
+        $rosterStatusId = RosterStatus::where("initial", "C")->first()->id;
+        $rosterDailyData = [];
+
+        $start = Carbon::parse($getData->date_vacation[0]);
+        $end = Carbon::parse($getData->date_vacation[1]);
+
+        while ($start->lte($end)) {
+            $rosterDailyData[] = ["date" => $start->format('Y-m-d')];
+            $start->addDay();
+        }
+
+        foreach ($rosterDailyData as $index => $item) {
+            RosterDaily::updateOrCreate(
+                [
+                    "employee_id" => $getData->employee_id,
+                    "date" => $item["date"],
+                ],
+                [
+                    "roster_status_id" => $rosterStatusId,
+                ]
+            );
+        }
+    }
+
+    private function storeOff($getData, $nameObject)
+    {
+        $rosterStatusId = RosterStatus::where("initial", "OFF")->first()->id;
+        $getDatesOffOne = $this->getDatesByDayName($getData->day_off_one, $getData->month);
+
+        foreach ($getDatesOffOne as $index => $item) {
+            RosterDaily::updateOrCreate(
+                [
+                    "employee_id" => $getData->employee_id,
+                    "date" => $item,
+                ],
+                [
+                    "roster_status_id" => $rosterStatusId,
+                ]
+            );
+        }
     }
 }
