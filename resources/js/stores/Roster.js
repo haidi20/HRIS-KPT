@@ -66,6 +66,7 @@ const Roster = {
                 work_schedule: getForm.work_schedule,
                 day_off_one: getForm.day_off_one,
                 day_off_two: getForm.day_off_two,
+                month: new Date(getForm.month),
                 date_vacation: [
                     new Date(getForm.date_vacation[0]),
                     new Date(getForm.date_vacation[1]),

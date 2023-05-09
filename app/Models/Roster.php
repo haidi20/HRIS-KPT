@@ -14,11 +14,14 @@ class Roster extends Model
     protected $appends = ["roster_status_initial", "roster_status_color"];
     protected $fillable = [
         'employee_id',
-        'roster_status_id',
-        'date',
+        'day_off_one',
+        'day_off_two',
+        'date_vacation_start',
+        'date_vacation_end',
+        'month',
         'created_by',
         'updated_by',
-        'deleted_by'
+        'deleted_by',
     ];
 
 

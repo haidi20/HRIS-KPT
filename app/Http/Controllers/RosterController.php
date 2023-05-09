@@ -36,16 +36,20 @@ class RosterController extends Controller
                 "employee_name" => "Muhammad Adi",
                 "department_name" => "Welder",
                 "work_schedule" => "5,2",
-                "day_off_one" => "Monday",
-                "day_off_two" => "Tuesday",
-                "date_vacation" => [
-                    Carbon::now(),
-                    Carbon::now(),
-                ],
             ]
         ];
 
         foreach ($employees as $key => $item) {
+            $roster = (object) [
+                "day_off_one" => "Monday",
+                "day_off_two" => "Tuesday",
+                "month" => "2023-05",
+                "date_vacation" => [
+                    Carbon::now(),
+                    Carbon::now(),
+                ],
+            ];
+
             $mainData = [];
             $mainData['id'] = $item->id;
             $mainData['id_finger'] = $item->id_finger;
@@ -53,9 +57,10 @@ class RosterController extends Controller
             $mainData['employee_name'] = $item->employee_name;
             $mainData['department_name'] = $item->department_name;
             $mainData['work_schedule'] = $item->work_schedule;
-            $mainData['day_off_one'] = $item->day_off_one;
-            $mainData['day_off_two'] = $item->day_off_two;
-            $mainData['date_vacation'] = $item->date_vacation;
+            $mainData['day_off_one'] = $roster->day_off_one;
+            $mainData['day_off_two'] = $roster->day_off_two;
+            $mainData['month'] = $roster->month;
+            $mainData['date_vacation'] = $roster->date_vacation;
 
             foreach ($dateRanges as $index => $date) {
                 $rosterDaily = RosterDaily::where(["employee_id" => $item->id])
@@ -100,7 +105,7 @@ class RosterController extends Controller
         // ], 200);
 
         try {
-            DB::beginTransaction();
+            // DB::beginTransaction();
 
             // store work day
             $this->storeWorkDay($getData);
@@ -112,12 +117,12 @@ class RosterController extends Controller
                 $this->storeOff($getData, "day_off_two");
             }
 
-            if ($getData->date_vacation != null) {
+            if ($getData->date_vacation != "") {
                 // insert data cuti
                 $this->storeVacation($getData);
             }
 
-            DB::commit();
+            // DB::commit();
 
             // create roster history
 
@@ -127,7 +132,7 @@ class RosterController extends Controller
                 'message' => "Berhasil ditambahkan",
             ], 200);
         } catch (\Exception $e) {
-            DB::rollback();
+            // DB::rollback();
 
             Log::error($e);
 
@@ -180,7 +185,7 @@ class RosterController extends Controller
             RosterDaily::updateOrCreate(
                 [
                     "employee_id" => $getData->employee_id,
-                    "date" => $item,
+                    "date" => Carbon::parse($item)->format("Y-m-d"),
                 ],
                 [
                     "roster_status_id" => $rosterStatusId,
@@ -204,7 +209,8 @@ class RosterController extends Controller
             RosterDaily::updateOrCreate(
                 [
                     "employee_id" => $getData->employee_id,
-                    "date" => $item["date"],
+                    "date" =>
+                    Carbon::parse($item["date"])->format("Y-m-d"),
                 ],
                 [
                     "roster_status_id" => $rosterStatusId,

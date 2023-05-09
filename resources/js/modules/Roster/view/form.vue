@@ -126,9 +126,9 @@ export default {
       this.$bvModal.hide("roster_form");
     },
     async onSend() {
-      console.info(this.form);
+      //   console.info(this.form);
 
-      return false;
+      //   return false;
 
       const getDateVacation =
         this.form.date_vacation.length > 0
