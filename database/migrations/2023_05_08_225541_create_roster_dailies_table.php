@@ -15,7 +15,8 @@ class CreateRosterDailiesTable extends Migration
     {
         Schema::create('roster_dailies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('roster_id');
+            // $table->foreignId('roster_id');
+            $table->foreignId('employee_id');
             $table->foreignId('roster_status_id');
             $table->date('date');
             // $table->string('type'); // actual atau plan

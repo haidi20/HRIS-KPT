@@ -66,6 +66,18 @@ class RosterStatusSeeder extends Seeder
                     'updated_at' => '2023-01-11 11:21:18',
                     'deleted_at' => null,
                 ],
+                [
+                    'name' => 'OFF',
+                    'initial' => 'OFF',
+                    'color' => '#FD0040',
+                    'note' => 'off karyawan',
+                    'created_by' => 1,
+                    'updated_by' => null,
+                    'deleted_by' => null,
+                    'created_at' => '2023-01-11 11:21:18',
+                    'updated_at' => '2023-01-11 11:21:18',
+                    'deleted_at' => null,
+                ],
             ],
         );
     }

@@ -20,6 +20,7 @@ class CreateRostersTable extends Migration
             $table->string('day_off_two')->nullable();
             $table->date('date_vacation_start')->nullable();
             $table->date('date_vacation_end')->nullable();
+            $table->date('month');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

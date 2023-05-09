@@ -64,9 +64,12 @@ const Roster = {
                 employee_id: getForm.employee_id,
                 employee_name: getForm.employee_name,
                 work_schedule: getForm.work_schedule,
-                date_off_one: getForm.date_off_one,
-                date_off_two: getForm.date_off_two,
-                date_vacation: getForm.date_vacation,
+                day_off_one: getForm.day_off_one,
+                day_off_two: getForm.day_off_two,
+                date_vacation: [
+                    new Date(getForm.date_vacation[0]),
+                    new Date(getForm.date_vacation[1]),
+                ],
             };
         },
         UPDATE_LOADING_TABLE(state, payload) {

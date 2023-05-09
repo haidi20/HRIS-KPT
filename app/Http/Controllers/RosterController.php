@@ -36,6 +36,12 @@ class RosterController extends Controller
                 "employee_name" => "Muhammad Adi",
                 "department_name" => "Welder",
                 "work_schedule" => "5,2",
+                "day_off_one" => "Monday",
+                "day_off_two" => "Tuesday",
+                "date_vacation" => [
+                    Carbon::now(),
+                    Carbon::now(),
+                ],
             ]
         ];
 
@@ -47,9 +53,12 @@ class RosterController extends Controller
             $mainData['employee_name'] = $item->employee_name;
             $mainData['department_name'] = $item->department_name;
             $mainData['work_schedule'] = $item->work_schedule;
+            $mainData['day_off_one'] = $item->day_off_one;
+            $mainData['day_off_two'] = $item->day_off_two;
+            $mainData['date_vacation'] = $item->date_vacation;
 
             foreach ($dateRanges as $index => $date) {
-                $rosterDaily = Roster::where(["employee_id" => $item->id])
+                $rosterDaily = RosterDaily::where(["employee_id" => $item->id])
                     ->whereDate("date", $date)
                     ->orderBy("created_at", "desc")
                     ->first();
@@ -93,11 +102,20 @@ class RosterController extends Controller
         try {
             DB::beginTransaction();
 
+            // store work day
+            $this->storeWorkDay($getData);
+
             // store off one
             $this->storeOff($getData, "day_off_one");
 
-            // insert data cuti
-            $this->storeVacation($getData);
+            if ($getData->day_off_two != null) {
+                $this->storeOff($getData, "day_off_two");
+            }
+
+            if ($getData->date_vacation != null) {
+                // insert data cuti
+                $this->storeVacation($getData);
+            }
 
             DB::commit();
 
@@ -154,14 +172,39 @@ class RosterController extends Controller
 
     private function storeOff($getData, $nameObject)
     {
+        $getDataOff = $nameObject == "day_off_one" ? $getData->day_off_one : $getData->day_off_two;
         $rosterStatusId = RosterStatus::where("initial", "OFF")->first()->id;
-        $getDatesOffOne = $this->getDatesByDayName($getData->day_off_one, $getData->month);
+        $getDatesOffOne = $this->getDatesByDayName($getDataOff, $getData->month);
 
         foreach ($getDatesOffOne as $index => $item) {
             RosterDaily::updateOrCreate(
                 [
                     "employee_id" => $getData->employee_id,
                     "date" => $item,
+                ],
+                [
+                    "roster_status_id" => $rosterStatusId,
+                ]
+            );
+        }
+    }
+
+    private function storeWorkDay($getData)
+    {
+        $rosterStatusId = RosterStatus::where("initial", "M")->first()->id;
+        $start = Carbon::parse($getData->month . '-01')->firstOfMonth();
+        $end = Carbon::parse($getData->month . '-01')->endOfMonth();
+
+        while ($start->lte($end)) {
+            $rosterDailyData[] = ["date" => $start->format('Y-m-d')];
+            $start->addDay();
+        }
+
+        foreach ($rosterDailyData as $index => $item) {
+            RosterDaily::updateOrCreate(
+                [
+                    "employee_id" => $getData->employee_id,
+                    "date" => $item["date"],
                 ],
                 [
                     "roster_status_id" => $rosterStatusId,

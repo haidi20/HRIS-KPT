@@ -126,14 +126,21 @@ export default {
       this.$bvModal.hide("roster_form");
     },
     async onSend() {
-      //   console.info(this.form);
+      console.info(this.form);
+
+      return false;
+
+      const getDateVacation =
+        this.form.date_vacation.length > 0
+          ? [
+              moment(this.form.date_vacation[0]).format("Y-MM-DD"),
+              moment(this.form.date_vacation[1]).format("Y-MM-DD"),
+            ]
+          : null;
 
       const data = {
         ...this.form,
-        date_vacation: [
-          moment(this.form.date_vacation[0]).format("Y-MM-DD"),
-          moment(this.form.date_vacation[1]).format("Y-MM-DD"),
-        ],
+        date_vacation: getDateVacation,
         month: moment(this.form.month).format("Y-MM"),
         user_id: this.getUserId,
       };
