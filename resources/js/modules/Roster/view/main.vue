@@ -156,8 +156,45 @@ export default {
     onCustomLabelNameDate(date) {
       return moment(date).format("dddd");
     },
-    onExport() {
-      console.info(this.params);
+    async onExport() {
+      const Swal = this.$swal;
+      this.is_loading_export = true;
+
+      await axios
+        .get(`${this.getBaseUrl}/roster/export`, {
+          params: {
+            user_id: this.getUserId,
+            date_filter: moment(this.getDateFilter).format("Y-MM"),
+          },
+        })
+        .then((responses) => {
+          //   console.info(responses);
+          this.is_loading_export = false;
+          const data = responses.data;
+
+          if (data.success) {
+            window.open(data.linkDownload, "_blank");
+          }
+        })
+        .catch((err) => {
+          this.is_loading_export = false;
+          console.info(err);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
     getNoTable(index, currentPage, perPage) {
       return index + 1 + (currentPage - 1) * perPage;

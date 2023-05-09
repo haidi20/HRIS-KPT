@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RosterExport;
 use App\Models\Roster;
 use App\Models\RosterDaily;
 use App\Models\RosterStatus;
@@ -10,9 +11,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RosterController extends Controller
 {
+    public $path = 'app\export\roster.xlsx';
+
     public function index()
     {
         $vue = true;
@@ -89,6 +94,46 @@ class RosterController extends Controller
             "monthReadAble" => $monthReadAble,
         ]);
     }
+
+    public function export()
+    {
+        $totalRoster = [];
+        $rosterStatsuses = RosterStatus::all();
+        $data = $this->fetchData()->original["data"];
+        $monthFilter = Carbon::parse(request("month_filter"));
+        $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
+        $dateRanges = $this->dateRanges($monthFilter->format("Y-m"));
+
+        // foreach ($rosterStatsuses as $key => $value) {
+        //     $totalRoster[$value->initial] = $this->fetchTotalRoster($value->initial)->original["data"];
+        // }
+        // $totalRoster["ALL"] = $this->fetchTotalRoster("ALL")->original["data"];
+
+        try {
+            Excel::store(new RosterExport($data, $dateRanges), $this->path, '', \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                "success" => true,
+                "data" => $data,
+                "linkDownload" => route('roster.download'),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal export data',
+            ], 500);
+        }
+    }
+
+    public function download()
+    {
+        $path = storage_path($this->path);
+
+        return Response::download($path);
+    }
+
 
     public function store()
     {

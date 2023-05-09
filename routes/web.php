@@ -68,7 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("roster")->name("roster.")->group(function () {
         Route::get('', [RosterController::class, "index"])->name("index");
-        Route::get('fetch-data', [RosterController::class, "fetchData"])->name("fetchData");
+        Route::get('export', [RosterController::class, "export"])->name("export");
+        Route::get('download', [RosterController::class, "download"])->name("download");
     });
     // salary advance = kasbon
     Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
