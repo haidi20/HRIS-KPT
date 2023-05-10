@@ -38,6 +38,6 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('delete', [RosterStatusController::class, "destroy"])->name('delete');
     });
     Route::prefix('payroll')->name('payroll.')->group(function () {
-        Route::get('fetch-salary', [PayrollController::class, "fetchSalary"])->name('fetchSalary');
+        Route::get('fetch-information', [PayrollController::class, "fetchInformation"])->name('fetchInformation');
     });
 });

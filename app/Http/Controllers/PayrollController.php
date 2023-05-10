@@ -35,7 +35,7 @@ class PayrollController extends Controller
         ));
     }
 
-    public function fetchSalary()
+    public function fetchInformation()
     {
         $month = Carbon::parse(request("month_filter", Carbon::now()));
         $monthNow = $month->format("Y-m");

@@ -52,7 +52,11 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="salary-tab" data-bs-toggle="tab" href="#salary" role="tab"
+                            <a class="nav-link " id="information-tab" data-bs-toggle="tab" href="#information"
+                                role="tab" aria-controls="information" aria-selected="true">Informasi</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link " id="salary-tab" data-bs-toggle="tab" href="#salary" role="tab"
                                 aria-controls="salary" aria-selected="true">Perhitungan Gaji</a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -60,26 +64,29 @@
                                 aria-controls="attendance" aria-selected="true">Absensi</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="bpjs-tab" data-bs-toggle="tab" href="#bpjs" role="tab"
+                            <a class="nav-link " id="bpjs-tab" data-bs-toggle="tab" href="#bpjs" role="tab"
                                 aria-controls="bpjs" aria-selected="true">Perhitungan BPJS</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="pph21-tab" data-bs-toggle="tab" href="#pph21" role="tab"
+                            <a class="nav-link active" id="pph21-tab" data-bs-toggle="tab" href="#pph21" role="tab"
                                 aria-controls="pph21" aria-selected="true">Perhitungan Pajak Penghasilan (PPH 21)</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="salary" role="tabpanel">
+                        <div class="tab-pane fade show " id="information" role="tabpanel">
+                            @include('pages.payroll.partials.information')
+                        </div>
+                        <div class="tab-pane fade show " id="salary" role="tabpanel">
                             @include('pages.payroll.partials.salary')
                         </div>
                         <div class="tab-pane fade show " id="attendance" role="tabpanel">
                             @include('pages.payroll.partials.attendance')
                         </div>
                         <div class="tab-pane fade show " id="bpjs" role="tabpanel">
-                            BPJS
+                            @include('pages.payroll.partials.bpjs')
                         </div>
-                        <div class="tab-pane fade show " id="pph21" role="tabpanel">
-                            PPH 21
+                        <div class="tab-pane fade show active" id="pph21" role="tabpanel">
+                            @include('pages.payroll.partials.pph21')
                         </div>
                     </div>
                 </div>
@@ -91,6 +98,25 @@
 
 @section('style')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+
+    <style>
+        .head-color {
+            color: #435ebe;
+        }
+
+        .summary {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .left-line-vertical {
+            border-left: 1px solid #A6CDF5;
+        }
+
+        .bpjs-row {
+            border-bottom: 1px solid gray;
+        }
+    </style>
 @endsection
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
@@ -107,18 +133,18 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            fetchSalary();
+            fetchInformation();
             setupSelect();
             // setupDateFilter();
         });
 
         function onFilter() {
-            fetchSalary();
+            fetchInformation();
         }
 
-        function fetchSalary() {
+        function fetchInformation() {
             $.ajax({
-                url: "{{ route('api.payroll.fetchSalary') }}",
+                url: "{{ route('api.payroll.fetchInformation') }}",
                 method: 'GET',
                 data: {
                     month_filter: $("#month_filter").val(),
