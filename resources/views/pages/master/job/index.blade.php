@@ -21,10 +21,11 @@
         </div>
         <section class="section">
             <div class="card">
-               <div class="card-header">
+                <div class="card-header">
                     <span class="fs-4 fw-bold">Data Jenis Pekerjaan</span>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData" data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jenis Pekerjaan
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                        data-toggle="modal">
+                        <i class="fas fa-plus text-white-50"></i> Tambah Jenis Pekerjaan
                     </button>
                 </div>
                 <div class="card-body">

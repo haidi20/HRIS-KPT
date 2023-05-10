@@ -25,7 +25,7 @@
                     <span class="fs-4 fw-bold">Data Perusahaan</span>
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Perusahaan
+                        <i class="fas fa-plus text-white-50"></i> Tambah Perusahaan
                     </button>
                 </div>
                 <div class="card-body">

@@ -23,20 +23,21 @@
             <div class="card">
                 <div class="card-header">
                     <span class="fs-4 fw-bold">Data Kapal</span>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData" data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Kapal
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                        data-toggle="modal">
+                        <i class="fas fa-plus text-white-50"></i> Tambah Kapal
                     </button>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
-                      <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nama</th>
-                            <th>Keterangan</th>
-                            <th width="20%">Aksi</th>
-                        </tr>
-                    </thead>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Nama</th>
+                                <th>Keterangan</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             @foreach ($barges as $barge)
                                 <tr>
