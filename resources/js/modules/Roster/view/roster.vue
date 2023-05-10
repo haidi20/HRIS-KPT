@@ -19,9 +19,9 @@
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <b-tab title="Total">
+          <!-- <b-tab title="Total">
             <Total />
-          </b-tab>
+          </b-tab>-->
           <b-tab title="Status">
             <Status />
           </b-tab>
