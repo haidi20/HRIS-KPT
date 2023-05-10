@@ -32,7 +32,7 @@ class Controller extends BaseController
      * @param  bool  $inclusive
      * @return array|null
      */
-    function dateRanges(string $yearMonth, $inclusive = true)
+    function dateRange(string $yearMonth, $inclusive = true)
     {
         $from = Carbon::parse($yearMonth)->format("Y-m-01");
         $from = Carbon::parse($from);

@@ -5,7 +5,8 @@
 <table>
     <thead>
         <tr>
-            <th nowrap rowspan="2">NAMA</th>
+            <th nowrap rowspan="2">Nama Karyawan</th>
+            <th nowrap rowspan="2">Departemen</th>
             @foreach ($dates as $date)
                 <th>{{ Carbon::parse($date)->format('d') }}</th>
             @endforeach
@@ -20,6 +21,7 @@
         @foreach ($data as $index => $item)
             <tr>
                 <td>{{ $item['employee_name'] }}</td>
+                <td>{{ $item['position_name'] }}</td>
                 @foreach ($dates as $date)
                     <td style="background-color: {{ $item[$date]['color'] }}">{{ $item[$date]['value'] }}</td>
                 @endforeach

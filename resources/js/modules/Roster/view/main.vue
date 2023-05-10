@@ -6,51 +6,18 @@
       :options="options"
       nameStore="roster"
       nameLoading="table"
-      :filter="true"
       bordered
     >
-      <template v-slot:filter>
-        <b-col cols>
-          <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
-            <DatePicker
-              id="month_filter"
-              v-model="params.month_filter"
-              format="YYYY-MM"
-              type="month"
-              placeholder="pilih bulan"
-            />
-          </b-form-group>
-          <b-button
-            class="place_filter_table"
-            variant="success"
-            size="sm"
-            @click="onFilter()"
-            :disabled="getIsLoadingFilter"
-          >Kirim</b-button>
-          <span v-if="getIsLoadingFilter">Loading...</span>
-          <b-button
-            class="place_filter_table ml-4"
-            variant="success"
-            size="sm"
-            @click="onExport()"
-            :disabled="is_loading_export"
-          >
-            <i class="fas fa-file-excel"></i>
-            Export
-          </b-button>
-          <span v-if="is_loading_export">Loading...</span>
-        </b-col>
-      </template>
       <template v-slot:thead>
         <b-th
-          v-for="(item, index) in getDateRanges"
+          v-for="(item, index) in getDateRange"
           v-bind:key="`thead-${index}`"
           style="width: 30px"
         >{{ onCustomLabelDate(item) }}</b-th>
       </template>
       <template v-slot:theadSecond>
         <b-th
-          v-for="(item, index) in getDateRanges"
+          v-for="(item, index) in getDateRange"
           v-bind:key="`thead-${index}`"
           style="text-align-last: center"
         >{{ onCustomLabelNameDate(item) }}</b-th>
@@ -61,9 +28,10 @@
             <b-button variant="info" size="sm" @click="onEdit(item.id)">Ubah</b-button>
           </b-td>
           <b-td nowrap>{{ item.employee_name }}</b-td>
+          <b-td nowrap>{{ item.position_name }}</b-td>
           <b-td
             class="cursor-pointer text-center"
-            v-for="(date, subIndex) in getDateRanges"
+            v-for="(date, subIndex) in getDateRange"
             :key="`date-${subIndex}`"
             :style="setStyling(
                 getNoTable(index, currentPage, options.perPage),
@@ -74,6 +42,7 @@
         </b-tr>
       </template>
     </DatatableClient>
+    <br />
     <Form />
   </div>
 </template>
@@ -89,7 +58,6 @@ import Form from "./form";
 export default {
   data() {
     return {
-      is_loading_export: false,
       options: {
         perPage: 20,
         // perPageValues: [5, 10, 25, 50, 100],
@@ -114,6 +82,13 @@ export default {
           rowspan: 2,
           class: "",
         },
+        {
+          label: "Departemen",
+          field: "position_name",
+          width: "100px",
+          rowspan: 2,
+          class: "",
+        },
       ],
     };
   },
@@ -130,10 +105,10 @@ export default {
       return this.$store.state.user?.id;
     },
     getData() {
-      return this.$store.state.roster.data;
+      return this.$store.state.roster.data.main;
     },
-    getDateRanges() {
-      return this.$store.state.roster.date_ranges;
+    getDateRange() {
+      return this.$store.state.roster.date_range;
     },
     getIsLoadingFilter() {
       return this.$store.state.roster.loading.table;
@@ -143,9 +118,6 @@ export default {
     },
   },
   methods: {
-    onFilter() {
-      this.$store.dispatch("roster/fetchData");
-    },
     onEdit(id) {
       this.$store.commit("roster/INSERT_FORM", { id: id });
       this.$bvModal.show("roster_form");
@@ -155,46 +127,6 @@ export default {
     },
     onCustomLabelNameDate(date) {
       return moment(date).format("dddd");
-    },
-    async onExport() {
-      const Swal = this.$swal;
-      this.is_loading_export = true;
-
-      await axios
-        .get(`${this.getBaseUrl}/roster/export`, {
-          params: {
-            user_id: this.getUserId,
-            date_filter: moment(this.getDateFilter).format("Y-MM"),
-          },
-        })
-        .then((responses) => {
-          //   console.info(responses);
-          this.is_loading_export = false;
-          const data = responses.data;
-
-          if (data.success) {
-            window.open(data.linkDownload, "_blank");
-          }
-        })
-        .catch((err) => {
-          this.is_loading_export = false;
-          console.info(err);
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-          Toast.fire({
-            icon: "error",
-            title: err.response.data.message,
-          });
-        });
     },
     getNoTable(index, currentPage, perPage) {
       return index + 1 + (currentPage - 1) * perPage;

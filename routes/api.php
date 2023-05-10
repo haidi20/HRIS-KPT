@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('roster')->name('roster.')->group(function () {
         Route::get('fetch-data', [RosterController::class, "fetchData"])->name('fetchData');
+        Route::get('fetch-total', [RosterController::class, "fetchTotal"])->name('fetchTotal');
         Route::post('store', [RosterController::class, "store"])->name('store');
     });
     Route::prefix('roster-status')->name('rosterStatus.')->group(function () {

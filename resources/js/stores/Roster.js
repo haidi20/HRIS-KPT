@@ -18,12 +18,10 @@ const Roster = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: "001-050523",
-                name: "perbaikan mesin kapal",
-            }
-        ],
+        data: {
+            main: [],
+            total: [],
+        },
         params: {
             month_filter: new Date(),
         },
@@ -42,7 +40,7 @@ const Roster = {
         loading: {
             table: false,
         },
-        date_ranges: [],
+        date_range: [],
         get_title_form: [],
     },
     mutations: {
@@ -50,13 +48,19 @@ const Roster = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA(state, payload) {
-            state.data = payload.data;
+            state.data.main = payload.data;
         },
-        INSERT_DATE_RANGES(state, payload) {
-            state.date_ranges = payload.date_ranges;
+        INSERT_DATE_RANGE(state, payload) {
+            state.date_range = payload.date_range;
+        },
+        INSERT_TOTAL(state, payload) {
+            state.data.total = {
+                ...state.data.total,
+                [payload.initial]: payload.data,
+            }
         },
         INSERT_FORM(state, payload) {
-            const getForm = state.data.find(item => item.id == payload.id);
+            const getForm = state.data.main.find(item => item.id == payload.id);
             console.info(getForm);
 
             const dateVacation = getForm.date_vacation[0] != null ? [
@@ -104,8 +108,8 @@ const Roster = {
                     context.commit("INSERT_DATA", {
                         data: data.data,
                     });
-                    context.commit("INSERT_DATE_RANGES", {
-                        date_ranges: data.dateRanges,
+                    context.commit("INSERT_DATE_RANGE", {
+                        date_range: data.dateRange,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })
@@ -114,7 +118,53 @@ const Roster = {
                     console.info(err);
                 });
         },
+        fetchTotal: async (context, payload) => {
+            const params = {
+                // ...context.state.params,
+                date_filter: moment(context.state.params.date_filter).format("Y-MM"),
+            }
 
+            let rosterStasuses = payload.rosterStasuses;
+            rosterStasuses = [
+                ...rosterStasuses,
+                {
+                    id: 0,
+                    initial: "ALL",
+                },
+            ];
+
+            const promises = rosterStasuses
+                .map(async (item, index) => {
+                    context.commit("INSERT_TOTAL", { initial: item, data: [] });
+
+                    return new Promise((resolve, reject) => {
+                        axios
+                            .get(`${context.state.base_url}/api/v1/roster/fetch-total`, {
+                                params: {
+                                    ...params,
+                                    roster_status_initial: item.initial,
+                                },
+                            })
+                            .then((responses) => {
+                                // console.info(responses);
+
+                                const data = responses.data.data;
+
+                                context.commit("INSERT_TOTAL", { initial: item.initial, data: data });
+
+                                resolve(item);
+                            }).then(roster_status => {
+
+                            });
+                    });
+                })
+
+            await Promise.all(promises)
+                .then((result) => {
+                    console.info(context.state.data.total);
+                });
+
+        },
     }
 }
 

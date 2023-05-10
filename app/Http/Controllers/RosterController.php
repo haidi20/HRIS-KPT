@@ -32,14 +32,14 @@ class RosterController extends Controller
         $result = [];
         $monthFilter = Carbon::parse(request("month_filter"));
         $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
-        $dateRanges = $this->dateRanges($monthFilter->format("Y-m"));
+        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
 
         $employees = [
             (object)[
                 "id" => 1,
                 "id_finger" => 04,
                 "employee_name" => "Muhammad Adi",
-                "department_name" => "Welder",
+                "position_name" => "Welder",
                 "work_schedule" => "6,1",
             ]
         ];
@@ -56,7 +56,7 @@ class RosterController extends Controller
             $mainData['id_finger'] = $item->id_finger;
             $mainData['employee_id'] = $item->id;
             $mainData['employee_name'] = $item->employee_name;
-            $mainData['department_name'] = $item->department_name;
+            $mainData['position_name'] = $item->position_name;
             $mainData['work_schedule'] = $item->work_schedule;
             $mainData['day_off_one'] = $roster ? $roster->day_off_one : null;
             $mainData['day_off_two'] = $roster ? $roster->day_off_two : null;
@@ -71,7 +71,7 @@ class RosterController extends Controller
                 $mainData['date_vacation'] = [null, null];
             }
 
-            foreach ($dateRanges as $index => $date) {
+            foreach ($dateRange as $index => $date) {
                 $rosterDaily = RosterDaily::where(["employee_id" => $item->id])
                     ->whereDate("date", $date)
                     ->orderBy("created_at", "desc")
@@ -90,8 +90,39 @@ class RosterController extends Controller
 
         return response()->json([
             "data" => $result,
-            "dateRanges" => $dateRanges,
+            "dateRange" => $dateRange,
             "monthReadAble" => $monthReadAble,
+        ]);
+    }
+
+    public function fetchTotal($setRosterStatusInitial = null)
+    {
+        $result = [];
+        $monthFilter = Carbon::parse(request("month_filter"));
+        $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
+
+        $rosterStatusInitial = request("roster_status_initial", $setRosterStatusInitial);
+
+        $rosterStatusId = RosterStatus::where("initial", $rosterStatusInitial)->first();
+        $rosterStatusId = $rosterStatusId ? $rosterStatusId->id : 0;
+
+        $listDriverId = [1];
+
+        foreach ($dateRange as $index => $date) {
+            $query = RosterDaily::whereIn("employee_id", $listDriverId);
+
+            if ($rosterStatusInitial != "ALL") {
+                $query = $query->where("roster_status_id", $rosterStatusId);
+            }
+
+            $result[$date] = $query->whereDate("date", $date)->count();
+        }
+
+        return response()->json([
+            "data" => $result,
+            "monthReadAble" => $monthReadAble,
+            "rosterStatusInitial" => $rosterStatusInitial,
         ]);
     }
 
@@ -102,7 +133,7 @@ class RosterController extends Controller
         $data = $this->fetchData()->original["data"];
         $monthFilter = Carbon::parse(request("month_filter"));
         $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
-        $dateRanges = $this->dateRanges($monthFilter->format("Y-m"));
+        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
 
         // foreach ($rosterStatsuses as $key => $value) {
         //     $totalRoster[$value->initial] = $this->fetchTotalRoster($value->initial)->original["data"];
@@ -110,7 +141,7 @@ class RosterController extends Controller
         // $totalRoster["ALL"] = $this->fetchTotalRoster("ALL")->original["data"];
 
         try {
-            Excel::store(new RosterExport($data, $dateRanges), $this->path, '', \Maatwebsite\Excel\Excel::XLSX);
+            Excel::store(new RosterExport($data, $dateRange), $this->path, '', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
