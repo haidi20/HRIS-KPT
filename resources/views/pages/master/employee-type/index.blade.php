@@ -52,12 +52,12 @@
                             </td>
                             <td class="flex flex-row justify-content-around">
                                 @can('ubah jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $employetype }})"
+                                <a href="javascript:void(0)" onclick="onEdit({{ $employeetype }})"
                                     class="btn btn-sm btn-info">Ubah
                                 </a>
                                 @endcan
                                 @can('hapus jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $employetype }})"
+                                <a href="javascript:void(0)" onclick="onDelete({{ $employeetype }})"
                                     class="btn btn-sm btn-danger">Hapus
                                 </a>
                                 @endcan

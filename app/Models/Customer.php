@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 
-class Job extends Model
+class Customer extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -20,15 +20,13 @@ class Job extends Model
         $this->fillable = Schema::getColumnListing($this->getTable());
     }
 
-    // public function getAutoNumberOptions()
-    // {
-    //     return [
-    //         'job_code' => [
-    //             'format' => function () {
-    //                 return 'MRD?';
-    //             },
-    //             'length' => 5 // Jumlah digit yang akan digunakan sebagai nomor urut
-    //         ],
-    //     ];
-    // }
+    public function company()
+    {
+        return $this->belongsTo(Company::class, "company_id", "id");
+    }
+
+    public function barge()
+    {
+        return $this->belongsTo(Barge::class, "barge_id", "id");
+    }
 }

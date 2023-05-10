@@ -1,84 +1,89 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.position.partials.modal')
-    <div class="page-heading">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Lokasi</h3>
-                    {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
-                </div>
-                <div class="col-12 col-md-6 order-md-2 order-first">
-                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                        <ol class="breadcrumb">
-                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Lokasi</li>
-                        </ol>
-                    </nav>
-                </div>
+@include('pages.master.customer.partials.modal')
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Pelanggan</h3>
+                {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                        <li class="breadcrumb-item active" aria-current="page">Pelanggan</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-        <section class="section">
-            <div class="card">
-                <div class="card-header">
-                    <span class="fs-4 fw-bold">Data Lokasi</span>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData" data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Lokasi
-                    </button>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped dataTable" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Deskripsi</th>
-                                <th width="20%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($locations as $location)
-                                <tr>
-                                    <td>
-                                        {{ $location->name }}
-                                    </td>
-                                    <td>
-                                        {{ $location->description }}
-                                    </td>
-                                    <td>
-                                        @can('ubah lokasi')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $location }})"
-                                                class="btn btn-sm btn-info">Ubah
-                                            </a>
-                                        @endcan
-                                        @can('hapus lokasi')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $location }})"
-                                                class="btn btn-sm btn-danger">Hapus
-                                            </a>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </section>
     </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <span class="fs-4 fw-bold">Data Pelanggan</span>
+                <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                    data-toggle="modal">
+                    <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Pelanggan
+                </button>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped dataTable" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Perusahaan</th>
+                            <th>Kapal</th>
+                            <th width="20%">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($customers as $customer)
+                        <tr>
+                            <td>
+                                {{ $customer->name }}
+                            </td>
+                            <td>
+                                {{ $customer->barge->name }}
+                            </td>
+                            <td>
+                                {{ $customer->company->name }}
+                            </td>
+                            <td>
+                                @can('ubah lokasi')
+                                <a href="javascript:void(0)" onclick="onEdit({{ $customer }})"
+                                    class="btn btn-sm btn-info">Ubah
+                                </a>
+                                @endcan
+                                @can('hapus lokasi')
+                                <a href="javascript:void(0)" onclick="onDelete({{ $customer }})"
+                                    class="btn btn-sm btn-danger">Hapus
+                                </a>
+                                @endcan
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+</div>
 @endsection
 
 @section('script')
-    {{-- <script src="assets/static/js/components/dark.js"></script>
+{{-- <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
     <!-- Need: Apexcharts -->
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script> --}}
 
-    <script>
-        const initialState = {
-            locations: [],
+<script>
+    const initialState = {
+            customers: [],
         };
 
         let state = {
@@ -88,13 +93,15 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.locations = {!! json_encode($locations) !!};
+            state.customers = {!! json_encode($customers) !!};
+            setupSelect();
+            // setupDateFilter();
             send();
         });
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Lokasi");
+            $("#titleForm").html("Tambah Customer");
             onModalAction("formModal", "show");
         }
 
@@ -103,9 +110,10 @@
 
             $("#id").val(data.id);
             $("#name").val(data.name);
-            $("#description").val(data.description);
+            $("#company_id").val(data.company_id).trigger("change");
+            $("#barge_id").val(data.barge_id).trigger("change");
 
-            $("#titleForm").html("Ubah Lokasi");
+            $("#titleForm").html("Ubah Customer");
             onModalAction("formModal", "show");
         }
 
@@ -122,7 +130,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('master.location.delete') }}",
+                        url: "{{ route('master.customer.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -179,7 +187,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('master.location.store') }}",
+                    url: "{{ route('master.customer.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,
@@ -233,10 +241,14 @@
             });
         }
 
+        function setupSelect() {
+        $(".select2").select2();
+        }
+
         function clearForm() {
             $("#id").val("");
             $("#name").val("");
             $("#description").val("");
         }
-    </script>
+</script>
 @endsection
