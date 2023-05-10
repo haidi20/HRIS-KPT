@@ -174,6 +174,7 @@ export default {
             });
 
             this.$store.dispatch("roster/fetchData");
+            this.$store.dispatch("roster/fetchTotal");
             this.$bvModal.hide("roster_form");
           }
         })

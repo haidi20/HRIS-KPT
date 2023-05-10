@@ -13,14 +13,14 @@
           v-for="(item, index) in getDateRange"
           v-bind:key="`thead-${index}`"
           style="width: 30px"
-        >{{ onCustomLabelDate(item) }}</b-th>
+        >{{ setLabelDate(item) }}</b-th>
       </template>
       <template v-slot:theadSecond>
         <b-th
           v-for="(item, index) in getDateRange"
           v-bind:key="`thead-${index}`"
           style="text-align-last: center"
-        >{{ onCustomLabelNameDate(item) }}</b-th>
+        >{{ setLabelNameDate(item) }}</b-th>
       </template>
       <template v-slot:tbody="{ filteredData, currentPage }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
@@ -49,7 +49,6 @@
 
 <script>
 import _ from "lodash";
-import axios from "axios";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
 import DatatableClient from "../../../components/DatatableClient";
@@ -122,14 +121,14 @@ export default {
       this.$store.commit("roster/INSERT_FORM", { id: id });
       this.$bvModal.show("roster_form");
     },
-    onCustomLabelDate(date) {
-      return moment(date).format("DD");
-    },
-    onCustomLabelNameDate(date) {
-      return moment(date).format("dddd");
-    },
     getNoTable(index, currentPage, perPage) {
       return index + 1 + (currentPage - 1) * perPage;
+    },
+    setLabelDate(date) {
+      return moment(date).format("DD");
+    },
+    setLabelNameDate(date) {
+      return moment(date).format("dddd");
     },
     setStyling(index, date, color) {
       // console.info(index, date);

@@ -13,14 +13,14 @@
           <b-th
             v-for="(date, index) in getDateRange"
             v-bind:key="`date-${index}`"
-          >{{ onCustomLabelDate(date) }}</b-th>
+          >{{ setLabelDate(date) }}</b-th>
         </b-tr>
         <b-tr>
           <b-th
             v-for="(date, index) in getDateRange"
             v-bind:key="`name-date-${index}`"
             style="text-align-last: center"
-          >{{ onCustomLabelNameDate(date) }}</b-th>
+          >{{ setLabelNameDate(date) }}</b-th>
         </b-tr>
       </b-thead>
       <b-tbody>
@@ -100,10 +100,10 @@ export default {
         return null;
       }
     },
-    onCustomLabelDate(date) {
+    setLabelDate(date) {
       return moment(date).format("DD");
     },
-    onCustomLabelNameDate(date) {
+    setLabelNameDate(date) {
       return moment(date).format("dddd");
     },
   },

@@ -2,10 +2,10 @@
   <div>
     <b-row>
       <b-col cols>
-        <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
+        <b-form-group label="Bulan" label-for="month" class="place_filter_table">
           <DatePicker
-            id="month_filter"
-            v-model="params.month_filter"
+            id="month"
+            v-model="params.month"
             format="YYYY-MM"
             type="month"
             placeholder="pilih bulan"
@@ -16,9 +16,9 @@
           variant="success"
           size="sm"
           @click="onFilter()"
-          :disabled="getIsLoadingFilter"
+          :disabled="getIsLoadingData"
         >Kirim</b-button>
-        <span v-if="getIsLoadingFilter">Loading...</span>
+        <span v-if="getIsLoadingData">Loading...</span>
         <b-button
           class="place_filter_table ml-4"
           variant="success"
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -43,7 +44,13 @@ export default {
     };
   },
   computed: {
-    getIsLoadingFilter() {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
+    getIsLoadingData() {
       return this.$store.state.roster.loading.table;
     },
     params() {
@@ -53,6 +60,7 @@ export default {
   methods: {
     onFilter() {
       this.$store.dispatch("roster/fetchData");
+      this.$store.dispatch("roster/fetchTotal");
     },
     async onExport() {
       const Swal = this.$swal;

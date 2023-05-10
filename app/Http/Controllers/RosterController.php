@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RosterController extends Controller
 {
-    public $path = 'app\export\roster.xlsx';
+    public $path = 'export\roster.xlsx';
 
     public function index()
     {
@@ -30,9 +30,9 @@ class RosterController extends Controller
     public function fetchData()
     {
         $result = [];
-        $monthFilter = Carbon::parse(request("month_filter"));
-        $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($month->format("Y-m"));
 
         $employees = [
             (object)[
@@ -47,8 +47,8 @@ class RosterController extends Controller
         foreach ($employees as $key => $item) {
             $roster = Roster::where([
                 "employee_id" => $item->id,
-            ])->whereYear("month", $monthFilter->format("Y"))
-                ->whereMonth("month", $monthFilter->format("m"))
+            ])->whereYear("month", $month->format("Y"))
+                ->whereMonth("month", $month->format("m"))
                 ->first();
 
             $mainData = [];
@@ -98,9 +98,9 @@ class RosterController extends Controller
     public function fetchTotal($setRosterStatusInitial = null)
     {
         $result = [];
-        $monthFilter = Carbon::parse(request("month_filter"));
-        $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($month->format("Y-m"));
 
         $rosterStatusInitial = request("roster_status_initial", $setRosterStatusInitial);
 
@@ -131,9 +131,9 @@ class RosterController extends Controller
         $totalRoster = [];
         $rosterStatsuses = RosterStatus::all();
         $data = $this->fetchData()->original["data"];
-        $monthFilter = Carbon::parse(request("month_filter"));
-        $monthReadAble = $monthFilter->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($monthFilter->format("Y-m"));
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($month->format("Y-m"));
 
         // foreach ($rosterStatsuses as $key => $value) {
         //     $totalRoster[$value->initial] = $this->fetchTotalRoster($value->initial)->original["data"];
@@ -141,7 +141,7 @@ class RosterController extends Controller
         // $totalRoster["ALL"] = $this->fetchTotalRoster("ALL")->original["data"];
 
         try {
-            Excel::store(new RosterExport($data, $dateRange), $this->path, '', \Maatwebsite\Excel\Excel::XLSX);
+            Excel::store(new RosterExport($data, $dateRange), $this->path, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,

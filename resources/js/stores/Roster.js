@@ -23,7 +23,7 @@ const Roster = {
             total: [],
         },
         params: {
-            month_filter: new Date(),
+            month: new Date(),
         },
         form: { ...defaultForm },
         options: {
@@ -92,7 +92,7 @@ const Roster = {
 
             const params = {
                 // ...context.state.params,
-                month_filter: moment(context.state.params.month_filter).format("Y-MM"),
+                month: moment(context.state.params.month).format("Y-MM"),
             }
 
             await axios

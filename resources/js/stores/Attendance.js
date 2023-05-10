@@ -13,7 +13,7 @@ const Attendance = {
             main: [],
         },
         params: {
-            date_filter: new Date(),
+            month_filter: new Date(),
         },
         form: { ...defaultForm },
         options: {
@@ -22,6 +22,7 @@ const Attendance = {
         loading: {
             table: false,
         },
+        date_range: [],
     },
     mutations: {
         INSERT_BASE_URL(state, payload) {
