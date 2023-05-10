@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class AttendanceController extends Controller
 {
     public function index()
     {
         $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
 
-        return view("pages.attendance.index", compact("vue"));
+        return view("pages.attendance.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()
@@ -47,6 +51,7 @@ class AttendanceController extends Controller
 
         return response()->json([
             "data" => $result,
+            "dateRange" => $dateRange,
         ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use Illuminate\Http\Request;
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix("v1")->name("api.")->group(function () {
+    Route::prefix('attendance')->name('attendance.')->group(function () {
+        Route::get('fetch-data', [AttendanceController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [AttendanceController::class, "store"])->name('store');
+    });
     Route::prefix('roster')->name('roster.')->group(function () {
         Route::get('fetch-data', [RosterController::class, "fetchData"])->name('fetchData');
         Route::get('fetch-total', [RosterController::class, "fetchTotal"])->name('fetchTotal');

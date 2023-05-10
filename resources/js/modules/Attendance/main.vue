@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DatatableClientSide
+    <DatatableClient
       :data="getData"
       :columns="columns"
       :options="options"
@@ -37,7 +37,7 @@
       <!-- <template v-slot:thead>
         <b-th v-for="i in 30" :key="`thead-${i}`" style="width: 30px">{{onCustomLabelNameDate(i)}}</b-th>
       </template>-->
-    </DatatableClientSide>
+    </DatatableClient>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
-import DatatableClientSide from "../../components/DatatableClient";
+import DatatableClient from "../../components/DatatableClient";
 
 export default {
   data() {
@@ -81,11 +81,11 @@ export default {
   },
   components: {
     DatePicker,
-    DatatableClientSide,
+    DatatableClient,
   },
   computed: {
     getData() {
-      return this.$store.state.attendance.data;
+      return this.$store.state.attendance.data.main;
     },
     params() {
       return this.$store.state.attendance.params;
