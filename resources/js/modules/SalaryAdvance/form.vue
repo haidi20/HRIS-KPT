@@ -4,7 +4,7 @@
       id="salary_advance_form"
       ref="salary_advance_form"
       :title="getTitleForm"
-      size="lg"
+      size="md"
       class="modal-custom"
       hide-footer
     >
@@ -26,14 +26,12 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols>
+        <b-col cols="12" md="6">
           <b-form-group label="Jumlah kasbon" label-for="amount" class>
             <b-form-input v-model="amount" id="amount" name="amount"></b-form-input>
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols>
+        <b-col cols="12" md="6">
           <b-form-group label="Alasan" label-for="reason" class>
             <b-form-input v-model="form.reason" id="reason" name="reason"></b-form-input>
           </b-form-group>

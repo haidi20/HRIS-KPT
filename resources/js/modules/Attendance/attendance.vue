@@ -23,12 +23,26 @@
 <script>
 import Main from "./main.vue";
 export default {
-  components: { Main },
+  props: {
+    user: String,
+    baseUrl: String,
+  },
   data() {
     return {
       title: "Absensi",
       version: "v1.1",
     };
+  },
+  components: { Main },
+  mounted() {
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    this.$store.commit("attendance/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+
+    this.$store.dispatch("attendance/fetchData");
   },
 };
 </script>

@@ -6,10 +6,36 @@
       :options="options"
       nameStore="salaryAdjustment"
       nameLoading="table"
-      :filter="false"
+      :filter="true"
       :footer="false"
       bordered
     >
+      <template v-slot:filter>
+        <b-col cols>
+          <b-form-group label="Tanggal" label-for="date" class="place_filter_table">
+            <DatePicker
+              id="date"
+              v-model="params.date"
+              format="YYYY-MM"
+              type="month"
+              placeholder="pilih Tanggal"
+              range
+            />
+          </b-form-group>
+          <b-button class="place_filter_table" variant="success" size="sm" @click="onFilter()">Kirim</b-button>
+          <b-button
+            class="place_filter_table ml-4"
+            variant="success"
+            size="sm"
+            @click="onExport()"
+            :disabled="is_loading_export"
+          >
+            <i class="fas fa-file-excel"></i>
+            Export
+          </b-button>
+          <span v-if="is_loading_export">Loading...</span>
+        </b-col>
+      </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
           <b-td>{{ item.name }}</b-td>
@@ -30,11 +56,15 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
+import DatePicker from "vue2-datepicker";
 import DatatableClient from "../../components/DatatableClient";
 
 export default {
   data() {
     return {
+      is_loading_export: false,
       columns: [
         {
           label: "Nama",
@@ -79,14 +109,21 @@ export default {
     };
   },
   components: {
+    DatePicker,
     DatatableClient,
   },
   computed: {
     getData() {
       return this.$store.state.salaryAdjustment.data;
     },
+    params() {
+      return this.$store.state.salaryAdjustment.params;
+    },
   },
   methods: {
+    onExport() {
+      //
+    },
     onDetail(id) {
       this.$bvModal.show("salary_adjustment_form");
     },
@@ -95,6 +132,9 @@ export default {
     },
     onDelete(id) {
       //
+    },
+    onFilter() {
+      console.info(this.params);
     },
   },
 };

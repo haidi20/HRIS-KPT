@@ -3,6 +3,7 @@ import store from "./stores/main";
 
 import Vue from "vue";
 
+import moment from "moment";
 import VueEvents from "vue-events";
 import BootstrapVue from "bootstrap-vue";
 import VueSweetalert2 from "vue-sweetalert2";
@@ -15,6 +16,8 @@ import "vue-select/dist/vue-select.css";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
+moment.locale("id");
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -26,7 +29,8 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component("roster", require("./modules/Roster/roster.vue").default);
+Vue.component("roster", require("./modules/Roster/view/roster.vue").default);
+Vue.component("vacation", require("./modules/Vacation/vacation.vue").default);
 Vue.component("job-order", require("./modules/JobOrder/jobOrder.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
 Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);

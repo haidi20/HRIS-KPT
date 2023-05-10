@@ -24,7 +24,7 @@ const SalaryAdvance = {
                 duration: "3 Bulan",
                 status: "accept",
                 status_readable: "Diterima",
-                note: "catatan kecil",
+                note: "kebutuhan beli kompor baru, kompor lama rusak",
             }
         ],
         params: {

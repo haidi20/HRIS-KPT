@@ -14,6 +14,16 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public $daysOfWeek = [
+        'Monday' => Carbon::MONDAY,
+        'Tuesday' => Carbon::TUESDAY,
+        'Wednesday' => Carbon::WEDNESDAY,
+        'Thursday' => Carbon::THURSDAY,
+        'Friday' => Carbon::FRIDAY,
+        'Saturday' => Carbon::SATURDAY,
+        'Sunday' => Carbon::SUNDAY
+    ];
+
     /**
      * Compute a range between two dates, and generate
      * a plain array of Carbon objects of each day in it.
@@ -55,5 +65,37 @@ class Controller extends BaseController
         }
 
         return !empty($range) ? $range : null;
+    }
+
+    /**
+     * mendapatkan tanggal - tanggal berdasarkan nama hari
+     *
+     * @param  string  $dayName
+     * @param  string  $yearMonth
+     *
+     * @author haidi
+     */
+    function getDatesByDayName($dayName, $yearMonth)
+    {
+        Carbon::setLocale('en_US');
+        $dates = [];
+
+        // Parse the year and month from the input
+        $yearMonth = Carbon::createFromFormat('Y-m', $yearMonth);
+
+        // Set the first day of the week to Monday
+        $yearMonth->setWeekStartsAt($this->daysOfWeek[$dayName]);
+
+        // Loop through all dates in the month
+        for ($i = 1; $i <= $yearMonth->daysInMonth; $i++) {
+            $date = Carbon::createFromDate($yearMonth->year, $yearMonth->month, $i);
+
+            // Check if the day name matches the input
+            if (strcasecmp($date->format('l'), $dayName) === 0) {
+                $dates[] = $date;
+            }
+        }
+
+        return $dates;
     }
 }

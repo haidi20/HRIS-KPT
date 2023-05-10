@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Feature;
-use App\Models\Task;
 use Illuminate\Database\Seeder;
 
 class FeatureSeeder extends Seeder
@@ -25,6 +24,7 @@ class FeatureSeeder extends Seeder
             ["name" => "Penggajian", "description" => ""],
             ["name" => "Proyek", "description" => ""],
             ["name" => "Job Order", "description" => ""],
+            ["name" => "Cuti", "description" => ""],
             // laporan
             ["name" => "Laporan Job Order", "description" => ""],
             ["name" => "Laporan Kasbon", "description" => ""],

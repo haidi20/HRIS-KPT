@@ -34,6 +34,7 @@ use App\Http\Controllers\SalaryAdvanceController;
 use App\Http\Controllers\SalaryAdvanceReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VacationController;
 use App\Http\Controllers\WorkingHourController;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,10 +66,13 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("attendance")->name("attendance.")->group(function () {
         Route::get('', [AttendanceController::class, "index"])->name("index");
+        Route::get('export', [AttendanceController::class, "export"])->name("export");
+        Route::get('download', [AttendanceController::class, "download"])->name("download");
     });
     Route::prefix("roster")->name("roster.")->group(function () {
         Route::get('', [RosterController::class, "index"])->name("index");
-        Route::get('fetch-data', [RosterController::class, "fetchData"])->name("fetchData");
+        Route::get('export', [RosterController::class, "export"])->name("export");
+        Route::get('download', [RosterController::class, "download"])->name("download");
     });
     // salary advance = kasbon
     Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
@@ -85,13 +89,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('', [PayslipController::class, "index"])->name("index");
     });
     Route::prefix("payroll")->name("payroll.")->group(function () {
-        Route::get('', [PayrollController::class, "index"])->name("index");
+        Route::get('', [PayrollController::class, "monthly"])->name("monthly");
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");
     });
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
+    });
+    // vacation = cuti kerja
+    Route::prefix("vacation")->name("vacation.")->group(function () {
+        Route::get('', [VacationController::class, "index"])->name("index");
     });
 
     Route::prefix("report")->name("report.")->group(function () {

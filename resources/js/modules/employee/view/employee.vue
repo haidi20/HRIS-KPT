@@ -18,11 +18,10 @@
         <br />
         <TableDesktop v-if="form.data_base == 'employee'" />
       </div>
-
       <br />
       <b-row>
         <b-col>
-          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+          <b-button variant="danger" @click="onCloseModal()">Batal</b-button>
           <b-button style="float: right" variant="success" @click="onSend()">Simpan</b-button>
         </b-col>
       </b-row>
@@ -48,6 +47,14 @@ export default {
     },
     form() {
       return this.$store.state.employee.form;
+    },
+  },
+  methods: {
+    onCloseModal() {
+      this.$bvModal.hide("data_employee");
+    },
+    onSend() {
+      this.$bvModal.hide("data_employee");
     },
   },
 };
