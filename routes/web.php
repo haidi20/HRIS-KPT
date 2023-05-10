@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BargeController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeTypeController;
@@ -121,8 +122,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('employee-type')->name("employeeType.")->group(function () {
             Route::get('', [EmployeeTypeController::class, "index"])->name("index");
-            Route::post('store', [PositionController::class, "store"])->name("store");
-            Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
+            Route::post('store', [EmployeeTypeController::class, "store"])->name("store");
+            Route::delete('delete', [EmployeeTypeController::class, "destroy"])->name("delete");
         });
         // barge = kapal tongkang
         Route::prefix('barge')->name("barge.")->group(function () {
@@ -132,8 +133,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('job')->name("job.")->group(function () {
             Route::get('', [JobController::class, "index"])->name("index");
-            Route::post('store', [BargeController::class, "store"])->name("store");
-            Route::delete('delete', [BargeController::class, "destroy"])->name("delete");
+            Route::post('store', [JobController::class, "store"])->name("store");
+            Route::delete('delete', [JobController::class, "destroy"])->name("delete");
         });
         Route::prefix('position')->name("position.")->group(function () {
             Route::get('', [PositionController::class, "index"])->name("index");
@@ -141,7 +142,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
         });
         Route::prefix('location')->name("location.")->group(function () {
-            Route::get('', [LocationController::class, "index"])->name("index");
+            Route::get('', [CustomerController::class, "index"])->name("index");
+            Route::post('store', [CustomerController::class, "store"])->name("store");
+            Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('customer')->name("customer.")->group(function () {
+            Route::get('', [CustomerController::class, "index"])->name("index");
+            Route::post('store', [CustomerController::class, "store"])->name("store");
+            Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
         });
         Route::prefix('material')->name("material.")->group(function () {
             Route::get('', [MaterialController::class, "index"])->name("index");

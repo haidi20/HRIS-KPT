@@ -12,15 +12,33 @@
                <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama Lokasi</label>
+                        <label for="name" class="col-sm-4 col-form-label">Nama Pelanggan</label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
+                        <label for="company_id" class="col-sm-4 col-form-label">Perusahaan </label>
                         <div class="col-sm-8">
-                            <input type="text" id="description" name="description" class="form-control">
+                            <select id="company_id" name="company_id" class="select2 form-select" style="width: 100%">
+                                @foreach ($companies as $company)
+                                <option value="">Pilih Perusahaan</option>
+                                <option value="{{ $company->id }}">{{ $company->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="barge_id" class="col-sm-4 col-form-label">Kapal </label>
+                        <div class="col-sm-8">
+                            <select id="barge_id" name="barge_id" class="select2 form-select" style="width: 100%">
+                                @foreach ($barges as $barge)
+                                <option value="">Pilih Kapal</option>
+                                <option value="{{ $barge->id }}">{{ $barge->name }}
+                                </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

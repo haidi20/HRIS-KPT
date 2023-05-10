@@ -42,7 +42,7 @@
                             @foreach ($jobs as $job)
                                 <tr>
                                     <td>
-                                        {{ $job->job_code }}
+                                        {{ $job->code }}
                                     </td>
                                     <td>
                                         {{ $job->name }}
@@ -107,6 +107,7 @@
             clearForm();
 
             $("#id").val(data.id);
+            $("#code").val(data.code);
             $("#name").val(data.name);
             $("#description").val(data.description);
 
@@ -240,6 +241,7 @@
 
         function clearForm() {
             $("#id").val("");
+            $("#code").val("");
             $("#name").val("");
             $("#description").val("");
         }

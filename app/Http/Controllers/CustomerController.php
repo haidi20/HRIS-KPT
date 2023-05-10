@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Location;
+use App\Models\Barge;
+use App\Models\Customer;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 
-class LocationController extends Controller
+class CustomerController extends Controller
 {
     public function index()
     {
-        $locations = Location::all();
+        $customers = Customer::all();
+        $companies = Company::all();
+        $barges = Barge::all();
 
-        return view("pages.master.location.index", compact("locations"));
+        return view("pages.master.customer.index", compact("customers", "companies", "barges"));
     }
 
     public function store(Request $request)
@@ -26,20 +30,21 @@ class LocationController extends Controller
             DB::beginTransaction();
 
             if (request("id")) {
-                $location = Location::find(request("id"));
-                $location->updated_by = Auth::user()->id;
+                $customer = Customer::find(request("id"));
+                $customer->updated_by = Auth::user()->id;
 
                 $message = "diperbaharui";
             } else {
-                $location = new Location;
-                $location->created_by = Auth::user()->id;
+                $customer = new Customer;
+                $customer->created_by = Auth::user()->id;
 
                 $message = "dikirim";
             }
 
-            $location->name = request("name");
-            $location->description = request("description");
-            $location->save();
+            $customer->name = request("name");
+            $customer->company_id = request("company_id");
+            $customer->barge_id = request("barge_id");
+            $customer->save();
 
             DB::commit();
 
@@ -64,11 +69,11 @@ class LocationController extends Controller
         try {
             DB::beginTransaction();
 
-            $location = Location::find(request("id"));
-            $location->update([
+            $customer = Customer::find(request("id"));
+            $customer->update([
                 'deleted_by' => Auth::user()->id,
             ]);
-            $location->delete();
+            $customer->delete();
 
             DB::commit();
 

@@ -194,7 +194,7 @@
                         <span>Karyawan</span>
                     </a>
                     <ul class="submenu {{ isActive('master/employee') }}"
-                        style="{{ Request::is('master/employee') || Request::is('master/typeEmployee') ? 'display: block;' : 'display: none;' }}">
+                        style="{{ Request::is('master/employee') || Request::is('master/typeEmployee') || Request::is('master/position') ? 'display: block;' : 'display: none;' }}">
                         @can('lihat karyawan')
                             <li class="submenu-item {{ isActive('master/employee') }}">
                                 <a href="{{ route('master.employee.index') }}">Daftar Karyawan</a>
@@ -205,12 +205,12 @@
                                 <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
                             </li>
                         @endcan
-                        @can('lihat departemen')
+                        {{-- @can('lihat departemen') --}}
                             <li class="submenu-item {{ isActive('master/position') }}">
                                 {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
                                 <a href="{{ route('master.position.index') }}">Departemen</a>
                             </li>
-                        @endcan
+                        {{-- @endcan --}}
                     </ul>
                 </li>
                 @php
@@ -263,7 +263,7 @@
                 @can('lihat pelanggan')
                     <li class="sidebar-item {{ isActive('master/customer') }}">
                         <a href="{{ route('master.customer.index') }}" class='sidebar-link'>
-                            <i class="bi bi-wrench-adjustable-circle"></i>
+                            <i class="bi bi-person-check"></i>
                             <span>Pelanggan</span>
                         </a>
                     </li>

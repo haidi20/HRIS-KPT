@@ -37,7 +37,7 @@ class JobController extends Controller
                 $message = "dikirim";
             }
 
-            $job->job_code = request("job_code");
+            $job->code = request("code");
             $job->name = request("name");
             $job->description = request("description");
             $job->save();
