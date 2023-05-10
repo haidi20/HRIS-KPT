@@ -126,13 +126,13 @@
                 @endphp
                 @canany($allPermissionSalary)
                     <li
-                        class="sidebar-item {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }} has-sub">
+                        class="sidebar-item {{ isActive('payslip') || isActive('payroll') || isActive('salary-adjustment') }} has-sub">
                         <a href="#" class="sidebar-link">
                             <i class="bi bi-cash-coin"></i>
                             <span>Gaji</span>
                         </a>
-                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') || isActive('setting/salary-adjustment') }}"
-                            style="{{ Request::is('payslip') || Request::is('payroll') ? 'display: block;' : 'display: none;' }}">
+                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') || isActive('salary-adjustment') }}"
+                            style="{{ Request::is('payslip') || Request::is('payroll') || Request::is('salary-adjustment') ? 'display: block;' : 'display: none;' }}">
                             @can('lihat slip gaji')
                                 <li class="submenu-item {{ isActive('payslip') }}">
                                     <a href="{{ route('payslip.index') }}">Slip Gaji Karyawan</a>
@@ -206,10 +206,10 @@
                             </li>
                         @endcan
                         {{-- @can('lihat departemen') --}}
-                            <li class="submenu-item {{ isActive('master/position') }}">
-                                {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
-                                <a href="{{ route('master.position.index') }}">Departemen</a>
-                            </li>
+                        <li class="submenu-item {{ isActive('master/position') }}">
+                            {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
+                            <a href="{{ route('master.position.index') }}">Departemen</a>
+                        </li>
                         {{-- @endcan --}}
                     </ul>
                 </li>
