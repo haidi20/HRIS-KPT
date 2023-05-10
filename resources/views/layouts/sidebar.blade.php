@@ -140,7 +140,7 @@
                             @endcan
                             @can('lihat penggajian')
                                 <li class="submenu-item {{ isActive('payroll') }}">
-                                    <a href="{{ route('payroll.index') }}">Penggajian</a>
+                                    <a href="{{ route('payroll.monthly') }}">Penggajian Bulanan</a>
                                 </li>
                             @endcan
                             @can('lihat penyesuaian gaji')

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use Illuminate\Http\Request;
@@ -35,5 +36,8 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [RosterStatusController::class, "fetchData"])->name('fetchData');
         Route::post('store', [RosterStatusController::class, "store"])->name('store');
         Route::post('delete', [RosterStatusController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('payroll')->name('payroll.')->group(function () {
+        Route::get('fetch-salary', [PayrollController::class, "fetchSalary"])->name('fetchSalary');
     });
 });

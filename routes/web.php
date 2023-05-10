@@ -88,7 +88,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('', [PayslipController::class, "index"])->name("index");
     });
     Route::prefix("payroll")->name("payroll.")->group(function () {
-        Route::get('', [PayrollController::class, "index"])->name("index");
+        Route::get('', [PayrollController::class, "monthly"])->name("monthly");
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");
