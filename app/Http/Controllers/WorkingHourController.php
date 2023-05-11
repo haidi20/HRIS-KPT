@@ -12,16 +12,14 @@ class WorkingHourController extends Controller
 {
     public function index()
     {
-        // $workingHours = WorkingHour::all();
-        $workingHours = [
-            [
-                "type" => "hour_start",
-                "value" => "08:00",
-                "time_zone" => "WITA",
-            ],
-        ];
+        $id = WorkingHour::pluck('id');
+        $startTime = WorkingHour::pluck('start_time');
+        $afterWork = WorkingHour::pluck('after_work');
+        $maximumDelay = WorkingHour::pluck('maximum_delay');
+        $fastestTime = WorkingHour::pluck('fastest_time');
+        $overtimeWork = WorkingHour::pluck('overtime_work');
 
-        return view("pages.setting.working-hour", compact("workingHours"));
+        return view("pages.master.working-hour.index", compact("id","startTime", "afterWork", "maximumDelay", "fastestTime", "overtimeWork"));
     }
 
     public function store(Request $request)
@@ -41,9 +39,11 @@ class WorkingHourController extends Controller
                 $message = "dikirim";
             }
 
-            $workingHour->name = request("name");
-            $workingHour->feature_id = request("feature_id");
-            $workingHour->description = request("description");
+            $workingHour->start_time = request("start_time");
+            $workingHour->after_work = request("after_work");
+            $workingHour->maximum_delay = request("maximum_delay");
+            $workingHour->fastest_time = request("fastest_time");
+            $workingHour->overtime_work = request("overtime_work");
             $workingHour->save();
 
             DB::commit();
@@ -61,35 +61,6 @@ class WorkingHourController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
-            ], 500);
-        }
-    }
-
-    public function destroy()
-    {
-        try {
-            DB::beginTransaction();
-
-            $workingHour = WorkingHour::find(request("id"));
-            $workingHour->update([
-                'deleted_by' => Auth::user()->id,
-            ]);
-            $workingHour->delete();
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil dihapus',
-            ], 200);
-        } catch (\Exception $e) {
-            DB::rollback();
-
-            Log::error($e);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal dihapus',
             ], 500);
         }
     }

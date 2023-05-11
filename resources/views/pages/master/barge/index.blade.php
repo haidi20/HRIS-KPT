@@ -50,12 +50,12 @@
                                         {{ $barge->description }}
                                     </td>
                                     <td>
-                                        @can('ubah jabatan')
+                                        @can('ubah kapal')
                                             <a href="javascript:void(0)" onclick="onEdit({{ $barge }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus jabatan')
+                                        @can('hapus kapal')
                                             <a href="javascript:void(0)" onclick="onDelete({{ $barge }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
