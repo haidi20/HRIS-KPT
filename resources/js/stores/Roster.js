@@ -61,7 +61,7 @@ const Roster = {
         },
         INSERT_FORM(state, payload) {
             const getForm = state.data.main.find(item => item.id == payload.id);
-            console.info(getForm);
+            // console.info(getForm);
 
             const dateVacation = getForm.date_vacation[0] != null ? [
                 new Date(getForm.date_vacation[0]),

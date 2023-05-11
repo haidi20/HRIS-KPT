@@ -3,12 +3,21 @@
     <b-row style="height: 100%">
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
-        <h3 style="display: inline">Job Order</h3>
-        <Table />
+        <h3 style="display: inline">Job Order {{form.form_kind}}</h3>
+        <template v-if="!getIsActiveForm">
+          <Table />
+        </template>
+        <template v-else>
+          <template v-if="getConditionForm()">
+            <Form />
+          </template>
+          <template v-else>
+            <FormAction />
+          </template>
+        </template>
       </b-col>
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
     </b-row>
-    <Form />
   </div>
 </template>
 
@@ -17,6 +26,7 @@ import { isMobile } from "../../utils";
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import Table from "./table";
 import Form from "./form";
+import FormAction from "./formAction.vue";
 
 export default {
   data() {
@@ -27,6 +37,7 @@ export default {
   components: {
     Table,
     Form,
+    FormAction,
     VueBottomSheet,
   },
   mounted() {
@@ -36,10 +47,20 @@ export default {
     getIsMobile() {
       return isMobile();
     },
+    getIsActiveForm() {
+      return this.$store.state.jobOrder.is_active_form;
+    },
+    form() {
+      return this.$store.state.jobOrder.form;
+    },
   },
   methods: {
     onClose() {
       this.$refs.myBottomSheet.close();
+    },
+    getConditionForm() {
+      console.info(this.form.form_kind);
+      return this.form.form_kind == "edit" || this.form.form_kind == "detail";
     },
   },
 };

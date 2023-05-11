@@ -7,8 +7,11 @@ const defaultForm = {
     category_id: "",
     type_job_id: "",
     type_job_note: "",
+    status: null,
     image: null,
     type_time: "hour",
+    form_kind: null,
+    form_title: null,
 }
 
 const JobOrder = {
@@ -18,9 +21,13 @@ const JobOrder = {
         data: [
             {
                 id: 1,
+                project_id: 1,
+                category_id: 1,
+                category_name: "Reguler",
                 project_name: "Staging",
-                project_note: "informasi lebih lengkap tentang staging ksjdlfkjsdf",
-                status: "Aktif",
+                project_note: "informasi lebih lengkap tentang staging",
+                status: "active",
+                status_readable: "Aktif",
                 employee_total: 5,
                 employee_active_total: 4,
                 status_color: "success",
@@ -40,6 +47,7 @@ const JobOrder = {
             type_by: "creator",
         },
         form: { ...defaultForm },
+        is_active_form: false,
         options: {
             projects: [
                 {
@@ -130,7 +138,26 @@ const JobOrder = {
         },
     },
     mutations: {
-
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
+        INSERT_DATA(state, payload) {
+            state.data = payload.data;
+        },
+        INSERT_FORM(state, payload) {
+            state.form.form_kind = payload?.form_kind;
+            state.form = {
+                ...state.form,
+                ...payload.form,
+            };
+        },
+        INSERT_FORM_KIND(state, payload) {
+            state.form.form_title = payload.form_title;
+            state.form.form_kind = payload.form_kind;
+        },
+        UPDATE_IS_ACTIVE_FORM(state, payload) {
+            state.is_active_form = payload.value;
+        },
     },
     actions: {
         // onIncrement: (context, payload) => {

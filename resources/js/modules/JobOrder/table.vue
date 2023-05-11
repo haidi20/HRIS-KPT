@@ -14,7 +14,7 @@
         <b-row v-for="(item, index) in getData" :key="index">
           <b-col class="place-item">
             <b-row>
-              <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item.id)">
+              <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item)">
                 <h6>
                   <b>{{item.project_name}}</b>
                 </h6>
@@ -25,7 +25,7 @@
                   <b-col cols="7">
                     <span>
                       Status :
-                      <div :class="`badge-${item.status_color}`">{{item.status}}</div>
+                      <div :class="`badge-${item.status_color}`">{{item.status_readable}}</div>
                     </span>
                     <br />
                     <span>Total Karyawan : {{item.employee_total}}</span>
@@ -60,15 +60,26 @@
         </b-row>
         <vue-bottom-sheet ref="myBottomSheet">
           <div class="flex flex-col">
-            <div class="action-item">tunda</div>
-            <div class="action-item">mulai kembali</div>
-            <div class="action-item">selesai</div>
-            <div class="action-item">lembur</div>
-            <div class="action-item">selesai lembur</div>
-            <div class="action-item">perbaikan</div>
-            <div class="action-item">ubah</div>
+            <div
+              v-if="getFormStatus != 'pending'"
+              class="action-item"
+              @click="onAction('pending', 'tunda')"
+            >tunda</div>
+            <div
+              class="action-item"
+              v-if="getFormStatus != 'active'"
+              @click="onAction('active', 'mulai')"
+            >mulai kembali</div>
+            <div class="action-item" @click="onAction('finish', 'selesai')">selesai</div>
+            <div class="action-item" @click="onAction('overtime_start', 'lembur')">lembur</div>
+            <div
+              class="action-item"
+              @click="onAction('overtime_finish', 'selesai lembur')"
+            >selesai lembur</div>
+            <div class="action-item" @click="onAction('correction', 'perbaikan')">perbaikan</div>
+            <div class="action-item" @click="onEdit">ubah</div>
             <div class="action-item" @click="onDetail">detail</div>
-            <div class="action-item">penilaian</div>
+            <div class="action-item" @click="onAction('assessment', 'penilaian')">penilaian</div>
           </div>
         </vue-bottom-sheet>
       </b-col>
@@ -91,19 +102,60 @@ export default {
     getData() {
       return this.$store.state.jobOrder.data;
     },
+    getFormStatus() {
+      return this.$store.state.jobOrder.form.status;
+    },
     getIsMobile() {
       return isMobile();
     },
+    form() {
+      return this.$store.state.jobOrder.form;
+    },
   },
   methods: {
-    onOpenAction(id) {
+    onOpenAction(data) {
       //   console.info(id);
+      this.$store.commit("jobOrder/INSERT_FORM", {
+        form: data,
+      });
       this.$refs.myBottomSheet.open();
+    },
+    onAction(type, title) {
+      this.$refs.myBottomSheet.close();
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: title + " job order",
+        form_kind: type,
+      });
+      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+        value: true,
+      });
+
+      //   console.info(this.form);
+
+      this.$bvModal.show("job_order_form_action");
     },
     onCreate() {
       this.$bvModal.show("job_order_form");
     },
     onDetail() {
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "detail job order",
+        form_kind: "detail",
+      });
+      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+        value: true,
+      });
+      this.$refs.myBottomSheet.close();
+      this.$bvModal.show("job_order_form");
+    },
+    onEdit() {
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "ubah job order",
+        form_kind: "edit",
+      });
+      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+        value: true,
+      });
       this.$refs.myBottomSheet.close();
       this.$bvModal.show("job_order_form");
     },
