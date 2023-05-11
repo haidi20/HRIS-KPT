@@ -197,7 +197,7 @@
                                         {{ $departemen->nama_departemen }}
                                         </option>
                                         @endforeach --}}
-                                        <option value="aktif">HSE</option>
+                                        <option value="aktif">HRD</option>
                                     </select>
                                 </div>
                             </div>
@@ -216,12 +216,12 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="keahlian" class="col-sm-4 col-form-label">Keahlian</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="keahlian" name="keahlian">
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group row">
                                 <label for="pendidikan_terakhir" class="col-sm-4 col-form-label">Pendidikan
@@ -256,7 +256,12 @@
                                         <option value="sd" {{ $pegawai->pendidikan_terakhir == 'sd' ? 'selected' : ''
                                             }}>SD
                                         </option> --}}
-                                        <option value="s3">S3</option>
+                                        <option value="SD">SD</option>
+                                        <option value="smp">SMP</option>
+                                        <option value="sma">SMA</option>
+                                        <option value="d3">D3</option>
+                                        <option value="s1">S1</option>
+                                        <option value="s2">S2</option>
                                     </select>
                                 </div>
                             </div>

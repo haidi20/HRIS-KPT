@@ -1,87 +1,87 @@
 @extends('layouts.master')
 
 @section('content')
-@include('pages.master.employee-type.partials.employee-type-modal')
-<div class="page-heading">
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Jenis Karyawan</h3>
-                {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                        <li class="breadcrumb-item active" aria-current="page">Jenis Karyawan</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <section class="section">
-        <div class="card">
-            <div class="card-header">
-                 <span class="fs-4 fw-bold">Data Jenis Karyawan</span>
-                <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                    data-toggle="modal">
-                    <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jenis Karyawan
-                </button>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped dataTable" id="table1">
-                    <thead>
-                       <tr>
-                            <th>No.</th>
-                            <th>Nama</th>
-                            <th>Keterangan</th>
-                            <th width="20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($employeetypes as $employeetype)
-                        <tr>
-                            <td>
-                                {{ $loop->iteration }}
-                            </td>
-                            <td>
-                                {{ $employeetype->name }}
-                            </td>
-                            <td>
-                                {{ $employeetype->description }}
-                            </td>
-                            <td class="flex flex-row justify-content-around">
-                                @can('ubah jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $employeetype }})"
-                                    class="btn btn-sm btn-info">Ubah
-                                </a>
-                                @endcan
-                                @can('hapus jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $employeetype }})"
-                                    class="btn btn-sm btn-danger">Hapus
-                                </a>
-                                @endcan
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    @include('pages.master.employee-type.partials.employee-type-modal')
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Jenis Karyawan</h3>
+                    {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                            <li class="breadcrumb-item active" aria-current="page">Jenis Karyawan</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
         </div>
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="fs-4 fw-bold">Data Jenis Karyawan</span>
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                        data-toggle="modal">
+                        <i class="fas fa-plus text-white-50"></i> Tambah Jenis Karyawan
+                    </button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped dataTable" id="table1">
+                        <thead>
+                            <tr>
+                                <th width="10%">No.</th>
+                                <th>Nama</th>
+                                <th>Keterangan</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($employeetypes as $employeetype)
+                                <tr>
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $employeetype->name }}
+                                    </td>
+                                    <td>
+                                        {{ $employeetype->description }}
+                                    </td>
+                                    <td class="flex flex-row justify-content-around">
+                                        @can('ubah jenis karyawan')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $employeetype }})"
+                                                class="btn btn-sm btn-info">Ubah
+                                            </a>
+                                        @endcan
+                                        @can('hapus jenis karyawan')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $employeetype }})"
+                                                class="btn btn-sm btn-danger">Hapus
+                                            </a>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-    </section>
-</div>
+        </section>
+    </div>
 @endsection
 
 @section('script')
 @section('style')
-<link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
 @endsection
 
 @section('script')
-<script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
-<script>
-    $(document).ready(function() {
+    <script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
             $('.dataTable').DataTable();
 
             send();
@@ -229,7 +229,7 @@
         }
 
         function setupSelect() {
-        $(".select2").select2();
+            $(".select2").select2();
         }
 
         function clearForm() {
@@ -237,6 +237,5 @@
             $("#name").val("");
             $("#description").val("");
         }
-
-</script>
+    </script>
 @endsection
