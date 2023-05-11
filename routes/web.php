@@ -167,6 +167,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('working-hour')->name("workingHour.")->group(function () {
             Route::get('', [WorkingHourController::class, "index"])->name("index");
+            Route::post('store', [WorkingHourController::class, "store"])->name("store");
         });
     });
     Route::prefix("setting")->name("setting.")->group(function () {
