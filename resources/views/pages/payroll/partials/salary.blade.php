@@ -16,13 +16,13 @@
                         Gaji Dasar
                     </td>
                     <td>
-                        <span id="jumlah_gaji_dasar">1</span>
+                        <span id="jumlah_gaji_dasar"></span>
                     </td>
                     <td>
                         <span> Bulan</span>
                     </td>
                     <td>
-                        <span id="nominal_gaji_dasar"> Rp 3.394.000 </span>
+                        <span id="nominal_gaji_dasar"> Rp </span>
                     </td>
                 </tr>
                 <tr>
@@ -33,13 +33,13 @@
                         Tunjangan Tetap
                     </td>
                     <td>
-                        <span id="jumlah_tunjangan_tetap">1</span>
+                        <span id="jumlah_tunjangan_tetap"></span>
                     </td>
                     <td>
                         <span> Bulan</span>
                     </td>
                     <td>
-                        <span id="nominal_tunjangan_tetap"> Rp - </span>
+                        <span id="nominal_tunjangan_tetap"> Rp </span>
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +56,7 @@
                         <span> Hari</span>
                     </td>
                     <td>
-                        <span id="nominal_uang_makan">Rp -</span>
+                        <span id="nominal_uang_makan">Rp</span>
                     </td>
                 </tr>
                 <tr>
@@ -67,13 +67,13 @@
                         Lembur
                     </td>
                     <td>
-                        <span id="jumlah_lembur">7</span>
+                        <span id="jumlah_lembur"></span>
                     </td>
                     <td>
                         <span> Jam</span>
                     </td>
                     <td>
-                        <span id="nominal_lembur"> Rp 137.326 </span>
+                        <span id="nominal_lembur"> Rp </span>
                     </td>
                 </tr>
                 <tr>
@@ -91,7 +91,7 @@
                     </td>
                     <td>
                         <span id="nominal_tambahan_lain_lain">
-                            Rp 130.538
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -108,7 +108,7 @@
                     </td>
                     <td>
                         <span id="jumlah_pendapatan_kotor">
-                            Rp 3.661.864
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -131,7 +131,7 @@
                         <span> </span>
                     </td>
                     <td>
-                        <span id="nominal_bpjs_dibayar_karyawan"> Rp 135.781 </span>
+                        <span id="nominal_bpjs_dibayar_karyawan"> Rp </span>
                     </td>
                 </tr>
                 <tr>
@@ -148,12 +148,12 @@
                         <span> </span>
                     </td>
                     <td>
-                        <span id="nominal_pajak_penghasilan_pph21"> Rp - </span>
+                        <span id="nominal_pajak_penghasilan_pph21"> Rp </span>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        5.
+                        3.
                     </td>
                     <td>
                         Potongan Lain - Lain
@@ -185,7 +185,7 @@
                     </td>
                     <td>
                         <span id="jumlah_potongan">
-                            Rp 135.781
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -195,7 +195,7 @@
                     </td>
                     <td>
                         <span id="gaji_bersih">
-                            Rp 3.526.083
+                            Rp
                         </span>
                     </td>
                 </tr>

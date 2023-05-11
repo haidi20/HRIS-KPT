@@ -64,11 +64,11 @@
                                 aria-controls="attendance" aria-selected="true">Absensi</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link " id="bpjs-tab" data-bs-toggle="tab" href="#bpjs" role="tab"
+                            <a class="nav-link active" id="bpjs-tab" data-bs-toggle="tab" href="#bpjs" role="tab"
                                 aria-controls="bpjs" aria-selected="true">Perhitungan BPJS</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pph21-tab" data-bs-toggle="tab" href="#pph21" role="tab"
+                            <a class="nav-link " id="pph21-tab" data-bs-toggle="tab" href="#pph21" role="tab"
                                 aria-controls="pph21" aria-selected="true">Perhitungan Pajak Penghasilan (PPH 21)</a>
                         </li>
                     </ul>
@@ -82,10 +82,10 @@
                         <div class="tab-pane fade show " id="attendance" role="tabpanel">
                             @include('pages.payroll.partials.attendance')
                         </div>
-                        <div class="tab-pane fade show " id="bpjs" role="tabpanel">
+                        <div class="tab-pane fade show active" id="bpjs" role="tabpanel">
                             @include('pages.payroll.partials.bpjs')
                         </div>
-                        <div class="tab-pane fade show active" id="pph21" role="tabpanel">
+                        <div class="tab-pane fade show " id="pph21" role="tabpanel">
                             @include('pages.payroll.partials.pph21')
                         </div>
                     </div>
@@ -133,12 +133,16 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
+            fetchBpjs();
+            fetchSalary();
             fetchInformation();
+
             setupSelect();
-            // setupDateFilter();
         });
 
         function onFilter() {
+            fetchBpjs();
+            fetchSalary();
             fetchInformation();
         }
 
@@ -153,7 +157,7 @@
                     // empty view
                 },
                 success: function(responses) {
-                    console.info(responses);
+                    // console.info(responses);
                     const employee = responses.employee;
                     const month_readable = responses.monthReadAble;
 
@@ -170,6 +174,98 @@
                     $("#ptkp_karyawan").text(`Rp. ${employee.ptkp_karyawan}`);
                     $("#jumlah_cuti_ijin").text(`Rp. ${employee.jumlah_cuti_ijin}`);
                     $("#sisa_cuti").text(`Rp. ${employee.sisa_cuti}`);
+
+                },
+                error: function(err) {}
+            });
+        }
+
+        function fetchSalary() {
+            $.ajax({
+                url: "{{ route('api.payroll.fetchSalary') }}",
+                method: 'GET',
+                data: {
+                    month_filter: $("#month_filter").val(),
+                },
+                beforeSend: function() {
+                    // empty view
+                },
+                success: function(responses) {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    $("#jumlah_gaji_dasar").text(data.jumlah_gaji_dasar);
+                    $("#nominal_gaji_dasar").text(`Rp ${data.nominal_gaji_dasar}`);
+                    $("#jumlah_tunjangan_tetap").text(data.jumlah_tunjangan_tetap);
+                    $("#nominal_tunjangan_tetap").text(`Rp ${data.nominal_tunjangan_tetap}`);
+                    $("#jumlah_uang_makan").text(data.jumlah_uang_makan);
+                    $("#nominal_uang_makan").text(`Rp ${data.nominal_uang_makan}`);
+                    $("#jumlah_lembur").text(data.jumlah_lembur);
+                    $("#nominal_lembur").text(`Rp ${data.nominal_lembur}`);
+                    $("#nominal_tambahan_lain_lain").text(`Rp ${data.nominal_tambahan_lain_lain}`);
+                    $("#jumlah_pendapatan_kotor").text(`Rp ${data.jumlah_pendapatan_kotor}`);
+                    $("#nominal_bpjs_dibayar_karyawan").text(`Rp ${data.nominal_bpjs_dibayar_karyawan}`);
+                    $("#nominal_pajak_penghasilan_pph21").text(`Rp ${data.nominal_pajak_penghasilan_pph21}`);
+                    $("#nominal_potongan_lain_lain").text(`Rp ${data.nominal_potongan_lain_lain}`);
+                    $("#jumlah_potongan").text(`Rp ${data.jumlah_potongan}`);
+                    $("#gaji_bersih").text(`Rp ${data.gaji_bersih}`);
+                },
+                error: function(err) {}
+            });
+        }
+
+        function fetchBpjs() {
+            const contentJaminanSosial = $("#content-jaminan-sosial");
+
+            $.ajax({
+                url: "{{ route('api.payroll.fetchBpjs') }}",
+                method: 'GET',
+                data: {
+                    month_filter: $("#month_filter").val(),
+                },
+                beforeSend: function() {
+                    // empty view
+
+                    contentJaminanSosial.empty();
+                },
+                success: function(responses) {
+                    console.info(responses);
+
+                    const data = responses.data;
+                    const jaminanSosial = responses.jaminanSosial;
+
+                    let dataJaminanSosial = "";
+
+                    $("#dasar_upah_bpjs_tk").text(`Rp ${data.dasar_upah_bpjs_tk}`);
+                    $("#dasar_upah_bpjs_kesehatan").text(`Rp ${data.dasar_upah_bpjs_kesehatan}`);
+
+                    jaminanSosial.map((data, index) => {
+                        dataJaminanSosial += `
+                            <tr class="bpjs-row">
+                                <td>${index + 1}</td>
+                                <td>${data.nama}</td>
+                                <td>${data.perusahaan_persen} %</td>
+                                <td>${data.karyawan_persen} %</td>
+                                <td>Rp ${data.perusahaan_nominal}</td>
+                                <td>Rp ${data.karyawan_nominal}</td>
+                            </tr>
+                        `
+                    });
+
+                    dataJaminanSosial += `
+                        <tr id="space-content-total" style="height: 15px;">
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Total</td>
+                            <td>11,74%</td>
+                            <td>4,00%</td>
+                            <td>Rp 398.516</td>
+                            <td>Rp 135.781</td>
+                        </tr>
+                    `;
+
+                    contentJaminanSosial.append(dataJaminanSosial);
 
                 },
                 error: function(err) {}

@@ -8,7 +8,9 @@
                             Dasar Upah BPJS TK
                         </td>
                         <td>
-                            Rp 3.394.513
+                            <span id="dasar_upah_bpjs_tk">
+                                Rp
+                            </span>
                         </td>
                     </tr>
                     <tr>
@@ -16,7 +18,9 @@
                             Dasar Upah BPJS KES
                         </td>
                         <td>
-                            Rp 3.394.513
+                            <span id="dasar_upah_bpjs_kesehatan">
+                                Rp
+                            </span>
                         </td>
                     </tr>
                 </table>
@@ -27,7 +31,7 @@
                 <table style="width: 100%">
                     <thead class="head-color" style="background-color: #F2F7FF;">
                         <tr>
-                            <td colspan="2" class="pl-2">
+                            <td id="header-jenis-jaminan-sosial" colspan="2" class="pl-2">
                                 Jenis Jaminan Sosial
                             </td>
                             <td>
@@ -44,38 +48,7 @@
                             </td>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="bpjs-row">
-                            <td>
-                                1.
-                            </td>
-                            <td>
-                                Hari Tua (JHT)
-                            </td>
-                            <td>
-                                3,70%
-                            </td>
-                            <td>
-                                2,00%
-                            </td>
-                            <td>
-                                Rp 125.597
-                            </td>
-                            <td>
-                                Rp 67.890
-                            </td>
-                        </tr>
-                        <tr style="height: 15px;">
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">Total</td>
-                            <td>11,74%</td>
-                            <td>4,00%</td>
-                            <td>Rp 398.516</td>
-                            <td>Rp 135.781</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="content-jaminan-sosial"></tbody>
                 </table>
             </div>
         </div>
