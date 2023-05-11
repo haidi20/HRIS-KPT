@@ -35,6 +35,7 @@
                                 <th width="5%">No.</th>
                                 <th>Nama</th>
                                 <th>Keterangan</th>
+                                <th>Minimum Jumlah Karyawan</th>
                                 <th width="10%">Aksi</th>
                             </tr>
                         </thead>
@@ -49,6 +50,9 @@
                                     </td>
                                     <td>
                                         {{ $position->description }}
+                                    </td>
+                                    <td>
+                                        {{ $position->minimum_employee }}
                                     </td>
                                     <td>
                                         @can('ubah departemen')

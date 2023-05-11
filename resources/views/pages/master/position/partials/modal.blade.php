@@ -24,6 +24,12 @@
                             <input type="text" id="description" name="description" class="form-control">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="minimum_employee" class="col-sm-4 col-form-label">Minimal Jumlah Karyawan </label>
+                        <div class="col-sm-8">
+                            <input type="number" id="minimum_employee" name="minimum_employee" class="form-control">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Batal</button>

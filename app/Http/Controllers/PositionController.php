@@ -39,6 +39,7 @@ class PositionController extends Controller
 
             $position->name = request("name");
             $position->description = request("description");
+            $position->minimum_employee = request("minimum_employee");
             $position->save();
 
             DB::commit();
