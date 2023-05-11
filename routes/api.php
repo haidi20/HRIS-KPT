@@ -39,6 +39,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('payroll')->name('payroll.')->group(function () {
         Route::get('fetch-bpjs', [PayrollController::class, "fetchBpjs"])->name('fetchBpjs');
+        Route::get('fetch-pph21', [PayrollController::class, "fetchPph21"])->name('fetchPph21');
         Route::get('fetch-salary', [PayrollController::class, "fetchSalary"])->name('fetchSalary');
         Route::get('fetch-information', [PayrollController::class, "fetchInformation"])->name('fetchInformation');
     });

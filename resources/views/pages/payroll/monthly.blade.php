@@ -64,11 +64,11 @@
                                 aria-controls="attendance" aria-selected="true">Absensi</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="bpjs-tab" data-bs-toggle="tab" href="#bpjs" role="tab"
+                            <a class="nav-link " id="bpjs-tab" data-bs-toggle="tab" href="#bpjs" role="tab"
                                 aria-controls="bpjs" aria-selected="true">Perhitungan BPJS</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link " id="pph21-tab" data-bs-toggle="tab" href="#pph21" role="tab"
+                            <a class="nav-link active" id="pph21-tab" data-bs-toggle="tab" href="#pph21" role="tab"
                                 aria-controls="pph21" aria-selected="true">Perhitungan Pajak Penghasilan (PPH 21)</a>
                         </li>
                     </ul>
@@ -82,10 +82,10 @@
                         <div class="tab-pane fade show " id="attendance" role="tabpanel">
                             @include('pages.payroll.partials.attendance')
                         </div>
-                        <div class="tab-pane fade show active" id="bpjs" role="tabpanel">
+                        <div class="tab-pane fade show " id="bpjs" role="tabpanel">
                             @include('pages.payroll.partials.bpjs')
                         </div>
-                        <div class="tab-pane fade show " id="pph21" role="tabpanel">
+                        <div class="tab-pane fade show active" id="pph21" role="tabpanel">
                             @include('pages.payroll.partials.pph21')
                         </div>
                     </div>
@@ -134,6 +134,7 @@
             $('.dataTable').DataTable();
 
             fetchBpjs();
+            fetchPph21();
             fetchSalary();
             fetchInformation();
 
@@ -142,6 +143,7 @@
 
         function onFilter() {
             fetchBpjs();
+            fetchPph21();
             fetchSalary();
             fetchInformation();
         }
@@ -229,7 +231,7 @@
                     contentJaminanSosial.empty();
                 },
                 success: function(responses) {
-                    console.info(responses);
+                    // console.info(responses);
 
                     const data = responses.data;
                     const jaminanSosial = responses.jaminanSosial;
@@ -267,6 +269,51 @@
 
                     contentJaminanSosial.append(dataJaminanSosial);
 
+                },
+                error: function(err) {}
+            });
+        }
+
+        function fetchPph21() {
+            const tableTarif = $("#table-tarif");
+            $.ajax({
+                url: "{{ route('api.payroll.fetchPph21') }}",
+                method: 'GET',
+                data: {
+                    month_filter: $("#month_filter").val(),
+                },
+                beforeSend: function() {
+                    // empty view
+
+                    $(".table-tarif").empty();
+                },
+                success: function(responses) {
+                    // console.info(responses);
+                    const data = responses.data;
+                    const table = responses.table;
+
+                    $("#gaji_kotor_potongan").text(`Rp ${data.gaji_kotor_potongan}`);
+                    $("#bpjs_dibayar_perusahaan").text(`Rp ${data.bpjs_dibayar_perusahaan}`);
+                    $("#total_penghasilan_kotor").text(`Rp ${data.total_penghasilan_kotor}`);
+                    $("#biaya_jabatan").text(`Rp ${data.biaya_jabatan}`);
+                    $("#bpjs_dibayar_karyawan").text(`Rp ${data.bpjs_dibayar_karyawan}`);
+                    $("#jumlah_pengurangan").text(`Rp ${data.jumlah_pengurangan}`);
+                    $("#gaji_bersih_setahun").text(`Rp ${data.gaji_bersih_setahun}`);
+                    $("#pkp_setahun").text(`Rp ${data.pkp_setahun}`);
+
+                    let row = "";
+                    table.map(item => {
+                        row += `
+                            <tr class="table-tarif">
+                                <td>${item.tarif} %</td>
+                                <td>${item.dari_pkp} jt</td>
+                                <td>${item.ke_pkp} jt</td>
+                                <td>Rp ${item.progressive_pph21}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableTarif.after(row);
                 },
                 error: function(err) {}
             });

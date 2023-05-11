@@ -163,10 +163,48 @@ class PayrollController extends Controller
         $data = (object) [
             // D. Penghasilan Kotor
             "gaji_kotor_potongan" => "3.661.864",
+            "bpjs_dibayar_perusahaan" => "398.516",
+            "total_penghasilan_kotor" => "4.060.380",
+            // E. Pengurangan
+            "biaya_jabatan" => "203.019",
+            "bpjs_dibayar_karyawan" => "135.781",
+            "jumlah_pengurangan" => "338.800",
+            // F. Gaji Bersih 12 Bulan
+            "gaji_bersih_setahun" => "44.658.964",
+            // G. PKP 12 Bulan= (F)-PTKP
+            "pkp_setahun" => "44.658.964",
+        ];
+
+        $table = [
+            (object) [
+                "tarif" => "5",
+                "dari_pkp" => "0",
+                "ke_pkp" => "50",
+                "progressive_pph21" => "2.232.948",
+            ],
+            (object) [
+                "tarif" => "15",
+                "dari_pkp" => "50",
+                "ke_pkp" => "250",
+                "progressive_pph21" => "-",
+            ],
+            (object) [
+                "tarif" => "25",
+                "dari_pkp" => "250",
+                "ke_pkp" => "500",
+                "progressive_pph21" => "-",
+            ],
+            (object) [
+                "tarif" => "30",
+                "dari_pkp" => "500",
+                "ke_pkp" => "1.000",
+                "progressive_pph21" => "-",
+            ],
         ];
 
         return response()->json([
             "data" => $data,
+            "table" => $table,
         ]);
     }
 }

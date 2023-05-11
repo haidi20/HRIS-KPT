@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6">
         <table style="width: 100%">
-            <tbody>
+            <tbody id="table-pph21">
                 <tr>
                     <td colspan="3">
                         <h6 class="head-color">D. Penghasilan Kotor</h6>
@@ -16,7 +16,7 @@
                     </td>
                     <td>
                         <span id="gaji_kotor_potongan">
-                            Rp 3.661.864
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -30,7 +30,7 @@
                     </td>
                     <td>
                         <span id="bpjs_dibayar_perusahaan">
-                            Rp 398.516
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -39,7 +39,9 @@
                         Total Penghasilan Kotor (D)
                     </td>
                     <td>
-                        Rp 4.060.380
+                        <span id="total_penghasilan_kotor">
+                            Rp
+                        </span>
                     </td>
                 </tr>
                 <tr style="height: 20px">
@@ -60,7 +62,7 @@
                     <td>
                         <span id="biaya_jabatan">
                             {{--  --}}
-                            Rp 203.019
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -74,7 +76,7 @@
                     <td>
                         <span id="bpjs_dibayar_karyawan">
                             {{--  --}}
-                            Rp 135.781
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -83,7 +85,9 @@
                         Jumlah Pengurangan (E)
                     </td>
                     <td>
-                        Rp 338.800
+                        <span id="jumlah_pengurangan">
+                            Rp
+                        </span>
                     </td>
                 </tr>
                 <tr style="height: 20px">
@@ -91,11 +95,11 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <h6 class="head-color">D. Penghasilan Kotor</h6>
+                        <h6 class="head-color">F. Gaji Bersih 12 Bulan</h6>
                     </td>
                     <td>
                         <span id="gaji_bersih_setahun">
-                            Rp 44.658.964
+                            Rp
                         </span>
                     </td>
                 </tr>
@@ -104,15 +108,15 @@
                         <h6 class="head-color">G. PKP 12 Bulan= (F)-PTKP</h6>
                     </td>
                     <td>
-                        <span id="gaji_bersih_setahun">
-                            Rp 44.658.964
+                        <span id="pkp_setahun">
+                            Rp
                         </span>
                     </td>
                 </tr>
                 <tr style="height: 20px">
 
                 </tr>
-                <tr>
+                <tr id="table-tarif" class="head-color" style="background-color: #F2F7FF;">
                     <td>
                         Tarif
                     </td>
@@ -126,18 +130,15 @@
                         Progressive PPH21
                     </td>
                 </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table style="width: 100%">
+            <tbody id="table-pph21">
                 <tr>
-                    <td>
-                        5%
-                    </td>
-                    <td>
-                        0 Jt
-                    </td>
-                    <td>
-                        50 Jt
-                    </td>
-                    <td>
-                        Rp 2.232.948
+                    <td colspan="3">
+                        <h6 class="head-color">G. PPH21 Tahunan</h6>
                     </td>
                 </tr>
             </tbody>
