@@ -3,7 +3,7 @@
     <b-row style="height: 100%">
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
-        <h3 style="display: inline">Job Order {{form.form_kind}}</h3>
+        <h3 style="display: inline">{{getTitle}}</h3>
         <template v-if="!getIsActiveForm">
           <Table />
         </template>
@@ -31,7 +31,7 @@ import FormAction from "./formAction.vue";
 export default {
   data() {
     return {
-      title: "Job Order",
+      //
     };
   },
   components: {
@@ -49,6 +49,9 @@ export default {
     },
     getIsActiveForm() {
       return this.$store.state.jobOrder.is_active_form;
+    },
+    getTitle() {
+      return this.$store.state.jobOrder.form.form_title;
     },
     form() {
       return this.$store.state.jobOrder.form;

@@ -203,6 +203,10 @@ export default {
   },
   methods: {
     onCloseModal() {
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "data job order",
+        form_kind: null,
+      });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
         value: false,
       });
@@ -212,6 +216,10 @@ export default {
       this.$bvModal.show("data_employee");
     },
     onSend() {
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "data job order",
+        form_kind: null,
+      });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
         value: false,
       });

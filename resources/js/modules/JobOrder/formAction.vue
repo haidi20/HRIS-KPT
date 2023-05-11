@@ -29,12 +29,20 @@ export default {
   },
   methods: {
     onCloseModal() {
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "data job order",
+        form_kind: null,
+      });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
         value: false,
       });
       this.$bvModal.hide("job_order_form_action");
     },
     onSend() {
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "data job order",
+        form_kind: null,
+      });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
         value: false,
       });

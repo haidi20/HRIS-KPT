@@ -11,7 +11,7 @@ const defaultForm = {
     image: null,
     type_time: "hour",
     form_kind: null,
-    form_title: null,
+    form_title: "data job order",
 }
 
 const JobOrder = {
