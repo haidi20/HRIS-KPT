@@ -205,12 +205,18 @@
                                 <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
                             </li>
                         @endcan
-                        {{-- @can('lihat departemen') --}}
+                        @can('lihat departemen')
+                        <li class="submenu-item {{ isActive('master/departmen') }}">
+                            {{-- <a href="{{ route('master.departmen.index') }}">Jabatan</a> --}}
+                            <a href="{{ route('master.departmen.index') }}">Departemen</a>
+                        </li>
+                        @endcan
+                        @can('lihat jabatan')
                         <li class="submenu-item {{ isActive('master/position') }}">
                             {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
-                            <a href="{{ route('master.position.index') }}">Departemen</a>
+                            <a href="{{ route('master.position.index') }}">Jabatan</a>
                         </li>
-                        {{-- @endcan --}}
+                        @endcan
                     </ul>
                 </li>
                 @php

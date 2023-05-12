@@ -6,14 +6,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Departemen</h3>
+                    <h3>Jabatan</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Karyawan</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Departemen</li>
+                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,10 +22,10 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <span class="fs-4 fw-bold">Data Departemen</span>
+                    <span class="fs-4 fw-bold">Data Jabatan</span>
                     <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus text-white-50"></i> Tambah Departemen
+                        <i class="fas fa-plus text-white-50"></i> Tambah Jabatan
                     </button>
                 </div>
                 <div class="card-body">
@@ -33,10 +33,11 @@
                         <thead>
                             <tr>
                                 <th width="5%">No.</th>
+                                <th>Departemen</th>
                                 <th>Nama</th>
                                 <th>Keterangan</th>
                                 <th>Minimum Jumlah Karyawan</th>
-                                <th width="10%">Aksi</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,9 @@
                                 <tr>
                                     <td>
                                         {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $position->departmen->name }}
                                     </td>
                                     <td>
                                         {{ $position->name }}
@@ -98,6 +102,7 @@
             $('.dataTable').DataTable();
 
             state.positions = {!! json_encode($positions) !!};
+            setupSelect();
             send();
         });
 
@@ -240,6 +245,10 @@
                     }
                 });
             });
+        }
+
+        function setupSelect() {
+        $(".select2").select2();
         }
 
         function clearForm() {
