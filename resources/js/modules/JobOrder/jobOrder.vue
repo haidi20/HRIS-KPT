@@ -62,8 +62,11 @@ export default {
       this.$refs.myBottomSheet.close();
     },
     getConditionForm() {
-      console.info(this.form.form_kind);
-      return this.form.form_kind == "edit" || this.form.form_kind == "detail";
+      return (
+        this.form.form_kind == "edit" ||
+        this.form.form_kind == "detail" ||
+        this.form.form_kind == "create"
+      );
     },
   },
 };

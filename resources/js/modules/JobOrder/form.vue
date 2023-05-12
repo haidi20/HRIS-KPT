@@ -24,23 +24,6 @@
         </b-form-group>
       </b-col>
       <b-col cols>
-        <b-form-group label="Kategori" label-for="category_id" class>
-          <VueSelect
-            id="category_id"
-            class="cursor-pointer"
-            v-model="form.category_id"
-            placeholder="Pilih Kategori"
-            :options="getOptionCategory"
-            :reduce="(data) => data.id"
-            label="name"
-            searchable
-            style="min-width: 180px"
-          />
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols sm="12" md="6">
         <b-form-group label="Pekerjaan" label-for="job_id" class>
           <VueSelect
             id="job_id"
@@ -51,6 +34,23 @@
             :reduce="(data) => data.id"
             label="name"
             searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols sm="12" md="6">
+        <b-form-group label="Kategori" label-for="category_id" class>
+          <VueSelect
+            id="category_id"
+            class="cursor-pointer"
+            v-model="form.category_id"
+            placeholder="Pilih Kategori"
+            :options="getOptionCategory"
+            :reduce="(data) => data.id"
+            label="name"
+            :searchable="false"
             style="min-width: 180px"
           />
         </b-form-group>
@@ -81,7 +81,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col col sm="6">
+      <b-col cols="12" md="6">
         <b-form-group label="Jenis Waktu" label-for="type_time" class>
           <VueSelect
             id="type_time"
@@ -91,12 +91,12 @@
             :options="getOptionTypTime"
             :reduce="(data) => data.id"
             label="name"
-            searchable
+            :searchable="false"
             style="min-width: 180px"
           />
         </b-form-group>
       </b-col>
-      <b-col col sm="6">
+      <b-col cols="12" md="6">
         <b-form-group label="Waktu Selesai : " label-for="type_time" class>
           <span style="font-size: 15px">Senin, 25 Mei 2023</span>
           <span v-if="form.type_time != 'day'">13:00</span>
@@ -114,7 +114,7 @@
             :options="getOptionJobLevels"
             :reduce="(data) => data.id"
             label="name"
-            searchable
+            :searchable="false"
             style="min-width: 180px"
           />
         </b-form-group>
@@ -232,6 +232,7 @@ export default {
 <style lang="scss" scoped>
 #job_order_form {
   max-height: 500px;
+  min-height: 400px;
   overflow-y: scroll;
 }
 #job_order_form::-webkit-scrollbar {

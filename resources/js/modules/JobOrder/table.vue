@@ -129,29 +129,33 @@ export default {
       this.$bvModal.show("job_order_form_action");
     },
     onCreate() {
-      this.$bvModal.show("job_order_form");
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "Tambah Job Order",
+        form_kind: "create",
+      });
+      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+        value: true,
+      });
     },
     onDetail() {
       this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "detail job order",
+        form_title: "Detail Job Order",
         form_kind: "detail",
       });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
         value: true,
       });
       this.$refs.myBottomSheet.close();
-      this.$bvModal.show("job_order_form");
     },
     onEdit() {
       this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "ubah job order",
+        form_title: "Ubah Job Order",
         form_kind: "edit",
       });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
         value: true,
       });
       this.$refs.myBottomSheet.close();
-      this.$bvModal.show("job_order_form");
     },
     onFilter() {
       this.$bvModal.show("job_order_filter");
