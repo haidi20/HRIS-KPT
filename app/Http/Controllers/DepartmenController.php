@@ -23,8 +23,9 @@ class DepartmenController extends Controller
 
         if ($lastDepartmen) {
             $lastCode = $lastDepartmen->code;
+            $newCode = substr($lastCode, 0, 3) . (intval(substr($lastCode, 3)) + 1);
             return response()->json([
-                'lastCode' => $lastCode,
+                'lastCode' => $newCode,
             ]);
         } else {
             return response()->json([
@@ -32,6 +33,7 @@ class DepartmenController extends Controller
             ]);
         }
     }
+
     public function index()
     {
         $departmens = Departmen::all();
