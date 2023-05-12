@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 
-class Position extends Model
+class Departmen extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -20,8 +20,8 @@ class Position extends Model
         $this->fillable = Schema::getColumnListing($this->getTable());
     }
 
-    public function departmen()
+    public function company()
     {
-        return $this->belongsTo(Departmen::class, "departmen_id", "id");
+        return $this->belongsTo(Company::class, "company_id", "id");
     }
 }

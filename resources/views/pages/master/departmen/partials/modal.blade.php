@@ -13,19 +13,26 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="departmen_id" class="col-sm-4 col-form-label">Departemen </label>
+                        <label for="company_id" class="col-sm-4 col-form-label">Perusahaan </label>
                         <div class="col-sm-8">
-                            <select id="departmen_id" name="departmen_id" class="select2 form-select" style="width: 100%">
-                                <option value="">Pilih Departemen</option>
-                                @foreach ($departmens as $departmen)
-                                <option value="{{ $departmen->id }}">{{ $departmen->code }} - {{ $departmen->name }}
+                            <select id="company_id" name="company_id" class="select2 form-select" style="width: 100%" onchange="setInitialCode(this.value)">
+                                <option value="">Pilih Perusahaan</option>
+                                @foreach ($companies as $company)
+                                <option value="{{ $company->id }}">{{ $company->name }}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama Jabatan</label>
+                        <label for="code" class="col-sm-4 col-form-label">Kode Perusahaan</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="code-new" name="code" class="form-control" readonly>
+                            <input type="text" id="code-last" name="code" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-4 col-form-label">Nama Departemen</label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">
                         </div>
@@ -34,12 +41,6 @@
                         <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
                         <div class="col-sm-8">
                             <input type="text" id="description" name="description" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="minimum_employee" class="col-sm-4 col-form-label">Minimal Jumlah Karyawan </label>
-                        <div class="col-sm-8">
-                            <input type="number" id="minimum_employee" name="minimum_employee" class="form-control">
                         </div>
                     </div>
                 </div>

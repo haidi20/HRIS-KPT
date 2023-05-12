@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 
-class Company extends Model
+class Employee extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -23,5 +23,20 @@ class Company extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, "company_id", "id");
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class, "position_id", "id");
+    }
+
+    public function employee_type()
+    {
+        return $this->belongsTo(EmployeeType::class, "employee_type_id", "id");
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, "location_id", "id");
     }
 }

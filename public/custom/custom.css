@@ -1,6 +1,11 @@
-html, body, #app, #main, #main-content, #root{
+/* html, body, #app, #main, #main-content, #root{
     height: 100%;
      overflow: hidden;
+} */
+
+#main-content {
+    height: 100%;
+    overflow: auto;
 }
 
 #main #main-content {
