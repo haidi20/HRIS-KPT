@@ -60,26 +60,20 @@
         </b-row>
         <vue-bottom-sheet ref="myBottomSheet">
           <div class="flex flex-col">
-            <div
-              v-if="getFormStatus != 'pending'"
-              class="action-item"
-              @click="onAction('pending', 'tunda')"
-            >tunda</div>
-            <div
-              class="action-item"
-              v-if="getFormStatus != 'active'"
-              @click="onAction('active', 'mulai')"
-            >mulai kembali</div>
-            <div class="action-item" @click="onAction('finish', 'selesai')">selesai</div>
-            <div class="action-item" @click="onAction('overtime_start', 'lembur')">lembur</div>
+            <!-- v-if="getFormStatus != 'pending'" -->
+            <div class="action-item" @click="onAction('pending', 'Tunda')">Tunda</div>
+            <!-- v-if="getFormStatus != 'active'" -->
+            <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div>
+            <div class="action-item" @click="onAction('finish', 'Selesai')">Selesai</div>
+            <div class="action-item" @click="onAction('overtime', 'Lembur')">Lembur</div>
             <div
               class="action-item"
-              @click="onAction('overtime_finish', 'selesai lembur')"
-            >selesai lembur</div>
-            <div class="action-item" @click="onAction('correction', 'perbaikan')">perbaikan</div>
-            <div class="action-item" @click="onEdit">ubah</div>
-            <div class="action-item" @click="onDetail">detail</div>
-            <div class="action-item" @click="onAction('assessment', 'penilaian')">penilaian</div>
+              @click="onAction('overtime_finish', 'Selesai Lembur')"
+            >Selesai Lembur</div>
+            <div class="action-item" @click="onAction('correction', 'Perbaikan')">Perbaikan</div>
+            <div class="action-item" @click="onEdit">Ubah</div>
+            <div class="action-item" @click="onDetail">Detail</div>
+            <div class="action-item" @click="onAction('assessment', 'Penilaian')">Penilaian</div>
           </div>
         </vue-bottom-sheet>
       </b-col>
@@ -123,7 +117,7 @@ export default {
     onAction(type, title) {
       this.$refs.myBottomSheet.close();
       this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: title + " job order",
+        form_title: title + " Job Order",
         form_kind: type,
       });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {

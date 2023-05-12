@@ -9,9 +9,12 @@ const defaultForm = {
     type_job_note: "",
     status: null,
     image: null,
+    date: new Date(),
+    hour: null,
+    note: null,
     type_time: "hour",
     form_kind: null,
-    form_title: "data job order",
+    form_title: "Job Order",
 }
 
 const JobOrder = {

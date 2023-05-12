@@ -204,7 +204,7 @@ export default {
   methods: {
     onCloseModal() {
       this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "data job order",
+        form_title: "Job Order",
         form_kind: null,
       });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
@@ -217,7 +217,7 @@ export default {
     },
     onSend() {
       this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "data job order",
+        form_title: "Job Order",
         form_kind: null,
       });
       this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
