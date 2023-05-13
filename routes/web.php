@@ -10,6 +10,7 @@ use App\Http\Controllers\BargeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmenController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeTypeController;
 use App\Http\Controllers\FeatureController;
@@ -136,15 +137,21 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('store', [JobController::class, "store"])->name("store");
             Route::delete('delete', [JobController::class, "destroy"])->name("delete");
         });
+        Route::prefix('departmen')->name("departmen.")->group(function () {
+            Route::get('', [DepartmenController::class, "index"])->name("index");
+            Route::get('get-last-code', [DepartmenController::class, "getLastCode"])->name("getLastCode");
+            Route::post('store', [DepartmenController::class, "store"])->name("store");
+            Route::delete('delete', [DepartmenController::class, "destroy"])->name("delete");
+        });
         Route::prefix('position')->name("position.")->group(function () {
             Route::get('', [PositionController::class, "index"])->name("index");
             Route::post('store', [PositionController::class, "store"])->name("store");
             Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
         });
         Route::prefix('location')->name("location.")->group(function () {
-            Route::get('', [CustomerController::class, "index"])->name("index");
-            Route::post('store', [CustomerController::class, "store"])->name("store");
-            Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
+            Route::get('', [LocationController::class, "index"])->name("index");
+            Route::post('store', [LocationController::class, "store"])->name("store");
+            Route::delete('delete', [LocationController::class, "destroy"])->name("delete");
         });
         Route::prefix('customer')->name("customer.")->group(function () {
             Route::get('', [CustomerController::class, "index"])->name("index");

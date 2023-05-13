@@ -33,10 +33,11 @@
                         <thead>
                             <tr>
                                 <th width="5%">No.</th>
+                                <th>Departemen</th>
                                 <th>Nama</th>
                                 <th>Keterangan</th>
                                 <th>Minimum Jumlah Karyawan</th>
-                                <th width="10%">Aksi</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,9 @@
                                 <tr>
                                     <td>
                                         {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $position->departmen->name }}
                                     </td>
                                     <td>
                                         {{ $position->name }}
@@ -98,6 +102,7 @@
             $('.dataTable').DataTable();
 
             state.positions = {!! json_encode($positions) !!};
+            setupSelect();
             send();
         });
 
@@ -240,6 +245,10 @@
                     }
                 });
             });
+        }
+
+        function setupSelect() {
+        $(".select2").select2();
         }
 
         function clearForm() {

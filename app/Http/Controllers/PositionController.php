@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Departmen;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,8 +15,9 @@ class PositionController extends Controller
      public function index()
     {
         $positions = Position::all();
+        $departmens = Departmen::all();
 
-        return view("pages.master.position.index", compact("positions"));
+        return view("pages.master.position.index", compact("positions", "departmens"));
     }
 
     public function store(Request $request)
@@ -40,6 +42,7 @@ class PositionController extends Controller
             $position->name = request("name");
             $position->description = request("description");
             $position->minimum_employee = request("minimum_employee");
+            $position->departmen_id = request("departmen_id");
             $position->save();
 
             DB::commit();

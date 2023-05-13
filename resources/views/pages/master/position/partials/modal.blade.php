@@ -12,6 +12,18 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
+                        <label for="departmen_id" class="col-sm-4 col-form-label">Departemen </label>
+                        <div class="col-sm-8">
+                            <select id="departmen_id" name="departmen_id" class="select2 form-select" style="width: 100%">
+                                <option value="">Pilih Departemen</option>
+                                @foreach ($departmens as $departmen)
+                                <option value="{{ $departmen->id }}">{{ $departmen->code }} - {{ $departmen->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="name" class="col-sm-4 col-form-label">Nama Jabatan</label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">

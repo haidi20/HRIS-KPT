@@ -31,14 +31,18 @@
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
+                                <th>No.</th>
                                 <th>Nama</th>
-                                <th>Deskripsi</th>
+                                <th>Keterangan</th>
                                 <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($locations as $location)
                                 <tr>
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td>
                                         {{ $location->name }}
                                     </td>
