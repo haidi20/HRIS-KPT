@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.position.partials.modal')
+    @include('pages.salary-advance-report.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -104,7 +104,7 @@
                                         @can('perwakilan persetujuan kasbon')
                                             @if ($salaryAdvance->status == 'accept')
                                                 <a href="javascript:void(0)" onclick="onEdit({{ $salaryAdvance->id }})"
-                                                    class="btn btn-sm btn-primary">Terima Sebagai Perwakilan
+                                                    class="btn btn-sm btn-primary">Terima Sebagai Direktur
                                                 </a>
                                             @endif
                                         @endcan

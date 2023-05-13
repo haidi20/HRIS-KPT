@@ -1,7 +1,11 @@
-/* html, body, #app, #main, #main-content, #root{
+/* html, body, #app, #main, #main-content, #root{ */
+    html, body {
+        height: 100%;
+    }
+.full-height {
     height: 100%;
-     overflow: hidden;
-} */
+    overflow: hidden;
+}
 
 #main-content {
     height: 100%;

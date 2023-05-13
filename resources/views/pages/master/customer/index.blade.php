@@ -23,10 +23,12 @@
             <div class="card">
                 <div class="card-header">
                     <span class="fs-4 fw-bold">Data Pelanggan</span>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus text-white-50"></i> Tambah Pelanggan
-                    </button>
+                    @can('tambah pelanggan')
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                            data-toggle="modal">
+                            <i class="fas fa-plus text-white-50"></i> Tambah Pelanggan
+                        </button>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
@@ -35,7 +37,7 @@
                                 <th>Nama</th>
                                 <th>Perusahaan</th>
                                 <th>Kapal</th>
-                                <th width="20%">Aksi</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,12 +53,12 @@
                                         {{ $customer->company->name }}
                                     </td>
                                     <td>
-                                        @can('ubah lokasi')
+                                        @can('ubah pelanggan')
                                             <a href="javascript:void(0)" onclick="onEdit({{ $customer }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus lokasi')
+                                        @can('hapus pelanggan')
                                             <a href="javascript:void(0)" onclick="onDelete({{ $customer }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
@@ -74,13 +76,6 @@
 @endsection
 
 @section('script')
-    {{-- <script src="assets/static/js/components/dark.js"></script>
-    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script> --}}
-
     <script>
         const initialState = {
             customers: [],
