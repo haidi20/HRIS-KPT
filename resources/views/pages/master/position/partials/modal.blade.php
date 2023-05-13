@@ -1,5 +1,4 @@
-<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel"
-    aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,15 +18,16 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
+                        <label for="minimum_employee" class="col-sm-4 col-form-label">Minimal Jumlah Karyawan Per hari
+                        </label>
                         <div class="col-sm-8">
-                            <input type="text" id="description" name="description" class="form-control">
+                            <input type="number" id="minimum_employee" name="minimum_employee" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="minimum_employee" class="col-sm-4 col-form-label">Minimal Jumlah Karyawan </label>
+                        <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
                         <div class="col-sm-8">
-                            <input type="number" id="minimum_employee" name="minimum_employee" class="form-control">
+                            <input type="text" id="description" name="description" class="form-control">
                         </div>
                     </div>
                 </div>
