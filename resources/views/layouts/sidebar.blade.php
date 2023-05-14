@@ -351,26 +351,14 @@
                             <a href="{{ route('setting.bpjsCalculation.index') }}">Perhitungan BPJS</a>
                         </li>
                         @endcan
+                        @can('lihat tingkat persetujuan')
+                        <li class="submenu-item {{ isActive('setting/approvalLevel') }}">
+                            <a href="{{ route('setting.approvalLevel.index') }}">Tingkat Persetujuan</a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
                 @endcanany
-                {{-- @can('lihat fitur')
-                    <li class="sidebar-item {{ isActive('setting/feature') }}">
-                        <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
-                            <i class="bi bi-menu-up"></i>
-                            <span>Fitur</span>
-                        </a>
-                    </li>
-                @endcan --}}
-                @endcan
-                @can('lihat tingkat persetujuan')
-                    <li class="sidebar-item {{ isActive('setting/approvalLevel') }}">
-                        <a href="{{ route('setting.approvalLevel.index') }}" class='sidebar-link'>
-                            <i class="bi bi-menu-up"></i>
-                            <span>Tingkat Persetujuan</span>
-                        </a>
-                    </li>
-                @endcan
             </ul>
         </div>
     </div>
