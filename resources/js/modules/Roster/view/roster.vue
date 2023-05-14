@@ -15,11 +15,11 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3" active>
+        <b-tabs content-class="mt-3">
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <b-tab title="Total">
+          <b-tab title="Total" active>
             <Total />
           </b-tab>
           <b-tab title="Status">

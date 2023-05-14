@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RosterExport;
+use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Roster;
 use App\Models\RosterDaily;
@@ -41,6 +42,7 @@ class RosterController extends Controller
                 "id_finger" => 04,
                 "employee_name" => "Muhammad Adi",
                 "position_name" => "Welder",
+                "position_id" => 1,
                 "work_schedule" => "6,1",
             ]
         ];
@@ -58,6 +60,7 @@ class RosterController extends Controller
             $mainData['employee_id'] = $item->id;
             $mainData['employee_name'] = $item->employee_name;
             $mainData['position_name'] = $item->position_name;
+            $mainData['position_id'] = $item->position_id;
             $mainData['work_schedule'] = $item->work_schedule;
             $mainData['day_off_one'] = $roster ? $roster->day_off_one : null;
             $mainData['day_off_two'] = $roster ? $roster->day_off_two : null;
@@ -103,29 +106,29 @@ class RosterController extends Controller
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRange($month->format("Y-m"));
 
-        $rosterStatusInitial = request("roster_status_initial", $setRosterStatusInitial);
+        $listEmployeeId = [1];
+        $positionId = request("position_id", $setRosterStatusInitial);
 
-        // $rosterStatusId = RosterStatus::where("initial", $rosterStatusInitial)->first();
-        // $rosterStatusId = $rosterStatusId ? $rosterStatusId->id : 0;
 
-        // $listDriverId = [1];
+        foreach ($dateRange as $index => $date) {
+            $query = RosterDaily::whereIn("employee_id", $listEmployeeId);
 
-        // foreach ($dateRange as $index => $date) {
-        //     $query = RosterDaily::whereIn("employee_id", $listDriverId);
+            if ($positionId != "all") {
+                $query = $query->where("position_id", $positionId);
+            }
 
-        //     if ($rosterStatusInitial != "ALL") {
-        //         $query = $query->where("roster_status_id", $rosterStatusId);
-        //     }
-
-        //     $result[$date] = $query->whereDate("date", $date)->count();
-        // }
-
-        $positions = Position::all();
+            $result[$date] = $query
+                ->whereHas("rosterStatus", function ($query) {
+                    $query->where("name", "Masuk");
+                })
+                ->whereDate("date", $date)
+                ->count();
+        }
 
         return response()->json([
             "data" => $result,
             "monthReadAble" => $monthReadAble,
-            "rosterStatusInitial" => $rosterStatusInitial,
+            "positionId" => $positionId,
         ]);
     }
 
@@ -293,6 +296,11 @@ class RosterController extends Controller
             $start->addDay();
         }
 
+        // $employee = Employee::find($getData->employee_id);
+        $employee = (object) [
+            "position_id" => 1,
+        ];
+
         foreach ($rosterDailyData as $index => $item) {
             RosterDaily::updateOrCreate(
                 [
@@ -300,6 +308,7 @@ class RosterController extends Controller
                     "date" => Carbon::parse($item["date"])->format("Y-m-d"),
                 ],
                 [
+                    "position_id" => $employee->position_id,
                     "roster_status_id" => $rosterStatusId,
                 ]
             );

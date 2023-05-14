@@ -100,12 +100,14 @@ export default {
   },
   methods: {
     onEdit(form) {
+      this.$store.commit("rosterStatus/CLEAR_FORM");
       this.$store.commit("rosterStatus/INSERT_FORM", {
         form: form,
       });
       this.$bvModal.show("roster_status_form");
     },
     onCreate() {
+      this.$store.commit("rosterStatus/CLEAR_FORM");
       this.$bvModal.show("roster_status_form");
     },
     async onDelete(data) {

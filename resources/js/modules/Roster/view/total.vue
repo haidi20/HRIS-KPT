@@ -24,13 +24,14 @@
         </b-tr>
       </b-thead>
       <b-tbody>
-        <!-- <b-tr>
-          <b-td class="fixed-column">MASUK</b-td>
+        <tr v-for="(position, index) in getPositions" :key="index">
+          <b-td>{{position.name}}</b-td>
           <b-td
             v-for="(date, index) in getDateRange"
             v-bind:key="`data-date-${index}`"
-          >{{ getTotalByInitial("M", date) }}</b-td>
-        </b-tr>-->
+            :style="setBackground(position, getTotalByPosition(position.id, date))"
+          >{{ getTotalByPosition(position.id, date) }}</b-td>
+        </tr>
       </b-tbody>
     </b-table-simple>
   </div>
@@ -41,8 +42,8 @@ import moment from "moment";
 
 export default {
   computed: {
-    getRosterStatuses() {
-      return this.$store.state.rosterStatus.data;
+    getPositions() {
+      return this.$store.state.roster.options.positions;
     },
     getTotal() {
       return this.$store.state.roster.data.total;
@@ -52,22 +53,20 @@ export default {
     },
   },
   watch: {
-    getRosterStatuses(value, oldValue) {
+    getPositions(value, oldValue) {
       if (value.length > 0) {
-        this.$store.dispatch("roster/fetchTotal", {
-          rosterStasuses: value,
-        });
+        this.$store.dispatch("roster/fetchTotal");
       }
     },
   },
   methods: {
-    getTotalByInitial(initial, date = null) {
+    getTotalByPosition(position_id, date = null) {
       const listTotal = this.getTotal;
 
       //   console.info(listTotal);
 
-      if (listTotal[initial] !== undefined) {
-        return listTotal[initial][date];
+      if (listTotal[position_id] !== undefined) {
+        return listTotal[position_id][date];
       } else {
         return null;
       }
@@ -77,6 +76,11 @@ export default {
     },
     setLabelNameDate(date) {
       return moment(date).format("dddd");
+    },
+    setBackground(position, value) {
+      return {
+        backgroundColor: value < position.minimum_employee ? "orange" : null,
+      };
     },
   },
 };

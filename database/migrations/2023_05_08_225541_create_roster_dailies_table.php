@@ -17,6 +17,7 @@ class CreateRosterDailiesTable extends Migration
             $table->id();
             // $table->foreignId('roster_id');
             $table->foreignId('employee_id');
+            $table->foreignId('position_id');
             $table->foreignId('roster_status_id');
             $table->date('date');
             // $table->string('type'); // actual atau plan

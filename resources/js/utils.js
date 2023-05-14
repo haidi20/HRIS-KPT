@@ -39,3 +39,9 @@ export const isMobile = () => {
         return false;
     }
 }
+
+export const checkNull = (value) => {
+    if (value === null) return null;
+
+    return value;
+}

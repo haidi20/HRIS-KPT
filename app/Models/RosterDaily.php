@@ -14,6 +14,7 @@ class RosterDaily extends Model
     protected $appends = ["roster_status_initial", "roster_status_color"];
     protected $fillable = [
         'employee_id',
+        'position_id',
         'date',
         'roster_status_id',
         'created_by',
