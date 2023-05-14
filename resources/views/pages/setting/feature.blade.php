@@ -32,14 +32,18 @@
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
+                                <th>No.</th>
                                 <th>Nama</th>
                                 <th>Deskripsi</th>
-                                <th width="20%"></th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($features as $feature)
                                 <tr>
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td>
                                         {{ $feature->name }}
                                     </td>

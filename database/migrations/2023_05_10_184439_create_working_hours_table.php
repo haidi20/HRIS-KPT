@@ -15,11 +15,11 @@ class CreateWorkingHoursTable extends Migration
     {
         Schema::create('working_hours', function (Blueprint $table) {
             $table->id();
-            $table->string('start_time');
-            $table->string('after_work');
-            $table->string('maximum_delay');
-            $table->string('fastest_time');
-            $table->string('overtime_work');
+            $table->time('start_time')->nullable();
+            $table->time('after_work')->nullable();
+            $table->time('maximum_delay')->nullable();
+            $table->time('fastest_time')->nullable();
+            $table->time('overtime_work')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

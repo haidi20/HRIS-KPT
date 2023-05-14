@@ -30,6 +30,11 @@ class Employee extends Model
         return $this->belongsTo(Position::class, "position_id", "id");
     }
 
+    public function departmen()
+    {
+        return $this->belongsTo(Departmen::class, "departmen_id", "id");
+    }
+
     public function employee_type()
     {
         return $this->belongsTo(EmployeeType::class, "employee_type_id", "id");

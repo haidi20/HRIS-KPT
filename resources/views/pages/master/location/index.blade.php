@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.position.partials.modal')
+    @include('pages.master.location.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">

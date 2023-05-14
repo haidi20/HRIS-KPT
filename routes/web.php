@@ -37,6 +37,8 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
 use App\Http\Controllers\WorkingHourController;
+use App\Http\Controllers\FingerToolController;
+use App\Http\Controllers\BpjsCalculationController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -153,6 +155,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('store', [LocationController::class, "store"])->name("store");
             Route::delete('delete', [LocationController::class, "destroy"])->name("delete");
         });
+        Route::prefix('finger-tool')->name("fingerTool.")->group(function () {
+            Route::get('', [FingerToolController::class, "index"])->name("index");
+            Route::post('store', [FingerToolController::class, "store"])->name("store");
+            Route::delete('delete', [FingerToolController::class, "destroy"])->name("delete");
+        });
         Route::prefix('customer')->name("customer.")->group(function () {
             Route::get('', [CustomerController::class, "index"])->name("index");
             Route::post('store', [CustomerController::class, "store"])->name("store");
@@ -169,6 +176,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('employee')->name("employee.")->group(function () {
             Route::get('', [EmployeeController::class, "index"])->name("index");
+            Route::get('get-departmens/{companyId}', [EmployeeController::class, "getDepartmens"])->name("getDepartmen");
+            Route::get('get-positions/{departmenId}', [EmployeeController::class, "getPositions"])->name("getPosition");
             Route::post('store', [EmployeeController::class, "store"])->name("store");
             Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
         });
@@ -200,6 +209,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('', [FeatureController::class, "index"])->name("index");
             Route::post('store', [FeatureController::class, "store"])->name("store");
             Route::delete('delete', [FeatureController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('bpjs-calculation')->name("bpjsCalculation.")->group(function () {
+            Route::get('', [BpjsCalculationController::class, "index"])->name("index");
+            Route::post('store', [BpjsCalculationController::class, "store"])->name("store");
+            Route::delete('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
         });
         Route::prefix("permission")->name("permission.")->group(function () {
             Route::get('{featureId}', [PermissionController::class, "index"])->name("index");

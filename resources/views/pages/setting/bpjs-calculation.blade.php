@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.master.position.partials.modal')
+    @include('pages.setting.partials.bpjs-calculation-modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Jabatan</h3>
+                    <h3>Perhitungan Bpjs</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Karyawan</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Jabatan</li>
+                            {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
+                            <li class="breadcrumb-item active" aria-current="page">Perhitungan Bpjs</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,53 +22,49 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <span class="fs-4 fw-bold">Data Jabatan</span>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                    Data Perhitungan Bpjs
+                    {{-- <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus text-white-50"></i> Tambah Jabatan
-                    </button>
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Perhitungan Bpjs
+                    </button> --}}
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
-                                <th width="5%">No.</th>
-                                <th>Departemen</th>
+                                <th>No.</th>
                                 <th>Nama</th>
-                                <th>Keterangan</th>
-                                <th>Minimum Jumlah Karyawan</th>
-                                <th width="15%">Aksi</th>
+                                <th>Persenan Dari Perusahaan</th>
+                                <th>Perhitungan Dari Perusahaan</th>
+                                <th width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($positions as $position)
+                            @foreach ($bpjs_calculations as $bpjs_calculation)
                                 <tr>
                                     <td>
                                         {{ $loop->iteration }}
                                     </td>
                                     <td>
-                                        {{ $position->departmen->name }}
+                                        {{ $bpjs_calculation->name }}
                                     </td>
                                     <td>
-                                        {{ $position->name }}
+                                        {{ $bpjs_calculation->company_percent }}
                                     </td>
                                     <td>
-                                        {{ $position->description }}
+                                        {{ $bpjs_calculation->company_nominal }}
                                     </td>
-                                    <td>
-                                        {{ $position->minimum_employee }}
-                                    </td>
-                                    <td>
-                                        @can('ubah jabatan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $position }})"
+                                    <td class="flex flex-row justify-content-around">
+                                        @can('ubah perhitungan bpjs')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $bpjs_calculation }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus jabatan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $position }})"
+                                        {{-- @can('hapus perhitungan bpjs')
+                                            <a href="javascript:void(0)" onclick="onDelete({{ $bpjs_calculation }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>
-                                        @endcan
+                                        @endcan --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -90,25 +86,15 @@
     <script src="assets/static/js/pages/dashboard.js"></script> --}}
 
     <script>
-        const initialState = {
-            positions: [],
-        };
-
-        let state = {
-            ...initialState
-        };
-
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            state.positions = {!! json_encode($positions) !!};
-            setupSelect();
             send();
         });
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Jabatan");
+            $("#titleForm").html("Tambah Perhitungan Bpjs");
             onModalAction("formModal", "show");
         }
 
@@ -117,16 +103,17 @@
 
             $("#id").val(data.id);
             $("#name").val(data.name);
-            $("#description").val(data.description);
+            $("#company_percent").val(data.company_percent);
+            $("#company_nominal").val(data.company_nominal);
 
-            $("#titleForm").html("Ubah Jabatan");
+            $("#titleForm").html("Ubah Perhitungan Bpjs");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data jabatan <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data perhitungan bpjs <h2><b> ${data.name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -136,7 +123,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('master.position.delete') }}",
+                        url: "{{ route('setting.bpjsCalculation.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -193,7 +180,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('master.position.store') }}",
+                    url: "{{ route('setting.bpjsCalculation.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,
@@ -245,10 +232,6 @@
                     }
                 });
             });
-        }
-
-        function setupSelect() {
-        $(".select2").select2();
         }
 
         function clearForm() {

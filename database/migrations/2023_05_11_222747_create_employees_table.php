@@ -21,17 +21,17 @@ class CreateEmployeesTable extends Migration
             $table->string('npwp')->nullable();
             $table->string('nik')->nullable();
             $table->string('bpjs_number')->nullable();
-            $table->string('nama_lengkap')->nullable();
-            $table->string('tempat_lahir')->nullable();
-            $table->date('tanggal_lahir')->nullable();
-            $table->string('agama')->nullable();
-            $table->string('alamat')->nullable();
-            $table->string('telepon')->nullable();
-            $table->string('pendidikan_terakhir')->nullable();
-            $table->string('keahlian')->nullable();
-            $table->string('foto')->nullable();
-            $table->date('tanggal_masuk')->nullable();
-            $table->date('tanggal_keluar')->nullable();
+            $table->string('name')->nullable();
+            $table->string('birth_place')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('religion')->nullable();
+            $table->string('address')->nullable();
+            $table->string('latest_education')->nullable();
+            $table->string('expertise')->nullable();
+            $table->string('photo')->nullable();
+            $table->date('enter_date')->nullable();
+            $table->date('out_date')->nullable();
 
             // DATA KEPEGAWAIAN
             $table->unsignedBigInteger('company_id')->nullable();
@@ -39,21 +39,19 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('employee_type_id')->nullable();
             $table->unsignedBigInteger('location_id')->nullable();
 
-            $table->enum('bpjs', ['Y', 'N'])->default('Y');
-            $table->enum('jkk', ['Y', 'N'])->default('Y');
-            $table->enum('jkm', ['Y', 'N'])->default('Y');
-            $table->enum('jht', ['Y', 'N'])->default('Y');
-            $table->enum('ip', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_tk', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_tk_pt', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_kes', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_kes_pt', ['Y', 'N'])->default('Y');
+            $table->enum('training', ['Y', 'N'])->default('Y');
 
             // DATA KELUARGA
-            $table->string('nama_ayah')->nullable();
-            $table->string('telepon_ayah')->nullable();
-            $table->string('nama_ibu')->nullable();
-            $table->string('telepon_ibu')->nullable();
-            $table->string('nama_istri')->nullable();
-            $table->string('telepon_istri')->nullable();
-            $table->string('nama_saudara')->nullable();
-            $table->string('telepon_saudara')->nullable();
+            // $table->string('father_name')->nullable();
+            // $table->string('father_phone')->nullable();
+            // $table->string('mother_name')->nullable();
+            // $table->string('mother_phone')->nullable();
+            // $table->string('wife_name')->nullable();
+            // $table->string('wife_phone')->nullable();
 
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

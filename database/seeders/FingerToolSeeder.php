@@ -1,0 +1,32 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Position;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class FingerToolSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('finger_tools')->insert(
+            [
+                [
+                    'name' => 'Alat Finger SITE A',
+                    'serial_number' => 'Fio66208021230850',
+                ],
+                [
+                    'name' => 'Alat Finger SITE B',
+                    'serial_number' => 'Fio66208022030036',
+                ],
+            ],
+        );
+    }
+}

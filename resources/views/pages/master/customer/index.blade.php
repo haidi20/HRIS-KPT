@@ -51,12 +51,12 @@
                                 {{ $customer->company->name }}
                             </td>
                             <td>
-                                @can('ubah lokasi')
+                                @can('ubah customer')
                                 <a href="javascript:void(0)" onclick="onEdit({{ $customer }})"
                                     class="btn btn-sm btn-info">Ubah
                                 </a>
                                 @endcan
-                                @can('hapus lokasi')
+                                @can('hapus customer')
                                 <a href="javascript:void(0)" onclick="onDelete({{ $customer }})"
                                     class="btn btn-sm btn-danger">Hapus
                                 </a>

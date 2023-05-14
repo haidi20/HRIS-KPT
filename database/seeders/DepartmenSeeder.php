@@ -21,8 +21,8 @@ class DepartmenSeeder extends Seeder
                 // PT KARYA PACIFIC TEKNIK
                 [
                     'code' => 'PT-01',
-                    'name' => 'Manager',
-                    'description' => 'Departemen Manager',
+                    'name' => 'Pengawas/ Supervisor',
+                    'description' => 'Departemen Pengawas/Supervisor',
                     'company_id' => 1,
                 ],
                 [
@@ -40,7 +40,7 @@ class DepartmenSeeder extends Seeder
                 [
                     'code' => 'PT-04',
                     'name' => 'Mekanik/ Mecanic',
-                    'description' => 'Departemen Mekanik/ Mecanic',
+                    'description' => 'Departemen Mekanik/Mecanic',
                     'company_id' => 1,
                 ],
                 [
@@ -63,30 +63,18 @@ class DepartmenSeeder extends Seeder
                 ],
                 [
                     'code' => 'PT-08',
-                    'name' => 'Rep. Balon',
-                    'description' => 'Departemen Rep. Balon',
-                    'company_id' => 1,
-                ],
-                [
-                    'code' => 'PT-09',
-                    'name' => 'Rep. Balon',
-                    'description' => 'Departemen Rep. Balon',
-                    'company_id' => 1,
-                ],
-                [
-                    'code' => 'PT-10',
                     'name' => 'Airbag',
                     'description' => 'Departemen Airbag',
                     'company_id' => 1,
                 ],
                 [
-                    'code' => 'PT-11',
+                    'code' => 'PT-09',
                     'name' => 'Driver',
                     'description' => 'Departemen Driver',
                     'company_id' => 1,
                 ],
                 [
-                    'code' => 'PT-12',
+                    'code' => 'PT-10',
                     'name' => 'Operator',
                     'description' => 'Departemen Operator',
                     'company_id' => 1,
@@ -113,8 +101,8 @@ class DepartmenSeeder extends Seeder
                 ],
                 [
                     'code' => 'CV-04',
-                    'name' => 'Pengawas/ Supervisor',
-                    'description' => 'Departemen Pengawas/ Supervisor',
+                    'name' => 'Pengawas/Supervisor',
+                    'description' => 'Departemen Pengawas/Supervisor',
                     'company_id' => 2,
                 ],
                 [
@@ -137,42 +125,48 @@ class DepartmenSeeder extends Seeder
                 ],
                 [
                     'code' => 'CV-08',
+                    'name' => 'Gudang',
+                    'description' => 'Departemen Gudang',
+                    'company_id' => 2,
+                ],
+                [
+                    'code' => 'CV-09',
                     'name' => 'Bubut',
                     'description' => 'Departemen Bubut',
                     'company_id' => 2,
                 ],
                 [
-                    'code' => 'CV-09',
+                    'code' => 'CV-10',
                     'name' => 'Mekanik/ Mecanic',
                     'description' => 'Departemen Mekanik/ Mecanic',
                     'company_id' => 2,
                 ],
                 [
-                    'code' => 'CV-10',
+                    'code' => 'CV-11',
                     'name' => 'Electric',
                     'description' => 'Departemen Electric',
                     'company_id' => 2,
                 ],
                 [
-                    'code' => 'CV-11',
+                    'code' => 'CV-12',
                     'name' => 'Operator',
                     'description' => 'Departemen Operator',
                     'company_id' => 2,
                 ],
                 [
-                    'code' => 'CV-12',
+                    'code' => 'CV-13',
                     'name' => 'Welder',
                     'description' => 'Departemen Welder',
                     'company_id' => 2,
                 ],
                 [
-                    'code' => 'CV-13',
+                    'code' => 'CV-14',
                     'name' => 'Fitter',
                     'description' => 'Departemen Fitter',
                     'company_id' => 2,
                 ],
                 [
-                    'code' => 'CV-14',
+                    'code' => 'CV-15',
                     'name' => 'Helper',
                     'description' => 'Departemen Helper',
                     'company_id' => 2,

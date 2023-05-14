@@ -20,5 +20,11 @@ class DatabaseSeeder extends Seeder
         $this->call(RosterStatusSeeder::class);
         $this->call(CompanySeeder::class);
         $this->call(DepartmenSeeder::class);
+        $this->call(PositionSeeder::class);
+        $this->call(WorkingHourSeeder::class);
+        $this->call(LocationSeeder::class);
+        $this->call(BargeSeeder::class);
+        $this->call(FingerToolSeeder::class);
+        $this->call(BpjsCalculationSeeder::class);
     }
 }

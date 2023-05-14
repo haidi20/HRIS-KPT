@@ -290,6 +290,14 @@
                         </a>
                     </li>
                 @endcan
+                @can('lihat alat finger')
+                    <li class="sidebar-item {{ isActive('master/finger-tool') }}">
+                        <a href="{{ route('master.fingerTool.index') }}" class='sidebar-link'>
+                            <i class="bi bi-clipboard2-check"></i>
+                            <span>Alat Absen</span>
+                        </a>
+                    </li>
+                @endcan
                 @php
                     $allPermissionUser = ['lihat pengguna', 'lihat grup pengguna'];
                     $allPermissionSetting = ['lihat penyesuaian gaji', 'lihat jam kerja', 'lihat pengguna', 'lihat grup pengguna', 'lihat fitur'];
@@ -318,14 +326,40 @@
                         </ul>
                     </li>
                 @endcanany
-                @can('lihat fitur')
+                @php
+                $allPermissionWork = ['lihat fitur', 'lihat perhitungan bpjs'];
+                @endphp
+                @canany($allPermissionWork)
+                <li
+                    class="sidebar-item {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }} has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="bi bi-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+
+                    <ul class="submenu {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }}"
+                        style="{{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'display: block;' : 'display: none;' }}">
+                        @can('lihat fitur')
+                        <li class="submenu-item {{ isActive('master/feature') }}">
+                            <a href="{{ route('setting.feature.index') }}">Fitur</a>
+                        </li>
+                        @endcan
+                        @can('lihat perhitungan bpjs')
+                        <li class="submenu-item {{ isActive('master/bpjs-calculation') }}">
+                            <a href="{{ route('setting.bpjsCalculation.index') }}">Perhitungan BPJS</a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+                @endcanany
+                {{-- @can('lihat fitur')
                     <li class="sidebar-item {{ isActive('setting/feature') }}">
                         <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
                             <i class="bi bi-menu-up"></i>
                             <span>Fitur</span>
                         </a>
                     </li>
-                @endcan
+                @endcan --}}
             </ul>
         </div>
     </div>

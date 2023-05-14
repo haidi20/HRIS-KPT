@@ -42,12 +42,14 @@ class FeatureSeeder extends Seeder
             ["name" => "Jenis Pekerjaan", "description" => ""],
             ["name" => "Karyawan", "description" => ""],
             ["name" => "Pelanggan", "description" => ""],
+            ["name" => "Alat Finger", "description" => ""],
             // setting
             ["name" => "Penyesuaian Gaji", "description" => "Manajemen penambahan dan pengurangan gaji karyawan"],
             ["name" => "Jam Kerja", "description" => "Manajemen Jam Kerja Karyawan"],
             ["name" => "Pengguna", "description" => "Manajemen Data Pengguna"],
             ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
             ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
+            ["name" => "Perhitungan Bpjs", "description" => "Manajemen Data Perhitungan Bpjs"],
             ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
 
         ]);
