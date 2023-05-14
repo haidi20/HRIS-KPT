@@ -36,6 +36,7 @@ const Roster = {
                 { name: "Sabtu", id: "Saturday" },
                 { name: "Minggu", id: "Sunday" },
             ],
+            positions: [],
         },
         loading: {
             table: false,
@@ -82,6 +83,9 @@ const Roster = {
                 date_vacation: dateVacation,
             };
         },
+        INSERT_OPTION_POSITION(state, payload) {
+            state.options.positions = payload.positions;
+        },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
         },
@@ -118,6 +122,30 @@ const Roster = {
                     console.info(err);
                 });
         },
+        fetchPosition: async (context, payload) => {
+            const params = {
+                // ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/position/fetch-data`, {
+                    params: { ...params },
+                }
+                )
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_OPTION_POSITION", {
+                        positions: data.data,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
         fetchTotal: async (context, payload) => {
             const params = {
                 // ...context.state.params,
@@ -150,7 +178,7 @@ const Roster = {
 
                                 const data = responses.data.data;
 
-                                context.commit("INSERT_TOTAL", { initial: item.initial, data: data });
+                                // context.commit("INSERT_TOTAL", { initial: item.initial, data: data });
 
                                 resolve(item);
                             }).then(roster_status => {
@@ -161,7 +189,7 @@ const Roster = {
 
             await Promise.all(promises)
                 .then((result) => {
-                    console.info(context.state.data.total);
+                    // console.info(context.state.data.total);
                 });
 
         },

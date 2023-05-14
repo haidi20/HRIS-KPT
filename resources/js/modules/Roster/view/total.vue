@@ -24,41 +24,13 @@
         </b-tr>
       </b-thead>
       <b-tbody>
-        <b-tr>
+        <!-- <b-tr>
           <b-td class="fixed-column">MASUK</b-td>
           <b-td
             v-for="(date, index) in getDateRange"
             v-bind:key="`data-date-${index}`"
           >{{ getTotalByInitial("M", date) }}</b-td>
-        </b-tr>
-        <b-tr>
-          <b-td class="fixed-column">OFF</b-td>
-          <b-td
-            v-for="(date, index) in getDateRange"
-            v-bind:key="`data-date-${index}`"
-          >{{ getTotalByInitial("OFF", date) }}</b-td>
-        </b-tr>
-        <b-tr>
-          <b-td class="fixed-column">CUTI</b-td>
-          <b-td
-            v-for="(date, index) in getDateRange"
-            v-bind:key="`data-date-${index}`"
-          >{{ getTotalByInitial("C", date) }}</b-td>
-        </b-tr>
-        <b-tr>
-          <b-td class="fixed-column">SAKIT</b-td>
-          <b-td
-            v-for="(date, index) in getDateRange"
-            v-bind:key="`data-date-${index}`"
-          >{{ getTotalByInitial("S", date) }}</b-td>
-        </b-tr>
-        <b-tr>
-          <b-td class="fixed-column">TOTAL</b-td>
-          <b-td
-            v-for="(date, index) in getDateRange"
-            v-bind:key="`data-date-${index}`"
-          >{{ getTotalByInitial("ALL", date) }}</b-td>
-        </b-tr>
+        </b-tr>-->
       </b-tbody>
     </b-table-simple>
   </div>

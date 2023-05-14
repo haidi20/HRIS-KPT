@@ -4,6 +4,7 @@ use App\Http\Controllers\ApprovalAgreementController;
 use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use Illuminate\Http\Request;
@@ -56,5 +57,8 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-pph21', [PayrollController::class, "fetchPph21"])->name('fetchPph21');
         Route::get('fetch-salary', [PayrollController::class, "fetchSalary"])->name('fetchSalary');
         Route::get('fetch-information', [PayrollController::class, "fetchInformation"])->name('fetchInformation');
+    });
+    Route::prefix('position')->name('position.')->group(function () {
+        Route::get('fetch-data', [PositionController::class, "fetchData"])->name('fetchData');
     });
 });

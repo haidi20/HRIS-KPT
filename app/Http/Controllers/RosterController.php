@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RosterExport;
+use App\Models\Position;
 use App\Models\Roster;
 use App\Models\RosterDaily;
 use App\Models\RosterStatus;
@@ -104,20 +105,22 @@ class RosterController extends Controller
 
         $rosterStatusInitial = request("roster_status_initial", $setRosterStatusInitial);
 
-        $rosterStatusId = RosterStatus::where("initial", $rosterStatusInitial)->first();
-        $rosterStatusId = $rosterStatusId ? $rosterStatusId->id : 0;
+        // $rosterStatusId = RosterStatus::where("initial", $rosterStatusInitial)->first();
+        // $rosterStatusId = $rosterStatusId ? $rosterStatusId->id : 0;
 
-        $listDriverId = [1];
+        // $listDriverId = [1];
 
-        foreach ($dateRange as $index => $date) {
-            $query = RosterDaily::whereIn("employee_id", $listDriverId);
+        // foreach ($dateRange as $index => $date) {
+        //     $query = RosterDaily::whereIn("employee_id", $listDriverId);
 
-            if ($rosterStatusInitial != "ALL") {
-                $query = $query->where("roster_status_id", $rosterStatusId);
-            }
+        //     if ($rosterStatusInitial != "ALL") {
+        //         $query = $query->where("roster_status_id", $rosterStatusId);
+        //     }
 
-            $result[$date] = $query->whereDate("date", $date)->count();
-        }
+        //     $result[$date] = $query->whereDate("date", $date)->count();
+        // }
+
+        $positions = Position::all();
 
         return response()->json([
             "data" => $result,

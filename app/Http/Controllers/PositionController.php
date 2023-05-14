@@ -12,12 +12,21 @@ use Spatie\Permission\Models\Permission;
 
 class PositionController extends Controller
 {
-     public function index()
+    public function index()
     {
         $positions = Position::all();
         $departmens = Departmen::all();
 
         return view("pages.master.position.index", compact("positions", "departmens"));
+    }
+
+    public function fetchData()
+    {
+        $data = Position::all();
+
+        return response()->json([
+            "data" => $data,
+        ]);
     }
 
     public function store(Request $request)
