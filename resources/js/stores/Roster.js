@@ -1,13 +1,15 @@
 import axios from "axios";
 import moment from "moment";
 
+import { checkNull } from "../utils";
+
 const defaultForm = {
     employee_id: null,
     employee_name: null,
     work_schedule: null,
     day_off_one: null,
     day_off_two: null,
-    month: new Date,
+    month: new Date(),
     date_vacation: [
         null,
         null,
@@ -36,6 +38,7 @@ const Roster = {
                 { name: "Sabtu", id: "Saturday" },
                 { name: "Minggu", id: "Sunday" },
             ],
+            positions: [],
         },
         loading: {
             table: false,
@@ -56,11 +59,12 @@ const Roster = {
         INSERT_TOTAL(state, payload) {
             state.data.total = {
                 ...state.data.total,
-                [payload.initial]: payload.data,
+                [payload.position_id]: payload.data,
             }
         },
         INSERT_FORM(state, payload) {
-            const getForm = state.data.main.find(item => item.id == payload.id);
+            // const getForm = state.data.main.find(item => item.id == payload.id);
+            const getForm = payload.data;
             // console.info(getForm);
 
             const dateVacation = getForm.date_vacation[0] != null ? [
@@ -78,9 +82,12 @@ const Roster = {
                 work_schedule: getForm.work_schedule,
                 day_off_one: getForm.day_off_one,
                 day_off_two: getForm.day_off_two,
-                month: new Date(getForm.month),
+                month: getForm.month != null ? new Date(moment(getForm.month)) : new Date(),
                 date_vacation: dateVacation,
             };
+        },
+        INSERT_OPTION_POSITION(state, payload) {
+            state.options.positions = payload.positions;
         },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
@@ -118,39 +125,70 @@ const Roster = {
                     console.info(err);
                 });
         },
+        fetchPosition: async (context, payload) => {
+            const params = {
+                // ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/position/fetch-data`, {
+                    params: { ...params },
+                }
+                )
+                .then((responses) => {
+                    // console.info(responses);
+                    let data = responses.data;
+
+                    data.data = [
+                        ...data.data,
+                        { id: "all", name: "Semua" },
+                    ];
+
+                    context.commit("INSERT_OPTION_POSITION", {
+                        positions: data.data,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
         fetchTotal: async (context, payload) => {
             const params = {
                 // ...context.state.params,
                 date_filter: moment(context.state.params.date_filter).format("Y-MM"),
             }
 
-            let rosterStasuses = payload.rosterStasuses;
-            rosterStasuses = [
-                ...rosterStasuses,
-                {
-                    id: 0,
-                    initial: "ALL",
-                },
-            ];
+            const positions = context.state.options.positions;
+            // positions = [
+            //     ...positions,
+            //     {
+            //         id: "all",
+            //         name: "ALL",
+            //     },
+            // ];
 
-            const promises = rosterStasuses
+            console.info(positions);
+
+            const promises = positions
                 .map(async (item, index) => {
-                    context.commit("INSERT_TOTAL", { initial: item, data: [] });
+                    context.commit("INSERT_TOTAL", { position_id: item.id, data: [] });
 
                     return new Promise((resolve, reject) => {
                         axios
                             .get(`${context.state.base_url}/api/v1/roster/fetch-total`, {
                                 params: {
                                     ...params,
-                                    roster_status_initial: item.initial,
+                                    position_id: item.id,
                                 },
                             })
                             .then((responses) => {
-                                // console.info(responses);
+                                console.info(responses);
 
                                 const data = responses.data.data;
 
-                                context.commit("INSERT_TOTAL", { initial: item.initial, data: data });
+                                context.commit("INSERT_TOTAL", { position_id: item.id, data: data });
 
                                 resolve(item);
                             }).then(roster_status => {
@@ -161,7 +199,7 @@ const Roster = {
 
             await Promise.all(promises)
                 .then((result) => {
-                    console.info(context.state.data.total);
+                    // console.info(context.state.data.total);
                 });
 
         },

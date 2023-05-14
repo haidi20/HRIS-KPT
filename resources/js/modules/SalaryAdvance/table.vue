@@ -97,6 +97,9 @@ export default {
   max-height: 500px;
   overflow-y: scroll;
 }
+.place-data::-webkit-scrollbar {
+  display: none;
+}
 .place-item {
   border-bottom: 1px solid #dbdfea;
   padding: 0.5rem;

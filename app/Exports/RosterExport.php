@@ -2,43 +2,36 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\WithTitle;
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithProperties;
+use App\Exports\Sheets\RosterMainSheet;
+use App\Exports\Sheets\RosterTotalSheet;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class RosterExport implements FromView, WithTitle, WithStyles, ShouldAutoSize
+class RosterExport implements WithMultipleSheets
 {
 
-    protected $data;
-    protected $dates;
+    private $main;
+    private $total;
+    private $date;
 
-    function __construct($data, $dates)
+
+    function __construct($main, $total, $date)
     {
-        $this->data = $data;
-        $this->dates = $dates;
+        $this->main = $main;
+        $this->total = $total;
+        $this->date = $date;
     }
 
-    public function title(): string
+    public function sheets(): array
     {
-        return 'Roster';
-    }
+        $sheets = [];
 
-    public function view(): View
-    {
-        return view('pages.roster.partials.export', [
-            'data' => $this->data,
-            'dates' => $this->dates,
-        ]);
-    }
+        $main = $this->main;
+        $total = $this->total;
+        $date = $this->date;
 
-    public function styles(Worksheet $sheet)
-    {
-        return [
-            1 => ['font' => ['bold' => true]]
-        ];
+        $sheets[] = new RosterMainSheet($main, $date);
+        $sheets[] = new RosterTotalSheet($total, $date);
+
+        return $sheets;
     }
 }

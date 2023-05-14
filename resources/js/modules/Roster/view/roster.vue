@@ -11,18 +11,25 @@
         </b-row>
         <b-row>
           <b-col>
-            <FilterData />
+            <template v-if="tab_name != 'status'">
+              <FilterData />
+            </template>
+            <template v-else>
+              <b-row style="height: 58px">
+                <b-col cols></b-col>
+              </b-row>
+            </template>
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3" active>
-          <b-tab title="Utama">
+        <b-tabs content-class="mt-3">
+          <b-tab title="Utama" @click="onChangeTab('main')">
             <Main />
           </b-tab>
-          <!-- <b-tab title="Total">
+          <b-tab title="Total" @click="onChangeTab('total')" active>
             <Total />
-          </b-tab>-->
-          <b-tab title="Status">
+          </b-tab>
+          <b-tab title="Status" @click="onChangeTab('status')">
             <Status />
           </b-tab>
         </b-tabs>
@@ -45,6 +52,7 @@ export default {
     return {
       title: "Roster",
       version: "v1.1",
+      tab_name: "main",
     };
   },
   components: { Main, Status, Total, FilterData },
@@ -60,7 +68,13 @@ export default {
     });
 
     this.$store.dispatch("roster/fetchData");
+    this.$store.dispatch("roster/fetchPosition");
     this.$store.dispatch("rosterStatus/fetchData");
+  },
+  methods: {
+    onChangeTab(value) {
+      this.tab_name = value;
+    },
   },
 };
 </script>

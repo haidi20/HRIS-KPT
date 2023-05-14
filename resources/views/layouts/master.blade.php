@@ -21,11 +21,11 @@
     @yield('style')
 </head>
 
-<body>
+<body class="full-height">
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
-    <div id="app">
+    <div id="app" class="full-height">
         @include('layouts.sidebar')
-        <div id="main" class='layout-navbar'>
+        <div id="main" class='layout-navbar full-height'>
             @include('layouts.header')
             <div id="main-content" class="pt-0">
                 @yield('content')
