@@ -21,7 +21,7 @@
       <br />
       <b-row>
         <b-col>
-          <b-button variant="danger" @click="onCloseModal()">Batal</b-button>
+          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
           <b-button style="float: right" variant="success" @click="onSend()">Simpan</b-button>
         </b-col>
       </b-row>

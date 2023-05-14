@@ -25,14 +25,24 @@ class UserSeeder extends Seeder
 
         $superadmin->assignRole('Super Admin');
 
-        $superadmin = User::create([
+        $admin = User::create([
             'name' => 'admin',
-            'email' => 'admin@addmin.com',
+            'email' => 'admin@email.com',
             'password' => Hash::make('samarinda'),
             'role_id' => 2,
             'status' => true,
         ]);
 
-        $superadmin->assignRole('Admin');
+        $admin->assignRole('Admin');
+
+        $hrd = User::create([
+            'name' => 'arini',
+            'email' => 'hrd@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 3,
+            'status' => true,
+        ]);
+
+        $hrd->assignRole('HRD');
     }
 }

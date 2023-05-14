@@ -23,13 +23,13 @@ class RoleSeeder extends Seeder
         $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
         $roleSuperAdmin->givePermissionTo(Permission::all());
 
-        // "lihat pengguna", "lihat grup pengguna",
         $permissionPrivate = Config("library.permission_private");
         $permissionAdmin = Permission::whereNotIn("name", $permissionPrivate)->pluck("name")->toArray();
         $permissionAdmin = array_map('strtolower', $permissionAdmin);
-        $roleSuperAdmin = Role::create(['name' => 'Admin']);
-        $roleSuperAdmin->givePermissionTo($permissionAdmin);
+        $roleAdmin = Role::create(['name' => 'Admin']);
+        $roleAdmin->givePermissionTo($permissionAdmin);
 
-        // $tRole->givePermissionTo(["lihat {$menu}"]);
+        $roleHrd = Role::create(['name' => 'HRD']);
+        // $roleHrd->givePermissionTo([]);
     }
 }

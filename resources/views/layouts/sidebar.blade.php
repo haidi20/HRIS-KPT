@@ -188,7 +188,8 @@
                 @canany($allPermissionMains)
                     <li class="sidebar-title has-sub">Utama</li>
                 @endcanany
-                <li class="sidebar-item {{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'active' : '' }} has-sub">
+                <li
+                    class="sidebar-item {{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'active' : '' }} has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-people"></i>
                         <span>Karyawan</span>
@@ -206,16 +207,16 @@
                             </li>
                         @endcan
                         @can('lihat departemen')
-                        <li class="submenu-item {{ isActive('master/departmen') }}">
-                            {{-- <a href="{{ route('master.departmen.index') }}">Jabatan</a> --}}
-                            <a href="{{ route('master.departmen.index') }}">Departemen</a>
-                        </li>
+                            <li class="submenu-item {{ isActive('master/departmen') }}">
+                                {{-- <a href="{{ route('master.departmen.index') }}">Jabatan</a> --}}
+                                <a href="{{ route('master.departmen.index') }}">Departemen</a>
+                            </li>
                         @endcan
                         @can('lihat jabatan')
-                        <li class="submenu-item {{ isActive('master/position') }}">
-                            {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
-                            <a href="{{ route('master.position.index') }}">Jabatan</a>
-                        </li>
+                            <li class="submenu-item {{ isActive('master/position') }}">
+                                {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
+                                <a href="{{ route('master.position.index') }}">Jabatan</a>
+                            </li>
                         @endcan
                     </ul>
                 </li>
@@ -298,7 +299,8 @@
                     <li class="sidebar-title has-sub">Pengaturan</li>
                 @endcanany
                 @canany($allPermissionUser)
-                    <li class="sidebar-item {{ Request::is('setting/user') || Request::is('setting/role') ? 'active' : '' }} has-sub">
+                    <li
+                        class="sidebar-item {{ Request::is('setting/user') || Request::is('setting/role') ? 'active' : '' }} has-sub">
                         <a href="#" class="sidebar-link">
                             <i class="bi bi-people"></i>
                             <span>Pengguna</span>
@@ -323,6 +325,14 @@
                         <a href="{{ route('setting.feature.index') }}" class='sidebar-link'>
                             <i class="bi bi-menu-up"></i>
                             <span>Fitur</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('lihat tingkat persetujuan')
+                    <li class="sidebar-item {{ isActive('setting/approvalLevel') }}">
+                        <a href="{{ route('setting.approvalLevel.index') }}" class='sidebar-link'>
+                            <i class="bi bi-menu-up"></i>
+                            <span>Tingkat Persetujuan</span>
                         </a>
                     </li>
                 @endcan

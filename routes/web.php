@@ -180,6 +180,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("setting")->name("setting.")->group(function () {
         Route::prefix('approval-level')->name("approvalLevel.")->group(function () {
             Route::get('', [ApprovalLevelController::class, "index"])->name("index");
+            Route::post("store", [ApprovalLevelController::class, 'store'])->name("store");
         });
         Route::prefix('user')->name("user.")->group(function () {
             Route::get('', [UserController::class, "index"])->name("index");

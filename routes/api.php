@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ApprovalAgreementController;
+use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\RosterController;
@@ -23,6 +25,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix("v1")->name("api.")->group(function () {
+    Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
+        Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");
+        Route::get("select-autorizeds", [ApprovalLevelController::class, "selectAuthorizeds"])->name("selectAuthorizeds");
+        Route::get("select-approval-level", [ApprovalLevelController::class, "selectApprovalLevel"])->name("selectApprovalLevel");
+
+        Route::post("delete", [ApprovalLevelController::class, "destroy"])->name("delete");
+    });
+    Route::prefix("approval-agreement")->name("approvalAgreement.")->group(function () {
+        Route::get("approve", [ApprovalAgreementController::class, "approve"])->name("approve");
+        Route::get("history", [ApprovalAgreementController::class, "history"])->name("history");
+        Route::get("all-hiistory", [ApprovalAgreementController::class, "allHistory"])->name("allHistory");
+    });
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('fetch-data', [AttendanceController::class, "fetchData"])->name('fetchData');
         Route::post('store', [AttendanceController::class, "store"])->name('store');
