@@ -15,13 +15,13 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3" active>
+        <b-tabs content-class="mt-3">
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <!-- <b-tab title="Total">
+          <b-tab title="Total" active>
             <Total />
-          </b-tab>-->
+          </b-tab>
           <b-tab title="Status">
             <Status />
           </b-tab>
@@ -60,6 +60,7 @@ export default {
     });
 
     this.$store.dispatch("roster/fetchData");
+    this.$store.dispatch("roster/fetchPosition");
     this.$store.dispatch("rosterStatus/fetchData");
   },
 };

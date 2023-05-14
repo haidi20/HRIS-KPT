@@ -25,7 +25,7 @@
       <template v-slot:tbody="{ filteredData, currentPage }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
           <b-td nowrap>
-            <b-button variant="info" size="sm" @click="onEdit(item.id)">Ubah</b-button>
+            <b-button variant="info" size="sm" @click="onEdit(item)">Ubah</b-button>
           </b-td>
           <b-td nowrap>{{ item.employee_name }}</b-td>
           <b-td nowrap>{{ item.position_name }}</b-td>
@@ -117,8 +117,8 @@ export default {
     },
   },
   methods: {
-    onEdit(id) {
-      this.$store.commit("roster/INSERT_FORM", { id: id });
+    onEdit(data) {
+      this.$store.commit("roster/INSERT_FORM", { data });
       this.$bvModal.show("roster_form");
     },
     getNoTable(index, currentPage, perPage) {

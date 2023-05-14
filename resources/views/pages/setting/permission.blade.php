@@ -224,7 +224,8 @@
         }
 
         function clearForm() {
-            //
+            $("#name").val("");
+            $("#description").val("");
         }
     </script>
 @endsection

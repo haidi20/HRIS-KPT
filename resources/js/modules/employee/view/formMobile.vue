@@ -2,6 +2,23 @@
   <div>
     <b-row>
       <b-col cols>
+        <b-form-group label="Jabatan" label-for="position_id" class>
+          <VueSelect
+            id="position_id"
+            class="cursor-pointer"
+            v-model="form.position_id"
+            placeholder="Pilih Jabatan"
+            :options="getOptionPositions"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
         <b-form-group label="Karyawan" label-for="employee_id" class>
           <VueSelect
             id="employee_id"
@@ -33,6 +50,9 @@ export default {
     VueSelect,
   },
   computed: {
+    getOptionPositions() {
+      return this.$store.state.employee.data.positions;
+    },
     getOptionEmployees() {
       return this.$store.state.employee.data.options;
     },

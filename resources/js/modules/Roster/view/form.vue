@@ -149,7 +149,7 @@ export default {
       await axios
         .post(`${this.getBaseUrl}/api/v1/roster/store`, data)
         .then((responses) => {
-          console.info(responses);
+          //   console.info(responses);
           this.is_loading = false;
 
           //   return false;

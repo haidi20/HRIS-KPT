@@ -1,0 +1,165 @@
+<?php
+
+namespace App\Models;
+
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
+
+class ApprovalAgreement extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $appends = [
+        "user_create_approval",
+        "status_approval_read_able",
+        "description_status_approval",
+        "label_status_approval",
+        "name_karyawan_detail",
+        "name_user",
+        "department_user",
+        "date_read_able",
+    ];
+
+    protected $fillable = [
+        "approval_level_id",
+        "user_id",
+        "model_id",
+        "name_model",
+        "status_approval",
+        "level_approval",
+    ];
+
+    public function otherModel()
+    {
+        return $this->belongsTo($this->name_model, "model_id", "id")->withTrashed();
+    }
+
+    public function karyawanDetail()
+    {
+        return $this->belongsTo("App\Models\KaryawanDetail", "user_id", "id")->withTrashed();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo("App\Models\User", "user_id", "id")->withTrashed();
+    }
+
+    public function userBehalf()
+    {
+        return $this->belongsTo("App\Models\User", "user_behalf_id", "id")->withTrashed();
+    }
+
+    public function getNameKaryawanDetailAttribute()
+    {
+        if ($this->karyawanDetail) {
+            return $this->karyawanDetail->karyawan_detail_option;
+        }
+    }
+
+    public function scopeByApprovalLevelId($query, $approval_level_id)
+    {
+        return $query->where("approval_level_id", $approval_level_id);
+    }
+
+    public function scopeByModel($query, $modelId, $nameModel)
+    {
+        return $query->where(["model_id" => $modelId, "name_model" => $nameModel]);
+    }
+
+    public function getStatusApprovalReadAbleAttribute()
+    {
+        $statusApprovalLibrary = Config::get("library.approval_agreement_status.{$this->status_approval}");
+
+        return $statusApprovalLibrary["status_read_able"];
+    }
+
+    public function getUserCreateApprovalAttribute()
+    {
+        if ($this->otherModel) {
+            return $this->otherModel->user_id;
+        }
+    }
+
+    // nama user yang approval
+    public function getNameUserAttribute()
+    {
+        if ($this->user) {
+            return $this->user->name;
+        }
+    }
+
+    // departemen user yang approval
+    public function getDepartmentUserAttribute()
+    {
+        if ($this->user) {
+            return $this->user->name_role;
+        }
+    }
+
+    public function getLabelStatusApprovalAttribute()
+    {
+        $statusApprovalLibrary = Config::get("library.approval_agreement_status.{$this->status_approval}");
+
+        return view("pages.approvallevel.renders.badge", ["type" => $statusApprovalLibrary["type"], "message" => $this->status_approval_read_able])->render();
+    }
+
+    public function getDescriptionStatusApprovalAttribute()
+    {
+        $sentanceBehalf = "";
+
+        if (request("user_id") == null) {
+            $userId = auth()->user()->id;
+        } else {
+            $userId = request("user_id");
+        }
+
+        if ($this->user_id == $userId) {
+            $by = "Anda";
+        } else {
+            if ($this->user) {
+                $by = "{$this->user->name} - {$this->user->name_role}";
+            } else {
+                $by = " - ";
+            }
+        }
+
+        if ($this->userBehalf) {
+            $nameUserBehalf = $this->userBehalf->name;
+            $sentanceBehalf = " a/n {$nameUserBehalf}";
+        }
+
+        return "di {$this->status_approval_read_able} oleh {$by} <br>" . $sentanceBehalf;
+    }
+
+    // public function getDescriptionStatusApprovalAttributeOld()
+    // {
+    //     if (request("user_id") == null) {
+    //         $userId = auth()->user()->id;
+    //     } else {
+    //         $userId = request("user_id");
+    //     }
+
+    //     if (auth()->user()) {
+    //         if ($this->user_id == $userId) {
+    //             $by = "Anda";
+    //         } else {
+    //             $by = "{$this->user->name} - {$this->user->name_role}";
+    //         }
+
+    //         return "di <b>{$this->status_approval_read_able}</b> oleh {$by}";
+    //     } else {
+    //         // untuk kebutuhan history personnel request
+    //         $by = "{$this->user->name} - {$this->user->name_role}";
+
+    //         return "di <b>{$this->status_approval_read_able}</b> oleh {$by}";
+    //     }
+    // }
+
+    public function getDateReadAbleAttribute()
+    {
+        return Carbon::parse($this->created_at)->locale('id')->isoFormat("dddd, D MMMM YYYY");
+    }
+}

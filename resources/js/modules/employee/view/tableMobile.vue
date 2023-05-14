@@ -33,8 +33,9 @@
     </b-row>
     <vue-bottom-sheet ref="myBottomSheetEmployee">
       <div class="flex flex-col">
+        <div class="action-item">mulai</div>
         <div class="action-item">tunda</div>
-        <div class="action-item">mulai kembali</div>
+        <div class="action-item">selesai</div>
         <div class="action-item">lembur</div>
         <div class="action-item">selesai lembur</div>
         <div class="action-item">hapus</div>
@@ -43,7 +44,21 @@
   </div>
 </template>
 
-<script src="../function/tableMobile.js"></script>
+<script >
+export default {
+  data() {
+    return {
+      is_loading: false,
+    };
+  },
+  methods: {
+    onOpenAction(data) {
+      //   console.info(id);
+      this.$refs.myBottomSheetEmployee.open();
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .place-data {

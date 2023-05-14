@@ -51,6 +51,7 @@ class FeatureSeeder extends Seeder
             ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
             ["name" => "Perhitungan Bpjs", "description" => "Manajemen Data Perhitungan Bpjs"],
             ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
+            ["name" => "Tingkat Persetujuan", "description" => "Manajemen Data Tingkat Persetujuan"],
 
         ]);
     }
