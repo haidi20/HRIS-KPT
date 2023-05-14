@@ -1,9 +1,9 @@
 <?php
 
 return [
-    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Penyesuaian Gaji", "Jenis Karyawan", "Tingkat Persetujuan"],
+    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Penyesuaian Gaji", "Jenis Karyawan", "Tingkat Persetujuan", "Departemen"],
     "permission_private" => [
-        "lihat jam kerja",  "lihat bahan", "lihat penyesuaian gaji",
+        "lihat jam kerja",  "lihat bahan", "lihat penyesuaian gaji", "lihat departemen",
         "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan", "lihat tingkat persetujuan",
         "hapus fitur", "hapus hak akses",
     ],
