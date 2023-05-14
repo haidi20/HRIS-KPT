@@ -102,12 +102,12 @@ class PositionSeeder extends Seeder
                 [
                     'name' => 'Kepala Bubut',
                     'description' => 'Kepala Bubut',
-                    'departmen_id' => 19,
+                    'departmen_id' => 11,
                 ],
                 [
                     'name' => 'Bubut',
                     'description' => 'Bubut',
-                    'departmen_id' => 19,
+                    'departmen_id' => 11,
                 ],
 
                 // CV KARYA PACIFIC TEKNIK SHIPYARD

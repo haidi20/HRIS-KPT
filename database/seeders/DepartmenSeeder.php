@@ -68,7 +68,7 @@ class DepartmenSeeder extends Seeder
                     'company_id' => 1,
                 ],
                 [
-                    'code' => '09',
+                    'code' => '17',
                     'name' => 'Driver',
                     'description' => 'Driver',
                     'company_id' => 1,
@@ -78,6 +78,12 @@ class DepartmenSeeder extends Seeder
                     'name' => 'Operator',
                     'description' => 'Operator',
                     'company_id' => 1,
+                ],
+                [
+                    'code' => '09',
+                    'name' => 'Bubut',
+                    'description' => 'Bubut',
+                    'company_id' => 2,
                 ],
 
                 // CV KARYA PACIFIC TEKNIK
