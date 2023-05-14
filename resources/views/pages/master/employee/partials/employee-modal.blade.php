@@ -25,7 +25,11 @@
                         {{-- <li class="nav-item" role="presentation" id="tab-keluarga">
                             <a class="nav-link" id="keluarga-tab" data-bs-toggle="tab" href="#keluarga" role="tab"
                                 aria-controls="keluarga" aria-selected="false">Data Keluarga</a>
-                        </li> --}}
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="finger-tab" data-bs-toggle="tab" href="#finger" role="tab"
+                                aria-controls="finger" aria-selected="false">Data Alat Finger</a>
+                        </li>
                         {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link" id="rekening-tab" data-bs-toggle="tab" href="#rekening" role="tab"
                                 aria-controls="rekening" aria-selected="false">Data Rekening</a>
@@ -187,19 +191,21 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="status_pegawai" class="col-sm-4 col-form-label">Status Kepegawaian</label>
+                                <label for="status_pegawai" class="col-sm-4 col-form-label">Jenis Karyawan</label>
                                 <div class="col-sm-8">
                                     <select name="status_pegawai" id="status_pegawai" class="form-control select2" style="width: 100%;">
                                         <option value="">-- Pilih Status Pegawai --</option>
                                         {{-- @foreach ($status_pegawais as $status_pegawai)
-                                                                                    <option value="{{ $status_pegawai->id }}"
+                                                                                                            <option value="{{ $status_pegawai->id }}"
                                         <?php if ($pegawai->status_pegawai_id == $status_pegawai->id) {
-                                                                                            echo 'selected';
-                                                                                        } ?>>
+                                                                                                                    echo 'selected';
+                                                                                                                } ?>>
                                         {{ $status_pegawai->nama_status_pegawai }}
                                         </option>
                                         @endforeach --}}
-                                        <option value="aktif">Permanent</option>
+                                        <option value="aktif">Tetap</option>
+                                        <option value="aktif">Harian</option>
+                                        <option value="aktif">Borongan</option>
                                     </select>
                                 </div>
                             </div>
@@ -250,7 +256,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="jkk">JKK</label><br>
+                                        <label for="jkk">BPJS TK CV</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : JKK"
@@ -264,7 +270,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="jkm">JKM</label><br>
+                                        <label for="jkm">BPJS KES</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : JKM"
@@ -279,7 +285,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="jht">JHT</label><br>
+                                        <label for="jht">BPJS KES CV</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : JHT"
@@ -294,7 +300,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="ip">IP</label><br>
+                                        <label for="ip">Training</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"

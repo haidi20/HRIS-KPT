@@ -134,20 +134,20 @@ class RosterController extends Controller
 
     public function export()
     {
-        $totalRoster = [];
-        $rosterStatsuses = RosterStatus::all();
+        $dataTotal = [];
+        $positions = Position::all();
         $data = $this->fetchData()->original["data"];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRange($month->format("Y-m"));
 
-        // foreach ($rosterStatsuses as $key => $value) {
-        //     $totalRoster[$value->initial] = $this->fetchTotalRoster($value->initial)->original["data"];
-        // }
-        // $totalRoster["ALL"] = $this->fetchTotalRoster("ALL")->original["data"];
+        foreach ($positions as $key => $value) {
+            $dataTotal[$value->initial] = $this->fetchTotal($value->initial)->original["data"];
+        }
+        $dataTotal["ALL"] = $this->fetchTotal("ALL")->original["data"];
 
         try {
-            Excel::store(new RosterExport($data, $dateRange), $this->path, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+            Excel::store(new RosterExport($data, $dataTotal, $dateRange), $this->path, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
@@ -166,7 +166,7 @@ class RosterController extends Controller
 
     public function download()
     {
-        $path = storage_path($this->path);
+        $path = public_path($this->path);
 
         return Response::download($path);
     }
