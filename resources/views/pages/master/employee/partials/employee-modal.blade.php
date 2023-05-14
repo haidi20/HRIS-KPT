@@ -25,7 +25,15 @@
                         {{-- <li class="nav-item" role="presentation" id="tab-keluarga">
                             <a class="nav-link" id="keluarga-tab" data-bs-toggle="tab" href="#keluarga" role="tab"
                                 aria-controls="keluarga" aria-selected="false">Data Keluarga</a>
+<<<<<<< HEAD
                         </li> --}}
+=======
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="finger-tab" data-bs-toggle="tab" href="#finger" role="tab"
+                                aria-controls="finger" aria-selected="false">Data Alat Finger</a>
+                        </li>
+>>>>>>> c1cbd0908334c0bf8e957431856d8215d6a9cdeb
                         {{-- <li class="nav-item" role="presentation">
                             <a class="nav-link" id="rekening-tab" data-bs-toggle="tab" href="#rekening" role="tab"
                                 aria-controls="rekening" aria-selected="false">Data Rekening</a>
@@ -187,7 +195,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="status_pegawai" class="col-sm-4 col-form-label">Status Kepegawaian</label>
+                                <label for="status_pegawai" class="col-sm-4 col-form-label">Jenis Karyawan</label>
                                 <div class="col-sm-8">
                                     <select name="status_pegawai" id="status_pegawai" class="form-control select2" style="width: 100%;">
                                         <option value="">-- Pilih Status Pegawai --</option>
@@ -199,7 +207,9 @@
                                         {{ $status_pegawai->nama_status_pegawai }}
                                         </option>
                                         @endforeach --}}
-                                        <option value="aktif">Permanent</option>
+                                        <option value="aktif">Tetap</option>
+                                        <option value="aktif">Harian</option>
+                                        <option value="aktif">Borongan</option>
                                     </select>
                                 </div>
                             </div>
@@ -250,7 +260,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="jkk">JKK</label><br>
+                                        <label for="jkk">BPJS TK CV</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : JKK"
@@ -264,7 +274,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="jkm">JKM</label><br>
+                                        <label for="jkm">BPJS KES</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : JKM"
@@ -279,7 +289,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="jht">JHT</label><br>
+                                        <label for="jht">BPJS KES CV</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : JHT"
@@ -294,7 +304,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="ip">IP</label><br>
+                                        <label for="ip">Training</label><br>
                                         <div class="form-check form-switch">
                                             <form>
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
@@ -306,6 +316,28 @@
                                         </div>
 
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- @else --}}
+
+                        {{-- @endif --}}
+
+                        <div class="tab-pane fade" id="finger" role="tabpanel" aria-labelledby="finger-tab">
+                            <div class="form-group row">
+                                <label for="tanggal_masuk" class="col-sm-4 col-form-label">Nomor ID di Finger Doc
+                                    1</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control datepicker" id="tanggal_masuk"
+                                        name="tanggal_masuk">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="tanggal_masuk" class="col-sm-4 col-form-label">Nomor ID di Finger Doc
+                                    2</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control datepicker" id="tanggal_masuk"
+                                        name="tanggal_masuk">
                                 </div>
                             </div>
                         </div>
