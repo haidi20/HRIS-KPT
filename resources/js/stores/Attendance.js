@@ -11,16 +11,23 @@ const Attendance = {
         base_url: null,
         data: {
             main: [],
+            detail: [],
         },
         params: {
-            month_filter: new Date(),
+            main: {
+                month_filter: new Date(),
+            },
+            detail: {
+                month_filter: new Date(),
+            },
         },
         form: { ...defaultForm },
         options: {
             //
         },
         loading: {
-            table: false,
+            main: false,
+            detail: false,
         },
         date_range: [],
     },
@@ -44,7 +51,7 @@ const Attendance = {
 
             const params = {
                 // ...context.state.params,
-                month_filter: moment(context.state.params.month_filter).format("Y-MM"),
+                month_filter: moment(context.state.params.main.month_filter).format("Y-MM"),
             }
 
             await axios
@@ -54,7 +61,7 @@ const Attendance = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

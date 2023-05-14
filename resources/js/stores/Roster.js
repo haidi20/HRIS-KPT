@@ -169,7 +169,7 @@ const Roster = {
             //     },
             // ];
 
-            console.info(positions);
+            // console.info(positions);
 
             const promises = positions
                 .map(async (item, index) => {
@@ -184,7 +184,7 @@ const Roster = {
                                 },
                             })
                             .then((responses) => {
-                                console.info(responses);
+                                // console.info(responses);
 
                                 const data = responses.data.data;
 

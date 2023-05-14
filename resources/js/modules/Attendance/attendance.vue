@@ -10,9 +10,12 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3" active>
+        <b-tabs content-class="mt-3">
           <b-tab title="Utama">
             <Main />
+          </b-tab>
+          <b-tab title="Berdasarkan Karyawan" active>
+            <Detail />
           </b-tab>
         </b-tabs>
       </div>
@@ -22,6 +25,7 @@
 
 <script>
 import Main from "./main.vue";
+import Detail from "./detail.vue";
 export default {
   props: {
     user: String,
@@ -33,7 +37,7 @@ export default {
       version: "v1.1",
     };
   },
-  components: { Main },
+  components: { Main, Detail },
   mounted() {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });

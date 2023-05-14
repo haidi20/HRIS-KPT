@@ -11,7 +11,7 @@
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label for="departmen_id" class="col-sm-4 col-form-label">Departemen </label>
                         <div class="col-sm-8">
                             <select id="departmen_id" name="departmen_id" class="select2 form-select" style="width: 100%">
@@ -22,7 +22,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">
                         <label for="name" class="col-sm-4 col-form-label">Nama Jabatan</label>
                         <div class="col-sm-8">

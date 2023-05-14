@@ -5,7 +5,7 @@
       :columns="columns"
       :options="options"
       nameStore="attendance"
-      nameLoading="table"
+      nameLoading="main"
       :filter="true"
       bordered
     >
@@ -132,10 +132,10 @@ export default {
       return this.$store.state.attendance.date_range;
     },
     getIsLoadingData() {
-      return this.$store.state.attendance.loading.table;
+      return this.$store.state.attendance.loading.main;
     },
     params() {
-      return this.$store.state.attendance.params;
+      return this.$store.state.attendance.params.main;
     },
   },
   methods: {
