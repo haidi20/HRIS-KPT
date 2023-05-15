@@ -15,6 +15,7 @@ const Attendance = {
         },
         params: {
             main: {
+                position_id: 'all',
                 month: new Date(),
             },
             detail: {

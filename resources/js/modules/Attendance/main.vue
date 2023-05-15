@@ -20,6 +20,19 @@
               placeholder="pilih bulan"
             />
           </b-form-group>
+          <b-form-group label="Jabatan" label-for="position_id" class="place_filter_table">
+            <VueSelect
+              id="position_id"
+              class="cursor-pointer"
+              v-model="params.position_id"
+              placeholder="Pilih Jabatan"
+              :options="getOptionPositions"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
+            />
+          </b-form-group>
           <b-button
             class="place_filter_table"
             variant="success"
@@ -80,6 +93,7 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
+import VueSelect from "vue-select";
 import DatePicker from "vue2-datepicker";
 import DatatableClient from "../../components/DatatableClient";
 
@@ -117,6 +131,7 @@ export default {
   components: {
     DatePicker,
     DatatableClient,
+    VueSelect,
   },
   computed: {
     getBaseUrl() {
@@ -133,6 +148,9 @@ export default {
     },
     getIsLoadingData() {
       return this.$store.state.attendance.loading.main;
+    },
+    getOptionPositions() {
+      return this.$store.state.employee.data.positions;
     },
     params() {
       return this.$store.state.attendance.params.main;

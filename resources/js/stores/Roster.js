@@ -125,35 +125,6 @@ const Roster = {
                     console.info(err);
                 });
         },
-        fetchPosition: async (context, payload) => {
-            const params = {
-                // ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
-            }
-
-            await axios
-                .get(
-                    `${context.state.base_url}/api/v1/position/fetch-data`, {
-                    params: { ...params },
-                }
-                )
-                .then((responses) => {
-                    // console.info(responses);
-                    let data = responses.data;
-
-                    data.data = [
-                        ...data.data,
-                        { id: "all", name: "Semua" },
-                    ];
-
-                    context.commit("INSERT_OPTION_POSITION", {
-                        positions: data.data,
-                    });
-                })
-                .catch((err) => {
-                    console.info(err);
-                });
-        },
         fetchTotal: async (context, payload) => {
             const params = {
                 // ...context.state.params,

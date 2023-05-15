@@ -66,10 +66,13 @@ export default {
     this.$store.commit("rosterStatus/INSERT_BASE_URL", {
       base_url: this.baseUrl,
     });
+    this.$store.commit("employee/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
 
     this.$store.dispatch("roster/fetchData");
-    this.$store.dispatch("roster/fetchPosition");
     this.$store.dispatch("rosterStatus/fetchData");
+    this.$store.dispatch("employee/fetchPosition");
   },
   methods: {
     onChangeTab(value) {

@@ -26,6 +26,7 @@ class AttendanceController extends Controller
     public function fetchDataMain()
     {
         $result = [];
+        $positionId = request("position_id");
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRange($month->format("Y-m"));

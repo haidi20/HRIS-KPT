@@ -65,14 +65,47 @@ const Employee = {
         is_form_mobile: true,
     },
     mutations: {
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
+        INSERT_DATA_OPTION(state, payload) {
+            state.data.options = payload.data;
+        },
+        INSERT_DATA_TABLE(state, payload) {
+            state.data.table = payload.data;
+        },
+        INSERT_DATA_POSITION(state, payload) {
+            state.data.positions = payload.data;
+        },
         UPDATE_IS_FORM_MOBILE(state, payload) {
             state.is_form_mobile = payload.value;
         },
     },
     actions: {
-        // onIncrement: (context, payload) => {
-        //     context.commit("INCREMENT");
-        // },
+        fetchPosition: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/position/fetch-data`, {
+                    params: {},
+                }
+                )
+                .then((responses) => {
+                    // console.info(responses);
+                    let data = responses.data;
+
+                    data.data = [
+                        { id: "all", name: "Semua" },
+                        ...data.data,
+                    ];
+
+                    context.commit("INSERT_DATA_POSITION", {
+                        data: data.data,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
 
     }
 }
