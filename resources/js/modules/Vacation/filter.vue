@@ -39,7 +39,13 @@
       <b-row>
         <b-col>
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-          <b-button variant="success" size="sm" class="float-end" @click="onSend()">Kirim</b-button>
+          <b-button
+            variant="success"
+            size="sm"
+            class="float-end"
+            @click="onSend()"
+            :disabled="getLoadingTable"
+          >Kirim</b-button>
         </b-col>
       </b-row>
     </b-modal>
@@ -59,14 +65,17 @@ export default {
     VueSelect,
   },
   computed: {
+    getLoadingTable() {
+      return this.$store.state.vacation.loading.table;
+    },
     params() {
       return this.$store.state.vacation.params;
     },
   },
   methods: {
     onSend() {
-      console.info(this.params);
       this.$bvModal.hide("vacation_filter");
+      this.$store.dispatch("vacation/fetchData");
     },
     onCloseModal() {
       this.$bvModal.hide("vacation_filter");

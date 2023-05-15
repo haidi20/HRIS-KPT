@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vacation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -14,21 +16,36 @@ class VacationController extends Controller
     public function index()
     {
         $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
 
-        return view("pages.vacation.index", compact('vue'));
+        return view("pages.vacation.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()
     {
-        $vacations = [
-            (object) [
-                "id" => 1,
-                "employee_name" => "Muhammad Adi",
-            ],
-        ];
+        $search = request("search");
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $data = Vacation::whereYear("date_start", $month->format("Y"))
+            ->whereMonth("date_start", $month->format("m"));
+
+        if ($search != null) {
+            $data = $data->where(function ($query) use ($search) {
+                $query->whereHas("employee", function ($employeeQuery) use ($search) {
+                    $employeeQuery->where("name", "like", "%" . $search . "%");
+                })->orWhereHas("creator", function ($creatorQuery) use ($search) {
+                    $creatorQuery->where("name", "like", "%" . $search . "%");
+                });
+            });
+        }
+
+        $data = $data->get();
 
         return response()->json([
-            "vacations" => $vacations,
+            "data" => $data,
+            "monthReadAble" => $monthReadAble,
         ]);
     }
 

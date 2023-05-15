@@ -93,6 +93,12 @@ export default {
   },
   components: { FilterData },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getData() {
       return this.$store.state.jobOrder.data;
     },

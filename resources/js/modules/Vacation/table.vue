@@ -11,46 +11,61 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <b-row v-for="(item, index) in getData" :key="index">
-          <b-col class="place-item">
-            <b-row>
-              <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item.id)">
-                <h5>
-                  <b>{{item.position_name}}</b>
-                </h5>
-                <h6>
-                  <b>{{item.employee_name}}</b>
-                </h6>
-                <b-row>
-                  <b-col cols>
-                    <span>Waktu :</span>
-                  </b-col>
-                  <b-col cols>
-                    <span>Tanggal :</span>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col cols>
-                    <span>{{item.duration_readable}}</span>
-                  </b-col>
-                  <b-col cols>
-                    <span>{{item.date_start}}</span>
+        <template v-if="getData.length > 0">
+          <b-row v-for="(item, index) in getData" :key="index">
+            <b-col class="place-item">
+              <b-row>
+                <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item)">
+                  <h5>
+                    <b>{{item.position_name}}</b>
+                  </h5>
+                  <h6>
+                    <b>{{item.employee_name}}</b>
+                  </h6>
+                  <b-row>
+                    <b-col cols>
+                      <span>Waktu :</span>
+                    </b-col>
+                    <b-col cols>
+                      <span>Tanggal :</span>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols>
+                      <span>{{item.duration_readable}}</span>
+                    </b-col>
+                    <b-col cols>
+                      <span>{{item.date_start_readable}}</span>
+                      <br />
+                      <span>{{item.date_end_readable}}</span>
+                    </b-col>
+                  </b-row>
+                  <div>
+                    <span>Pengawas :</span>
                     <br />
-                    <span>{{item.date_end}}</span>
-                  </b-col>
-                </b-row>
-                <div>
-                  <span>Pengawas :</span>
-                  <br />
-                  <span>{{item.created_by_name}}</span>
-                </div>
-              </b-col>
-            </b-row>
-          </b-col>
-        </b-row>
-        <vue-bottom-sheet ref="myBottomSheet">
-          <div class="flex flex-col">
-            <div class="action-item">ubah</div>
+                    <span>{{item.creator_name}}</span>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </template>
+        <template v-else-if="getLoadingTable">
+          <b-tr>
+            <b-td>Loading...</b-td>
+          </b-tr>
+        </template>
+        <template v-else>
+          <b-tr>
+            <b-td>Data Kosong</b-td>
+          </b-tr>
+        </template>
+        <vue-bottom-sheet ref="myBottomSheet" max-height="30%">
+          <div class="flex flex-col mb-4">
+            <!-- <div class="action-item">{{getConditionEdit()}}</div> -->
+            <div class="action-item" @click="onAction('edit', 'Ubah')">
+              <span v-if="getConditionEdit()">Ubah</span>
+            </div>
           </div>
         </vue-bottom-sheet>
       </b-col>
@@ -72,23 +87,47 @@ export default {
   },
   components: { FilterData, Form },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getData() {
       return this.$store.state.vacation.data;
+    },
+    getLoadingTable() {
+      return this.$store.state.vacation.loading.table;
     },
     getIsMobile() {
       return isMobile();
     },
+    form() {
+      return this.$store.state.vacation.form;
+    },
   },
   methods: {
-    onOpenAction(id) {
-      //   console.info(id);
+    onOpenAction(data) {
+      this.$store.commit("vacation/CLEAR_FORM");
+      this.$store.commit("vacation/INSERT_FORM", {
+        form: data,
+      });
       this.$refs.myBottomSheet.open();
     },
     onCreate() {
+      this.$store.commit("vacation/CLEAR_FORM");
       this.$bvModal.show("vacation_form");
     },
     onFilter() {
       this.$bvModal.show("vacation_filter");
+    },
+    onAction(type, title) {
+      //   console.info(type, title);
+
+      if (this.getConditionEdit()) {
+        this.$refs.myBottomSheet.close();
+        this.$bvModal.show("vacation_form");
+      }
     },
     onLimitSentence(sentence) {
       const maxLength = 35;
@@ -98,6 +137,10 @@ export default {
       }
 
       return sentence;
+    },
+    getConditionEdit() {
+      //   console.info(Number(this.form.created_by), Number(this.getUserId));
+      return Number(this.form.created_by) == Number(this.getUserId);
     },
   },
 };

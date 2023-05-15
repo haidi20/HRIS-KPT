@@ -3,26 +3,17 @@ import moment from "moment";
 
 const defaultForm = {
     employee_id: null,
-    date_start: new Date(),
-    date_end: new Date(),
+    date_start: null,
+    date_end: null,
     note: null,
+    created_by: null,
 }
 
 const Vacation = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                employee_name: "muhammad adi",
-                position_name: "Welder",
-                duration_readable: "7 Hari",
-                date_start: "01 Mei 2023",
-                date_end: "07 Mei 2023",
-                created_by_name: "Sumardi",
-            }
-        ],
+        data: [],
         params: {
             month: new Date(),
             search: null,
@@ -36,14 +27,69 @@ const Vacation = {
         },
     },
     mutations: {
-
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
+        INSERT_DATA(state, payload) {
+            state.data = payload.data;
+        },
+        INSERT_FORM(state, payload) {
+            state.form = {
+                ...payload.form,
+                date_start: new Date(payload.form.date_start),
+                date_end: new Date(payload.form.date_end),
+            };
+        },
+        CLEAR_FORM(state, payload) {
+            // console.info(defaultForm);
+            state.form = { ...defaultForm };
+        },
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
     },
     actions: {
-        // onIncrement: (context, payload) => {
-        //     context.commit("INCREMENT");
-        // },
+        fetchData: async (context, payload) => {
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
 
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/vacation/fetch-data`, {
+                    params: { ...params },
+                }
+                )
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        data: data.data,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
     }
 }
 
 export default Vacation;
+
+
+
+// {
+//     id: 1,
+//         employee_name: "muhammad adi",
+//             position_name: "Welder",
+//                 duration_readable: "7 Hari",
+//                     date_start: "01 Mei 2023",
+//                         date_end: "07 Mei 2023",
+//                             created_by_name: "Sumardi",
+//             }
