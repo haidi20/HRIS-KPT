@@ -55,6 +55,13 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Keterangan" label-for="note" class>
+            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
       <br />
       <b-row class="float-end">
         <b-col>

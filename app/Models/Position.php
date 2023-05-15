@@ -20,6 +20,20 @@ class Position extends Model
         $this->fillable = Schema::getColumnListing($this->getTable());
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->user()->id;
+            $model->updated_by = NULL;
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->user()->id;
+        });
+    }
+
     public function departmen()
     {
         return $this->belongsTo(Departmen::class, "departmen_id", "id");

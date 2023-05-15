@@ -39,6 +39,7 @@ use App\Http\Controllers\VacationController;
 use App\Http\Controllers\WorkingHourController;
 use App\Http\Controllers\FingerToolController;
 use App\Http\Controllers\BpjsCalculationController;
+use App\Http\Controllers\VacationReportController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -115,6 +116,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("overtime")->name("overtime.")->group(function () {
             Route::get('', [OvertimeReportController::class, "index"])->name("index");
+        });
+        Route::prefix("vacation")->name("vacation.")->group(function () {
+            Route::get('', [VacationReportController::class, "index"])->name("index");
         });
     });
 

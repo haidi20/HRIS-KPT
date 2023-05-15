@@ -3,6 +3,9 @@ import moment from "moment";
 
 const defaultForm = {
     employee_id: null,
+    date_start: new Date(),
+    date_end: new Date(),
+    note: null,
 }
 
 const Vacation = {
@@ -21,8 +24,8 @@ const Vacation = {
             }
         ],
         params: {
-                month: new Date(),
-                search: null,
+            month: new Date(),
+            search: null,
         },
         form: { ...defaultForm },
         options: {
