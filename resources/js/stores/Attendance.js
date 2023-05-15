@@ -18,6 +18,7 @@ const Attendance = {
                 month: new Date(),
             },
             detail: {
+                employee_id: null,
                 month: new Date(),
             },
         },
@@ -56,7 +57,7 @@ const Attendance = {
             context.commit("UPDATE_LOADING_MAIN", { value: true });
 
             const params = {
-                // ...context.state.params,
+                ...context.state.params.main,
                 month: moment(context.state.params.main.month).format("Y-MM"),
             }
 
@@ -87,7 +88,7 @@ const Attendance = {
             context.commit("UPDATE_LOADING_DETAIL", { value: true });
 
             const params = {
-                // ...context.state.params,
+                ...context.state.params.detail,
                 month: moment(context.state.params.detail.month).format("Y-MM"),
             }
 
@@ -98,7 +99,7 @@ const Attendance = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA_DETAIL", {

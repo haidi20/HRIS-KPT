@@ -67,6 +67,7 @@ class AttendanceController extends Controller
     public function fetchDataDetail()
     {
         $result = [];
+        $employeeId = request("employee_id");
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
 
@@ -88,7 +89,7 @@ class AttendanceController extends Controller
         }
 
         return response()->json([
-            "data" => $dateRange,
+            "data" => $result,
             "monthReadAble" => $monthReadAble,
         ]);
     }
@@ -129,5 +130,14 @@ class AttendanceController extends Controller
         $path = public_path($this->path);
 
         return Response::download($path);
+    }
+
+    public function print()
+    {
+        $data = $this->fetchDataDetail()->original["data"];
+
+        // return $data;
+
+        return view("pages.attendance.partials.print", compact("data"));
     }
 }

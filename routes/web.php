@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('', [AttendanceController::class, "index"])->name("index");
         Route::get('export', [AttendanceController::class, "export"])->name("export");
         Route::get('download', [AttendanceController::class, "download"])->name("download");
+        Route::get('print', [AttendanceController::class, "print"])->name("print");
     });
     Route::prefix("roster")->name("roster.")->group(function () {
         Route::get('', [RosterController::class, "index"])->name("index");

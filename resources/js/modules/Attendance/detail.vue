@@ -144,8 +144,12 @@ export default {
       this.$store.dispatch("attendance/fetchData");
       this.$store.dispatch("attendance/fetchDetail");
     },
-    async onPrint() {
-      //
+    onPrint() {
+      //   console.info(`${this.getBaseUrl}/attendance/print`);
+      const month = moment(this.params.month).format("Y-MM");
+      const params = `month=${month}&employee_id=${this.params.employee_id}`;
+      const linkPrint = `${this.getBaseUrl}/attendance/print?${params}`;
+      window.open(`${linkPrint}`, "_blank");
     },
     setLabelDate(date) {
       return moment(date).format("DD");
