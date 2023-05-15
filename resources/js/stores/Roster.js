@@ -109,7 +109,7 @@ const Roster = {
                 }
                 )
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
@@ -161,13 +161,6 @@ const Roster = {
             }
 
             const positions = context.state.options.positions;
-            // positions = [
-            //     ...positions,
-            //     {
-            //         id: "all",
-            //         name: "ALL",
-            //     },
-            // ];
 
             // console.info(positions);
 

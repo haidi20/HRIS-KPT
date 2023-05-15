@@ -23,7 +23,7 @@ class AttendanceController extends Controller
         return view("pages.attendance.index", compact("vue", "user", "baseUrl"));
     }
 
-    public function fetchData()
+    public function fetchDataMain()
     {
         $result = [];
         $month = Carbon::parse(request("month"));
@@ -61,6 +61,35 @@ class AttendanceController extends Controller
         return response()->json([
             "data" => $result,
             "dateRange" => $dateRange,
+        ]);
+    }
+
+    public function fetchDataDetail()
+    {
+        $result = [];
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $dateRange = $this->dateRangeCustom($month, "d", "object", true);
+
+        foreach ($dateRange as $index => $date) {
+            $row = (object) [
+                "date" => $date->date,
+                "day" => $date->day, // Add the value for "day"
+                "hour_start" => "", // Add the value for "hour_start"
+                "hour_end" => "", // Add the value for "hour_end"
+                "duration" => "", // Add the value for "duration"
+                "hour_rest_start" => "", // Add the value for "hour_rest_start"
+                "hour_rest_end" => "", // Add the value for "hour_rest_end"
+                "duration_hour_work" => "", // Add the value for "duration_hour_work"
+            ];
+
+            array_push($result, $row);
+        }
+
+        return response()->json([
+            "data" => $dateRange,
+            "monthReadAble" => $monthReadAble,
         ]);
     }
 

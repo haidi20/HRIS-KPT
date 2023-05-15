@@ -19,11 +19,11 @@ class FingerToolSeeder extends Seeder
         DB::table('finger_tools')->insert(
             [
                 [
-                    'name' => 'Alat Finger SITE A',
+                    'name' => 'Alat Finger DOC 1',
                     'serial_number' => 'Fio66208021230850',
                 ],
                 [
-                    'name' => 'Alat Finger SITE B',
+                    'name' => 'Alat Finger DOC 2',
                     'serial_number' => 'Fio66208022030036',
                 ],
             ],

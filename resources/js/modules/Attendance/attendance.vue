@@ -47,6 +47,7 @@ export default {
     });
 
     this.$store.dispatch("attendance/fetchData");
+    this.$store.dispatch("attendance/fetchDetail");
   },
 };
 </script>

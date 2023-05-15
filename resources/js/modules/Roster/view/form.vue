@@ -201,7 +201,7 @@ export default {
         });
     },
     disabledDate(date, currentValue) {
-      return date < moment({ date: 1 });
+      //   return date < moment({ date: 1 });
     },
   },
 };

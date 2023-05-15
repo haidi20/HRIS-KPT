@@ -39,7 +39,8 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get("all-hiistory", [ApprovalAgreementController::class, "allHistory"])->name("allHistory");
     });
     Route::prefix('attendance')->name('attendance.')->group(function () {
-        Route::get('fetch-data', [AttendanceController::class, "fetchData"])->name('fetchData');
+        Route::get('fetch-data-main', [AttendanceController::class, "fetchDataMain"])->name('fetchDataMain');
+        Route::get('fetch-data-detail', [AttendanceController::class, "fetchDataDetail"])->name('fetchDataDetail');
         Route::post('store', [AttendanceController::class, "store"])->name('store');
     });
     Route::prefix('roster')->name('roster.')->group(function () {

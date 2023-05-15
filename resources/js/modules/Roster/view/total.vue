@@ -78,8 +78,10 @@ export default {
       return moment(date).format("dddd");
     },
     setBackground(position, value) {
+      //   console.info(value, position.minimum_employee);
       return {
-        backgroundColor: value < position.minimum_employee ? "orange" : null,
+        backgroundColor:
+          Number(value) < Number(position.minimum_employee) ? "orange" : null,
       };
     },
   },

@@ -11,10 +11,10 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
+          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
-              id="month_filter"
-              v-model="params.month_filter"
+              id="month"
+              v-model="params.month"
               format="YYYY-MM"
               type="month"
               placeholder="pilih bulan"
@@ -150,7 +150,7 @@ export default {
         .get(`${this.getBaseUrl}/attendance/export`, {
           params: {
             user_id: this.getUserId,
-            date_filter: moment(this.getDateFilter).format("Y-MM"),
+            month: moment(this.params.month).format("Y-MM"),
           },
         })
         .then((responses) => {
