@@ -82,10 +82,11 @@ class RosterController extends Controller
                     ->first();
 
                 $mainData[$date] = [
+                    "id" => $rosterDaily != null ? $rosterDaily->id : null,
                     "value" => $rosterDaily != null ? $rosterDaily->roster_status_initial : null,
+                    "roster_status_id" => $rosterDaily != null ? $rosterDaily->roster_status_id : null,
                     "color" => $rosterDaily != null ? $rosterDaily->roster_status_color : null,
-                    "date_start" => $rosterDaily != null ? $rosterDaily->date_start : null,
-                    "date_end" => $rosterDaily != null ? $rosterDaily->date_end : null,
+                    "date" => $rosterDaily != null ? $rosterDaily->date : null,
                 ];
             }
 
@@ -233,10 +234,41 @@ class RosterController extends Controller
                 'message' => 'Gagal ditambahkan',
             ], 500);
         }
+    }
 
-        return response()->json([
-            "request" => $getData,
-        ]);
+    public function storeChangeStatus()
+    {
+        $getData = (object) [
+            "id" => request("id"),
+            "roster_status_id" => request("roster_status_id"),
+        ];
+
+        try {
+            DB::beginTransaction();
+
+            $rosterDaily = RosterDaily::find($getData->id);
+            $rosterDaily->roster_status_id = $getData->roster_status_id;
+            $rosterDaily->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'data' => $getData,
+                'message' => "Berhasil diperbaharui",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            // create roster history
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal diperbaharui',
+            ], 500);
+        }
     }
 
     private function storeVacation($getData)

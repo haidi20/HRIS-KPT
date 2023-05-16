@@ -4,6 +4,7 @@ import moment from "moment";
 import { checkNull } from "../utils";
 
 const defaultForm = {
+    id: null,
     employee_id: null,
     employee_name: null,
     work_schedule: null,
@@ -14,6 +15,8 @@ const defaultForm = {
         null,
         null,
     ],
+    roster_status_id: null,
+    roster_status_initial: null,
 }
 
 const Roster = {
@@ -86,6 +89,9 @@ const Roster = {
                 date_vacation: dateVacation,
             };
         },
+        INSERT_SELECTED_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
+        },
         INSERT_OPTION_POSITION(state, payload) {
             state.options.positions = payload.positions;
         },
@@ -109,7 +115,7 @@ const Roster = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
@@ -131,7 +137,8 @@ const Roster = {
                 date_filter: moment(context.state.params.date_filter).format("Y-MM"),
             }
 
-            const positions = context.state.options.positions;
+            // const positions = context.state.options.positions;
+            const positions = payload.positions;
 
             // console.info(positions);
 

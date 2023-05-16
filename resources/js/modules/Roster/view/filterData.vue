@@ -53,6 +53,9 @@ export default {
     getIsLoadingData() {
       return this.$store.state.roster.loading.table;
     },
+    getPositions() {
+      return this.$store.state.employee.data.positions;
+    },
     params() {
       return this.$store.state.roster.params;
     },
@@ -60,7 +63,9 @@ export default {
   methods: {
     onFilter() {
       this.$store.dispatch("roster/fetchData");
-      this.$store.dispatch("roster/fetchTotal");
+      this.$store.dispatch("roster/fetchTotal", {
+        positions: this.getPositions,
+      });
     },
     async onExport() {
       const Swal = this.$swal;

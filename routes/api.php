@@ -48,6 +48,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [RosterController::class, "fetchData"])->name('fetchData');
         Route::get('fetch-total', [RosterController::class, "fetchTotal"])->name('fetchTotal');
         Route::post('store', [RosterController::class, "store"])->name('store');
+        Route::post('store-change-status', [RosterController::class, "storeChangeStatus"])->name('storeChangeStatus');
     });
     Route::prefix('roster-status')->name('rosterStatus.')->group(function () {
         Route::get('fetch-data', [RosterStatusController::class, "fetchData"])->name('fetchData');

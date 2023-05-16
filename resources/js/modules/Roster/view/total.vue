@@ -43,7 +43,7 @@ import moment from "moment";
 export default {
   computed: {
     getPositions() {
-      return this.$store.state.roster.options.positions;
+      return this.$store.state.employee.data.positions;
     },
     getTotal() {
       return this.$store.state.roster.data.total;
@@ -55,7 +55,7 @@ export default {
   watch: {
     getPositions(value, oldValue) {
       if (value.length > 0) {
-        this.$store.dispatch("roster/fetchTotal");
+        this.$store.dispatch("roster/fetchTotal", { positions: value });
       }
     },
   },

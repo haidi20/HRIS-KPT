@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 
 const defaultForm = {
+    id: null,
     employee_id: null,
     data_base: "all",
 }
@@ -24,12 +25,7 @@ const Employee = {
                     position_name: "Welder",
                 }
             ],
-            positions: [
-                {
-                    id: 1,
-                    name: "Welder",
-                }
-            ],
+            positions: [],
         },
         params: {
             date_filter: new Date(),
@@ -76,6 +72,9 @@ const Employee = {
         },
         INSERT_DATA_POSITION(state, payload) {
             state.data.positions = payload.data;
+        },
+        INSERT_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
         },
         UPDATE_IS_FORM_MOBILE(state, payload) {
             state.is_form_mobile = payload.value;

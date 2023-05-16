@@ -33,6 +33,12 @@
             class="cursor-pointer text-center"
             v-for="(date, subIndex) in getDateRange"
             :key="`date-${subIndex}`"
+            @click="onRowClick(
+                item,
+                date,
+                getNoTable(index, currentPage, options.perPage),
+                item[date]?.value
+            )"
             :style="setStyling(
                 getNoTable(index, currentPage, options.perPage),
                 date,
@@ -44,6 +50,7 @@
     </DatatableClient>
     <br />
     <Form />
+    <FormChangeStatus />
   </div>
 </template>
 
@@ -53,6 +60,7 @@ import moment from "moment";
 import DatePicker from "vue2-datepicker";
 import DatatableClient from "../../../components/DatatableClient";
 import Form from "./form";
+import FormChangeStatus from "./formChangeStatus";
 
 export default {
   data() {
@@ -93,6 +101,7 @@ export default {
   },
   components: {
     Form,
+    FormChangeStatus,
     DatePicker,
     DatatableClient,
   },
@@ -121,6 +130,11 @@ export default {
       this.$store.commit("roster/INSERT_FORM", { data });
       this.$bvModal.show("roster_form");
     },
+    onRowClick(item, date_selected, row, data_roster_status) {
+      const form = { ...item[date_selected] };
+      this.$store.commit("roster/INSERT_SELECTED_FORM", { form });
+      this.$bvModal.show("roster_change_status_form");
+    },
     getNoTable(index, currentPage, perPage) {
       return index + 1 + (currentPage - 1) * perPage;
     },
@@ -146,6 +160,9 @@ export default {
       }
 
       return style;
+    },
+    setDateReadAble(date) {
+      return moment(date).format("dddd, DD MMMM YYYY");
     },
   },
 };
