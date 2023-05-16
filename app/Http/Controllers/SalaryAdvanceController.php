@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SalaryAdvance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class SalaryAdvanceController extends Controller
 {
@@ -38,5 +45,86 @@ class SalaryAdvanceController extends Controller
         return response()->json([
             "salaryAdvances" => $salaryAdvances,
         ]);
+    }
+
+    // ketika pengawas input data kasbon
+    public function store(Request $request)
+    {
+        // return request()->all();
+
+        try {
+            DB::beginTransaction();
+
+            if (request("id")) {
+                $salaryAdvance = SalaryAdvance::find(request("id"));
+
+                $message = "diperbaharui";
+            } else {
+                $salaryAdvance = new SalaryAdvance;
+
+                $message = "dikirim";
+            }
+
+            $salaryAdvance->employee_id = request("employee_id");
+            $salaryAdvance->loan_amount = request("loan_amount");
+            $salaryAdvance->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    // proses persetujuan dengan menentukan potongan perbulan
+    // role : HRD
+    public function storeApprovalSetup()
+    {
+    }
+
+    // proses persetujuan biasa
+    // role : direktur atau kasir
+    public function storeApproval()
+    {
+    }
+
+    public function destroy()
+    {
+        try {
+            DB::beginTransaction();
+
+            $salaryAdvance = SalaryAdvance::find(request("id"));
+            $salaryAdvance->update([
+                'deleted_by' => Auth::user()->id,
+            ]);
+            $salaryAdvance->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus',
+            ], 500);
+        }
     }
 }

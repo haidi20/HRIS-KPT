@@ -4,7 +4,7 @@
 <html>
 
 <head>
-    <title>sdfsfsdf</title>
+    <title>Print Absensi Karyawan</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style>
         table {

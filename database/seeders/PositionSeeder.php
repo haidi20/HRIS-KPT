@@ -17,25 +17,31 @@ class PositionSeeder extends Seeder
     public function run()
     {
         DB::table('positions')->insert(
+            // Pengawas/ Supervisor
+            [
+                'name' => 'Pengawas',
+                'description' => 'Pengawas',
+                'departmen_id' => 1,
+                'minimum_employee' => 1,
+            ],
+            [
+                'name' => 'Ass Mekanik',
+                'description' => 'Ass Mekanik',
+                'departmen_id' => 1,
+                'minimum_employee' => 1,
+            ],
+            [
+                'name' => 'QC',
+                'description' => 'Quality Control',
+                'departmen_id' => 1,
+                'minimum_employee' => 1,
+            ],
+        );
+
+        DB::table('positions')->insert(
             [
                 // PT KARYA PACIFIC TEKNIK SHIPYARD
-                // Pengawas/ Supervisor
-                [
-                    'name' => 'Pengawas',
-                    'description' => 'Pengawas',
-                    'departmen_id' => 1,
-                    'minimum_employee' => 2,
-                ],
-                [
-                    'name' => 'Ass Mekanik',
-                    'description' => 'Ass Mekanik',
-                    'departmen_id' => 1,
-                ],
-                [
-                    'name' => 'QC',
-                    'description' => 'Quality Control',
-                    'departmen_id' => 1,
-                ],
+
                 // HRD
                 [
                     'name' => 'HRD',

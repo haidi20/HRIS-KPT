@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateApprovalAgreementsTable extends Migration
+class CreateApprovalAgreementHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateApprovalAgreementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('approval_agreements', function (Blueprint $table) {
+        Schema::create('approval_agreement_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId("approval_level_id");
             $table->foreignId("user_id"); // karyawan yang telah melakukan approval
@@ -23,6 +23,7 @@ class CreateApprovalAgreementsTable extends Migration
             // $table->string("status_approval"); //review, not yet, accept, reject, revision, etc | tinjau, belum, terima, tolak, revisi, dll
             $table->enum('status_approval', ['review', 'not yet', 'accept', 'reject', 'revision'])->nullable()->default('review');
             $table->integer("level_approval")->default(0); // sudah di tahap apa proses approval
+            $table->text('note')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
@@ -38,6 +39,6 @@ class CreateApprovalAgreementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('approval_agreements');
+        Schema::dropIfExists('approval_agreement_histories');
     }
 }
