@@ -33,6 +33,7 @@ class CreateEmployeesTable extends Migration
             $table->string('no_bpjs')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('position_id')->nullable();
+            $table->unsignedBigInteger('location_id')->nullable();
             $table->unsignedBigInteger('employee_type_id')->nullable();
             $table->string('contract_start')->nullable();
             $table->string('contract_end')->nullable();
@@ -65,6 +66,10 @@ class CreateEmployeesTable extends Migration
             $table->string('rekening_name')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('branch')->nullable();
+
+            // DATA FINGER
+            $table->string('finger_doc_1')->nullable();
+            $table->string('finger_doc_2')->nullable();
 
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

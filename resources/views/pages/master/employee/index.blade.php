@@ -24,68 +24,91 @@
             <div class="card-header">
                 Data Karyawan
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                data-toggle="modal">
-                <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
-            </button>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped dataTable" id="table1">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Perusahaan</th>
-                        <th>Jabatan</th>
-                        <th>Status</th>
-                        <th width="15%">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($employees as $employee)
-                    <tr>
-                        <td>
-                            {{ $loop->iteration }}
-                        </td>
-                        <td>
-                            {{ $employee->nip }}
-                        </td>
-                        <td>
-                            {{ $employee->name }}
-                        </td>
-                        <td>
-                            {{ $employee->company_name }}
-                        </td>
-                        <td>
-                            {{ $employee->position_name }}
-                        </td>
-                        <td>
-                            @if($employee->employee_status == "aktif")
-                            <span class="text-success">AKTIF</span>
-                            @else
-                            <span class="text-danger">TIDAK AKTIF</span>
-                            @endif
-                        </td>
-                        <td class="flex flex-row justify-content-around">
-                            @can('ubah karyawan')
-                            <a href="javascript:void(0)" onclick="onEdit({{ $employee }})"
-                            class="btn btn-sm btn-info">Ubah
-                        </a>
-                        @endcan
-                        @can('hapus karyawan')
-                        <a href="javascript:void(0)" onclick="onDelete({{ $employee }})"
-                        class="btn btn-sm btn-danger">Hapus
-                    </a>
-                    @endcan
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-</div>
+                    data-toggle="modal">
+                    <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 d-flex align-items-center">
+                        <h5>Filter berdasarkan : </h5>
+                    </div>
 
-</section>
+                </div>
+                <div class="row">
+                    <div class="col-6 form-group">
+                        <label for="jabatanFilter" class="col-form-label">Jabatan :</label>
+                        <div style="width: 100%;">
+                            <select name="jabatanFilter" id="jabatanFilter" class="form-control select2"
+                                style="width: 100%;">
+                                <option value="">-- Pilih Jabatan --</option>
+                                @foreach ($positions as $position)
+                                <option value="{{ $position->name }}">{{ $position->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="locationFilter" class="col-form-label">Lokasi :</label>
+                        <div style="width: 100%;">
+                            <select name="locationFilter" id="locationFilter" class="form-control select2"
+                                style="width: 100%;">
+                                <option value="">-- Pilih Lokasi Karyawan --</option>
+                                @foreach ($locations as $location)
+                                <option value="{{ $location->name }}">{{ $location->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <table class="table table-striped dataTable" id="table1">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>NIP</th>
+                            <th>Nama</th>
+                            <th>Perusahaan</th>
+                            <th>Jabatan</th>
+                            <th width="15%">Lokasi</th>
+                            <th>Status</th>
+                            <th width="15%">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($employees as $employee)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $employee->nip }}</td>
+                            <td>{{ $employee->name }}</td>
+                            <td>{{ $employee->company_name }}</td>
+                            <td>{{ $employee->position_name }}</td>
+                            <td>{{ $employee->location_name }}</td>
+                            <td>
+                                @if($employee->employee_status == "aktif")
+                                <span class="text-success">AKTIF</span>
+                                @else
+                                <span class="text-danger">TIDAK AKTIF</span>
+                                @endif
+                            </td>
+                            <td class="flex flex-row justify-content-around">
+                                @can('ubah karyawan')
+                                <a href="javascript:void(0)" onclick="onEdit({{ $employee }})"
+                                    class="btn btn-sm btn-info">Ubah</a>
+                                @endcan
+                                @can('hapus karyawan')
+                                <a href="javascript:void(0)" onclick="onDelete({{ $employee }})"
+                                    class="btn btn-sm btn-danger">Hapus</a>
+                                @endcan
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
 </div>
 @endsection
 
@@ -123,11 +146,36 @@
 
     });
 
+    // SETUP FILTER POSITION
+    $(document).ready(function () {
+        var table = $('.dataTable').DataTable();
+
+        $('#jabatanFilter').select2();
+
+        $('#jabatanFilter').on('change', function() {
+            var selectedJabatan = $(this).val();
+            table.column(4).search(selectedJabatan).draw();
+        });
+    })
+
+    // SETUP FILTER LOCATION
+    $(document).ready(function () {
+        var table = $('.dataTable').DataTable();
+
+        $('#locationFilter').select2();
+
+        $('#locationFilter').on('change', function() {
+            var selectedLocation = $(this).val();
+            table.column(5).search(selectedLocation).draw();
+        });
+    })
+
     function onCreate() {
         clearForm();
         $("#titleForm").html("Tambah Karyawan");
         $("#kepegawaian-tab").hide();
         $("#salary-tab").hide();
+        $("#finger-tab").hide();
         // $("#kepegawaian").hide();
 
         $('#birth_date').each(function () {
@@ -139,6 +187,17 @@
             });
             $(this).datepicker('clearDates');
         });
+
+        $("#photo").change(function(e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $("#photoPreview").html('<img src="' + e.target.result + '" alt="Foto" width="100%">');
+            };
+
+            reader.readAsDataURL(file);
+        });
         onModalAction("formModal", "show");
     }
 
@@ -147,7 +206,7 @@
 
         $("#kepegawaian-tab").show();
         $("#salary-tab").show();
-        // $("#kepegawaian").show();
+        $("#finger-tab").show();
 
         function formatEnterDate(dateString) {
             var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -169,7 +228,7 @@
                 // viewMode: "months",
                 // minViewMode: "months"
             });
-           $(this).datepicker('setDate', new Date());
+            $(this).datepicker('setDate', new Date());
         });
 
         $('#contract_range input').each(function () {
@@ -231,12 +290,37 @@
         $("#phone").val(data.phone);
         $("#religion").val(data.religion).trigger("change");
         $("#address").val(data.address);
+        $("#photo").change(function(e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $("#photoPreview").html('<img src="' + e.target.result + '" alt="Foto" width="100%">');
+            };
+
+            reader.readAsDataURL(file);
+        });
+        // Mendapatkan URL foto dari data yang diterima
+        $("#photoPreviewReady").show();
+        var photoUrl = "{{ Storage::url('') }}" + data.photo;
+
+        // Membuat elemen <img> untuk menampilkan foto
+        var imageElement = document.createElement("img");
+        imageElement.src = photoUrl;
+        imageElement.alt = "Employee Photo";
+        imageElement.style.width = "100%"; // Menambahkan gaya CSS untuk lebar 100%
+
+        // Menambahkan elemen <img> ke dalam elemen dengan id "photoPreviewReady"
+        var photoPreviewReady = document.getElementById("photoPreviewReady");
+        photoPreviewReady.innerHTML = "";
+        photoPreviewReady.appendChild(imageElement);
 
         // DATA KEPEGAWAIAN
         $("#enter_date").val(formatEnterDate(data.enter_date));
         $("#npwp").val(data.npwp);
         $("#company_id").val(data.company_id).trigger("change");
         $("#position_id").val(data.position_id).trigger("change");
+        $("#location_id").val(data.location_id).trigger("change");
         $("#employee_type_id").val(data.employee_type_id).trigger("change");
         $("#contract_start").val(data.contract_start);
         $("#contract_end").val(data.contract_end);
@@ -646,6 +730,9 @@
         $("#phone").val("");
         $("#religion").val("").trigger("change");
         $("#address").val("");
+        $("#photo").val("");
+        $("#photoPreview").val("");
+        $("#photoPreviewReady").hide();
     }
 </script>
 @endsection

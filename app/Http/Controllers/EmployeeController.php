@@ -7,16 +7,21 @@ use App\Models\Company;
 use App\Models\Departmen;
 use App\Models\Employee;
 use App\Models\EmployeeType;
+use App\Models\Location;
 use App\Models\Position;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 
 class EmployeeController extends Controller
 {
+    private $public_path = '/storage/pegawai/';
+
     public function getDepartmens($companyId)
     {
         $departmens = Departmen::with('company')->where('company_id', $companyId)->get();
@@ -38,9 +43,10 @@ class EmployeeController extends Controller
         $barges = Barge::all();
         $departmens = Departmen::all();
         $positions = Position::all();
+        $locations = Location::all();
         $employee_types = EmployeeType::all();
 
-        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types"));
+        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations"));
     }
 
     public function store(Request $request)
@@ -52,34 +58,7 @@ class EmployeeController extends Controller
                 // Logika saat mengubah data
                 $employee = Employee::find(request("id"));
                 $employee->updated_by = Auth::user()->id;
-
-                // DATA KEPEGAWAIAN
-                $employee->enter_date = Carbon::parse($employee->created_at);
-                $employee->npwp = request("npwp");
-                $employee->no_bpjs = request("no_bpjs");
-                $employee->company_id = request("company_id");
-                $employee->position_id = request("position_id");
-                $employee->employee_type_id = request("employee_type_id");
-                $employee->contract_start = request("contract_start");
-                $employee->contract_end = request("contract_end");
-                $employee->latest_education = request("latest_education");
-                $employee->working_hour = request("working_hour");
-                $employee->married_status = request("married_status");
-                $employee->update(['bpjsTK' => $employee->bpjs_tk]);
-                $employee->update(['bpjsTKPT' => $employee->bpjs_tk_pt]);
-                $employee->update(['bpjsKES' => $employee->bpjs_kes]);
-                $employee->update(['bpjsKESPT' => $employee->bpjs_kes_pt]);
-                $employee->update(['bpjsTRAINING' => $employee->bpjs_training]);
                 $employee->employee_status = request("employee_status");
-                $employee->out_date = request("out_date");
-                $employee->reason = request("reason");
-
-                // DATA GAJI DAN REKENING
-                $employee->basic_salary = request("basic_salary");
-                $employee->rekening_number = request("rekening_number");
-                $employee->rekening_name = request("rekening_name");
-                $employee->bank_name = request("bank_name");
-                $employee->branch = request("branch");
 
                 $message = "diperbaharui";
             } else {
@@ -100,6 +79,50 @@ class EmployeeController extends Controller
             $employee->religion = request("religion");
             $employee->address = request("address");
 
+            // $photo = '';
+            // if ($request->file('photo')) {
+            //     $image = $request->file('photo');
+            //     $extension = $image->getClientOriginalExtension();
+            //     $fileName = 'photo-' . Str::random(10) . '.' . $extension;
+            //     Storage::disk('pegawai')->putFileAs('', $image, $fileName, 'public');
+            //     $photo = $fileName;
+            // }
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo')->store('employee', 'public');
+                $employee->photo = $photo;
+            }
+
+            // DATA KEPEGAWAIAN
+            $employee->enter_date = Carbon::parse($employee->created_at);
+            $employee->npwp = request("npwp");
+            $employee->no_bpjs = request("no_bpjs");
+            $employee->company_id = request("company_id");
+            $employee->position_id = request("position_id");
+            $employee->location_id = request("location_id");
+            $employee->employee_type_id = request("employee_type_id");
+            $employee->contract_start = request("contract_start");
+            $employee->contract_end = request("contract_end");
+            $employee->latest_education = request("latest_education");
+            $employee->working_hour = request("working_hour");
+            $employee->married_status = request("married_status");
+            $employee->update(['bpjsTK' => $employee->bpjs_tk]);
+            $employee->update(['bpjsTKPT' => $employee->bpjs_tk_pt]);
+            $employee->update(['bpjsKES' => $employee->bpjs_kes]);
+            $employee->update(['bpjsKESPT' => $employee->bpjs_kes_pt]);
+            $employee->update(['bpjsTRAINING' => $employee->bpjs_training]);
+            $employee->out_date = request("out_date");
+            $employee->reason = request("reason");
+
+            // DATA GAJI DAN REKENING
+            $employee->basic_salary = request("basic_salary");
+            $employee->rekening_number = request("rekening_number");
+            $employee->rekening_name = request("rekening_name");
+            $employee->bank_name = request("bank_name");
+            $employee->branch = request("branch");
+
+            // DATA FINGER
+            $employee->finger_doc_1 = request("finger_doc_1");
+            $employee->finger_doc_2 = request("finger_doc_2");
 
 
             $employee->save();

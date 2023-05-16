@@ -100,11 +100,11 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="address" class="col-sm-4 col-form-label">Alamat</label>
+                                <label for="photo" class="col-sm-4 col-form-label">Foto</label>
                                 <div class="col-sm-8">
-                                    {{-- <input type="text" id="address" name="address" class="form-control"> --}}
-                                    <textarea name="address" id="address" cols="60" rows="5"
-                                        class="form-control"></textarea>
+                                    <input class="form-control" type="file" id="photo" name="photo">
+                                    <label id="photoPreview"></label>
+                                    <label id="photoPreviewReady" width="100%"></label>
                                 </div>
                             </div>
                         </div>
@@ -152,6 +152,20 @@
                                         <option value="">-- Pilih Jabatan --</option>
                                         @foreach ($positions as $position)
                                         <option value="{{ $position->id }}">{{ $position->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="location_id" class="col-sm-4 col-form-label"> Lokasi Karyawan
+                                </label>
+                                <div class="col-sm-8">
+                                    <select id="location_id" name="location_id" class="select2 form-select"
+                                        style="width: 100%">
+                                        <option value="">-- Pilih Lokasi Karyawan --</option>
+                                        @foreach ($locations as $location)
+                                        <option value="{{ $location->id }}">{{ $location->name }}
                                         </option>
                                         @endforeach
                                     </select>
@@ -353,6 +367,24 @@
                                 <label for="branch" class="col-sm-4 col-form-label">Cabang</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="branch" name="branch" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- DATA FINGER --}}
+                        <div class="tab-pane fade" id="finger" role="tabpanel" aria-labelledby="finger-tab">
+                            <div class="form-group row">
+                                <label for="finger_doc_1" class="col-sm-4 col-form-label">Nomor ID di Finger Doc
+                                    1</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control datepicker" id="finger_doc_1" name="finger_doc_1">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="finger_doc_2" class="col-sm-4 col-form-label">Nomor ID di Finger Doc
+                                    2</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control datepicker" id="finger_doc_2" name="finger_doc_2">
                                 </div>
                             </div>
                         </div>
