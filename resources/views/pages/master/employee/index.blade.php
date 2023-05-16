@@ -204,10 +204,12 @@
     function onEdit(data) {
         clearForm();
 
+        // MEMUNCULKAN TAB
         $("#kepegawaian-tab").show();
         $("#salary-tab").show();
         $("#finger-tab").show();
 
+        // SETUP FORMAT UNTUK TANGGAL MASUK
         function formatEnterDate(dateString) {
             var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             var date = new Date(dateString);
@@ -221,6 +223,7 @@
             return formattedDate;
         }
 
+        // SETUP FORMAT UNTUK TANGGAL KELUAR
         $('#out_date').each(function () {
             $(this).datepicker({
                 autoclose: true,
@@ -231,6 +234,7 @@
             $(this).datepicker('setDate', new Date());
         });
 
+        // SETUP FORMAT UNTUK KONTRAK
         $('#contract_range input').each(function () {
             $(this).datepicker({
                 autoclose: true,
@@ -241,6 +245,7 @@
             $(this).datepicker('contract_range');
         });
 
+        // SETUP KONDISI UNTUK JENIS KARYAWAN
         $("#employee_type_id").change(function() {
             var selectedValue = $(this).val();
 
@@ -265,6 +270,7 @@
             }
         });
 
+        // SETUP KONDISI UNTUK STATUS KARYAWAN
         $("#employee_status").change(function() {
             var employeeStatus = $(this).val();
 
@@ -280,6 +286,7 @@
             }
         });
 
+        // EDIT VALUE
         // DATA PERSONAL
         $("#id").val(data.id);
         $("#nip").val(data.nip);
@@ -300,17 +307,14 @@
 
             reader.readAsDataURL(file);
         });
-        // Mendapatkan URL foto dari data yang diterima
         $("#photoPreviewReady").show();
         var photoUrl = "{{ Storage::url('') }}" + data.photo;
 
-        // Membuat elemen <img> untuk menampilkan foto
         var imageElement = document.createElement("img");
         imageElement.src = photoUrl;
         imageElement.alt = "Employee Photo";
-        imageElement.style.width = "100%"; // Menambahkan gaya CSS untuk lebar 100%
+        imageElement.style.width = "100%";
 
-        // Menambahkan elemen <img> ke dalam elemen dengan id "photoPreviewReady"
         var photoPreviewReady = document.getElementById("photoPreviewReady");
         photoPreviewReady.innerHTML = "";
         photoPreviewReady.appendChild(imageElement);
@@ -356,88 +360,7 @@
 
         $("#titleForm").html("Ubah Karyawan");
 
-        // Mengatur #departmen menjadi nonaktif saat halaman dimuat
-        $('#departmen').prop('disabled', true);
-
-        // Mengatur peristiwa saat pilihan pada #company berubah
-        $('#company').on('change', function() {
-            var companyId = $(this).val();
-
-            // Memuat departemen berdasarkan perusahaan yang dipilih
-            $.ajax({
-                url: 'employee/get-departmens/' + companyId,
-                method: 'GET',
-                success: function(response) {
-                    // Menghapus opsi sebelumnya pada #departmen
-                    $('#departmen').find('option').remove();
-
-                    // Menambahkan opsi "-- Pilih Jabatan --"
-                    $('#departmen').append('<option value="">-- Pilih Departemen --</option>');
-
-                    // Menambahkan opsi departemen baru
-                    if (response.length > 0) {
-                        $.each(response, function(key, value) {
-                            $('#departmen').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-
-                        // Mengaktifkan #departmen
-                        $('#departmen').prop('disabled', false);
-                    } else {
-                        // Tidak ada departemen yang tersedia
-                        $('#departmen').append('<option value="">Tidak ada departemen yang tersedia</option>');
-
-                        // Menonaktifkan #departmen
-                        $('#departmen').prop('disabled', true);
-                    }
-                },
-                error: function() {
-                    // Menampilkan pesan error jika terjadi masalah saat memuat departemen
-                    console.log('Terjadi kesalahan saat memuat departemen.');
-                }
-            });
-        });
-
-        // Mengatur #position menjadi nonaktif saat halaman dimuat
-        $('#position').prop('disabled', true);
-
-        // Mengatur peristiwa saat pilihan pada #company berubah
-        $('#departmen').on('change', function() {
-            var departmenId = $(this).val();
-
-            // Memuat departemen berdasarkan perusahaan yang dipilih
-            $.ajax({
-                url: 'employee/get-positions/' + departmenId,
-                method: 'GET',
-                success: function(response) {
-                    // Menghapus opsi sebelumnya pada #departmen
-                    $('#position').find('option').remove();
-
-                    // Menambahkan opsi "-- Pilih Jabatan --"
-                    $('#position').append('<option value="">-- Pilih Jabatan --</option>');
-
-                    // Menambahkan opsi departemen baru
-                    if (response.length > 0) {
-                        $.each(response, function(key, value) {
-                            $('#position').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-
-                        // Mengaktifkan #position
-                        $('#position').prop('disabled', false);
-                    } else {
-                        // Tidak ada departemen yang tersedia
-                        $('#position').append('<option value="">Tidak ada departemen yang tersedia</option>');
-
-                        // Menonaktifkan #position
-                        $('#position').prop('disabled', true);
-                    }
-                },
-                error: function() {
-                    // Menampilkan pesan error jika terjadi masalah saat memuat departemen
-                    console.log('Terjadi kesalahan saat memuat departemen.');
-                }
-            });
-        });
-
+        // CHECK SLIDER CONDITION
         $('.bpjsTKCheck').change(function() {
             var mode = $(this).prop('checked');
             var id = $(this).attr('data-target');

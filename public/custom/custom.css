@@ -23,3 +23,52 @@
 .page-heading {
     margin: 0 0 1rem !important;
 }
+
+.bootstrap-timepicker-widget {
+    left: auto;
+    width: 180px;
+    border-radius: 0.42rem;
+}
+
+.bootstrap-timepicker-widget .bootstrap-timepicker-hour,
+.bootstrap-timepicker-widget .bootstrap-timepicker-minute,
+.bootstrap-timepicker-widget .bootstrap-timepicker-meridian,
+.bootstrap-timepicker-widget .bootstrap-timepicker-second {
+    border: 0;
+    background-color: transparent;
+    outline: none !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #7E8299;
+    font-weight: 500;
+}
+
+.bootstrap-timepicker-widget table td {
+    border-radius: 0.42rem;
+    text-align: center;
+}
+
+.bootstrap-timepicker-widget table td>a {
+    border: 0;
+    border-radius: 0.42rem;
+    width: 33px;
+    height: 33px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.bootstrap-timepicker-widget table td>a span {
+    font-size: 0.75rem;
+    color: #B5B5C3;
+    line-height: 1;
+}
+
+.bootstrap-timepicker-widget table td>a:hover {
+    background: #F3F6F9;
+}
+

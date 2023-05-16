@@ -20,6 +20,7 @@ class CreateWorkingHoursTable extends Migration
             $table->time('maximum_delay')->nullable();
             $table->time('fastest_time')->nullable();
             $table->time('overtime_work')->nullable();
+            $table->time('saturday_work_hour')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

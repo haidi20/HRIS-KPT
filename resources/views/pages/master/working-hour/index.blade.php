@@ -23,9 +23,9 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
 
-                    </div>
+                    </div> --}}
 
                     <div class="card-body">
                         <form id="form" enctype="multipart/form-data">
@@ -36,8 +36,8 @@
                                     <div class="form-group row">
                                         <label for="start_time" class="col-sm-4 col-form-label">Jam Mulai Kerja </label>
                                         <div class="col-sm-8">
-                                            <input type="time" id="start_time" name="start_time" class="form-control" placeholder="contoh: 08:00"
-                                                value="{{ $startTime[0] ?? '' }}">
+                                            <input type="text" id="start_time" name="start_time" class="form-control datetime"
+                                                placeholder="contoh: 08:00" value="{{ $startTime[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -45,10 +45,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="after_work" class="col-sm-4 col-form-label">Jam Selesai Kerja</label>
+                                        <label for="after_work" class="col-sm-4 col-form-label">Jam Selesai
+                                            Kerja</label>
                                         <div class="col-sm-8">
-                                            <input type="time" id="after_work" name="after_work" class="form-control" placeholder="contoh: 05:00"
-                                                value="{{ $afterWork[0] ?? '' }}">
+                                            <input type="text" id="after_work" name="after_work" class="form-control datetime"
+                                                placeholder="contoh: 05:00" value="{{ $afterWork[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -56,10 +57,12 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal Keterlambatan</label>
+                                        <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal
+                                            Keterlambatan</label>
                                         <div class="col-sm-8">
-                                            <input type="time" id="maximum_delay" name="maximum_delay" class="form-control"
-                                                placeholder="contoh: 08:30" value="{{ $maximumDelay[0] ?? '' }}">
+                                            <input type="text" id="maximum_delay" name="maximum_delay"
+                                                class="form-control datetime" placeholder="contoh: 08:30"
+                                                value="{{ $maximumDelay[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -67,10 +70,12 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="fastest_time" class="col-sm-4 col-form-label">Jam Paling Cepat Pulang</label>
+                                        <label for="fastest_time" class="col-sm-4 col-form-label">Jam Paling Cepat
+                                            Pulang</label>
                                         <div class="col-sm-8">
-                                            <input type="time" id="fastest_time" name="fastest_time" class="form-control"
-                                                placeholder="contoh: 16:30" value="{{ $fastestTime[0] ?? '' }}">
+                                            <input type="text" id="fastest_time" name="fastest_time"
+                                                class="form-control datetime" placeholder="contoh: 16:30"
+                                                value="{{ $fastestTime[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -78,10 +83,24 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="overtime_work" class="col-sm-4 col-form-label">Jam Mulai Lembur</label>
+                                        <label for="overtime_work" class="col-sm-4 col-form-label">Jam Mulai
+                                            Lembur</label>
                                         <div class="col-sm-8">
-                                            <input type="time" id="overtime_work" name="overtime_work" class="form-control"
-                                                placeholder="contoh: 16:30" value="{{ $overtimeWork[0] ?? '' }}">
+                                            <input type="text" id="overtime_work" name="overtime_work"
+                                                class="form-control datetime" placeholder="contoh: 16:30"
+                                                value="{{ $overtimeWork[0] ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Kerja Hari Sabtu</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="saturday_work_hour" name="saturday_work_hour"
+                                                class="form-control datetime" placeholder="contoh: 13:30"
+                                                value="{{ $saturdayWorkHour[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +110,7 @@
                                 <div class="col-md-8"></div>
                                 <div class="col-md-4" style="text-align:end; ">
                                     {{-- <button type="button" class="btn btn-sm btn-danger"
-                                    data-bs-dismiss="modal">Batal</button> --}}
+                                                    data-bs-dismiss="modal">Batal</button> --}}
                                     <button type="submit" class="btn btn-sm btn-success">Perbaharui</button>
                                 </div>
                             </div>
@@ -106,17 +125,41 @@
 @endsection
 
 @section('style')
-<link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/bootstrap-timepicker.css') }}" rel="stylesheet" />
 @endsection
-
 @section('script')
-<script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
+<script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-timepicker.min.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('.dataTable').DataTable();
         clearForm();
         setupSelect();
         send();
+
+       $('.datetime').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        dropdown: true,
+        scrollbar: true,
+        showMeridian: false,
+        snapToStep: true,
+        icons: {
+        time: 'far fa-clock',
+        date: 'far fa-calendar',
+        up: 'fas fa-arrow-up',
+        down: 'fas fa-arrow-down',
+        previous: 'fas fa-chevron-left',
+        next: 'fas fa-chevron-right',
+        today: 'fas fa-calendar-check',
+        clear: 'far fa-trash-alt',
+        close: 'far fa-times-circle'
+        }
+        });
+
+        var currentdate = new Date();
+        var hours = ('0' + currentdate.getHours()).slice(-2);
+        var minutes = ('0' + currentdate.getMinutes()).slice(-2);
+        var datetime = hours + ":" + minutes;
     });
 
     function onCreate() {

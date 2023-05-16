@@ -19,11 +19,12 @@ class WorkingHourSeeder extends Seeder
         DB::table('working_hours')->insert(
             [
                 [
-                    'start_time' => '08.00',
-                    'after_work' => '17.00',
-                    'maximum_delay' => '18.00',
-                    'fastest_time' => '16.00',
-                    'overtime_work' => '24.00',
+                    'start_time' => '08:00',
+                    'after_work' => '17:00',
+                    'maximum_delay' => '18:00',
+                    'fastest_time' => '16:00',
+                    'overtime_work' => '24:00',
+                    'saturday_work_hour' => '13:00',
                 ],
             ],
         );
