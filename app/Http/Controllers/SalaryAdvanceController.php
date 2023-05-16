@@ -21,11 +21,11 @@ class SalaryAdvanceController extends Controller
 
     public function index()
     {
-
-
         $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
 
-        return view("pages.salary-advance.index", compact("vue"));
+        return view("pages.salary-advance.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()
@@ -50,7 +50,7 @@ class SalaryAdvanceController extends Controller
     // ketika pengawas input data kasbon
     public function store(Request $request)
     {
-        // return request()->all();
+        return request()->all();
 
         try {
             DB::beginTransaction();

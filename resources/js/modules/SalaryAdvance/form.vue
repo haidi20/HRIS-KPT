@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 import VueSelect from "vue-select";
 
 export default {
@@ -68,8 +70,14 @@ export default {
     VueSelect,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getOptionEmployees() {
-      return this.$store.state.employee.data.main;
+      return this.$store.state.employee.data.options;
     },
     form() {
       return this.$store.state.salaryAdvance.form;
@@ -89,8 +97,66 @@ export default {
     onCloseModal() {
       this.$bvModal.hide("salary_advance_form");
     },
-    onSend() {
-      this.$bvModal.hide("salary_advance_form");
+    async onSend() {
+      const Swal = this.$swal;
+
+      // mengambil data hexa saja
+      const request = {
+        ...this.form,
+      };
+
+      // console.info(request);
+
+      await axios
+        .post(`${this.getBaseUrl}/api/v1/salary-advance/store`, request)
+        .then((responses) => {
+          console.info(responses);
+
+          return false;
+          const data = responses.data;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          if (data.success == true) {
+            Toast.fire({
+              icon: "success",
+              title: data.message,
+            });
+
+            this.$bvModal.hide("salary_advance_form");
+            this.$store.dispatch("salaryAdvance/fetchData");
+          }
+        })
+        .catch((err) => {
+          console.info(err);
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
   },
 };

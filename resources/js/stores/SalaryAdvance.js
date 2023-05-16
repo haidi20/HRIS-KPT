@@ -66,6 +66,12 @@ const SalaryAdvance = {
         },
     },
     mutations: {
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
+        INSERT_DATA(state, payload) {
+            state.data = payload.data;
+        },
         INSERT_FORM_AMOUNT(state, payload) {
             if (payload.amount != null) {
                 // console.info(typeof payload.amount);
