@@ -25,7 +25,7 @@
       </b-thead>
       <b-tbody>
         <tr v-for="(position, index) in getPositions" :key="index">
-          <b-td>{{position.name}}</b-td>
+          <b-td :style="setStyle(position)">{{position.name}}</b-td>
           <b-td
             v-for="(date, index) in getDateRange"
             v-bind:key="`data-date-${index}`"
@@ -83,6 +83,14 @@ export default {
         backgroundColor:
           Number(value) < Number(position.minimum_employee) ? "orange" : null,
       };
+    },
+    setStyle(data) {
+      if (data.id == "all") {
+        return {
+          color: "white",
+          backgroundColor: "#435EBE",
+        };
+      }
     },
   },
 };

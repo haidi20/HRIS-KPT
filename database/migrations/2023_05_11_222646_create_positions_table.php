@@ -17,7 +17,7 @@ class CreatePositionsTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->string('minimum_employee')->nullable();
+            $table->integer('minimum_employee')->default(0);
             $table->unsignedBigInteger('departmen_id')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

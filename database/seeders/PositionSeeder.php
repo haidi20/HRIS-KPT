@@ -24,6 +24,7 @@ class PositionSeeder extends Seeder
                     'name' => 'Pengawas',
                     'description' => 'Pengawas',
                     'departmen_id' => 1,
+                    'minimum_employee' => 2,
                 ],
                 [
                     'name' => 'Ass Mekanik',
