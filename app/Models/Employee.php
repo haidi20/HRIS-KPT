@@ -11,6 +11,7 @@ class Employee extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ["company_name","position_name","departmen_name","location_name","employee_type_name"];
     protected $fillable = [];
 
     public function __construct(array $attributes = [])
@@ -25,9 +26,28 @@ class Employee extends Model
         return $this->belongsTo(Company::class, "company_id", "id");
     }
 
+
+    public function getCompanyNameAttribute()
+    {
+        if ($this->company) {
+            return $this->company->name;
+        } else {
+            return "Data Perusahaan Masih Kosong";
+        }
+    }
+
     public function position()
     {
         return $this->belongsTo(Position::class, "position_id", "id");
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->position) {
+            return $this->position->name;
+        } else {
+            return "Data Jabatan Masih Kosong";
+        }
     }
 
     public function departmen()
@@ -35,13 +55,40 @@ class Employee extends Model
         return $this->belongsTo(Departmen::class, "departmen_id", "id");
     }
 
-    public function employee_type()
+    public function getDepartmenNameAttribute()
     {
-        return $this->belongsTo(EmployeeType::class, "employee_type_id", "id");
+        if ($this->departmen) {
+            return $this->departmen->name;
+        } else {
+            return "Data Departemen Masih Kosong";
+        }
     }
 
     public function location()
     {
         return $this->belongsTo(Location::class, "location_id", "id");
+    }
+
+    public function getLocationNameAttribute()
+    {
+        if ($this->location) {
+            return $this->location->name;
+        } else {
+            return "Data Lokasi Masih Kosong";
+        }
+    }
+
+    public function employee_type()
+    {
+        return $this->belongsTo(EmployeeType::class, "employee_type_id", "id");
+    }
+
+    public function getEmployeeTypeNameAttribute()
+    {
+        if ($this->employee_type) {
+            return $this->employee_type->name;
+        } else {
+            return "Data Tipe Pegawai Masih Kosong";
+        }
     }
 }

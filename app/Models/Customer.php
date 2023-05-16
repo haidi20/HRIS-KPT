@@ -11,7 +11,15 @@ class Customer extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $appends = ["company_name", "barge_name"];
+    protected $fillable = [
+        'name',
+        'company_id',
+        'barge_id',
+        'created_by',
+        'updated_by',
+        'deleted_by'
+    ];
 
     public function __construct(array $attributes = [])
     {
@@ -28,5 +36,22 @@ class Customer extends Model
     public function barge()
     {
         return $this->belongsTo(Barge::class, "barge_id", "id");
+    }
+
+    public function getCompanyNameAttribute()
+    {
+        if ($this->company) {
+            return $this->company->name;
+        } else {
+            return "Data Perusahaan Masih Kosong";
+        }
+    }
+    public function getBargeNameAttribute()
+    {
+        if ($this->barge) {
+            return $this->barge->name;
+        } else {
+            return "Data Kapal Masih Kosong";
+        }
     }
 }

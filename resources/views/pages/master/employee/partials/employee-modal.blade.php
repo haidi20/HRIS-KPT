@@ -22,22 +22,14 @@
                             <a class="nav-link" id="kepegawaian-tab" data-bs-toggle="tab" href="#kepegawaian" role="tab"
                                 aria-controls="kepegawaian" aria-selected="false">Data Kepegawaian</a>
                         </li>
-                        {{-- <li class="nav-item" role="presentation" id="tab-keluarga">
-                            <a class="nav-link" id="keluarga-tab" data-bs-toggle="tab" href="#keluarga" role="tab"
-                                aria-controls="keluarga" aria-selected="false">Data Keluarga</a>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="salary-tab" data-bs-toggle="tab" href="#salary" role="tab" aria-controls="salary"
+                                aria-selected="false">Data Gaji & Rekening</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="finger-tab" data-bs-toggle="tab" href="#finger" role="tab"
-                                aria-controls="finger" aria-selected="false">Data Alat Finger</a>
+                            aria-controls="finger" aria-selected="false">Data Alat Finger</a>
                         </li>
-                        {{-- <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="rekening-tab" data-bs-toggle="tab" href="#rekening" role="tab"
-                                aria-controls="rekening" aria-selected="false">Data Rekening</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="dokumen-tab" data-bs-toggle="tab" href="#dokumen" role="tab"
-                                aria-controls="dokumen" aria-selected="false">Data Dokumen</a>
-                        </li> --}}
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         {{-- DATA PERSONAL --}}
@@ -70,13 +62,14 @@
                             <div class="form-group row">
                                 <label for="birth_date" class="col-sm-4 col-form-label">Tanggal Lahir</label>
                                 <div class="col-sm-8">
-                                    <input type="date" id="birth_date" name="birth_date" class="form-control">
+                                    <input type="text" id="birth_date" name="birth_date" class="form-control" readonly
+                                        style="cursor: pointer;">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="phone" class="col-sm-4 col-form-label">Telepon</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="phone" name="phone" class="form-control">
+                                    <input type="number" id="phone" name="phone" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -84,7 +77,7 @@
                                 <div class="col-sm-8">
                                     <select id="religion" name="religion" class="select2 form-select"
                                         style="width: 100%">
-                                        <option value="">Pilih Agama</option>
+                                        <option value="">-- Pilih Agama --</option>
                                         <option value="islam">Islam
                                         </option>
                                         <option value="kristen">
@@ -106,14 +99,42 @@
                                         class="form-control"></textarea>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="address" class="col-sm-4 col-form-label">Alamat</label>
+                                <div class="col-sm-8">
+                                    {{-- <input type="text" id="address" name="address" class="form-control"> --}}
+                                    <textarea name="address" id="address" cols="60" rows="5"
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- DATA KEPEGAWAIAN --}}
                         <div class="tab-pane fade" id="kepegawaian" role="tabpanel" aria-labelledby="kepegawaian-tab">
                             <div class="form-group row">
-                                <label for="company" class="col-sm-4 col-form-label">Perusahaan</label>
+                                <label for="enter_date" class="col-sm-4 col-form-label">Tanggal Masuk</label>
                                 <div class="col-sm-8">
-                                    <select name="company" id="company" class="form-control select2" style="width: 100%;">
+                                    <input type="text" class="form-control datepicker" id="enter_date" name="enter_date"
+                                        readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="npwp" class="col-sm-4 col-form-label">NPWP</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="npwp" name="npwp">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="no_bpjs" class="col-sm-4 col-form-label">Nomor BPJS</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="no_bpjs" name="no_bpjs">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="company_id" class="col-sm-4 col-form-label">Perusahaan</label>
+                                <div class="col-sm-8">
+                                    <select name="company_id" id="company_id" class="form-control select2"
+                                        style="width: 100%;">
                                         <option value="">-- Pilih Perusahaan --</option>
                                         @foreach ($companies as $company)
                                         <option value="{{ $company->id }}">
@@ -124,22 +145,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="departmen" class="col-sm-4 col-form-label">Departemen</label>
+                                <label for="position_id" class="col-sm-4 col-form-label">Jabatan</label>
                                 <div class="col-sm-8">
-                                    <select name="departmen" id="departmen" class="form-control select2" style="width: 100%;">
-                                        <option value="">-- Pilih Departemen --</option>
-                                        @foreach ($departmens as $departmen)
-                                        <option value="{{ $departmen->id }}">{{ $departmen->company->name }} -
-                                            {{ $departmen->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="position" class="col-sm-4 col-form-label">Jabatan</label>
-                                <div class="col-sm-8">
-                                    <select name="position" id="position" class="form-control select2" style="width: 100%;">
+                                    <select name="position_id" id="position_id" class="form-control select2"
+                                        style="width: 100%;">
                                         <option value="">-- Pilih Jabatan --</option>
                                         @foreach ($positions as $position)
                                         <option value="{{ $position->id }}">{{ $position->name }}
@@ -149,35 +158,37 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="agama" class="col-sm-4 col-form-label"> Jenis Kepegawaian </label>
+                                <label for="employee_type_id" class="col-sm-4 col-form-label"> Jenis Karyawan
+                                </label>
                                 <div class="col-sm-8">
-                                    <select id="agama" name="agama" class="select2 form-select" required style="width: 100%">
-                                        <option value="6,1">
-                                            6 - 1 (6 hari kerja dan 1 hari off)
+                                    <select id="employee_type_id" name="employee_type_id" class="select2 form-select"
+                                        style="width: 100%">
+                                        <option value="">-- Pilih Jenis Karyawan --</option>
+                                        @foreach ($employee_types as $employee_type)
+                                        <option value="{{ $employee_type->id }}">{{ $employee_type->name }}
                                         </option>
-                                        <option value="5,2">
-                                            5 - 2 (5 hari kerja dan 2 hari off)
-                                        </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="tanggal_masuk" class="col-sm-4 col-form-label">Tanggal Masuk</label>
+                            <div class="form-group row" id="contract_range_row">
+                                <label for="contract_range" id="titleContactRange"
+                                    class="col-sm-4 col-form-label"></label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control datepicker" id="tanggal_masuk" name="tanggal_masuk">
+                                    <div class="input-group input-daterange" id="contract_range">
+                                        <input type="text" class="form-control" name="contract_start"
+                                            id="contract_start" autocomplete="off">
+                                        <div class="input-group-addon" style="padding-right: 8px;">S/D</div>
+                                        <input type="text" class="form-control" name="contract_end" id="contract_end"
+                                            autocomplete="off">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="npwp" class="col-sm-4 col-form-label">NPWP</label>
-                                <div class="col-sm-8">
-                                    <input type="number" class="form-control" id="npwp" name="npwp">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="pendidikan_terakhir" class="col-sm-4 col-form-label">Pendidikan
+                                <label for="latest_education" class="col-sm-4 col-form-label">Pendidikan
                                     Terakhir</label>
                                 <div class="col-sm-8">
-                                    <select name="pendidikan_terakhir" id="pendidikan_terakhir" class="form-control select2"
+                                    <select name="latest_education" id="latest_education" class="form-control select2"
                                         style="width: 100%;">
                                         <option value="">-- Pilih Pendidikan Terakhir --</option>
                                         <option value="sd">SD</option>
@@ -191,127 +202,157 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="status_pegawai" class="col-sm-4 col-form-label">Jenis Karyawan</label>
+                                <label for="working_hour" class="col-sm-4 col-form-label">Jam Kerja Karyawan</label>
                                 <div class="col-sm-8">
-                                    <select name="status_pegawai" id="status_pegawai" class="form-control select2" style="width: 100%;">
-                                        <option value="">-- Pilih Status Pegawai --</option>
-                                        {{-- @foreach ($status_pegawais as $status_pegawai)
-                                                                                                            <option value="{{ $status_pegawai->id }}"
-                                        <?php if ($pegawai->status_pegawai_id == $status_pegawai->id) {
-                                                                                                                    echo 'selected';
-                                                                                                                } ?>>
-                                        {{ $status_pegawai->nama_status_pegawai }}
+                                    <select name="working_hour" id="working_hour" class="form-control select2"
+                                        style="width: 100%;">
+                                        <option value="">-- Pilih Jam Kerja Karyawan --</option>
+                                        <option value="6,1">
+                                            6 - 1 (6 hari kerja dan 1 hari off)
                                         </option>
-                                        @endforeach --}}
-                                        <option value="aktif">Tetap</option>
-                                        <option value="aktif">Harian</option>
-                                        <option value="aktif">Borongan</option>
+                                        <option value="5,2">
+                                            5 - 2 (5 hari kerja dan 2 hari off)
+                                        </option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="kawin" class="col-sm-4 col-form-label">Status Nikah</label>
+                                <label for="married_status" class="col-sm-4 col-form-label">Status Nikah</label>
                                 <div class="col-sm-8">
-                                    <select name="kawin" id="kawin" class="form-control select2" style="width: 100%;">
-                                        <option value="">-- Pilih Nikah --</option>
-                                        <option value="aktif">Sudah Menikah</option>
-                                        <option value="aktif">Belum Menikah</option>
-                                        <option value="aktif">Janda</option>
-                                        <option value="aktif">Duda</option>
+                                    <select name="married_status" id="married_status" class="form-control select2"
+                                        style="width: 100%;">
+                                        <option value="">-- Pilih Status Nikah --</option>
+                                        <option value="sudah_menikah">Sudah Menikah</option>
+                                        <option value="belum_menikah">Belum Menikah</option>
+                                        <option value="janda">Janda</option>
+                                        <option value="duda">Duda</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="status" class="col-sm-4 col-form-label">Status Pegawai</label>
+                                <label for="bpjs" class="col-sm-4 col-form-label">Status BPJS</label>
                                 <div class="col-sm-8">
-                                    <select name="status" id="status" class="form-control select2" style="width: 100%;">
-                                        <option value="">-- Pilih Status --</option>
-                                        <option value="aktif">Aktif</option>
-                                        <option value="keluar">Keluar</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="tanggal_keluar" class="col-sm-4 col-form-label">Tanggal Keluar</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control datepicker" id="tanggal_keluar" name="tanggal_keluar"
-                                        placeholder="Tanggal Keluar">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="bpjs">BPJS</label><br>
-                                        <div class="form-check form-switch">
-                                            <form>
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : BPJS"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="toggle" class="form-check-input bpjsCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="1" data-on="Enabled">
-                                            </form>
-                                            </label>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="jkk">BPJS TK CV</label><br>
-                                        <div class="form-check form-switch">
-                                            <form>
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : JKK"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="toggle" class="form-check-input jkkCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="2" data-on="Enabled">
-                                            </form>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="jkm">BPJS KES</label><br>
-                                        <div class="form-check form-switch">
-                                            <form>
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : JKM"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="toggle" class="form-check-input jkmCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="3" data-on="Enabled">
-                                            </form>
-                                            </label>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="jht">BPJS KES CV</label><br>
-                                        <div class="form-check form-switch">
-                                            <form>
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : JHT"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="toggle" class="form-check-input jhtCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="4" data-on="Enabled">
-                                            </form>
-                                            </label>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="ip">Training</label><br>
-                                        <div class="form-check form-switch">
-                                            <form>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label for="bpjs_tk" class="col-form-label">TK</label>
+                                            <div class="form-check form-switch">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
                                                     for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="toggle" class="form-check-input ipCheck" data-toggle="toggle"
-                                                        id="flexSwitchCheckChecked" data-off="Disabled" data-target="5" data-on="Enabled">
-                                            </form>
-                                            </label>
+                                                    <input type="checkbox" name="bpjs_tk"
+                                                        class="form-check-input bpjsTKCheck" data-toggle="toggle"
+                                                        id="bpjs_tk" data-off="Disabled" data-on="Enabled">
+                                                </label>
+                                            </div>
                                         </div>
-
+                                        <div class="col-md-2">
+                                            <label for="bpjs_tk_pt" class="col-form-label">TK PT</label>
+                                            <div class="form-check form-switch">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
+                                                    for="flexSwitchCheckChecked">
+                                                    <input type="checkbox" name="bpjs_tk_pt"
+                                                        class="form-check-input bpjsTKPTCheck" data-toggle="toggle"
+                                                        id="bpjs_tk_pt" data-off="Disabled" data-on="Enabled">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="bpjs_kes" class="col-form-label">KES</label>
+                                            <div class="form-check form-switch">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
+                                                    for="flexSwitchCheckChecked">
+                                                    <input type="checkbox" name="bpjs_kes"
+                                                        class="form-check-input bpjsKESCheck" data-toggle="toggle"
+                                                        id="bpjs_kes" data-off="Disabled" data-on="Enabled">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="bpjs_kes_pt" class="col-form-label">KES PT</label>
+                                            <div class="form-check form-switch">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
+                                                    for="flexSwitchCheckChecked">
+                                                    <input type="checkbox" name="bpjs_kes_pt"
+                                                        class="form-check-input bpjsKESPTCheck" data-toggle="toggle"
+                                                        id="bpjs_kes_pt" data-off="Disabled" data-on="Enabled">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="bpjs_training" class="col-form-label">TRAINING</label>
+                                            <div class="form-check form-switch">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
+                                                    for="flexSwitchCheckChecked">
+                                                    <input type="checkbox" name="bpjs_training"
+                                                        class="form-check-input bpjsTRAININGCheck" data-toggle="toggle"
+                                                        id="bpjs_training" data-off="Disabled" data-on="Enabled">
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label for="employee_status" class="col-sm-4 col-form-label">Status Pegawai</label>
+                                <div class="col-sm-8">
+                                    <select name="employee_status" id="employee_status" class="form-control select2"
+                                        style="width: 100%;">
+                                        <option value="">-- Pilih Status --</option>
+                                        <option value="aktif">Aktif</option>
+                                        <option value="tidak_aktif">Tidak Aktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="reason_row">
+                                <label for="reason" class="col-sm-4 col-form-label">Alasan Tidak Aktif</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="reason" name="reason">
+                                </div>
+                            </div>
+                            <div class="form-group row" id="out_date_row">
+                                <label for="out_date" class="col-sm-4 col-form-label">Tanggal Keluar</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="out_date" name="out_date" class="form-control" readonly style="cursor: pointer;">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- DATA GAJI DAN REKENING --}}
+                        <div class="tab-pane fade" id="salary" role="tabpanel" aria-labelledby="salary-tab">
+                            <div class="form-group row">
+                                <label for="basic_salary" class="col-sm-4 col-form-label">Gaji Pokok</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="basic_salary" name="basic_salary" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="rekening_number" class="col-sm-4 col-form-label">Nomor Rekening</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="rekening_number" name="rekening_number" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="rekening_name" class="col-sm-4 col-form-label">Nama Rekening</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="rekening_name" name="rekening_name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="bank_name" class="col-sm-4 col-form-label">Nama Bank </label>
+                                <div class="col-sm-8">
+                                    <select id="bank_name" name="bank_name" class="select2 form-select" style="width: 100%">
+                                        <option value="">-- Pilih Bank --</option>
+                                        <option value="bca">BCA</option>
+                                        <option value="bri">BRI</option>
+                                        <option value="mandiri">MANDIRI</option>
+                                        <option value="bsi">BSI</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="branch" class="col-sm-4 col-form-label">Cabang</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="branch" name="branch" class="form-control">
                                 </div>
                             </div>
                         </div>

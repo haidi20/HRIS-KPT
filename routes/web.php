@@ -178,6 +178,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('', [EmployeeController::class, "index"])->name("index");
             Route::get('get-departmens/{companyId}', [EmployeeController::class, "getDepartmens"])->name("getDepartmen");
             Route::get('get-positions/{departmenId}', [EmployeeController::class, "getPositions"])->name("getPosition");
+            Route::post('bpjs-tk', [EmployeeController::class, "bpjsTK"])->name("bpjsTK");
+            Route::post('bpjs-tk-pt', [EmployeeController::class, "bpjsTKPT"])->name("bpjsTKPT");
+            Route::post('bpjs-kes', [EmployeeController::class, "bpjsKES"])->name("bpjsKES");
+            Route::post('bpjs-kes-pt', [EmployeeController::class, "bpjsKESPT"])->name("bpjsKESPT");
+            Route::post('bpjs-training', [EmployeeController::class, "bpjsTRAINING"])->name("bpjsTRAINING");
             Route::post('store', [EmployeeController::class, "store"])->name("store");
             Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
         });

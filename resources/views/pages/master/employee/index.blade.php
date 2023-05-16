@@ -2,7 +2,6 @@
 
 @section('content')
 @include('pages.master.employee.partials.employee-modal')
-{{-- @include('pages.master.employee.partials.employee-modal-edit') --}}
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -37,7 +36,6 @@
                         <th>NIP</th>
                         <th>Nama</th>
                         <th>Perusahaan</th>
-                        <th>Departemen</th>
                         <th>Jabatan</th>
                         <th>Status</th>
                         <th width="15%">Aksi</th>
@@ -56,16 +54,17 @@
                             {{ $employee->name }}
                         </td>
                         <td>
-                            {{ $employee->company->name ?? 'Data belum tersedia' }}
+                            {{ $employee->company_name }}
                         </td>
                         <td>
-                            {{ $employee->departmen->name ?? 'Data belum tersedia' }}
+                            {{ $employee->position_name }}
                         </td>
                         <td>
-                            {{ $employee->position->name ?? 'Data belum tersedia' }}
-                        </td>
-                        <td>
-                            {{ $employee->status ?? 'Data belum tersedia' }}
+                            @if($employee->employee_status == "aktif")
+                            <span class="text-success">AKTIF</span>
+                            @else
+                            <span class="text-danger">TIDAK AKTIF</span>
+                            @endif
                         </td>
                         <td class="flex flex-row justify-content-around">
                             @can('ubah karyawan')
@@ -92,9 +91,18 @@
 
 @section('style')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/form-element-select.css') }}" rel="stylesheet" />"
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
+"
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/datepicker3.css') }}" rel="stylesheet" />"
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/daterangepicker.css') }}" rel="stylesheet" />"
 @endsection
 @section('script')
 <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
+<script src="{{ asset('assets-mazer/extensions/backup/js/form-element-select.js') }}"></script>
+<script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-datetimepicker.min.js') }}"></script>
+<script src="{{ asset('assets-mazer/extensions/backup/js/daterangepicker.js') }}"></script>
 <script>
     const initialState = {
         employees: [],
@@ -108,6 +116,7 @@
         $('.dataTable').DataTable();
 
         state.employees = {!! json_encode($employees) !!};
+
         setupSelect();
         // setupDateFilter();
         send();
@@ -117,60 +126,151 @@
     function onCreate() {
         clearForm();
         $("#titleForm").html("Tambah Karyawan");
+        $("#kepegawaian-tab").hide();
+        $("#salary-tab").hide();
+        // $("#kepegawaian").hide();
 
-
-        // // Tampilkan form Data Personal
-        // document.getElementById("personal-tab").classList.add("active");
-        // document.getElementById("personal").classList.add("show", "active");
-
-        // // Sembunyikan form Data Kepegawaian
-        // document.getElementById("kepegawaian-tab").classList.remove("active");
-        // document.getElementById("kepegawaian").classList.remove("show", "active");
-
-        // Lakukan pengaturan tambahan sesuai kebutuhan
-
+        $('#birth_date').each(function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: "yyyy-mm-dd",
+                // viewMode: "months",
+                // minViewMode: "months"
+            });
+            $(this).datepicker('clearDates');
+        });
         onModalAction("formModal", "show");
     }
 
     function onEdit(data) {
         clearForm();
 
-        // // Sembunyikan form Data Personal
-        // document.getElementById("personal-tab").classList.remove("active");
-        // document.getElementById("personal").classList.remove("show", "active");
+        $("#kepegawaian-tab").show();
+        $("#salary-tab").show();
+        // $("#kepegawaian").show();
 
-        // // Tampilkan form Data Kepegawaian
-        // document.getElementById("kepegawaian-tab").classList.add("active");
-        // document.getElementById("kepegawaian").classList.add("show", "active");
-
-        // document.getElementById("personal").style.display = "none";
-        // document.getElementById("kepegawaian").style.display = "block";
-
-
-        var idInput = document.getElementById('id');
-        var tabKepegawaian = document.getElementById('tab-kepegawaian');
-
-        // Atur nilai ID dari data.id ke elemen dengan ID "id"
-        idInput.value = data.id;
-
-        // Jika ID tidak ada
-        if (!idInput) {
-        // Sembunyikan tab kepegawaian
-        console.log(idInput)
-        tabKepegawaian.style.display = 'none';
-        } else {
-        // Tampilkan tab kepegawaian
-        tabKepegawaian.style.display = 'block';
+        function formatEnterDate(dateString) {
+            var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            var date = new Date(dateString);
+            var dayName = days[date.getDay()];
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var formattedDate = dayName + ', ' + day + '-' + month + '-' + year;
+            return formattedDate;
         }
 
-        console.log(idInput)
+        $('#out_date').each(function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: "yyyy-mm-dd",
+                // viewMode: "months",
+                // minViewMode: "months"
+            });
+           $(this).datepicker('setDate', new Date());
+        });
 
+        $('#contract_range input').each(function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+                // viewMode: "months",
+                // minViewMode: "months"
+            });
+            $(this).datepicker('contract_range');
+        });
+
+        $("#employee_type_id").change(function() {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === "1") {
+                $("#contract_range_row").hide();
+                $("#contract_start").val("");
+                $("#contract_end").val("");
+            }
+            else if (selectedValue === "2") {
+                $("#contract_range_row").show();
+                $("#contract_start").val("");
+                $("#contract_end").val("");
+                $("#titleContactRange").html("Jangka Waktu Kontrak");
+            }
+            else if (selectedValue === "3") {
+                $("#contract_range_row").show();
+                $("#contract_start").val("");
+                $("#contract_end").val("");
+                $("#titleContactRange").html("Jangka Waktu Harian");
+            } else {
+                $("#contract_range_row").hide();
+            }
+        });
+
+        $("#employee_status").change(function() {
+            var employeeStatus = $(this).val();
+
+            if (employeeStatus === "aktif") {
+                $("#out_date_row").hide();
+                $("#reason_row").hide();
+                $("#reason").val("");
+                $("#out_date").val("");
+            }
+            else if (employeeStatus === "tidak_aktif") {
+                $("#out_date_row").show();
+                $("#reason_row").show();
+            }
+        });
+
+        // DATA PERSONAL
         $("#id").val(data.id);
+        $("#nip").val(data.nip);
+        $("#nik").val(data.nik);
         $("#name").val(data.name);
-        $("#company_id").val(data.company_id).trigger("change");
-        $("#barge_id").val(data.barge_id).trigger("change");
+        $("#birth_place").val(data.birth_place);
+        $("#birth_date").val(data.birth_date);
+        $("#phone").val(data.phone);
+        $("#religion").val(data.religion).trigger("change");
+        $("#address").val(data.address);
 
-        $("#titleForm").html("Ubah Karyawan" + data.id);
+        // DATA KEPEGAWAIAN
+        $("#enter_date").val(formatEnterDate(data.enter_date));
+        $("#npwp").val(data.npwp);
+        $("#company_id").val(data.company_id).trigger("change");
+        $("#position_id").val(data.position_id).trigger("change");
+        $("#employee_type_id").val(data.employee_type_id).trigger("change");
+        $("#contract_start").val(data.contract_start);
+        $("#contract_end").val(data.contract_end);
+        $("#latest_education").val(data.latest_education).trigger("change");
+        $("#working_hour").val(data.working_hour).trigger("change");
+        $("#married_status").val(data.married_status).trigger("change");
+
+        $("#bpjs_tk").prop("checked", data.bpjs_tk === "Y");
+        $("#bpjs_tk").attr("data-target", data.id);
+
+        $("#bpjs_tk_pt").prop("checked", data.bpjs_tk_pt === "Y");
+        $("#bpjs_tk_pt").attr("data-target", data.id);
+
+        $("#bpjs_kes").prop("checked", data.bpjs_kes === "Y");
+        $("#bpjs_kes").attr("data-target", data.id);
+
+        $("#bpjs_kes_pt").prop("checked", data.bpjs_kes_pt === "Y");
+        $("#bpjs_kes_pt").attr("data-target", data.id);
+
+        $("#bpjs_training").prop("checked", data.bpjs_training === "Y");
+        $("#bpjs_training").attr("data-target", data.id);
+
+        $("#employee_status").val(data.employee_status).trigger("change");
+        $("#reason").val(data.reason);
+        $("#out_date").val(data.out_date);
+
+        // DATA GAJI DAN REKENING
+        $("#basic_salary").val(data.basic_salary);
+        $("#rekening_number").val(data.rekening_number);
+        $("#rekening_name").val(data.rekening_name);
+        $("#bank_name").val(data.bank_name).trigger("change");
+        $("#branch").val(data.branch);
+
+        $("#titleForm").html("Ubah Karyawan");
 
         // Mengatur #departmen menjadi nonaktif saat halaman dimuat
         $('#departmen').prop('disabled', true);
@@ -254,6 +354,156 @@
             });
         });
 
+        $('.bpjsTKCheck').change(function() {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsTK') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function(data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsTKPTCheck').change(function() {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsTKPT') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function(data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsKESCheck').change(function() {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsKES') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function(data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsKESPTCheck').change(function() {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsKESPT') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function(data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsTRAININGCheck').change(function() {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsTRAINING') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function(data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
         onModalAction("formModal", "show");
     }
 
@@ -323,7 +573,8 @@
 
     function send() {
         $("#form").submit(function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Batalkan tindakan submit default
+
             let fd = new FormData(this);
 
             $.ajax({
@@ -387,8 +638,14 @@
 
     function clearForm() {
         $("#id").val("");
+        $("#nip").val("");
+        $("#nik").val("");
         $("#name").val("");
-        $("#description").val("");
+        $("#birth_place").val("");
+        $("#birth_date").val("");
+        $("#phone").val("");
+        $("#religion").val("").trigger("change");
+        $("#address").val("");
     }
 </script>
 @endsection

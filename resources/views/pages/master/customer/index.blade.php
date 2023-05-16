@@ -37,7 +37,7 @@
                                 <th>Nama</th>
                                 <th>Perusahaan</th>
                                 <th>Kapal</th>
-                                <th width="10%">Aksi</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,10 +47,10 @@
                                         {{ $customer->name }}
                                     </td>
                                     <td>
-                                        {{ $customer->barge->name }}
+                                        {{ $customer->company_name }}
                                     </td>
                                     <td>
-                                        {{ $customer->company->name }}
+                                        {{ $customer->barge_name }}
                                     </td>
                                     <td>
                                         @can('ubah pelanggan')

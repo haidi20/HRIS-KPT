@@ -11,7 +11,16 @@ class Position extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $appends = ["departmen_name"];
+    protected $fillable = [
+        'name',
+        'description',
+        'minimum_employee',
+        'departmen_id',
+        'created_by',
+        'updated_by',
+        'deleted_by'
+    ];
 
     public function __construct(array $attributes = [])
     {
@@ -23,5 +32,14 @@ class Position extends Model
     public function departmen()
     {
         return $this->belongsTo(Departmen::class, "departmen_id", "id");
+    }
+
+    public function getDepartmenNameAttribute()
+    {
+        if ($this->departmen) {
+            return $this->departmen->name;
+        } else {
+            return "Data Departmen Masih Kosong";
+        }
     }
 }

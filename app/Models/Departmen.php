@@ -11,7 +11,16 @@ class Departmen extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $appends = ["company_name"];
+    protected $fillable = [
+        'code',
+        'name',
+        'description',
+        'company_id',
+        'created_by',
+        'updated_by',
+        'deleted_by'
+    ];
 
     public function __construct(array $attributes = [])
     {
@@ -23,5 +32,14 @@ class Departmen extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, "company_id", "id");
+    }
+
+    public function getCompanyNameAttribute()
+    {
+        if ($this->company) {
+            return $this->company->name;
+        } else {
+            return "Data Perusahaan Masih Kosong";
+        }
     }
 }

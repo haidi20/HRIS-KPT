@@ -33,7 +33,7 @@
                         <thead>
                             <tr>
                                 <th width="5%">No.</th>
-                                <th>Departemen</th>
+                                {{-- <th>Departemen</th> --}}
                                 <th>Nama</th>
                                 <th>Keterangan</th>
                                 <th>Minimum Jumlah Karyawan</th>
@@ -46,9 +46,9 @@
                                     <td>
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td>
-                                        {{ $position->departmen->name }}
-                                    </td>
+                                    {{-- <td>
+                                        {{ $position->departmen_name }}
+                                    </td> --}}
                                     <td>
                                         {{ $position->name }}
                                     </td>
