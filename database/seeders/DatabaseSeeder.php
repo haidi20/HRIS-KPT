@@ -26,5 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(BargeSeeder::class);
         $this->call(FingerToolSeeder::class);
         $this->call(BpjsCalculationSeeder::class);
+        $this->call(ApprovalSeeder::class);
     }
 }

@@ -79,8 +79,23 @@ export default {
     Form,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getData() {
       return this.$store.state.salaryAdvance.data;
+    },
+  },
+  watch: {
+    getBaseUrl(value, oldValue) {
+      if (value != null) {
+        this.$store.dispatch("salaryAdvance/fetchData", {
+          user_id: this.getUserId,
+        });
+      }
     },
   },
   methods: {

@@ -42,8 +42,6 @@ export default {
     this.$store.commit("employee/INSERT_BASE_URL", {
       base_url: this.baseUrl,
     });
-
-    this.$store.dispatch("salaryAdvance/fetchData");
   },
   methods: {
     onClose() {

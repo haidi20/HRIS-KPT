@@ -109,14 +109,13 @@ class ApprovalAgreementController extends Controller
 
 
             $query->approval_user_id = $approvalAgreement ? $approvalAgreementUsers : null;
-            $query->status_approval = $approvalAgreement ? $approvalAgreement->status_approval : null;
-            $query->label_status_approval = $approvalAgreement ? $approvalAgreement->label_status_approval : null;
-            $query->description_status_approval = $approvalAgreement ? $approvalAgreement->description_status_approval : null;
+            $query->approval_status = $approvalAgreement ? $approvalAgreement->status_approval : null;
+            $query->approval_label = $approvalAgreement ? $approvalAgreement->label_status_approval : null;
+            $query->approval_description = $approvalAgreement ? $approvalAgreement->description_status_approval : null;
         });
 
         return $model;
     }
-
 
     public function storeApprovalAgreement($request)
     {
@@ -151,19 +150,6 @@ class ApprovalAgreementController extends Controller
                     ->where('user_id', $request['user_id'])
                     ->update(["status_approval" => $request['status_approval']]);
             }
-
-            // $approvalLevel = ApprovalLevelDetail::byApprovalLevelId($request["approval_level_id"])
-            //                                         ->where("user_id", $request["user_id"])
-            //                                         ->first();
-
-            // ApprovalAgreement::create([
-            //     "approval_level_id" => $request["approval_level_id"],
-            //     "user_id" => $request["user_id"],
-            //     "name_model" => $request["name_model"],
-            //     "model_id" => $request["model_id"],
-            //     "status_approval" => $request["status_approval"],
-            //     "level_approval" => $approvalLevel->level,
-            // ]);
 
             $nextLevelApproval = ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
                 ->byModel($request["model_id"], $request["name_model"])

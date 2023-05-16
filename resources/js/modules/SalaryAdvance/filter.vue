@@ -79,6 +79,12 @@ export default {
     VueSelect,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getOptionTypes() {
       //   return this.$store.state.salaryAdvance.options.types.filter(
       //     (item) => this.params.is_filter_month && item.name != "all"
@@ -112,7 +118,9 @@ export default {
   methods: {
     onFilter() {
       this.$bvModal.hide("salary_advance_filter");
-      this.$store.dispatch("salaryAdvance/fetchData");
+      this.$store.dispatch("salaryAdvance/fetchData", {
+        user_id: this.getUserId,
+      });
     },
     onActiveFilterMonth() {
       this.params.is_filter_month = !this.params.is_filter_month;

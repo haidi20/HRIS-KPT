@@ -12,7 +12,8 @@ class SalaryAdvance extends Model
     use HasFactory, SoftDeletes;
 
     protected $appends = [
-        'employee_name', 'status_readable', 'status_color', 'loan_amount_readable'
+        'employee_name', 'loan_amount_readable',
+        // 'status_readable', 'status_color',
     ];
 
 
@@ -42,23 +43,23 @@ class SalaryAdvance extends Model
         }
     }
 
-    public function getStatusReadableAttribute()
-    {
-        $getStatus = Config::get("library.status.{$this->status}");
-
-        return $getStatus["readable"];
-    }
-
-    public function getStatusColorAttribute()
-    {
-        $getStatus = Config::get("library.status.{$this->status}");
-
-        return $getStatus["color"];
-    }
-
     public function getLoanAmountReadableAttribute()
     {
         $loanAmount = number_format($this->loan_amount, 0, ',', '.');
         return "Rp {$loanAmount}";
     }
+
+    // public function getStatusReadableAttribute()
+    // {
+    //     $getStatus = Config::get("library.status.{$this->status}");
+
+    //     return $getStatus["readable"];
+    // }
+
+    // public function getStatusColorAttribute()
+    // {
+    //     $getStatus = Config::get("library.status.{$this->status}");
+
+    //     return $getStatus["color"];
+    // }
 }

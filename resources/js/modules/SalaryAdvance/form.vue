@@ -103,6 +103,7 @@ export default {
       // mengambil data hexa saja
       const request = {
         ...this.form,
+        user_id: this.getUserId,
       };
 
       // console.info(request);
@@ -136,7 +137,9 @@ export default {
             });
 
             this.$bvModal.hide("salary_advance_form");
-            this.$store.dispatch("salaryAdvance/fetchData");
+            this.$store.dispatch("salaryAdvance/fetchData", {
+              user_id: this.getUserId,
+            });
           }
         })
         .catch((err) => {

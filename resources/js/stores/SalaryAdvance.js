@@ -14,19 +14,7 @@ const SalaryAdvance = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                name: "Muhammad Adi",
-                position_name: "Welder",
-                loan_amount: "Rp. 1.500.000",
-                monthly_deduction: "Rp. 500.000",
-                duration: "3 Bulan",
-                status: "accept",
-                status_readable: "Diterima",
-                note: "kebutuhan beli kompor baru, kompor lama rusak",
-            }
-        ],
+        data: [],
         params: {
             month: new Date(),
             type: "all",
@@ -98,7 +86,7 @@ const SalaryAdvance = {
                 .get(
                     `${context.state.base_url}/api/v1/salary-advance/fetch-data`, {
                     params: {
-                        //
+                        user_id: payload.user_id,
                     },
                 }
                 )
@@ -118,3 +106,15 @@ const SalaryAdvance = {
 }
 
 export default SalaryAdvance;
+
+// {
+//     id: 1,
+//         name: "Muhammad Adi",
+//             position_name: "Welder",
+//                 loan_amount: "Rp. 1.500.000",
+//                     monthly_deduction: "Rp. 500.000",
+//                         duration: "3 Bulan",
+//                             status: "accept",
+//                                 status_readable: "Diterima",
+//                                     note: "kebutuhan beli kompor baru, kompor lama rusak",
+//             }
