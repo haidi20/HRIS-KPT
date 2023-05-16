@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="root" class="full-height">
-        <vacation />
+        <vacation base-url="{{ $baseUrl }}" user="{{ $user }}" />
     </div>
 @endsection
 

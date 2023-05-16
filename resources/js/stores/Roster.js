@@ -4,6 +4,7 @@ import moment from "moment";
 import { checkNull } from "../utils";
 
 const defaultForm = {
+    id: null,
     employee_id: null,
     employee_name: null,
     work_schedule: null,
@@ -14,6 +15,8 @@ const defaultForm = {
         null,
         null,
     ],
+    roster_status_id: null,
+    roster_status_initial: null,
 }
 
 const Roster = {
@@ -86,6 +89,9 @@ const Roster = {
                 date_vacation: dateVacation,
             };
         },
+        INSERT_SELECTED_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
+        },
         INSERT_OPTION_POSITION(state, payload) {
             state.options.positions = payload.positions;
         },
@@ -125,49 +131,14 @@ const Roster = {
                     console.info(err);
                 });
         },
-        fetchPosition: async (context, payload) => {
-            const params = {
-                // ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
-            }
-
-            await axios
-                .get(
-                    `${context.state.base_url}/api/v1/position/fetch-data`, {
-                    params: { ...params },
-                }
-                )
-                .then((responses) => {
-                    // console.info(responses);
-                    let data = responses.data;
-
-                    data.data = [
-                        ...data.data,
-                        { id: "all", name: "Semua" },
-                    ];
-
-                    context.commit("INSERT_OPTION_POSITION", {
-                        positions: data.data,
-                    });
-                })
-                .catch((err) => {
-                    console.info(err);
-                });
-        },
         fetchTotal: async (context, payload) => {
             const params = {
                 // ...context.state.params,
                 date_filter: moment(context.state.params.date_filter).format("Y-MM"),
             }
 
-            const positions = context.state.options.positions;
-            // positions = [
-            //     ...positions,
-            //     {
-            //         id: "all",
-            //         name: "ALL",
-            //     },
-            // ];
+            // const positions = context.state.options.positions;
+            const positions = payload.positions;
 
             // console.info(positions);
 

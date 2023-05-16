@@ -25,7 +25,7 @@
       </b-thead>
       <b-tbody>
         <tr v-for="(position, index) in getPositions" :key="index">
-          <b-td>{{position.name}}</b-td>
+          <b-td :style="setStyle(position)">{{position.name}}</b-td>
           <b-td
             v-for="(date, index) in getDateRange"
             v-bind:key="`data-date-${index}`"
@@ -43,7 +43,7 @@ import moment from "moment";
 export default {
   computed: {
     getPositions() {
-      return this.$store.state.roster.options.positions;
+      return this.$store.state.employee.data.positions;
     },
     getTotal() {
       return this.$store.state.roster.data.total;
@@ -55,7 +55,7 @@ export default {
   watch: {
     getPositions(value, oldValue) {
       if (value.length > 0) {
-        this.$store.dispatch("roster/fetchTotal");
+        this.$store.dispatch("roster/fetchTotal", { positions: value });
       }
     },
   },
@@ -78,9 +78,19 @@ export default {
       return moment(date).format("dddd");
     },
     setBackground(position, value) {
+      //   console.info(value, position.minimum_employee);
       return {
-        backgroundColor: value < position.minimum_employee ? "orange" : null,
+        backgroundColor:
+          Number(value) < Number(position.minimum_employee) ? "orange" : null,
       };
+    },
+    setStyle(data) {
+      if (data.id == "all") {
+        return {
+          color: "white",
+          backgroundColor: "#435EBE",
+        };
+      }
     },
   },
 };

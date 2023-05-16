@@ -10,11 +10,11 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3">
+        <b-tabs content-class="mt-3" active>
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <b-tab title="Berdasarkan Karyawan" active>
+          <b-tab title="Berdasarkan Karyawan">
             <Detail />
           </b-tab>
         </b-tabs>
@@ -45,8 +45,13 @@ export default {
     this.$store.commit("attendance/INSERT_BASE_URL", {
       base_url: this.baseUrl,
     });
+    this.$store.commit("employee/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
 
     this.$store.dispatch("attendance/fetchData");
+    this.$store.dispatch("attendance/fetchDetail");
+    this.$store.dispatch("employee/fetchPosition");
   },
 };
 </script>

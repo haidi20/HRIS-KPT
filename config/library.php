@@ -61,4 +61,26 @@ return [
             "featurer_id" => 9,
         ],
     ],
+    "status" => [
+        "review" => [
+            "readable" => "proses",
+            "color" => "warning",
+        ],
+        "accept" => [
+            "readable" => "terima",
+            "color" => "success",
+        ],
+        "reject" => [
+            "readable" => "tolak",
+            "color" => "danger",
+        ],
+        "revision" => [
+            "readable" => "perbaiki",
+            "color" => "info",
+        ],
+        "not yet" => [
+            "readable" => "belum konfirmasi",
+            "color" => "info",
+        ],
+    ],
 ];

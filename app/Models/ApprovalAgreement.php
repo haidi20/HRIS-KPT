@@ -71,9 +71,9 @@ class ApprovalAgreement extends Model
 
     public function getStatusApprovalReadAbleAttribute()
     {
-        $statusApprovalLibrary = Config::get("library.approval_agreement_status.{$this->status_approval}");
+        $statusApprovalLibrary = Config::get("library.status.{$this->status_approval}");
 
-        return $statusApprovalLibrary["status_read_able"];
+        return $statusApprovalLibrary["readable"];
     }
 
     public function getUserCreateApprovalAttribute()
@@ -101,9 +101,9 @@ class ApprovalAgreement extends Model
 
     public function getLabelStatusApprovalAttribute()
     {
-        $statusApprovalLibrary = Config::get("library.approval_agreement_status.{$this->status_approval}");
+        $statusApprovalLibrary = Config::get("library.status.{$this->status_approval}");
 
-        return view("pages.approvallevel.renders.badge", ["type" => $statusApprovalLibrary["type"], "message" => $this->status_approval_read_able])->render();
+        return view("pages.setting.renders.badge", ["type" => $statusApprovalLibrary["color"], "message" => $this->status_approval_read_able])->render();
     }
 
     public function getDescriptionStatusApprovalAttribute()

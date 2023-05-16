@@ -182,6 +182,15 @@
                         </a>
                     </li>
                 @endcan
+                @can('lihat laporan cuti')
+                    <li class="sidebar-item {{ isActive('vacation-report') }} ">
+                        <a href="{{ route('report.vacation.index') }}" class='sidebar-link'>
+                            {{-- <i class="bi bi-cloud-moon"></i> --}}
+                            <i class="bi bi-file-earmark-bar-graph"></i>
+                            <span>Laporan Cuti</span>
+                        </a>
+                    </li>
+                @endcan
                 @php
                     $allPermissionMains = ['lihat departemen', 'lihat departemen', 'lihat karyawan', 'lihat jenis karyawan'];
                 @endphp
@@ -329,35 +338,35 @@
                     </li>
                 @endcanany
                 @php
-                $allPermissionWork = ['lihat fitur', 'lihat perhitungan bpjs'];
+                    $allPermissionWork = ['lihat fitur', 'lihat perhitungan bpjs'];
                 @endphp
                 @canany($allPermissionWork)
-                <li
-                    class="sidebar-item {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-gear"></i>
-                        <span>Pengaturan</span>
-                    </a>
+                    <li
+                        class="sidebar-item {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-gear"></i>
+                            <span>Pengaturan</span>
+                        </a>
 
-                    <ul class="submenu {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }}"
-                        style="{{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat fitur')
-                        <li class="submenu-item {{ isActive('master/feature') }}">
-                            <a href="{{ route('setting.feature.index') }}">Fitur</a>
-                        </li>
-                        @endcan
-                        @can('lihat perhitungan bpjs')
-                        <li class="submenu-item {{ isActive('master/bpjs-calculation') }}">
-                            <a href="{{ route('setting.bpjsCalculation.index') }}">Perhitungan BPJS</a>
-                        </li>
-                        @endcan
-                        @can('lihat tingkat persetujuan')
-                        <li class="submenu-item {{ isActive('setting/approvalLevel') }}">
-                            <a href="{{ route('setting.approvalLevel.index') }}">Tingkat Persetujuan</a>
-                        </li>
-                        @endcan
-                    </ul>
-                </li>
+                        <ul class="submenu {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }}"
+                            style="{{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat fitur')
+                                <li class="submenu-item {{ isActive('master/feature') }}">
+                                    <a href="{{ route('setting.feature.index') }}">Fitur</a>
+                                </li>
+                            @endcan
+                            @can('lihat perhitungan bpjs')
+                                <li class="submenu-item {{ isActive('master/bpjs-calculation') }}">
+                                    <a href="{{ route('setting.bpjsCalculation.index') }}">Perhitungan BPJS</a>
+                                </li>
+                            @endcan
+                            @can('lihat tingkat persetujuan')
+                                <li class="submenu-item {{ isActive('setting/approvalLevel') }}">
+                                    <a href="{{ route('setting.approvalLevel.index') }}">Tingkat Persetujuan</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
                 @endcanany
             </ul>
         </div>

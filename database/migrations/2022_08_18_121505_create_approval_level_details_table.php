@@ -17,7 +17,8 @@ class CreateApprovalLevelDetailsTable extends Migration
             $table->id();
             $table->foreignId("user_id");
             $table->foreignId("approval_level_id");
-            $table->string("status"); // jenis persetujuan: submit = mengajukan, knowing = Mengetahui, approved = Disetujui
+            // $table->string("status"); // jenis persetujuan: submit = mengajukan, knowing = Mengetahui, approved = Disetujui
+            $table->enum('status', ['submit', 'knowing', 'approved']);
             $table->integer("level"); // prioritas: 1, 2, 3. tingkatan aproval.
             $table->timestamps();
             $table->softDeletes();

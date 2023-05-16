@@ -19,6 +19,10 @@ import Table from "./table";
 // import Form from "./form";
 
 export default {
+  props: {
+    user: String,
+    baseUrl: String,
+  },
   data() {
     return {
       title: "Cuti",
@@ -30,7 +34,14 @@ export default {
     VueBottomSheet,
   },
   mounted() {
-    // this.$bvModal.show("job_order_form");
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    this.$store.commit("vacation/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+
+    this.$store.dispatch("vacation/fetchData");
   },
   computed: {
     getIsMobile() {

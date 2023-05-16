@@ -41,7 +41,7 @@
         <b-col cols="6">
           <b-form-group
             :label="`Hari Off ${form.work_schedule == '5,2' ? 'Pertama': ''}`"
-            label-for="date"
+            label-for="day_off_one"
           >
             <VueSelect
               id="day_off_one"
@@ -57,7 +57,7 @@
           </b-form-group>
         </b-col>
         <b-col cols="6" v-if="form.work_schedule == '5,2'">
-          <b-form-group label="Hari Off Kedua" label-for="date">
+          <b-form-group label="Hari Off Kedua" label-for="day_off_two">
             <VueSelect
               id="day_off_two"
               class="cursor-pointer"
@@ -201,7 +201,7 @@ export default {
         });
     },
     disabledDate(date, currentValue) {
-      return date < moment({ date: 1 });
+      //   return date < moment({ date: 1 });
     },
   },
 };

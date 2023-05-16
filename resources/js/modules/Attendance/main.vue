@@ -11,13 +11,26 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
+          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
-              id="month_filter"
-              v-model="params.month_filter"
+              id="month"
+              v-model="params.month"
               format="YYYY-MM"
               type="month"
               placeholder="pilih bulan"
+            />
+          </b-form-group>
+          <b-form-group label="Jabatan" label-for="position_id" class="place_filter_table">
+            <VueSelect
+              id="position_id"
+              class="cursor-pointer"
+              v-model="params.position_id"
+              placeholder="Pilih Jabatan"
+              :options="getOptionPositions"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
             />
           </b-form-group>
           <b-button
@@ -80,6 +93,7 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
+import VueSelect from "vue-select";
 import DatePicker from "vue2-datepicker";
 import DatatableClient from "../../components/DatatableClient";
 
@@ -117,6 +131,7 @@ export default {
   components: {
     DatePicker,
     DatatableClient,
+    VueSelect,
   },
   computed: {
     getBaseUrl() {
@@ -134,6 +149,9 @@ export default {
     getIsLoadingData() {
       return this.$store.state.attendance.loading.main;
     },
+    getOptionPositions() {
+      return this.$store.state.employee.data.positions;
+    },
     params() {
       return this.$store.state.attendance.params.main;
     },
@@ -150,7 +168,7 @@ export default {
         .get(`${this.getBaseUrl}/attendance/export`, {
           params: {
             user_id: this.getUserId,
-            date_filter: moment(this.getDateFilter).format("Y-MM"),
+            month: moment(this.params.month).format("Y-MM"),
           },
         })
         .then((responses) => {

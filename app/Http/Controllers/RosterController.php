@@ -34,7 +34,7 @@ class RosterController extends Controller
         $result = [];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($month->format("Y-m"));
+        $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
 
         $employees = [
             (object)[
@@ -82,10 +82,11 @@ class RosterController extends Controller
                     ->first();
 
                 $mainData[$date] = [
+                    "id" => $rosterDaily != null ? $rosterDaily->id : null,
                     "value" => $rosterDaily != null ? $rosterDaily->roster_status_initial : null,
+                    "roster_status_id" => $rosterDaily != null ? $rosterDaily->roster_status_id : null,
                     "color" => $rosterDaily != null ? $rosterDaily->roster_status_color : null,
-                    "date_start" => $rosterDaily != null ? $rosterDaily->date_start : null,
-                    "date_end" => $rosterDaily != null ? $rosterDaily->date_end : null,
+                    "date" => $rosterDaily != null ? $rosterDaily->date : null,
                 ];
             }
 
@@ -104,7 +105,7 @@ class RosterController extends Controller
         $result = [];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($month->format("Y-m"));
+        $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
 
         $listEmployeeId = [1];
         $positionId = request("position_id", $setRosterStatusInitial);
@@ -204,7 +205,6 @@ class RosterController extends Controller
                 $this->storeOff($getData, "day_off_two");
             }
 
-
             // insert data cuti
             if ($getData->date_vacation != null) {
                 $this->storeVacation($getData);
@@ -234,10 +234,41 @@ class RosterController extends Controller
                 'message' => 'Gagal ditambahkan',
             ], 500);
         }
+    }
 
-        return response()->json([
-            "request" => $getData,
-        ]);
+    public function storeChangeStatus()
+    {
+        $getData = (object) [
+            "id" => request("id"),
+            "roster_status_id" => request("roster_status_id"),
+        ];
+
+        try {
+            DB::beginTransaction();
+
+            $rosterDaily = RosterDaily::find($getData->id);
+            $rosterDaily->roster_status_id = $getData->roster_status_id;
+            $rosterDaily->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'data' => $getData,
+                'message' => "Berhasil diperbaharui",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            // create roster history
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal diperbaharui',
+            ], 500);
+        }
     }
 
     private function storeVacation($getData)
@@ -288,24 +319,18 @@ class RosterController extends Controller
     private function storeWorkDay($getData)
     {
         $rosterStatusId = RosterStatus::where("initial", "M")->first()->id;
-        $start = Carbon::parse($getData->month . '-01')->firstOfMonth();
-        $end = Carbon::parse($getData->month . '-01')->endOfMonth();
-
-        while ($start->lte($end)) {
-            $rosterDailyData[] = ["date" => $start->format('Y-m-d')];
-            $start->addDay();
-        }
+        $dateRange = $this->dateRangeCustom(Carbon::parse($getData->month), "Y-m-d", "string", true);
 
         // $employee = Employee::find($getData->employee_id);
         $employee = (object) [
             "position_id" => 1,
         ];
 
-        foreach ($rosterDailyData as $index => $item) {
+        foreach ($dateRange as $index => $date) {
             RosterDaily::updateOrCreate(
                 [
                     "employee_id" => $getData->employee_id,
-                    "date" => Carbon::parse($item["date"])->format("Y-m-d"),
+                    "date" => $date,
                 ],
                 [
                     "position_id" => $employee->position_id,

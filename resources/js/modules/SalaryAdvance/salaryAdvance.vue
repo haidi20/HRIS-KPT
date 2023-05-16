@@ -18,6 +18,10 @@ import Table from "./table";
 // import Form from "./form";
 
 export default {
+  props: {
+    user: String,
+    baseUrl: String,
+  },
   data() {
     return {
       title: "Kasbon",
@@ -29,7 +33,15 @@ export default {
     VueBottomSheet,
   },
   mounted() {
-    // this.$bvModal.show("job_order_form");
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    this.$store.commit("salaryAdvance/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+    this.$store.commit("employee/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
   },
   methods: {
     onClose() {

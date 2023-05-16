@@ -2,10 +2,10 @@
   <div>
     <b-row>
       <b-col cols>
-        <b-form-group label="Bulan" label-for="month_filter" class="place_filter_table">
+        <b-form-group label="Bulan" label-for="month" class="place_filter_table">
           <DatePicker
-            id="month_filter"
-            v-model="params.month_filter"
+            id="month"
+            v-model="params.month"
             format="YYYY-MM"
             type="month"
             placeholder="pilih bulan"
@@ -142,9 +142,14 @@ export default {
   methods: {
     onFilter() {
       this.$store.dispatch("attendance/fetchData");
+      this.$store.dispatch("attendance/fetchDetail");
     },
-    async onPrint() {
-      //
+    onPrint() {
+      //   console.info(`${this.getBaseUrl}/attendance/print`);
+      const month = moment(this.params.month).format("Y-MM");
+      const params = `month=${month}&employee_id=${this.params.employee_id}`;
+      const linkPrint = `${this.getBaseUrl}/attendance/print?${params}`;
+      window.open(`${linkPrint}`, "_blank");
     },
     setLabelDate(date) {
       return moment(date).format("DD");

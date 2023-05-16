@@ -29,6 +29,7 @@ class FeatureSeeder extends Seeder
             ["name" => "Laporan Job Order", "description" => ""],
             ["name" => "Laporan Kasbon", "description" => ""],
             ["name" => "Laporan Surat Perintah Lembur", "description" => ""],
+            ["name" => "Laporan Cuti", "description" => ""],
             // master
             ["name" => "Departemen", "description" => ""],
             ["name" => "Jabatan", "description" => ""],
