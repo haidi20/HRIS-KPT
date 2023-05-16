@@ -99,7 +99,8 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group row">
-                                            <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Kerja Hari
+                                            <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Selesai
+                                                Kerja Hari
                                                 Sabtu</label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="saturday_work_hour" name="saturday_work_hour"
@@ -150,6 +151,7 @@
             $("#maximum_delay").val(data.maximum_delay);
             $("#fastest_time").val(data.fastest_time);
             $("#overtime_work").val(data.overtime_work);
+            $("#saturday_work_hour").val(data.saturday_work_hour);
             // $("#titleForm").html("Tambah Pengguna");
             onModalAction("formModal", "show");
         }

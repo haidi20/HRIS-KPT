@@ -19,9 +19,9 @@ class WorkingHourController extends Controller
         $maximumDelay = WorkingHour::pluck('maximum_delay');
         $fastestTime = WorkingHour::pluck('fastest_time');
         $overtimeWork = WorkingHour::pluck('overtime_work');
-        $satudayWorkHour = WorkingHour::pluck('saturday_work_hour');
+        $saturdayWorkHour = WorkingHour::pluck('saturday_work_hour');
 
-        return view("pages.master.working-hour.index", compact("id","startTime", "afterWork", "maximumDelay", "fastestTime", "overtimeWork", "satudayWorkHour"));
+        return view("pages.master.working-hour.index", compact("id", "startTime", "afterWork", "maximumDelay", "fastestTime", "overtimeWork", "saturdayWorkHour"));
     }
 
     public function store(Request $request)
