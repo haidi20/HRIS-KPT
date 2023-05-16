@@ -62,6 +62,12 @@ const SalaryAdvance = {
         INSERT_DATA(state, payload) {
             state.data = payload.salaryAdvances;
         },
+        INSERT_FORM(state, payload) {
+            state.form = {
+                ...state.form,
+                ...payload.form,
+            };
+        },
         INSERT_FORM_LOAN_AMOUNT(state, payload) {
             if (payload.loan_amount != null) {
                 // console.info(typeof payload.loan_amount);
@@ -79,9 +85,17 @@ const SalaryAdvance = {
         INSERT_PARAM_TYPE(state, payload) {
             state.params.type = payload.type;
         },
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
     },
     actions: {
         fetchData: async (context, payload) => {
+            context.commit("INSERT_DATA", {
+                salaryAdvances: [],
+            });
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
+
             await axios
                 .get(
                     `${context.state.base_url}/api/v1/salary-advance/fetch-data`, {
@@ -92,6 +106,7 @@ const SalaryAdvance = {
                 )
                 .then((responses) => {
                     console.info(responses);
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
@@ -100,6 +115,7 @@ const SalaryAdvance = {
                 })
                 .catch((err) => {
                     console.info(err);
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
                 });
         },
     }

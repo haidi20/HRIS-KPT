@@ -11,51 +11,64 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <b-row v-for="(data, index) in getData" :key="index">
-          <b-col class="place-item" @click="onOpenAction(data.id)">
-            <h5>{{data.employee_name}} - {{data.position_name}}</h5>
-            <div class="flex flex-row">
-              <div class="flex-grow-2 flex flex-col">
-                <span>
-                  <b>Jumlah Kasbon :</b>
-                </span>
-                <span>{{data.loan_amount_readable}}</span>
-                <template v-if="data.status == 'accept'">
-                  <span class="title-item">
-                    <b>Potongan Setiap Bulan :</b>
+        <template v-if="getLoadingTable">
+          <b-tr>
+            <b-td>Loading...</b-td>
+          </b-tr>
+        </template>
+        <template v-else-if="getData.length > 0">
+          <b-row v-for="(data, index) in getData" :key="index">
+            <b-col class="place-item" @click="onOpenAction(data)">
+              <h5>{{data.employee_name}} - {{data.position_name}}</h5>
+              <div class="flex flex-row">
+                <div class="flex-grow-2 flex flex-col">
+                  <span>
+                    <b>Jumlah Kasbon :</b>
                   </span>
-                  <span>{{data.monthly_deduction}}</span>
-                </template>
-                <span class="title-item">
-                  <b>Keterangan :</b>
-                </span>
-                <span>{{data.note}}</span>
-                <!-- <span class="title-item">Sudah Terbayarkan :</span>
+                  <span>{{data.loan_amount_readable}}</span>
+                  <template v-if="data.status == 'accept'">
+                    <span class="title-item">
+                      <b>Potongan Setiap Bulan :</b>
+                    </span>
+                    <span>{{data.monthly_deduction}}</span>
+                  </template>
+                  <span class="title-item">
+                    <b>Keterangan :</b>
+                  </span>
+                  <span>{{data.note}}</span>
+                  <!-- <span class="title-item">Sudah Terbayarkan :</span>
                 <span>Rp. 500.000</span>
                 <span class="title-item">Belum Terbayarkan :</span>
-                <span>Rp. 1.000.000</span>-->
-              </div>
-              <div class="flex-grow flex flex-col">
-                <span>
-                  <b>Status :</b>
-                </span>
-                <span
-                  :class="`badge bg-${data.status_color}`"
-                  style="width:5rem"
-                >{{data.status_readable}}</span>
-                <template v-if="data.status == 'accept'">
-                  <span class="title-item">
-                    <b>Durasi :</b>
+                  <span>Rp. 1.000.000</span>-->
+                </div>
+                <div class="flex-grow flex flex-col">
+                  <span>
+                    <b>Status :</b>
                   </span>
-                  <span>{{data.duration}}</span>
-                </template>
+                  <span
+                    :class="`badge bg-${data.status_color}`"
+                    style="width:5rem"
+                  >{{data.status_readable}}</span>
+                  <template v-if="data.status == 'accept'">
+                    <span class="title-item">
+                      <b>Durasi :</b>
+                    </span>
+                    <span>{{data.duration}}</span>
+                  </template>
+                </div>
               </div>
-            </div>
-          </b-col>
-        </b-row>
+            </b-col>
+          </b-row>
+        </template>
+        <template v-else>
+          <b-tr>
+            <b-td>Data Kosong</b-td>
+          </b-tr>
+        </template>
         <vue-bottom-sheet ref="myBottomSheet" max-height="20%">
           <div class="flex flex-col">
             <div class="action-item">ubah</div>
+            <div class="action-item" @click="onDelete">hapus</div>
           </div>
         </vue-bottom-sheet>
       </b-col>
@@ -66,6 +79,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 import Form from "./form";
 import FilterData from "./filter";
 export default {
@@ -88,6 +103,12 @@ export default {
     getData() {
       return this.$store.state.salaryAdvance.data;
     },
+    getLoadingTable() {
+      return this.$store.state.salaryAdvance.loading.table;
+    },
+    form() {
+      return this.$store.state.salaryAdvance.form;
+    },
   },
   watch: {
     getBaseUrl(value, oldValue) {
@@ -99,8 +120,10 @@ export default {
     },
   },
   methods: {
-    onOpenAction(i) {
-      //   console.info(i);
+    onOpenAction(data) {
+      this.$store.commit("salaryAdvance/INSERT_FORM", {
+        form: data,
+      });
 
       this.$refs.myBottomSheet.open();
     },
@@ -111,6 +134,76 @@ export default {
     },
     onFilter() {
       this.$bvModal.show("salary_advance_filter");
+    },
+    async onDelete() {
+      this.$refs.myBottomSheet.close();
+      //   console.info(this.form);
+      const Swal = this.$swal;
+      await Swal.fire({
+        title: "Perhatian!!!",
+        html: `Anda yakin ingin hapus data kasbon dari karyawan ${this.form.employee_name} ?</h2>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .post(`${this.getBaseUrl}/api/v1/salary-advance/delete`, {
+              id: this.form.id,
+              user_id: this.getUserId,
+            })
+            .then((responses) => {
+              //   console.info(responses);
+              const data = responses.data;
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              if (data.success == true) {
+                Toast.fire({
+                  icon: "success",
+                  title: data.message,
+                });
+
+                this.$store.dispatch("salaryAdvance/fetchData", {
+                  user_id: this.getUserId,
+                });
+              }
+            })
+            .catch((err) => {
+              console.info(err);
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              Toast.fire({
+                icon: "error",
+                title: err.response.data.message,
+              });
+            });
+        }
+      });
     },
   },
 };

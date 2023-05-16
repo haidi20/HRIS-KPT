@@ -108,7 +108,7 @@ class SalaryAdvanceController extends Controller
 
             $salaryAdvance = SalaryAdvance::find(request("id"));
             $salaryAdvance->update([
-                'deleted_by' => Auth::user()->id,
+                'deleted_by' => request("user_id"),
             ]);
             $salaryAdvance->delete();
 

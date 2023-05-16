@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 
 class SalaryAdvance extends Model
 {
@@ -15,6 +16,15 @@ class SalaryAdvance extends Model
         'employee_name', 'loan_amount_readable',
         // 'status_readable', 'status_color',
     ];
+
+    protected $fillable = [];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->fillable = Schema::getColumnListing($this->getTable());
+    }
 
 
     protected static function boot()

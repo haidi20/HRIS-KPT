@@ -72,5 +72,6 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
         Route::get('fetch-data', [SalaryAdvanceController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdvanceController::class, "store"])->name('store');
+        Route::post('delete', [SalaryAdvanceController::class, "destroy"])->name('delete');
     });
 });

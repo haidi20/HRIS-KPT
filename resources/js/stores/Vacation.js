@@ -50,6 +50,9 @@ const Vacation = {
     },
     actions: {
         fetchData: async (context, payload) => {
+            context.commit("INSERT_DATA", {
+                vacations: [],
+            });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
             const params = {

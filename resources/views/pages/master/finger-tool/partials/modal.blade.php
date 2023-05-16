@@ -9,7 +9,7 @@
             </div>
             <form id="form" enctype="multipart/form-data">
                 @csrf
-               <div class="modal-body">
+                <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
                         <label for="name" class="col-sm-4 col-form-label">Nama Alat Finger</label>
@@ -20,7 +20,7 @@
                     <div class="form-group row">
                         <label for="serial_number" class="col-sm-4 col-form-label">Serial Number </label>
                         <div class="col-sm-8">
-                            <input type="number" id="serial_number" name="serial_number" class="form-control">
+                            <input type="text" id="serial_number" name="serial_number" class="form-control">
                         </div>
                     </div>
                 </div>

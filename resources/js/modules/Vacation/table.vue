@@ -11,7 +11,12 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <template v-if="getData.length > 0">
+        <template v-if="getLoadingTable">
+          <b-tr>
+            <b-td>Loading...</b-td>
+          </b-tr>
+        </template>
+        <template v-else-if="getData.length > 0">
           <b-row v-for="(item, index) in getData" :key="index">
             <b-col class="place-item">
               <b-row>
@@ -50,11 +55,7 @@
             </b-col>
           </b-row>
         </template>
-        <template v-else-if="getLoadingTable">
-          <b-tr>
-            <b-td>Loading...</b-td>
-          </b-tr>
-        </template>
+
         <template v-else>
           <b-tr>
             <b-td>Data Kosong</b-td>
@@ -64,6 +65,9 @@
           <div class="flex flex-col mb-4">
             <!-- <div class="action-item">{{getConditionEdit()}}</div> -->
             <div class="action-item" @click="onAction('edit', 'Ubah')">
+              <span v-if="getConditionEdit()">Ubah</span>
+            </div>
+            <div class="action-item" @click="onDelete()">
               <span v-if="getConditionEdit()">Ubah</span>
             </div>
           </div>
@@ -76,6 +80,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 import { isMobile } from "../../utils";
 import Form from "./form";
 import FilterData from "./filter.vue";
