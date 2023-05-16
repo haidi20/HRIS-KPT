@@ -27,8 +27,8 @@
       </b-row>
       <b-row>
         <b-col cols="12" md="6">
-          <b-form-group label="Jumlah kasbon" label-for="amount" class>
-            <b-form-input v-model="amount" id="amount" name="amount"></b-form-input>
+          <b-form-group label="Jumlah kasbon" label-for="loan_amount" class>
+            <b-form-input v-model="loan_amount" id="loan_amount" name="loan_amount"></b-form-input>
           </b-form-group>
         </b-col>
         <b-col cols="12" md="6">
@@ -47,7 +47,7 @@
             @click="onSend()"
             :disabled="is_loading"
           >Simpan</b-button>
-          <span v-if="is_loading">Loading...</span>
+          <span v-if="is_loading" style="float: right">Loading...</span>
         </b-col>
       </b-row>
     </b-modal>
@@ -82,13 +82,13 @@ export default {
     form() {
       return this.$store.state.salaryAdvance.form;
     },
-    amount: {
+    loan_amount: {
       get() {
-        return this.$store.state.salaryAdvance.form.amount_readable;
+        return this.$store.state.salaryAdvance.form.loan_amount_readable;
       },
       set(value) {
-        this.$store.commit("salaryAdvance/INSERT_FORM_AMOUNT", {
-          amount: value,
+        this.$store.commit("salaryAdvance/INSERT_FORM_LOAN_AMOUNT", {
+          loan_amount: value,
         });
       },
     },
@@ -106,13 +106,15 @@ export default {
       };
 
       // console.info(request);
-
+      this.is_loading = true;
       await axios
         .post(`${this.getBaseUrl}/api/v1/salary-advance/store`, request)
         .then((responses) => {
           console.info(responses);
 
-          return false;
+          this.is_loading = false;
+
+          //   return false;
           const data = responses.data;
 
           const Toast = Swal.mixin({
@@ -139,6 +141,7 @@ export default {
         })
         .catch((err) => {
           console.info(err);
+          this.is_loading = false;
 
           const Toast = Swal.mixin({
             toast: true,

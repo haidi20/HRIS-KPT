@@ -13,17 +13,19 @@
       <b-col class="place-data">
         <b-row v-for="(data, index) in getData" :key="index">
           <b-col class="place-item" @click="onOpenAction(data.id)">
-            <h5>{{data.name}} - {{data.position_name}}</h5>
+            <h5>{{data.employee_name}} - {{data.position_name}}</h5>
             <div class="flex flex-row">
               <div class="flex-grow-2 flex flex-col">
                 <span>
                   <b>Jumlah Kasbon :</b>
                 </span>
-                <span>{{data.amount}}</span>
-                <span class="title-item">
-                  <b>Potongan Setiap Bulan :</b>
-                </span>
-                <span>{{data.monthly_deduction}}</span>
+                <span>{{data.loan_amount_readable}}</span>
+                <template v-if="data.status == 'accept'">
+                  <span class="title-item">
+                    <b>Potongan Setiap Bulan :</b>
+                  </span>
+                  <span>{{data.monthly_deduction}}</span>
+                </template>
                 <span class="title-item">
                   <b>Keterangan :</b>
                 </span>
@@ -37,12 +39,16 @@
                 <span>
                   <b>Status :</b>
                 </span>
-                <div class="badge-success" style="width:5rem">{{data.status_readable}}</div>
-                <br />
-                <span>
-                  <b>Durasi :</b>
-                </span>
-                <span>{{data.duration}}</span>
+                <span
+                  :class="`badge bg-${data.status_color}`"
+                  style="width:5rem"
+                >{{data.status_readable}}</span>
+                <template v-if="data.status == 'accept'">
+                  <span class="title-item">
+                    <b>Durasi :</b>
+                  </span>
+                  <span>{{data.duration}}</span>
+                </template>
               </div>
             </div>
           </b-col>
@@ -68,7 +74,10 @@ export default {
       title: "",
     };
   },
-  components: { FilterData, Form },
+  components: {
+    FilterData,
+    Form,
+  },
   computed: {
     getData() {
       return this.$store.state.salaryAdvance.data;

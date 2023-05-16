@@ -43,7 +43,7 @@ export default {
       base_url: this.baseUrl,
     });
 
-    // this.$store.dispatch("salaryAdvance/fetchData");
+    this.$store.dispatch("salaryAdvance/fetchData");
   },
   methods: {
     onClose() {

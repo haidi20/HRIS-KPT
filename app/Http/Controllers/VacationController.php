@@ -28,11 +28,11 @@ class VacationController extends Controller
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
 
-        $data = Vacation::whereYear("date_start", $month->format("Y"))
+        $vacations = Vacation::whereYear("date_start", $month->format("Y"))
             ->whereMonth("date_start", $month->format("m"));
 
         if ($search != null) {
-            $data = $data->where(function ($query) use ($search) {
+            $vacations = $vacations->where(function ($query) use ($search) {
                 $query->whereHas("employee", function ($employeeQuery) use ($search) {
                     $employeeQuery->where("name", "like", "%" . $search . "%");
                 })->orWhereHas("creator", function ($creatorQuery) use ($search) {
@@ -41,10 +41,10 @@ class VacationController extends Controller
             });
         }
 
-        $data = $data->get();
+        $vacations = $vacations->get();
 
         return response()->json([
-            "data" => $data,
+            "vacations" => $vacations,
             "monthReadAble" => $monthReadAble,
         ]);
     }

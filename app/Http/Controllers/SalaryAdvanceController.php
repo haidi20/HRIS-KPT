@@ -30,17 +30,7 @@ class SalaryAdvanceController extends Controller
 
     public function fetchData()
     {
-        $salaryAdvances = [
-            (object)[
-                "id" => 1,
-                "employee_name" => "Muhammad Adi",
-                "amount" => "5.000.000",
-                "monthly_deduction" => "1.000.000",
-                "duration" => "5 bulan",
-                "net_salary" => "4.000.000",
-                "date" => "Jum'at, 5 Mei 2023",
-            ]
-        ];
+        $salaryAdvances = SalaryAdvance::orderBy("created_at", "desc")->get();
 
         return response()->json([
             "salaryAdvances" => $salaryAdvances,
@@ -50,7 +40,7 @@ class SalaryAdvanceController extends Controller
     // ketika pengawas input data kasbon
     public function store(Request $request)
     {
-        return request()->all();
+        // return request()->all();
 
         try {
             DB::beginTransaction();
@@ -126,5 +116,24 @@ class SalaryAdvanceController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    public function fetchDataOld()
+    {
+        $salaryAdvances = [
+            (object)[
+                "id" => 1,
+                "employee_name" => "Muhammad Adi",
+                "amount" => "5.000.000",
+                "monthly_deduction" => "1.000.000",
+                "duration" => "5 bulan",
+                "net_salary" => "4.000.000",
+                "date" => "Jum'at, 5 Mei 2023",
+            ]
+        ];
+
+        return response()->json([
+            "salaryAdvances" => $salaryAdvances,
+        ]);
     }
 }

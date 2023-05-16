@@ -121,12 +121,13 @@ export default {
       //   console.info(request);
 
       //   return false;
-
+      this.is_loading = true;
       await axios
         .post(`${this.getBaseUrl}/api/v1/vacation/store`, request)
         .then((responses) => {
           // console.info(responses);
           const data = responses.data;
+          this.is_loading = false;
 
           const Toast = Swal.mixin({
             toast: true,
@@ -152,6 +153,7 @@ export default {
         })
         .catch((err) => {
           console.info(err);
+          this.is_loading = false;
 
           const Toast = Swal.mixin({
             toast: true,

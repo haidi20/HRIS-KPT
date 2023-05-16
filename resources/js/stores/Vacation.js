@@ -31,7 +31,7 @@ const Vacation = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA(state, payload) {
-            state.data = payload.data;
+            state.data = payload.vacations;
         },
         INSERT_FORM(state, payload) {
             state.form = {
@@ -68,7 +68,7 @@ const Vacation = {
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
-                        data: data.data,
+                        vacations: data.vacations,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })
