@@ -65,7 +65,7 @@
             <b-td>Data Kosong</b-td>
           </b-tr>
         </template>
-        <vue-bottom-sheet ref="myBottomSheet" max-height="20%">
+        <vue-bottom-sheet ref="myBottomSheet" max-height="30%">
           <div class="flex flex-col">
             <div class="action-item">ubah</div>
             <div class="action-item" @click="onDelete">hapus</div>
@@ -223,7 +223,7 @@ export default {
 }
 .action-item {
   padding: 25px 0px 25px 20px;
-  // border-bottom: 1px solid #dbdfea;
+  border-bottom: 1px solid #dbdfea;
 }
 .title-item {
   margin-top: 10px;

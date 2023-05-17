@@ -97,7 +97,7 @@ class VacationController extends Controller
 
             $vacation = Vacation::find(request("id"));
             $vacation->update([
-                'deleted_by' => Auth::user()->id,
+                'deleted_by' => request("user_id"),
             ]);
             $vacation->delete();
 

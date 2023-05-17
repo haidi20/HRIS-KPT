@@ -55,22 +55,28 @@
             </b-col>
           </b-row>
         </template>
-
         <template v-else>
           <b-tr>
             <b-td>Data Kosong</b-td>
           </b-tr>
         </template>
+
         <vue-bottom-sheet ref="myBottomSheet" max-height="30%">
-          <div class="flex flex-col mb-4">
-            <!-- <div class="action-item">{{getConditionEdit()}}</div> -->
-            <div class="action-item" @click="onAction('edit', 'Ubah')">
-              <span v-if="getConditionEdit()">Ubah</span>
+          <!-- <div class="flex flex-col">
+            <div class="action-item" @click="onEdit()">
+              <span v-if="getConditionByUser()">Ubah</span>
             </div>
             <div class="action-item" @click="onDelete()">
-              <span v-if="getConditionEdit()">Ubah</span>
+              <span v-if="getConditionByUser()">Hapus</span>
             </div>
+          </div>-->
+          <div class="action-item" @click="onEdit">
+            <template v-if="getConditionByUser()">Ubah</template>
           </div>
+          <div class="action-item" @click="onDelete">
+            <template v-if="getConditionByUser()">Hapus</template>
+          </div>
+          <div class="action-item"></div>
         </vue-bottom-sheet>
       </b-col>
     </b-row>
@@ -91,7 +97,10 @@ export default {
       title: "",
     };
   },
-  components: { FilterData, Form },
+  components: {
+    FilterData,
+    Form,
+  },
   computed: {
     getBaseUrl() {
       return this.$store.state.base_url;
@@ -122,29 +131,96 @@ export default {
     },
     onCreate() {
       this.$store.commit("vacation/CLEAR_FORM");
+      this.$store.commit("vacation/INSERT_FORM_TITLE", {
+        form_title: "Tambah Cuti",
+      });
       this.$bvModal.show("vacation_form");
     },
     onFilter() {
       this.$bvModal.show("vacation_filter");
     },
-    onAction(type, title) {
+    onEdit(type, title) {
       //   console.info(type, title);
 
-      if (this.getConditionEdit()) {
+      if (this.getConditionByUser()) {
         this.$refs.myBottomSheet.close();
+        this.$store.commit("vacation/INSERT_FORM_TITLE", {
+          form_title: "Ubah Cuti",
+        });
         this.$bvModal.show("vacation_form");
       }
     },
-    onLimitSentence(sentence) {
-      const maxLength = 35;
+    async onDelete() {
+      this.$refs.myBottomSheet.close();
+      //   console.info(this.form);
+      const Swal = this.$swal;
+      await Swal.fire({
+        title: "Perhatian!!!",
+        html: `Anda yakin ingin hapus data cuti dari karyawan ${this.form.employee_name} ?</h2>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .post(`${this.getBaseUrl}/api/v1/vacation/delete`, {
+              id: this.form.id,
+              user_id: this.getUserId,
+            })
+            .then((responses) => {
+              //   console.info(responses);
+              const data = responses.data;
 
-      if (sentence.length > maxLength) {
-        sentence = sentence.substring(0, maxLength) + "...";
-      }
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
 
-      return sentence;
+              if (data.success == true) {
+                Toast.fire({
+                  icon: "success",
+                  title: data.message,
+                });
+
+                this.$store.dispatch("vacation/fetchData", {
+                  user_id: this.getUserId,
+                });
+              }
+            })
+            .catch((err) => {
+              console.info(err);
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              Toast.fire({
+                icon: "error",
+                title: err.response.data.message,
+              });
+            });
+        }
+      });
     },
-    getConditionEdit() {
+    getConditionByUser() {
       //   console.info(Number(this.form.created_by), Number(this.getUserId));
       return Number(this.form.created_by) == Number(this.getUserId);
     },
@@ -152,10 +228,10 @@ export default {
 };
 </script>
 
+
 <style lang="scss" scoped>
 .place-data {
   max-height: 500px;
-  //max-height: 20%;
   overflow-y: scroll;
 }
 .place-data::-webkit-scrollbar {
@@ -165,15 +241,11 @@ export default {
   border-bottom: 1px solid #dbdfea;
   padding: 0.5rem;
 }
-.place-content {
-  font-size: 15px;
-  margin-top: 10px;
-}
 .action-item {
   padding: 25px 0px 25px 20px;
   border-bottom: 1px solid #dbdfea;
 }
-.badge-success {
-  padding: 0.115rem 0.5rem;
+.title-item {
+  margin-top: 10px;
 }
 </style>

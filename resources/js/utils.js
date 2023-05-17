@@ -45,3 +45,13 @@ export const checkNull = (value) => {
 
     return value;
 }
+
+export const limitSentence = (sentence) => {
+    const maxLength = 35;
+
+    if (sentence.length > maxLength) {
+        sentence = sentence.substring(0, maxLength) + "...";
+    }
+
+    return sentence;
+};

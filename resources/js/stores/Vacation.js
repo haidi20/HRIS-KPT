@@ -19,6 +19,7 @@ const Vacation = {
             search: null,
         },
         form: { ...defaultForm },
+        form_title: "Tambah Cuti",
         options: {
             //
         },
@@ -32,6 +33,9 @@ const Vacation = {
         },
         INSERT_DATA(state, payload) {
             state.data = payload.vacations;
+        },
+        INSERT_FORM_TITLE(state, payload) {
+            state.form_title = payload.form_title;
         },
         INSERT_FORM(state, payload) {
             state.form = {

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Schema;
 
 class Vacation extends Model
 {
@@ -15,6 +16,15 @@ class Vacation extends Model
         'employee_name', 'creator_name', 'date_start_readable', 'date_end_readable',
         'duration_readable',
     ];
+
+    protected $fillable = [];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->fillable = Schema::getColumnListing($this->getTable());
+    }
 
     protected static function boot()
     {

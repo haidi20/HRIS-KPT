@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FingerToolSeeder::class);
         $this->call(BpjsCalculationSeeder::class);
         $this->call(EmployeeTypeSeeder::class);
+        $this->call(ApprovalSeeder::class);
     }
 }

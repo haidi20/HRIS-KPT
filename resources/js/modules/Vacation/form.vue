@@ -3,7 +3,7 @@
     <b-modal
       id="vacation_form"
       ref="vacation_form"
-      :title="getTitleForm"
+      :title="getFormTitle"
       size="md"
       class="modal-custom"
       hide-footer
@@ -83,7 +83,6 @@ export default {
   data() {
     return {
       is_loading: false,
-      getTitleForm: "Tambah Cuti",
     };
   },
   components: {
@@ -98,6 +97,9 @@ export default {
     },
     getOptionEmployees() {
       return this.$store.state.employee.data.options;
+    },
+    getFormTitle() {
+      return this.$store.state.vacation.form_title;
     },
     form() {
       return this.$store.state.vacation.form;
