@@ -22,10 +22,11 @@ class ProjectController extends Controller
         $projects = [
             (object)[
                 "id" => 1,
-                "name" => "Kapal A",
+                "name" => "Pengerjaan Kapal A",
+                "barge_name" => "Kapal A",
                 "company_name" => "PT. Maju Jaya",
-                "total_job_order" => 4,
-                "total_job_order_finish" => 5,
+                "job_order_total" => 4,
+                "job_order_total_finish" => 5,
             ]
         ];
 

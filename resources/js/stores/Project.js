@@ -15,7 +15,32 @@ const Project = {
         },
         form: { ...defaultForm },
         options: {
-            //
+            barges: [
+                {
+                    id: 1,
+                    name: "Kapal A",
+                },
+            ],
+            types: [
+                {
+                    id: "daily",
+                    name: "Harian",
+                },
+                {
+                    id: "contract",
+                    name: "Borongan",
+                },
+            ],
+            work_types: [
+                {
+                    id: "production",
+                    name: "Produksi (pembuatan dari awal)",
+                },
+                {
+                    id: "maintenance",
+                    name: "Maintenance (Perbaikan)",
+                },
+            ],
         },
         loading: {
             table: false,
@@ -26,7 +51,7 @@ const Project = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA(state, payload) {
-            state.data = payload.vacations;
+            state.data = payload.projects;
         },
 
 
@@ -41,7 +66,7 @@ const Project = {
     actions: {
         fetchData: async (context, payload) => {
             context.commit("INSERT_DATA", {
-                vacations: [],
+                projects: [],
             });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
@@ -52,7 +77,7 @@ const Project = {
 
             await axios
                 .get(
-                    `${context.state.base_url}/api/v1/vacation/fetch-data`, {
+                    `${context.state.base_url}/api/v1/project/fetch-data`, {
                     params: { ...params },
                 }
                 )
@@ -61,7 +86,7 @@ const Project = {
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
-                        vacations: data.vacations,
+                        projects: data.projects,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })

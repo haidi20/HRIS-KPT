@@ -5,7 +5,7 @@
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
         <h3 style="display: inline">{{getTitle}}</h3>
         <template v-if="!getIsActiveForm">
-          <Table />
+          <List />
         </template>
         <template v-else>
           <template v-if="getConditionForm()">
@@ -24,7 +24,7 @@
 <script>
 import { isMobile } from "../../utils";
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
-import Table from "./table";
+import List from "./list";
 import Form from "./form";
 import FormAction from "./formAction.vue";
 
@@ -35,7 +35,7 @@ export default {
     };
   },
   components: {
-    Table,
+    List,
     Form,
     FormAction,
     VueBottomSheet,

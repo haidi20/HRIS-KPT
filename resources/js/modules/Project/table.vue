@@ -18,22 +18,26 @@
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
           <b-td>{{ item.name }}</b-td>
-          <b-td>{{ item.initial }}</b-td>
-          <b-td>{{ item.note }}</b-td>
-          <b-td :style="{backgroundColor: item.color}">
-            <p :style="{ color: item.color }">.</p>
+          <b-td>{{ item.company_name }}</b-td>
+          <b-td>
+            {{ item.job_order_total }}
+            \ {{ item.job_order_total_finish }}
           </b-td>
           <b-td>
+            <b-button variant="primary" size="sm" @click="onDetail(item)">Detail</b-button>
+            <b-button variant="warning" size="sm" @click="onShowJobOrder(item)">Job Order</b-button>
             <b-button variant="info" size="sm" @click="onEdit(item)">Ubah</b-button>
             <b-button variant="danger" size="sm" @click="onDelete(item)">Hapus</b-button>
           </b-td>
         </b-tr>
       </template>
     </DatatableClient>
+    <JobOrderModal />
   </div>
 </template>
 
 <script>
+import JobOrderModal from "../JobOrder/modal";
 import DatatableClient from "../../components/DatatableClient";
 
 export default {
@@ -47,20 +51,14 @@ export default {
           class: "",
         },
         {
-          label: "Nama Inisial",
-          field: "initial",
+          label: "Perusahaan",
+          field: "company_name",
           width: "100px",
           class: "",
         },
         {
-          label: "Catatan",
-          field: "note",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Warna",
-          field: "color",
+          label: "Total Job Order",
+          field: "job_order_total",
           width: "100px",
           class: "",
         },
@@ -78,6 +76,7 @@ export default {
   },
   components: {
     DatatableClient,
+    JobOrderModal,
   },
   computed: {
     getBaseUrl() {
@@ -96,6 +95,18 @@ export default {
   methods: {
     onCreate() {
       this.$bvModal.show("project_form");
+    },
+    onDetail() {
+      this.$bvModal.show("project_form");
+    },
+    onEdit() {
+      this.$bvModal.show("project_form");
+    },
+    onShowJobOrder() {
+      this.$bvModal.show("job_order_modal");
+    },
+    onDelete() {
+      //
     },
   },
 };

@@ -3,12 +3,14 @@
 use App\Http\Controllers\ApprovalAgreementController;
 use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use App\Http\Controllers\SalaryAdvanceController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -80,5 +82,11 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [ProjectController::class, "fetchData"])->name('fetchData');
         Route::post('store', [ProjectController::class, "store"])->name('store');
         Route::post('delete', [ProjectController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('fetch-permission', [UserController::class, "fetchPermission"])->name('fetchPermission');
+    });
+    Route::prefix('employee')->name('employee.')->group(function () {
+        Route::get('fetch-foreman', [EmployeeController::class, "fetchForeman"])->name('fetchForeman');
     });
 });

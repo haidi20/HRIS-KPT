@@ -22,10 +22,10 @@ class PositionController extends Controller
 
     public function fetchData()
     {
-        $data = Position::all();
+        $positions = Position::all();
 
         return response()->json([
-            "data" => $data,
+            "positions" => $positions,
         ]);
     }
 
