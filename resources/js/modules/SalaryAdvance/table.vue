@@ -235,8 +235,22 @@ export default {
       });
     },
     getConditionAction() {
+      let result = true;
       //   console.info(Number(this.form.created_by), Number(this.getUserId));
-      return Number(this.form.created_by) == Number(this.getUserId);
+      //   return (
+      //     Number(this.form.created_by) == Number(this.getUserId) &&
+      //     this.form.approval_status != "accept"
+      //   );
+
+      if (Number(this.form.created_by) != Number(this.getUserId)) {
+        result = false;
+      }
+
+      if (this.form.approval_status_first == "accept") {
+        result = false;
+      }
+
+      return result;
     },
   },
 };

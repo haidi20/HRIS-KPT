@@ -104,12 +104,16 @@ const SalaryAdvance = {
             });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+                user_id: payload.user_id,
+            }
+
             await axios
                 .get(
                     `${context.state.base_url}/api/v1/salary-advance/fetch-data`, {
-                    params: {
-                        user_id: payload.user_id,
-                    },
+                    params: { ...params },
                 }
                 )
                 .then((responses) => {
