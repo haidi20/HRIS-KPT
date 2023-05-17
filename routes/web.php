@@ -39,6 +39,7 @@ use App\Http\Controllers\VacationController;
 use App\Http\Controllers\WorkingHourController;
 use App\Http\Controllers\FingerToolController;
 use App\Http\Controllers\BpjsCalculationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VacationReportController;
 use Illuminate\Support\Facades\Auth;
 
@@ -235,8 +236,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

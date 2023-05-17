@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class ProjectController extends Controller
 {
     public function index()
+    {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.project.index", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData()
     {
         $projects = [
             (object)[
@@ -18,6 +29,8 @@ class ProjectController extends Controller
             ]
         ];
 
-        return view("pages.project.index", compact("projects"));
+        return response()->json([
+            "projects" => $projects,
+        ]);
     }
 }

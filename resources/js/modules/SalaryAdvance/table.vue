@@ -62,6 +62,10 @@
                     </span>
                     <span>{{data.duration}}</span>
                   </template>
+                  <span class="title-item">
+                    <b>Dibuat oleh :</b>
+                  </span>
+                  <span>{{data.creator_name}}</span>
                 </div>
               </div>
             </b-col>

@@ -5,6 +5,7 @@ use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use App\Http\Controllers\SalaryAdvanceController;
@@ -74,5 +75,10 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [SalaryAdvanceController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdvanceController::class, "store"])->name('store');
         Route::post('delete', [SalaryAdvanceController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('project')->name('project.')->group(function () {
+        Route::get('fetch-data', [ProjectController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [ProjectController::class, "store"])->name('store');
+        Route::post('delete', [ProjectController::class, "destroy"])->name('delete');
     });
 });
