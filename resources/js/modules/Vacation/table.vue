@@ -62,20 +62,8 @@
         </template>
 
         <vue-bottom-sheet ref="myBottomSheet" max-height="30%">
-          <!-- <div class="flex flex-col">
-            <div class="action-item" @click="onEdit()">
-              <span v-if="getConditionByUser()">Ubah</span>
-            </div>
-            <div class="action-item" @click="onDelete()">
-              <span v-if="getConditionByUser()">Hapus</span>
-            </div>
-          </div>-->
-          <div class="action-item" @click="onEdit">
-            <template v-if="getConditionByUser()">Ubah</template>
-          </div>
-          <div class="action-item" @click="onDelete">
-            <template v-if="getConditionByUser()">Hapus</template>
-          </div>
+          <div class="action-item" @click="onEdit">Ubah</div>
+          <div class="action-item" @click="onDelete">Hapus</div>
           <div class="action-item"></div>
         </vue-bottom-sheet>
       </b-col>
@@ -123,10 +111,14 @@ export default {
   },
   methods: {
     onOpenAction(data) {
-      this.$store.commit("vacation/CLEAR_FORM");
       this.$store.commit("vacation/INSERT_FORM", {
         form: data,
       });
+
+      if (!this.getConditionAction()) {
+        return false;
+      }
+
       this.$refs.myBottomSheet.open();
     },
     onCreate() {
@@ -142,7 +134,7 @@ export default {
     onEdit(type, title) {
       //   console.info(type, title);
 
-      if (this.getConditionByUser()) {
+      if (this.getConditionAction()) {
         this.$refs.myBottomSheet.close();
         this.$store.commit("vacation/INSERT_FORM_TITLE", {
           form_title: "Ubah Cuti",
@@ -151,6 +143,10 @@ export default {
       }
     },
     async onDelete() {
+      if (!this.getConditionAction()) {
+        return false;
+      }
+
       this.$refs.myBottomSheet.close();
       //   console.info(this.form);
       const Swal = this.$swal;
@@ -220,7 +216,7 @@ export default {
         }
       });
     },
-    getConditionByUser() {
+    getConditionAction() {
       //   console.info(Number(this.form.created_by), Number(this.getUserId));
       return Number(this.form.created_by) == Number(this.getUserId);
     },

@@ -22,6 +22,7 @@ const SalaryAdvance = {
             is_filter_month: true,
         },
         form: { ...defaultForm },
+        form_title: "Tambah Kasbon",
         options: {
             types: [
                 // (opsional)
@@ -67,6 +68,9 @@ const SalaryAdvance = {
                 ...state.form,
                 ...payload.form,
             };
+        },
+        INSERT_FORM_TITLE(state, payload) {
+            state.form_title = payload.form_title;
         },
         INSERT_FORM_LOAN_AMOUNT(state, payload) {
             if (payload.loan_amount != null) {
