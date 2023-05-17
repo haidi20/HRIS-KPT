@@ -88,6 +88,10 @@ const SalaryAdvance = {
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
         },
+        CLEAR_FORM(state, payload) {
+            // console.info(defaultForm);
+            state.form = { ...defaultForm };
+        },
     },
     actions: {
         fetchData: async (context, payload) => {

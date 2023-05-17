@@ -67,6 +67,7 @@ class SalaryAdvanceController extends Controller
             $salaryAdvance->employee_id = request("employee_id");
             $salaryAdvance->loan_amount = request("loan_amount");
             $salaryAdvance->approval_level_id = $approvalLevel->id;
+            $salaryAdvance->reason = request("reason");
             $salaryAdvance->save();
 
             $this->insertApprovalLevel($salaryAdvance, $userId);

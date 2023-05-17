@@ -26,16 +26,23 @@
                     <b>Jumlah Kasbon :</b>
                   </span>
                   <span>{{data.loan_amount_readable}}</span>
-                  <template v-if="data.status == 'accept'">
+
+                  <span class="title-item">
+                    <b>Keterangan :</b>
+                  </span>
+                  <span>{{data.reason}}</span>
+                  <template v-if="data.approval_status == 'accept'">
                     <span class="title-item">
                       <b>Potongan Setiap Bulan :</b>
                     </span>
                     <span>{{data.monthly_deduction}}</span>
                   </template>
-                  <span class="title-item">
-                    <b>Keterangan :</b>
-                  </span>
-                  <span>{{data.note}}</span>
+                  <template v-if="data.approval_status == 'reject'">
+                    <span class="title-item">
+                      <b>Catatan :</b>
+                    </span>
+                    <span>{{data.note}}</span>
+                  </template>
                   <!-- <span class="title-item">Sudah Terbayarkan :</span>
                 <span>Rp. 500.000</span>
                 <span class="title-item">Belum Terbayarkan :</span>
@@ -46,10 +53,10 @@
                     <b>Status :</b>
                   </span>
                   <span
-                    :class="`badge bg-${data.status_color}`"
+                    :class="`badge bg-${data.approval_color}`"
                     style="width:5rem"
-                  >{{data.status_readable}}</span>
-                  <template v-if="data.status == 'accept'">
+                  >{{data.approval_status}}</span>
+                  <template v-if="data.approval_status == 'accept'">
                     <span class="title-item">
                       <b>Durasi :</b>
                     </span>
@@ -130,6 +137,7 @@ export default {
     onCreate() {
       //   console.info("create");
       this.$refs.myBottomSheet.close();
+      this.$store.commit("salaryAdvance/CLEAR_FORM");
       this.$bvModal.show("salary_advance_form");
     },
     onFilter() {

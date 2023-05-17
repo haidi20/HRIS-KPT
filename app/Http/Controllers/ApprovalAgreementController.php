@@ -6,6 +6,7 @@ use App\Models\ApprovalAgreement;
 use App\Models\ApprovalLevel;
 use App\Models\ApprovalLevelDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 
 class ApprovalAgreementController extends Controller
@@ -106,11 +107,12 @@ class ApprovalAgreementController extends Controller
                 ->orderBy("created_at", "desc")
                 ->first();
 
-
+            $statusApprovalLibrary = Config::get("library.status");
 
             $query->approval_user_id = $approvalAgreement ? $approvalAgreementUsers : null;
             $query->approval_status = $approvalAgreement ? $approvalAgreement->status_approval : null;
             $query->approval_label = $approvalAgreement ? $approvalAgreement->label_status_approval : null;
+            $query->approval_color = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["color"] : null;
             $query->approval_description = $approvalAgreement ? $approvalAgreement->description_status_approval : null;
         });
 

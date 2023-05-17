@@ -22,6 +22,9 @@ class CreateSalaryAdvancesTable extends Migration
             $table->integer('duration')->nullable(); // durasi pinjaman
             // sisa gaji setelah potongan cicilan bulanan
             $table->double('remaining_salary')->nullable();
+            // dari pengawas
+            $table->text('reason')->nullable();
+            // dari HRD
             $table->text('note')->nullable();
             // status sudah di handle oleh approval_aggrement
             // $table->enum('status', ['accept', 'reject', 'review'])->default('review');
