@@ -18,6 +18,8 @@ class CreateBpjsCalculationsTable extends Migration
             $table->string('name');
             $table->string('company_percent')->nullable();
             $table->string('company_nominal')->nullable();
+            $table->string('employee_percent')->nullable();
+            $table->string('employee_nominal')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
