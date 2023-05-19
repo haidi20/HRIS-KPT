@@ -79,8 +79,6 @@
           </b-form-group>
         </b-col>
         <b-col cols>perusahaan</b-col>
-      </b-row>
-      <b-row>
         <b-col cols>
           <b-form-group label="Tanggal Selesai" label-for="date_end">
             <DatePicker
@@ -94,20 +92,49 @@
             />
           </b-form-group>
         </b-col>
+      </b-row>
+      <b-row>
         <b-col cols>
           <b-form-group label="Biaya" label-for="price" class>
-            <b-form-input v-model="form.price" id="price" name="price" autocomplete="off"></b-form-input>
+            <b-form-input v-model="price" id="price" name="price" autocomplete="off"></b-form-input>
           </b-form-group>
         </b-col>
         <b-col cols>
           <b-form-group label="DP (Down Payment) " label-for="down_payment" class>
             <b-form-input
-              v-model="form.down_payment"
+              v-model="down_payment"
               id="down_payment"
               name="down_payment"
               autocomplete="off"
             ></b-form-input>
           </b-form-group>
+        </b-col>
+        <b-col cols>
+          <b-form-group label="Sisa Yang Dibayarkan" label-for="remaining_payment" class>
+            <b-form-input
+              v-model="form.remaining_payment_readable"
+              id="remaining_payment"
+              name="remaining_payment"
+              autocomplete="off"
+              disabled
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col col md="4">
+          <b-form-group label="Catatan" label-for="note" class>
+            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <b-tabs content-class="mt-3">
+            <b-tab title="Kapal" @click="onChangeTab('barge')" active>kapal</b-tab>
+            <b-tab title="Kepala Pemborong" @click="onChangeTab('contractor_head')">Kepala Pemborong</b-tab>
+            <b-tab title="OS" @click="onChangeTab('os')">OS</b-tab>
+          </b-tabs>
         </b-col>
       </b-row>
       <br />
@@ -164,11 +191,42 @@ export default {
     form() {
       return this.$store.state.project.form;
     },
+    price: {
+      get() {
+        return this.$store.state.project.form.price_readable;
+      },
+      set(value) {
+        this.$store.commit("project/INSERT_FORM_PRICE", {
+          price: value,
+        });
+      },
+    },
+    down_payment: {
+      get() {
+        return this.$store.state.project.form.down_payment_readable;
+      },
+      set(value) {
+        this.$store.commit("project/INSERT_FORM_DOWN_PAYMENT", {
+          down_payment: value,
+        });
+      },
+    },
+  },
+  watch: {
+    price(value, oldValue) {
+      this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
+    },
+    down_payment(value, oldValue) {
+      this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
+    },
   },
   methods: {
     onCloseModal() {
       this.$store.commit("project/CLEAR_FORM");
       this.$bvModal.hide("project_form");
+    },
+    onChangeTab(type) {
+      console.info(type);
     },
     async onSend() {
       this.$bvModal.hide("project_form");
