@@ -33,14 +33,40 @@ class SalaryAdvanceController extends Controller
 
     public function fetchData()
     {
+        $search = request("search");
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
         $approvalAgreement = new ApprovalAgreementController;
 
-        $salaryAdvances = SalaryAdvance::orderBy("created_at", "desc")->get();
+        $salaryAdvances = new SalaryAdvance;
+
+        if (request("is_filter_month") == "true") {
+            $salaryAdvances = $salaryAdvances->whereYear("created_at", $month->format("Y"))
+                ->whereMonth("created_at", $month->format("m"));
+        }
+
+        if ($search != null) {
+            $salaryAdvances = $salaryAdvances->where(function ($query) use ($search) {
+                $query->whereHas("employee", function ($employeeQuery) use ($search) {
+                    $employeeQuery->where("name", "like", "%" . $search . "%");
+                });
+                // ->orWhereHas("position", function ($creatorQuery) use ($search) {
+                //     $creatorQuery->where("name", "like", "%" . $search . "%");
+                // });
+            })->orWhere("reason", "like", "%" . $search . "%")
+                ->orWhere("loan_amount", "like", "%" . $search . "%");
+        }
+
+        $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
         $salaryAdvances = $approvalAgreement->mapApprovalAgreeent($salaryAdvances, $this->nameModel, false);
+
+        if (request("type") != "all") {
+            $salaryAdvances = $salaryAdvances->where("approval_status", request("type"));
+        }
 
         return response()->json([
             "salaryAdvances" => $salaryAdvances,
-            // "user_id" => request("user_id"),
+            "is_filter_month" => request("is_filter_month"),
         ]);
     }
 
@@ -70,7 +96,9 @@ class SalaryAdvanceController extends Controller
             $salaryAdvance->reason = request("reason");
             $salaryAdvance->save();
 
-            $this->insertApprovalLevel($salaryAdvance, $userId);
+            if (request("id") == null) {
+                $this->insertApprovalLevel($salaryAdvance, $userId);
+            }
 
             DB::commit();
 

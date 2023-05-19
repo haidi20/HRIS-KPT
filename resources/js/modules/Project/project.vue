@@ -1,0 +1,69 @@
+<template>
+  <div>
+    <title>Roster</title>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <b-row>
+          <b-col class="place-title">
+            <h2>{{ title }}</h2>
+            <p class="version">{{ version }}</p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>filter data</b-col>
+        </b-row>
+        <br />
+        <Table />
+        <Form />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Table from "./table";
+import Form from "./form";
+
+export default {
+  props: {
+    user: String,
+    baseUrl: String,
+  },
+  data() {
+    return {
+      title: "Proyek",
+      version: "v1.1",
+    };
+  },
+  components: {
+    Table,
+    Form,
+  },
+  mounted() {
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    ["project", "jobOrder", "employee"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
+    });
+
+    this.$store.dispatch("fetchPermission");
+    this.$store.dispatch("project/fetchData");
+    this.$store.dispatch("employee/fetchForeman");
+
+    this.$bvModal.show("project_form");
+  },
+};
+</script>
+
+<style lang="css" scoped>
+.version {
+  font-size: 13px;
+  margin-left: 5px;
+}
+.place-title {
+  display: -webkit-inline-box;
+}
+</style>

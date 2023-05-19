@@ -4,6 +4,7 @@ import axios from "axios";
 import moment from "moment";
 
 import Roster from "./Roster";
+import Project from "./Project";
 import Vacation from "./Vacation";
 import JobOrder from "./JobOrder";
 import Employee from "./Employee";
@@ -17,6 +18,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     modules: {
         roster: Roster,
+        project: Project,
         vacation: Vacation,
         jobOrder: JobOrder,
         employee: Employee,
@@ -51,12 +53,37 @@ const store = new Vuex.Store({
         UPDATE_PERMISSION_IS_DELETE(state, payload) {
             state.permission.is_delete = payload.value;
         },
-        INSERT_PERMISSIONS(state, payload) {
+        INSERT_PERMISSION(state, payload) {
             state.permissions = payload.permissions;
         },
     },
     actions: {
-        //
+        fetchPermission: async (context, payload) => {
+            context.commit("INSERT_PERMISSION", {
+                permissions: [],
+            });
+
+            // console.info(context.state.user);
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/user/fetch-permission`, {
+                    params: { user_id: context.state.user?.id },
+                }
+                )
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_PERMISSION", {
+                        permissions: data.permissions,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
+
     },
     getters: {
         //

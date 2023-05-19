@@ -22,6 +22,7 @@ const SalaryAdvance = {
             is_filter_month: true,
         },
         form: { ...defaultForm },
+        form_title: "Tambah Kasbon",
         options: {
             types: [
                 // (opsional)
@@ -68,6 +69,9 @@ const SalaryAdvance = {
                 ...payload.form,
             };
         },
+        INSERT_FORM_TITLE(state, payload) {
+            state.form_title = payload.form_title;
+        },
         INSERT_FORM_LOAN_AMOUNT(state, payload) {
             if (payload.loan_amount != null) {
                 // console.info(typeof payload.loan_amount);
@@ -100,12 +104,16 @@ const SalaryAdvance = {
             });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+                user_id: payload.user_id,
+            }
+
             await axios
                 .get(
                     `${context.state.base_url}/api/v1/salary-advance/fetch-data`, {
-                    params: {
-                        user_id: payload.user_id,
-                    },
+                    params: { ...params },
                 }
                 )
                 .then((responses) => {

@@ -49,6 +49,27 @@ class EmployeeController extends Controller
         return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations"));
     }
 
+    // untuk kebutuhan di vuejs
+    // semua karyawan
+    public function fetchData()
+    {
+        //
+    }
+
+    public function fetchForeman()
+    {
+        $foremans = [
+            (object) [
+                "id" => 1,
+                "name" => "Samsudin",
+            ],
+        ];
+
+        return response()->json([
+            "foremans" => $foremans,
+        ]);
+    }
+
     public function store(Request $request)
     {
         try {

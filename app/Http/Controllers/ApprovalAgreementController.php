@@ -107,10 +107,16 @@ class ApprovalAgreementController extends Controller
                 ->orderBy("created_at", "desc")
                 ->first();
 
+            $approvalAgreementFirst = ApprovalAgreement::byApprovalLevelId($query->approval_level_id)
+                ->byModel($query["id"], $nameModel)
+                ->where("level_approval", 1)
+                ->first();
+
             $statusApprovalLibrary = Config::get("library.status");
 
             $query->approval_user_id = $approvalAgreement ? $approvalAgreementUsers : null;
             $query->approval_status = $approvalAgreement ? $approvalAgreement->status_approval : null;
+            $query->approval_status_first = $approvalAgreementFirst ? $approvalAgreementFirst->status_approval : null;
             $query->approval_label = $approvalAgreement ? $approvalAgreement->label_status_approval : null;
             $query->approval_color = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["color"] : null;
             $query->approval_description = $approvalAgreement ? $approvalAgreement->description_status_approval : null;

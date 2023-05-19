@@ -100,7 +100,6 @@ export default {
     async onSend() {
       const Swal = this.$swal;
 
-      // mengambil data hexa saja
       const request = {
         ...this.form,
         user_id: this.getUserId,

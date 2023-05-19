@@ -62,6 +62,10 @@
                     </span>
                     <span>{{data.duration}}</span>
                   </template>
+                  <span class="title-item">
+                    <b>Dibuat oleh :</b>
+                  </span>
+                  <span>{{data.creator_name}}</span>
                 </div>
               </div>
             </b-col>
@@ -74,8 +78,9 @@
         </template>
         <vue-bottom-sheet ref="myBottomSheet" max-height="30%">
           <div class="flex flex-col">
-            <div class="action-item">ubah</div>
-            <div class="action-item" @click="onDelete">hapus</div>
+            <div class="action-item" @click="onEdit">Ubah</div>
+            <div class="action-item" @click="onDelete">Hapus</div>
+            <div class="action-item"></div>
           </div>
         </vue-bottom-sheet>
       </b-col>
@@ -132,18 +137,38 @@ export default {
         form: data,
       });
 
+      if (!this.getConditionAction()) {
+        return false;
+      }
       this.$refs.myBottomSheet.open();
     },
     onCreate() {
       //   console.info("create");
       this.$refs.myBottomSheet.close();
+      this.$store.commit("salaryAdvance/INSERT_FORM_TITLE", {
+        form_title: "Tambah Kasbon",
+      });
       this.$store.commit("salaryAdvance/CLEAR_FORM");
       this.$bvModal.show("salary_advance_form");
     },
     onFilter() {
       this.$bvModal.show("salary_advance_filter");
     },
+    onEdit(type, title) {
+      //   console.info(type, title);
+
+      if (this.getConditionAction()) {
+        this.$refs.myBottomSheet.close();
+        this.$store.commit("salaryAdvance/INSERT_FORM_TITLE", {
+          form_title: "Ubah Kasbon",
+        });
+        this.$bvModal.show("salary_advance_form");
+      }
+    },
     async onDelete() {
+      if (!this.getConditionAction()) {
+        return false;
+      }
       this.$refs.myBottomSheet.close();
       //   console.info(this.form);
       const Swal = this.$swal;
@@ -212,6 +237,24 @@ export default {
             });
         }
       });
+    },
+    getConditionAction() {
+      let result = true;
+      //   console.info(Number(this.form.created_by), Number(this.getUserId));
+      //   return (
+      //     Number(this.form.created_by) == Number(this.getUserId) &&
+      //     this.form.approval_status != "accept"
+      //   );
+
+      if (Number(this.form.created_by) != Number(this.getUserId)) {
+        result = false;
+      }
+
+      if (this.form.approval_status_first == "accept") {
+        result = false;
+      }
+
+      return result;
     },
   },
 };

@@ -30,6 +30,17 @@ class UserController extends Controller
         return view("pages.setting.user", compact("users", "roles"));
     }
 
+    public function fetchPermission()
+    {
+        $user = User::find(request("user_id"));
+        $permissions = $user->permission;
+
+        return response()->json([
+            'success' => true,
+            'permissions' => $permissions,
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         // return request()->all();

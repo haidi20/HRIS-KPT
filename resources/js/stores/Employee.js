@@ -26,6 +26,7 @@ const Employee = {
                 }
             ],
             positions: [],
+            foremans: [],
         },
         params: {
             date_filter: new Date(),
@@ -71,7 +72,10 @@ const Employee = {
             state.data.table = payload.data;
         },
         INSERT_DATA_POSITION(state, payload) {
-            state.data.positions = payload.data;
+            state.data.positions = payload.positions;
+        },
+        INSERT_DATA_FOREMAN(state, payload) {
+            state.data.foremans = payload.foremans;
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
@@ -92,13 +96,32 @@ const Employee = {
                     // console.info(responses);
                     let data = responses.data;
 
-                    data.data = [
+                    data.positions = [
                         { id: "all", name: "Semua" },
                         ...data.data,
                     ];
 
                     context.commit("INSERT_DATA_POSITION", {
-                        data: data.data,
+                        positions: data.positions,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
+        fetchForeman: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/employee/fetch-foreman`, {
+                    params: {},
+                }
+                )
+                .then((responses) => {
+                    // console.info(responses);
+                    let data = responses.data;
+
+                    context.commit("INSERT_DATA_FOREMAN", {
+                        foremans: data.foremans,
                     });
                 })
                 .catch((err) => {
