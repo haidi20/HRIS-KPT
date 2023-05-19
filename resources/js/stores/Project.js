@@ -1,8 +1,19 @@
 import axios from "axios";
 import moment from "moment";
 
-const defaultForm = {
+import { numbersOnly, formatCurrency } from "../utils";
 
+const defaultForm = {
+    id: null,
+    // biaya
+    price: null,
+    price_readable: null,
+    // DP
+    down_payment: null,
+    down_payment_readable: null,
+    // sisa pembyaaran
+    remaining_payment: null,
+    remaining_payment_readable: null,
 }
 
 const Project = {
@@ -53,7 +64,52 @@ const Project = {
         INSERT_DATA(state, payload) {
             state.data = payload.projects;
         },
+        INSERT_FORM_PRICE(state, payload) {
+            if (payload.price != null) {
+                // console.info(typeof payload.amount);
+                const numericValue = numbersOnly(payload.price.toString());
+                const readAble = formatCurrency(payload.price, ".");
 
+                // console.info(readAble.replace(/[^\d.:]/g, ''));
+
+                state.form.price = numericValue;
+                state.form.price_readable = readAble;
+
+                // console.info(state);
+            }
+        },
+        INSERT_FORM_DOWN_PAYMENT(state, payload) {
+            if (payload.down_payment != null) {
+                // console.info(typeof payload.amount);
+                const numericValue = numbersOnly(payload.down_payment.toString());
+                const readAble = formatCurrency(payload.down_payment, ".");
+
+                // console.info(readAble.replace(/[^\d.:]/g, ''));
+
+                state.form.down_payment = numericValue;
+                state.form.down_payment_readable = readAble;
+
+                // console.info(state);
+            }
+        },
+        INSERT_FORM_REMAINING_PAYMENT(state, payload) {
+
+            // console.info(state.form);
+            // return false;
+            if (state.form.down_payment != null && state.form.price != null) {
+                const remaining_payment = state.form.price - state.form.down_payment;
+                // console.info(typeof payload.amount);
+                const numericValue = numbersOnly(remaining_payment.toString());
+                const readAble = formatCurrency(remaining_payment, ".");
+
+                // console.info(readAble.replace(/[^\d.:]/g, ''));
+
+                state.form.remaining_payment = numericValue;
+                state.form.remaining_payment_readable = readAble;
+
+                // console.info(state);
+            }
+        },
 
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);
