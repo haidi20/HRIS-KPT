@@ -1,156 +1,144 @@
 <template>
   <div>
-    <b-modal
-      id="project_form"
-      ref="project_form"
-      :title="getTitleForm"
-      size="lg"
-      class="modal-custom"
-      hide-footer
-    >
-      <b-row>
-        <b-col cols>
-          <b-form-group label="Nama Proyek" label-for="name" class>
-            <b-form-input v-model="form.name" id="name" name="name" autocomplete="off"></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols>
-          <b-form-group label="Jenis Pekerjaan" label-for="work_type" class>
-            <VueSelect
-              id="work_type"
-              class="cursor-pointer"
-              v-model="form.work_type"
-              placeholder="Pilih Jenis Pekerjaan"
-              :options="getOptionWorkTypes"
-              :reduce="(data) => data.id"
-              label="name"
-              searchable
-              style="min-width: 180px"
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols>
-          <b-form-group label="Kapal" label-for="barge_id" class>
-            <VueSelect
-              id="barge_id"
-              class="cursor-pointer"
-              v-model="form.barge_id"
-              placeholder="Pilih Kapal"
-              :options="getOptionBarges"
-              :reduce="(data) => data.id"
-              label="name"
-              searchable
-              style="min-width: 180px"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols>
-          <b-form-group label="Jenis Proyek" label-for="barge_id" class>
-            <VueSelect
-              id="barge_id"
-              class="cursor-pointer"
-              v-model="form.barge_id"
-              placeholder="Pilih Jenis Proyek"
-              :options="getOptionTypes"
-              :reduce="(data) => data.id"
-              label="name"
-              searchable
-              style="min-width: 180px"
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols>
-          <b-form-group label="Pengawas" label-for="foreman_id" class>
-            <VueSelect
-              id="foreman_id"
-              class="cursor-pointer"
-              v-model="form.foreman_id"
-              placeholder="Pilih Pengawas"
-              :options="getOptionForemans"
-              :reduce="(data) => data.id"
-              label="name"
-              searchable
-              style="min-width: 180px"
-            />
-          </b-form-group>
-        </b-col>
-        <b-col cols>perusahaan</b-col>
-        <b-col cols>
-          <b-form-group label="Tanggal Selesai" label-for="date_end">
-            <DatePicker
-              id="date_end"
-              v-model="form.date_end"
-              format="YYYY-MM-DD"
-              type="date"
-              placeholder="Pilih Tanggal Selesai"
-              style="width: 100%"
-              :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols>
-          <b-form-group label="Biaya" label-for="price" class>
-            <b-form-input v-model="price" id="price" name="price" autocomplete="off"></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols>
-          <b-form-group label="DP (Down Payment) " label-for="down_payment" class>
-            <b-form-input
-              v-model="down_payment"
-              id="down_payment"
-              name="down_payment"
-              autocomplete="off"
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols>
-          <b-form-group label="Sisa Yang Dibayarkan" label-for="remaining_payment" class>
-            <b-form-input
-              v-model="form.remaining_payment_readable"
-              id="remaining_payment"
-              name="remaining_payment"
-              autocomplete="off"
-              disabled
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col col md="4">
-          <b-form-group label="Catatan" label-for="note" class>
-            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols>
-          <b-tabs content-class="mt-3">
-            <b-tab title="Kapal" @click="onChangeTab('barge')" active>kapal</b-tab>
-            <b-tab title="Kepala Pemborong" @click="onChangeTab('contractor_head')">Kepala Pemborong</b-tab>
-            <b-tab title="OS" @click="onChangeTab('os')">OS</b-tab>
-          </b-tabs>
-        </b-col>
-      </b-row>
-      <br />
-      <b-row>
-        <b-col>
-          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-          <b-button
-            style="float: right"
-            variant="success"
-            @click="onSend()"
-            :disabled="is_loading"
-          >Simpan</b-button>
-          <span v-if="is_loading">Loading...</span>
-        </b-col>
-      </b-row>
-    </b-modal>
+    <b-row>
+      <b-col cols>
+        <b-form-group label="Nama Proyek" label-for="name" class>
+          <b-form-input v-model="form.name" id="name" name="name" autocomplete="off"></b-form-input>
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="Jenis Pekerjaan" label-for="work_type" class>
+          <VueSelect
+            id="work_type"
+            class="cursor-pointer"
+            v-model="form.work_type"
+            placeholder="Pilih Jenis Pekerjaan"
+            :options="getOptionWorkTypes"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
+        <b-form-group label="Kapal" label-for="barge_id" class>
+          <VueSelect
+            id="barge_id"
+            class="cursor-pointer"
+            v-model="form.barge_id"
+            placeholder="Pilih Kapal"
+            :options="getOptionBarges"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="Jenis Proyek" label-for="type" class>
+          <VueSelect
+            id="type"
+            class="cursor-pointer"
+            v-model="form.type"
+            placeholder="Pilih Jenis Proyek"
+            :options="getOptionTypes"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="Perusahaan" label-for="company_id" class>
+          <VueSelect
+            id="company_id"
+            class="cursor-pointer"
+            v-model="form.company_id"
+            placeholder="Pilih Kapal"
+            :options="getOptionBarges"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
+        <b-form-group label="Pengawas" label-for="foreman_id" class>
+          <VueSelect
+            id="foreman_id"
+            class="cursor-pointer"
+            v-model="form.foreman_id"
+            placeholder="Pilih Pengawas"
+            :options="getOptionForemans"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="Tanggal Selesai" label-for="date_end">
+          <DatePicker
+            id="date_end"
+            v-model="date_end"
+            format="YYYY-MM-DD"
+            type="date"
+            placeholder="Pilih Tanggal Selesai"
+            style="width: 100%"
+            :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="Lama Pengerjaan" label-for="date_end">
+          <span>{{form.date_duration}}</span>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
+        <b-form-group label="Biaya" label-for="price" class>
+          <b-form-input v-model="price" id="price" name="price" autocomplete="off"></b-form-input>
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="DP (Down Payment) " label-for="down_payment" class>
+          <b-form-input
+            v-model="down_payment"
+            id="down_payment"
+            name="down_payment"
+            autocomplete="off"
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
+      <b-col cols>
+        <b-form-group label="Sisa Yang Dibayarkan" label-for="remaining_payment" class>
+          <b-form-input
+            v-model="form.remaining_payment_readable"
+            id="remaining_payment"
+            name="remaining_payment"
+            autocomplete="off"
+            disabled
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col col md="8">
+        <b-form-group label="Catatan" label-for="note" class>
+          <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -211,6 +199,16 @@ export default {
         });
       },
     },
+    date_end: {
+      get() {
+        return this.$store.state.project.form.date_end;
+      },
+      set(value) {
+        this.$store.commit("project/INSERT_FORM_DATE_END", {
+          date_end: value,
+        });
+      },
+    },
   },
   watch: {
     price(value, oldValue) {
@@ -218,6 +216,9 @@ export default {
     },
     down_payment(value, oldValue) {
       this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
+    },
+    date_end(value, oldValue) {
+      this.$store.commit("project/INSERT_FORM_DATE_DURATION");
     },
   },
   methods: {

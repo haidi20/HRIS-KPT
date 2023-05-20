@@ -3,29 +3,37 @@ import Vuex from 'vuex';
 import axios from "axios";
 import moment from "moment";
 
+import Os from "./Os";
 import Roster from "./Roster";
 import Project from "./Project";
 import Vacation from "./Vacation";
 import JobOrder from "./JobOrder";
 import Employee from "./Employee";
+import Contractor from "./Contractor";
 import Attendance from "./Attendance";
+import OsHasParent from "./OsHasParent";
 import RosterStatus from "./RosterStatus";
 import SalaryAdvance from './SalaryAdvance';
 import SalaryAdjustment from './SalaryAdjustment';
+import ContractorHasParent from "./ContractorHasParent";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
+        os: Os,
         roster: Roster,
         project: Project,
         vacation: Vacation,
         jobOrder: JobOrder,
         employee: Employee,
+        contractor: Contractor,
         attendance: Attendance,
+        osHasParent: OsHasParent,
         rosterStatus: RosterStatus,
         salaryAdvance: SalaryAdvance,
         salaryAdjustment: SalaryAdjustment,
+        contractorHasParent: ContractorHasParent,
     },
     state: {
         user: {},

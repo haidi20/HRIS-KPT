@@ -14,7 +14,7 @@
         </b-row>
         <br />
         <Table />
-        <Form />
+        <FormModal />
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@
 
 <script>
 import Table from "./table";
-import Form from "./form";
+import FormModal from "./formModal";
 
 export default {
   props: {
@@ -37,7 +37,7 @@ export default {
   },
   components: {
     Table,
-    Form,
+    FormModal,
   },
   mounted() {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
