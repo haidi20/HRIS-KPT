@@ -25,19 +25,19 @@ class PositionSeeder extends Seeder
                     'name' => 'Pengawas',
                     'description' => 'Pengawas',
                     'minimum_employee' => 1,
-                    'departmen_id' => 1,
+                    // 'departmen_id' => 1,
                 ],
                 [
                     'name' => 'Ass Mekanik',
                     'description' => 'Ass Mekanik',
                     'minimum_employee' => 1,
-                    'departmen_id' => 1,
+                    // 'departmen_id' => 1,
                 ],
                 [
                     'name' => 'QC',
                     'description' => 'Quality Control',
                     'minimum_employee' => 1,
-                    'departmen_id' => 1,
+                    // 'departmen_id' => 1,
                 ],
 
                 // HRD
@@ -45,229 +45,216 @@ class PositionSeeder extends Seeder
                     'name' => 'HRD',
                     'description' => 'HRD',
                     'minimum_employee' => 1,
-                    'departmen_id' => 2,
+                    // 'departmen_id' => 2,
                 ],
                 // Gudang/ Logistics
                 [
                     'name' => 'Logistics',
                     'description' => 'Logistics',
                     'minimum_employee' => 1,
-                    'departmen_id' => 3,
+                    // 'departmen_id' => 3,
                 ],
                 // Mekanik
                 [
                     'name' => 'Mekanik',
                     'description' => 'Mekanik',
                     'minimum_employee' => 1,
-                    'departmen_id' => 4,
+                    // 'departmen_id' => 4,
                 ],
                 [
                     'name' => 'Help Mekanik',
                     'description' => 'Help Mekanik',
                     'minimum_employee' => 1,
-                    'departmen_id' => 4,
+                    // 'departmen_id' => 4,
                 ],
                 // Electric
                 [
                     'name' => 'Electric',
                     'description' => 'Electric',
                     'minimum_employee' => 1,
-                    'departmen_id' => 5,
+                    // 'departmen_id' => 5,
                 ],
                 // Kebun
                 [
                     'name' => 'Kebun',
                     'description' => 'Kebun',
                     'minimum_employee' => 1,
-                    'departmen_id' => 6,
+                    // 'departmen_id' => 6,
                 ],
                 [
                     'name' => 'Helper',
                     'description' => 'Helper',
                     'minimum_employee' => 1,
-                    'departmen_id' => 6,
+                    // 'departmen_id' => 6,
                 ],
                 // Rep. Balon
                 [
                     'name' => 'Rep. Balon',
                     'description' => 'Rep. Balon',
                     'minimum_employee' => 1,
-                    'departmen_id' => 7,
+                    // 'departmen_id' => 7,
                 ],
                 // Airbag
                 [
                     'name' => 'Airbag',
                     'description' => 'Airbag',
                     'minimum_employee' => 1,
-                    'departmen_id' => 8,
+                    // 'departmen_id' => 8,
                 ],
                 // Driver
                 [
                     'name' => 'Driver',
                     'description' => 'Driver',
                     'minimum_employee' => 1,
-                    'departmen_id' => 9,
+                    // 'departmen_id' => 9,
                 ],
                 // Operator
                 [
                     'name' => 'Operator',
                     'description' => 'Operator',
                     'minimum_employee' => 1,
-                    'departmen_id' => 10,
+                    // 'departmen_id' => 10,
                 ],
                 [
                     'name' => 'Kepala Bubut',
                     'description' => 'Kepala Bubut',
                     'minimum_employee' => 1,
-                    'departmen_id' => 11,
+                    // 'departmen_id' => 11,
                 ],
                 [
                     'name' => 'Bubut',
                     'description' => 'Bubut',
                     'minimum_employee' => 1,
-                    'departmen_id' => 11,
+                    // 'departmen_id' => 11,
                 ],
 
                 // CV KARYA PACIFIC TEKNIK SHIPYARD
                 // Manager
-                // [
-                //     'name' => 'Manager',
-                //     'description' => 'Manager',
-                //     'departmen_id' => 11,
-                // ],
-                // // Ass Manager
-                // [
-                //     'name' => 'Pengawas',
-                //     'description' => 'Pengawas',
-                //     'departmen_id' => 12,
-                // ],
-                // [
-                //     'name' => 'QC',
-                //     'description' => 'QC',
-                //     'departmen_id' => 12,
-                // ],
-                // // HRD
-                // [
-                //     'name' => 'HRD',
-                //     'description' => 'HRD',
-                //     'departmen_id' => 13,
-                // ],
-                // // Pengawas/Supervisor
-                // [
-                //     'name' => 'Pengawas/Supervisor',
-                //     'description' => 'Pengawas/Supervisor',
-                //     'departmen_id' => 14,
-                // ],
+                [
+                    'name' => 'Manager',
+                    'description' => 'Manager',
+                    'minimum_employee' => 1,
+                ],
                 // // Acounting
-                // [
-                //     'name' => 'Head of Acounting',
-                //     'description' => 'Head of Acounting',
-                //     'departmen_id' => 15,
-                // ],
-                // [
-                //     'name' => 'Acounting',
-                //     'description' => 'Acounting',
-                //     'departmen_id' => 15,
-                // ],
-                // [
-                //     'name' => 'Purchasing',
-                //     'description' => 'Purchasing',
-                //     'departmen_id' => 15,
-                // ],
-                // [
-                //     'name' => 'Cashier',
-                //     'description' => 'Cashier',
-                //     'departmen_id' => 15,
-                // ],
-                // [
-                //     'name' => 'Admin',
-                //     'description' => 'Admin',
-                //     'departmen_id' => 15,
-                // ],
-                // [
-                //     'name' => 'Admin A/R',
-                //     'description' => 'Admin A/R',
-                //     'departmen_id' => 15,
-                // ],
-                // // Marketing
-                // [
-                //     'name' => 'Marketing',
-                //     'description' => 'Marketing',
-                //     'departmen_id' => 16,
-                // ],
-                // // Hygiene
-                // [
-                //     'name' => 'Office Girl',
-                //     'description' => 'office Girl',
-                //     'departmen_id' => 17,
-                // ],
-                // // Gudang
-                // [
-                //     'name' => 'Head of Warehouse',
-                //     'description' => 'Head of Warehouse',
-                //     'departmen_id' => 18,
-                // ],
-                // [
-                //     'name' => 'Adm. Warehouse',
-                //     'description' => 'Adm. Warehouse',
-                //     'departmen_id' => 18,
-                // ],
+                [
+                    'name' => 'Head of Acounting',
+                    'description' => 'Head of Acounting',
+                    'minimum_employee' => 1,
+                ],
+                [
+                    'name' => 'Acounting',
+                    'description' => 'Acounting',
+                    'minimum_employee' => 1,
+                ],
+                [
+                    'name' => 'Purchasing',
+                    'description' => 'Purchasing',
+                    'minimum_employee' => 1,
+                ],
+                [
+                    'name' => 'Cashier',
+                    'description' => 'Cashier',
+                    'minimum_employee' => 1,
+                ],
+                [
+                    'name' => 'Admin',
+                    'description' => 'Admin',
+                    'minimum_employee' => 1,
+                ],
+                [
+                    'name' => 'Admin A/R',
+                    'description' => 'Admin A/R',
+                    'minimum_employee' => 1,
+                ],
+                // Marketing
+                [
+                    'name' => 'Marketing',
+                    'description' => 'Marketing',
+                    'minimum_employee' => 1,
+                ],
+                // Hygiene
+                [
+                    'name' => 'Office Girl',
+                    'description' => 'office Girl',
+                    'minimum_employee' => 1,
+                ],
+                // Gudang
+                [
+                    'name' => 'Head of Warehouse',
+                    'description' => 'Head of Warehouse',
+                    'minimum_employee' => 1,
+                ],
+                [
+                    'name' => 'Adm. Warehouse',
+                    'description' => 'Adm. Warehouse',
+                    'minimum_employee' => 1,
+                ],
                 // // Bubut
                 // [
                 //     'name' => 'Kepala Bubut',
                 //     'description' => 'Kepala Bubut',
-                //     'departmen_id' => 19,
+
+                // 'minimum_employee' => 1,              //     'departmen_id' => 19,
                 // ],
                 // [
                 //     'name' => 'Bubut',
                 //     'description' => 'Bubut',
-                //     'departmen_id' => 19,
+
+                // 'minimum_employee' => 1,              //     'departmen_id' => 19,
                 // ],
                 // // Mekanik
                 // [
                 //     'name' => 'Mekanik',
                 //     'description' => 'Mekanik',
-                //     'departmen_id' => 20,
+                //     'minimum_employee' => 1,
+                //     //     'departmen_id' => 20,
                 // ],
                 // [
                 //     'name' => 'Helper Mekanik',
                 //     'description' => 'Helper Mekanik',
-                //     'departmen_id' => 20,
+                //     'minimum_employee' => 1,
+                //     //     'departmen_id' => 20,
                 // ],
-                // // Electric
+                // Electric
                 // [
                 //     'name' => 'Electric',
                 //     'description' => 'Electric',
-                //     'departmen_id' => 21,
+                //     'minimum_employee' => 1,
+                //     //     'departmen_id' => 21,
                 // ],
-                // // Operator Crane
-                // [
-                //     'name' => 'Operator Crane',
-                //     'description' => 'Operator Crane',
-                //     'departmen_id' => 22,
-                // ],
+                // Operator Crane
+                [
+                    'name' => 'Operator Crane',
+                    'description' => 'Operator Crane',
+                    'minimum_employee' => 1,
+                     //     'departmen_id' => 22,
+                ],
                 // [
                 //     'name' => 'Operator',
                 //     'description' => 'Operator',
-                //     'departmen_id' => 22,
+                //     'minimum_employee' => 1,
+                //     //     'departmen_id' => 22,
                 // ],
-                // // Welder
-                // [
-                //     'name' => 'Welder',
-                //     'description' => 'Welder',
-                //     'departmen_id' => 23,
-                // ],
-                // // Fitter
-                // [
-                //     'name' => 'Fitter',
-                //     'description' => 'Fitter',
-                //     'departmen_id' => 24,
-                // ],
-                // // Helper
+                // Welder
+                [
+                    'name' => 'Welder',
+                    'description' => 'Welder',
+                    'minimum_employee' => 1,
+                    //     'departmen_id' => 23,
+                ],
+                // Fitter
+                [
+                    'name' => 'Fitter',
+                    'description' => 'Fitter',
+                    'minimum_employee' => 1,
+                    //     'departmen_id' => 24,
+                ],
+                // Helper
                 // [
                 //     'name' => 'Helper',
                 //     'description' => 'Helper',
-                //     'departmen_id' => 25,
+                //     'minimum_employee' => 1,
+                //     // 'departmen_id' => 25,
                 // ],
                 // // Kebun
                 // [
