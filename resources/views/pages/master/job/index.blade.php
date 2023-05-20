@@ -34,10 +34,10 @@
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Keterangan</th>
-                                <th width="20%"></th>
+                                <th width="10%">Kode</th>
+                                <th nowrap>Nama</th>
+                                <th nowrap>Keterangan</th>
+                                <th width="10%"></th>
                             </tr>
                         </thead>
                         <tbody>
