@@ -2,7 +2,7 @@
   <div>
     <b-row>
       <b-col cols>
-        <b-form-group label="Nama Kepala Kontraktor" label-for="name" class>
+        <b-form-group label="Nama Kepala Pemborong" label-for="name" class>
           <b-form-input v-model="form.name" id="name" name="name" autocomplete="off"></b-form-input>
         </b-form-group>
       </b-col>
@@ -60,7 +60,7 @@ export default {
   methods: {
     onCloseModal() {
       this.$store.commit("contractor/CLEAR_FORM");
-      this.$bvModal.hide("contractor_form");
+      //   this.$bvModal.hide("contractor_form");
     },
     async onSend() {
       const Swal = this.$swal;

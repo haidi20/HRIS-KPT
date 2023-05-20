@@ -60,7 +60,7 @@ export default {
   methods: {
     onCloseModal() {
       this.$store.commit("os/CLEAR_FORM");
-      this.$bvModal.hide("os_form");
+      //   this.$bvModal.hide("os_form");
     },
     async onSend() {
       const Swal = this.$swal;

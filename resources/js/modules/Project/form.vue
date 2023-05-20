@@ -106,7 +106,7 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Biaya" label-for="price" class>
+        <b-form-group label="Biaya Proyek" label-for="price" class>
           <b-form-input v-model="price" id="price" name="price" autocomplete="off"></b-form-input>
         </b-form-group>
       </b-col>
