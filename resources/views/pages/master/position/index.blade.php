@@ -117,6 +117,7 @@
 
             $("#id").val(data.id);
             $("#name").val(data.name);
+            $("#minimum_employee").val(data.minimum_employee);
             $("#description").val(data.description);
 
             $("#titleForm").html("Ubah Jabatan");

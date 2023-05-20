@@ -28,5 +28,8 @@ class DatabaseSeeder extends Seeder
         $this->call(BpjsCalculationSeeder::class);
         $this->call(EmployeeTypeSeeder::class);
         $this->call(ApprovalSeeder::class);
+        $this->call(BaseWagesBpjsSeeder::class);
+        $this->call(EmployeeSeeder::class);
+        $this->call(JobSeeder::class);
     }
 }

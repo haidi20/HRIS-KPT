@@ -51,6 +51,7 @@ class FeatureSeeder extends Seeder
             ["name" => "Hak Akses", "description" => "Manajemen Hak Akses berdasarkan grup user"],
             ["name" => "Fitur", "description" => "Manajemen Data Fitur"],
             ["name" => "Perhitungan Bpjs", "description" => "Manajemen Data Perhitungan Bpjs"],
+            ["name" => "Dasar Upah Bpjs", "description" => "Manajemen Data Dasar Upah Bpjs"],
             ["name" => "Grup Pengguna", "description" => "Manajemen Data Grup Pengguna"],
             ["name" => "Tingkat Persetujuan", "description" => "Manajemen Data Tingkat Persetujuan"],
 

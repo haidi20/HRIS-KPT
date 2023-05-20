@@ -18,27 +18,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="company_percent" class="col-sm-4 col-form-label">Persenan Perusahaan </label>
+                        <label for="nominal" class="col-sm-4 col-form-label">Nominal</label>
                         <div class="col-sm-8">
-                            <input type="number" id="company_percent" name="company_percent" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="employee_percent" class="col-sm-4 col-form-label">Persenan Karyawan </label>
-                        <div class="col-sm-8">
-                            <input type="number" id="employee_percent" name="employee_percent" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="company_nominal" class="col-sm-4 col-form-label">Nominal Dari Perusahaan </label>
-                        <div class="col-sm-8">
-                            <input type="number" id="company_nominal" name="company_nominal" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="employee_nominal" class="col-sm-4 col-form-label">Nominal Dari Perusahaan </label>
-                        <div class="col-sm-8">
-                            <input type="number" id="employee_nominal" name="employee_nominal" class="form-control">
+                            <input type="text" id="nominal" name="nominal" class="form-control" >
                         </div>
                     </div>
                 </div>

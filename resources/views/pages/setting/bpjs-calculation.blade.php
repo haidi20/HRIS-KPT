@@ -33,10 +33,12 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Nama</th>
-                                <th>Persenan Dari Perusahaan</th>
-                                <th>Perhitungan Dari Perusahaan</th>
-                                <th width="20%">Aksi</th>
+                                <th width="18%">Nama</th>
+                                <th>Persenan Perusahaan</th>
+                                <th>Persenan Karyawan</th>
+                                <th>Nominal Perusahaan</th>
+                                <th>Nominal Karyawan</th>
+                                <th width="5%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +54,13 @@
                                         {{ $bpjs_calculation->company_percent }}
                                     </td>
                                     <td>
+                                        {{ $bpjs_calculation->employee_percent }}
+                                    </td>
+                                    <td>
                                         {{ $bpjs_calculation->company_nominal }}
+                                    </td>
+                                    <td>
+                                        {{ $bpjs_calculation->employee_nominal }}
                                     </td>
                                     <td class="flex flex-row justify-content-around">
                                         @can('ubah perhitungan bpjs')
