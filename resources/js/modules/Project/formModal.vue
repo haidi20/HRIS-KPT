@@ -16,7 +16,9 @@
             <b-tab title="Kepala Pemborong" @click="onChangeTab('contractor')">
               <ContractorHasParent />
             </b-tab>
-            <b-tab title="OS" @click="onChangeTab('os')">OS</b-tab>
+            <b-tab title="OS" @click="onChangeTab('os')">
+              <OrdinarySeamanHasParent />
+            </b-tab>
           </b-tabs>
         </b-col>
       </b-row>
@@ -44,6 +46,7 @@ import VueSelect from "vue-select";
 
 import Form from "./form";
 import ContractorHasParent from "../ContractorHasParent/contractorHasParent";
+import OrdinarySeamanHasParent from "../OrdinarySeamanHasParent/ordinarySeamanHasParent";
 
 export default {
   data() {
@@ -56,6 +59,7 @@ export default {
     Form,
     VueSelect,
     ContractorHasParent,
+    OrdinarySeamanHasParent,
   },
   computed: {
     getBaseUrl() {

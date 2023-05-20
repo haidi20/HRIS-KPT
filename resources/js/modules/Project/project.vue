@@ -43,7 +43,7 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["project", "jobOrder", "employee"].map((item) => {
+    ["project", "jobOrder", "employee", "contractor", "os"].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });
@@ -51,6 +51,8 @@ export default {
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("project/fetchData");
+    this.$store.dispatch("contractor/fetchData");
+    this.$store.dispatch("os/fetchData");
     this.$store.dispatch("employee/fetchForeman");
 
     this.$bvModal.show("project_form");

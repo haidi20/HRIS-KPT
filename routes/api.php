@@ -5,6 +5,7 @@ use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
@@ -94,5 +95,10 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [ContractorController::class, "fetchData"])->name('fetchData');
         Route::post('store', [ContractorController::class, "store"])->name('store');
         Route::post('delete', [ContractorController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('ordinary-seaman')->name('ordinarySeaman.')->group(function () {
+        Route::get('fetch-data', [OrdinarySeamanController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [OrdinarySeamanController::class, "store"])->name('store');
+        Route::post('delete', [OrdinarySeamanController::class, "destroy"])->name('delete');
     });
 });

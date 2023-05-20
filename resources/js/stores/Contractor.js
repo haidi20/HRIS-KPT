@@ -12,20 +12,7 @@ const Contractor = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                name: "Pak Jamal",
-                address: null,
-                no_hp: null,
-            },
-            {
-                id: 2,
-                name: "Pak Saipudin",
-                address: null,
-                no_hp: null,
-            },
-        ],
+        data: [],
         params: {
             month: new Date(),
         },
@@ -76,7 +63,7 @@ const Contractor = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

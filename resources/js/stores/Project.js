@@ -21,6 +21,11 @@ const defaultForm = {
             id: null,
         },
     ],
+    oses: [
+        {
+            id: null,
+        },
+    ],
 }
 
 const Project = {
@@ -75,6 +80,14 @@ const Project = {
         INSERT_FORM_NEW_CONTRACTOR(state, payload) {
             state.form.contractors = [
                 ...state.form.contractors,
+                {
+                    id: null,
+                },
+            ]
+        },
+        INSERT_FORM_NEW_OS(state, payload) {
+            state.form.oses = [
+                ...state.form.oses,
                 {
                     id: null,
                 },
@@ -162,6 +175,9 @@ const Project = {
 
             state.form.contractors.splice(payload.index, 1);
         },
+        DELETE_FORM_OS(state, payload) {
+            state.form.oses.splice(payload.index, 1);
+        },
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);
             state.form = { ...defaultForm };
@@ -186,7 +202,7 @@ const Project = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

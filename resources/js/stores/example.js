@@ -28,7 +28,9 @@ const example = {
         INSERT_DATA(state, payload) {
             state.data = payload.vacations;
         },
-
+        INSERT_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
+        },
 
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);

@@ -31,6 +31,9 @@ const Os = {
         INSERT_DATA(state, payload) {
             state.data = payload.oses;
         },
+        INSERT_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
+        },
 
 
         CLEAR_FORM(state, payload) {
@@ -55,7 +58,7 @@ const Os = {
 
             await axios
                 .get(
-                    `${context.state.base_url}/api/v1/os/fetch-data`, {
+                    `${context.state.base_url}/api/v1/ordinary-seaman/fetch-data`, {
                     params: { ...params },
                 }
                 )
@@ -64,7 +67,7 @@ const Os = {
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
-                        oses: data.oses,
+                        oses: data.ordinarySeamans,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })
