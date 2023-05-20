@@ -16,6 +16,9 @@ const defaultForm = {
     // sisa pembyaaran
     remaining_payment: null,
     remaining_payment_readable: null,
+    company_id: null,
+    foreman_id: null,
+    type: null,
     contractors: [
         {
             id: null,
@@ -26,6 +29,7 @@ const defaultForm = {
             id: null,
         },
     ],
+
 }
 
 const Project = {

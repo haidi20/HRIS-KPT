@@ -18,6 +18,16 @@ class BargeController extends Controller
         return view("pages.master.barge.index", compact("barges"));
     }
 
+    public function fetchData()
+    {
+        $barges = Barge::orderBy("name", "asc")->get();
+
+        return response()->json([
+            "barges" => $barges,
+        ]);
+    }
+
+
     public function store(Request $request)
     {
         // return request()->all();

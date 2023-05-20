@@ -58,12 +58,9 @@ class EmployeeController extends Controller
 
     public function fetchForeman()
     {
-        $foremans = [
-            (object) [
-                "id" => 1,
-                "name" => "Samsudin",
-            ],
-        ];
+        $foremans = Employee::whereHas("position", function ($query) {
+            $query->where("name", "Pengawas");
+        })->get();
 
         return response()->json([
             "foremans" => $foremans,

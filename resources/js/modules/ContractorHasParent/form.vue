@@ -10,7 +10,7 @@
     </b-row>
     <br />
     <b-row v-for="(contractor, index) in form.contractors" :key="index">
-      <b-col cols>
+      <b-col cols class="mt-4">
         <b-form-group label="Pilih Kepala Proyek" label-for="name" style="display: inline">
           <VueSelect
             id="contractor_id"

@@ -18,6 +18,15 @@ class CompanyController extends Controller
         return view("pages.master.company.index", compact("companys"));
     }
 
+    public function fetchData()
+    {
+        $companies = Company::orderBy("name", "asc")->get();
+
+        return response()->json([
+            "companies" => $companies,
+        ]);
+    }
+
     public function store(Request $request)
     {
         // return request()->all();
