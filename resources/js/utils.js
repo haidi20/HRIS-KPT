@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const cleaningNumber = (value) => value?.toString().replace(/\./g, "");
 
 // export const numbersOnly = (value) => value.replace(/[^\d]/g, "");
@@ -41,7 +43,7 @@ export const isMobile = () => {
 }
 
 export const checkNull = (value) => {
-    if (value === null) return null;
+    if (value === null || value === "") return null;
 
     return value;
 }
@@ -55,3 +57,21 @@ export const limitSentence = (sentence) => {
 
     return sentence;
 };
+
+/**
+    Calculate the duration in days between two Moment.js dates.
+    @param {moment} date_start - The start date with format YYYY-MM-DD.
+    @param {moment} date_end - The end date with format YYYY-MM-DD.
+    @returns {number} - The duration in days.
+*/
+export const dateDuration = (date_start, date_end) => {
+    let getDateStart = moment(date_start);
+    let getDateEnd = moment(date_end);
+
+    // console.info(getDateEnd);
+
+    let duration = moment.duration(getDateEnd.diff(getDateStart));
+    let days = duration.asDays();
+
+    return days;
+}

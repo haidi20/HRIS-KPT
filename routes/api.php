@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApprovalAgreementController;
 use App\Http\Controllers\ApprovalLevelController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
@@ -88,5 +89,10 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('employee')->name('employee.')->group(function () {
         Route::get('fetch-foreman', [EmployeeController::class, "fetchForeman"])->name('fetchForeman');
+    });
+    Route::prefix('contractor')->name('contractor.')->group(function () {
+        Route::get('fetch-data', [ContractorController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [ContractorController::class, "store"])->name('store');
+        Route::post('delete', [ContractorController::class, "destroy"])->name('delete');
     });
 });
