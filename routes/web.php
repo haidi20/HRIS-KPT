@@ -7,6 +7,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BargeController;
+use App\Http\Controllers\BaseWagesBpjsController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -226,6 +227,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('', [BpjsCalculationController::class, "index"])->name("index");
             Route::post('store', [BpjsCalculationController::class, "store"])->name("store");
             Route::delete('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('base-wages-bpjs')->name("baseWagesBpjs.")->group(function () {
+            Route::get('', [BaseWagesBpjsController::class, "index"])->name("index");
+            Route::post('store', [BaseWagesBpjsController::class, "store"])->name("store");
+            Route::delete('delete', [BaseWagesBpjsController::class, "destroy"])->name("delete");
         });
         Route::prefix("permission")->name("permission.")->group(function () {
             Route::get('{featureId}', [PermissionController::class, "index"])->name("index");

@@ -17,103 +17,114 @@ class PositionSeeder extends Seeder
     public function run()
     {
         DB::table('positions')->insert(
-            // Pengawas/ Supervisor
-            [
-                'name' => 'Pengawas',
-                'description' => 'Pengawas',
-                'departmen_id' => 1,
-                'minimum_employee' => 1,
-            ],
-            [
-                'name' => 'Ass Mekanik',
-                'description' => 'Ass Mekanik',
-                'departmen_id' => 1,
-                'minimum_employee' => 1,
-            ],
-            [
-                'name' => 'QC',
-                'description' => 'Quality Control',
-                'departmen_id' => 1,
-                'minimum_employee' => 1,
-            ],
-        );
-
-        DB::table('positions')->insert(
             [
                 // PT KARYA PACIFIC TEKNIK SHIPYARD
+
+                // Pengawas/ Supervisor
+                [
+                    'name' => 'Pengawas',
+                    'description' => 'Pengawas',
+                    'minimum_employee' => 1,
+                    'departmen_id' => 1,
+                ],
+                [
+                    'name' => 'Ass Mekanik',
+                    'description' => 'Ass Mekanik',
+                    'minimum_employee' => 1,
+                    'departmen_id' => 1,
+                ],
+                [
+                    'name' => 'QC',
+                    'description' => 'Quality Control',
+                    'minimum_employee' => 1,
+                    'departmen_id' => 1,
+                ],
 
                 // HRD
                 [
                     'name' => 'HRD',
                     'description' => 'HRD',
+                    'minimum_employee' => 1,
                     'departmen_id' => 2,
                 ],
                 // Gudang/ Logistics
                 [
                     'name' => 'Logistics',
                     'description' => 'Logistics',
+                    'minimum_employee' => 1,
                     'departmen_id' => 3,
                 ],
                 // Mekanik
                 [
                     'name' => 'Mekanik',
                     'description' => 'Mekanik',
+                    'minimum_employee' => 1,
                     'departmen_id' => 4,
                 ],
                 [
                     'name' => 'Help Mekanik',
                     'description' => 'Help Mekanik',
+                    'minimum_employee' => 1,
                     'departmen_id' => 4,
                 ],
                 // Electric
                 [
                     'name' => 'Electric',
                     'description' => 'Electric',
+                    'minimum_employee' => 1,
                     'departmen_id' => 5,
                 ],
                 // Kebun
                 [
                     'name' => 'Kebun',
                     'description' => 'Kebun',
+                    'minimum_employee' => 1,
                     'departmen_id' => 6,
                 ],
                 [
                     'name' => 'Helper',
                     'description' => 'Helper',
+                    'minimum_employee' => 1,
                     'departmen_id' => 6,
                 ],
                 // Rep. Balon
                 [
                     'name' => 'Rep. Balon',
                     'description' => 'Rep. Balon',
+                    'minimum_employee' => 1,
                     'departmen_id' => 7,
                 ],
                 // Airbag
                 [
                     'name' => 'Airbag',
                     'description' => 'Airbag',
+                    'minimum_employee' => 1,
                     'departmen_id' => 8,
                 ],
                 // Driver
                 [
                     'name' => 'Driver',
                     'description' => 'Driver',
+                    'minimum_employee' => 1,
                     'departmen_id' => 9,
                 ],
                 // Operator
                 [
                     'name' => 'Operator',
                     'description' => 'Operator',
+                    'minimum_employee' => 1,
                     'departmen_id' => 10,
                 ],
                 [
                     'name' => 'Kepala Bubut',
                     'description' => 'Kepala Bubut',
+                    'minimum_employee' => 1,
                     'departmen_id' => 11,
                 ],
                 [
                     'name' => 'Bubut',
                     'description' => 'Bubut',
+                    'minimum_employee' => 1,
                     'departmen_id' => 11,
                 ],
 

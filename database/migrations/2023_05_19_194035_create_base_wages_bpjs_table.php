@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBpjsCalculationsTable extends Migration
+class CreateBaseWagesBpjsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateBpjsCalculationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bpjs_calculations', function (Blueprint $table) {
+        Schema::create('base_wages_bpjs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('company_percent')->nullable();
-            $table->string('employee_percent')->nullable();
-            $table->string('company_nominal')->nullable();
-            $table->string('employee_nominal')->nullable();
+            $table->string('nominal')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
@@ -35,6 +32,6 @@ class CreateBpjsCalculationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bpjs_calculations');
+        Schema::dropIfExists('base_wages_bpjs');
     }
 }

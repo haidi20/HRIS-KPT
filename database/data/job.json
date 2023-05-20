@@ -1,0 +1,322 @@
+[
+    {
+        "id": "1",
+        "code": "SC002",
+        "name": "Pemakaian Docking Area Per Hari"
+    },
+    {
+        "id": "2",
+        "code": "SC003",
+        "name": "Line Handler, Mooring Unmooring"
+    },
+    {
+        "id": "3",
+        "code": "GS001",
+        "name": "Kapal Sandar di Area Dock Per Hari"
+    },
+    {
+        "id": "4",
+        "code": "GS002",
+        "name": "Biaya Keamanan Per Hari"
+    },
+    {
+        "id": "5",
+        "code": "GS003",
+        "name": "Air Test"
+    },
+    {
+        "id": "6",
+        "code": "GS004",
+        "name": "Free Gas Tank"
+    },
+    {
+        "id": "7",
+        "code": "GS005",
+        "name": "Pemakaian Crane / Alat Berat"
+    },
+    {
+        "id": "8",
+        "code": "GS006",
+        "name": "Staging"
+    },
+    {
+        "id": "9",
+        "code": "GS007",
+        "name": "Pembuatan Gambar dan Docking Report"
+    },
+    {
+        "id": "10",
+        "code": "SC001",
+        "name": "Docking - Undocking"
+    },
+    {
+        "id": "11",
+        "code": "OF001",
+        "name": "Outfitting Unit"
+    },
+    {
+        "id": "12",
+        "code": "RP001",
+        "name": "Replating"
+    },
+    {
+        "id": "13",
+        "code": "OF002",
+        "name": "Outfitting Lumpsum"
+    },
+    {
+        "id": "14",
+        "code": "OF003",
+        "name": "Outfitting Pcs"
+    },
+    {
+        "id": "15",
+        "code": "PL001",
+        "name": "Scrap tiram"
+    },
+    {
+        "id": "16",
+        "code": "PL002",
+        "name": "Water Jet"
+    },
+    {
+        "id": "17",
+        "code": "PL003",
+        "name": "Sandblasting Bottom"
+    },
+    {
+        "id": "18",
+        "code": "PL004",
+        "name": "Sandblasting Topside"
+    },
+    {
+        "id": "19",
+        "code": "PL005",
+        "name": "Painting"
+    },
+    {
+        "id": "20",
+        "code": "PL006",
+        "name": "Menandai garis air T 1.2 Meter"
+    },
+    {
+        "id": "21",
+        "code": "PL007",
+        "name": "Perawatan Markah lambung timbul, draft kapal, nama kapal dan pelabuhan dicat warna putih"
+    },
+    {
+        "id": "22",
+        "code": "PL008",
+        "name": "Pemasangan anti karat (Supply Owner)"
+    },
+    {
+        "id": "23",
+        "code": "PL009",
+        "name": "Buka tutup menhole"
+    },
+    {
+        "id": "24",
+        "code": "PL010",
+        "name": "Ganti karet packing manhole"
+    },
+    {
+        "id": "25",
+        "code": "RW001",
+        "name": "Rewelding"
+    },
+    {
+        "id": "26",
+        "code": "RP099",
+        "name": "Total Replating"
+    },
+    {
+        "id": "27",
+        "code": "GS008",
+        "name": "Asistensi Kapal"
+    },
+    {
+        "id": "28",
+        "code": "PL011",
+        "name": "Penyemenan tutup menhole"
+    },
+    {
+        "id": "29",
+        "code": "GS009",
+        "name": "Supply listrik ke kapal"
+    },
+    {
+        "id": "30",
+        "code": "OF004",
+        "name": "Outfitting Mtr"
+    },
+    {
+        "id": "31",
+        "code": "GS010",
+        "name": "Pelayanan pembuangan sampah dan MCK"
+    },
+    {
+        "id": "32",
+        "code": "GS011",
+        "name": "Jasa Pemadam Kebakaran"
+    },
+    {
+        "id": "33",
+        "code": "VS008",
+        "name": "Buka pasang pipa 1/2"
+    },
+    {
+        "id": "34",
+        "code": "KT002",
+        "name": "Buka pasang clamp kemudi"
+    },
+    {
+        "id": "35",
+        "code": "KT003",
+        "name": "Buka pasang daun kemudi"
+    },
+    {
+        "id": "36",
+        "code": "KT010",
+        "name": "Dibuatkan kunci pembuka mur propeller"
+    },
+    {
+        "id": "37",
+        "code": "KT011",
+        "name": "Penyemenan baut clam kemudi kanan dan kiri"
+    },
+    {
+        "id": "38",
+        "code": "GS012",
+        "name": "Kapur Test"
+    },
+    {
+        "id": "39",
+        "code": "KT001",
+        "name": "Bongkar pasang tongkat kemudi"
+    },
+    {
+        "id": "40",
+        "code": "KT004",
+        "name": "Buka pasang quadran"
+    },
+    {
+        "id": "41",
+        "code": "KT005",
+        "name": "Buka pasang rod hydraulic kemudi"
+    },
+    {
+        "id": "42",
+        "code": "KT007",
+        "name": "Bersihkan tongkat kemudi sebelum di NDT"
+    },
+    {
+        "id": "43",
+        "code": "KT008",
+        "name": "Potong dan ganti baru baut pengikat kemudi"
+    },
+    {
+        "id": "44",
+        "code": "KT009",
+        "name": "Pasang plate tahanan semen di posisi baut pengikat kemudi"
+    },
+    {
+        "id": "45",
+        "code": "CB002",
+        "name": "Bongkar pasang stuffing"
+    },
+    {
+        "id": "46",
+        "code": "CB003",
+        "name": "Buatkan alat untuk nge-jack cutleas bearing apabila keras"
+    },
+    {
+        "id": "47",
+        "code": "KT006",
+        "name": "Bongkar pasang rod connection kemudi"
+    },
+    {
+        "id": "48",
+        "code": "PS001",
+        "name": "Buka pasang cup bonnet propeller kanan & kiri"
+    },
+    {
+        "id": "49",
+        "code": "PS004",
+        "name": "Bongkar pasang shaft propeller"
+    },
+    {
+        "id": "50",
+        "code": "PS005",
+        "name": "Bongkar pasang sleeve coupling shaft propeller ke gearbox"
+    },
+    {
+        "id": "51",
+        "code": "PS006",
+        "name": "Pasang baru baut cam untuk spi sleeve coupling shaft propeller"
+    },
+    {
+        "id": "52",
+        "code": "PS007",
+        "name": "Pasang baru baut cam pada mur propeller"
+    },
+    {
+        "id": "53",
+        "code": "PS008",
+        "name": "Penyemenan pada baut cam propeller dengan menggunakan semen soda api"
+    },
+    {
+        "id": "54",
+        "code": "PS009",
+        "name": "Pembuatan kunci pembuka mur cup bonnet propeller"
+    },
+    {
+        "id": "55",
+        "code": "PS010",
+        "name": "Pembuatan kunci pembuka mur sleeve coupling propeller"
+    },
+    {
+        "id": "56",
+        "code": "CB001",
+        "name": "Bongkar pasang cuttleas bearing"
+    },
+    {
+        "id": "57",
+        "code": "OF005",
+        "name": "Potong ganti baru kupingan daprah"
+    },
+    {
+        "id": "58",
+        "code": "OF006",
+        "name": "Buka pasang ban pusher (Supply Owner)"
+    },
+    {
+        "id": "59",
+        "code": "OF007",
+        "name": "Buka pasang ban pusher (Supply Dock)"
+    },
+    {
+        "id": "60",
+        "code": "KN001",
+        "name": "Jack buritan kapal agar terangkat sebagai assistensi perbaikan kort nozzle"
+    },
+    {
+        "id": "61",
+        "code": "KN002",
+        "name": "Recondisi pada kort nozzle bagian kiri yang bengkok akibat kandas, dengan dipotong, dan dijack agar"
+    },
+    {
+        "id": "62",
+        "code": "KN003",
+        "name": "Pengelasan kort nozzle yang retak serta plate yang direcondisi"
+    },
+    {
+        "id": "63",
+        "code": "KN004",
+        "name": "Center dengan diluruskan pintle kemudi kiri dengan antara daun kemudi dengan tongkat kemudi kiri dan"
+    },
+    {
+        "id": "64",
+        "code": "KN005",
+        "name": "Meluruskan kembali dengan dipanaskan dan ditarik menggunakan 2 chain block support bosstube propelle"
+    }
+]

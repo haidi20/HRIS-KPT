@@ -355,6 +355,11 @@
                                     <a href="{{ route('setting.feature.index') }}">Fitur</a>
                                 </li>
                             @endcan
+                            @can('lihat dasar upah bpjs')
+                                <li class="submenu-item {{ isActive('master/base-wages-bpjs') }}">
+                                    <a href="{{ route('setting.baseWagesBpjs.index') }}">Dasar Upah BPJS</a>
+                                </li>
+                            @endcan
                             @can('lihat perhitungan bpjs')
                                 <li class="submenu-item {{ isActive('master/bpjs-calculation') }}">
                                     <a href="{{ route('setting.bpjsCalculation.index') }}">Perhitungan BPJS</a>
