@@ -34,7 +34,7 @@ class EmployeeTypeController extends Controller
                 $employeetype = new EmployeeType;
                 $employeetype->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $employeetype->name = request("name");

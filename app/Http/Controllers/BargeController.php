@@ -44,7 +44,7 @@ class BargeController extends Controller
                 $barge = new Barge;
                 $barge->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $barge->name = request("name");

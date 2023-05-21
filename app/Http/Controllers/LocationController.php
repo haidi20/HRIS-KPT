@@ -34,7 +34,7 @@ class LocationController extends Controller
                 $location = new Location;
                 $location->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $location->name = request("name");

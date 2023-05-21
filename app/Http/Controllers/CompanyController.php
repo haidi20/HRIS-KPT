@@ -43,7 +43,7 @@ class CompanyController extends Controller
                 $company = new Company;
                 $company->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $company->name = request("name");

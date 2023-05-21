@@ -34,7 +34,7 @@ class BpjsCalculationController extends Controller
                 $bpjs_calculation = new BpjsCalculation;
                 $bpjs_calculation->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $bpjs_calculation->name = request("name");

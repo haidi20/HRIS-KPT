@@ -29,7 +29,7 @@ class PositionController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store()
     {
         // return request()->all();
 
@@ -45,7 +45,7 @@ class PositionController extends Controller
                 $position = new Position;
                 $position->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $position->name = request("name");

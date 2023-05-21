@@ -84,7 +84,7 @@ class EmployeeController extends Controller
                 $employee = new Employee;
                 $employee->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             // DATA PERSONAL

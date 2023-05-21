@@ -34,7 +34,7 @@ class FeatureController extends Controller
                 $feature = new Feature;
                 $feature->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $feature->name = request("name");

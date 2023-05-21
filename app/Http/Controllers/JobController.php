@@ -43,7 +43,7 @@ class JobController extends Controller
                 $job = new Job;
                 $job->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $job->code = request("code");

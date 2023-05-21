@@ -87,7 +87,7 @@ class SalaryAdvanceController extends Controller
             } else {
                 $salaryAdvance = new SalaryAdvance;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $salaryAdvance->employee_id = request("employee_id");

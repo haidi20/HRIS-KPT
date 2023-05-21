@@ -39,7 +39,7 @@ class OrdinarySeamanController extends Controller
             } else {
                 $ordinarySeaman = new OrdinarySeaman;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $ordinarySeaman->name = request("name");

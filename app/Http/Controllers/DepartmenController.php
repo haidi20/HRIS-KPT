@@ -85,7 +85,7 @@ class DepartmenController extends Controller
                     $departmen->code = $codePrefix . '1';
                 }
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $departmen->name = request("name");

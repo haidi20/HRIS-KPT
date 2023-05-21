@@ -63,7 +63,7 @@ class VacationController extends Controller
             } else {
                 $vacation = new Vacation;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $vacation->employee_id = request("employee_id");
