@@ -20,7 +20,7 @@ class ProjectController extends Controller
 
     public function fetchData()
     {
-        $projects = Project::orderBy("name", "desc")->get();
+        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])->orderBy("date_end", "asc")->get();
 
         return response()->json([
             "projects" => $projects,

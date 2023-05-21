@@ -60,7 +60,7 @@ export default {
     this.$store.dispatch("master/fetchCompany");
     this.$store.dispatch("employee/fetchForeman");
 
-    this.$bvModal.show("project_form");
+    // this.$bvModal.show("project_form");
   },
 };
 </script>

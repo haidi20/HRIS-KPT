@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ["company_name", "job_order_total", "date_end_readable"];
     protected $fillable = [];
 
     public function __construct(array $attributes = [])
@@ -54,6 +56,11 @@ class Project extends Model
         return $this->belongsTo(Employee::class, "foreman_id", "id");
     }
 
+    public function jobOrders()
+    {
+        return $this->hasMany(JobOrder::class, "project_id", "id");
+    }
+
     public function contractors()
     {
         return $this->hasMany(ContractorHasParent::class, "parent_id", "id")
@@ -64,5 +71,26 @@ class Project extends Model
     {
         return $this->hasMany(OrdinarySeamanHasParent::class, "parent_id", "id")
             ->where("parent_model", "App\Models\Project");
+    }
+
+    public function getCompanyNameAttribute()
+    {
+        if ($this->company) {
+            return $this->company->name;
+        } else {
+            return null;
+        }
+    }
+
+    public function getJobOrderTotalAttribute()
+    {
+        if ($this->jobOrders) {
+            return count($this->jobOrders);
+        }
+    }
+
+    public function getDateEndReadableAttribute()
+    {
+        return dateReadable($this->date_end);
     }
 }

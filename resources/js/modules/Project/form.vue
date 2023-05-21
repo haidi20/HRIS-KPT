@@ -99,7 +99,7 @@
       </b-col>
       <b-col cols>
         <b-form-group label="Lama Pengerjaan" label-for="date_end">
-          <span>{{form.date_duration}}</span>
+          <span>{{form.day_duration}}</span>
         </b-form-group>
       </b-col>
     </b-row>
@@ -220,7 +220,7 @@ export default {
       this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
     },
     date_end(value, oldValue) {
-      this.$store.commit("project/INSERT_FORM_DATE_DURATION");
+      this.$store.commit("project/INSERT_FORM_DAY_DURATION");
     },
   },
   methods: {

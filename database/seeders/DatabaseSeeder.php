@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(JobSeeder::class);
         $this->call(ContractorSeeder::class);
         $this->call(OrdinarySeamanSeeder::class);
+        $this->call(ProjectSeeder::class);
     }
 }

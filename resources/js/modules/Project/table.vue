@@ -17,17 +17,39 @@
       </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <b-td>{{ item.name }}</b-td>
-          <b-td>{{ item.company_name }}</b-td>
-          <b-td>
-            {{ item.job_order_total }}
-            \ {{ item.job_order_total_finish }}
-          </b-td>
-          <b-td>
-            <b-button variant="primary" size="sm" @click="onDetail(item)">Detail</b-button>
+          <b-td @click="onAction()">
+            <ButtonAction class="cursor-pointer" type="click">
+              <template v-slot:list_detail_button>
+                <a href="#" @click="onDetail(item, index)">Informasi Lengkap</a>
+                <a href="#" @click="onEdit(item)">Edit</a>
+                <a href="#" @click="onDelete(item)">Hapus</a>
+              </template>
+            </ButtonAction>
+            <!-- <b-button variant="primary" size="sm" @click="onDetail(item)">Detail</b-button>
             <b-button variant="warning" size="sm" @click="onShowJobOrder(item)">Job Order</b-button>
             <b-button variant="info" size="sm" @click="onEdit(item)">Ubah</b-button>
-            <b-button variant="danger" size="sm" @click="onDelete(item)">Hapus</b-button>
+            <b-button variant="danger" size="sm" @click="onDelete(item)">Hapus</b-button>-->
+            <!-- <b-dropdown size="sm" left split text="Tombol" varian="info">
+              <b-list-group>
+                <b-list-group-item class="cursor-pointer">Semua Informasi</b-list-group-item>
+                <b-list-group-item class="cursor-pointer">Job Order</b-list-group-item>
+                <b-list-group-item class="cursor-pointer">Ubah</b-list-group-item>
+                <b-list-group-item class="cursor-pointer">Hapus</b-list-group-item>
+              </b-list-group>
+            </b-dropdown>-->
+          </b-td>
+          <b-td>{{ item.name }}</b-td>
+          <b-td>{{ item.company_name }}</b-td>
+          <b-td>{{ item.date_end_readable }}</b-td>
+          <b-td>{{ item.day_duration }} Hari</b-td>
+          <b-td>
+            <template v-if="item.job_order_total > 0">
+              {{ item.job_order_total_finish }}
+              \ {{ item.job_order_total }}
+            </template>
+            <template v-else>
+              <span>belum ada job order</span>
+            </template>
           </b-td>
         </b-tr>
       </template>
@@ -39,33 +61,46 @@
 <script>
 import JobOrderModal from "../JobOrder/modal";
 import DatatableClient from "../../components/DatatableClient";
+import ButtonAction from "../../components/ButtonAction";
 
 export default {
   data() {
     return {
       columns: [
         {
+          label: "",
+          class: "",
+          width: "10px",
+        },
+        {
           label: "Nama",
           field: "name",
-          width: "100px",
+          width: "150px",
           class: "",
         },
         {
           label: "Perusahaan",
           field: "company_name",
-          width: "100px",
+          width: "200px",
+          class: "",
+        },
+        {
+          label: "Tanggal Selesai",
+          field: "date_end",
+          width: "200px",
+          class: "",
+        },
+        {
+          label: "Jangka Waktu Pekerjaan",
+          field: "duration",
+          width: "200px",
           class: "",
         },
         {
           label: "Total Job Order",
           field: "job_order_total",
-          width: "100px",
+          width: "200px",
           class: "",
-        },
-        {
-          label: "",
-          class: "",
-          width: "10px",
         },
       ],
       options: {
@@ -75,8 +110,9 @@ export default {
     };
   },
   components: {
-    DatatableClient,
+    ButtonAction,
     JobOrderModal,
+    DatatableClient,
   },
   computed: {
     getBaseUrl() {
@@ -93,6 +129,9 @@ export default {
     },
   },
   methods: {
+    onAction() {
+      //
+    },
     onCreate() {
       this.$bvModal.show("project_form");
     },

@@ -19,7 +19,7 @@ class CreateProjectsTable extends Migration
             $table->foreignId('foreman_id')->nullable(); // pengawas
             $table->string("name"); // nama proyek
             $table->date('date_end'); // tanggal selesai
-            $table->integer('date_duration')->nullable(); // berapa lama durasi
+            $table->integer('day_duration')->nullable(); // berapa lama hari pengerjaan
             $table->double('price'); // biaya proyek
             $table->string('price_readable')->nullable();
             $table->double('down_payment')->nullable(); // DP
