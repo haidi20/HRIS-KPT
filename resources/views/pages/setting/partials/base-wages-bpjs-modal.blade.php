@@ -20,7 +20,7 @@
                     <div class="form-group row">
                         <label for="nominal" class="col-sm-4 col-form-label">Nominal</label>
                         <div class="col-sm-8">
-                            <input type="text" id="nominal" name="nominal" class="form-control" >
+                            <input type="number" id="nominal" name="nominal" class="form-control" >
                         </div>
                     </div>
                 </div>

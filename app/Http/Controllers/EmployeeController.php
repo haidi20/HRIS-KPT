@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Departmen;
 use App\Models\Employee;
 use App\Models\EmployeeType;
+use App\Models\FingerTool;
 use App\Models\Location;
 use App\Models\Position;
 use Carbon\Carbon;
@@ -45,8 +46,9 @@ class EmployeeController extends Controller
         $positions = Position::all();
         $locations = Location::all();
         $employee_types = EmployeeType::all();
+        $finger_tools = FingerTool::all();
 
-        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations"));
+        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types","locations", "finger_tools"));
     }
 
     // untuk kebutuhan di vuejs
