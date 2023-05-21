@@ -19,16 +19,16 @@ const defaultForm = {
     company_id: null,
     foreman_id: null,
     type: null,
-    contractors: [
-        {
-            id: null,
-        },
-    ],
-    oses: [
-        {
-            id: null,
-        },
-    ],
+    // contractors: [
+    //     {
+    //         id: null,
+    //     },
+    // ],
+    // ordinary_seamans: [
+    //     {
+    //         id: null,
+    //     },
+    // ],
     form_type: "create", // create, edit, detail
     form_title: "Tambah Proyek",
 
@@ -93,8 +93,8 @@ const Project = {
             ]
         },
         INSERT_FORM_NEW_OS(state, payload) {
-            state.form.oses = [
-                ...state.form.oses,
+            state.form.ordinary_seamans = [
+                ...state.form.ordinary_seamans,
                 {
                     id: null,
                 },
@@ -187,7 +187,7 @@ const Project = {
             state.form.contractors.splice(payload.index, 1);
         },
         DELETE_FORM_OS(state, payload) {
-            state.form.oses.splice(payload.index, 1);
+            state.form.ordinary_seamans.splice(payload.index, 1);
         },
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);
@@ -237,12 +237,12 @@ const Project = {
          * @returns {Promise} A promise that resolves after the action is performed.
          */
         onAction: async (context, payload) => {
+            context.commit("INSERT_FORM", {
+                form: payload.form,
+            });
             context.commit("INSERT_FORM_FORM_TYPE", {
                 form_type: payload.form_type,
                 form_title: payload.form_title,
-            });
-            context.commit("INSERT_FORM", {
-                form: payload.form,
             });
             context.commit("INSERT_FORM_PRICE", {
                 price: payload.form.price,
@@ -251,6 +251,14 @@ const Project = {
                 down_payment: payload.form.down_payment,
             });
             context.commit("INSERT_FORM_REMAINING_PAYMENT");
+
+            // if (payload.form.contractors.length == 0) {
+            //     context.commit("INSERT_FORM_NEW_CONTRACTOR");
+            // }
+
+            // if (payload.form.ordinary_seamans.length == 0) {
+            //     context.commit("INSERT_FORM_NEW_OS");
+            // }
         },
     }
 }

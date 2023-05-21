@@ -9,13 +9,13 @@
       </b-col>
     </b-row>
     <br />
-    <b-row v-for="(os, index) in form.oses" :key="index">
-      <b-col cols>
+    <b-row v-for="(os, index) in form.ordinary_seamans" :key="index">
+      <b-col cols class="mb-4">
         <b-form-group label="Pilih OS" label-for="os_id" style="display: inline">
           <VueSelect
             id="os_id"
             class="cursor-pointer"
-            v-model="os.id"
+            v-model="os.ordinary_seaman_id"
             :options="getOptionOses"
             :reduce="(data) => data.id"
             label="name"
@@ -25,7 +25,7 @@
         </b-form-group>
       </b-col>
       <b-col cols="1" style="align-self: center;">
-        <span @click="onDelete(index)" class="cursor-pointer" v-if="index > 0">
+        <span @click="onDelete(index)" class="cursor-pointer">
           <i class="fas fa-trash" style="color: #BB2D3B;"></i>
         </span>
       </b-col>

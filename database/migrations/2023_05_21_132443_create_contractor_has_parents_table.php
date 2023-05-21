@@ -16,7 +16,8 @@ class CreateContractorHasParentsTable extends Migration
         Schema::create('contractor_has_parents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id');
-            $table->foreignId('parent_model');
+            $table->string('parent_model');
+            $table->foreignId('contractor_id');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

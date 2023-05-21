@@ -9,16 +9,13 @@ use Illuminate\Support\Facades\Schema;
 
 class OrdinarySeamanHasParent extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $fillable = [];
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->fillable = Schema::getColumnListing($this->getTable());
-    }
+    protected $fillable = [
+        "parent_id",
+        "parent_model",
+        "ordinary_seaman_id",
+    ];
 
     protected static function boot()
     {

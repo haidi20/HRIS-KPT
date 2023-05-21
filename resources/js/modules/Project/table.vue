@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 import JobOrderModal from "../JobOrder/modal";
 import DatatableClient from "../../components/DatatableClient";
 import ButtonAction from "../../components/ButtonAction";

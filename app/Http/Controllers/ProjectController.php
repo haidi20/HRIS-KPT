@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contractor;
+use App\Models\ContractorHasParent;
+use App\Models\OrdinarySeamanHasParent;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +61,9 @@ class ProjectController extends Controller
             $project->note = request("note");
             $project->save();
 
+            $this->storeContractors($project);
+            $this->storeOrdinarySeamans($project);
+
             DB::commit();
 
             return response()->json([
@@ -102,6 +108,44 @@ class ProjectController extends Controller
                 'success' => false,
                 'message' => 'Gagal dihapus',
             ], 500);
+        }
+    }
+
+    private function storeContractors($project)
+    {
+        $getData = [
+            "parent_id" => $project->id,
+            "parent_model" => "App\Models\Project",
+        ];
+
+        $contractorHasParentDelete = ContractorHasParent::where($getData);
+        $contractorHasParentDelete->delete();
+
+        if (count(request("contractors")) > 0) {
+
+            foreach (request("contractors") as $index => $item) {
+                $getData["contractor_id"] =  $item["contractor_id"];
+                ContractorHasParent::create($getData);
+            }
+        }
+    }
+
+    private function storeOrdinarySeamans($project)
+    {
+        $getData = [
+            "parent_id" => $project->id,
+            "parent_model" => "App\Models\Project",
+        ];
+
+        $oridnarySeamanHasParentDelete = OrdinarySeamanHasParent::where($getData);
+        $oridnarySeamanHasParentDelete->delete();
+
+        if (count(request("ordinary_seamans")) > 0) {
+
+            foreach (request("ordinary_seamans") as $index => $item) {
+                $getData["ordinary_seaman_id"] =  $item["ordinary_seaman_id"];
+                OrdinarySeamanHasParent::create($getData);
+            }
         }
     }
 

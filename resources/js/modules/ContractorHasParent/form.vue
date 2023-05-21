@@ -10,12 +10,12 @@
     </b-row>
     <br />
     <b-row v-for="(contractor, index) in form.contractors" :key="index">
-      <b-col cols class="mt-4">
+      <b-col cols class="mb-4">
         <b-form-group label="Pilih Kepala Proyek" label-for="name" style="display: inline">
           <VueSelect
             id="contractor_id"
             class="cursor-pointer"
-            v-model="contractor.id"
+            v-model="contractor.contractor_id"
             :options="getOptionContractors"
             :reduce="(data) => data.id"
             label="name"
@@ -25,7 +25,7 @@
         </b-form-group>
       </b-col>
       <b-col cols="1" style="align-self: center;">
-        <span @click="onDelete(index)" class="cursor-pointer" v-if="index > 0">
+        <span @click="onDelete(index)" class="cursor-pointer">
           <i class="fas fa-trash" style="color: #BB2D3B;"></i>
         </span>
       </b-col>
