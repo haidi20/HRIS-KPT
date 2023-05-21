@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
@@ -18,6 +19,15 @@ class ProjectController extends Controller
     }
 
     public function fetchData()
+    {
+        $projects = Project::orderBy("name", "desc")->get();
+
+        return response()->json([
+            "projects" => $projects,
+        ]);
+    }
+
+    public function fetchDataOld()
     {
         $projects = [
             (object)[

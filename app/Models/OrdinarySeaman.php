@@ -11,6 +11,7 @@ class OrdinarySeaman extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = "ordinary_seamans";
     protected $fillable = [];
 
     public function __construct(array $attributes = [])

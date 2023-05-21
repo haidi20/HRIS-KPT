@@ -59,7 +59,7 @@
             id="company_id"
             class="cursor-pointer"
             v-model="form.company_id"
-            placeholder="Pilih Kapal"
+            placeholder="Pilih Perusahaan"
             :options="getOptionCompanies"
             :reduce="(data) => data.id"
             label="name"
