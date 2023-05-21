@@ -42,12 +42,6 @@ const Project = {
         },
         form: { ...defaultForm },
         options: {
-            barges: [
-                {
-                    id: 1,
-                    name: "Kapal A",
-                },
-            ],
             types: [
                 {
                     id: "daily",

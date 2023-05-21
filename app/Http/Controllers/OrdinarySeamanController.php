@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrdinarySeamans;
+use App\Models\OrdinarySeaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -10,9 +10,15 @@ use Illuminate\Support\Facades\Log;
 
 class OrdinarySeamanController extends Controller
 {
+    /*
+         Ordinary Seaman biasanya merupakan
+         seorang anggota kru kapal yang memiliki
+         tanggung jawab umum dalam menjaga dan merawat kapal.
+    */
+
     public function fetchData()
     {
-        $ordinarySeamans = OrdinarySeamans::all();
+        $ordinarySeamans = OrdinarySeaman::all();
 
         return response()->json([
             "ordinarySeamans" => $ordinarySeamans,
@@ -27,11 +33,11 @@ class OrdinarySeamanController extends Controller
             DB::beginTransaction();
 
             if (request("id")) {
-                $ordinarySeaman = OrdinarySeamans::find(request("id"));
+                $ordinarySeaman = OrdinarySeaman::find(request("id"));
 
                 $message = "diperbaharui";
             } else {
-                $ordinarySeaman = new OrdinarySeamans;
+                $ordinarySeaman = new OrdinarySeaman;
 
                 $message = "dikirim";
             }
@@ -64,7 +70,7 @@ class OrdinarySeamanController extends Controller
         try {
             DB::beginTransaction();
 
-            $ordinarySeaman = OrdinarySeamans::find(request("id"));
+            $ordinarySeaman = OrdinarySeaman::find(request("id"));
             $ordinarySeaman->update([
                 'deleted_by' => request("user_id"),
             ]);
