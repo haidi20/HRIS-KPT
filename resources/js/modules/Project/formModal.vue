@@ -3,7 +3,7 @@
     <b-modal
       id="project_form"
       ref="project_form"
-      :title="getTitleForm"
+      :title="getFormTitle"
       size="lg"
       class="modal-custom"
       hide-footer
@@ -51,7 +51,6 @@ import OrdinarySeamanHasParent from "../OrdinarySeamanHasParent/ordinarySeamanHa
 export default {
   data() {
     return {
-      getTitleForm: "Buat Proyek",
       is_loading: false,
     };
   },
@@ -68,6 +67,9 @@ export default {
     getUserId() {
       return this.$store.state.user?.id;
     },
+    getFormTitle() {
+      return this.$store.state.project.form.form_title;
+    },
     form() {
       return this.$store.state.project.form;
     },
@@ -83,8 +85,70 @@ export default {
     onChangeTab(type) {
       //   console.info(type);
     },
-    onSend() {
-      console.info(this.form);
+    async onSend() {
+      const Swal = this.$swal;
+
+      // mengambil data hexa saja
+      const request = {
+        ...this.form,
+        user_id: this.getUserId,
+      };
+
+      this.is_loading = true;
+
+      console.info(request);
+
+      await axios
+        .post(`${this.getBaseUrl}/api/v1/project/store`, request)
+        .then((responses) => {
+          // console.info(responses);
+          this.is_loading = false;
+          const data = responses.data;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          if (data.success == true) {
+            Toast.fire({
+              icon: "success",
+              title: data.message,
+            });
+
+            this.$bvModal.hide("project_form");
+            this.$store.dispatch("project/fetchData");
+            this.$store.commit("project/CLEAR_FORM");
+          }
+        })
+        .catch((err) => {
+          console.info(err);
+          this.is_loading = false;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
   },
 };

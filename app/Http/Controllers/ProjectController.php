@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
@@ -44,7 +45,17 @@ class ProjectController extends Controller
                 $message = "ditambahkan";
             }
 
+            $project->company_id = request("company_id");
+            $project->foreman_id = request("foreman_id");
+            $project->barge_id = request("barge_id");
             $project->name = request("name");
+            $project->date_end = Carbon::parse(request("date_end"))->format("Y-m-d");
+            $project->day_duration = request("day_duration");
+            $project->price = request("price");
+            $project->down_payment = request("down_payment");
+            $project->remaining_payment = request("remaining_payment");
+            $project->type = request("type");
+            $project->note = request("note");
             $project->save();
 
             DB::commit();

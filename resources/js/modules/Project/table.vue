@@ -132,20 +132,101 @@ export default {
     onAction() {
       //
     },
-    onCreate() {
+    onCreate(item) {
+      this.$store.commit("project/INSERT_FORM_FORM_TYPE", {
+        form_type: "create",
+        form_title: "Tambah Proyek",
+      });
+      this.$store.commit("project/CLEAR_FORM");
       this.$bvModal.show("project_form");
     },
-    onDetail() {
+    onDetail(item) {
+      console.info(item);
+      this.$store.dispatch("project/onAction", {
+        form: item,
+        form_type: "detail",
+        form_title: "Informasi Lengkap Proyek",
+      });
+
       this.$bvModal.show("project_form");
     },
-    onEdit() {
+    onEdit(item) {
+      this.$store.dispatch("project/onAction", {
+        form: item,
+        form_type: "edit",
+        form_title: "Ubah Proyek",
+      });
+
       this.$bvModal.show("project_form");
     },
     onShowJobOrder() {
       this.$bvModal.show("job_order_modal");
     },
-    onDelete() {
-      //
+    async onDelete(data) {
+      const Swal = this.$swal;
+      await Swal.fire({
+        title: "Perhatian!!!",
+        html: `Anda yakin ingin hapus Proyek <h2><b>${data.name}</b> ?</h2>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .post(`${this.getBaseUrl}/api/v1/project/delete`, {
+              id: data.id,
+              user_id: this.getUserId,
+            })
+            .then((responses) => {
+              //   console.info(responses);
+              const data = responses.data;
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              if (data.success == true) {
+                Toast.fire({
+                  icon: "success",
+                  title: data.message,
+                });
+
+                this.$store.dispatch("project/fetchData");
+              }
+            })
+            .catch((err) => {
+              console.info(err);
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              Toast.fire({
+                icon: "error",
+                title: err.response.data.message,
+              });
+            });
+        }
+      });
     },
   },
 };

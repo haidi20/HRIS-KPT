@@ -3,7 +3,13 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Nama Proyek" label-for="name" class>
-          <b-form-input v-model="form.name" id="name" name="name" autocomplete="off"></b-form-input>
+          <b-form-input
+            v-model="form.name"
+            id="name"
+            name="name"
+            autocomplete="off"
+            :disabled="getReadOnly()"
+          ></b-form-input>
         </b-form-group>
       </b-col>
       <b-col cols>
@@ -18,6 +24,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -50,6 +57,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -65,6 +73,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -82,6 +91,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -94,19 +104,26 @@
             type="date"
             style="width: 100%"
             :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
       <b-col cols>
         <b-form-group label="Lama Pengerjaan" label-for="date_end">
-          <span>{{form.day_duration}}</span>
+          <span>{{form.day_duration}} Hari</span>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols>
         <b-form-group label="Biaya Proyek" label-for="price" class>
-          <b-form-input v-model="price" id="price" name="price" autocomplete="off"></b-form-input>
+          <b-form-input
+            v-model="price"
+            id="price"
+            name="price"
+            autocomplete="off"
+            :disabled="getReadOnly()"
+          ></b-form-input>
         </b-form-group>
       </b-col>
       <b-col cols>
@@ -116,6 +133,7 @@
             id="down_payment"
             name="down_payment"
             autocomplete="off"
+            :disabled="getReadOnly()"
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -134,7 +152,13 @@
     <b-row>
       <b-col col md="8">
         <b-form-group label="Catatan" label-for="note" class>
-          <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
+          <b-form-input
+            v-model="form.note"
+            id="note"
+            name="note"
+            autocomplete="off"
+            :disabled="getReadOnly()"
+          ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
@@ -149,7 +173,6 @@ import VueSelect from "vue-select";
 export default {
   data() {
     return {
-      getTitleForm: "Buat Proyek",
       is_loading: false,
     };
   },
@@ -231,8 +254,16 @@ export default {
     onChangeTab(type) {
       console.info(type);
     },
-    async onSend() {
-      this.$bvModal.hide("project_form");
+    getReadOnly() {
+      let result = false;
+
+      //   console.info(this.form.form_type);
+
+      if (this.form.form_type == "detail") {
+        result = true;
+      }
+
+      return result;
     },
     disabledDate(date, currentValue) {
       return date <= moment();
