@@ -7,23 +7,6 @@
         </b-form-group>
       </b-col>
       <b-col cols>
-        <b-form-group label="Jenis Pekerjaan" label-for="work_type" class>
-          <VueSelect
-            id="work_type"
-            class="cursor-pointer"
-            v-model="form.work_type"
-            placeholder="Pilih Jenis Pekerjaan"
-            :options="getOptionWorkTypes"
-            :reduce="(data) => data.id"
-            label="name"
-            searchable
-            style="min-width: 180px"
-          />
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols>
         <b-form-group label="Kapal" label-for="barge_id" class>
           <VueSelect
             id="barge_id"
@@ -38,6 +21,23 @@
           />
         </b-form-group>
       </b-col>
+      <!-- <b-col cols>
+        <b-form-group label="Jenis Pekerjaan" label-for="work_type" class>
+          <VueSelect
+            id="work_type"
+            class="cursor-pointer"
+            v-model="form.work_type"
+            placeholder="Pilih Jenis Pekerjaan"
+            :options="getOptionJobs"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
+        </b-form-group>
+      </b-col>-->
+    </b-row>
+    <b-row>
       <b-col cols>
         <b-form-group label="Jenis Proyek" label-for="type" class>
           <VueSelect
@@ -59,8 +59,8 @@
             id="company_id"
             class="cursor-pointer"
             v-model="form.company_id"
-            placeholder="Pilih Kapal"
-            :options="getOptionBarges"
+            placeholder="Pilih Perusahaan"
+            :options="getOptionCompanies"
             :reduce="(data) => data.id"
             label="name"
             searchable
@@ -92,7 +92,6 @@
             v-model="date_end"
             format="YYYY-MM-DD"
             type="date"
-            placeholder="Pilih Tanggal Selesai"
             style="width: 100%"
             :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
           />
@@ -100,13 +99,13 @@
       </b-col>
       <b-col cols>
         <b-form-group label="Lama Pengerjaan" label-for="date_end">
-          <span>{{form.date_duration}}</span>
+          <span>{{form.day_duration}}</span>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Biaya" label-for="price" class>
+        <b-form-group label="Biaya Proyek" label-for="price" class>
           <b-form-input v-model="price" id="price" name="price" autocomplete="off"></b-form-input>
         </b-form-group>
       </b-col>
@@ -165,13 +164,16 @@ export default {
       return this.$store.state.user?.id;
     },
     getOptionBarges() {
-      return this.$store.state.project.options.barges;
+      return this.$store.state.master.data.barges;
+    },
+    getOptionCompanies() {
+      return this.$store.state.master.data.companies;
     },
     getOptionTypes() {
       return this.$store.state.project.options.types;
     },
-    getOptionWorkTypes() {
-      return this.$store.state.project.options.work_types;
+    getOptionJobs() {
+      return this.$store.state.master.data.jobs;
     },
     getOptionForemans() {
       return this.$store.state.employee.data.foremans;
@@ -218,7 +220,7 @@ export default {
       this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
     },
     date_end(value, oldValue) {
-      this.$store.commit("project/INSERT_FORM_DATE_DURATION");
+      this.$store.commit("project/INSERT_FORM_DAY_DURATION");
     },
   },
   methods: {

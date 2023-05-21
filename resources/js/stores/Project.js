@@ -6,7 +6,7 @@ import { numbersOnly, formatCurrency, checkNull, dateDuration } from "../utils";
 const defaultForm = {
     id: null,
     date_end: null,
-    date_duration: null,
+    day_duration: null,
     // biaya
     price: null,
     price_readable: null,
@@ -16,6 +16,9 @@ const defaultForm = {
     // sisa pembyaaran
     remaining_payment: null,
     remaining_payment_readable: null,
+    company_id: null,
+    foreman_id: null,
+    type: null,
     contractors: [
         {
             id: null,
@@ -26,6 +29,7 @@ const defaultForm = {
             id: null,
         },
     ],
+
 }
 
 const Project = {
@@ -38,12 +42,6 @@ const Project = {
         },
         form: { ...defaultForm },
         options: {
-            barges: [
-                {
-                    id: 1,
-                    name: "Kapal A",
-                },
-            ],
             types: [
                 {
                     id: "daily",
@@ -76,6 +74,9 @@ const Project = {
         },
         INSERT_DATA(state, payload) {
             state.data = payload.projects;
+        },
+        INSERT_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
         },
         INSERT_FORM_NEW_CONTRACTOR(state, payload) {
             state.form.contractors = [
@@ -148,13 +149,13 @@ const Project = {
             // console.info(payload.date_end);
             state.form.date_end = payload.date_end;
         },
-        INSERT_FORM_DATE_DURATION(state, payload) {
+        INSERT_FORM_DAY_DURATION(state, payload) {
             // console.info(state.form.date_end);
             const dateNow = moment().format("YYYY-MM-DD");
-            const date_duration = dateDuration(dateNow, state.form.date_end);
+            const dayDuration = dateDuration(dateNow, state.form.date_end);
 
-            // console.info(date_duration);
-            state.form.date_duration = `${date_duration} Hari`;
+            // console.info(day_duration);
+            state.form.day_duration = `${dayDuration} Hari`;
         },
         INSERT_OPTION_POSITION(state, payload) {
             state.options.positions = payload.positions;
@@ -202,7 +203,7 @@ const Project = {
                 }
                 )
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
@@ -212,37 +213,6 @@ const Project = {
                 })
                 .catch((err) => {
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
-                    console.info(err);
-                });
-        },
-        fetchPosition: async (context, payload) => {
-            context.commit("INSERT_OPTION_POSITION", {
-                projects: [],
-            });
-            context.commit("UPDATE_LOADING_POSITION", { value: true });
-
-            const params = {
-                ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
-            }
-
-            await axios
-                .get(
-                    `${context.state.base_url}/api/v1/position/fetch-data`, {
-                    params: { ...params },
-                }
-                )
-                .then((responses) => {
-                    console.info(responses);
-                    const data = responses.data;
-
-                    context.commit("INSERT_OPTION_POSITION", {
-                        positions: data.positions,
-                    });
-                    context.commit("UPDATE_LOADING_POSITION", { value: false });
-                })
-                .catch((err) => {
-                    context.commit("UPDATE_LOADING_POSITION", { value: false });
                     console.info(err);
                 });
         },

@@ -6,14 +6,14 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Pekerjaan</h3>
+                    <h3>Jenis Pekerjaan</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             {{-- <li class="breadcrumb-item"><a href="#">Pengaturan</a></li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Pekerjaan</li>
+                            <li class="breadcrumb-item active" aria-current="page">Jenis Pekerjaan</li>
                         </ol>
                     </nav>
                 </div>
@@ -23,19 +23,21 @@
             <div class="card">
                 <div class="card-header">
                     <span class="fs-4 fw-bold">Data Jenis Pekerjaan</span>
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                        data-toggle="modal">
-                        <i class="fas fa-plus text-white-50"></i> Tambah Jenis Pekerjaan
-                    </button>
+                    @can('tambah jenis pekerjaan')
+                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                            data-toggle="modal">
+                            <i class="fas fa-plus text-white-50"></i> Tambah Jenis Pekerjaan
+                        </button>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <table class="table table-striped dataTable" id="table1">
                         <thead>
                             <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Keterangan</th>
-                                <th width="20%"></th>
+                                <th width="10%">Kode</th>
+                                <th nowrap>Nama</th>
+                                <th nowrap>Keterangan</th>
+                                <th width="10%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,12 +53,12 @@
                                         {{ $job->description }}
                                     </td>
                                     <td>
-                                        @can('ubah kategori job')
+                                        @can('ubah jenis pekerjaan')
                                             <a href="javascript:void(0)" onclick="onEdit({{ $job }})"
                                                 class="btn btn-sm btn-info">Ubah
                                             </a>
                                         @endcan
-                                        @can('hapus kategori job')
+                                        @can('hapus jenis pekerjaan')
                                             <a href="javascript:void(0)" onclick="onDelete({{ $job }})"
                                                 class="btn btn-sm btn-danger">Hapus
                                             </a>

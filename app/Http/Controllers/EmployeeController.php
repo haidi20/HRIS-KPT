@@ -60,12 +60,9 @@ class EmployeeController extends Controller
 
     public function fetchForeman()
     {
-        $foremans = [
-            (object) [
-                "id" => 1,
-                "name" => "Samsudin",
-            ],
-        ];
+        $foremans = Employee::whereHas("position", function ($query) {
+            $query->where("name", "Pengawas");
+        })->get();
 
         return response()->json([
             "foremans" => $foremans,
@@ -89,7 +86,7 @@ class EmployeeController extends Controller
                 $employee = new Employee;
                 $employee->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             // DATA PERSONAL

@@ -47,7 +47,7 @@ class RoleController extends Controller
             } else {
                 $role = new Role;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $role->name = request("name");

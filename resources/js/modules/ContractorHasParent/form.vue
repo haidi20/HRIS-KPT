@@ -2,7 +2,7 @@
   <div>
     <b-row>
       <b-col cols md="6">
-        <b-button variant="info" size="sm" @click="onShowContractorMaster()">Data Kepala Kontraktor</b-button>
+        <b-button variant="info" size="sm" @click="onShowContractorMaster()">Data Kepala Pemborong</b-button>
       </b-col>
       <b-col cols md="4">
         <b-button variant="success" size="sm" @click="onAdd()">Tambah</b-button>
@@ -10,7 +10,7 @@
     </b-row>
     <br />
     <b-row v-for="(contractor, index) in form.contractors" :key="index">
-      <b-col cols>
+      <b-col cols class="mt-4">
         <b-form-group label="Pilih Kepala Proyek" label-for="name" style="display: inline">
           <VueSelect
             id="contractor_id"

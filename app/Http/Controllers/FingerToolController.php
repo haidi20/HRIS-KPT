@@ -34,7 +34,7 @@ class FingerToolController extends Controller
                 $finger_tool = new FingerTool;
                 $finger_tool->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $finger_tool->name = request("name");

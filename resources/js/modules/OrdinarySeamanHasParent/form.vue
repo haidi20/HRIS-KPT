@@ -9,9 +9,9 @@
       </b-col>
     </b-row>
     <br />
-    <b-row v-for="(os, index) in form.Oses" :key="index">
+    <b-row v-for="(os, index) in form.oses" :key="index">
       <b-col cols>
-        <b-form-group label="Pilih Kepala Proyek" label-for="name" style="display: inline">
+        <b-form-group label="Pilih OS" label-for="os_id" style="display: inline">
           <VueSelect
             id="os_id"
             class="cursor-pointer"

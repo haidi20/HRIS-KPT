@@ -31,5 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->call(BaseWagesBpjsSeeder::class);
         $this->call(EmployeeSeeder::class);
         $this->call(JobSeeder::class);
+        $this->call(ContractorSeeder::class);
+        $this->call(OrdinarySeamanSeeder::class);
+        $this->call(ProjectSeeder::class);
     }
 }

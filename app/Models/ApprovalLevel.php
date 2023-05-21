@@ -34,6 +34,6 @@ class ApprovalLevel extends Model
 
     public function getDateReadAbleAttribute()
     {
-        return Carbon::parse($this->created_at)->locale('id')->isoFormat("dddd, D MMMM YYYY");
+        return dateReadable($this->created_at);
     }
 }

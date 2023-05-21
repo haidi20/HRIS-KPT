@@ -55,7 +55,7 @@ class UserController extends Controller
             } else {
                 $user = new User;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             if (request("password") != null) {

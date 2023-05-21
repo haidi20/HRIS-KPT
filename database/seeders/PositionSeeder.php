@@ -44,14 +44,14 @@ class PositionSeeder extends Seeder
                 [
                     'name' => 'HRD',
                     'description' => 'HRD',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                     // 'departmen_id' => 2,
                 ],
                 // Gudang/ Logistics
                 [
                     'name' => 'Logistics',
                     'description' => 'Logistics',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                     // 'departmen_id' => 3,
                 ],
                 // Mekanik
@@ -133,61 +133,61 @@ class PositionSeeder extends Seeder
                 [
                     'name' => 'Manager',
                     'description' => 'Manager',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 // // Acounting
                 [
                     'name' => 'Head of Acounting',
                     'description' => 'Head of Acounting',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 [
                     'name' => 'Acounting',
                     'description' => 'Acounting',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 [
                     'name' => 'Purchasing',
                     'description' => 'Purchasing',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 [
                     'name' => 'Cashier',
                     'description' => 'Cashier',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 [
                     'name' => 'Admin',
                     'description' => 'Admin',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 [
                     'name' => 'Admin A/R',
                     'description' => 'Admin A/R',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 // Marketing
                 [
                     'name' => 'Marketing',
                     'description' => 'Marketing',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 // Hygiene
                 [
                     'name' => 'Office Girl',
                     'description' => 'office Girl',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 // Gudang
                 [
                     'name' => 'Head of Warehouse',
                     'description' => 'Head of Warehouse',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 [
                     'name' => 'Adm. Warehouse',
                     'description' => 'Adm. Warehouse',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                 ],
                 // // Bubut
                 // [
@@ -227,7 +227,7 @@ class PositionSeeder extends Seeder
                     'name' => 'Operator Crane',
                     'description' => 'Operator Crane',
                     'minimum_employee' => 1,
-                     //     'departmen_id' => 22,
+                    //     'departmen_id' => 22,
                 ],
                 // [
                 //     'name' => 'Operator',
@@ -246,7 +246,7 @@ class PositionSeeder extends Seeder
                 [
                     'name' => 'Fitter',
                     'description' => 'Fitter',
-                    'minimum_employee' => 1,
+                    'minimum_employee' => 0,
                     //     'departmen_id' => 24,
                 ],
                 // Helper

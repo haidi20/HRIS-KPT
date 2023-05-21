@@ -34,7 +34,7 @@ class BaseWagesBpjsController extends Controller
                 $base_wages_bpjs = new BaseWagesBpjs;
                 $base_wages_bpjs->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $base_wages_bpjs->name = request("name");

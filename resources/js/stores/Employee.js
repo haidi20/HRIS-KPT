@@ -25,7 +25,6 @@ const Employee = {
                     position_name: "Welder",
                 }
             ],
-            positions: [],
             foremans: [],
         },
         params: {
@@ -71,9 +70,6 @@ const Employee = {
         INSERT_DATA_TABLE(state, payload) {
             state.data.table = payload.data;
         },
-        INSERT_DATA_POSITION(state, payload) {
-            state.data.positions = payload.positions;
-        },
         INSERT_DATA_FOREMAN(state, payload) {
             state.data.foremans = payload.foremans;
         },
@@ -85,30 +81,6 @@ const Employee = {
         },
     },
     actions: {
-        fetchPosition: async (context, payload) => {
-            await axios
-                .get(
-                    `${context.state.base_url}/api/v1/position/fetch-data`, {
-                    params: {},
-                }
-                )
-                .then((responses) => {
-                    // console.info(responses);
-                    let data = responses.data;
-
-                    data.positions = [
-                        { id: "all", name: "Semua" },
-                        ...data.data,
-                    ];
-
-                    context.commit("INSERT_DATA_POSITION", {
-                        positions: data.positions,
-                    });
-                })
-                .catch((err) => {
-                    console.info(err);
-                });
-        },
         fetchForeman: async (context, payload) => {
             await axios
                 .get(

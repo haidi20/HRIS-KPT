@@ -18,6 +18,15 @@ class JobController extends Controller
         return view("pages.master.job.index", compact("jobs"));
     }
 
+    public function fetchData()
+    {
+        $jobs = Job::orderBy("name", "asc")->get();
+
+        return response()->json([
+            "jobs" => $jobs,
+        ]);
+    }
+
     public function store(Request $request)
     {
         // return request()->all();
@@ -34,7 +43,7 @@ class JobController extends Controller
                 $job = new Job;
                 $job->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $job->code = request("code");

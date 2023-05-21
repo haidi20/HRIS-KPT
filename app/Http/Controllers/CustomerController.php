@@ -38,7 +38,7 @@ class CustomerController extends Controller
                 $customer = new Customer;
                 $customer->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $customer->name = request("name");

@@ -11,7 +11,7 @@ class Employee extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ["company_name","position_name","departmen_name","location_name","employee_type_name"];
+    protected $appends = ["company_name", "position_name", "departmen_name", "location_name", "employee_type_name"];
     protected $fillable = [];
 
     public function __construct(array $attributes = [])
@@ -25,7 +25,6 @@ class Employee extends Model
     {
         return $this->belongsTo(Company::class, "company_id", "id");
     }
-
 
     public function getCompanyNameAttribute()
     {

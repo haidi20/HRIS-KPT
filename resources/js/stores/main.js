@@ -4,6 +4,7 @@ import axios from "axios";
 import moment from "moment";
 
 import Os from "./Os";
+import Master from "./Master";
 import Roster from "./Roster";
 import Project from "./Project";
 import Vacation from "./Vacation";
@@ -23,6 +24,7 @@ const store = new Vuex.Store({
     modules: {
         os: Os,
         roster: Roster,
+        master: Master,
         project: Project,
         vacation: Vacation,
         jobOrder: JobOrder,

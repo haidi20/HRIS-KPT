@@ -9,7 +9,7 @@ import BootstrapVue from "bootstrap-vue";
 import VueSweetalert2 from "vue-sweetalert2";
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
 import { ServerTable, ClientTable, Event } from "vue-tables-2";
-// import clickOutside from './vue-directive-clickOutside';
+import clickOutside from './vue-directive-clickOutside';
 
 import 'vue2-datepicker/index.css';
 import "vue-select/dist/vue-select.css";
@@ -39,7 +39,7 @@ Vue.component("salary-advance", require("./modules/SalaryAdvance/salaryAdvance.v
 Vue.component("job-order-report", require("./modules/JobOrderReport/jobOrderReport.vue").default);
 Vue.component("salary-adjustment", require("./modules/SalaryAdjustment/salaryAdjustment.vue").default);
 
-// Vue.directive('click-outside', clickOutside);
+Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;
 
 /**

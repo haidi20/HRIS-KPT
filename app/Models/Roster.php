@@ -11,7 +11,7 @@ class Roster extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ["roster_status_initial", "roster_status_color"];
+    // protected $appends = ["roster_status_initial", "roster_status_color"];
     protected $fillable = [
         'employee_id',
         'day_off_one',

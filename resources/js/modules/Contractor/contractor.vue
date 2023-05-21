@@ -27,7 +27,7 @@ import Form from "./form";
 export default {
   data() {
     return {
-      getTitleForm: "Data Kepala Kontraktor",
+      getTitleForm: "Data Kepala Pemborong",
     };
   },
   components: {
