@@ -255,15 +255,10 @@ export default {
       console.info(type);
     },
     getReadOnly() {
-      let result = false;
+      const readOnly = this.$store.getters["project/getReadOnly"];
+      //   console.info(readOnly);
 
-      //   console.info(this.form.form_type);
-
-      if (this.form.form_type == "detail") {
-        result = true;
-      }
-
-      return result;
+      return readOnly;
     },
     disabledDate(date, currentValue) {
       return date <= moment();

@@ -5,7 +5,7 @@
         <b-button variant="info" size="sm" @click="onShowOsMaster()">Data OS</b-button>
       </b-col>
       <b-col cols md="4">
-        <b-button variant="success" size="sm" @click="onAdd()">Tambah</b-button>
+        <b-button variant="success" size="sm" @click="onAdd()" v-if="!getReadOnly()">Tambah</b-button>
       </b-col>
     </b-row>
     <br />
@@ -21,6 +21,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -53,9 +54,6 @@ export default {
     getUserId() {
       return this.$store.state.user?.id;
     },
-    getData() {
-      return this.$store.state.osHasParent.data;
-    },
     getOptionOses() {
       return this.$store.state.os.data;
     },
@@ -72,6 +70,12 @@ export default {
     },
     onDelete(index) {
       this.$store.commit("project/DELETE_FORM_OS", { index });
+    },
+    getReadOnly() {
+      const readOnly = this.$store.getters["project/getReadOnly"];
+      //   console.info(readOnly);
+
+      return readOnly;
     },
   },
 };

@@ -19,16 +19,12 @@ class LocationSeeder extends Seeder
         DB::table('locations')->insert(
             [
                 [
-                    'name' => 'SITE A',
-                    'description' => 'Lokasi SITE A',
+                    'name' => 'Doc 1',
+                    'description' => '',
                 ],
                 [
-                    'name' => 'SITE B',
-                    'description' => 'Lokasi SITE B',
-                ],
-                [
-                    'name' => 'SITE C',
-                    'description' => 'Lokasi SITE C',
+                    'name' => 'Doc 2',
+                    'description' => '',
                 ],
             ],
         );

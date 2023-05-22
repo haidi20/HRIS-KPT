@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProjectExport;
 use App\Models\Contractor;
 use App\Models\ContractorHasParent;
 use App\Models\OrdinarySeamanHasParent;
@@ -10,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Response;
 
 class ProjectController extends Controller
 {
@@ -24,11 +27,50 @@ class ProjectController extends Controller
 
     public function fetchData()
     {
-        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])->orderBy("date_end", "asc")->get();
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
+            ->whereYear("date_end", $month->format("Y"))
+            ->whereMonth("date_end", $month->format("m"))
+            ->orderBy("date_end", "asc")->get();
 
         return response()->json([
             "projects" => $projects,
         ]);
+    }
+
+    public function export()
+    {
+        $data = $this->fetchData()->original["projects"];
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($month->format("Y-m"));
+        $nameFile = "project_{$monthReadAble}.xlsx";
+
+        try {
+            Excel::store(new ProjectExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                "success" => true,
+                "data" => $data,
+                "linkDownload" => route('project.download', ["name_file" => $nameFile]),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal export data',
+            ], 500);
+        }
+    }
+
+    public function download()
+    {
+        $path = public_path(request("name_file"));
+
+        return Response::download($path);
     }
 
     public function store()

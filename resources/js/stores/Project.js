@@ -260,7 +260,20 @@ const Project = {
             //     context.commit("INSERT_FORM_NEW_OS");
             // }
         },
-    }
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (state.form.form_type == "detail") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default Project;

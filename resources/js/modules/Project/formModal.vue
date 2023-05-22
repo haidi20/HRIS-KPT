@@ -19,6 +19,9 @@
             <b-tab title="OS" @click="onChangeTab('os')">
               <OrdinarySeamanHasParent />
             </b-tab>
+            <b-tab title="Job Order" @click="onChangeTab('os')">
+              <JobOrderTable />
+            </b-tab>
           </b-tabs>
         </b-col>
       </b-row>
@@ -30,6 +33,7 @@
             style="float: right"
             variant="success"
             @click="onSend()"
+            v-if="!getReadOnly()"
             :disabled="is_loading"
           >Simpan</b-button>
           <span v-if="is_loading">Loading...</span>
@@ -47,6 +51,7 @@ import VueSelect from "vue-select";
 import Form from "./form";
 import ContractorHasParent from "../ContractorHasParent/contractorHasParent";
 import OrdinarySeamanHasParent from "../OrdinarySeamanHasParent/ordinarySeamanHasParent";
+import JobOrderTable from "../JobOrder/table";
 
 export default {
   data() {
@@ -57,6 +62,7 @@ export default {
   components: {
     Form,
     VueSelect,
+    JobOrderTable,
     ContractorHasParent,
     OrdinarySeamanHasParent,
   },
@@ -96,7 +102,7 @@ export default {
 
       this.is_loading = true;
 
-      console.info(request);
+      //   console.info(request);
 
       await axios
         .post(`${this.getBaseUrl}/api/v1/project/store`, request)
@@ -149,6 +155,12 @@ export default {
             title: err.response.data.message,
           });
         });
+    },
+    getReadOnly() {
+      const readOnly = this.$store.getters["project/getReadOnly"];
+      //   console.info(readOnly);
+
+      return readOnly;
     },
   },
 };

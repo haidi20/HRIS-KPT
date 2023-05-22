@@ -24,20 +24,9 @@ const JobOrder = {
         data: [
             {
                 id: 1,
-                project_id: 1,
-                category_id: 1,
-                category_name: "Reguler",
-                project_name: "Staging",
-                project_note: "informasi lebih lengkap tentang staging",
-                status: "active",
-                status_readable: "Aktif",
-                employee_total: 5,
-                employee_active_total: 4,
-                status_color: "success",
-                count_assessment: 1,
-                is_assessment_foreman: false,
-                is_assessment_quality_control: true,
-            },
+                proyek_name: "Project A",
+                job_name: "Bongkar pasang cuttleas bearing",
+            }
         ],
         params: {
             date: [
@@ -48,6 +37,7 @@ const JobOrder = {
             ],
             type: "all",
             type_by: "creator",
+            proyek_id: null,
         },
         form: { ...defaultForm },
         is_active_form: false,
@@ -158,6 +148,12 @@ const JobOrder = {
             state.form.form_title = payload.form_title;
             state.form.form_kind = payload.form_kind;
         },
+        INSERT_PARAM(state, payload) {
+            state.params = {
+                ...state.params,
+                ...payload.params,
+            }
+        },
         UPDATE_IS_ACTIVE_FORM(state, payload) {
             state.is_active_form = payload.value;
         },
@@ -171,3 +167,20 @@ const JobOrder = {
 }
 
 export default JobOrder;
+
+// {
+//     id: 1,
+//         project_id: 1,
+//             category_id: 1,
+//                 category_name: "Reguler",
+//                     project_name: "Staging",
+//                         project_note: "informasi lebih lengkap tentang staging",
+//                             status: "active",
+//                                 status_readable: "Aktif",
+//                                     employee_total: 5,
+//                                         employee_active_total: 4,
+//                                             status_color: "success",
+//                                                 count_assessment: 1,
+//                                                     is_assessment_foreman: false,
+//                                                         is_assessment_quality_control: true,
+//             },

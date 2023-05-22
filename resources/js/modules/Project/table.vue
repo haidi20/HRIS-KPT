@@ -12,7 +12,37 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-button variant="success" size="sm" @click="onCreate()">Tambah</b-button>
+          <b-form-group label="Bulan Selesai Proyek" label-for="month" class="place_filter_table">
+            <DatePicker
+              id="month"
+              v-model="params.month"
+              format="YYYY-MM"
+              type="month"
+              placeholder="pilih bulan"
+            />
+          </b-form-group>
+          <b-button
+            class="place_filter_table"
+            variant="success"
+            size="sm"
+            @click="onFilter()"
+            :disabled="getIsLoadingData"
+          >Kirim</b-button>
+          <b-button
+            class="place_filter_table ml-4"
+            variant="success"
+            size="sm"
+            @click="onExport()"
+            :disabled="is_loading_export"
+          >
+            <i class="fas fa-file-excel"></i>
+            Export
+          </b-button>
+          <span v-if="is_loading_export">Loading...</span>
+          <b-button variant="success" class="place_filter_table ml-4" size="sm" @click="onCreate()">
+            <i class="fas fa-plus"></i>
+            Tambah
+          </b-button>
         </b-col>
       </template>
       <template v-slot:tbody="{ filteredData }">
@@ -60,6 +90,7 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
 
 import JobOrderModal from "../JobOrder/modal";
 import DatatableClient from "../../components/DatatableClient";
@@ -68,6 +99,7 @@ import ButtonAction from "../../components/ButtonAction";
 export default {
   data() {
     return {
+      is_loading_export: false,
       columns: [
         {
           label: "",
@@ -126,8 +158,11 @@ export default {
     getData() {
       return this.$store.state.project.data;
     },
-    form() {
-      return this.$store.state.project.form;
+    getIsLoadingData() {
+      return this.$store.state.project.loading.table;
+    },
+    params() {
+      return this.$store.state.project.params;
     },
   },
   methods: {
@@ -163,6 +198,52 @@ export default {
     },
     onShowJobOrder() {
       this.$bvModal.show("job_order_modal");
+    },
+    onFilter() {
+      this.$store.dispatch("project/fetchData");
+    },
+    async onExport() {
+      const Swal = this.$swal;
+      this.is_loading_export = true;
+
+      await axios
+        .get(`${this.getBaseUrl}/project/export`, {
+          params: {
+            ...this.params,
+            user_id: this.getUserId,
+            month: moment(this.params.month).format("Y-MM"),
+          },
+        })
+        .then((responses) => {
+          console.info(responses);
+          this.is_loading_export = false;
+          const data = responses.data;
+
+          //   return false;
+
+          if (data.success) {
+            window.open(data.linkDownload, "_blank");
+          }
+        })
+        .catch((err) => {
+          this.is_loading_export = false;
+          console.info(err);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
     async onDelete(data) {
       const Swal = this.$swal;
@@ -235,4 +316,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.place_filter_table {
+  align-items: self-end;
+  margin-bottom: 0;
+  display: inline-block;
+}
 </style>

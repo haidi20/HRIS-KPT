@@ -100,6 +100,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");
+        Route::get('export', [ProjectController::class, "export"])->name("export");
+        Route::get('download', [ProjectController::class, "download"])->name("download");
     });
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
