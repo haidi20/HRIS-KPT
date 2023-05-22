@@ -42,7 +42,7 @@ class BpjsCalculationController extends Controller
                 $bpjs_calculation = new BpjsCalculation;
                 $bpjs_calculation->created_by = Auth::user()->id;
 
-                $message = "ditambahkan";
+                $message = "dikirim";
             }
 
             $bpjs_calculation->name = request("name");
@@ -51,10 +51,6 @@ class BpjsCalculationController extends Controller
             $baseWages = $bpjs_calculation->getBaseWages();
 
             $calculateNominal = function ($percent, $baseWage) {
-                if ($percent == 0.00) {
-                    return 0;
-                }
-
                 $nominal = floor($baseWage * $percent);
                 $last3Digits = substr($nominal, -3);
                 $roundedValue = round($last3Digits / 100) * 100;
@@ -63,8 +59,7 @@ class BpjsCalculationController extends Controller
                 if (substr($nominal, -3) === "000") {
                     $nominal = rtrim($nominal, "0") . "0";
                 } else {
-                    // $nominal = rtrim($nominal, "0");
-                    $nominal = rtrim($nominal, "0") . "0";
+                    $nominal = rtrim($nominal, "0");
                 }
 
                 return $nominal;
@@ -73,6 +68,52 @@ class BpjsCalculationController extends Controller
             $bpjs_calculation->company_nominal = $calculateNominal($bpjs_calculation->company_percent, $baseWages['base_wages_bpjs_nominal_1']);
             $bpjs_calculation->employee_nominal = $calculateNominal($bpjs_calculation->employee_percent, $baseWages['base_wages_bpjs_nominal_2']);
 
+
+            // Menghilangkan "00" di belakang angka
+            // $bpjs_calculation->company_nominal = rtrim($bpjs_calculation->company_nominal, "0");
+            // $bpjs_calculation->employee_nominal = rtrim($bpjs_calculation->employee_nominal, "0");
+
+            // // Mengubah format menjadi 125.597
+            // $bpjs_calculation->company_nominal = number_format($bpjs_calculation->company_nominal, 0, ',', '.');
+            // $bpjs_calculation->employee_nominal = number_format($bpjs_calculation->employee_nominal, 0, ',', '.');
+
+            // $bpjs_calculation->company_nominal = $baseWagesBPJSTK->nominal * $bpjs_calculation->company_percent;
+            // $bpjs_calculation->employee_nominal = $baseWagesBPJSKES->nominal * $bpjs_calculation->employee_percent;
+
+            // // Menghapus angka di belakang koma
+            // $bpjs_calculation->company_nominal = floor($bpjs_calculation->company_nominal);
+            // $bpjs_calculation->employee_nominal = floor($bpjs_calculation->employee_nominal);
+
+            // // Mengambil 3 angka terakhir
+            // $company_nominal_last_3_digits = substr($bpjs_calculation->company_nominal, -3);
+            // $employee_nominal_last_3_digits = substr($bpjs_calculation->employee_nominal, -3);
+
+            // // Membulatkan 3 angka terakhir
+            // $company_nominal_rounded = round($company_nominal_last_3_digits / 100) * 100;
+            // $employee_nominal_rounded = round($employee_nominal_last_3_digits / 100) * 100;
+
+            // // Menambahkan angka bulatan ke nilai nominal
+            // $bpjs_calculation->company_nominal = $bpjs_calculation->company_nominal - $company_nominal_last_3_digits + $company_nominal_rounded;
+            // $bpjs_calculation->employee_nominal = $bpjs_calculation->employee_nominal - $employee_nominal_last_3_digits + $employee_nominal_rounded;
+
+            // // Menghilangkan "00" di belakang angka
+            // $bpjs_calculation->company_nominal = rtrim($bpjs_calculation->company_nominal, "0");
+            // $bpjs_calculation->employee_nominal = rtrim($bpjs_calculation->employee_nominal, "0");
+
+            // // Format angka dengan kondisi
+            // if ($bpjs_calculation->company_nominal >= 1000) {
+            //     $bpjs_calculation->company_nominal = number_format((float)$bpjs_calculation->company_nominal, 0, ',', '.');
+            // } else {
+            //     $bpjs_calculation->company_nominal = number_format((float)$bpjs_calculation->company_nominal, 3, ',', '.');
+            //     $bpjs_calculation->company_nominal = rtrim($bpjs_calculation->company_nominal, "0");
+            // }
+
+            // if ($bpjs_calculation->employee_nominal >= 1000) {
+            //     $bpjs_calculation->employee_nominal = number_format((float)$bpjs_calculation->employee_nominal, 0, ',', '.');
+            // } else {
+            //     $bpjs_calculation->employee_nominal = number_format((float)$bpjs_calculation->employee_nominal, 3, ',', '.');
+            //     $bpjs_calculation->employee_nominal = rtrim($bpjs_calculation->employee_nominal, "0");
+            // }
 
             $bpjs_calculation->save();
 

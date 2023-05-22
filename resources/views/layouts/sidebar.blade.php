@@ -338,30 +338,30 @@
                     </li>
                 @endcanany
                 @php
-                    $allPermissionWork = ['lihat fitur', 'lihat perhitungan bpjs'];
+                    $allPermissionWork = ['lihat fitur', 'lihat perhitungan bpjs', 'lihat dasar upah bpjs'];
                 @endphp
                 @canany($allPermissionWork)
                     <li
-                        class="sidebar-item {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }} has-sub">
+                        class="sidebar-item {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') || Request::is('setting/base-wages-bpjs') ? 'active' : '' }} has-sub">
                         <a href="#" class="sidebar-link">
                             <i class="bi bi-gear"></i>
                             <span>Pengaturan</span>
                         </a>
 
-                        <ul class="submenu {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'active' : '' }}"
-                            style="{{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') ? 'display: block;' : 'display: none;' }}">
+                        <ul class="submenu {{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') || Request::is('setting/base-wages-bpjs') ? 'active' : '' }}"
+                            style="{{ Request::is('setting/feature') || Request::is('setting/bpjs-calculation') || Request::is('setting/base-wages-bpjs') ? 'display: block;' : 'display: none;' }}">
                             @can('lihat fitur')
-                                <li class="submenu-item {{ isActive('master/feature') }}">
+                                <li class="submenu-item {{ isActive('setting/feature') }}">
                                     <a href="{{ route('setting.feature.index') }}">Fitur</a>
                                 </li>
                             @endcan
                             @can('lihat dasar upah bpjs')
-                                <li class="submenu-item {{ isActive('master/base-wages-bpjs') }}">
+                                <li class="submenu-item {{ isActive('setting/base-wages-bpjs') }}">
                                     <a href="{{ route('setting.baseWagesBpjs.index') }}">Dasar Upah BPJS</a>
                                 </li>
                             @endcan
                             @can('lihat perhitungan bpjs')
-                                <li class="submenu-item {{ isActive('master/bpjs-calculation') }}">
+                                <li class="submenu-item {{ isActive('setting/bpjs-calculation') }}">
                                     <a href="{{ route('setting.bpjsCalculation.index') }}">Perhitungan BPJS</a>
                                 </li>
                             @endcan

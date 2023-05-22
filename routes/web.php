@@ -227,6 +227,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('bpjs-calculation')->name("bpjsCalculation.")->group(function () {
             Route::get('', [BpjsCalculationController::class, "index"])->name("index");
+            Route::post('get-base-wages', [BpjsCalculationController::class, "getBaseWages"])->name("get-base-wages");
             Route::post('store', [BpjsCalculationController::class, "store"])->name("store");
             Route::delete('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
         });

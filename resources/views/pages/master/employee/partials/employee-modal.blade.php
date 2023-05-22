@@ -374,6 +374,19 @@
                         {{-- DATA FINGER --}}
                         <div class="tab-pane fade" id="finger" role="tabpanel" aria-labelledby="finger-tab">
                             <div class="form-group row">
+                                <label for="location_id" class="col-sm-4 col-form-label"> Lokasi Karyawan
+                                </label>
+                                <div class="col-sm-8">
+                                    <select id="location_id" name="location_id" class="select2 form-select" style="width: 100%">
+                                        <option value="">-- Pilih Lokasi Karyawan --</option>
+                                        @foreach ($finger_tools as $finger_tool)
+                                        <option value="{{ $finger_tool->id }}">{{ $finger_tool->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            {{-- <div class="form-group row">
                                 <label for="finger_doc_1" class="col-sm-4 col-form-label">Nomor ID di Finger Doc
                                     1</label>
                                 <div class="col-sm-8">
@@ -386,7 +399,7 @@
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control datepicker" id="finger_doc_2" name="finger_doc_2">
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
