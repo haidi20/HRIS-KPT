@@ -29,6 +29,7 @@
             :disabled="getIsLoadingData"
           >Kirim</b-button>
           <b-button
+            v-if="getCan('ekspor proyek')"
             class="place_filter_table ml-4"
             variant="success"
             size="sm"
@@ -39,7 +40,13 @@
             Export
           </b-button>
           <span v-if="is_loading_export">Loading...</span>
-          <b-button variant="success" class="place_filter_table ml-4" size="sm" @click="onCreate()">
+          <b-button
+            v-if="getCan('tambah proyek')"
+            variant="success"
+            class="place_filter_table ml-4"
+            size="sm"
+            @click="onCreate()"
+          >
             <i class="fas fa-plus"></i>
             Tambah
           </b-button>
@@ -50,9 +57,13 @@
           <b-td @click="onAction()">
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
-                <a href="#" @click="onDetail(item, index)">Informasi Lengkap</a>
-                <a href="#" @click="onEdit(item)">Edit</a>
-                <a href="#" @click="onDelete(item)">Hapus</a>
+                <a
+                  href="#"
+                  v-if="getCan('lihat proyek')"
+                  @click="onDetail(item, index)"
+                >Informasi Lengkap</a>
+                <a href="#" v-if="getCan('ubah proyek')" @click="onEdit(item)">Edit</a>
+                <a href="#" v-if="getCan('hapus proyek')" @click="onDelete(item)">Hapus</a>
               </template>
             </ButtonAction>
             <!-- <b-button variant="primary" size="sm" @click="onDetail(item)">Detail</b-button>
@@ -316,6 +327,11 @@ export default {
             });
         }
       });
+    },
+    getCan(permissionName) {
+      const getPermission = this.$store.getters["getCan"](permissionName);
+
+      return getPermission;
     },
   },
 };

@@ -36,12 +36,6 @@ const JobOrder = {
         form: { ...defaultForm },
         is_active_form: false,
         options: {
-            jobs: [
-                {
-                    id: 1,
-                    name: "Perbaikan Mesin",
-                },
-            ],
             type_times: [
                 {
                     id: "minute",
@@ -167,7 +161,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

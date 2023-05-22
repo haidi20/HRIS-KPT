@@ -20,10 +20,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import moment from "moment";
-import DatePicker from "vue2-datepicker";
-
 import DatatableClient from "../../components/DatatableClient";
 
 export default {
@@ -39,6 +35,12 @@ export default {
         {
           label: "Pekerjaan",
           field: "job_name",
+          width: "100px",
+          class: "",
+        },
+        {
+          label: "Pengawas",
+          field: "foreman_name",
           width: "100px",
           class: "",
         },
