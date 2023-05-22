@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Departmen;
 use App\Models\Employee;
 use App\Models\EmployeeType;
+use App\Models\FingerTool;
 use App\Models\Location;
 use App\Models\Position;
 use Carbon\Carbon;
@@ -45,25 +46,27 @@ class EmployeeController extends Controller
         $positions = Position::all();
         $locations = Location::all();
         $employee_types = EmployeeType::all();
+        $finger_tools = FingerTool::all();
 
-        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations"));
+        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations", "finger_tools"));
     }
 
     // untuk kebutuhan di vuejs
     // semua karyawan
     public function fetchData()
     {
-        //
+        $employees = Employee::active()->orderBy("name", "asc")->get();
+
+        return response()->json([
+            "employees" => $employees,
+        ]);
     }
 
     public function fetchForeman()
     {
-        $foremans = [
-            (object) [
-                "id" => 1,
-                "name" => "Samsudin",
-            ],
-        ];
+        $foremans = Employee::active()->whereHas("position", function ($query) {
+            $query->where("name", "Pengawas");
+        })->get();
 
         return response()->json([
             "foremans" => $foremans,
@@ -87,7 +90,7 @@ class EmployeeController extends Controller
                 $employee = new Employee;
                 $employee->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             // DATA PERSONAL

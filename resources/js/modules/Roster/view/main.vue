@@ -121,6 +121,9 @@ export default {
     getIsLoadingFilter() {
       return this.$store.state.roster.loading.table;
     },
+    getOptionPositions() {
+      return this.$store.state.master.data.positions;
+    },
     params() {
       return this.$store.state.roster.params;
     },

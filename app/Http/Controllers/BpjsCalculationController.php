@@ -18,6 +18,14 @@ class BpjsCalculationController extends Controller
         return view("pages.setting.bpjs-calculation", compact("bpjs_calculations"));
     }
 
+    public function getBaseWages(Request $request)
+    {
+        $bpjsCalculation = new BpjsCalculation();
+        $baseWages = $bpjsCalculation->getBaseWages();
+
+        return response()->json(['baseWages' => $baseWages]);
+    }
+
     public function store(Request $request)
     {
         // return request()->all();
@@ -34,12 +42,38 @@ class BpjsCalculationController extends Controller
                 $bpjs_calculation = new BpjsCalculation;
                 $bpjs_calculation->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $bpjs_calculation->name = request("name");
             $bpjs_calculation->company_percent = request("company_percent");
-            $bpjs_calculation->company_nominal = request("company_nominal");
+            $bpjs_calculation->employee_percent = request("employee_percent");
+            $baseWages = $bpjs_calculation->getBaseWages();
+
+            $calculateNominal = function ($percent, $baseWage) {
+                if ($percent == 0.00) {
+                    return 0;
+                }
+
+                $nominal = floor($baseWage * $percent);
+                $last3Digits = substr($nominal, -3);
+                $roundedValue = round($last3Digits / 100) * 100;
+                $nominal = $nominal - $last3Digits + $roundedValue;
+
+                if (substr($nominal, -3) === "000") {
+                    $nominal = rtrim($nominal, "0") . "0";
+                } else {
+                    // $nominal = rtrim($nominal, "0");
+                    $nominal = rtrim($nominal, "0") . "0";
+                }
+
+                return $nominal;
+            };
+
+            $bpjs_calculation->company_nominal = $calculateNominal($bpjs_calculation->company_percent, $baseWages['base_wages_bpjs_nominal_1']);
+            $bpjs_calculation->employee_nominal = $calculateNominal($bpjs_calculation->employee_percent, $baseWages['base_wages_bpjs_nominal_2']);
+
+
             $bpjs_calculation->save();
 
             DB::commit();

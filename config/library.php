@@ -60,6 +60,10 @@ return [
             "name" => "ekspor laporan job order",
             "featurer_id" => 9,
         ],
+        [
+            "name" => "ekspor laporan cuti",
+            "featurer_id" => 13,
+        ],
     ],
     "status" => [
         "review" => [

@@ -38,7 +38,7 @@ class WorkingHourController extends Controller
             } else {
                 $workingHour = new WorkingHour;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $start_time = Carbon::createFromFormat('H:i', request('start_time'))->format('H:i');

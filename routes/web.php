@@ -100,6 +100,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");
+        Route::get('export', [ProjectController::class, "export"])->name("export");
+        Route::get('download', [ProjectController::class, "download"])->name("download");
     });
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
@@ -121,6 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("vacation")->name("vacation.")->group(function () {
             Route::get('', [VacationReportController::class, "index"])->name("index");
+            Route::get('export', [VacationReportController::class, "export"])->name("export");
+            Route::get('download', [VacationReportController::class, "download"])->name("download");
         });
     });
 
@@ -225,6 +229,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('bpjs-calculation')->name("bpjsCalculation.")->group(function () {
             Route::get('', [BpjsCalculationController::class, "index"])->name("index");
+            Route::post('get-base-wages', [BpjsCalculationController::class, "getBaseWages"])->name("get-base-wages");
             Route::post('store', [BpjsCalculationController::class, "store"])->name("store");
             Route::delete('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
         });

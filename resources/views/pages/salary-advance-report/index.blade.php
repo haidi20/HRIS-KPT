@@ -155,7 +155,7 @@
 
         function onCreate() {
             clearForm();
-            $("#titleForm").html("Tambah Fitur");
+            $("#titleForm").html("Tambah Kasbon");
             onModalAction("formModal", "show");
         }
 
@@ -165,14 +165,14 @@
             $("#id").val(data.id);
             $("#name").val(data.name);
 
-            $("#titleForm").html("Ubah Fitur");
+            $("#titleForm").html("Ubah Kasbon");
             onModalAction("formModal", "show");
         }
 
         function onDelete(data) {
             Swal.fire({
                 title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data fitur <h2><b> ${data.name} </b> ?</h2>`,
+                html: `Anda yakin ingin hapus data kasbon <h2><b> ${data.employee_name} </b> ?</h2>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -182,7 +182,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ route('setting.feature.delete') }}",
+                        url: "{{ route('setting.salaryAdvance.delete') }}",
                         method: 'DELETE',
                         dataType: 'json',
                         data: {
@@ -239,7 +239,7 @@
                 let fd = new FormData(this);
 
                 $.ajax({
-                    url: "{{ route('setting.feature.store') }}",
+                    url: "{{ route('setting.salaryAdvance.store') }}",
                     method: 'POST',
                     data: fd,
                     cache: false,

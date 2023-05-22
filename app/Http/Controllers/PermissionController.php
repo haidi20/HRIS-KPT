@@ -33,7 +33,7 @@ class PermissionController extends Controller
             } else {
                 $permission = new Permission;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $permission->name = request("name");

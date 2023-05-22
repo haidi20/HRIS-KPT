@@ -6,7 +6,7 @@ import { numbersOnly, formatCurrency, checkNull, dateDuration } from "../utils";
 const defaultForm = {
     id: null,
     date_end: null,
-    date_duration: null,
+    day_duration: null,
     // biaya
     price: null,
     price_readable: null,
@@ -16,16 +16,22 @@ const defaultForm = {
     // sisa pembyaaran
     remaining_payment: null,
     remaining_payment_readable: null,
-    contractors: [
-        {
-            id: null,
-        },
-    ],
-    oses: [
-        {
-            id: null,
-        },
-    ],
+    company_id: null,
+    foreman_id: null,
+    type: null,
+    // contractors: [
+    //     {
+    //         id: null,
+    //     },
+    // ],
+    // ordinary_seamans: [
+    //     {
+    //         id: null,
+    //     },
+    // ],
+    form_type: "create", // create, edit, detail
+    form_title: "Tambah Proyek",
+
 }
 
 const Project = {
@@ -38,12 +44,6 @@ const Project = {
         },
         form: { ...defaultForm },
         options: {
-            barges: [
-                {
-                    id: 1,
-                    name: "Kapal A",
-                },
-            ],
             types: [
                 {
                     id: "daily",
@@ -77,6 +77,13 @@ const Project = {
         INSERT_DATA(state, payload) {
             state.data = payload.projects;
         },
+        INSERT_FORM(state, payload) {
+            state.form = {
+                ...state.form,
+                ...payload.form,
+                date_end: new Date(payload.form.date_end),
+            };
+        },
         INSERT_FORM_NEW_CONTRACTOR(state, payload) {
             state.form.contractors = [
                 ...state.form.contractors,
@@ -86,8 +93,8 @@ const Project = {
             ]
         },
         INSERT_FORM_NEW_OS(state, payload) {
-            state.form.oses = [
-                ...state.form.oses,
+            state.form.ordinary_seamans = [
+                ...state.form.ordinary_seamans,
                 {
                     id: null,
                 },
@@ -148,13 +155,17 @@ const Project = {
             // console.info(payload.date_end);
             state.form.date_end = payload.date_end;
         },
-        INSERT_FORM_DATE_DURATION(state, payload) {
+        INSERT_FORM_FORM_TYPE(state, payload) {
+            state.form.form_type = payload.form_type;
+            state.form.form_title = payload.form_title;
+        },
+        INSERT_FORM_DAY_DURATION(state, payload) {
             // console.info(state.form.date_end);
             const dateNow = moment().format("YYYY-MM-DD");
-            const date_duration = dateDuration(dateNow, state.form.date_end);
+            const dayDuration = dateDuration(dateNow, state.form.date_end);
 
-            // console.info(date_duration);
-            state.form.date_duration = `${date_duration} Hari`;
+            // console.info(day_duration);
+            state.form.day_duration = `${dayDuration}`;
         },
         INSERT_OPTION_POSITION(state, payload) {
             state.options.positions = payload.positions;
@@ -176,7 +187,7 @@ const Project = {
             state.form.contractors.splice(payload.index, 1);
         },
         DELETE_FORM_OS(state, payload) {
-            state.form.oses.splice(payload.index, 1);
+            state.form.ordinary_seamans.splice(payload.index, 1);
         },
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);
@@ -199,8 +210,7 @@ const Project = {
                 .get(
                     `${context.state.base_url}/api/v1/project/fetch-data`, {
                     params: { ...params },
-                }
-                )
+                })
                 .then((responses) => {
                     // console.info(responses);
                     const data = responses.data;
@@ -215,39 +225,54 @@ const Project = {
                     console.info(err);
                 });
         },
-        fetchPosition: async (context, payload) => {
-            context.commit("INSERT_OPTION_POSITION", {
-                projects: [],
+        /**
+         * Perform an action asynchronously.
+         *
+         * @param {Object} context - The context object.
+         * @param {Object} payload - The payload object.
+         * @param {Object} payload.form - The form item.
+         * @param {string} payload.form_type - The type of form.
+         * @param {string} payload.form_title - The title of the form.
+         * @returns {Promise} A promise that resolves after the action is performed.
+         */
+        onAction: async (context, payload) => {
+            context.commit("INSERT_FORM", {
+                form: payload.form,
             });
-            context.commit("UPDATE_LOADING_POSITION", { value: true });
+            context.commit("INSERT_FORM_FORM_TYPE", {
+                form_type: payload.form_type,
+                form_title: payload.form_title,
+            });
+            context.commit("INSERT_FORM_PRICE", {
+                price: payload.form.price,
+            });
+            context.commit("INSERT_FORM_DOWN_PAYMENT", {
+                down_payment: payload.form.down_payment,
+            });
+            context.commit("INSERT_FORM_REMAINING_PAYMENT");
 
-            const params = {
-                ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
+            // if (payload.form.contractors.length == 0) {
+            //     context.commit("INSERT_FORM_NEW_CONTRACTOR");
+            // }
+
+            // if (payload.form.ordinary_seamans.length == 0) {
+            //     context.commit("INSERT_FORM_NEW_OS");
+            // }
+        },
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (state.form.form_type == "detail") {
+                result = true;
             }
 
-            await axios
-                .get(
-                    `${context.state.base_url}/api/v1/position/fetch-data`, {
-                    params: { ...params },
-                }
-                )
-                .then((responses) => {
-                    // console.info(responses);
-                    const data = responses.data;
-
-                    context.commit("INSERT_OPTION_POSITION", {
-                        positions: data.positions,
-                    });
-                    context.commit("UPDATE_LOADING_POSITION", { value: false });
-                })
-                .catch((err) => {
-                    context.commit("UPDATE_LOADING_POSITION", { value: false });
-                    console.info(err);
-                });
+            return result;
         },
-
-    }
+    },
 }
 
 export default Project;

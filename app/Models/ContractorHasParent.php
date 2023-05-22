@@ -7,18 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 
-class OrdinarySeamans extends Model
+class ContractorHasParent extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $fillable = [];
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->fillable = Schema::getColumnListing($this->getTable());
-    }
+    protected $fillable = [
+        "parent_id",
+        "parent_model",
+        "contractor_id",
+    ];
 
     protected static function boot()
     {

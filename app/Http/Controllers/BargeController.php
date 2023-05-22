@@ -18,6 +18,16 @@ class BargeController extends Controller
         return view("pages.master.barge.index", compact("barges"));
     }
 
+    public function fetchData()
+    {
+        $barges = Barge::orderBy("name", "asc")->get();
+
+        return response()->json([
+            "barges" => $barges,
+        ]);
+    }
+
+
     public function store(Request $request)
     {
         // return request()->all();
@@ -34,7 +44,7 @@ class BargeController extends Controller
                 $barge = new Barge;
                 $barge->created_by = Auth::user()->id;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $barge->name = request("name");

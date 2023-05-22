@@ -12,20 +12,8 @@ const Employee = {
     state: {
         base_url: null,
         data: {
-            options: [
-                {
-                    id: 1,
-                    name: "Muhammad Adi",
-                }
-            ],
-            table: [
-                {
-                    id: 1,
-                    name: "Muhammad Adi",
-                    position_name: "Welder",
-                }
-            ],
-            positions: [],
+            options: [],
+            table: [],
             foremans: [],
         },
         params: {
@@ -66,13 +54,10 @@ const Employee = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA_OPTION(state, payload) {
-            state.data.options = payload.data;
+            state.data.options = payload.employees;
         },
         INSERT_DATA_TABLE(state, payload) {
-            state.data.table = payload.data;
-        },
-        INSERT_DATA_POSITION(state, payload) {
-            state.data.positions = payload.positions;
+            state.data.table = payload.employees;
         },
         INSERT_DATA_FOREMAN(state, payload) {
             state.data.foremans = payload.foremans;
@@ -85,24 +70,22 @@ const Employee = {
         },
     },
     actions: {
-        fetchPosition: async (context, payload) => {
+        fetchData: async (context, payload) => {
             await axios
                 .get(
-                    `${context.state.base_url}/api/v1/position/fetch-data`, {
+                    `${context.state.base_url}/api/v1/employee/fetch-data`, {
                     params: {},
                 }
                 )
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     let data = responses.data;
 
-                    data.positions = [
-                        { id: "all", name: "Semua" },
-                        ...data.data,
-                    ];
-
-                    context.commit("INSERT_DATA_POSITION", {
-                        positions: data.positions,
+                    context.commit("INSERT_DATA_TABLE", {
+                        employees: data.employees,
+                    });
+                    context.commit("INSERT_DATA_OPTION", {
+                        employees: data.employees,
                     });
                 })
                 .catch((err) => {

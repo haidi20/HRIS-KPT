@@ -36,16 +36,7 @@ class RosterController extends Controller
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
 
-        $employees = [
-            (object)[
-                "id" => 1,
-                "id_finger" => 04,
-                "employee_name" => "Muhammad Adi",
-                "position_name" => "Welder",
-                "position_id" => 1,
-                "work_schedule" => "6,1",
-            ]
-        ];
+        $employees = Employee::active()->orderBy("name", "asc")->get();
 
         foreach ($employees as $key => $item) {
             $roster = Roster::where([
@@ -58,7 +49,7 @@ class RosterController extends Controller
             $mainData['id'] = $item->id;
             $mainData['id_finger'] = $item->id_finger;
             $mainData['employee_id'] = $item->id;
-            $mainData['employee_name'] = $item->employee_name;
+            $mainData['employee_name'] = $item->name;
             $mainData['position_name'] = $item->position_name;
             $mainData['position_id'] = $item->position_id;
             $mainData['work_schedule'] = $item->work_schedule;
@@ -176,6 +167,7 @@ class RosterController extends Controller
     public function store()
     {
         $getData = (object) [
+            "position_id" => request("position_id"),
             "employee_id" => request("employee_id"),
             "employee_name" => request("employee_name"),
             "work_schedule" => request("work_schedule"),
@@ -205,11 +197,10 @@ class RosterController extends Controller
                 $this->storeOff($getData, "day_off_two");
             }
 
-            // insert data cuti
+            // store data cuti
             if ($getData->date_vacation != null) {
                 $this->storeVacation($getData);
             }
-
 
             $this->storeRoster($getData);
 
@@ -273,6 +264,7 @@ class RosterController extends Controller
 
     private function storeVacation($getData)
     {
+        $employee = Employee::find($getData->employee_id);
         $rosterStatusId = RosterStatus::where("initial", "C")->first()->id;
         $rosterDailyData = [];
 
@@ -291,6 +283,7 @@ class RosterController extends Controller
                     "date" => $item["date"],
                 ],
                 [
+                    "position_id" => $getData->position_id,
                     "roster_status_id" => $rosterStatusId,
                 ]
             );
@@ -310,6 +303,7 @@ class RosterController extends Controller
                     "date" => Carbon::parse($item)->format("Y-m-d"),
                 ],
                 [
+                    "position_id" => $getData->position_id,
                     "roster_status_id" => $rosterStatusId,
                 ]
             );
@@ -321,10 +315,7 @@ class RosterController extends Controller
         $rosterStatusId = RosterStatus::where("initial", "M")->first()->id;
         $dateRange = $this->dateRangeCustom(Carbon::parse($getData->month), "Y-m-d", "string", true);
 
-        // $employee = Employee::find($getData->employee_id);
-        $employee = (object) [
-            "position_id" => 1,
-        ];
+        $employee = Employee::find($getData->employee_id);
 
         foreach ($dateRange as $index => $date) {
             RosterDaily::updateOrCreate(
@@ -333,7 +324,7 @@ class RosterController extends Controller
                     "date" => $date,
                 ],
                 [
-                    "position_id" => $employee->position_id,
+                    "position_id" => $getData->position_id,
                     "roster_status_id" => $rosterStatusId,
                 ]
             );

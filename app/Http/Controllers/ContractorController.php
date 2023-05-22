@@ -33,7 +33,7 @@ class ContractorController extends Controller
             } else {
                 $contractor = new Contractor;
 
-                $message = "dikirim";
+                $message = "ditambahkan";
             }
 
             $contractor->name = request("name");
