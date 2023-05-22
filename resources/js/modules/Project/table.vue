@@ -178,12 +178,15 @@ export default {
       this.$bvModal.show("project_form");
     },
     onDetail(item) {
-      console.info(item);
+      //   console.info(item);
       this.$store.dispatch("project/onAction", {
         form: item,
         form_type: "detail",
         form_title: "Informasi Lengkap Proyek",
       });
+
+      this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
+      this.$store.dispatch("jobOrder/fetchData");
 
       this.$bvModal.show("project_form");
     },
@@ -193,6 +196,9 @@ export default {
         form_type: "edit",
         form_title: "Ubah Proyek",
       });
+
+      this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
+      this.$store.dispatch("jobOrder/fetchData");
 
       this.$bvModal.show("project_form");
     },

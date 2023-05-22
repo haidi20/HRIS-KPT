@@ -42,6 +42,12 @@ export default {
           width: "100px",
           class: "",
         },
+        {
+          label: "Waktu Selesai",
+          field: "time_end_readable",
+          width: "100px",
+          class: "",
+        },
       ],
       options: {
         perPage: 5,

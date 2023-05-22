@@ -21,13 +21,7 @@ const JobOrder = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                proyek_name: "Project A",
-                job_name: "Bongkar pasang cuttleas bearing",
-            }
-        ],
+        data: [],
         params: {
             date: [
                 [
@@ -37,17 +31,11 @@ const JobOrder = {
             ],
             type: "all",
             type_by: "creator",
-            proyek_id: null,
+            project_id: null,
         },
         form: { ...defaultForm },
         is_active_form: false,
         options: {
-            projects: [
-                {
-                    id: 1,
-                    name: "Kapal A",
-                },
-            ],
             jobs: [
                 {
                     id: 1,
@@ -135,7 +123,7 @@ const JobOrder = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA(state, payload) {
-            state.data = payload.data;
+            state.data = payload.job_orders;
         },
         INSERT_FORM(state, payload) {
             state.form.form_kind = payload?.form_kind;
@@ -151,17 +139,47 @@ const JobOrder = {
         INSERT_PARAM(state, payload) {
             state.params = {
                 ...state.params,
-                ...payload.params,
+                ...payload,
             }
         },
         UPDATE_IS_ACTIVE_FORM(state, payload) {
             state.is_active_form = payload.value;
         },
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
     },
     actions: {
-        // onIncrement: (context, payload) => {
-        //     context.commit("INCREMENT");
-        // },
+        fetchData: async (context, payload) => {
+            context.commit("INSERT_DATA", {
+                job_orders: [],
+            });
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
+
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/job-order/fetch-data`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        job_orders: data.jobOrders,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
 
     }
 }

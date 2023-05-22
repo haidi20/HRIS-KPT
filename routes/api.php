@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
@@ -112,5 +113,10 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [OrdinarySeamanController::class, "fetchData"])->name('fetchData');
         Route::post('store', [OrdinarySeamanController::class, "store"])->name('store');
         Route::post('delete', [OrdinarySeamanController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('job-order')->name('jobOrder.')->group(function () {
+        Route::get('fetch-data', [JobOrderController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [JobOrderController::class, "store"])->name('store');
+        Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
 });

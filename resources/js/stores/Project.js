@@ -210,10 +210,9 @@ const Project = {
                 .get(
                     `${context.state.base_url}/api/v1/project/fetch-data`, {
                     params: { ...params },
-                }
-                )
+                })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
