@@ -90,4 +90,9 @@ class Employee extends Model
             return "Data Tipe Pegawai Masih Kosong";
         }
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where("employee_status", "aktif");
+    }
 }

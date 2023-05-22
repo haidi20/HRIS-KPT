@@ -113,6 +113,9 @@ export default {
     getOptionDays() {
       return this.$store.state.roster.options.list_days;
     },
+    getOptionPositions() {
+      return this.$store.state.master.data.positions;
+    },
     form() {
       return this.$store.state.roster.form;
     },
@@ -139,17 +142,23 @@ export default {
             ]
           : null;
 
-      const data = {
+      const requests = {
         ...this.form,
         date_vacation: getDateVacation,
         month: moment(this.form.month).format("Y-MM"),
         user_id: this.getUserId,
       };
 
+      //   console.info(requests);
+
+      //   return false;
+
+      this.is_loading = true;
+
       await axios
-        .post(`${this.getBaseUrl}/api/v1/roster/store`, data)
+        .post(`${this.getBaseUrl}/api/v1/roster/store`, requests)
         .then((responses) => {
-          //   console.info(responses);
+          console.info(responses);
           this.is_loading = false;
 
           //   return false;
@@ -174,7 +183,9 @@ export default {
             });
 
             this.$store.dispatch("roster/fetchData");
-            this.$store.dispatch("roster/fetchTotal");
+            this.$store.dispatch("roster/fetchTotal", {
+              positions: this.getOptionPositions,
+            });
             this.$bvModal.hide("roster_form");
           }
         })
