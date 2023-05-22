@@ -11,7 +11,10 @@ class Employee extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ["company_name", "position_name", "departmen_name", "location_name", "employee_type_name"];
+    protected $appends = [
+        "company_name", "position_name", "departmen_name",
+        "location_name", "employee_type_name", "name_and_position",
+    ];
     protected $fillable = [];
 
     public function __construct(array $attributes = [])
@@ -88,6 +91,13 @@ class Employee extends Model
             return $this->employee_type->name;
         } else {
             return "Data Tipe Pegawai Masih Kosong";
+        }
+    }
+
+    public function getNameAndPositionAttribute()
+    {
+        if ($this->position) {
+            return $this->name . " - " . $this->position_name;
         }
     }
 

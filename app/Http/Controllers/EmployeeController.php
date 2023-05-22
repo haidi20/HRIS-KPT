@@ -48,19 +48,23 @@ class EmployeeController extends Controller
         $employee_types = EmployeeType::all();
         $finger_tools = FingerTool::all();
 
-        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types","locations", "finger_tools"));
+        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations", "finger_tools"));
     }
 
     // untuk kebutuhan di vuejs
     // semua karyawan
     public function fetchData()
     {
-        //
+        $employees = Employee::active()->orderBy("name", "asc")->get();
+
+        return response()->json([
+            "employees" => $employees,
+        ]);
     }
 
     public function fetchForeman()
     {
-        $foremans = Employee::whereHas("position", function ($query) {
+        $foremans = Employee::active()->whereHas("position", function ($query) {
             $query->where("name", "Pengawas");
         })->get();
 

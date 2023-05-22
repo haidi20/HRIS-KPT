@@ -18,6 +18,7 @@ use App\Http\Controllers\RosterStatusController;
 use App\Http\Controllers\SalaryAdvanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
+use App\Http\Controllers\VacationReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix("v1")->name("api.")->group(function () {
+    Route::prefix('report')->name('report.')->group(function () {
+        Route::prefix('vacation')->name('vacation.')->group(function () {
+            Route::get('fetch-data', [VacationReportController::class, "fetchData"])->name('fetchData');
+        });
+    });
+
     Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
         Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");
         Route::get("select-autorizeds", [ApprovalLevelController::class, "selectAuthorizeds"])->name("selectAuthorizeds");
@@ -93,6 +100,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-permission', [UserController::class, "fetchPermission"])->name('fetchPermission');
     });
     Route::prefix('employee')->name('employee.')->group(function () {
+        Route::get('fetch-data', [EmployeeController::class, "fetchData"])->name('fetchData');
         Route::get('fetch-foreman', [EmployeeController::class, "fetchForeman"])->name('fetchForeman');
     });
     Route::prefix('barge')->name('barge.')->group(function () {

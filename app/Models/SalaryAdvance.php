@@ -13,7 +13,7 @@ class SalaryAdvance extends Model
     use HasFactory, SoftDeletes;
 
     protected $appends = [
-        'employee_name', 'creator_name', 'loan_amount_readable',
+        'employee_name', 'creator_name', 'loan_amount_readable', 'position_name',
         // 'status_readable', 'status_color',
     ];
 
@@ -70,6 +70,15 @@ class SalaryAdvance extends Model
     {
         $loanAmount = number_format($this->loan_amount, 0, ',', '.');
         return "Rp {$loanAmount}";
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_name;
+        } else {
+            return null;
+        }
     }
 
     // public function getStatusReadableAttribute()

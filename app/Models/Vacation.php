@@ -14,7 +14,7 @@ class Vacation extends Model
 
     protected $appends = [
         'employee_name', 'creator_name', 'date_start_readable', 'date_end_readable',
-        'duration_readable',
+        'duration_readable', 'position_name',
     ];
 
     protected $fillable = [];
@@ -79,5 +79,14 @@ class Vacation extends Model
         $dateStart = Carbon::parse($this->date_start);
         $dateEnd = Carbon::parse($this->date_end);
         return $dateStart->diffInDays($dateEnd, false) . " Hari";
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_name;
+        } else {
+            return null;
+        }
     }
 }

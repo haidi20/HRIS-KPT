@@ -12,19 +12,8 @@ const Employee = {
     state: {
         base_url: null,
         data: {
-            options: [
-                {
-                    id: 1,
-                    name: "Muhammad Adi",
-                }
-            ],
-            table: [
-                {
-                    id: 1,
-                    name: "Muhammad Adi",
-                    position_name: "Welder",
-                }
-            ],
+            options: [],
+            table: [],
             foremans: [],
         },
         params: {
@@ -65,10 +54,10 @@ const Employee = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA_OPTION(state, payload) {
-            state.data.options = payload.data;
+            state.data.options = payload.employees;
         },
         INSERT_DATA_TABLE(state, payload) {
-            state.data.table = payload.data;
+            state.data.table = payload.employees;
         },
         INSERT_DATA_FOREMAN(state, payload) {
             state.data.foremans = payload.foremans;
@@ -81,6 +70,28 @@ const Employee = {
         },
     },
     actions: {
+        fetchData: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/employee/fetch-data`, {
+                    params: {},
+                }
+                )
+                .then((responses) => {
+                    console.info(responses);
+                    let data = responses.data;
+
+                    context.commit("INSERT_DATA_TABLE", {
+                        employees: data.employees,
+                    });
+                    context.commit("INSERT_DATA_OPTION", {
+                        employees: data.employees,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
         fetchForeman: async (context, payload) => {
             await axios
                 .get(

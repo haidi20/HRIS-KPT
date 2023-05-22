@@ -37,11 +37,14 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    this.$store.commit("vacation/INSERT_BASE_URL", {
-      base_url: this.baseUrl,
+    ["vacation", "employee", "master"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
     });
 
     this.$store.dispatch("vacation/fetchData");
+    this.$store.dispatch("employee/fetchData");
   },
   computed: {
     getIsMobile() {

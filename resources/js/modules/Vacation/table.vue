@@ -21,32 +21,34 @@
             <b-col class="place-item">
               <b-row>
                 <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item)">
-                  <h5>
-                    <b>{{item.position_name}}</b>
-                  </h5>
-                  <h6>
-                    <b>{{item.employee_name}}</b>
-                  </h6>
+                  <h5>{{item.employee_name}} - {{item.position_name}}</h5>
                   <b-row>
                     <b-col cols>
-                      <span>Waktu :</span>
+                      <span>
+                        <b>Waktu :</b>
+                      </span>
                     </b-col>
                     <b-col cols>
-                      <span>Tanggal :</span>
+                      <span>
+                        <b>Tanggal :</b>
+                      </span>
                     </b-col>
                   </b-row>
                   <b-row>
                     <b-col cols>
                       <span>{{item.duration_readable}}</span>
                     </b-col>
-                    <b-col cols>
+                    <b-col cols style="font-size: 14px">
                       <span>{{item.date_start_readable}}</span>
                       <br />
                       <span>{{item.date_end_readable}}</span>
                     </b-col>
                   </b-row>
                   <div>
-                    <span>Pengawas :</span>
+                    <!-- <span>Pengawas :</span> -->
+                    <span>
+                      <b>Dibuat oleh :</b>
+                    </span>
                     <br />
                     <span>{{item.creator_name}}</span>
                   </div>

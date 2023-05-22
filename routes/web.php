@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("vacation")->name("vacation.")->group(function () {
             Route::get('', [VacationReportController::class, "index"])->name("index");
+            Route::get('export', [VacationReportController::class, "export"])->name("export");
+            Route::get('download', [VacationReportController::class, "download"])->name("download");
         });
     });
 
