@@ -63,8 +63,8 @@ class BpjsCalculationController extends Controller
                 if (substr($nominal, -3) === "000") {
                     $nominal = rtrim($nominal, "0") . "0";
                 } else {
-                    // $nominal = rtrim($nominal, "0");
-                    $nominal = rtrim($nominal, "0") . "0";
+                    $nominal = rtrim($nominal, "0");
+                    // $nominal = rtrim($nominal, "0") . "0";
                 }
 
                 return $nominal;

@@ -38,8 +38,13 @@ class BaseWagesBpjsController extends Controller
             }
 
             $base_wages_bpjs->name = request("name");
-            $base_wages_bpjs->nominal = request("nominal");
+
+            // Membersihkan nilai nominal dari format Rupiah
+            $nominal = str_replace(["Rp. ", ".", ","], "", request("nominal"));
+            $base_wages_bpjs->nominal = $nominal;
+
             $base_wages_bpjs->save();
+
 
             DB::commit();
 
