@@ -16,6 +16,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use App\Http\Controllers\SalaryAdvanceController;
+use App\Http\Controllers\SalaryAdvanceReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
 use App\Http\Controllers\VacationReportController;
@@ -41,6 +42,9 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('report')->name('report.')->group(function () {
         Route::prefix('vacation')->name('vacation.')->group(function () {
             Route::get('fetch-data', [VacationReportController::class, "fetchData"])->name('fetchData');
+        });
+        Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
+            Route::get('fetch-data', [SalaryAdvanceReportController::class, "fetchData"])->name('fetchData');
         });
     });
 

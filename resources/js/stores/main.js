@@ -16,6 +16,7 @@ import OsHasParent from "./OsHasParent";
 import RosterStatus from "./RosterStatus";
 import SalaryAdvance from './SalaryAdvance';
 import SalaryAdjustment from './SalaryAdjustment';
+import SalaryAdvanceReport from './SalaryAdvanceReport';
 import ContractorHasParent from "./ContractorHasParent";
 
 Vue.use(Vuex);
@@ -35,6 +36,7 @@ const store = new Vuex.Store({
         rosterStatus: RosterStatus,
         salaryAdvance: SalaryAdvance,
         salaryAdjustment: SalaryAdjustment,
+        salaryAdvanceReport: SalaryAdvanceReport,
         contractorHasParent: ContractorHasParent,
     },
     state: {

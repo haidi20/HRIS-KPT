@@ -38,6 +38,7 @@ Vue.component("attendance", require("./modules/Attendance/attendance.vue").defau
 Vue.component("salary-advance", require("./modules/SalaryAdvance/salaryAdvance.vue").default);
 Vue.component("job-order-report", require("./modules/JobOrderReport/jobOrderReport.vue").default);
 Vue.component("salary-adjustment", require("./modules/SalaryAdjustment/salaryAdjustment.vue").default);
+Vue.component("salary-advance-report", require("./modules/SalaryAdvanceReport/salaryAdvanceReport.vue").default);
 
 Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;
