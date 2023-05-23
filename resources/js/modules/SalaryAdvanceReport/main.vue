@@ -15,8 +15,19 @@
           <b-td @click="onAction()">
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
-                <a href="#" v-if="getCan('ubah laporan kasbon')" @click="onEdit(item)">Ubah</a>
-                <a href="#" v-if="getCan('hapus laporan kasbon')" @click="onDelete(item)">Hapus</a>
+                <template v-if="getCan('perwakilan kasbon')">
+                  <a
+                    href="#"
+                    v-if="item.approval_status == 'accept'"
+                    @click="onApprove(item, 'accept_onbehalf')"
+                  >Terima Perwakilan Direktur</a>
+                </template>
+                <template v-if="getCan('persetujuan kasbon') && getPermissionApproval(item)">
+                  <a href="#" @click="onApprove(item, 'accept')">Terima</a>
+                  <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
+                </template>
+                <a href="#" v-if="getCan('ubah kasbon')" @click="onEdit(item)">Ubah</a>
+                <a href="#" v-if="getCan('hapus kasbon')" @click="onDelete(item)">Hapus</a>
               </template>
             </ButtonAction>
           </b-td>
@@ -79,6 +90,12 @@ export default {
         {
           label: "Alasan",
           field: "reason",
+          width: "150px",
+          class: "",
+        },
+        {
+          label: "Sisa Hutang",
+          field: "remaining_debt",
           width: "150px",
           class: "",
         },
@@ -151,6 +168,9 @@ export default {
       });
 
       this.$bvModal.show("salary_advance_report_form");
+    },
+    onApprove(item, status) {
+      console.info(item, status);
     },
     async onDelete(data) {
       const Swal = this.$swal;
@@ -226,6 +246,17 @@ export default {
     getColumns() {
       const columns = this.columns.filter((item) => item.label != "");
       return columns;
+    },
+    getPermissionApproval(item) {
+      let result = true;
+      const approvalUsers = item.approval_user_id.map((value) => Number(value));
+      // console.info(approvalUsers, Number(this.getUserId));
+
+      if (!approvalUsers.includes(Number(this.getUserId))) {
+        result = false;
+      }
+
+      return result;
     },
   },
 };

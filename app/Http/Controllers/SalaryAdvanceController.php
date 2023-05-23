@@ -77,6 +77,8 @@ class SalaryAdvanceController extends Controller
         $approvalLevel = ApprovalLevel::where("name", "Kasbon")->first();
         $userId = request("user_id");
 
+        // return request()->all();
+
         try {
             DB::beginTransaction();
 

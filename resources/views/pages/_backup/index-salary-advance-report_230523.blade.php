@@ -104,7 +104,7 @@
                                         @can('perwakilan persetujuan kasbon')
                                             @if ($salaryAdvance->status == 'accept')
                                                 <a href="javascript:void(0)" onclick="onEdit({{ $salaryAdvance->id }})"
-                                                    class="btn btn-sm btn-primary">Terima Sebagai Direktur
+                                                    class="btn btn-sm btn-primary">Terima Perwakilan Direktur
                                                 </a>
                                             @endif
                                         @endcan

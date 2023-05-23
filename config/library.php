@@ -35,10 +35,6 @@ return [
             "featurer_id" => 4,
         ],
         [
-            "name" => "perwakilan persetujuan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
             "name" => "ekspor laporan kasbon",
             "featurer_id" => 4,
         ],

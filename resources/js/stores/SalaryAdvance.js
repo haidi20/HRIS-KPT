@@ -4,6 +4,7 @@ import moment from "moment";
 import { numbersOnly, formatCurrency } from "../utils";
 
 const defaultForm = {
+    id: null,
     employee_id: null,
     loan_amount: null, // jumlah nominal kasbon
     loan_amount_readable: null,

@@ -34,5 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ContractorSeeder::class);
         $this->call(OrdinarySeamanSeeder::class);
         $this->call(ProjectSeeder::class);
+        $this->call(SalaryAdvanceSeeder::class);
     }
 }

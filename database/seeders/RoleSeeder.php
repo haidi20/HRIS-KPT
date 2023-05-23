@@ -30,6 +30,6 @@ class RoleSeeder extends Seeder
         $roleAdmin->givePermissionTo($permissionAdmin);
 
         $roleHrd = Role::create(['name' => 'HRD']);
-        // $roleHrd->givePermissionTo([]);
+        $roleHrd->givePermissionTo(["lihat kasbon", "persetujuan kasbon"]);
     }
 }
