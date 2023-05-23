@@ -13,7 +13,7 @@ class FeatureController extends Controller
 {
     public function index()
     {
-        $features = Feature::all();
+        $features = Feature::orderBy("created_at", "desc")->get();
 
         return view("pages.setting.feature", compact("features"));
     }

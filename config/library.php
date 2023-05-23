@@ -5,7 +5,7 @@ return [
     "permission_private" => [
         "lihat jam kerja",  "lihat bahan", "lihat penyesuaian gaji", "lihat departemen",
         "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan", "lihat tingkat persetujuan",
-        "hapus fitur", "hapus hak akses",
+        "hapus hak akses",
     ],
     "permission_added" => [
         [
