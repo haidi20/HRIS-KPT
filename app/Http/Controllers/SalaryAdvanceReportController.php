@@ -32,8 +32,9 @@ class SalaryAdvanceReportController extends Controller
         // is_just_by_status = agar bisa lihat data keseluruhan berdasarkan status accept, reject, atau waiting
         // *note lihat referensi di library.php bagian status
 
-        $isJustByStatus = (bool) request("is_just_by_status", false);
-        $isByUser = $isJustByStatus ? false : true;
+        // $isJustByStatus = (bool) request("is_just_by_status", false);
+        // $isByUser = $isJustByStatus ? false : true;
+        $isByUser = true;
 
         $approvalAgreement = new ApprovalAgreementController;
         $salaryAdvances = new SalaryAdvance;
@@ -42,19 +43,19 @@ class SalaryAdvanceReportController extends Controller
             $salaryAdvances,
             $userId,
             $nameModel,
-            $isByUser,
             $dateStart,
-            $dateEnd
+            $dateEnd,
+            $isByUser,
         );
 
         $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
 
-        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, $isByUser);
-
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, $userId, $isByUser);
 
         return response()->json([
             "salaryAdvances" => $salaryAdvances,
             "request" => request()->all(),
+            "userId" => $userId,
         ]);
     }
 

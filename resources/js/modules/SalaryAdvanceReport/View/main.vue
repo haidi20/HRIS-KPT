@@ -1,0 +1,58 @@
+<template>
+  <div>
+    <DatatableClient
+      :data="getData"
+      :columns="columns"
+      :options="options"
+      nameStore="salaryAdvanceReport"
+      nameLoading="table"
+      :filter="false"
+      :footer="false"
+      bordered
+    >
+      <template v-slot:tbody="{ filteredData }">
+        <b-tr v-for="(item, index) in filteredData" :key="index">
+          <b-td @click="onAction()">
+            <ButtonAction class="cursor-pointer" type="click">
+              <template v-slot:list_detail_button>
+                <template v-if="getCan('perwakilan kasbon')">
+                  <a
+                    href="#"
+                    v-if="item.approval_status == 'accept'"
+                    @click="onApprove(item, 'accept_onbehalf')"
+                  >Terima Perwakilan Direktur</a>
+                </template>
+                <template v-if="getApproval(item)">
+                  <a href="#" @click="onApprove(item, 'accept')">Terima</a>
+                  <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
+                </template>
+                <a href="#" v-if="getCan('ubah kasbon')" @click="onEdit(item)">Ubah</a>
+                <a href="#" v-if="getCan('hapus kasbon')" @click="onDelete(item)">Hapus</a>
+              </template>
+            </ButtonAction>
+          </b-td>
+          <b-td v-for="column in getColumns()" :key="column.label">
+            <template v-if="column.field == 'approval_label'">
+              <span
+                :class="`badge bg-${item.approval_color}`"
+                style="width:5rem"
+              >{{item.approval_status_readable}}</span>
+            </template>
+            <template v-else>{{ item[column.field] }}</template>
+          </b-td>
+        </b-tr>
+      </template>
+    </DatatableClient>
+    <FormApproval />
+  </div>
+</template>
+
+<script src="../Script/mainScript.js"></script>
+
+<style lang="scss" scoped>
+.place_filter_table {
+  align-items: self-end;
+  margin-bottom: 0;
+  display: inline-block;
+}
+</style>

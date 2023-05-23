@@ -131,7 +131,7 @@ const SalaryAdvance = {
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 });
         },
-    }
+    },
 }
 
 export default SalaryAdvance;

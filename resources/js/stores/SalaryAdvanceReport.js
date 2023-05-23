@@ -1,8 +1,19 @@
 import axios from "axios";
 import moment from "moment";
 
-const defaultForm = {
+import { numbersOnly, formatCurrency, formatNumberId } from "../utils";
 
+const defaultForm = {
+    id: null,
+    type: "month",
+    approval_status: null,
+    duration: null,
+    loan_amount: null,
+    loan_amount_readable: null,
+    monthly_deduction: null,
+    monthly_deduction_readable: null,
+    monthly_deduction_amount: null,
+    monthly_deduction_amount_readable: null,
 }
 
 const example = {
@@ -21,6 +32,16 @@ const example = {
         },
         form: { ...defaultForm },
         options: {
+            types: [
+                {
+                    id: 'nominal',
+                    name: 'Berdasarkan Jumlah Uang',
+                },
+                {
+                    id: 'month',
+                    name: 'Berdasarkan Jumlah Bulan',
+                },
+            ],
             statuses: [
                 {
                     id: "all",
@@ -60,7 +81,17 @@ const example = {
             state.data.main = payload.salary_advances;
         },
         INSERT_FORM(state, payload) {
+            // console.info(payload);
             state.form = { ...state.form, ...payload.form };
+        },
+        INSERT_FORM_MONTHLY_DEDUCTION_AMOUNT(state, payload) {
+            if (payload.monthly_deduction_amount != null) {
+                const numericValue = numbersOnly(payload.monthly_deduction_amount.toString());
+                const readAble = formatCurrency(payload.monthly_deduction_amount, ".");
+
+                state.form.monthly_deduction_amount = numericValue;
+                state.form.monthly_deduction_amount_readable = readAble;
+            }
         },
 
         CLEAR_FORM(state, payload) {
@@ -107,7 +138,24 @@ const example = {
 
     },
     getters: {
-        //
+        getDeductionFormula: (state) => {
+            let result = "";
+
+            if (state.form.duration > 0 && state.form.type == 'month') {
+                result = state.form.loan_amount / state.form.duration;
+                result = "Rp. " + formatNumberId(Number(result.toFixed(2)), ".");
+            }
+            else if (state.form.type == 'nominal' && state.form.monthly_deduction_amount > 0) {
+                // console.info(state.form.monthly_deduction_amount);
+                result = state.form.loan_amount / state.form.monthly_deduction_amount;
+                console.info(result);
+                result = Math.ceil(result) + " Bulan";
+            } else {
+                // result = null;
+            }
+
+            return result;
+        }
     },
 }
 

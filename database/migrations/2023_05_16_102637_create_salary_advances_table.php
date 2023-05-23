@@ -18,9 +18,10 @@ class CreateSalaryAdvancesTable extends Migration
             $table->foreignId('employee_id');
             $table->foreignId('approval_level_id');
             $table->double('loan_amount'); // total pinjaman
-            $table->double('monthly_deduction')->nullable(); // potongan bulanan
+            $table->double('monthly_deduction')->nullable(); // potongan per bulan
+            $table->double('monthly_deduction_amount')->nullable(); // nominal potongan per bulan
             $table->integer('duration')->nullable(); // durasi pinjaman
-            // sisa gaji setelah potongan cicilan bulanan
+            // sisa gaji setelah potongan cicilan per bulan
             $table->double('remaining_salary')->nullable();
             // dari pengawas
             $table->text('reason')->nullable();

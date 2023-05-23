@@ -63,23 +63,28 @@ return [
     ],
     "status" => [
         "review" => [
-            "readable" => "proses",
+            "readable" => "sedang proses",
+            "short_readable" => "proses",
             "color" => "warning",
         ],
         "accept" => [
-            "readable" => "terima",
+            "readable" => "di terima",
+            "short_readable" => "di terima",
             "color" => "success",
         ],
         "reject" => [
-            "readable" => "tolak",
+            "readable" => "di tolak",
+            "short_readable" => "di tolak",
             "color" => "danger",
         ],
         "revision" => [
-            "readable" => "perbaiki",
+            "readable" => "perlu diperbaiki",
+            "short_readable" => "perbaiki",
             "color" => "info",
         ],
         "not yet" => [
-            "readable" => "belum konfirmasi",
+            "readable" => "belum dikonfirmasi",
+            "short_readable" => "belum",
             "color" => "info",
         ],
     ],

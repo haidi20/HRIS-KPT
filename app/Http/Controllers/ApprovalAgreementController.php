@@ -78,18 +78,17 @@ class ApprovalAgreementController extends Controller
      *@param \Illuminate\Database\Eloquent\Model $model The Eloquent model instance to filter.
      *@param int $userId The user ID for filtering.
      *@param string $nameModel The name of the model for filtering.
-     *@param bool $isByUser Indicates if the filtering is based on user.
      *@param string|null $dateStart The start date for filtering. Format: "Y-m-d".
      *@param string|null $dateEnd The end date for filtering. Format: "Y-m-d".
+     *@param bool $isByUser Indicates if the filtering is based on user.
      *@return \Illuminate\Database\Eloquent\Builder The updated query builder instance.
      */
-    public function whereByApproval($model, $userId, $nameModel, $isByUser, $dateStart, $dateEnd)
+    public function whereByApproval($model, $userId, $nameModel, $dateStart, $dateEnd, $isByUser)
     {
 
         return $model->where(function ($query) use ($userId, $nameModel, $isByUser, $dateStart, $dateEnd) {
             if ($isByUser) {
                 $query->where('created_by', $userId)
-
                     ->orWhereIn('id', function ($query) use ($userId, $nameModel, $dateStart, $dateEnd) {
                         $query->select('model_id')
                             ->from('approval_agreements')
@@ -110,16 +109,17 @@ class ApprovalAgreementController extends Controller
      *Map the approval agreement data to the specified Eloquent model.
      *@param \Illuminate\Database\Eloquent\Model $model The Eloquent model instance to map the data to.
      *@param string $nameModel The name of the model to map the approval agreement data.
+     *@param int $userId .
      *@param bool $isByUser Indicates if the mapping is based on user.
      *@return \Illuminate\Database\Eloquent\Model The updated Eloquent model instance.
      */
-    public function mapApprovalAgreement($model, $nameModel, $isByUser = true)
+    public function mapApprovalAgreement($model, $nameModel, $userId, $isByUser = true)
     {
-        if (request("user_id") == null) {
-            $userId = auth()->user()->id;
-        } else {
-            $userId = request("user_id");
-        }
+        // if (request("user_id") == null) {
+        //     $userId = auth()->user()->id;
+        // } else {
+        //     $userId = request("user_id");
+        // }
 
         $model->map(function ($query) use ($nameModel, $userId, $isByUser) {
             //CATATAN JANGAN DI HAPUS!!
@@ -139,14 +139,16 @@ class ApprovalAgreementController extends Controller
                 // ->byModel($query["id"], $nameModel)
                 ->byModel($query["id"], $nameModel);
 
-            $approvalAgreementUsers = $approvalAgreementQuery->pluck("user_id");
+            $approvalAgreementUsers = $approvalAgreementQuery->pluck("user_id")->toArray();
+            // array_push($approvalAgreementUsers, $approvalAgreementQuery->first()->created_by);
 
             $approvalAgreement = $approvalAgreementQuery
                 ->where(function ($subQuery) use ($query, $userId, $isByUser) {
 
                     // berdasarkan user yang selain pembuat data.
                     if ($query->user_id != $userId && $isByUser) {
-                        $subQuery->where("user_id", $userId);
+                        $subQuery->where("user_id", $userId)
+                            ->orWhere("created_by", $userId);
                     }
 
                     $subQuery->where("status_approval", "!=", "not yet");
@@ -164,7 +166,7 @@ class ApprovalAgreementController extends Controller
 
             $query->approval_user_id = $approvalAgreement ? $approvalAgreementUsers : null;
             $query->approval_status = $approvalAgreement ? $approvalAgreement->status_approval : null;
-            $query->approval_status_readable = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["readable"] : null;
+            $query->approval_status_readable = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["short_readable"] : null;
             $query->approval_status_first = $approvalAgreementFirst ? $approvalAgreementFirst->status_approval : null;
             $query->approval_label = $approvalAgreement ? $approvalAgreement->label_status_approval : null;
             $query->approval_color = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["color"] : null;

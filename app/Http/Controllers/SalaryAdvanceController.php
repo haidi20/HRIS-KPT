@@ -33,6 +33,7 @@ class SalaryAdvanceController extends Controller
 
     public function fetchData()
     {
+        $userId = request("user_id");
         $search = request("search");
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
@@ -58,7 +59,7 @@ class SalaryAdvanceController extends Controller
         }
 
         $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
-        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, true);
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, $userId,  true);
 
         if (request("type") != "all") {
             $salaryAdvances = $salaryAdvances->where("approval_status", request("type"));

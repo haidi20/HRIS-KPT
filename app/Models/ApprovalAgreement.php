@@ -17,9 +17,9 @@ class ApprovalAgreement extends Model
         "status_approval_read_able",
         "description_status_approval",
         "label_status_approval",
-        "name_karyawan_detail",
-        "name_user",
-        "department_name",
+        "employee_name",
+        "user_name",
+        "position_name",
         "date_read_able",
     ];
 
@@ -34,28 +34,28 @@ class ApprovalAgreement extends Model
 
     public function otherModel()
     {
-        return $this->belongsTo($this->name_model, "model_id", "id")->withTrashed();
+        return $this->belongsTo($this->name_model, "model_id", "id");
     }
 
-    public function karyawanDetail()
+    public function employee()
     {
-        return $this->belongsTo("App\Models\KaryawanDetail", "user_id", "id")->withTrashed();
+        return $this->belongsTo(Employee::class, "user_id", "id");
     }
 
     public function user()
     {
-        return $this->belongsTo("App\Models\User", "user_id", "id")->withTrashed();
+        return $this->belongsTo(User::class, "user_id", "id");
     }
 
     public function userBehalf()
     {
-        return $this->belongsTo("App\Models\User", "user_behalf_id", "id")->withTrashed();
+        return $this->belongsTo(User::class, "user_behalf_id", "id");
     }
 
-    public function getNameKaryawanDetailAttribute()
+    public function getEmployeeNameAttribute()
     {
-        if ($this->karyawanDetail) {
-            return $this->karyawanDetail->karyawan_detail_option;
+        if ($this->employee) {
+            return $this->employee->name_and_position;
         }
     }
 
@@ -84,18 +84,10 @@ class ApprovalAgreement extends Model
     }
 
     // nama user yang approval
-    public function getNameUserAttribute()
+    public function getUserNameAttribute()
     {
         if ($this->user) {
             return $this->user->name;
-        }
-    }
-
-    // departemen user yang approval
-    public function getDepartmenNameAttribute()
-    {
-        if ($this->user) {
-            return $this->user->department_name;
         }
     }
 
@@ -142,32 +134,8 @@ class ApprovalAgreement extends Model
             $newLine = "";
         }
 
-        return "di {$this->status_approval_read_able} oleh {$by} {$newLine}" . $sentanceBehalf;
+        return "{$this->status_approval_read_able} oleh {$by} {$newLine}" . $sentanceBehalf;
     }
-
-    // public function getDescriptionStatusApprovalAttributeOld()
-    // {
-    //     if (request("user_id") == null) {
-    //         $userId = auth()->user()->id;
-    //     } else {
-    //         $userId = request("user_id");
-    //     }
-
-    //     if (auth()->user()) {
-    //         if ($this->user_id == $userId) {
-    //             $by = "Anda";
-    //         } else {
-    //             $by = "{$this->user->name} - {$this->user->name_role}";
-    //         }
-
-    //         return "di <b>{$this->status_approval_read_able}</b> oleh {$by}";
-    //     } else {
-    //         // untuk kebutuhan history personnel request
-    //         $by = "{$this->user->name} - {$this->user->name_role}";
-
-    //         return "di <b>{$this->status_approval_read_able}</b> oleh {$by}";
-    //     }
-    // }
 
     public function getDateReadAbleAttribute()
     {

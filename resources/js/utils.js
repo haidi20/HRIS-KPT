@@ -29,6 +29,11 @@ export const formatCurrency = (value, prefix) => {
     return prefix == undefined ? rupiah : rupiah ? rupiah : "";
 };
 
+export const formatNumberId = (number) => {
+    // Menggunakan metode toLocaleString dengan opsi 'id-ID'
+    return number.toLocaleString('id-ID');
+}
+
 export const convertMonthToRoman = (month) => {
     const romanNumerals = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
     return romanNumerals[month];

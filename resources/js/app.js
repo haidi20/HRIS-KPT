@@ -30,7 +30,7 @@ moment.locale("id");
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component("project", require("./modules/Project/project.vue").default);
-Vue.component("roster", require("./modules/Roster/view/roster.vue").default);
+Vue.component("roster", require("./modules/Roster/roster.vue").default);
 Vue.component("vacation", require("./modules/Vacation/vacation.vue").default);
 Vue.component("job-order", require("./modules/JobOrder/jobOrder.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
@@ -38,7 +38,7 @@ Vue.component("attendance", require("./modules/Attendance/attendance.vue").defau
 Vue.component("salary-advance", require("./modules/SalaryAdvance/salaryAdvance.vue").default);
 Vue.component("job-order-report", require("./modules/JobOrderReport/jobOrderReport.vue").default);
 Vue.component("salary-adjustment", require("./modules/SalaryAdjustment/salaryAdjustment.vue").default);
-Vue.component("salary-advance-report", require("./modules/SalaryAdvanceReport/salaryAdvanceReport.vue").default);
+Vue.component("salary-advance-report", require("./modules/SalaryAdvanceReport/View/salaryAdvanceReport.vue").default);
 
 Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;
