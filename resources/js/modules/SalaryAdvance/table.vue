@@ -55,7 +55,7 @@
                   <span
                     :class="`badge bg-${data.approval_color}`"
                     style="width:5rem"
-                  >{{data.approval_status}}</span>
+                  >{{data.approval_status_readable}}</span>
                   <template v-if="data.approval_status == 'accept'">
                     <span class="title-item">
                       <b>Durasi :</b>

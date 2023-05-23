@@ -62,7 +62,7 @@
                   v-if="getCan('lihat proyek')"
                   @click="onDetail(item, index)"
                 >Informasi Lengkap</a>
-                <a href="#" v-if="getCan('ubah proyek')" @click="onEdit(item)">Edit</a>
+                <a href="#" v-if="getCan('ubah proyek')" @click="onEdit(item)">Ubah</a>
                 <a href="#" v-if="getCan('hapus proyek')" @click="onDelete(item)">Hapus</a>
               </template>
             </ButtonAction>

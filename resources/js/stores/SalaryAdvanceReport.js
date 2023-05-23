@@ -9,13 +9,44 @@ const example = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [],
+        data: {
+            main: []
+        },
         params: {
-            month: new Date(),
+            date: [
+                new Date(moment().startOf("month")),
+                new Date(),
+            ],
+            status: "all",
         },
         form: { ...defaultForm },
         options: {
-            //
+            statuses: [
+                {
+                    id: "all",
+                    name: "Semua",
+                },
+                {
+                    id: "waiting",
+                    name: "Menunggu Persetujuan",
+                },
+                {
+                    id: "settled",
+                    name: "Lunas",
+                },
+                {
+                    id: "unpaid",
+                    name: "Belum Lunas",
+                },
+                {
+                    id: "accept",
+                    name: "Diterima",
+                },
+                {
+                    id: "reject",
+                    name: "Ditolak",
+                },
+            ],
         },
         loading: {
             table: false,
@@ -25,8 +56,8 @@ const example = {
         INSERT_BASE_URL(state, payload) {
             state.base_url = payload.base_url;
         },
-        INSERT_DATA(state, payload) {
-            state.data = payload.salary_advances;
+        INSERT_DATA_MAIN(state, payload) {
+            state.data.main = payload.salary_advances;
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
@@ -42,14 +73,16 @@ const example = {
     },
     actions: {
         fetchData: async (context, payload) => {
-            context.commit("INSERT_DATA", {
+            context.commit("INSERT_DATA_MAIN", {
                 salary_advances: [],
             });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
             const params = {
                 ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
+                date_start: moment(context.state.params.date[0]).format("YYYY-MM-DD"),
+                date_end: moment(context.state.params.date[1]).format("YYYY-MM-DD"),
+                user_id: payload.user_id,
             }
 
             await axios
@@ -61,7 +94,7 @@ const example = {
                     console.info(responses);
                     const data = responses.data;
 
-                    context.commit("INSERT_DATA", {
+                    context.commit("INSERT_DATA_MAIN", {
                         salary_advances: data.salaryAdvances,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });

@@ -19,7 +19,7 @@ class ApprovalAgreement extends Model
         "label_status_approval",
         "name_karyawan_detail",
         "name_user",
-        "department_user",
+        "department_name",
         "date_read_able",
     ];
 
@@ -92,10 +92,18 @@ class ApprovalAgreement extends Model
     }
 
     // departemen user yang approval
-    public function getDepartmentUserAttribute()
+    public function getDepartmenNameAttribute()
     {
         if ($this->user) {
-            return $this->user->name_role;
+            return $this->user->department_name;
+        }
+    }
+
+    // departemen user yang approval
+    public function getPositionNameAttribute()
+    {
+        if ($this->user) {
+            return $this->user->position_name;
         }
     }
 
@@ -120,7 +128,7 @@ class ApprovalAgreement extends Model
             $by = "Anda";
         } else {
             if ($this->user) {
-                $by = "{$this->user->name} - {$this->user->name_role}";
+                $by = "{$this->user->name} - {$this->user->group_name}";
             } else {
                 $by = " - ";
             }
@@ -129,9 +137,12 @@ class ApprovalAgreement extends Model
         if ($this->userBehalf) {
             $nameUserBehalf = $this->userBehalf->name;
             $sentanceBehalf = " a/n {$nameUserBehalf}";
+            $newLine = "<br>";
+        } else {
+            $newLine = "";
         }
 
-        return "di {$this->status_approval_read_able} oleh {$by} <br>" . $sentanceBehalf;
+        return "di {$this->status_approval_read_able} oleh {$by} {$newLine}" . $sentanceBehalf;
     }
 
     // public function getDescriptionStatusApprovalAttributeOld()

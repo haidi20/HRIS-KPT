@@ -46,6 +46,11 @@ class SalaryAdvance extends Model
         return $this->belongsTo(Employee::class, "employee_id", "id");
     }
 
+    public function foreman()
+    {
+        return $this->belongsTo(Employee::class, "foreman_id", "id");
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, "created_by", "id");

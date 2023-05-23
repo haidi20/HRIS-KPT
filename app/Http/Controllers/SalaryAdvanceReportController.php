@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Response;
 
 class SalaryAdvanceReportController extends Controller
 {
+    private $nameModel = "App\\Models\\SalaryAdvance";
+
     public function index()
     {
         $vue = true;
@@ -22,11 +24,16 @@ class SalaryAdvanceReportController extends Controller
 
     public function fetchData()
     {
+        $approvalAgreement = new ApprovalAgreementController;
+        $salaryAdvances = new SalaryAdvance;
 
-        $salaryAdvances = SalaryAdvance::orderBy("created_at", "desc")->get();
+
+        $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreeent($salaryAdvances, $this->nameModel, false);
 
         return response()->json([
             "salaryAdvances" => $salaryAdvances,
+            "request" => request()->all(),
         ]);
     }
 

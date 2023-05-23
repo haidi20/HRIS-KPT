@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title>Roster</title>
+    <title>Laporan Kasbon</title>
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <b-row>
@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: "Roster",
+      title: "Laporan Kasbon",
       version: "v1.1",
       tab_name: "main",
     };
@@ -51,7 +51,7 @@ export default {
       });
     });
 
-    this.$store.dispatch("salaryAdvanceReport/fetchData");
+    this.$store.dispatch("fetchPermission");
   },
   methods: {
     onChangeTab(value) {

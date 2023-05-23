@@ -116,6 +116,7 @@ class ApprovalAgreementController extends Controller
 
             $query->approval_user_id = $approvalAgreement ? $approvalAgreementUsers : null;
             $query->approval_status = $approvalAgreement ? $approvalAgreement->status_approval : null;
+            $query->approval_status_readable = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["readable"] : null;
             $query->approval_status_first = $approvalAgreementFirst ? $approvalAgreementFirst->status_approval : null;
             $query->approval_label = $approvalAgreement ? $approvalAgreement->label_status_approval : null;
             $query->approval_color = $approvalAgreement ? $statusApprovalLibrary[$approvalAgreement->status_approval]["color"] : null;
