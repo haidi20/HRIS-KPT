@@ -22,14 +22,35 @@ class SalaryAdvanceReportController extends Controller
         return view("pages.salary-advance-report.index", compact("vue", "user", "baseUrl"));
     }
 
-    public function fetchData()
+    public function fetchData($reqStatus = null)
     {
+        $dateStart = request("date_start");
+        $dateEnd = request("date_end");
+        $nameModel = $this->nameModel;
+        $userId = (int) request("user_id");
+
+        // is_just_by_status = agar bisa lihat data keseluruhan berdasarkan status accept, reject, atau waiting
+        // *note lihat referensi di library.php bagian status
+
+        $isJustByStatus = (bool) request("is_just_by_status", false);
+        $isByUser = $isJustByStatus ? false : true;
+
         $approvalAgreement = new ApprovalAgreementController;
         $salaryAdvances = new SalaryAdvance;
 
+        $salaryAdvances = $approvalAgreement->whereByApproval(
+            $salaryAdvances,
+            $userId,
+            $nameModel,
+            $isByUser,
+            $dateStart,
+            $dateEnd
+        );
 
         $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
-        $salaryAdvances = $approvalAgreement->mapApprovalAgreeent($salaryAdvances, $this->nameModel, false);
+
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, $isByUser);
+
 
         return response()->json([
             "salaryAdvances" => $salaryAdvances,

@@ -22,7 +22,7 @@
                     @click="onApprove(item, 'accept_onbehalf')"
                   >Terima Perwakilan Direktur</a>
                 </template>
-                <template v-if="getCan('persetujuan kasbon') && getPermissionApproval(item)">
+                <template v-if="getApproval(item)">
                   <a href="#" @click="onApprove(item, 'accept')">Terima</a>
                   <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
                 </template>
@@ -254,6 +254,21 @@ export default {
 
       if (!approvalUsers.includes(Number(this.getUserId))) {
         result = false;
+      }
+
+      return result;
+    },
+    getApproval(item) {
+      let result = false;
+
+      console.info(item);
+
+      if (
+        this.getCan("persetujuan kasbon") &&
+        this.getPermissionApproval(item) &&
+        item.approval_status != "not yet"
+      ) {
+        result = true;
       }
 
       return result;

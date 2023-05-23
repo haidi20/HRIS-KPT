@@ -58,7 +58,7 @@ class SalaryAdvanceController extends Controller
         }
 
         $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
-        $salaryAdvances = $approvalAgreement->mapApprovalAgreeent($salaryAdvances, $this->nameModel, false);
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, true);
 
         if (request("type") != "all") {
             $salaryAdvances = $salaryAdvances->where("approval_status", request("type"));
@@ -182,7 +182,14 @@ class SalaryAdvanceController extends Controller
         $requestApprovalAgreement["status_approval"] = $statusApproval != null ? $statusApproval : "review";
 
         // process insert to approval agreement
-        $approvalAgreement->storeApprovalAgreement($requestApprovalAgreement);
+        $approvalAgreement->storeApprovalAgreement(
+            $requestApprovalAgreement["approval_level_id"],
+            $requestApprovalAgreement["model_id"],
+            $requestApprovalAgreement["user_id"],
+            $requestApprovalAgreement["name_model"],
+            $requestApprovalAgreement["status_approval"],
+            $requestApprovalAgreement["user_behalf_id"],
+        );
     }
 
     private function fetchDataOld()

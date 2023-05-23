@@ -7,6 +7,7 @@ use App\Models\ApprovalLevel;
 use App\Models\ApprovalLevelDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ApprovalAgreementController extends Controller
@@ -21,7 +22,13 @@ class ApprovalAgreementController extends Controller
             $request["name_model"] =  request("name_model");
             $request["status_approval"] =  request("status_approval");
 
-            $storeApprovalAgreement = $this->storeApprovalAgreement($request);
+            $storeApprovalAgreement = $this->storeApprovalAgreement(
+                request("approval_level_id"),
+                request("model_id"),
+                request("user_id"),
+                request("name_model"),
+                request("status_approval"),
+            );
 
             return response()->json([
                 'success' => true,
@@ -65,7 +72,48 @@ class ApprovalAgreementController extends Controller
         ], 201);
     }
 
-    public function mapApprovalAgreeent($model, $nameModel, $isByUser = true)
+    /**
+
+     *Filter the Eloquent model records based on the approval criteria.
+     *@param \Illuminate\Database\Eloquent\Model $model The Eloquent model instance to filter.
+     *@param int $userId The user ID for filtering.
+     *@param string $nameModel The name of the model for filtering.
+     *@param bool $isByUser Indicates if the filtering is based on user.
+     *@param string|null $dateStart The start date for filtering. Format: "Y-m-d".
+     *@param string|null $dateEnd The end date for filtering. Format: "Y-m-d".
+     *@return \Illuminate\Database\Eloquent\Builder The updated query builder instance.
+     */
+    public function whereByApproval($model, $userId, $nameModel, $isByUser, $dateStart, $dateEnd)
+    {
+
+        return $model->where(function ($query) use ($userId, $nameModel, $isByUser, $dateStart, $dateEnd) {
+            if ($isByUser) {
+                $query->where('created_by', $userId)
+
+                    ->orWhereIn('id', function ($query) use ($userId, $nameModel, $dateStart, $dateEnd) {
+                        $query->select('model_id')
+                            ->from('approval_agreements')
+                            ->where('name_model', $nameModel)
+                            ->where('user_id', $userId)
+                            ->where('status_approval', '!=', 'not yet')
+                            ->whereBetween(DB::raw("date_format(`created_at`, '%Y-%m-%d')"), [$dateStart, $dateEnd]);
+                    });
+            } else {
+                //
+            }
+        });
+    }
+
+
+    /**
+
+     *Map the approval agreement data to the specified Eloquent model.
+     *@param \Illuminate\Database\Eloquent\Model $model The Eloquent model instance to map the data to.
+     *@param string $nameModel The name of the model to map the approval agreement data.
+     *@param bool $isByUser Indicates if the mapping is based on user.
+     *@return \Illuminate\Database\Eloquent\Model The updated Eloquent model instance.
+     */
+    public function mapApprovalAgreement($model, $nameModel, $isByUser = true)
     {
         if (request("user_id") == null) {
             $userId = auth()->user()->id;
@@ -101,7 +149,7 @@ class ApprovalAgreementController extends Controller
                         $subQuery->where("user_id", $userId);
                     }
 
-                    $subQuery->where("status_approval", "<>", "not yet");
+                    $subQuery->where("status_approval", "!=", "not yet");
                 })
                 ->orderBy("level_approval", "desc")
                 ->orderBy("created_at", "desc")
@@ -126,16 +174,33 @@ class ApprovalAgreementController extends Controller
         return $model;
     }
 
-    public function storeApprovalAgreement($request)
-    {
-        $checkDataApprovalAgreement = ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
-            ->byModel($request["model_id"], $request["name_model"])
+    /**
+
+     *Store an approval agreement.
+     *@param int $approvalLevelId The ID of the approval level.
+     *@param int $modelId The ID of the model.
+     *@param int $userId The ID of the user.
+     *@param string $nameModel The name of the model.
+     *@param string $statusApproval The status of the approval.
+     *@param int|null $userBehalfId The ID of the user on behalf.
+     *@return void
+     */
+    public function storeApprovalAgreement(
+        $approvalLevelId,
+        $modelId,
+        $userId,
+        $nameModel,
+        $statusApproval,
+        $userBehalfId = null
+    ) {
+        $checkDataApprovalAgreement = ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+            ->byModel($modelId, $nameModel)
             ->count();
 
         // langkah pertama kali atau jika data di approval agreement kosong.
         if ($checkDataApprovalAgreement == 0) {
 
-            $approvalLevelDetail = ApprovalLevelDetail::byApprovalLevelId($request["approval_level_id"])
+            $approvalLevelDetail = ApprovalLevelDetail::byApprovalLevelId($approvalLevelId)
                 ->orderBy("level", "asc")
                 ->get();
 
@@ -143,63 +208,63 @@ class ApprovalAgreementController extends Controller
                 ApprovalAgreement::create([
                     "approval_level_id" => $item->approval_level_id,
                     "user_id" => $item->user_id,
-                    "model_id" => $request["model_id"],
-                    "name_model" => $request["name_model"],
+                    "model_id" => $modelId,
+                    "name_model" => $nameModel,
                     "status_approval" => $index == 0 ? "review" : "not yet",
                     "level_approval" => $item->level,
                 ]);
             }
         } else {
-            if ($request['status_approval'] != "accept_onbehalf") {
-                // $request['status_approval'] = "accept";
+            if ($statusApproval != "accept_onbehalf") {
+                // $statusApproval = "accept";
 
                 // update status approval current level
-                ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
-                    ->byModel($request["model_id"], $request["name_model"])
-                    ->where('user_id', $request['user_id'])
-                    ->update(["status_approval" => $request['status_approval']]);
+                ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                    ->byModel($modelId, $nameModel)
+                    ->where('user_id', $userId)
+                    ->update(["status_approval" => $statusApproval]);
             }
 
-            $nextLevelApproval = ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
-                ->byModel($request["model_id"], $request["name_model"])
-                ->where("user_id", $request['user_id'])
+            $nextLevelApproval = ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                ->byModel($modelId, $nameModel)
+                ->where("user_id", $userId)
                 ->first()->level_approval + 1;
 
-            $checkNextLevelApproval = ApprovalLevelDetail::byApprovalLevelId($request["approval_level_id"])
+            $checkNextLevelApproval = ApprovalLevelDetail::byApprovalLevelId($approvalLevelId)
                 ->where("level", $nextLevelApproval)
                 ->first();
 
             // status approval di next level akan menjadi 'review'
-            if ($request['status_approval'] == "accept") {
+            if ($statusApproval == "accept") {
 
                 // check apakah masih ada next level atau tidak
                 if ($checkNextLevelApproval != null) {
-                    ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
-                        ->byModel($request["model_id"], $request["name_model"])
+                    ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                        ->byModel($modelId, $nameModel)
                         ->updateOrCreate([
                             "level_approval" => $nextLevelApproval,
                         ], [
                             "status_approval" => "review",
                         ]);
                 }
-            } else if ($request['status_approval'] == "reject") {
+            } else if ($statusApproval == "reject") {
                 // check apakah masih ada next level atau tidak
                 if ($checkNextLevelApproval != null) {
                     // update status approval on all next level can be 'not yet'
-                    ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
-                        ->byModel($request["model_id"], $request["name_model"])
+                    ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                        ->byModel($modelId, $nameModel)
                         ->where("level_approval", ">=", $nextLevelApproval)
                         ->update(["status_approval" => "not yet"]);
                 }
                 // untuk atas nama approval
-            } else if ($request['status_approval'] == "accept_onbehalf") {
+            } else if ($statusApproval == "accept_onbehalf") {
                 // check apakah masih ada next level atau tidak
                 if ($checkNextLevelApproval != null) {
                     // update status approval on next level can be 'accept'
-                    ApprovalAgreement::byApprovalLevelId($request["approval_level_id"])
-                        ->byModel($request["model_id"], $request["name_model"])
+                    ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                        ->byModel($modelId, $nameModel)
                         ->where("level_approval", $nextLevelApproval)
-                        ->update(["status_approval" => "accept", "user_behalf_id" => $request["user_behalf_id"]]);
+                        ->update(["status_approval" => "accept", "user_behalf_id" => $userBehalfId]);
                 }
             }
         }
