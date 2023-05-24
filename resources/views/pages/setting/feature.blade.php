@@ -57,14 +57,18 @@
                                             </a>
                                         @endcan
                                         @can('ubah fitur')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
-                                                class="btn btn-sm btn-info">Ubah
-                                            </a>
+                                            @if ($feature->created_by == auth()->user()->id)
+                                                <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
+                                                    class="btn btn-sm btn-info">Ubah
+                                                </a>
+                                            @endif
                                         @endcan
                                         @can('hapus fitur')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
-                                                class="btn btn-sm btn-danger">Hapus
-                                            </a>
+                                            @if ($feature->created_by == auth()->user()->id)
+                                                <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
+                                                    class="btn btn-sm btn-danger">Hapus
+                                                </a>
+                                            @endif
                                         @endcan
                                     </td>
                                 </tr>

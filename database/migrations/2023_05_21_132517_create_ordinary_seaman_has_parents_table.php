@@ -16,7 +16,8 @@ class CreateOrdinarySeamanHasParentsTable extends Migration
         Schema::create('ordinary_seaman_has_parents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id');
-            $table->foreignId('parent_model');
+            $table->string('parent_model');
+            $table->foreignId('ordinary_seaman_id');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

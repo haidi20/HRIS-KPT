@@ -9,9 +9,6 @@
             <p class="version">{{ version }}</p>
           </b-col>
         </b-row>
-        <b-row>
-          <b-col>filter data</b-col>
-        </b-row>
         <br />
         <Table />
         <FormModal />

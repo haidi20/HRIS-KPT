@@ -40,7 +40,7 @@
 
 <script>
 import Main from "./main";
-import Status from "../../RosterStatus/rosterStatus";
+import Status from "../RosterStatus/rosterStatus";
 import Total from "./total.vue";
 import FilterData from "./filterData.vue";
 export default {
@@ -60,19 +60,15 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    this.$store.commit("roster/INSERT_BASE_URL", {
-      base_url: this.baseUrl,
-    });
-    this.$store.commit("rosterStatus/INSERT_BASE_URL", {
-      base_url: this.baseUrl,
-    });
-    this.$store.commit("employee/INSERT_BASE_URL", {
-      base_url: this.baseUrl,
+    ["roster", "rosterStatus", "master"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
     });
 
     this.$store.dispatch("roster/fetchData");
     this.$store.dispatch("rosterStatus/fetchData");
-    this.$store.dispatch("employee/fetchPosition");
+    this.$store.dispatch("master/fetchPosition");
   },
   methods: {
     onChangeTab(value) {

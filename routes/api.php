@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
@@ -15,8 +16,10 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
 use App\Http\Controllers\SalaryAdvanceController;
+use App\Http\Controllers\SalaryAdvanceReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacationController;
+use App\Http\Controllers\VacationReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +39,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix("v1")->name("api.")->group(function () {
+    // START LAPORAN
+    Route::prefix('report')->name('report.')->group(function () {
+        Route::prefix('vacation')->name('vacation.')->group(function () {
+            Route::get('fetch-data', [VacationReportController::class, "fetchData"])->name('fetchData');
+        });
+        Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
+            Route::get('fetch-data', [SalaryAdvanceReportController::class, "fetchData"])->name('fetchData');
+        });
+    });
+    // END LAPORAN
+
     Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
         Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");
         Route::get("select-autorizeds", [ApprovalLevelController::class, "selectAuthorizeds"])->name("selectAuthorizeds");
@@ -81,6 +95,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
         Route::get('fetch-data', [SalaryAdvanceController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdvanceController::class, "store"])->name('store');
+        Route::post('store-approval', [SalaryAdvanceController::class, "storeApproval"])->name('storeApproval');
         Route::post('delete', [SalaryAdvanceController::class, "destroy"])->name('delete');
     });
     Route::prefix('project')->name('project.')->group(function () {
@@ -92,6 +107,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-permission', [UserController::class, "fetchPermission"])->name('fetchPermission');
     });
     Route::prefix('employee')->name('employee.')->group(function () {
+        Route::get('fetch-data', [EmployeeController::class, "fetchData"])->name('fetchData');
         Route::get('fetch-foreman', [EmployeeController::class, "fetchForeman"])->name('fetchForeman');
     });
     Route::prefix('barge')->name('barge.')->group(function () {
@@ -112,5 +128,10 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [OrdinarySeamanController::class, "fetchData"])->name('fetchData');
         Route::post('store', [OrdinarySeamanController::class, "store"])->name('store');
         Route::post('delete', [OrdinarySeamanController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('job-order')->name('jobOrder.')->group(function () {
+        Route::get('fetch-data', [JobOrderController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [JobOrderController::class, "store"])->name('store');
+        Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
 });

@@ -64,13 +64,13 @@ class Project extends Model
     public function contractors()
     {
         return $this->hasMany(ContractorHasParent::class, "parent_id", "id")
-            ->where("parent_model", "App\Models\Project");
+            ->where("parent_model", "App\Models\Project")->orderBy("created_at", "desc");
     }
 
     public function ordinarySeamans()
     {
         return $this->hasMany(OrdinarySeamanHasParent::class, "parent_id", "id")
-            ->where("parent_model", "App\Models\Project");
+            ->where("parent_model", "App\Models\Project")->orderBy("created_at", "desc");
     }
 
     public function getCompanyNameAttribute()

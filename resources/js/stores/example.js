@@ -2,7 +2,7 @@ import axios from "axios";
 import moment from "moment";
 
 const defaultForm = {
-
+    id: null,
 }
 
 const example = {
@@ -56,8 +56,7 @@ const example = {
                 .get(
                     `${context.state.base_url}/api/v1/vacation/fetch-data`, {
                     params: { ...params },
-                }
-                )
+                })
                 .then((responses) => {
                     console.info(responses);
                     const data = responses.data;
@@ -73,7 +72,10 @@ const example = {
                 });
         },
 
-    }
+    },
+    getters: {
+        //
+    },
 }
 
 export default example;

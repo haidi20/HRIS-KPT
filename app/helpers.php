@@ -35,3 +35,25 @@ if (
         return Carbon::parse($date)->locale('id')->isoFormat("dddd, D MMMM YYYY");
     }
 }
+
+if (
+    !function_exists('dateDuration')
+) {
+
+    /**
+     * Calculate the duration in days between two Carbon dates.
+     *
+     * @param string $date_start The start date with format Y-m-d.
+     * @param string $date_end The end date with format Y-m-d.
+     * @return int The duration in days.
+     */
+    function dateDuration($date_start, $date_end)
+    {
+        $getDateStart = Carbon::createFromFormat('Y-m-d', $date_start);
+        $getDateEnd = Carbon::createFromFormat('Y-m-d', $date_end);
+
+        $duration = $getDateEnd->diffInDays($getDateStart);
+
+        return $duration;
+    }
+}

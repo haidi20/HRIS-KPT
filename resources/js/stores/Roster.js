@@ -5,6 +5,7 @@ import { checkNull } from "../utils";
 
 const defaultForm = {
     id: null,
+    position_id: null,
     employee_id: null,
     employee_name: null,
     work_schedule: null,
@@ -80,6 +81,7 @@ const Roster = {
             state.get_title_form = "Ubah Roster - " + getForm.employee_name;
             state.form = {
                 ...state.form,
+                position_id: getForm.position_id,
                 employee_id: getForm.employee_id,
                 employee_name: getForm.employee_name,
                 work_schedule: getForm.work_schedule,
@@ -136,6 +138,8 @@ const Roster = {
                 // ...context.state.params,
                 date_filter: moment(context.state.params.date_filter).format("Y-MM"),
             }
+
+            // console.info(payload);
 
             // const positions = context.state.options.positions;
             const positions = payload.positions;

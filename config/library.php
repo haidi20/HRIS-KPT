@@ -5,7 +5,7 @@ return [
     "permission_private" => [
         "lihat jam kerja",  "lihat bahan", "lihat penyesuaian gaji", "lihat departemen",
         "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan", "lihat tingkat persetujuan",
-        "hapus fitur", "hapus hak akses",
+        "hapus hak akses",
     ],
     "permission_added" => [
         [
@@ -35,10 +35,6 @@ return [
             "featurer_id" => 4,
         ],
         [
-            "name" => "perwakilan persetujuan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
             "name" => "ekspor laporan kasbon",
             "featurer_id" => 4,
         ],
@@ -60,26 +56,35 @@ return [
             "name" => "ekspor laporan job order",
             "featurer_id" => 9,
         ],
+        [
+            "name" => "ekspor laporan cuti",
+            "featurer_id" => 13,
+        ],
     ],
     "status" => [
         "review" => [
-            "readable" => "proses",
+            "readable" => "menunggu persetujuan",
+            "short_readable" => "persetujuan",
             "color" => "warning",
         ],
         "accept" => [
-            "readable" => "terima",
+            "readable" => "di terima",
+            "short_readable" => "terima",
             "color" => "success",
         ],
         "reject" => [
-            "readable" => "tolak",
+            "readable" => "di tolak",
+            "short_readable" => "tolak",
             "color" => "danger",
         ],
         "revision" => [
-            "readable" => "perbaiki",
+            "readable" => "perlu diperbaiki",
+            "short_readable" => "perbaiki",
             "color" => "info",
         ],
         "not yet" => [
-            "readable" => "belum konfirmasi",
+            "readable" => "belum dikonfirmasi",
+            "short_readable" => "belum",
             "color" => "info",
         ],
     ],

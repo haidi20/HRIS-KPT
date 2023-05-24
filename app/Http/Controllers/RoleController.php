@@ -17,10 +17,11 @@ class RoleController extends Controller
         $roles = new Role;
 
         if ($userRoleId != 1) {
-            $roles = $roles->where("id", "!=", 1);
+            $roles = $roles->where("id", "!=", 1)
+                ->where("id", "!=", 2);
         }
 
-        $roles = $roles->get();
+        $roles = $roles->orderBy('created_at', 'desc')->get();
 
         return view("pages.setting.role", compact("roles"));
     }

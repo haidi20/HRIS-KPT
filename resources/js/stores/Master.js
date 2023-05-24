@@ -66,12 +66,12 @@ const example = {
                 }
                 )
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     let data = responses.data;
 
                     data.positions = [
                         { id: "all", name: "Semua" },
-                        ...data.data,
+                        ...data.positions,
                     ];
 
                     context.commit("INSERT_DATA_POSITION", {

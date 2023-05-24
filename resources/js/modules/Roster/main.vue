@@ -58,7 +58,7 @@
 import _ from "lodash";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
-import DatatableClient from "../../../components/DatatableClient";
+import DatatableClient from "../../components/DatatableClient";
 import Form from "./form";
 import FormChangeStatus from "./formChangeStatus";
 
@@ -120,6 +120,9 @@ export default {
     },
     getIsLoadingFilter() {
       return this.$store.state.roster.loading.table;
+    },
+    getOptionPositions() {
+      return this.$store.state.master.data.positions;
     },
     params() {
       return this.$store.state.roster.params;

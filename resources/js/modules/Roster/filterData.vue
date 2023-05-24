@@ -18,7 +18,6 @@
           @click="onFilter()"
           :disabled="getIsLoadingData"
         >Kirim</b-button>
-        <span v-if="getIsLoadingData">Loading...</span>
         <b-button
           class="place_filter_table ml-4"
           variant="success"
@@ -37,6 +36,8 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
+
 export default {
   data() {
     return {

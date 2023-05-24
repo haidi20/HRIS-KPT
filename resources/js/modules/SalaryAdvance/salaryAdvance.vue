@@ -36,12 +36,13 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    this.$store.commit("salaryAdvance/INSERT_BASE_URL", {
-      base_url: this.baseUrl,
+    ["salaryAdvance", "employee", "master"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
     });
-    this.$store.commit("employee/INSERT_BASE_URL", {
-      base_url: this.baseUrl,
-    });
+
+    this.$store.dispatch("employee/fetchData");
   },
   methods: {
     onClose() {

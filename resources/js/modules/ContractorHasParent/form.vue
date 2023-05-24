@@ -5,27 +5,28 @@
         <b-button variant="info" size="sm" @click="onShowContractorMaster()">Data Kepala Pemborong</b-button>
       </b-col>
       <b-col cols md="4">
-        <b-button variant="success" size="sm" @click="onAdd()">Tambah</b-button>
+        <b-button variant="success" size="sm" @click="onAdd()" v-if="!getReadOnly()">Tambah</b-button>
       </b-col>
     </b-row>
     <br />
     <b-row v-for="(contractor, index) in form.contractors" :key="index">
-      <b-col cols class="mt-4">
+      <b-col cols class="mb-4">
         <b-form-group label="Pilih Kepala Proyek" label-for="name" style="display: inline">
           <VueSelect
             id="contractor_id"
             class="cursor-pointer"
-            v-model="contractor.id"
+            v-model="contractor.contractor_id"
             :options="getOptionContractors"
             :reduce="(data) => data.id"
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
       <b-col cols="1" style="align-self: center;">
-        <span @click="onDelete(index)" class="cursor-pointer" v-if="index > 0">
+        <span @click="onDelete(index)" class="cursor-pointer">
           <i class="fas fa-trash" style="color: #BB2D3B;"></i>
         </span>
       </b-col>
@@ -53,9 +54,6 @@ export default {
     getUserId() {
       return this.$store.state.user?.id;
     },
-    getData() {
-      return this.$store.state.contractorHasParent.data;
-    },
     getOptionContractors() {
       return this.$store.state.contractor.data;
     },
@@ -72,6 +70,12 @@ export default {
     },
     onDelete(index) {
       this.$store.commit("project/DELETE_FORM_CONTRACTOR", { index });
+    },
+    getReadOnly() {
+      const readOnly = this.$store.getters["project/getReadOnly"];
+      //   console.info(readOnly);
+
+      return readOnly;
     },
   },
 };

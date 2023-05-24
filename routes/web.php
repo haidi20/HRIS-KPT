@@ -100,6 +100,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");
+        Route::get('export', [ProjectController::class, "export"])->name("export");
+        Route::get('download', [ProjectController::class, "download"])->name("download");
     });
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
@@ -121,6 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("vacation")->name("vacation.")->group(function () {
             Route::get('', [VacationReportController::class, "index"])->name("index");
+            Route::get('export', [VacationReportController::class, "export"])->name("export");
+            Route::get('download', [VacationReportController::class, "download"])->name("download");
         });
     });
 
@@ -128,49 +132,49 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('company')->name("company.")->group(function () {
             Route::get('', [CompanyController::class, "index"])->name("index");
             Route::post('store', [CompanyController::class, "store"])->name("store");
-            Route::delete('delete', [CompanyController::class, "destroy"])->name("delete");
+            Route::post('delete', [CompanyController::class, "destroy"])->name("delete");
         });
         Route::prefix('employee-type')->name("employeeType.")->group(function () {
             Route::get('', [EmployeeTypeController::class, "index"])->name("index");
             Route::post('store', [EmployeeTypeController::class, "store"])->name("store");
-            Route::delete('delete', [EmployeeTypeController::class, "destroy"])->name("delete");
+            Route::post('delete', [EmployeeTypeController::class, "destroy"])->name("delete");
         });
         // barge = kapal tongkang
         Route::prefix('barge')->name("barge.")->group(function () {
             Route::get('', [BargeController::class, "index"])->name("index");
             Route::post('store', [BargeController::class, "store"])->name("store");
-            Route::delete('delete', [BargeController::class, "destroy"])->name("delete");
+            Route::post('delete', [BargeController::class, "destroy"])->name("delete");
         });
         Route::prefix('job')->name("job.")->group(function () {
             Route::get('', [JobController::class, "index"])->name("index");
             Route::post('store', [JobController::class, "store"])->name("store");
-            Route::delete('delete', [JobController::class, "destroy"])->name("delete");
+            Route::post('delete', [JobController::class, "destroy"])->name("delete");
         });
         Route::prefix('departmen')->name("departmen.")->group(function () {
             Route::get('', [DepartmenController::class, "index"])->name("index");
             Route::get('get-last-code', [DepartmenController::class, "getLastCode"])->name("getLastCode");
             Route::post('store', [DepartmenController::class, "store"])->name("store");
-            Route::delete('delete', [DepartmenController::class, "destroy"])->name("delete");
+            Route::post('delete', [DepartmenController::class, "destroy"])->name("delete");
         });
         Route::prefix('position')->name("position.")->group(function () {
             Route::get('', [PositionController::class, "index"])->name("index");
             Route::post('store', [PositionController::class, "store"])->name("store");
-            Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
+            Route::post('delete', [PositionController::class, "destroy"])->name("delete");
         });
         Route::prefix('location')->name("location.")->group(function () {
             Route::get('', [LocationController::class, "index"])->name("index");
             Route::post('store', [LocationController::class, "store"])->name("store");
-            Route::delete('delete', [LocationController::class, "destroy"])->name("delete");
+            Route::post('delete', [LocationController::class, "destroy"])->name("delete");
         });
         Route::prefix('finger-tool')->name("fingerTool.")->group(function () {
             Route::get('', [FingerToolController::class, "index"])->name("index");
             Route::post('store', [FingerToolController::class, "store"])->name("store");
-            Route::delete('delete', [FingerToolController::class, "destroy"])->name("delete");
+            Route::post('delete', [FingerToolController::class, "destroy"])->name("delete");
         });
         Route::prefix('customer')->name("customer.")->group(function () {
             Route::get('', [CustomerController::class, "index"])->name("index");
             Route::post('store', [CustomerController::class, "store"])->name("store");
-            Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
+            Route::post('delete', [CustomerController::class, "destroy"])->name("delete");
         });
         Route::prefix('material')->name("material.")->group(function () {
             Route::get('', [MaterialController::class, "index"])->name("index");
@@ -191,7 +195,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('bpjs-kes-pt', [EmployeeController::class, "bpjsKESPT"])->name("bpjsKESPT");
             Route::post('bpjs-training', [EmployeeController::class, "bpjsTRAINING"])->name("bpjsTRAINING");
             Route::post('store', [EmployeeController::class, "store"])->name("store");
-            Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
+            Route::post('delete', [EmployeeController::class, "destroy"])->name("delete");
         });
         Route::prefix('working-hour')->name("workingHour.")->group(function () {
             Route::get('', [WorkingHourController::class, "index"])->name("index");
@@ -206,12 +210,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('user')->name("user.")->group(function () {
             Route::get('', [UserController::class, "index"])->name("index");
             Route::post('store', [UserController::class, "store"])->name("store");
-            Route::delete('delete', [UserController::class, "destroy"])->name("delete");
+            Route::post('delete', [UserController::class, "destroy"])->name("delete");
         });
         Route::prefix('role')->name("role.")->group(function () {
             Route::get('', [RoleController::class, "index"])->name("index");
             Route::post('store', [RoleController::class, "store"])->name("store");
-            Route::delete('delete', [RoleController::class, "destroy"])->name("delete");
+            Route::post('delete', [RoleController::class, "destroy"])->name("delete");
         });
         Route::prefix('role-permission/{roleId}')->name("rolePermission.")->group(function () {
             Route::get('', [RolePermissionController::class, "index"])->name("index");
@@ -221,23 +225,23 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('feature')->name("feature.")->group(function () {
             Route::get('', [FeatureController::class, "index"])->name("index");
             Route::post('store', [FeatureController::class, "store"])->name("store");
-            Route::delete('delete', [FeatureController::class, "destroy"])->name("delete");
+            Route::post('delete', [FeatureController::class, "destroy"])->name("delete");
         });
         Route::prefix('bpjs-calculation')->name("bpjsCalculation.")->group(function () {
             Route::get('', [BpjsCalculationController::class, "index"])->name("index");
             Route::post('get-base-wages', [BpjsCalculationController::class, "getBaseWages"])->name("get-base-wages");
             Route::post('store', [BpjsCalculationController::class, "store"])->name("store");
-            Route::delete('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
+            Route::post('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
         });
         Route::prefix('base-wages-bpjs')->name("baseWagesBpjs.")->group(function () {
             Route::get('', [BaseWagesBpjsController::class, "index"])->name("index");
             Route::post('store', [BaseWagesBpjsController::class, "store"])->name("store");
-            Route::delete('delete', [BaseWagesBpjsController::class, "destroy"])->name("delete");
+            Route::post('delete', [BaseWagesBpjsController::class, "destroy"])->name("delete");
         });
         Route::prefix("permission")->name("permission.")->group(function () {
             Route::get('{featureId}', [PermissionController::class, "index"])->name("index");
             Route::post('store', [PermissionController::class, "store"])->name("store");
-            Route::delete('delete', [PermissionController::class, "destroy"])->name("delete");
+            Route::post('delete', [PermissionController::class, "destroy"])->name("delete");
         });
     });
 });

@@ -13,7 +13,8 @@ class SalaryAdvance extends Model
     use HasFactory, SoftDeletes;
 
     protected $appends = [
-        'employee_name', 'creator_name', 'loan_amount_readable',
+        'employee_name', 'creator_name', 'loan_amount_readable', 'position_name',
+        'monthly_deduction_readable',
         // 'status_readable', 'status_color',
     ];
 
@@ -46,6 +47,11 @@ class SalaryAdvance extends Model
         return $this->belongsTo(Employee::class, "employee_id", "id");
     }
 
+    public function foreman()
+    {
+        return $this->belongsTo(Employee::class, "foreman_id", "id");
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, "created_by", "id");
@@ -69,6 +75,21 @@ class SalaryAdvance extends Model
     public function getLoanAmountReadableAttribute()
     {
         $loanAmount = number_format($this->loan_amount, 0, ',', '.');
+        return "Rp {$loanAmount}";
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_name;
+        } else {
+            return null;
+        }
+    }
+
+    public function getMonthlyDeductionReadAbleAttribute()
+    {
+        $loanAmount = number_format($this->monthly_deduction, 0, ',', '.');
         return "Rp {$loanAmount}";
     }
 

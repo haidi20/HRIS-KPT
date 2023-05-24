@@ -42,14 +42,14 @@ import moment from "moment";
 
 export default {
   computed: {
-    getPositions() {
-      return this.$store.state.employee.data.positions;
-    },
     getTotal() {
       return this.$store.state.roster.data.total;
     },
     getDateRange() {
       return this.$store.state.roster.date_range;
+    },
+    getPositions() {
+      return this.$store.state.master.data.positions;
     },
   },
   watch: {

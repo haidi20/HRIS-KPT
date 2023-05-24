@@ -2,12 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SalaryAdvance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class SalaryAdvanceReportController extends Controller
 {
-    // LAPORAN KASBON
+    private $nameModel = "App\\Models\\SalaryAdvance";
+
     public function index()
+    {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.salary-advance-report.index", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData($reqStatus = null)
+    {
+        $dateStart = request("date_start");
+        $dateEnd = request("date_end");
+        $nameModel = $this->nameModel;
+        $userId = (int) request("user_id");
+
+        // is_just_by_status = agar bisa lihat data keseluruhan berdasarkan status accept, reject, atau waiting
+        // *note lihat referensi di library.php bagian status
+
+        // $isJustByStatus = (bool) request("is_just_by_status", false);
+        // $isByUser = $isJustByStatus ? false : true;
+        $isByUser = true;
+
+        $approvalAgreement = new ApprovalAgreementController;
+        $salaryAdvances = new SalaryAdvance;
+
+        $salaryAdvances = $approvalAgreement->whereByApproval(
+            $salaryAdvances,
+            $userId,
+            $nameModel,
+            $dateStart,
+            $dateEnd,
+            $isByUser,
+        );
+
+        $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
+
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, $userId, $isByUser);
+
+        return response()->json([
+            "salaryAdvances" => $salaryAdvances,
+            "request" => request()->all(),
+            "userId" => $userId,
+        ]);
+    }
+
+    // LAPORAN KASBON
+    public function indexOld()
     {
 
         // selanjutnya pindah ke fetchData dapatkan datanya.

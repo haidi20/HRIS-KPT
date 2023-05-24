@@ -13,6 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        /*
+            data master merupakan data wajib ada, jadi harus di input ulang ketika migrate ulang.
+        */
+        // start data master
         $this->call(FeatureSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
@@ -25,14 +29,23 @@ class DatabaseSeeder extends Seeder
         $this->call(LocationSeeder::class);
         $this->call(BargeSeeder::class);
         $this->call(FingerToolSeeder::class);
-        $this->call(BpjsCalculationSeeder::class);
         $this->call(EmployeeTypeSeeder::class);
         $this->call(ApprovalSeeder::class);
+        $this->call(BpjsCalculationSeeder::class);
         $this->call(BaseWagesBpjsSeeder::class);
         $this->call(EmployeeSeeder::class);
         $this->call(JobSeeder::class);
+        // end master
+
+        /*
+            data biasa merupakan data dummy untuk testing fitur, percobaan, dan latihan.
+            ketika production data ini tidak wajib diinput
+        */
+        // start data biasa
         $this->call(ContractorSeeder::class);
         $this->call(OrdinarySeamanSeeder::class);
         $this->call(ProjectSeeder::class);
+        $this->call(SalaryAdvanceSeeder::class);
+        // end data biasa
     }
 }
