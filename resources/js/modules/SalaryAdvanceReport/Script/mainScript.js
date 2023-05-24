@@ -108,7 +108,7 @@ export default {
             // if (item.approval_status == status || item.approval_status == 'review') {
             //     note = item.note; || status != "reject"
             // }
-            if (item.approval_status == status) {
+            if (item.approval_status == status || status == 'accept_onbehalf') {
                 note = item.note;
             }
 

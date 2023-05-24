@@ -48,7 +48,7 @@ const example = {
                     name: "Semua",
                 },
                 {
-                    id: "waiting",
+                    id: "review",
                     name: "Menunggu Persetujuan",
                 },
                 {

@@ -237,7 +237,7 @@ class SalaryAdvanceController extends Controller
     {
         $result = null;
 
-        if ($approvalStatus == 'accept') {
+        if ($approvalStatus == 'accept' || $approvalStatus == 'accept_onbehalf') {
             $result = $item;
         }
 

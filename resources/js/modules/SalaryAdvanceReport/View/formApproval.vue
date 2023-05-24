@@ -10,8 +10,8 @@
     >
       <template
         v-if="
-        form.approval_status == 'accept'
-        || form.approval_status == 'accept_onbehalf'
+            form.approval_status == 'accept'
+            || form.approval_status == 'accept_onbehalf'
         "
       >
         <b-row>

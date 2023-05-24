@@ -28,6 +28,7 @@ class SalaryAdvanceReportController extends Controller
         $dateEnd = request("date_end");
         $nameModel = $this->nameModel;
         $userId = (int) request("user_id");
+        $status = request("status");
 
         // is_just_by_status = agar bisa lihat data keseluruhan berdasarkan status accept, reject, atau waiting
         // *note lihat referensi di library.php bagian status
@@ -50,7 +51,16 @@ class SalaryAdvanceReportController extends Controller
 
         $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
 
-        $salaryAdvances = $approvalAgreement->mapApprovalAgreement($salaryAdvances, $this->nameModel, $userId, $isByUser);
+        $salaryAdvances = $approvalAgreement->mapApprovalAgreement(
+            $salaryAdvances,
+            $this->nameModel,
+            $userId,
+            $isByUser
+        );
+
+        if ($status != "all") {
+            $salaryAdvances = $salaryAdvances->where("approval_status", $status);
+        }
 
         return response()->json([
             "salaryAdvances" => $salaryAdvances,
