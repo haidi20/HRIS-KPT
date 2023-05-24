@@ -30,7 +30,7 @@
                   >Terima</a>
                   <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
                 </template>
-                <a href="#" v-if="getCan('hapus laporan kasbon')" @click="onDelete(item)">Hapus</a>
+                <!-- <a href="#" v-if="getCan('hapus laporan kasbon')" @click="onDelete(item)">Hapus</a> -->
               </template>
             </ButtonAction>
           </b-td>

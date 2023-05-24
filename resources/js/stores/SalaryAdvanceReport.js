@@ -155,7 +155,21 @@ const example = {
             }
 
             return result;
-        }
+        },
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (
+                state.form.form_type == "detail"
+                || state.form.approval_agreement_level == 2
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
     },
 }
 

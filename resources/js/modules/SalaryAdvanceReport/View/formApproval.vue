@@ -49,6 +49,8 @@
                 v-model="monthly_deduction"
                 id="monthly_deduction"
                 name="monthly_deduction"
+                :disabled="getReadOnly()"
+                autocomplete="off"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -61,7 +63,13 @@
         <b-row v-if="form.type == 'month'">
           <b-col cols="6">
             <b-form-group label="Lama Pembayaran (bulan)" label-for="duration" class>
-              <b-form-input v-model="form.duration" id="duration" name="duration"></b-form-input>
+              <b-form-input
+                v-model="form.duration"
+                id="duration"
+                name="duration"
+                :disabled="getReadOnly()"
+                autocomplete="off"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="6">
@@ -73,7 +81,13 @@
         <b-row>
           <b-col cols="12">
             <b-form-group label="Catatan" label-for="note" class>
-              <b-form-input v-model="form.note" id="note" name="note"></b-form-input>
+              <b-form-input
+                v-model="form.note"
+                id="note"
+                name="note"
+                :disabled="getReadOnly()"
+                autocomplete="off"
+              ></b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -102,138 +116,7 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import moment from "moment";
-import VueSelect from "vue-select";
-
-export default {
-  data() {
-    return {
-      is_loading: false,
-      getTitleForm: "Persetujuan Kasbon",
-    };
-  },
-  components: {
-    VueSelect,
-  },
-  computed: {
-    getBaseUrl() {
-      return this.$store.state.base_url;
-    },
-    getUserId() {
-      return this.$store.state.user?.id;
-    },
-    getOptionEmployees() {
-      return this.$store.state.employee.data.options;
-    },
-    getOptionTypes() {
-      return this.$store.state.salaryAdvanceReport.options.types;
-    },
-    form() {
-      return this.$store.state.salaryAdvanceReport.form;
-    },
-    monthly_deduction: {
-      get() {
-        return this.$store.state.salaryAdvanceReport.form
-          .monthly_deduction_readable;
-      },
-      set(value) {
-        this.$store.commit(
-          "salaryAdvanceReport/INSERT_FORM_MONTHLY_DEDUCTION",
-          {
-            monthly_deduction: value,
-          }
-        );
-      },
-    },
-  },
-  methods: {
-    onCloseModal() {
-      this.$bvModal.hide("salary_advance_approval_form");
-    },
-    async onSend() {
-      const Swal = this.$swal;
-
-      const request = {
-        ...this.form,
-        user_id: this.getUserId,
-      };
-
-      // console.info(request);
-      this.is_loading = true;
-      await axios
-        .post(
-          `${this.getBaseUrl}/api/v1/salary-advance/store-approval`,
-          request
-        )
-        .then((responses) => {
-          console.info(responses);
-
-          this.is_loading = false;
-
-          //   return false;
-          const data = responses.data;
-
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-
-          if (data.success == true) {
-            Toast.fire({
-              icon: "success",
-              title: data.message,
-            });
-
-            this.$bvModal.hide("salary_advance_approval_form");
-            this.$store.dispatch("salaryAdvanceReport/fetchData", {
-              user_id: this.getUserId,
-            });
-          }
-        })
-        .catch((err) => {
-          console.info(err);
-          this.is_loading = false;
-
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-
-          Toast.fire({
-            icon: "error",
-            title: err.response.data.message,
-          });
-        });
-    },
-    getDeductionFormula() {
-      const getResult =
-        this.$store.getters["salaryAdvanceReport/getDeductionFormula"];
-
-      this.$store.commit("salaryAdvanceReport/INSERT_FORM_MONTHLY_DEDUCTION", {
-        monthly_deduction: getResult,
-      });
-
-      return getResult;
-    },
-  },
-};
-</script>
+<script src="../Script/formApprovalScript.js"></script>
 
 <style lang="scss" scoped>
 </style>

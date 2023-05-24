@@ -103,7 +103,16 @@ export default {
     },
     methods: {
         onApprove(item, status) {
-            const note = item.approval_status == status ? item.note : null;
+            let note = null;
+
+            // if (item.approval_status == status || item.approval_status == 'review') {
+            //     note = item.note;
+            // }
+            if (item.approval_status == status || status != "reject") {
+                note = item.note;
+            }
+
+            console.info(item.approval_status, status);
             this.$store.commit("salaryAdvanceReport/INSERT_FORM", {
                 form: { ...item, approval_status: status, note: note },
             });
