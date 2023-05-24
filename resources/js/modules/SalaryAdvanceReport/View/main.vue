@@ -15,7 +15,7 @@
           <b-td>
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
-                <template v-if="getCan('perwakilan kasbon')">
+                <template v-if="getCan('perwakilan laporan kasbon')">
                   <a
                     href="#"
                     v-if="item.approval_status == 'accept'"
@@ -23,10 +23,14 @@
                   >Terima Perwakilan Direktur</a>
                 </template>
                 <template v-if="getApproval(item)">
-                  <a href="#" @click="onApprove(item, 'accept')">Terima</a>
+                  <a
+                    href="#"
+                    v-if="item.approval_status != 'accept'"
+                    @click="onApprove(item, 'accept')"
+                  >Terima</a>
                   <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
                 </template>
-                <a href="#" v-if="getCan('hapus kasbon')" @click="onDelete(item)">Hapus</a>
+                <a href="#" v-if="getCan('hapus laporan kasbon')" @click="onDelete(item)">Hapus</a>
               </template>
             </ButtonAction>
           </b-td>

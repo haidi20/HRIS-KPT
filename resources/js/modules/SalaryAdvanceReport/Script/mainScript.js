@@ -203,7 +203,7 @@ export default {
             // console.info(item);
 
             if (
-                this.getCan("persetujuan kasbon") &&
+                this.getCan("persetujuan laporan kasbon") &&
                 this.getPermissionApproval(item) &&
                 item.approval_status != "not yet"
             ) {
