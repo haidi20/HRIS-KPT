@@ -68,7 +68,7 @@ return [
     "status" => [
         "review" => [
             "readable" => "menunggu persetujuan",
-            "short_readable" => "persetujuan",
+            "short_readable" => "proses",
             "color" => "warning",
         ],
         "accept" => [

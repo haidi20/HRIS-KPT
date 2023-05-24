@@ -125,6 +125,7 @@ class SalaryAdvanceController extends Controller
     // role : direktur dan kasir
     public function storeApproval()
     {
+        $note = request("note");
         $userId = request("user_id");
         $duration = request("duration");
         $loanAmount = request("loan_amount");
@@ -138,8 +139,8 @@ class SalaryAdvanceController extends Controller
             $salaryAdvance = SalaryAdvance::find(request("id"));
             $message = "melakukan persetujuan";
 
+            $salaryAdvance->note = $note;
             $salaryAdvance->loan_amount =  $loanAmount;
-            $salaryAdvance->note = request("note");
             $salaryAdvance->duration = $this->setFormulaByApprovalStatus($approvalStatus, $duration);
             $salaryAdvance->monthly_deduction = $this->setFormulaByApprovalStatus($approvalStatus, $monthlyDeduction);
             $salaryAdvance->month_loan_complite = $this->setFormulaByApprovalStatus($approvalStatus, $monthLoanComplite);

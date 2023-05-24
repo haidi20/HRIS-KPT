@@ -163,6 +163,7 @@ const example = {
 
             if (
                 state.form.form_type == "detail"
+                || state.form.approval_status == "accept_onbehalf"
                 || state.form.approval_agreement_level == 2
             ) {
                 result = true;

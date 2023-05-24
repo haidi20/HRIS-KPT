@@ -8,7 +8,23 @@
       class="modal-custom"
       hide-footer
     >
-      <template v-if="form.approval_status == 'accept'">
+      <template
+        v-if="
+        form.approval_status == 'accept'
+        || form.approval_status == 'accept_onbehalf'
+        "
+      >
+        <b-row>
+          <b-col cols="6">
+            <span>
+              <b>Nama Karyawan</b> :
+            </span>
+            <br />
+            <span>{{form.employee_name_and_position}}</span>
+          </b-col>
+          <b-col cols="6"></b-col>
+        </b-row>
+        <br />
         <b-row>
           <b-col cols="6">
             <span>
@@ -79,7 +95,18 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col cols="12">
+          <b-col cols="6">
+            <b-form-group label="Alasan" label-for="reason" class>
+              <b-form-input
+                v-model="form.reason"
+                id="reason"
+                name="reason"
+                disabled
+                autocomplete="off"
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col cols="6">
             <b-form-group label="Catatan" label-for="note" class>
               <b-form-input
                 v-model="form.note"

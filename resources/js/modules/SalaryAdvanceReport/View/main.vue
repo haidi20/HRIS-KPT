@@ -18,7 +18,7 @@
                 <template v-if="getCan('perwakilan laporan kasbon')">
                   <a
                     href="#"
-                    v-if="item.approval_status == 'accept'"
+                    v-if="getConditionOnbehalf(item)"
                     @click="onApprove(item, 'accept_onbehalf')"
                   >Terima Perwakilan Direktur</a>
                 </template>
@@ -28,7 +28,11 @@
                     v-if="item.approval_status != 'accept'"
                     @click="onApprove(item, 'accept')"
                   >Terima</a>
-                  <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
+                  <a
+                    href="#"
+                    v-if="item.approval_status != 'reject'"
+                    @click="onApprove(item, 'reject')"
+                  >Tolak</a>
                 </template>
                 <!-- <a href="#" v-if="getCan('hapus laporan kasbon')" @click="onDelete(item)">Hapus</a> -->
               </template>
@@ -40,6 +44,9 @@
                 :class="`badge bg-${item.approval_color}`"
                 style="width:6rem"
               >{{item.approval_status_readable}}</span>
+            </template>
+            <template v-else-if="column.field == 'approval_description'">
+              <span v-html="item.approval_description"></span>
             </template>
             <template v-else>{{ item[column.field] }}</template>
           </b-td>

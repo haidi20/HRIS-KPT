@@ -106,9 +106,9 @@ export default {
             let note = null;
 
             // if (item.approval_status == status || item.approval_status == 'review') {
-            //     note = item.note;
+            //     note = item.note; || status != "reject"
             // }
-            if (item.approval_status == status || status != "reject") {
+            if (item.approval_status == status) {
                 note = item.note;
             }
 
@@ -216,6 +216,17 @@ export default {
                 this.getPermissionApproval(item) &&
                 item.approval_status != "not yet"
             ) {
+                result = true;
+            }
+
+            return result;
+        },
+        getConditionOnbehalf(item) {
+            let result = false;
+
+            // console.info(item.approval_agreement_level);
+
+            if (item.approval_status == 'accept' && item.approval_agreement_level == 1) {
                 result = true;
             }
 

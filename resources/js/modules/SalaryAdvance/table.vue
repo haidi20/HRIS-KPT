@@ -54,7 +54,7 @@
                   </span>
                   <span
                     :class="`badge bg-${data.approval_color}`"
-                    style="width:5rem"
+                    style="width:6rem"
                   >{{data.approval_status_readable}}</span>
                   <template v-if="data.approval_status == 'accept'">
                     <span class="title-item">
