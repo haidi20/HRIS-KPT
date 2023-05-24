@@ -121,16 +121,49 @@ class SalaryAdvanceController extends Controller
         }
     }
 
-    // proses persetujuan dengan menentukan potongan perbulan
-    // role : HRD
-    public function storeApprovalSetup()
-    {
-    }
-
     // proses persetujuan biasa
-    // role : direktur atau kasir
+    // role : direktur dan kasir
     public function storeApproval()
     {
+        $userId = request("user_id");
+        $duration = request("duration");
+        $loanAmount = request("loan_amount");
+        $monthlyDeduction = request("monthly_deduction");
+        $approvalStatus = request("approval_status");
+        $monthLoanComplite = Carbon::now()->addMonths($duration);
+
+        try {
+            DB::beginTransaction();
+
+            $salaryAdvance = SalaryAdvance::find(request("id"));
+            $message = "melakukan persetujuan";
+
+            $salaryAdvance->loan_amount =  $loanAmount;
+            $salaryAdvance->note = request("note");
+            $salaryAdvance->duration = $this->setFormulaByApprovalStatus($approvalStatus, $duration);
+            $salaryAdvance->monthly_deduction = $this->setFormulaByApprovalStatus($approvalStatus, $monthlyDeduction);
+            $salaryAdvance->month_loan_complite = $this->setFormulaByApprovalStatus($approvalStatus, $monthLoanComplite);
+            $salaryAdvance->save();
+
+            $this->insertApprovalLevel($salaryAdvance, $userId, $approvalStatus);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'requests' => request()->all(),
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
     }
 
     public function destroy()
@@ -162,13 +195,19 @@ class SalaryAdvanceController extends Controller
         }
     }
 
-    private function insertApprovalLevel($faPr, $userId, $statusApproval = null)
+    // proses persetujuan dengan menentukan potongan perbulan
+    // role : HRD
+    private function storeApprovalSetup()
+    {
+    }
+
+    private function insertApprovalLevel($salaryAdvance, $userId, $statusApproval = null)
     {
         $approvalAgreement = new ApprovalAgreementController;
         $approvalLevel = ApprovalLevel::where("name", "Kasbon")->first();
 
         $requestApprovalAgreement["approval_level_id"] = $approvalLevel->id; // Purchase Request
-        $requestApprovalAgreement["model_id"] =  $faPr->id;
+        $requestApprovalAgreement["model_id"] =  $salaryAdvance->id;
         $requestApprovalAgreement["user_id"] =  $userId;
         $requestApprovalAgreement["name_model"] =  $this->nameModel;
 
@@ -191,6 +230,17 @@ class SalaryAdvanceController extends Controller
             $requestApprovalAgreement["status_approval"],
             $requestApprovalAgreement["user_behalf_id"],
         );
+    }
+
+    private function setFormulaByApprovalStatus($approvalStatus, $item)
+    {
+        $result = null;
+
+        if ($approvalStatus == 'accept') {
+            $result = $item;
+        }
+
+        return $result;
     }
 
     private function fetchDataOld()

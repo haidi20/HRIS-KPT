@@ -12,7 +12,7 @@
     >
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <b-td @click="onAction()">
+          <b-td>
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <template v-if="getCan('perwakilan kasbon')">
@@ -26,7 +26,6 @@
                   <a href="#" @click="onApprove(item, 'accept')">Terima</a>
                   <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
                 </template>
-                <a href="#" v-if="getCan('ubah kasbon')" @click="onEdit(item)">Ubah</a>
                 <a href="#" v-if="getCan('hapus kasbon')" @click="onDelete(item)">Hapus</a>
               </template>
             </ButtonAction>
@@ -35,7 +34,7 @@
             <template v-if="column.field == 'approval_label'">
               <span
                 :class="`badge bg-${item.approval_color}`"
-                style="width:5rem"
+                style="width:6rem"
               >{{item.approval_status_readable}}</span>
             </template>
             <template v-else>{{ item[column.field] }}</template>

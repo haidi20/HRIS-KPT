@@ -12,8 +12,8 @@ const defaultForm = {
     loan_amount_readable: null,
     monthly_deduction: null,
     monthly_deduction_readable: null,
-    monthly_deduction_amount: null,
-    monthly_deduction_amount_readable: null,
+
+    form_type: null,
 }
 
 const example = {
@@ -84,13 +84,13 @@ const example = {
             // console.info(payload);
             state.form = { ...state.form, ...payload.form };
         },
-        INSERT_FORM_MONTHLY_DEDUCTION_AMOUNT(state, payload) {
-            if (payload.monthly_deduction_amount != null) {
-                const numericValue = numbersOnly(payload.monthly_deduction_amount.toString());
-                const readAble = formatCurrency(payload.monthly_deduction_amount, ".");
+        INSERT_FORM_MONTHLY_DEDUCTION(state, payload) {
+            if (payload.monthly_deduction != null) {
+                const numericValue = numbersOnly(payload.monthly_deduction.toString());
+                const readAble = formatCurrency(payload.monthly_deduction, ".");
 
-                state.form.monthly_deduction_amount = numericValue;
-                state.form.monthly_deduction_amount_readable = readAble;
+                state.form.monthly_deduction = numericValue;
+                state.form.monthly_deduction_readable = readAble;
             }
         },
 

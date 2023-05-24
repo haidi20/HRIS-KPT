@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix("v1")->name("api.")->group(function () {
+    // START LAPORAN
     Route::prefix('report')->name('report.')->group(function () {
         Route::prefix('vacation')->name('vacation.')->group(function () {
             Route::get('fetch-data', [VacationReportController::class, "fetchData"])->name('fetchData');
@@ -47,6 +48,7 @@ Route::prefix("v1")->name("api.")->group(function () {
             Route::get('fetch-data', [SalaryAdvanceReportController::class, "fetchData"])->name('fetchData');
         });
     });
+    // END LAPORAN
 
     Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
         Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");
@@ -93,6 +95,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
         Route::get('fetch-data', [SalaryAdvanceController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdvanceController::class, "store"])->name('store');
+        Route::post('store-approval', [SalaryAdvanceController::class, "storeApproval"])->name('storeApproval');
         Route::post('delete', [SalaryAdvanceController::class, "destroy"])->name('delete');
     });
     Route::prefix('project')->name('project.')->group(function () {

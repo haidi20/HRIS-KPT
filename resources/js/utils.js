@@ -3,7 +3,7 @@ import moment from "moment";
 export const cleaningNumber = (value) => value?.toString().replace(/\./g, "");
 
 // export const numbersOnly = (value) => value.replace(/[^\d]/g, "");
-export const numbersOnly = (value) => value.replace(/\./g, '').replace(',', '.');
+export const numbersOnly = (value) => value.replace(/\./g, '').replace(',', '.').replace("Rp", "");
 
 // contoh formatCurrency(20000, ".");
 /* Fungsi formatRupiah */

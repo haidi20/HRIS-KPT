@@ -44,15 +44,11 @@
         </b-row>-->
         <b-row v-if="form.type == 'nominal'">
           <b-col cols="6">
-            <b-form-group
-              label="Nominal Potongan Per Bulan"
-              label-for="monthly_deduction_amount"
-              class
-            >
+            <b-form-group label="Nominal Potongan Per Bulan" label-for="monthly_deduction" class>
               <b-form-input
-                v-model="monthly_deduction_amount"
-                id="monthly_deduction_amount"
-                name="monthly_deduction_amount"
+                v-model="monthly_deduction"
+                id="monthly_deduction"
+                name="monthly_deduction"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -137,16 +133,16 @@ export default {
     form() {
       return this.$store.state.salaryAdvanceReport.form;
     },
-    monthly_deduction_amount: {
+    monthly_deduction: {
       get() {
         return this.$store.state.salaryAdvanceReport.form
-          .monthly_deduction_amount_readable;
+          .monthly_deduction_readable;
       },
       set(value) {
         this.$store.commit(
-          "salaryAdvanceReport/INSERT_FORM_MONTHLY_DEDUCTION_AMOUNT",
+          "salaryAdvanceReport/INSERT_FORM_MONTHLY_DEDUCTION",
           {
-            monthly_deduction_amount: value,
+            monthly_deduction: value,
           }
         );
       },
@@ -167,7 +163,10 @@ export default {
       // console.info(request);
       this.is_loading = true;
       await axios
-        .post(`${this.getBaseUrl}/api/v1/salary-advance/approval`, request)
+        .post(
+          `${this.getBaseUrl}/api/v1/salary-advance/store-approval`,
+          request
+        )
         .then((responses) => {
           console.info(responses);
 
@@ -223,7 +222,14 @@ export default {
         });
     },
     getDeductionFormula() {
-      return this.$store.getters["salaryAdvanceReport/getDeductionFormula"];
+      const getResult =
+        this.$store.getters["salaryAdvanceReport/getDeductionFormula"];
+
+      this.$store.commit("salaryAdvanceReport/INSERT_FORM_MONTHLY_DEDUCTION", {
+        monthly_deduction: getResult,
+      });
+
+      return getResult;
     },
   },
 };

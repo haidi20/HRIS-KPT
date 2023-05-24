@@ -18,7 +18,7 @@
               placeholder="Pilih Karyawan"
               :options="getOptionEmployees"
               :reduce="(data) => data.id"
-              label="name_and_position"
+              label="name"
               searchable
               style="min-width: 180px"
             />

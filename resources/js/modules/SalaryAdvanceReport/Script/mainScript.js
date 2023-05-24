@@ -46,7 +46,7 @@ export default {
                     class: "",
                 },
                 {
-                    label: "Sisa Hutang",
+                    label: "Sisa Pinjaman",
                     field: "remaining_debt_readable",
                     width: "150px",
                     class: "",
@@ -102,22 +102,10 @@ export default {
         },
     },
     methods: {
-        onAction() {
-            //
-        },
-        onEdit(item) {
-            this.$store.dispatch("salaryAdvanceReport/onAction", {
-                form: item,
-                form_type: "edit",
-                form_title: "Ubah Proyek",
-            });
-
-            this.$bvModal.show("salary_advance_report_form");
-        },
         onApprove(item, status) {
-            // console.info(item, status);
+            const note = item.approval_status == status ? item.note : null;
             this.$store.commit("salaryAdvanceReport/INSERT_FORM", {
-                form: { ...item, approval_status: status },
+                form: { ...item, approval_status: status, note: note },
             });
             this.$bvModal.show("salary_advance_approval_form");
         },
@@ -161,7 +149,9 @@ export default {
                                     title: data.message,
                                 });
 
-                                this.$store.dispatch("salaryAdvanceReport/fetchData");
+                                this.$store.dispatch("salaryAdvanceReport/fetchData", {
+                                    user_id: this.getUserId,
+                                });
                             }
                         })
                         .catch((err) => {

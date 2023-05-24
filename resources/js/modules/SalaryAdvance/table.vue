@@ -35,7 +35,7 @@
                     <span class="title-item">
                       <b>Potongan Setiap Bulan :</b>
                     </span>
-                    <span>{{data.monthly_deduction}}</span>
+                    <span>{{data.monthly_deduction_readable}}</span>
                   </template>
                   <template v-if="data.approval_status == 'reject'">
                     <span class="title-item">

@@ -14,6 +14,7 @@ class SalaryAdvance extends Model
 
     protected $appends = [
         'employee_name', 'creator_name', 'loan_amount_readable', 'position_name',
+        'monthly_deduction_readable',
         // 'status_readable', 'status_color',
     ];
 
@@ -84,6 +85,12 @@ class SalaryAdvance extends Model
         } else {
             return null;
         }
+    }
+
+    public function getMonthlyDeductionReadAbleAttribute()
+    {
+        $loanAmount = number_format($this->monthly_deduction, 0, ',', '.');
+        return "Rp {$loanAmount}";
     }
 
     // public function getStatusReadableAttribute()

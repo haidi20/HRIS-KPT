@@ -63,18 +63,18 @@ return [
     ],
     "status" => [
         "review" => [
-            "readable" => "sedang proses",
-            "short_readable" => "proses",
+            "readable" => "menunggu persetujuan",
+            "short_readable" => "persetujuan",
             "color" => "warning",
         ],
         "accept" => [
             "readable" => "di terima",
-            "short_readable" => "di terima",
+            "short_readable" => "terima",
             "color" => "success",
         ],
         "reject" => [
             "readable" => "di tolak",
-            "short_readable" => "di tolak",
+            "short_readable" => "tolak",
             "color" => "danger",
         ],
         "revision" => [
