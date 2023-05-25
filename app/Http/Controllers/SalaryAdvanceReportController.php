@@ -51,6 +51,30 @@ class SalaryAdvanceReportController extends Controller
 
         $salaryAdvances = $salaryAdvances->orderBy("created_at", "desc")->get();
 
+        $salaryAdvances = $salaryAdvances->map(function ($query) {
+            $salaryAdvanceLasts = SalaryAdvance::where("employee_id", $query->employee_id)
+                ->where("created_at", "<", $query->created_at);
+            $checkLastData = $salaryAdvanceLasts->count();
+
+
+            if ($checkLastData > 0) {
+                $totalRemainingDebt = 0;
+                foreach ($salaryAdvanceLasts->get() as $index => $item) {
+                    // $totalRemainingDebt += $item->remaining_debt;
+                    $totalRemainingDebt = $item->remaining_debt;
+                }
+
+                $remainingDebt = $totalRemainingDebt;
+                // $remainingDebt = "Rp. " . number_format($remainingDebt, 0, ',', '.');
+            } else {
+                $remainingDebt = "Rp. 0";
+            }
+
+            $query["remaining_debt_readable"] = $remainingDebt;
+
+            return $query;
+        });
+
         $salaryAdvances = $approvalAgreement->mapApprovalAgreement(
             $salaryAdvances,
             $this->nameModel,
@@ -67,6 +91,16 @@ class SalaryAdvanceReportController extends Controller
             "request" => request()->all(),
             "userId" => $userId,
         ]);
+    }
+
+    public function export()
+    {
+        //
+    }
+
+    public function download()
+    {
+        //
     }
 
     // LAPORAN KASBON

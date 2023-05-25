@@ -30,11 +30,8 @@
                   >Terima Perwakilan Direktur</a>
                 </template>
                 <template v-if="getConditionApproval(item)">
-                  <a
-                    href="#"
-                    v-if="item.approval_status != 'accept'"
-                    @click="onApprove(item, 'accept')"
-                  >Terima</a>
+                  <!-- v-if="item.approval_status != 'accept'" -->
+                  <a href="#" @click="onApprove(item, 'accept')">Terima</a>
                   <a
                     href="#"
                     v-if="getConditionReject(item)"
@@ -48,14 +45,16 @@
           <b-td v-for="column in getColumns()" :key="column.label">
             <template v-if="column.field == 'approval_label'">
               <span
-                :class="`badge bg-${item.approval_color}`"
+                :class="`badge bg-${item.approval_color} `"
                 style="width:6rem"
               >{{item.approval_status_readable}}</span>
             </template>
             <template v-else-if="column.field == 'approval_description'">
-              <span v-html="item.approval_description"></span>
+              <span v-html="item.approval_description" class></span>
             </template>
-            <template v-else>{{ item[column.field] }}</template>
+            <template v-else>
+              <span class>{{ item[column.field] }}</span>
+            </template>
           </b-td>
         </b-tr>
       </template>

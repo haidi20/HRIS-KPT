@@ -41,10 +41,12 @@ export default {
     },
     methods: {
         onOpenAction(data) {
+            // console.info(data);
             this.$store.commit("salaryAdvance/INSERT_FORM", {
                 form: data,
             });
 
+            // pilihan action tidak muncul jika  sudah di setujui oleh HRD
             if (!this.getConditionAction()) {
                 return false;
             }

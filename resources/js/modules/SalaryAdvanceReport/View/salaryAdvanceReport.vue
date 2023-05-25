@@ -16,7 +16,7 @@
         </b-row>
         <br />
         <b-tabs content-class="mt-3">
-          <b-tab title="Data" @click="onChangeTab('main')" active>
+          <b-tab title="Utama" @click="onChangeTab('main')" active>
             <Main />
           </b-tab>
         </b-tabs>

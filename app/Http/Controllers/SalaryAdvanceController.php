@@ -49,11 +49,11 @@ class SalaryAdvanceController extends Controller
         if ($search != null) {
             $salaryAdvances = $salaryAdvances->where(function ($query) use ($search) {
                 $query->whereHas("employee", function ($employeeQuery) use ($search) {
-                    $employeeQuery->where("name", "like", "%" . $search . "%");
+                    $employeeQuery->where("name", "like", "%" . $search . "%")
+                        ->orWhereHas("position", function ($positionQuery) use ($search) {
+                            $positionQuery->where("name", "like", "%" . $search . "%");
+                        });
                 });
-                // ->orWhereHas("position", function ($creatorQuery) use ($search) {
-                //     $creatorQuery->where("name", "like", "%" . $search . "%");
-                // });
             })->orWhere("reason", "like", "%" . $search . "%")
                 ->orWhere("loan_amount", "like", "%" . $search . "%");
         }
@@ -133,7 +133,8 @@ class SalaryAdvanceController extends Controller
         $approvalStatus = request("approval_status");
         $monthlyDeduction = request("monthly_deduction");
         $approvalAgreementNote = request("approval_agreement_note");
-        $monthLoanComplite = Carbon::now()->addMonths($duration);
+        $monthLoanComplite = Carbon::now()->addMonths($duration - 1);
+
 
         try {
             DB::beginTransaction();

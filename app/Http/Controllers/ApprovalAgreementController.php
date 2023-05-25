@@ -147,9 +147,10 @@ class ApprovalAgreementController extends Controller
                 ->where(function ($subQuery) use ($query, $userId, $isByUser) {
 
                     // berdasarkan user yang selain pembuat data.
-                    if ($query->user_id != $userId && $isByUser) {
-                        $subQuery->where("user_id", $userId)
-                            ->orWhere("created_by", $userId);
+                    if ($query->created_by != $userId && $isByUser) {
+                        $subQuery->where(function ($queryUser) use ($userId) {
+                            $queryUser->where("user_id", $userId);
+                        });
                     }
 
                     $subQuery->where("status_approval", "!=", "not yet");

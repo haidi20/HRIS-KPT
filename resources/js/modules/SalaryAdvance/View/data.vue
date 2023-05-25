@@ -19,9 +19,13 @@
         <template v-else-if="getData.length > 0">
           <b-row v-for="(data, index) in getData" :key="index">
             <b-col class="place-item" @click="onOpenAction(data)">
-              <h5>{{data.employee_name}} - {{data.position_name}}</h5>
-              <div class="flex flex-row">
-                <div class="flex-grow-2 flex flex-col">
+              <b-row>
+                <b-col cols>
+                  <h5>{{data.employee_name}} - {{data.position_name}}</h5>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col cols="6" class="flex flex-col">
                   <span>
                     <b>Jumlah Kasbon :</b>
                   </span>
@@ -41,8 +45,8 @@
                 <span>Rp. 500.000</span>
                 <span class="title-item">Belum Terbayarkan :</span>
                   <span>Rp. 1.000.000</span>-->
-                </div>
-                <div class="flex-grow flex flex-col">
+                </b-col>
+                <b-col cols="6" class="flex flex-col">
                   <span>
                     <b>Status :</b>
                   </span>
@@ -66,8 +70,8 @@
                     </span>
                     <span>{{data.monthly_deduction_readable}}</span>
                   </template>
-                </div>
-              </div>
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
         </template>

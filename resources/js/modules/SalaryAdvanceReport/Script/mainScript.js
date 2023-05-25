@@ -46,8 +46,14 @@ export default {
                     class: "",
                 },
                 {
-                    label: "Sisa Pinjaman",
+                    label: "Sisa Pinjaman Sebelumnya",
                     field: "remaining_debt_readable",
+                    width: "150px",
+                    class: "",
+                },
+                {
+                    label: "Selesai di Bulan",
+                    field: "month_loan_complite_readable",
                     width: "150px",
                     class: "",
                 },
@@ -116,7 +122,7 @@ export default {
             // }
             note = item.approval_agreement_note;
 
-            console.info(item.approval_status, status);
+            // console.info(item.approval_status, status);
             this.$store.commit("salaryAdvanceReport/INSERT_FORM", {
                 form: { ...item, approval_status: status, note: note },
             });
@@ -244,7 +250,7 @@ export default {
             if (item.approval_status != 'reject') {
                 result = true;
             }
-            console.info(this.getUserGroupName);
+            // console.info(this.getUserGroupName);
             if (this.getUserGroupName.toLowerCase() == 'kasir') {
                 result = false;
             }

@@ -32,7 +32,7 @@
           @click="onFilter()"
           :disabled="getIsLoadingData"
         >Kirim</b-button>
-        <b-button
+        <!-- <b-button
           class="place_filter_table ml-4"
           variant="success"
           size="sm"
@@ -42,7 +42,7 @@
           <i class="fas fa-file-excel"></i>
           Export
         </b-button>
-        <span v-if="is_loading_export">Loading...</span>
+        <span v-if="is_loading_export">Loading...</span>-->
       </b-col>
     </b-row>
   </div>
@@ -90,7 +90,7 @@ export default {
       this.is_loading_export = true;
 
       await axios
-        .get(`${this.getBaseUrl}/salaryAdvanceReport/export`, {
+        .get(`${this.getBaseUrl}/report/salaryAdvance/export`, {
           params: {
             user_id: this.getUserId,
             date_filter: moment(this.getDateFilter).format("Y-MM"),
