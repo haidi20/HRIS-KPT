@@ -91,6 +91,21 @@ VALUES (
         '2023-05-23 05:49:04',
         '2023-05-23 05:49:04',
         NULL
+    ), (
+        3,
+        1,
+        4,
+        NULL,
+        1,
+        'App\\Models\\SalaryAdvance',
+        'not yet',
+        3,
+        1,
+        NULL,
+        NULL,
+        '2023-05-23 05:49:04',
+        '2023-05-23 05:49:04',
+        NULL
     );
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */

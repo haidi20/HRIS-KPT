@@ -128,13 +128,17 @@ class ApprovalAgreement extends Model
 
         if ($this->userBehalf) {
             $nameUserBehalf = $this->userBehalf->name;
-            $sentanceBehalf = " a/n {$nameUserBehalf}";
+            $sentanceBehalf = "dan di wakilkan oleh {$nameUserBehalf}";
             $newLine = "<br>";
+
+            return "{$this->status_approval_read_able} {$newLine}" . $sentanceBehalf;
         } else {
             $newLine = "";
+
+            return "{$this->status_approval_read_able} oleh {$by} {$newLine}";
         }
 
-        return "{$this->status_approval_read_able} oleh {$by} {$newLine}" . $sentanceBehalf;
+        // return "{$this->status_approval_read_able} oleh {$by} {$newLine}" . $sentanceBehalf;
     }
 
     public function getDateReadAbleAttribute()

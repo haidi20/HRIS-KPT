@@ -27,17 +27,21 @@ return [
         ],
         // start kasbon
         [
-            "name" => "persetujuan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
-            "name" => "perwakilan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
             "name" => "ekspor laporan kasbon",
             "featurer_id" => 4,
         ],
+        [
+            "name" => "perwakilan laporan kasbon",
+            "featurer_id" => 4,
+        ],
+        [
+            "name" => "persetujuan laporan kasbon",
+            "featurer_id" => 4,
+        ],
+        // [
+        //     "name" => "hapus laporan kasbon",
+        //     "featurer_id" => 4,
+        // ],
 
         // end kasbon
 
@@ -64,7 +68,7 @@ return [
     "status" => [
         "review" => [
             "readable" => "menunggu persetujuan",
-            "short_readable" => "persetujuan",
+            "short_readable" => "proses",
             "color" => "warning",
         ],
         "accept" => [

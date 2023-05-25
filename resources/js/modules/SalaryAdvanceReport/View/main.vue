@@ -13,20 +13,35 @@
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
           <b-td>
-            <ButtonAction class="cursor-pointer" type="click">
+            <ButtonAction
+              v-if="
+                getConditionOnbehalf(item)
+                || getConditionApproval(item)
+            "
+              class="cursor-pointer"
+              type="click"
+            >
               <template v-slot:list_detail_button>
-                <template v-if="getCan('perwakilan kasbon')">
+                <template v-if="getCan('perwakilan laporan kasbon')">
                   <a
                     href="#"
-                    v-if="item.approval_status == 'accept'"
+                    v-if="getConditionOnbehalf(item)"
                     @click="onApprove(item, 'accept_onbehalf')"
                   >Terima Perwakilan Direktur</a>
                 </template>
-                <template v-if="getApproval(item)">
-                  <a href="#" @click="onApprove(item, 'accept')">Terima</a>
-                  <a href="#" @click="onApprove(item, 'reject')">Tolak</a>
+                <template v-if="getConditionApproval(item)">
+                  <a
+                    href="#"
+                    v-if="item.approval_status != 'accept'"
+                    @click="onApprove(item, 'accept')"
+                  >Terima</a>
+                  <a
+                    href="#"
+                    v-if="getConditionReject(item)"
+                    @click="onApprove(item, 'reject')"
+                  >Tolak</a>
                 </template>
-                <a href="#" v-if="getCan('hapus kasbon')" @click="onDelete(item)">Hapus</a>
+                <!-- <a href="#" v-if="getCan('hapus laporan kasbon')" @click="onDelete(item)">Hapus</a> -->
               </template>
             </ButtonAction>
           </b-td>
@@ -36,6 +51,9 @@
                 :class="`badge bg-${item.approval_color}`"
                 style="width:6rem"
               >{{item.approval_status_readable}}</span>
+            </template>
+            <template v-else-if="column.field == 'approval_description'">
+              <span v-html="item.approval_description"></span>
             </template>
             <template v-else>{{ item[column.field] }}</template>
           </b-td>

@@ -35,7 +35,7 @@ Vue.component("vacation", require("./modules/Vacation/vacation.vue").default);
 Vue.component("job-order", require("./modules/JobOrder/jobOrder.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
 Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);
-Vue.component("salary-advance", require("./modules/SalaryAdvance/salaryAdvance.vue").default);
+Vue.component("salary-advance", require("./modules/SalaryAdvance/View/salaryAdvance.vue").default);
 Vue.component("job-order-report", require("./modules/JobOrderReport/jobOrderReport.vue").default);
 Vue.component("salary-adjustment", require("./modules/SalaryAdjustment/salaryAdjustment.vue").default);
 Vue.component("salary-advance-report", require("./modules/SalaryAdvanceReport/View/salaryAdvanceReport.vue").default);

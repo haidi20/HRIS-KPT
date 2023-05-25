@@ -14,7 +14,7 @@ class SalaryAdvance extends Model
 
     protected $appends = [
         'employee_name', 'creator_name', 'loan_amount_readable', 'position_name',
-        'monthly_deduction_readable',
+        'monthly_deduction_readable', 'employee_name_and_position',
         // 'status_readable', 'status_color',
     ];
 
@@ -61,6 +61,13 @@ class SalaryAdvance extends Model
     {
         if ($this->employee) {
             return $this->employee->name;
+        }
+    }
+
+    public function getEmployeeNameAndPositionAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->name_and_position;
         }
     }
 

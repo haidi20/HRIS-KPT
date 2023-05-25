@@ -6,12 +6,17 @@ import { numbersOnly, formatCurrency, formatNumberId } from "../utils";
 const defaultForm = {
     id: null,
     type: "month",
-    approval_status: null,
     duration: null,
     loan_amount: null,
     loan_amount_readable: null,
     monthly_deduction: null,
     monthly_deduction_readable: null,
+    payment_method: null,
+    payment_status: null,
+
+    approval_status: null,
+    approval_agreement_level: null,
+    approval_agreement_note: null,
 
     form_type: null,
 }
@@ -42,13 +47,23 @@ const example = {
                     name: 'Berdasarkan Jumlah Bulan',
                 },
             ],
+            payment_methods: [
+                {
+                    id: 'cash',
+                    name: 'Uang Cash',
+                },
+                {
+                    id: 'transfer',
+                    name: 'Transfer',
+                },
+            ],
             statuses: [
                 {
                     id: "all",
                     name: "Semua",
                 },
                 {
-                    id: "waiting",
+                    id: "review",
                     name: "Menunggu Persetujuan",
                 },
                 {
@@ -155,7 +170,22 @@ const example = {
             }
 
             return result;
-        }
+        },
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.approval_status);
+
+            if (
+                state.form.form_type == "detail"
+                // || state.form.approval_status == "accept_onbehalf"
+                || state.form.approval_agreement_level == 2
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
     },
 }
 

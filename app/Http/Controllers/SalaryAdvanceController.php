@@ -100,7 +100,7 @@ class SalaryAdvanceController extends Controller
             $salaryAdvance->save();
 
             if (request("id") == null) {
-                $this->insertApprovalLevel($salaryAdvance, $userId);
+                $this->insertApprovalLevel($salaryAdvance, $userId, null, null);
             }
 
             DB::commit();
@@ -125,11 +125,14 @@ class SalaryAdvanceController extends Controller
     // role : direktur dan kasir
     public function storeApproval()
     {
+        $note = request("note");
         $userId = request("user_id");
         $duration = request("duration");
         $loanAmount = request("loan_amount");
-        $monthlyDeduction = request("monthly_deduction");
+        $paymentMethod = request("payment_method");
         $approvalStatus = request("approval_status");
+        $monthlyDeduction = request("monthly_deduction");
+        $approvalAgreementNote = request("approval_agreement_note");
         $monthLoanComplite = Carbon::now()->addMonths($duration);
 
         try {
@@ -138,14 +141,15 @@ class SalaryAdvanceController extends Controller
             $salaryAdvance = SalaryAdvance::find(request("id"));
             $message = "melakukan persetujuan";
 
+            // $salaryAdvance->note = $note;
             $salaryAdvance->loan_amount =  $loanAmount;
-            $salaryAdvance->note = request("note");
             $salaryAdvance->duration = $this->setFormulaByApprovalStatus($approvalStatus, $duration);
+            $salaryAdvance->payment_method = $this->setFormulaByApprovalStatus($approvalStatus, $paymentMethod);
             $salaryAdvance->monthly_deduction = $this->setFormulaByApprovalStatus($approvalStatus, $monthlyDeduction);
             $salaryAdvance->month_loan_complite = $this->setFormulaByApprovalStatus($approvalStatus, $monthLoanComplite);
             $salaryAdvance->save();
 
-            $this->insertApprovalLevel($salaryAdvance, $userId, $approvalStatus);
+            $this->insertApprovalLevel($salaryAdvance, $userId, $approvalStatus, $approvalAgreementNote);
 
             DB::commit();
 
@@ -201,25 +205,25 @@ class SalaryAdvanceController extends Controller
     {
     }
 
-    private function insertApprovalLevel($salaryAdvance, $userId, $statusApproval = null)
+    private function insertApprovalLevel($salaryAdvance, $userId, $approvalStatus = null, $approvalNote = null)
     {
         $approvalAgreement = new ApprovalAgreementController;
         $approvalLevel = ApprovalLevel::where("name", "Kasbon")->first();
 
-        $requestApprovalAgreement["approval_level_id"] = $approvalLevel->id; // Purchase Request
+        $requestApprovalAgreement["approval_level_id"] = $approvalLevel->id;
         $requestApprovalAgreement["model_id"] =  $salaryAdvance->id;
         $requestApprovalAgreement["user_id"] =  $userId;
         $requestApprovalAgreement["name_model"] =  $this->nameModel;
 
         // accept_onbehalf = perwakilan / atas nama
-        if ($statusApproval == "accept_onbehalf") {
+        if ($approvalStatus == "accept_onbehalf") {
             $requestApprovalAgreement["user_behalf_id"] = $userId;
-            // $statusApproval = "accept";
+            // $approvalStatus = "accept";
         } else {
             $requestApprovalAgreement["user_behalf_id"] = null;
         }
 
-        $requestApprovalAgreement["status_approval"] = $statusApproval != null ? $statusApproval : "review";
+        $requestApprovalAgreement["status_approval"] = $approvalStatus != null ? $approvalStatus : "review";
 
         // process insert to approval agreement
         $approvalAgreement->storeApprovalAgreement(
@@ -229,6 +233,7 @@ class SalaryAdvanceController extends Controller
             $requestApprovalAgreement["name_model"],
             $requestApprovalAgreement["status_approval"],
             $requestApprovalAgreement["user_behalf_id"],
+            $approvalNote,
         );
     }
 
@@ -236,7 +241,7 @@ class SalaryAdvanceController extends Controller
     {
         $result = null;
 
-        if ($approvalStatus == 'accept') {
+        if ($approvalStatus == 'accept' || $approvalStatus == 'accept_onbehalf') {
             $result = $item;
         }
 
