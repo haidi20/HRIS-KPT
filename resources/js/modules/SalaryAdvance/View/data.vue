@@ -37,12 +37,6 @@
                     </span>
                     <span>{{data.creator_name}}</span>
                   </template>
-                  <template v-if="data.approval_status == 'reject'">
-                    <span class="title-item">
-                      <b>Catatan :</b>
-                    </span>
-                    <span>{{data.note}}</span>
-                  </template>
                   <!-- <span class="title-item">Sudah Terbayarkan :</span>
                 <span>Rp. 500.000</span>
                 <span class="title-item">Belum Terbayarkan :</span>
@@ -56,6 +50,12 @@
                     :class="`badge bg-${data.approval_color}`"
                     style="width:6rem"
                   >{{data.approval_status_readable}}</span>
+                  <template v-if="data.approval_status == 'reject'">
+                    <span class="title-item">
+                      <b>Catatan :</b>
+                    </span>
+                    <span>{{data.note}}</span>
+                  </template>
                   <template v-if="data.approval_status == 'accept'">
                     <span class="title-item">
                       <b>Durasi :</b>
@@ -90,7 +90,7 @@
   </div>
 </template>
 
-<script src="../Script/tableScript.js"></script>
+<script src="../Script/dataScript.js"></script>
 
 <style lang="scss" scoped>
 .place-data {

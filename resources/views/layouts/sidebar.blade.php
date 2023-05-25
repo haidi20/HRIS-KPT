@@ -192,43 +192,43 @@
                     </li>
                 @endcan
                 @php
-                    $allPermissionMains = ['lihat departemen', 'lihat departemen', 'lihat karyawan', 'lihat jenis karyawan'];
+                    $allPermissionMains = ['lihat departemen', 'lihat departemen', 'lihat jabatan', 'lihat karyawan', 'lihat jenis karyawan'];
                 @endphp
                 @canany($allPermissionMains)
                     <li class="sidebar-title has-sub">Utama</li>
+                    <li
+                        class="sidebar-item {{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'active' : '' }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-people"></i>
+                            <span>Karyawan</span>
+                        </a>
+                        <ul class="submenu {{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'active' : '' }}"
+                            style="{{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat karyawan')
+                                <li class="submenu-item {{ isActive('master/employee') }}">
+                                    <a href="{{ route('master.employee.index') }}">Daftar Karyawan</a>
+                                </li>
+                            @endcan
+                            @can('lihat jenis karyawan')
+                                <li class="submenu-item {{ isActive('master/employee-type') }}">
+                                    <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
+                                </li>
+                            @endcan
+                            @can('lihat departemen')
+                                <li class="submenu-item {{ isActive('master/departmen') }}">
+                                    {{-- <a href="{{ route('master.departmen.index') }}">Jabatan</a> --}}
+                                    <a href="{{ route('master.departmen.index') }}">Departemen</a>
+                                </li>
+                            @endcan
+                            @can('lihat jabatan')
+                                <li class="submenu-item {{ isActive('master/position') }}">
+                                    {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
+                                    <a href="{{ route('master.position.index') }}">Jabatan</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
                 @endcanany
-                <li
-                    class="sidebar-item {{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'active' : '' }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-people"></i>
-                        <span>Karyawan</span>
-                    </a>
-                    <ul class="submenu {{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'active' : '' }}"
-                        style="{{ Request::is('master/employee') || Request::is('master/employee-type') || Request::is('master/departmen') || Request::is('master/position') ? 'display: block;' : 'display: none;' }}">
-                        @can('lihat karyawan')
-                            <li class="submenu-item {{ isActive('master/employee') }}">
-                                <a href="{{ route('master.employee.index') }}">Daftar Karyawan</a>
-                            </li>
-                        @endcan
-                        @can('lihat jenis karyawan')
-                            <li class="submenu-item {{ isActive('master/employee-type') }}">
-                                <a href="{{ route('master.employeeType.index') }}">Jenis Karyawan</a>
-                            </li>
-                        @endcan
-                        @can('lihat departemen')
-                            <li class="submenu-item {{ isActive('master/departmen') }}">
-                                {{-- <a href="{{ route('master.departmen.index') }}">Jabatan</a> --}}
-                                <a href="{{ route('master.departmen.index') }}">Departemen</a>
-                            </li>
-                        @endcan
-                        @can('lihat jabatan')
-                            <li class="submenu-item {{ isActive('master/position') }}">
-                                {{-- <a href="{{ route('master.position.index') }}">Jabatan</a> --}}
-                                <a href="{{ route('master.position.index') }}">Jabatan</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
                 @php
                     $allPermissionWork = ['lihat jenis pekerjaan', 'lihat jam kerja'];
                 @endphp

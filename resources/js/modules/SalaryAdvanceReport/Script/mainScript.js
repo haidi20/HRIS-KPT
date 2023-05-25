@@ -82,6 +82,9 @@ export default {
         getUserId() {
             return this.$store.state.user?.id;
         },
+        getUserGroupName() {
+            return this.$store.state.user?.group_name;
+        },
         getData() {
             return this.$store.state.salaryAdvanceReport.data.main;
         },
@@ -108,9 +111,10 @@ export default {
             // if (item.approval_status == status || item.approval_status == 'review') {
             //     note = item.note; || status != "reject"
             // }
-            if (item.approval_status == status || status == 'accept_onbehalf') {
-                note = item.note;
-            }
+            // if (item.approval_status == status || status == 'accept_onbehalf') {
+            //     note = item.note;
+            // }
+            note = item.approval_agreement_note;
 
             console.info(item.approval_status, status);
             this.$store.commit("salaryAdvanceReport/INSERT_FORM", {
@@ -195,7 +199,7 @@ export default {
             const columns = this.columns.filter((item) => item.label != "");
             return columns;
         },
-        getPermissionApproval(item) {
+        getPermissionUsers(item) {
             let result = true;
             const approvalUsers = item.approval_user_id.map((value) => Number(value));
             // console.info(approvalUsers, Number(this.getUserId));
@@ -206,14 +210,14 @@ export default {
 
             return result;
         },
-        getApproval(item) {
+        getConditionApproval(item) {
             let result = false;
 
             // console.info(item);
 
             if (
                 this.getCan("persetujuan laporan kasbon") &&
-                this.getPermissionApproval(item) &&
+                this.getPermissionUsers(item) &&
                 item.approval_status != "not yet"
             ) {
                 result = true;
@@ -226,8 +230,23 @@ export default {
 
             // console.info(item.approval_agreement_level);
 
-            if (item.approval_status == 'accept' && item.approval_agreement_level == 1) {
+            if (
+                item.approval_status == 'accept'
+                && item.approval_agreement_level == 1) {
                 result = true;
+            }
+
+            return result;
+        },
+        getConditionReject(item) {
+            let result = false;
+
+            if (item.approval_status != 'reject') {
+                result = true;
+            }
+            console.info(this.getUserGroupName);
+            if (this.getUserGroupName.toLowerCase() == 'kasir') {
+                result = false;
             }
 
             return result;

@@ -13,7 +13,14 @@
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
           <b-td>
-            <ButtonAction class="cursor-pointer" type="click">
+            <ButtonAction
+              v-if="
+                getConditionOnbehalf(item)
+                || getConditionApproval(item)
+            "
+              class="cursor-pointer"
+              type="click"
+            >
               <template v-slot:list_detail_button>
                 <template v-if="getCan('perwakilan laporan kasbon')">
                   <a
@@ -22,7 +29,7 @@
                     @click="onApprove(item, 'accept_onbehalf')"
                   >Terima Perwakilan Direktur</a>
                 </template>
-                <template v-if="getApproval(item)">
+                <template v-if="getConditionApproval(item)">
                   <a
                     href="#"
                     v-if="item.approval_status != 'accept'"
@@ -30,7 +37,7 @@
                   >Terima</a>
                   <a
                     href="#"
-                    v-if="item.approval_status != 'reject'"
+                    v-if="getConditionReject(item)"
                     @click="onApprove(item, 'reject')"
                   >Tolak</a>
                 </template>

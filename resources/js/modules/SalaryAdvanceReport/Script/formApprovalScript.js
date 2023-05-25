@@ -19,11 +19,17 @@ export default {
         getUserId() {
             return this.$store.state.user?.id;
         },
+        getUserGroupName() {
+            return this.$store.state.user?.group_name;
+        },
         getOptionEmployees() {
             return this.$store.state.employee.data.options;
         },
         getOptionTypes() {
             return this.$store.state.salaryAdvanceReport.options.types;
+        },
+        getOptionPaymentMethods() {
+            return this.$store.state.salaryAdvanceReport.options.payment_methods;
         },
         form() {
             return this.$store.state.salaryAdvanceReport.form;
@@ -54,6 +60,12 @@ export default {
                 ...this.form,
                 user_id: this.getUserId,
             };
+
+            const getCheckDuration = this.getCheckDuration();
+
+            if (!getCheckDuration) {
+                return false;
+            }
 
             // console.info(request);
             this.is_loading = true;
@@ -131,6 +143,32 @@ export default {
             //   console.info(readOnly);
 
             return readOnly;
+        },
+        getCheckDuration() {
+            if (this.form.duration == null || this.form.duration == "") {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener("mouseenter", Swal.stopTimer);
+                        toast.addEventListener("mouseleave", Swal.resumeTimer);
+                    },
+                });
+
+                const roleHrd = this.form.approval_agreement_level == 2 ? "oleh HRD" : null;
+
+                Toast.fire({
+                    icon: "warning",
+                    title: `Maaf, durasi harus di isi ${roleHrd} terlebih dahulu`,
+                });
+
+                return false;
+            }
+
+            return true;
         },
     },
 };
