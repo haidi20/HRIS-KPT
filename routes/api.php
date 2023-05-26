@@ -109,6 +109,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('employee')->name('employee.')->group(function () {
         Route::get('fetch-data', [EmployeeController::class, "fetchData"])->name('fetchData');
+        Route::get('fetch-option', [EmployeeController::class, "fetchOption"])->name('fetchOption');
         Route::get('fetch-foreman', [EmployeeController::class, "fetchForeman"])->name('fetchForeman');
     });
     Route::prefix('barge')->name('barge.')->group(function () {
@@ -137,5 +138,6 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
         Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
+        Route::post('store', [SalaryAdjustmentController::class, "store"])->name('store');
     });
 });

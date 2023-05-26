@@ -60,7 +60,11 @@ class SalaryAdjustmentController extends Controller
             // $role->save();
 
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Berhasil Kirim Data'], 200);
+            return response()->json([
+                'success' => true,
+                'data' => request()->all(),
+                'message' => 'Berhasil Kirim Data',
+            ], 200);
         } catch (\Exception $e) {
             DB::rollback();
 

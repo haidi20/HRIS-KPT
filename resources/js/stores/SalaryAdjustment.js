@@ -5,13 +5,13 @@ import { numbersOnly, formatCurrency } from "../utils";
 
 const defaultForm = {
     name: null,
-    type_time: "base time",
+    type_time: "forever",
     type_amount: "nominal",
     amount: null,
     amount_readable: null,
     date_start: new Date(),
     date_end: new Date(moment().add({ month: 1 })),
-    type_adjustment: "deduction",
+    type_adjustment: "addition",
     note: null,
 }
 
@@ -82,16 +82,17 @@ const SalaryAdjustment = {
                 state.form.amount = numericValue;
                 state.form.amount_readable = readAble;
 
-                console.info(state);
+                // console.info(state);
             }
         },
 
+
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);
             state.form = { ...defaultForm };
-        },
-        UPDATE_LOADING_TABLE(state, payload) {
-            state.loading.table = payload.value;
         },
     },
     actions: {

@@ -24,7 +24,7 @@
             id="addData"
             data-toggle="modal"
           >
-            <i class="fas fa-plus text-white-50"></i> Tambah Penyesuaian Gaji
+            <i class="fas fa-plus text-white-50"></i> Tambah
           </button>
         </div>
 
@@ -51,6 +51,7 @@ export default {
     Form,
   },
   mounted() {
+    this.$bvModal.show("salary_adjustment_form");
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
@@ -61,8 +62,9 @@ export default {
     });
 
     this.$store.dispatch("fetchPermission");
-    this.$store.dispatch("salaryAdjustment/fetchData");
     this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("employee/fetchOption");
+    this.$store.dispatch("salaryAdjustment/fetchData");
   },
   methods: {
     onCreate() {

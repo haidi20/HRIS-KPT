@@ -62,6 +62,18 @@ class EmployeeController extends Controller
         ]);
     }
 
+    public function fetchOption()
+    {
+        $employees = Employee::active()
+            ->select("id", "position_id", "name",)
+            ->orderBy("name", "asc")
+            ->get();
+
+        return response()->json([
+            "employees" => $employees,
+        ]);
+    }
+
     public function fetchForeman()
     {
         $foremans = Employee::active()->whereHas("position", function ($query) {

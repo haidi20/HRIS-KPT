@@ -4,7 +4,7 @@ import moment from "moment";
 const defaultForm = {
     id: null,
     employee_id: null,
-    data_base: "all",
+    employee_base: "all",
 }
 
 const Employee = {
@@ -14,6 +14,7 @@ const Employee = {
         data: {
             options: [],
             table: [],
+            selecteds: [],
             foremans: [],
         },
         params: {
@@ -21,14 +22,14 @@ const Employee = {
         },
         form: { ...defaultForm },
         options: {
-            data_bases: [
+            employee_bases: [
                 {
                     id: 'all',
                     name: "Semua Karyawan",
                 },
                 {
-                    id: 'employee',
-                    name: "Karyawan",
+                    id: 'choose_employee',
+                    name: "Pilih Karyawan",
                 },
                 {
                     id: 'position',
@@ -62,11 +63,26 @@ const Employee = {
         INSERT_DATA_FOREMAN(state, payload) {
             state.data.foremans = payload.foremans;
         },
+        INSERT_DATA_SELECTED(state, payload) {
+            state.data.selecteds = [
+                ...state.data.selecteds,
+                payload.employee,
+            ];
+        },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
         },
         UPDATE_IS_FORM_MOBILE(state, payload) {
             state.is_form_mobile = payload.value;
+        },
+        DELETE_DATA_SELECTED(state, payload) {
+            state.data.selecteds.splice(payload.index, 1);
+        },
+        CLEAR_FORM(state, payload) {
+            state.form = { ...defaultForm };
+        },
+        CLEAR_DATA_SELECTED(state, payload) {
+            state.data.selecteds = [];
         },
     },
     actions: {
@@ -84,9 +100,26 @@ const Employee = {
                     context.commit("INSERT_DATA_TABLE", {
                         employees: data.employees,
                     });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
+        fetchOption: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/employee/fetch-option`, {
+                    params: {},
+                }
+                )
+                .then((responses) => {
+                    console.info(responses);
+                    let data = responses.data;
+
                     context.commit("INSERT_DATA_OPTION", {
                         employees: data.employees,
                     });
+
                 })
                 .catch((err) => {
                     console.info(err);

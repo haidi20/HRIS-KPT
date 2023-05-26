@@ -14,8 +14,6 @@
             <b-form-input v-model="form.name" id="name" name="name"></b-form-input>
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
         <b-col cols>
           <b-form-group label="Pilih Jenis Waktu" label-for="type_time" class>
             <VueSelect
@@ -46,7 +44,7 @@
           />
         </b-col>
         <b-col cols>
-          <label for="scope_id" style="display:inline-block">
+          <label for="scope_id">
             <b-form-checkbox style="display: inline" v-model="is_date_end"></b-form-checkbox>
             <span @click="onActiveDateEnd">Lebih dari 1 bulan</span>
           </label>
@@ -84,7 +82,7 @@
       </b-row>
       <b-row>
         <b-col cols="6">
-          <b-form-group label="nilai" label-for="amount" class>
+          <b-form-group label="Nilai" label-for="amount" class>
             <b-form-input
               v-model="amount"
               id="amount"
@@ -95,19 +93,20 @@
           </b-form-group>
         </b-col>
         <b-col cols="6">
-          <b-form-group label="." label-for="type_adjustment">
-            <VueSelect
-              id="type_adjustment"
-              class="cursor-pointer"
-              v-model="form.type_adjustment"
-              placeholder="Pilih Jenis Penyesuaian"
-              :options="getOptionTypeAdjustments"
-              :reduce="(data) => data.id"
-              label="name"
-              searchable
-              style="min-width: 180px"
-            />
-          </b-form-group>
+          <label for="type_adjustment" style="display:inline-block; color: white;">
+            <span>.</span>
+          </label>
+          <VueSelect
+            id="type_adjustment"
+            class="cursor-pointer"
+            v-model="form.type_adjustment"
+            placeholder="Pilih Jenis Penyesuaian"
+            :options="getOptionTypeAdjustments"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+          />
         </b-col>
       </b-row>
       <b-row>
@@ -162,6 +161,12 @@ export default {
     });
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getOptionTypeTimes() {
       return this.$store.state.salaryAdjustment.options.type_times;
     },
@@ -170,6 +175,15 @@ export default {
     },
     getOptionTypeAdjustments() {
       return this.$store.state.salaryAdjustment.options.type_adjustments;
+    },
+    getEmployeeForm() {
+      return this.$store.state.employee.form;
+    },
+    getEmployeeSelected() {
+      return this.$store.state.employee.data.selecteds;
+    },
+    form() {
+      return this.$store.state.salaryAdjustment.form;
     },
     amount: {
       get() {
@@ -180,9 +194,6 @@ export default {
           amount: value,
         });
       },
-    },
-    form() {
-      return this.$store.state.salaryAdjustment.form;
     },
   },
   methods: {
@@ -208,8 +219,78 @@ export default {
         $event.preventDefault();
       }
     },
-    onSend() {
-      this.$bvModal.hide("salary_adjustment_form");
+    onSendOld() {
+      console.info(this.form, this.getEmployeeForm, this.getEmployeeSelected);
+      //   this.$bvModal.hide("salary_adjustment_form");
+    },
+    async onSend() {
+      const Swal = this.$swal;
+
+      // mengambil data hexa saja
+      const request = {
+        ...this.form,
+        ...this.getEmployeeForm,
+        employee_selected: this.getEmployeeSelected,
+        user_id: this.getUserId,
+      };
+
+      this.is_loading = true;
+
+      //   console.info(request);
+
+      await axios
+        .post(`${this.getBaseUrl}/api/v1/salary-adjustment/store`, request)
+        .then((responses) => {
+          console.info(responses);
+          this.is_loading = false;
+          const data = responses.data;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          if (data.success == true) {
+            Toast.fire({
+              icon: "success",
+              title: data.message,
+            });
+
+            // this.$bvModal.hide("salary_adjustment_form");
+            // this.$store.dispatch("salaryAdjustment/fetchData");
+            //     this.$store.commit("salaryAdjustment/CLEAR_FORM");
+            //     this.$store.commit("employee/CLEAR_FORM");
+            //     this.$store.commit("employee/CLEAR_DATA_SELECTED");
+          }
+        })
+        .catch((err) => {
+          console.info(err);
+          this.is_loading = false;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
   },
 };
