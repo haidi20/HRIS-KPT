@@ -15,6 +15,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\RosterStatusController;
+use App\Http\Controllers\SalaryAdjustmentController;
 use App\Http\Controllers\SalaryAdvanceController;
 use App\Http\Controllers\SalaryAdvanceReportController;
 use App\Http\Controllers\UserController;
@@ -133,5 +134,8 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [JobOrderController::class, "fetchData"])->name('fetchData');
         Route::post('store', [JobOrderController::class, "store"])->name('store');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
+    });
+    Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
+        Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
     });
 });

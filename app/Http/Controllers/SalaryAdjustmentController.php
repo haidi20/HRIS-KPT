@@ -2,30 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Response;
 
 class SalaryAdjustmentController extends Controller
 {
     public function index()
     {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.setting.salary-adjustment", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData()
+    {
         $salaryAdjustments = [
             (object)[
                 "id" => 1,
                 "name" => "Naik Kapal",
+                "time" => "Mei 2023",
+                "amount" => "1.000.000",
+                "type_adjustment_name" => "penambahan",
+                "note" => "bonus turun kapal",
             ],
         ];
-        // $salaryAdjustments = $salaryAdjustments->toJson();
 
-        // return $salaryAdjustments;
-
-        $vue = true;
-
-        return view("pages.setting.salary-adjustment", compact("salaryAdjustments", "vue"));
+        return response()->json([
+            "salaryAdjustments" => $salaryAdjustments,
+        ]);
     }
 
-    public function store(Request $request)
+    public function store()
     {
         // return request()->all();
 

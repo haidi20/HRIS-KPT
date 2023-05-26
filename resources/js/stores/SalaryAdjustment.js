@@ -19,16 +19,7 @@ const SalaryAdjustment = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                name: "Turun Kapal",
-                time: "Mei 2023",
-                amount: "1.000.000",
-                type_adjustment_name: "penambahan",
-                note: "bonus turun kapal",
-            },
-        ],
+        data: [],
         params: {
             date_filter: new Date(),
         },
@@ -71,6 +62,15 @@ const SalaryAdjustment = {
         },
     },
     mutations: {
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
+        INSERT_DATA(state, payload) {
+            state.data = payload.salaryAdjustments;
+        },
+        INSERT_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
+        },
         INSERT_FORM_AMOUNT(state, payload) {
             if (payload.amount != null) {
                 // console.info(typeof payload.amount);
@@ -85,12 +85,46 @@ const SalaryAdjustment = {
                 console.info(state);
             }
         },
+
+        CLEAR_FORM(state, payload) {
+            // console.info(defaultForm);
+            state.form = { ...defaultForm };
+        },
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
     },
     actions: {
-        // onIncrement: (context, payload) => {
-        //     context.commit("INCREMENT");
-        // },
+        fetchData: async (context, payload) => {
+            context.commit("INSERT_DATA", {
+                salaryAdjustments: [],
+            });
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
 
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/salary-adjustment/fetch-data`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        salaryAdjustments: data.salaryAdjustments,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
     }
 }
 

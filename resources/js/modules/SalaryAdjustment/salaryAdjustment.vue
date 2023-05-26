@@ -40,10 +40,29 @@
 <script>
 import Form from "./form";
 import Table from "./table";
+
 export default {
-  components: { Table, Form },
+  props: {
+    user: String,
+    baseUrl: String,
+  },
+  components: {
+    Table,
+    Form,
+  },
   mounted() {
-    // this.$bvModal.show("salary_adjustment_form");
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    ["salaryAdjustment", "employee", "master"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
+    });
+
+    this.$store.dispatch("fetchPermission");
+    this.$store.dispatch("salaryAdjustment/fetchData");
+    this.$store.dispatch("master/fetchPosition");
   },
   methods: {
     onCreate() {
