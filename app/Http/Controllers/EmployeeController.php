@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
+use PDF;
+use App\Exports\LaporanMutasiExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Sheets\EmployeePositionSheet;
+use App\Exports\Sheets\EmployeeLocationSheet;
 
 class EmployeeController extends Controller
 {
@@ -252,6 +257,26 @@ class EmployeeController extends Controller
         $employee->update();
 
         return response()->json($employee, 200);
+    }
+
+    public function exportExcelPositionEmployee($position_id)
+    {
+        // Menambahkan filter posisi berdasarkan position_id pada query data karyawan
+        $employees = Employee::where('position_id', $position_id)->get();
+
+        $data = ['employees' => $employees, 'position_id' => $position_id];
+
+        return Excel::download(new EmployeePositionSheet($data), 'laporan_pegawai_' . $position_id . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function exportExcelLocationEmployee($location_id)
+    {
+        // Menambahkan filter posisi berdasarkan position_id pada query data karyawan
+        $employees = Employee::where('location_id', $location_id)->get();
+
+        $data = ['employees' => $employees, 'location_id' => $location_id];
+
+        return Excel::download(new EmployeeLocationSheet($data), 'laporan_pegawai_' . $location_id . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
 
