@@ -24,97 +24,117 @@
             <div class="card-header">
                 Data Karyawan
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                    data-toggle="modal">
-                    <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
-                </button>
-            </div>
-            <div class="card-body">
-                {{-- <div class="row">
-                    <div class="col-12 d-flex align-items-center">
-                        <h5>Filter berdasarkan : </h5>
-                    </div>
-
-                </div> --}}
-                <div class="row">
-                    <div class="col-2 form-group">
-                        <label for="jabatanFilter" class="col-form-label">Jabatan :</label>
-                        <div style="width: 100%;">
-                            <select name="jabatanFilter" id="jabatanFilter" class="form-control select2"
-                                style="width: 100%;">
-                                <option value="">-- Pilih Jabatan --</option>
-                                @foreach ($positions as $position)
-                                <option value="{{ $position->name }}">{{ $position->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-2 form-group">
-                        <label for="locationFilter" class="col-form-label">Lokasi :</label>
-                        <div style="width: 100%;">
-                            <select name="locationFilter" id="locationFilter" class="form-control select2"
-                                style="width: 100%;">
-                                <option value="">-- Pilih Lokasi Karyawan --</option>
-                                @foreach ($locations as $location)
-                                <option value="{{ $location->name }}">{{ $location->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <table class="table table-striped dataTable" id="table1">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>NIP</th>
-                            <th>Nama</th>
-                            <th>Perusahaan</th>
-                            <th>Jabatan</th>
-                            <th>Lokasi</th>
-                            <th>Status</th>
-                            <th width="15%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($employees as $employee)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $employee->nip }}</td>
-                            <td>{{ $employee->name }}</td>
-                            <td>
-                                @if ($employee->company_name == 'PT. KARYA PACIFIC TEHNIK SHIPYARD')
-                                <span>PT. KPTS</span>
-                                @else
-                                <span>CV. KPTS</span>
-
-                                @endif
-                            </td>
-                            <td>{{ $employee->position_name }}</td>
-                            <td>{{ $employee->location_name }}</td>
-                            <td>
-                                <span
-                                    class="{{ $employee->employee_status == 'aktif' ? 'text-success' : 'text-danger' }}">
-                                    {{ $employee->employee_status == 'aktif' ? 'AKTIF' : 'TIDAK AKTIF' }}
-                                </span>
-                            </td>
-                            <td class="flex flex-row justify-content-around">
-                                @can('ubah karyawan')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $employee }})"
-                                    class="btn btn-sm btn-info">Ubah</a>
-                                @endcan
-                                @can('hapus karyawan')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $employee }})"
-                                    class="btn btn-sm btn-danger">Hapus</a>
-                                @endcan
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                data-toggle="modal">
+                <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
+            </button>
         </div>
+        <div class="card-body">
+            {{-- <div class="row">
+                <div class="col-12 d-flex align-items-center">
+                    <h5>Filter berdasarkan : </h5>
+                </div>
 
-    </section>
+            </div> --}}
+            <div class="row">
+                <div class="col-2 form-group">
+                    <label for="jabatanFilter" class="col-form-label">Jabatan :</label>
+                    <div style="width: 100%;">
+                        <select name="jabatanFilter" id="jabatanFilter" class="form-control select2"
+                        style="width: 100%;">
+                        <option value="">-- Pilih Jabatan --</option>
+                        @foreach ($positions as $position)
+                        <option value="{{ $position->name }}">{{ $position->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportPositionBtn"
+                style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
+                <p id="exportPositionMessage" style="display: none; margin-top: 5px;">Pegawai Dengan Jabatan Yang
+                    Dipilih Tidak Ada</p>
+                </div>
+                <div class="col-2 form-group">
+                    <label for="locationFilter" class="col-form-label">Lokasi :</label>
+                    <div style="width: 100%;">
+                        <select name="locationFilter" id="locationFilter" class="form-control select2"
+                        style="width: 100%;">
+                        <option value="">-- Pilih Lokasi Karyawan --</option>
+                        @foreach ($locations as $location)
+                        <option value="{{ $location->name }}">{{ $location->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportLocationBtn"
+                style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
+                <p id="exportLocationMessage" style="display: none; margin-top: 5px;">Pegawai Dengan Lokasi Yang
+                    Dipilih Tidak Ada</p>
+                </div>
+                {{-- <div class="col-2 form-group">
+                    <label for="rangeContractFilter" class="col-form-label">Tanggal Masuk :</label>
+                    <div style="width: 100%;">
+                        <div class="input-group input-daterange" id="rangeContractFilter">
+                            <input type="text" class="form-control" name="enter_date_start" id="enter_date_start" autocomplete="off"
+                            width="100%">
+                            <div class="input-group-addon" style="padding-right: 8px;">S/D</div>
+                            <input type="text" class="form-control" name="enter_date_end" id="enter_date_end" autocomplete="off"
+                            width="100%">
+                        </div>
+                    </div>
+                </div> --}}
+            </div>
+            <hr>
+            <table class="table table-striped dataTable" id="table1">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>NIP</th>
+                        <th>Nama</th>
+                        <th>Perusahaan</th>
+                        <th>Jabatan</th>
+                        <th>Lokasi</th>
+                        <th>Tanggal Masuk</th>
+                        <th>Status</th>
+                        <th width="15%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($employees as $employee)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $employee->nip }}</td>
+                        <td>{{ $employee->name }}</td>
+                        <td>
+                            @if ($employee->company_name == 'PT. KARYA PACIFIC TEHNIK SHIPYARD')
+                            <span>PT. KPTS</span>
+                            @else
+                            <span>CV. KPTS</span>
+                            @endif
+                        </td>
+                        <td data-position-id="{{ $employee->position_id }}">{{ $employee->position_name }}</td>
+                        <td data-location-id="{{ $employee->location_id }}">{{ $employee->location_name }}</td>
+                        <td>{{ $employee->enter_date }}</td>
+                        <td>
+                            <span
+                            class="{{ $employee->employee_status == 'aktif' ? 'text-success' : 'text-danger' }}">
+                            {{ $employee->employee_status == 'aktif' ? 'AKTIF' : 'TIDAK AKTIF' }}
+                        </span>
+                    </td>
+                    <td class="flex flex-row justify-content-around">
+                        @can('ubah karyawan')
+                        <a href="javascript:void(0)" onclick="onEdit({{ $employee }})"
+                        class="btn btn-sm btn-info">Ubah</a>
+                        @endcan
+                        @can('hapus karyawan')
+                        <a href="javascript:void(0)" onclick="onDelete({{ $employee }})"
+                        class="btn btn-sm btn-danger">Hapus</a>
+                        @endcan
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+</section>
 </div>
 @endsection
 
@@ -153,28 +173,110 @@
     });
 
     // SETUP FILTER POSITION
-    $(document).ready(function () {
+    $(document).ready(function() {
         var table = $('.dataTable').DataTable();
-
+        var exportPositionBtn = $('#exportPositionBtn');
         $('#jabatanFilter').select2();
 
-        $('#jabatanFilter').on('change', function () {
+        $('#jabatanFilter').on('change', function() {
             var selectedJabatan = $(this).val();
             table.column(4).search(selectedJabatan).draw();
+
+
+            // Update export URL and set initial export URL
+            var exportUrl = "{{ route('master.employee.exportExcelPosition', ['position_id' => ':position_id']) }}";
+            var positionId = $('.dataTable tbody td[data-position-id]').first().data('position-id');
+            exportUrl = exportUrl.replace(':position_id', positionId);
+            exportPositionBtn.attr('href', exportUrl);
+
+            // Toggle export button visibility
+            // $('#exportPositionBtn').toggle(selectedJabatan !== '');
+
+            // Toggle export button visibility and display message
+            if (positionId != null) {
+                exportPositionBtn.show();
+                $('#exportPositionMessage').hide();
+            } else {
+                exportPositionBtn.hide();
+                $('#exportPositionMessage').show();
+            }
         });
-    })
+    });
 
     // SETUP FILTER LOCATION
     $(document).ready(function () {
         var table = $('.dataTable').DataTable();
+        var exportLocationBtn = $('#exportLocationBtn');
 
         $('#locationFilter').select2();
 
         $('#locationFilter').on('change', function () {
             var selectedLocation = $(this).val();
             table.column(5).search(selectedLocation).draw();
+
+            // Update export URL and set initial export URL
+            var exportUrl = "{{ route('master.employee.exportExcelLocation', ['location_id' => ':location_id']) }}";
+            var locationId = $('.dataTable tbody td[data-location-id]').first().data('location-id');
+            exportUrl = exportUrl.replace(':location_id', locationId);
+            exportLocationBtn.attr('href', exportUrl);
+
+            console.log(locationId);
+
+            // Toggle export button visibility and display message
+            if (locationId != null) {
+                exportLocationBtn.show();
+                $('#exportLocationMessage').hide();
+            } else {
+                exportLocationBtn.hide();
+                $('#exportLocationMessage').show();
+            }
         });
-    })
+    });
+
+    $(document).ready(function() {
+        var table = $('.dataTable').DataTable();
+        var startDate = '';
+        var endDate = '';
+
+        // Mengambil nilai awal enter_date_start dan enter_date_end dari tabel
+        var enterDateValues = table.column(6).data().unique().sort().toArray();
+        if (enterDateValues.length > 0) {
+            var minDate = new Date(enterDateValues[0]);
+            var maxDate = new Date(enterDateValues[enterDateValues.length - 1]);
+
+            startDate = formatDate(minDate);
+            endDate = formatDate(maxDate);
+            $('#enter_date_start').val(startDate);
+            $('#enter_date_end').val(endDate);
+        }
+
+        // Setup format untuk tanggal masuk
+        $('#rangeContractFilter input').each(function() {
+            $(this).datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy"
+            });
+        });
+
+        $('#rangeContractFilter').on('change', function() {
+            startDate = $('#enter_date_start').val();
+            endDate = $('#enter_date_end').val();
+
+            table.column(6).search(startDate + ' - ' + endDate).draw();
+        });
+    });
+
+    function formatDate(date) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        return padZero(day) + '-' + padZero(month) + '-' + year;
+    }
+
+    function padZero(number) {
+        return number.toString().padStart(2, '0');
+    }
 
     function onCreate() {
         clearForm();

@@ -48,7 +48,7 @@
                                 {{ $base_wages_bpjs->name }}
                             </td>
                             <td>
-                                {{ "Rp " . number_format($base_wages_bpjs->nominal, 0, ",", ".") }}
+                                {{ "Rp. " . number_format($base_wages_bpjs->nominal, 0, ",", ".") }}
                             </td>
                             <td class="flex flex-row justify-content-around">
                                 @can('ubah perhitungan bpjs')
@@ -99,31 +99,24 @@
 
         $("#id").val(data.id);
         $("#name").val(data.name);
-        $("#nominal").val(data.nominal);
+        $("#nominal").val(formatRupiah(data.nominal, "Rp. "));
 
         $("#titleForm").html("Ubah Dasar Upah Bpjs");
         onModalAction("formModal", "show");
 
-        // var rupiah = document.getElementById("nominal");
-        // rupiah.addEventListener("keyup", function (e) {
-        //     rupiah.value = formatRupiah(this.value, "Rp. ");
-        // });
+        var rupiah = document.getElementById("nominal");
+        rupiah.addEventListener("input", formatInputValue);
+        window.addEventListener("DOMContentLoaded", formatInputValue);
 
-        // function formatRupiah(angka, prefix) {
-        //     var number_string = angka.replace(/[^,\d]/g, "").toString(),
-        //         split = number_string.split(","),
-        //         sisa = split[0].length % 3,
-        //         rupiah = split[0].substr(0, sisa),
-        //         ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+        function formatInputValue() {
+        var value = rupiah.value.replace(/\D/g, "");
+        rupiah.value = formatRupiah(value, "Rp. ");
+        }
 
-        //     if (ribuan) {
-        //         separator = sisa ? "." : "";
-        //         rupiah += separator + ribuan.join(".");
-        //     }
-
-        //     rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-        //     return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
-        // }
+        function formatRupiah(angka, prefix) {
+        var rupiah = Number(angka);
+        return prefix + rupiah.toLocaleString();
+        }
     }
 
     function onDelete(data) {
