@@ -12,6 +12,9 @@ class salaryAdjustment extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = [
+        "type_time_readable", "type_adjustment_name", "amount_readable",
+    ];
     protected $fillable = [];
 
     public function __construct(array $attributes = [])
@@ -20,7 +23,6 @@ class salaryAdjustment extends Model
 
         $this->fillable = Schema::getColumnListing($this->getTable());
     }
-
 
     protected static function boot()
     {
@@ -39,5 +41,25 @@ class salaryAdjustment extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
+    public function getAmountReadableAttribute()
+    {
+        $amount = number_format($this->amount, 0, ',', '.');
+        return "Rp {$amount}";
+    }
+
+    public function getTypeTimeReadableAttribute()
+    {
+        $typeTime = Config::get("library.type_times.{$this->type_time}");
+
+        return $typeTime;
+    }
+
+    public function getTypeAdjustmentNameAttribute()
+    {
+        $typeAdjustment = Config::get("library.type_adjustments.{$this->type_adjustment}");
+
+        return $typeAdjustment;
     }
 }

@@ -14,6 +14,7 @@ const defaultForm = {
     type_adjustment: "addition",
     note: null,
     is_date_end: false,
+    form_type: "create",
 }
 
 const SalaryAdjustment = {
@@ -70,7 +71,14 @@ const SalaryAdjustment = {
             state.data = payload.salaryAdjustments;
         },
         INSERT_FORM(state, payload) {
-            state.form = { ...state.form, ...payload.form };
+            state.form = {
+                ...state.form,
+                ...payload.form,
+                form_type: payload.form_type,
+            };
+        },
+        INSERT_FORM_FORM_TYPE(state, payload) {
+            state.form.form_type = payload.from_type;
         },
         INSERT_FORM_AMOUNT(state, payload) {
             if (payload.amount != null) {
@@ -130,7 +138,20 @@ const SalaryAdjustment = {
                     console.info(err);
                 });
         },
-    }
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (state.form.form_type == "detail") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default SalaryAdjustment;

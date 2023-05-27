@@ -7,6 +7,7 @@ const defaultForm = {
     position_id: null,
     job_order_id: null,
     employee_base: "all",
+    form_type: "create",
 }
 
 const Employee = {
@@ -72,7 +73,14 @@ const Employee = {
             ];
         },
         INSERT_FORM(state, payload) {
-            state.form = { ...state.form, ...payload.form };
+            state.form = {
+                ...state.form,
+                ...payload.form,
+                form_type: payload.form_type,
+            };
+        },
+        INSERT_FORM_FORM_TYPE(state, payload) {
+            state.form.form_type = payload.from_type;
         },
         UPDATE_IS_FORM_MOBILE(state, payload) {
             state.is_form_mobile = payload.value;
@@ -96,7 +104,7 @@ const Employee = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     let data = responses.data;
 
                     context.commit("INSERT_DATA_TABLE", {
@@ -115,7 +123,7 @@ const Employee = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     let data = responses.data;
 
                     context.commit("INSERT_DATA_OPTION", {

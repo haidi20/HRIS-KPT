@@ -1,9 +1,9 @@
 <?php
 
 return [
-    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Penyesuaian Gaji", "Jenis Karyawan", "Tingkat Persetujuan", "Departemen"],
+    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Jenis Karyawan", "Tingkat Persetujuan", "Departemen"],
     "permission_private" => [
-        "lihat jam kerja",  "lihat bahan", "lihat penyesuaian gaji", "lihat departemen",
+        "lihat jam kerja",  "lihat bahan", "lihat departemen",
         "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan", "lihat tingkat persetujuan",
         "hapus hak akses",
     ],
@@ -92,4 +92,18 @@ return [
             "color" => "info",
         ],
     ],
+    // start untuk penyesuaian gaji
+    "type_times" => [
+        "forever" => "selamanya",
+        "base time" => "berdasarkan bulan",
+    ],
+    "type_amounts" => [
+        "nominal" => "jumlah uang",
+        "percent" => "persen dari gaji karyawan",
+    ],
+    "type_adjustments" => [
+        "deduction" => "pengurangan",
+        "addition" => "penambahan",
+    ],
+    // end untuk penyesuaian gaji
 ];
