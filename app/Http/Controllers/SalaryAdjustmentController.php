@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\salaryAdjustment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,19 +46,26 @@ class SalaryAdjustmentController extends Controller
         try {
             DB::beginTransaction();
 
-            // if (request("id")) {
-            //     $role = Role::find(request("id"));
+            if (request("id")) {
+                $salaryAdjustment = salaryAdjustment::find(request("id"));
 
-            //     $message = "diperbaharui";
-            // } else {
-            //     $role = new Role;
+                $message = "diperbaharui";
+            } else {
+                $salaryAdjustment = new salaryAdjustment;
 
-            //     $message = "dikirim";
-            // }
+                $message = "dikirim";
+            }
 
-            // $role->name = request("name");
-            // $role->guard_name = "web";
-            // $role->save();
+            $salaryAdjustment->name = request("name");
+            $salaryAdjustment->type_time = request("type_time");
+            $salaryAdjustment->is_date_end = request("is_date_end", false);
+            $salaryAdjustment->date_start = request("date_start");
+            $salaryAdjustment->date_end = request("date_end");
+            $salaryAdjustment->type_amount = request("type_amount");
+            $salaryAdjustment->amount = request("amount");
+            $salaryAdjustment->type_adjustment = request("type_adjustment");
+            $salaryAdjustment->note = request("note");
+            $salaryAdjustment->save();
 
             DB::commit();
             return response()->json([
@@ -78,11 +86,11 @@ class SalaryAdjustmentController extends Controller
         try {
             DB::beginTransaction();
 
-            // $role = Role::find(request("id"));
-            // $role->update([
+            // $salaryAdjustment = salaryAdjustment::find(request("id"));
+            // $salaryAdjustment->update([
             //     'deleted_by' => request("user_id"),
             // ]);
-            // $role->delete();
+            // $salaryAdjustment->delete();
 
             DB::commit();
 

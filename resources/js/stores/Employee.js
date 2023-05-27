@@ -4,6 +4,8 @@ import moment from "moment";
 const defaultForm = {
     id: null,
     employee_id: null,
+    position_id: null,
+    job_order_id: null,
     employee_base: "all",
 }
 
@@ -33,7 +35,7 @@ const Employee = {
                 },
                 {
                     id: 'position',
-                    name: "Departemen",
+                    name: "Jabatan",
                 },
                 {
                     id: 'job_order',

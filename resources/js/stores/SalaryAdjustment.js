@@ -13,6 +13,7 @@ const defaultForm = {
     date_end: new Date(moment().add({ month: 1 })),
     type_adjustment: "addition",
     note: null,
+    is_date_end: false,
 }
 
 const SalaryAdjustment = {
@@ -43,7 +44,7 @@ const SalaryAdjustment = {
                 },
                 {
                     id: "percent",
-                    name: "presentase dari gaji karyawan",
+                    name: "persen dari gaji karyawan",
                 },
             ],
             type_adjustments: [
@@ -87,6 +88,9 @@ const SalaryAdjustment = {
         },
 
 
+        UPDATE_FORM_IS_DATE_END(state, payload) {
+            state.form.is_date_end = payload.value;
+        },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
         },

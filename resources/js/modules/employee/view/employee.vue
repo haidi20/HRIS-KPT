@@ -16,7 +16,7 @@
       <div v-else>
         <FormDesktop />
         <br />
-        <TableDesktop v-if="form.data_base == 'employee'" />
+        <TableDesktop v-if="form.employee_base == 'choose_employee'" />
       </div>
       <br />
       <b-row>
@@ -31,11 +31,17 @@
 
 <script>
 import FormMobile from "./formMobile";
-import FormDesktop from "./formDesktop";
 import TableMobile from "./tableMobile";
+import FormDesktop from "./formDesktop";
 import TableDesktop from "./tableDesktop";
+
 export default {
-  components: { TableMobile, FormMobile, TableDesktop, FormDesktop },
+  components: {
+    TableMobile,
+    FormMobile,
+    TableDesktop,
+    FormDesktop,
+  },
   data() {
     return {
       getTitleForm: "Data Karyawan",

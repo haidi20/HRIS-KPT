@@ -2,12 +2,12 @@
   <div>
     <b-row>
       <b-col cols="4">
-        <b-form-group label="Pilih Karyawan Berdasarkan" label-for="data_base" class>
+        <b-form-group label="Pilih Karyawan Berdasarkan" label-for="employee_base" class>
           <VueSelect
-            id="data_base"
+            id="employee_base"
             class="cursor-pointer"
-            v-model="form.data_base"
-            :options="getOptionDataBases"
+            v-model="form.employee_base"
+            :options="getOptionEmplyeeBases"
             :reduce="(data) => data.id"
             label="name"
             searchable
@@ -17,7 +17,7 @@
       </b-col>
       <b-col cols="8">
         <b-form-group
-          v-if="form.data_base == 'employee'"
+          v-if="form.employee_base == 'choose_employee'"
           label="Karyawan"
           label-for="employee_id"
           class
@@ -29,14 +29,14 @@
             placeholder="Pilih Karyawan"
             :options="getOptionEmployees"
             :reduce="(data) => data.id"
-            label="name"
+            label="name_and_position"
             searchable
             style="min-width: 180px"
           />
         </b-form-group>
         <b-form-group
-          v-if="form.data_base == 'position'"
-          label="Departemen"
+          v-if="form.employee_base == 'position'"
+          label="Jabatan"
           label-for="position_id"
           class
         >
@@ -44,7 +44,7 @@
             id="position_id"
             class="cursor-pointer"
             v-model="form.position_id"
-            placeholder="Pilih Departemen"
+            placeholder="Pilih Jabatan"
             :options="getOptionPositions"
             :reduce="(data) => data.id"
             label="name"
@@ -53,7 +53,7 @@
           />
         </b-form-group>
         <b-form-group
-          v-if="form.data_base == 'job_order'"
+          v-if="form.employee_base == 'job_order'"
           label="Job Order"
           label-for="job_order_id"
           class
@@ -72,9 +72,9 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="form.data_base == 'employee'">
+    <b-row v-if="form.employee_base == 'choose_employee'">
       <b-col cols style="text-align: right">
-        <b-button variant="success" @click="onSend()">Pilih</b-button>
+        <b-button variant="success" @click="onChoose()">Pilih</b-button>
       </b-col>
     </b-row>
   </div>
@@ -88,14 +88,14 @@ export default {
     VueSelect,
   },
   computed: {
-    getOptionDataBases() {
-      return this.$store.state.employee.options.data_bases;
+    getOptionEmplyeeBases() {
+      return this.$store.state.employee.options.employee_bases;
     },
     getOptionEmployees() {
       return this.$store.state.employee.data.options;
     },
     getOptionPositions() {
-      return this.$store.state.employee.data.positions;
+      return this.$store.state.master.data.positions;
     },
     getOptionJobOrders() {
       return this.$store.state.jobOrder.data.map((item) => ({
@@ -103,13 +103,51 @@ export default {
         name: item.project_name,
       }));
     },
+    getData() {
+      return this.$store.state.employee.data.selecteds;
+    },
     form() {
       return this.$store.state.employee.form;
     },
   },
   methods: {
-    onSend() {
-      console.info(this.form.employee_id);
+    onChoose() {
+      const checkData = this.getData.find(
+        (item) => item.id == this.form.employee_id
+      );
+
+      // jika sudah ada datanya tidak perlu di masukkan lagi
+      if (!checkData) {
+        const getEmployee = this.getOptionEmployees.find(
+          (item) => item.id == this.form.employee_id
+        );
+
+        //   console.info(getEmployee);
+        this.$store.commit("employee/INSERT_DATA_SELECTED", {
+          employee: {
+            id: getEmployee.id,
+            name: getEmployee.name,
+            position_name: getEmployee.position_name,
+          },
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "warning",
+          title: `Maaf, karyawan atas nama ${checkData.name} sudah dipilih`,
+        });
+      }
     },
   },
 };

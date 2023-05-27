@@ -18,7 +18,7 @@
               v-model="params.date"
               format="YYYY-MM"
               type="month"
-              placeholder="pilih Tanggal"
+              placeholder="pilih tanggal"
               range
             />
           </b-form-group>

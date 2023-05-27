@@ -45,11 +45,11 @@
         </b-col>
         <b-col cols>
           <label for="scope_id">
-            <b-form-checkbox style="display: inline" v-model="is_date_end"></b-form-checkbox>
+            <b-form-checkbox style="display: inline" v-model="form.is_date_end"></b-form-checkbox>
             <span @click="onActiveDateEnd">Lebih dari 1 bulan</span>
           </label>
           <DatePicker
-            v-if="is_date_end"
+            v-if="form.is_date_end"
             id="date_end"
             v-model="form.date_end"
             format="YYYY-MM"
@@ -60,17 +60,12 @@
       </b-row>
       <br />
       <b-row>
-        <b-col cols>
-          <b-form-group
-            label="Pilih Jumlah Uang / Persentase dari Gaji Karyawan"
-            label-for="type_amount"
-            class
-          >
+        <b-col cols="8">
+          <b-form-group label="Pilih Jenis Uang" label-for="type_amount" class>
             <VueSelect
               id="type_amount"
               class="cursor-pointer"
               v-model="form.type_amount"
-              placeholder="Pilih Kategori"
               :options="getOptionTypeAmount"
               :reduce="(data) => data.id"
               label="name"
@@ -79,9 +74,7 @@
             />
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="6">
+        <b-col cols="4">
           <b-form-group label="Nilai" label-for="amount" class>
             <b-form-input
               v-model="amount"
@@ -89,12 +82,14 @@
               name="amount"
               @keypress="onReplaceAmount($event)"
             ></b-form-input>
-            <span class="note">catatan: hanya berupa angka saja</span>
+            <span class="note">*masukkan angka saja</span>
           </b-form-group>
         </b-col>
+      </b-row>
+      <b-row>
         <b-col cols="6">
-          <label for="type_adjustment" style="display:inline-block; color: white;">
-            <span>.</span>
+          <label for="type_adjustment" style="display:inline-block; ">
+            <span>penambahan / pengurangan</span>
           </label>
           <VueSelect
             id="type_adjustment"
@@ -108,16 +103,16 @@
             style="min-width: 180px"
           />
         </b-col>
+        <b-col cols="6">
+          <b-form-group label="Keterangan" label-for="note" class>
+            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
+          </b-form-group>
+        </b-col>
       </b-row>
       <b-row>
         <b-col cols="4">
           <b-form-group label="Pilih Karyawan" label-for="image" class>
             <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>
-          </b-form-group>
-        </b-col>
-        <b-col cols="8">
-          <b-form-group label="Keterangan" label-for="note" class>
-            <b-form-input v-model="form.note" id="note" name="note" autocomplete="off"></b-form-input>
           </b-form-group>
         </b-col>
       </b-row>
@@ -146,7 +141,6 @@ export default {
   data() {
     return {
       is_loading: false,
-      is_date_end: false,
       getTitleForm: "Tambah Penyesuaian Gaji",
     };
   },
@@ -179,7 +173,7 @@ export default {
     getEmployeeForm() {
       return this.$store.state.employee.form;
     },
-    getEmployeeSelected() {
+    getEmployeeSelecteds() {
       return this.$store.state.employee.data.selecteds;
     },
     form() {
@@ -204,7 +198,10 @@ export default {
       //
     },
     onActiveDateEnd() {
-      this.is_date_end = !this.is_date_end;
+      //   this.is_date_end = !this.is_date_end;
+      this.$store.commit("salaryAdjustment/UPDATE_FORM_IS_DATE_END", {
+        value: !this.form.is_date_end,
+      });
     },
     onShowEmployee() {
       this.$bvModal.show("data_employee");
@@ -220,7 +217,7 @@ export default {
       }
     },
     onSendOld() {
-      console.info(this.form, this.getEmployeeForm, this.getEmployeeSelected);
+      console.info(this.form, this.getEmployeeForm, this.getEmployeeSelecteds);
       //   this.$bvModal.hide("salary_adjustment_form");
     },
     async onSend() {
@@ -229,8 +226,8 @@ export default {
       // mengambil data hexa saja
       const request = {
         ...this.form,
-        ...this.getEmployeeForm,
-        employee_selected: this.getEmployeeSelected,
+        employee_form: { ...this.getEmployeeForm },
+        employee_selecteds: this.getEmployeeSelecteds,
         user_id: this.getUserId,
       };
 

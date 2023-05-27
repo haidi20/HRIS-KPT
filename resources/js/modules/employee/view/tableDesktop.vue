@@ -9,7 +9,7 @@
           nameStore="employee"
           nameLoading="table"
           :filter="false"
-          :footer="true"
+          :footer="false"
           bordered
         >
           <template v-slot:tbody="{ filteredData }">
@@ -18,7 +18,7 @@
               <b-td>{{ item.position_name }}</b-td>
               <b-td>
                 <!-- <a href="#" @click="onDelete(item)" class="fomr-control">Hapus</a> -->
-                <b-button variant="danger" size="sm" @click="onDelete()">Hapus</b-button>
+                <b-button variant="danger" size="sm" @click="onDelete(index)">Hapus</b-button>
               </b-td>
             </b-tr>
           </template>
@@ -28,7 +28,6 @@
   </div>
 </template>
 
-<!-- <script src="../function/tableDesktop.js"></script> -->
 <script>
 import DatatableClient from "../../../components/DatatableClient";
 
@@ -65,11 +64,13 @@ export default {
   },
   computed: {
     getData() {
-      return this.$store.state.employee.data.table;
+      return this.$store.state.employee.data.selecteds;
     },
   },
   methods: {
-    //
+    onDelete(index) {
+      this.$store.commit("employee/DELETE_DATA_SELECTED", { index });
+    },
   },
 };
 </script>
