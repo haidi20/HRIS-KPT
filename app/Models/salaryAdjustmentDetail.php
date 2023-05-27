@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Schema;
 
 class salaryAdjustmentDetail extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $appends = [
-        //
+        "employee_name", "position_name",
     ];
     protected $fillable = [
-        "salary_adjustment_id", "employee_id", "type_amount", "amount",
+        "salary_adjustment_id",  "employee_id", "type_amount", "amount",
     ];
 
     protected static function boot()
@@ -33,8 +33,27 @@ class salaryAdjustmentDetail extends Model
         });
     }
 
+    public function SalaryAdjustment()
+    {
+        return $this->belongsTo(salaryAdjustment::class, "salary_adjustment_id", "id");
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
+    public function getEmployeeNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->name;
+        }
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_name;
+        }
     }
 }

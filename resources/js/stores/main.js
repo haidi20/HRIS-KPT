@@ -9,7 +9,7 @@ import Roster from "./Roster";
 import Project from "./Project";
 import Vacation from "./Vacation";
 import JobOrder from "./JobOrder";
-import Employee from "./Employee";
+import EmployeeHasParent from "./EmployeeHasParent";
 import Contractor from "./Contractor";
 import Attendance from "./Attendance";
 import OsHasParent from "./OsHasParent";
@@ -29,13 +29,13 @@ const store = new Vuex.Store({
         project: Project,
         vacation: Vacation,
         jobOrder: JobOrder,
-        employee: Employee,
         contractor: Contractor,
         attendance: Attendance,
         osHasParent: OsHasParent,
         rosterStatus: RosterStatus,
         salaryAdvance: SalaryAdvance,
         salaryAdjustment: SalaryAdjustment,
+        employeeHasParent: EmployeeHasParent,
         salaryAdvanceReport: SalaryAdvanceReport,
         contractorHasParent: ContractorHasParent,
     },

@@ -17,7 +17,6 @@
     <section class="section">
       <div class="card">
         <div class="card-header">
-          Data
           <button
             @click="onCreate"
             class="btn btn-sm btn-success shadow-sm float-end ml-2"
@@ -55,7 +54,7 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["salaryAdjustment", "employee", "master"].map((item) => {
+    ["salaryAdjustment", "employeeHasParent", "master"].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });
@@ -63,16 +62,20 @@ export default {
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("master/fetchPosition");
-    this.$store.dispatch("employee/fetchOption");
+    this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("salaryAdjustment/fetchData");
   },
   methods: {
     onCreate() {
-      this.$store.commit("salaryAdjustment/CLEAR_FORM");
       this.$bvModal.show("salary_adjustment_form");
+
+      this.$store.commit("salaryAdjustment/CLEAR_FORM");
       this.$store.commit("salaryAdjustment/INSERT_FORM_FORM_TYPE", {
         form_type: "detail",
       });
+
+      this.$store.commit("employeeHasParent/CLEAR_FORM");
+      this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
     },
   },
 };

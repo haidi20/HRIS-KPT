@@ -63,7 +63,7 @@
   </div>
 </template>
 
-<script src="../Script/mainScript.js"></script>
+<script src="../Script/main.js"></script>
 
 <style lang="scss" scoped>
 .place_filter_table {

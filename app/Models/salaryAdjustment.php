@@ -38,15 +38,15 @@ class salaryAdjustment extends Model
         });
     }
 
-    public function employee()
+    public function salaryAdjustmentDetails()
     {
-        return $this->belongsTo(Employee::class, "employee_id", "id");
+        return $this->hasMany(salaryAdjustmentDetail::class, "salary_adjustment_id", "id");
     }
 
     public function getAmountReadableAttribute()
     {
         $amount = number_format($this->amount, 0, ',', '.');
-        return "Rp {$amount}";
+        return "{$amount}";
     }
 
     public function getTypeTimeReadableAttribute()

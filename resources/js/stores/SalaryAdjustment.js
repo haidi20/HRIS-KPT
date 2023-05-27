@@ -4,6 +4,7 @@ import moment from "moment";
 import { numbersOnly, formatCurrency } from "../utils";
 
 const defaultForm = {
+    id: null,
     name: null,
     type_time: "forever",
     type_amount: "nominal",
@@ -23,7 +24,10 @@ const SalaryAdjustment = {
         base_url: null,
         data: [],
         params: {
-            date_filter: new Date(),
+            month: [
+                new Date(),
+                new Date(),
+            ],
         },
         form: { ...defaultForm },
         options: {
@@ -33,7 +37,7 @@ const SalaryAdjustment = {
                     name: "selamanya",
                 },
                 {
-                    id: "base time",
+                    id: "base_time",
                     name: "berdasarkan bulan",
                 }
             ],

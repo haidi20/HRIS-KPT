@@ -15,8 +15,13 @@ class CreateSalaryAdjustmentsTable extends Migration
     {
         Schema::create('salary_adjustments', function (Blueprint $table) {
             $table->id();
+            // start employee form
+            $table->foreignId('position_id')->nullable();
+            $table->foreignId('job_order_id')->nullable();
+            $table->enum('employee_base', ['all', 'choose_employee', 'position', 'job_order']);
+            // end employee form
             $table->string("name");
-            $table->enum('type_time', ['forever', 'base time']);
+            $table->enum('type_time', ['forever', 'base_time']);
             $table->boolean("is_date_end")->default(false);
             $table->date("date_start")->nullable();
             $table->date("date_end")->nullable();

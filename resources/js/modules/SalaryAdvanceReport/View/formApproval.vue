@@ -161,7 +161,7 @@
   </div>
 </template>
 
-<script src="../Script/formApprovalScript.js"></script>
+<script src="../Script/formApproval.js"></script>
 
 <style lang="scss" scoped>
 </style>

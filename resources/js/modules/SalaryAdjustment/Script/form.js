@@ -3,7 +3,7 @@ import moment from "moment";
 import DatePicker from "vue2-datepicker";
 import VueSelect from "vue-select";
 
-import Employee from "../../employee/view/employee";
+import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 
 export default {
     data() {
@@ -15,10 +15,10 @@ export default {
     components: {
         VueSelect,
         DatePicker,
-        Employee,
+        EmployeeHasParent,
     },
     mounted() {
-        this.$store.commit("employee/UPDATE_IS_FORM_MOBILE", {
+        this.$store.commit("employeeHasParent/UPDATE_IS_FORM_MOBILE", {
             value: false,
         });
     },
@@ -39,10 +39,10 @@ export default {
             return this.$store.state.salaryAdjustment.options.type_adjustments;
         },
         getEmployeeForm() {
-            return this.$store.state.employee.form;
+            return this.$store.state.employeeHasParent.form;
         },
         getEmployeeSelecteds() {
-            return this.$store.state.employee.data.selecteds;
+            return this.$store.state.employeeHasParent.data.selecteds;
         },
         form() {
             return this.$store.state.salaryAdjustment.form;
@@ -84,24 +84,22 @@ export default {
                 $event.preventDefault();
             }
         },
-        onSendOld() {
-            console.info(this.form, this.getEmployeeForm, this.getEmployeeSelecteds);
-            //   this.$bvModal.hide("salary_adjustment_form");
-        },
         async onSend() {
             const Swal = this.$swal;
 
             // mengambil data hexa saja
             const request = {
                 ...this.form,
-                employee_form: { ...this.getEmployeeForm },
+                position_id: this.getEmployeeForm.position_id,
+                job_order_id: this.getEmployeeForm.job_order_id,
+                employee_base: this.getEmployeeForm.employee_base,
                 employee_selecteds: this.getEmployeeSelecteds,
                 user_id: this.getUserId,
             };
 
             this.is_loading = true;
 
-            //   console.info(request);
+            console.info(request);
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/salary-adjustment/store`, request)
@@ -131,8 +129,8 @@ export default {
                         this.$bvModal.hide("salary_adjustment_form");
                         this.$store.dispatch("salaryAdjustment/fetchData");
                         this.$store.commit("salaryAdjustment/CLEAR_FORM");
-                        this.$store.commit("employee/CLEAR_FORM");
-                        this.$store.commit("employee/CLEAR_DATA_SELECTED");
+                        this.$store.commit("employeeHasParent/CLEAR_FORM");
+                        this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
                     }
                 })
                 .catch((err) => {

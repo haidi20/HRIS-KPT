@@ -31,7 +31,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-row v-if="form.type_time == 'base time'">
+      <b-row v-if="form.type_time == 'base_time'">
         <b-col cols>
           <label for="scope_id" style="display:inline-block">
             <span>Pilih Bulan</span>
@@ -148,7 +148,7 @@
         </b-col>
       </b-row>
     </b-modal>
-    <Employee />
+    <EmployeeHasParent />
   </div>
 </template>
 

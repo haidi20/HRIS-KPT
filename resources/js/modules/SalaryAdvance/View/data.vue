@@ -94,7 +94,7 @@
   </div>
 </template>
 
-<script src="../Script/dataScript.js"></script>
+<script src="../Script/data.js"></script>
 
 <style lang="scss" scoped>
 .place-data {
