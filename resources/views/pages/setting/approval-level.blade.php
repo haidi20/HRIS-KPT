@@ -198,14 +198,14 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                            if (responses.success == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: responses.message
-                                });
+                             $('#formModal').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
 
-                                window.location.reload();
-                            }
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);

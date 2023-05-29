@@ -57,14 +57,18 @@
                                             </a>
                                         @endcan
                                         @can('ubah fitur')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
-                                                class="btn btn-sm btn-info">Ubah
-                                            </a>
+                                            @if ($feature->created_by == auth()->user()->id)
+                                                <a href="javascript:void(0)" onclick="onEdit({{ $feature }})"
+                                                    class="btn btn-sm btn-info">Ubah
+                                                </a>
+                                            @endif
                                         @endcan
                                         @can('hapus fitur')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
-                                                class="btn btn-sm btn-danger">Hapus
-                                            </a>
+                                            @if ($feature->created_by == auth()->user()->id)
+                                                <a href="javascript:void(0)" onclick="onDelete({{ $feature }})"
+                                                    class="btn btn-sm btn-danger">Hapus
+                                                </a>
+                                            @endif
                                         @endcan
                                     </td>
                                 </tr>
@@ -141,14 +145,14 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                            if (responses.success == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: responses.message
-                                });
+                             $('#formModal').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
 
-                                window.location.reload();
-                            }
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);

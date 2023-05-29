@@ -3,7 +3,7 @@ import moment from "moment";
 export const cleaningNumber = (value) => value?.toString().replace(/\./g, "");
 
 // export const numbersOnly = (value) => value.replace(/[^\d]/g, "");
-export const numbersOnly = (value) => value.replace(/\./g, '').replace(',', '.');
+export const numbersOnly = (value) => value.replace(/\./g, '').replace(',', '.').replace("Rp", "");
 
 // contoh formatCurrency(20000, ".");
 /* Fungsi formatRupiah */
@@ -28,6 +28,11 @@ export const formatCurrency = (value, prefix) => {
     // return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     return prefix == undefined ? rupiah : rupiah ? rupiah : "";
 };
+
+export const formatNumberId = (number) => {
+    // Menggunakan metode toLocaleString dengan opsi 'id-ID'
+    return number.toLocaleString('id-ID');
+}
 
 export const convertMonthToRoman = (month) => {
     const romanNumerals = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];

@@ -189,6 +189,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('', [EmployeeController::class, "index"])->name("index");
             Route::get('get-departmens/{companyId}', [EmployeeController::class, "getDepartmens"])->name("getDepartmen");
             Route::get('get-positions/{departmenId}', [EmployeeController::class, "getPositions"])->name("getPosition");
+            Route::get('exportExcelPosition/{position_id}', [EmployeeController::class, 'exportExcelPositionEmployee'])->name('exportExcelPosition');
+            Route::get('exportExcelLocation/{location_id}', [EmployeeController::class, 'exportExcelLocationEmployee'])->name('exportExcelLocation');
             Route::post('bpjs-tk', [EmployeeController::class, "bpjsTK"])->name("bpjsTK");
             Route::post('bpjs-tk-pt', [EmployeeController::class, "bpjsTKPT"])->name("bpjsTKPT");
             Route::post('bpjs-kes', [EmployeeController::class, "bpjsKES"])->name("bpjsKES");

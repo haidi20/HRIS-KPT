@@ -1,0 +1,75 @@
+<template>
+  <div>
+    <b-modal
+      id="data_employee"
+      ref="data_employee"
+      :title="getTitleForm"
+      :size="getIsFormMobile ?'md' : 'lg'"
+      class="modal-custom"
+      hide-footer
+    >
+      <div v-if="getIsFormMobile">
+        <FormMobile />
+        <br />
+        <TableMobile />
+      </div>
+      <div v-else>
+        <FormDesktop />
+        <br />
+        <TableDesktop v-if="form.employee_base == 'choose_employee'" />
+      </div>
+      <br />
+      <b-row>
+        <b-col>
+          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+          <b-button
+            v-if="form.employee_base != 'job_order'"
+            style="float: right"
+            variant="success"
+            @click="onSend()"
+          >Simpan</b-button>
+        </b-col>
+      </b-row>
+    </b-modal>
+  </div>
+</template>
+
+<script>
+import FormMobile from "./formMobile";
+import TableMobile from "./tableMobile";
+import FormDesktop from "./formDesktop";
+import TableDesktop from "./tableDesktop";
+
+export default {
+  components: {
+    TableMobile,
+    FormMobile,
+    TableDesktop,
+    FormDesktop,
+  },
+  data() {
+    return {
+      getTitleForm: "Data Karyawan",
+    };
+  },
+  computed: {
+    getIsFormMobile() {
+      return this.$store.state.employeeHasParent.is_form_mobile;
+    },
+    form() {
+      return this.$store.state.employeeHasParent.form;
+    },
+  },
+  methods: {
+    onCloseModal() {
+      this.$bvModal.hide("data_employee");
+    },
+    onSend() {
+      this.$bvModal.hide("data_employee");
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+</style>

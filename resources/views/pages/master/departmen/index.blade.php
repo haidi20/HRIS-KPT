@@ -24,60 +24,21 @@
             <div class="card-header">
                 <span class="fs-4 fw-bold">Data Departemen</span>
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                data-toggle="modal">
-                <i class="fas fa-plus text-white-50"></i> Tambah Departemen
-            </button>
+                    data-toggle="modal">
+                    <i class="fas fa-plus text-white-50"></i> Tambah Departemen
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <table class="table table-striped dataTable" id="table1">
-                <thead>
-                    <tr>
-                        <th width="5%">No.</th>
-                        <th>Perusahaan</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Keterangan</th>
-                        <th width="15%">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($departmens as $departmen)
-                    <tr>
-                        <td>
-                            {{ $loop->iteration }}
-                        </td>
-                        <td>
-                            {{ $departmen->company->name }}
-                        </td>
-                        <td>
-                            {{ $departmen->code }}
-                        </td>
-                        <td>
-                            {{ $departmen->name }}
-                        </td>
-                        <td>
-                            {{ $departmen->description }}
-                        </td>
-                        <td>
-                            @can('ubah departemen')
-                            <a href="javascript:void(0)" onclick="onEdit({{ $departmen }})"
-                            class="btn btn-sm btn-info">Ubah
-                        </a>
-                        @endcan
-                        @can('hapus departemen')
-                        <a href="javascript:void(0)" onclick="onDelete({{ $departmen }})"
-                        class="btn btn-sm btn-danger">Hapus
-                    </a>
-                    @endcan
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-</div>
-
-</section>
+    </section>
 </div>
 @endsection
 
@@ -88,10 +49,10 @@
 <!-- Need: Apexcharts -->
 <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
 <script src="assets/static/js/pages/dashboard.js"></script> --}}
-
+{!! $html->scripts() !!}
 <script>
     const initialState = {
-        positions: [],
+        departmens: [],
     };
 
     let state = {
@@ -101,7 +62,7 @@
     $(document).ready(function() {
         $('.dataTable').DataTable();
 
-        state.positions = {!! json_encode($departmens) !!};
+        state.departmens = {!! json_encode($departmens) !!};
         setupSelect();
         setInitialCode();
         send();
@@ -133,70 +94,6 @@
         onModalAction("formModal", "show");
     }
 
-    function onDelete(data) {
-        Swal.fire({
-            title: 'Perhatian!!!',
-            html: `Anda yakin ingin hapus data departemen <h2><b> ${data.name} </b> ?</h2>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            onfirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "{{ route('master.departmen.delete') }}",
-                    method: 'DELETE',
-                    dataType: 'json',
-                    data: {
-                        id: data.id
-                    },
-                    success: function(responses) {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 2500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                        if (responses.success == true) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: responses.message
-                            });
-
-                            window.location.reload();
-                        }
-                    },
-                    error: function(err) {
-                        // console.log(err.responseJSON.message);
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 4000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-
-                        Toast.fire({
-                            icon: 'error',
-                            title: err.responseJSON.message
-                        });
-                    }
-                });
-            }
-        });
-    }
-
     function send() {
         $("#form").submit(function(e) {
             e.preventDefault();
@@ -226,12 +123,14 @@
                         }
                     });
                     if (responses.success == true) {
+                        $('#formModal').modal('hide');
                         Toast.fire({
-                            icon: 'success',
-                            title: responses.message
+                        icon: 'success',
+                        title: responses.message
                         });
 
-                        window.location.reload();
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                     }
                 },
                 error: function(err) {
@@ -254,6 +153,72 @@
                     });
                 }
             });
+        });
+    }
+
+    function onDelete(data) {
+        Swal.fire({
+            title: 'Perhatian!!!',
+            html: `Anda yakin ingin hapus data departemen <h2><b> ${data.name} </b> ?</h2>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            onfirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('master.departmen.delete') }}",
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _method: 'DELETE',
+                        id: data.id
+                    },
+                    success: function(responses) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        if (responses.success == true) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
+
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                            function(json) {});
+                        }
+                    },
+                    error: function(err) {
+                        // console.log(err.responseJSON.message);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: err.responseJSON.message
+                        });
+                    }
+                });
+            }
         });
     }
 

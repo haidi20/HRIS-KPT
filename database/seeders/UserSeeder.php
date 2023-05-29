@@ -44,5 +44,15 @@ class UserSeeder extends Seeder
         ]);
 
         $hrd->assignRole('HRD');
+
+        $cashier = User::create([
+            'name' => 'indah',
+            'email' => 'cashier@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 4,
+            'status' => true,
+        ]);
+
+        $cashier->assignRole('HRD');
     }
 }

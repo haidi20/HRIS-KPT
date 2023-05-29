@@ -1,11 +1,11 @@
 <?php
 
 return [
-    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Penyesuaian Gaji", "Jenis Karyawan", "Tingkat Persetujuan", "Departemen"],
+    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Jenis Karyawan", "Tingkat Persetujuan", "Departemen"],
     "permission_private" => [
-        "lihat jam kerja",  "lihat bahan", "lihat penyesuaian gaji", "lihat departemen",
+        "lihat jam kerja",  "lihat bahan", "lihat departemen",
         "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan", "lihat tingkat persetujuan",
-        "hapus fitur", "hapus hak akses",
+        "hapus hak akses",
     ],
     "permission_added" => [
         [
@@ -27,21 +27,21 @@ return [
         ],
         // start kasbon
         [
-            "name" => "persetujuan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
-            "name" => "perwakilan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
-            "name" => "perwakilan persetujuan kasbon",
-            "featurer_id" => 4,
-        ],
-        [
             "name" => "ekspor laporan kasbon",
             "featurer_id" => 4,
         ],
+        [
+            "name" => "perwakilan laporan kasbon",
+            "featurer_id" => 4,
+        ],
+        [
+            "name" => "persetujuan laporan kasbon",
+            "featurer_id" => 4,
+        ],
+        // [
+        //     "name" => "hapus laporan kasbon",
+        //     "featurer_id" => 4,
+        // ],
 
         // end kasbon
 
@@ -67,24 +67,43 @@ return [
     ],
     "status" => [
         "review" => [
-            "readable" => "proses",
+            "readable" => "menunggu persetujuan",
+            "short_readable" => "proses",
             "color" => "warning",
         ],
         "accept" => [
-            "readable" => "terima",
+            "readable" => "di terima",
+            "short_readable" => "terima",
             "color" => "success",
         ],
         "reject" => [
-            "readable" => "tolak",
+            "readable" => "di tolak",
+            "short_readable" => "tolak",
             "color" => "danger",
         ],
         "revision" => [
-            "readable" => "perbaiki",
+            "readable" => "perlu diperbaiki",
+            "short_readable" => "perbaiki",
             "color" => "info",
         ],
         "not yet" => [
-            "readable" => "belum konfirmasi",
+            "readable" => "belum dikonfirmasi",
+            "short_readable" => "belum",
             "color" => "info",
         ],
     ],
+    // start untuk penyesuaian gaji
+    "type_times" => [
+        "forever" => "selamanya",
+        "base time" => "berdasarkan bulan",
+    ],
+    "type_amounts" => [
+        "nominal" => "jumlah uang",
+        "percent" => "persen dari gaji karyawan",
+    ],
+    "type_adjustments" => [
+        "deduction" => "pengurangan",
+        "addition" => "penambahan",
+    ],
+    // end untuk penyesuaian gaji
 ];

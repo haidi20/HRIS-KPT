@@ -33,7 +33,7 @@
                         <label for="minimum_employee" class="col-sm-4 col-form-label">Minimal Jumlah Karyawan Per hari
                         </label>
                         <div class="col-sm-8">
-                            <input type="number" id="minimum_employee" name="minimum_employee" class="form-control">
+                            <input type="number" id="minimum_employee" name="minimum_employee" class="form-control" min="1">
                         </div>
                     </div>
                     <div class="form-group row">

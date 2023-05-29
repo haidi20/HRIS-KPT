@@ -154,13 +154,13 @@
         <span v-if="is_loading">Loading...</span>
       </b-col>
     </b-row>
-    <Employee />
+    <EmployeeHasParent />
   </div>
 </template>
 
 <script>
 import VueSelect from "vue-select";
-import Employee from "../employee/view/employee";
+import EmployeeHasParent from "../EmployeeHasParent/view/employeeHasParent";
 
 export default {
   data() {
@@ -170,13 +170,13 @@ export default {
   },
   mounted() {
     // this.$bvModal.show("data_employee");
-    this.$store.commit("employee/UPDATE_IS_FORM_MOBILE", {
+    this.$store.commit("employeeHasParent/UPDATE_IS_FORM_MOBILE", {
       value: true,
     });
   },
   components: {
     VueSelect,
-    Employee,
+    EmployeeHasParent,
   },
   computed: {
     getTitleForm() {

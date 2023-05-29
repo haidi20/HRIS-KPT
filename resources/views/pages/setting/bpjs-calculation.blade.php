@@ -51,16 +51,16 @@
                                 {{ $bpjs_calculation->name }}
                             </td>
                             <td>
-                                {{ $bpjs_calculation->company_percent }}
+                                {{ $bpjs_calculation->company_percent . "%" }}
                             </td>
                             <td>
-                                {{ $bpjs_calculation->employee_percent }}
+                                {{ $bpjs_calculation->employee_percent . "%" }}
                             </td>
                             <td>
-                                {{ $bpjs_calculation->company_nominal }}
+                                {{ "Rp. " . number_format($bpjs_calculation->company_nominal, 0, ",", ".") }}
                             </td>
                             <td>
-                                {{ $bpjs_calculation->employee_nominal }}
+                                {{ "Rp. " . number_format($bpjs_calculation->employee_nominal, 0, ",", ".") }}
                             </td>
                             <td class="flex flex-row justify-content-around">
                                 @can('ubah perhitungan bpjs')
@@ -122,6 +122,11 @@
                 var baseWagesBPJSTK = baseWages.base_wages_bpjs_nominal_1;
                 var baseWagesBPJSKES = baseWages.base_wages_bpjs_nominal_2;
 
+                function formatRupiah(angka, prefix) {
+                    var rupiah = Number(angka);
+                    return prefix + rupiah.toLocaleString();
+                }
+
                 var calculateNominal = function (percent, baseWage) {
                     var nominal = Math.floor(baseWage * percent);
                     var last3Digits = nominal.toString().slice(-3);
@@ -133,7 +138,8 @@
                     } else {
                         nominal = nominal.toString().slice(0, -2);
                     }
-                    return nominal;
+
+                    return formatRupiah(nominal, "Rp. ");
                 };
 
                 $("#company_nominal").val(calculateNominal(data.company_percent, baseWagesBPJSTK));
@@ -157,6 +163,11 @@
                 var baseWagesBPJSTK = baseWages.base_wages_bpjs_nominal_1;
                 var baseWagesBPJSKES = baseWages.base_wages_bpjs_nominal_2;
 
+                function formatRupiah(angka, prefix) {
+                    var rupiah = Number(angka);
+                    return prefix + rupiah.toLocaleString();
+                }
+
                 var calculateNominal = function (percent, baseWage) {
                     var nominal = Math.floor(baseWage * percent);
                     var last3Digits = nominal.toString().slice(-3);
@@ -168,7 +179,8 @@
                     } else {
                         nominal = nominal.toString().slice(0, -2);
                     }
-                    return nominal;
+
+                    return formatRupiah(nominal, "Rp. ");
                 };
 
                 var companyPercent = $("#company_percent").val();
@@ -275,12 +287,14 @@
                         }
                     });
                     if (responses.success == true) {
+                        $('#formModal').modal('hide');
                         Toast.fire({
                             icon: 'success',
                             title: responses.message
                         });
 
-                        window.location.reload();
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                     }
                 },
                 error: function (err) {

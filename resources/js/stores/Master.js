@@ -2,7 +2,7 @@ import axios from "axios";
 import moment from "moment";
 
 const defaultForm = {
-
+    id: null,
 }
 
 const example = {
@@ -49,12 +49,12 @@ const example = {
             state.data.companies = payload.companies;
         },
 
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
         CLEAR_FORM(state, payload) {
             // console.info(defaultForm);
             state.form = { ...defaultForm };
-        },
-        UPDATE_LOADING_TABLE(state, payload) {
-            state.loading.table = payload.value;
         },
     },
     actions: {
@@ -66,7 +66,7 @@ const example = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     let data = responses.data;
 
                     data.positions = [

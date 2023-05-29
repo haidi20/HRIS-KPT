@@ -7,16 +7,88 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
+use Yajra\DataTables\DataTables;
 use Spatie\Permission\Models\Permission;
 
 class LocationController extends Controller
 {
-    public function index()
+    public function index(Datatables $datatables)
     {
+        $columns = [
+            'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
+                return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
+            }],
+            'name' => ['name' => 'name', 'title' => 'Nama'],
+            'description' => ['name' => 'description', 'title' => 'Deskripsi'],
+            'aksi' => [
+                'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '130px', 'exportable' => false
+            ],
+        ];
+
+        if ($datatables->getRequest()->ajax()) {
+            $location = Location::query()
+                ->select('locations.*');
+
+            return $datatables->eloquent($location)
+                ->filterColumn('name', function (Builder $query, $keyword) {
+                    $sql = "locations.name  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('description', function (Builder $query, $keyword) {
+                    $sql = "locations.description like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->addColumn('aksi', function (Location $data) {
+                    $button = '';
+
+                    if (auth()->user()->can('ubah jenis karyawan')) {
+                        $button .= '<a href="javascript:void(0)" onclick="onEdit(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-warning me-2"><i class="bi bi-pen"></i></a>';
+                    }
+
+                    if (auth()->user()->can('hapus jenis karyawan')) {
+                        $button .= '<a href="javascript:void(0)" onclick="onDelete(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>';
+                    }
+
+                    return $button;
+                })
+                ->rawColumns(['aksi'])
+                ->toJson();
+        }
+
+        $columnsArrExPr = [0, 1, 2, 3];
+        $html = $datatables->getHtmlBuilder()
+            ->columns($columns)
+            ->parameters([
+                'order' => [[1, 'desc']],
+                'responsive' => true,
+                'autoWidth' => false,
+                'dom' => 'lBfrtip',
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 Data', '25 Data', '50 Data', 'Semua Data']
+                ],
+                'buttons' => $this->buttonDatatables($columnsArrExPr),
+            ]);
+
+
         $locations = Location::all();
 
-        return view("pages.master.location.index", compact("locations"));
+        $compact = compact('html', 'locations');
+
+        return view("pages.master.location.index", $compact);
     }
+
+    private function buttonDatatables($columnsArrExPr)
+    {
+        return [
+            ['extend' => 'csv', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export CSV'],
+            ['extend' => 'pdf', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export PDF'],
+            ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
+            ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
+        ];
+    }
+
 
     public function store(Request $request)
     {

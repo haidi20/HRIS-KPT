@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>HRIS - KPT</title>
 
+    {{-- FAVICON --}}
     <link rel="shortcut icon" href="{{ asset('assets/img/logo.ico') }}" type="image/x-icon">
 
     
@@ -27,13 +28,21 @@
 
             
     <link rel="stylesheet" href="{{ asset('assets-mazer/css/main/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app-tailwind.css') }}">
-    <link href="{{ asset('assets/vendors/select2/css/select2.min.css') }}" rel="stylesheet" />
+
+    {{-- CUSTOM CSS --}}
     <link href="{{ asset('custom/custom.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link href="{{ asset('custom/responsive.css') }}" rel="stylesheet" />
+
+    {{-- THIRDPARTY CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/app-tailwind.css') }}">
+    <link href="{{ asset('assets-mazer/extensions/select2/css/select2.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets-mazer/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}">
+
+    {{-- BACKUP CSS --}}
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
 
 
     @yield('style')
@@ -96,20 +105,41 @@
     </div>
 
 
+    <script src="{{ asset('assets-mazer/js/app.js') }}"></script>
+    <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets-mazer/extensions/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/backup/js/moment.min.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/backup/js/datatables.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js')}}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
+    <script src="{{ asset('assets-mazer/extensions/backup/js/form-element-select.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/backup/js/daterangepicker.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/pdfmake-0.1.32/pdfmake.min.js?v=37') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/pdfmake-0.1.32/vfs_fonts.js?v=37') }}"></script>
+    <!--Data tables-->
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/buttons.server-side.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/jszip/jszip.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/pdfmake/pdfmake.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/pdfmake/vfs_fonts.js') }}"></script>
+    {{-- Button --}}
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/buttons/js/dataTables.buttons.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/buttons/js/buttons.colVis.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/buttons/js/buttons.html5.js') }}"></script>
+    <script src="{{ asset('assets-mazer/extensions/datatables-plugins/buttons/js/buttons.print.js') }}"></script>
+    
     {{-- <script src="{{ asset('assets/compiled/js/app-mazer.js') }}"></script> --}}
     {{-- bootstrap.js not found --}}
     {{-- <script src="{{ asset('assets/compiled/js/bootstrap.js') }}"></script> --}}
     {{-- <script src="{{ asset('assets/compiled/js/mazer.js') }}"></script> --}}
-    <script src="{{ asset('assets-mazer/js/app.js') }}"></script>
     {{-- <script src="{{ asset('js/bootstrap.js') }}" defer></script> --}}
-    <script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
-    <script src="{{ asset('assets/vendors/select2/js/select2.full.min.js') }}"></script>
-    <script src="{{ asset('assets-mazer/extensions/backup/js/moment.min.js') }}"></script>
     {{-- <script src="{{ asset('assets-mazer/extensions/backup/js/sweetalert2.js') }}"></script> --}}
-    <script src="{{ asset('assets-mazer/extensions/backup/js/datatables.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script> --}}
     @isset($vue)
         <script src="{{ asset('js/app.js') }}"></script>

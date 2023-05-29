@@ -23,6 +23,7 @@ class CreateApprovalAgreementsTable extends Migration
             // $table->string("status_approval"); //review, not yet, accept, reject, revision, etc | tinjau, belum, terima, tolak, revisi, dll
             $table->enum('status_approval', ['review', 'not yet', 'accept', 'reject', 'revision'])->nullable()->default('review');
             $table->integer("level_approval")->default(0); // sudah di tahap apa proses approval
+            $table->text('note')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

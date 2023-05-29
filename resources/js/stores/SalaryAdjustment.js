@@ -4,33 +4,30 @@ import moment from "moment";
 import { numbersOnly, formatCurrency } from "../utils";
 
 const defaultForm = {
+    id: null,
     name: null,
-    type_time: "base time",
+    type_time: "forever",
     type_amount: "nominal",
     amount: null,
     amount_readable: null,
     date_start: new Date(),
     date_end: new Date(moment().add({ month: 1 })),
-    type_adjustment: "deduction",
+    type_adjustment: "addition",
     note: null,
+    is_date_end: false,
+    form_type: "create",
 }
 
 const SalaryAdjustment = {
     namespaced: true,
     state: {
         base_url: null,
-        data: [
-            {
-                id: 1,
-                name: "Turun Kapal",
-                time: "Mei 2023",
-                amount: "1.000.000",
-                type_adjustment_name: "penambahan",
-                note: "bonus turun kapal",
-            },
-        ],
+        data: [],
         params: {
-            date_filter: new Date(),
+            month: [
+                new Date(),
+                new Date(),
+            ],
         },
         form: { ...defaultForm },
         options: {
@@ -40,7 +37,7 @@ const SalaryAdjustment = {
                     name: "selamanya",
                 },
                 {
-                    id: "base time",
+                    id: "base_time",
                     name: "berdasarkan bulan",
                 }
             ],
@@ -52,7 +49,7 @@ const SalaryAdjustment = {
                 },
                 {
                     id: "percent",
-                    name: "presentase dari gaji karyawan",
+                    name: "persen dari gaji karyawan",
                 },
             ],
             type_adjustments: [
@@ -71,6 +68,22 @@ const SalaryAdjustment = {
         },
     },
     mutations: {
+        INSERT_BASE_URL(state, payload) {
+            state.base_url = payload.base_url;
+        },
+        INSERT_DATA(state, payload) {
+            state.data = payload.salaryAdjustments;
+        },
+        INSERT_FORM(state, payload) {
+            state.form = {
+                ...state.form,
+                ...payload.form,
+                form_type: payload.form_type,
+            };
+        },
+        INSERT_FORM_FORM_TYPE(state, payload) {
+            state.form.form_type = payload.from_type;
+        },
         INSERT_FORM_AMOUNT(state, payload) {
             if (payload.amount != null) {
                 // console.info(typeof payload.amount);
@@ -82,16 +95,67 @@ const SalaryAdjustment = {
                 state.form.amount = numericValue;
                 state.form.amount_readable = readAble;
 
-                console.info(state);
+                // console.info(state);
             }
+        },
+
+
+        UPDATE_FORM_IS_DATE_END(state, payload) {
+            state.form.is_date_end = payload.value;
+        },
+        UPDATE_LOADING_TABLE(state, payload) {
+            state.loading.table = payload.value;
+        },
+        CLEAR_FORM(state, payload) {
+            // console.info(defaultForm);
+            state.form = { ...defaultForm };
         },
     },
     actions: {
-        // onIncrement: (context, payload) => {
-        //     context.commit("INCREMENT");
-        // },
+        fetchData: async (context, payload) => {
+            context.commit("INSERT_DATA", {
+                salaryAdjustments: [],
+            });
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
 
-    }
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/salary-adjustment/fetch-data`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        salaryAdjustments: data.salaryAdjustments,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (state.form.form_type == "detail") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default SalaryAdjustment;

@@ -9,6 +9,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
 {
@@ -25,6 +27,18 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
     {
         return 'UTAMA';
     }
+
+    // public function drawings()
+    // {
+    //     $drawing = new Drawing();
+    //     $drawing->setName('signature');
+    //     $drawing->setDescription('This is my signature');
+    //     $drawing->setPath(public_path('/assets/img/logo.png'));
+    //     $drawing->setHeight(90);
+    //     $drawing->setCoordinates('A1');
+
+    //     return $drawing;
+    // }
 
     public function view(): View
     {

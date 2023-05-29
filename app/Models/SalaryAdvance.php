@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +15,9 @@ class SalaryAdvance extends Model
 
     protected $appends = [
         'employee_name', 'creator_name', 'loan_amount_readable', 'position_name',
+        'monthly_deduction_readable', 'employee_name_and_position',
+        // 'remaining_debt_readable',
+        'month_loan_complite_readable', 'remaining_debt',
         // 'status_readable', 'status_color',
     ];
 
@@ -41,9 +45,20 @@ class SalaryAdvance extends Model
         });
     }
 
+    // public function salaryAdvanceLasts()
+    // {
+    //     return $this->hasMany(SalaryAdvance::class, "employee_id", "employee_id")
+    //         ->where('created_at', '<', $this->created_at);
+    // }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
+    public function foreman()
+    {
+        return $this->belongsTo(Employee::class, "foreman_id", "id");
     }
 
     public function creator()
@@ -55,6 +70,13 @@ class SalaryAdvance extends Model
     {
         if ($this->employee) {
             return $this->employee->name;
+        }
+    }
+
+    public function getEmployeeNameAndPositionAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->name_and_position;
         }
     }
 
@@ -80,6 +102,50 @@ class SalaryAdvance extends Model
             return null;
         }
     }
+
+    public function getMonthlyDeductionReadAbleAttribute()
+    {
+        $loanAmount = number_format($this->monthly_deduction, 0, ',', '.');
+        return "Rp {$loanAmount}";
+    }
+
+    public function getMonthLoanCompliteReadableAttribute()
+    {
+        return Carbon::parse($this->month_loan_complite)->locale('id')->isoFormat("MMMM YYYY");
+    }
+
+    public function getRemainingDebtAttribute()
+    {
+        $monthNow = Carbon::now()->floorMonth();
+        $monthEnd = Carbon::parse($this->month_loan_complite)->floorMonth();
+        $getDiffMonth = $monthNow->diffInMonths($monthEnd, false) + 1;
+
+        if ($monthNow->format("Y-m-d") <= $monthEnd) {
+            // $remainingDebt = $this->loan_mount / $getDiffMonth;
+            $remainingDebt = $this->monthly_deduction * $getDiffMonth;
+            $remainingDebt =  number_format($remainingDebt, 0, ',', '.');
+            // return $remainingDebt;
+            return "Rp {$remainingDebt}";
+            // return "{$monthNow} {$monthEnd} {$getDiffMonth}";
+        } else {
+            return "Rp. 0";
+        }
+    }
+
+    // public function getRemainingDebtReadableAttribute()
+    // {
+    //     $salaryAdvanceLasts = SalaryAdvance::where("employee_id", $this->employee_id)
+    //         ->where("created_at", "<", $this->created_at);
+    //     $checkLastData = $salaryAdvanceLasts->count();
+
+    //     if ($checkLastData > 0) {
+    //         $remainingDebt = $salaryAdvanceLasts->sum("remaining_debt");
+    //         $remainingDebt =  number_format($remainingDebt, 0, ',', '.');
+    //         return $remainingDebt;
+    //     } else {
+    //         return "Rp. 0";
+    //     }
+    // }
 
     // public function getStatusReadableAttribute()
     // {

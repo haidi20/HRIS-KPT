@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="root">
-        <salary-adjustment />
+        <salary-adjustment base-url="{{ $baseUrl }}" user="{{ $user }}" />
     </div>
 @endsection
 
