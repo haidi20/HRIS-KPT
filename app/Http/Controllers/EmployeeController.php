@@ -23,38 +23,140 @@ use App\Exports\LaporanMutasiExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Sheets\EmployeePositionSheet;
 use App\Exports\Sheets\EmployeeLocationSheet;
+use Illuminate\Database\Eloquent\Builder;
+use Yajra\DataTables\DataTables;
+
 
 class EmployeeController extends Controller
 {
     private $public_path = '/storage/pegawai/';
 
-    public function getDepartmens($companyId)
+    // public function getDepartmens($companyId)
+    // {
+    //     $departmens = Departmen::with('company')->where('company_id', $companyId)->get();
+
+    //     return response()->json($departmens);
+    // }
+
+    // public function getPositions($departmenId)
+    // {
+    //     $positions = Position::with('departmen')->where('departmen_id', $departmenId)->get();
+
+    //     return response()->json($positions);
+    // }
+
+    public function index(Datatables $datatables)
     {
-        $departmens = Departmen::with('company')->where('company_id', $companyId)->get();
+        $columns = [
+            'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
+                return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
+            }],
+            'nip' => ['name' => 'nip', 'title' => 'NIP'],
+            'name' => ['name' => 'name', 'title' => 'Nama'],
+            'position_name' => ['name' => 'position_name', 'title' => 'Nama Jabatan'],
+            'location_name' => ['name' => 'location_name', 'title' => 'Nama Lokasi'],
+            'company_name' => ['name' => 'company_name', 'title' => 'Nama Perusahaan'],
+            'employee_status' => ['name' => 'employee_status', 'title' => 'Status'],
+            'aksi' => [
+                'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '130px', 'exportable' => false
+            ],
+        ];
 
-        return response()->json($departmens);
-    }
+        if ($datatables->getRequest()->ajax()) {
+            $employee = Employee::query()
+                ->select('employees.*', 'positions.name as position_name', 'locations.name as location_name', 'companies.name as company_name')
+                ->with('company', 'location', 'position',) // Eager load the company and position relationships
+                ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
+                ->leftJoin('locations', 'employees.location_id', '=', 'locations.id')
+                ->leftJoin('companies', 'employees.company_id', '=', 'companies.id');
 
-    public function getPositions($departmenId)
-    {
-        $positions = Position::with('departmen')->where('departmen_id', $departmenId)->get();
+            return $datatables->eloquent($employee)
+                ->filterColumn('position_name', function (Builder $query, $keyword) {
+                    $sql = "positions.name  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('location_name', function (Builder $query, $keyword) {
+                    $sql = "locations.name like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('company_name', function (Builder $query, $keyword) {
+                    $sql = "companies.name like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('employee_status', function (Builder $query, $keyword) {
+                    $sql = "employees.employee_status  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->editColumn('employee_status', function (Employee $data) {
+                    if ($data->employee_status == 'aktif') {
+                        $employee_status = 'Aktif';
+                    } elseif ($data->employee_status == 'meninggal') {
+                        $employee_status = 'Meninggal';
+                    } else {
+                        $employee_status = 'Keluar';
+                    }
 
-        return response()->json($positions);
-    }
+                    return $employee_status;
+                })
+                ->addColumn('aksi', function (Employee $data) {
+                    $employee = $data->load('company', 'location', 'position'); // Load the related company and position data
 
-    public function index()
-    {
+                    $button = '';
+
+                    if (auth()->user()->can('ubah karyawan')) {
+                        $button .= '<a href="javascript:void(0)" onclick="onEdit(' . htmlspecialchars(json_encode($employee), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-warning me-2"><i class="bi bi-pen"></i></a>';
+                    }
+
+                    if (auth()->user()->can('hapus karyawan')) {
+                        $button .= '<a href="javascript:void(0)" onclick="onDelete(' . htmlspecialchars(json_encode($employee), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>';
+                    }
+
+                    return $button;
+                })
+                ->rawColumns(['aksi'])
+                ->toJson();
+        }
+
+        $columnsArrExPr = [0, 1, 2, 3];
+        $html = $datatables->getHtmlBuilder()
+        ->columns($columns)
+        ->parameters([
+            'order' => [[1, 'desc']],
+            'responsive' => true,
+            'autoWidth' => false,
+            'dom' => 'lBfrtip',
+            'lengthMenu' => [
+                [10, 25, 50, -1],
+                ['10 Data', '25 Data', '50 Data', 'Semua Data']
+            ],
+            'buttons' => $this->buttonDatatables($columnsArrExPr),
+        ]);
+
+
         $employees = Employee::all();
         $companies = Company::all();
-        $barges = Barge::all();
-        $departmens = Departmen::all();
         $positions = Position::all();
         $locations = Location::all();
         $employee_types = EmployeeType::all();
+        $barges = Barge::all();
+        $departments = Departmen::all();
         $finger_tools = FingerTool::all();
 
-        return view("pages.master.employee.index", compact("employees", "companies", "barges", "departmens", "positions", "employee_types", "locations", "finger_tools"));
+        $compact = compact('html', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools');
+
+        return view("pages.master.employee.index", $compact);
     }
+
+    private function buttonDatatables($columnsArrExPr)
+    {
+        return [
+            ['extend' => 'csv', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export CSV'],
+            ['extend' => 'pdf', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export PDF'],
+            ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
+            ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
+        ];
+    }
+
 
     // untuk kebutuhan di vuejs
     // semua karyawan
