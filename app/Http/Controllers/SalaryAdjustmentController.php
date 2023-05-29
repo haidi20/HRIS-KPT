@@ -189,13 +189,13 @@ class SalaryAdjustmentController extends Controller
         }
 
         foreach ($employees as $index => $item) {
-            $salaryAdjustmentDetail = salaryAdjustmentDetail::updateOrCreate([
+            $salaryAdjustmentDetail = salaryAdjustmentDetail::create([
                 "employee_id" => $item->id,
                 "salary_adjustment_id" => $salaryAdjustment->id,
-            ], [
-                "type_amount" => $salaryAdjustment->type_amount,
-                "amount" => $salaryAdjustment->amount,
             ]);
+
+            $salaryAdjustmentDetail["type_amount"] = $salaryAdjustment->type_amount;
+            $salaryAdjustmentDetail["amount"] = $salaryAdjustment->amount;
 
             $this->storeSalaryAdjustmentDetailHistory($salaryAdjustmentDetail);
         }

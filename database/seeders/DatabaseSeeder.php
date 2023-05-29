@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BaseWagesBpjsSeeder::class);
         $this->call(EmployeeSeeder::class);
         $this->call(JobSeeder::class);
+        $this->call(SalaryAdjustmentSeeder::class);
         // end master
 
         /*
