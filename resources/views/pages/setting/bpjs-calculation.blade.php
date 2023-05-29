@@ -287,12 +287,14 @@
                         }
                     });
                     if (responses.success == true) {
+                        $('#formModal').modal('hide');
                         Toast.fire({
                             icon: 'success',
                             title: responses.message
                         });
 
-                        window.location.reload();
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                     }
                 },
                 error: function (err) {

@@ -22,136 +22,81 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                Data Karyawan
+                <span class="fs-4 fw-bold">Data Karyawan</span>
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                data-toggle="modal">
-                <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
-            </button>
-        </div>
-        <div class="card-body">
-            {{-- <div class="row">
+                    data-toggle="modal">
+                    <i class="fas fa-plus text-white-50"></i> Tambah Karyawan
+                </button>
+            </div>
+            <div class="card-body">
+                {{-- <div class="row">
                 <div class="col-12 d-flex align-items-center">
                     <h5>Filter berdasarkan : </h5>
                 </div>
 
             </div> --}}
-            <div class="row">
-                <div class="col-2 form-group">
-                    <label for="jabatanFilter" class="col-form-label">Jabatan :</label>
-                    <div style="width: 100%;">
-                        <select name="jabatanFilter" id="jabatanFilter" class="form-control select2"
-                        style="width: 100%;">
-                        <option value="">-- Pilih Jabatan --</option>
-                        @foreach ($positions as $position)
-                        <option value="{{ $position->name }}">{{ $position->name }}</option>
-                        @endforeach
-                    </select>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-2 form-group">
+                        <label for="jabatanFilter" class="col-form-label">Jabatan :</label>
+                        <div style="width: 100%;">
+                            <select name="jabatanFilter" id="jabatanFilter" class="form-control select2"
+                                style="width: 100%;">
+                                <option value="">-- Pilih Jabatan --</option>
+                                @foreach ($positions as $position)
+                                <option value="{{ $position->name }}" data-position-id="{{ $position->id }}">
+                                    {{ $position->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <a href="" target="_blank" class="btn btn-sm btn-secondary mt-2" id="exportPositionBtn"
+                            style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
+                    </div>
+                    <div class="col-sm-6 col-lg-2 form-group">
+                        <label for="locationFilter" class="col-form-label">Lokasi :</label>
+                        <div style="width: 100%;">
+                            <select name="locationFilter" id="locationFilter" class="form-control select2"
+                                style="width: 100%;">
+                                <option value="">-- Pilih Lokasi Karyawan --</option>
+                                @foreach ($locations as $location)
+                                <option value="{{ $location->name }}" data-location-id="{{ $location->id }}">
+                                    {{ $location->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportLocationBtn" style="display: none;"><i
+                                class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
+                    </div>
                 </div>
-                <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportPositionBtn"
-                style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
-                <p id="exportPositionMessage" style="display: none; margin-top: 5px;">Pegawai Dengan Jabatan Yang
-                    Dipilih Tidak Ada</p>
-                </div>
-                <div class="col-2 form-group">
-                    <label for="locationFilter" class="col-form-label">Lokasi :</label>
-                    <div style="width: 100%;">
-                        <select name="locationFilter" id="locationFilter" class="form-control select2"
-                        style="width: 100%;">
-                        <option value="">-- Pilih Lokasi Karyawan --</option>
-                        @foreach ($locations as $location)
-                        <option value="{{ $location->name }}">{{ $location->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportLocationBtn"
-                style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
-                <p id="exportLocationMessage" style="display: none; margin-top: 5px;">Pegawai Dengan Lokasi Yang
-                    Dipilih Tidak Ada</p>
-                </div>
-                {{-- <div class="col-2 form-group">
-                    <label for="rangeContractFilter" class="col-form-label">Tanggal Masuk :</label>
-                    <div style="width: 100%;">
-                        <div class="input-group input-daterange" id="rangeContractFilter">
-                            <input type="text" class="form-control" name="enter_date_start" id="enter_date_start" autocomplete="off"
-                            width="100%">
-                            <div class="input-group-addon" style="padding-right: 8px;">S/D</div>
-                            <input type="text" class="form-control" name="enter_date_end" id="enter_date_end" autocomplete="off"
-                            width="100%">
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
                         </div>
                     </div>
-                </div> --}}
+                </div>
             </div>
-            <hr>
-            <table class="table table-striped dataTable" id="table1">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Perusahaan</th>
-                        <th>Jabatan</th>
-                        <th>Lokasi</th>
-                        <th>Tanggal Masuk</th>
-                        <th>Status</th>
-                        <th width="15%">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($employees as $employee)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $employee->nip }}</td>
-                        <td>{{ $employee->name }}</td>
-                        <td>
-                            @if ($employee->company_name == 'PT. KARYA PACIFIC TEHNIK SHIPYARD')
-                            <span>PT. KPTS</span>
-                            @else
-                            <span>CV. KPTS</span>
-                            @endif
-                        </td>
-                        <td data-position-id="{{ $employee->position_id }}">{{ $employee->position_name }}</td>
-                        <td data-location-id="{{ $employee->location_id }}">{{ $employee->location_name }}</td>
-                        <td>{{ $employee->enter_date }}</td>
-                        <td>
-                            <span
-                            class="{{ $employee->employee_status == 'aktif' ? 'text-success' : 'text-danger' }}">
-                            {{ $employee->employee_status == 'aktif' ? 'AKTIF' : 'TIDAK AKTIF' }}
-                        </span>
-                    </td>
-                    <td class="flex flex-row justify-content-around">
-                        @can('ubah karyawan')
-                        <a href="javascript:void(0)" onclick="onEdit({{ $employee }})"
-                        class="btn btn-sm btn-info">Ubah</a>
-                        @endcan
-                        @can('hapus karyawan')
-                        <a href="javascript:void(0)" onclick="onDelete({{ $employee }})"
-                        class="btn btn-sm btn-danger">Hapus</a>
-                        @endcan
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+        </div>
+    </section>
 </div>
-</section>
-</div>
+
 @endsection
 
 @section('style')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
-<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/form-element-select.css') }}" rel="stylesheet" />"
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/form-element-select.css') }}" rel="stylesheet" />
 <link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
-"
-<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/datepicker3.css') }}" rel="stylesheet" />"
-<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/daterangepicker.css') }}" rel="stylesheet" />"
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/datepicker3.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/daterangepicker.css') }}" rel="stylesheet" />
+
+{{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"> --}}
+
 @endsection
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
-<script src="{{ asset('assets-mazer/extensions/backup/js/form-element-select.js') }}"></script>
-<script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-datepicker.js') }}"></script>
-<script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-datetimepicker.min.js') }}"></script>
-<script src="{{ asset('assets-mazer/extensions/backup/js/daterangepicker.js') }}"></script>
+{!! $html->scripts() !!}
 <script>
     const initialState = {
         employees: [],
@@ -162,7 +107,7 @@
     };
 
     $(document).ready(function () {
-        $('.dataTable').DataTable();
+        // $('.dataTable').DataTable();
 
         state.employees = {!! json_encode($employees) !!};
 
@@ -176,24 +121,21 @@
     $(document).ready(function() {
         var table = $('.dataTable').DataTable();
         var exportPositionBtn = $('#exportPositionBtn');
+
         $('#jabatanFilter').select2();
 
         $('#jabatanFilter').on('change', function() {
             var selectedJabatan = $(this).val();
-            table.column(4).search(selectedJabatan).draw();
-
+            var selectedPositionId = $(this).find(':selected').data('position-id');
+            table.column(3).search(selectedJabatan).draw(); // Mengubah angka kolom menjadi 3 untuk pencarian berdasarkan jabatan
 
             // Update export URL and set initial export URL
             var exportUrl = "{{ route('master.employee.exportExcelPosition', ['position_id' => ':position_id']) }}";
-            var positionId = $('.dataTable tbody td[data-position-id]').first().data('position-id');
-            exportUrl = exportUrl.replace(':position_id', positionId);
+            exportUrl = exportUrl.replace(':position_id', selectedPositionId);
             exportPositionBtn.attr('href', exportUrl);
 
-            // Toggle export button visibility
-            // $('#exportPositionBtn').toggle(selectedJabatan !== '');
-
             // Toggle export button visibility and display message
-            if (positionId != null) {
+            if (selectedPositionId != null) {
                 exportPositionBtn.show();
                 $('#exportPositionMessage').hide();
             } else {
@@ -204,26 +146,24 @@
     });
 
     // SETUP FILTER LOCATION
-    $(document).ready(function () {
+    $(document).ready(function() {
         var table = $('.dataTable').DataTable();
         var exportLocationBtn = $('#exportLocationBtn');
 
         $('#locationFilter').select2();
 
-        $('#locationFilter').on('change', function () {
+        $('#locationFilter').on('change', function() {
             var selectedLocation = $(this).val();
-            table.column(5).search(selectedLocation).draw();
+            var selectedLocationId = $(this).find(':selected').data('location-id');
+            table.column(4).search(selectedLocation).draw(); // Mengubah angka kolom menjadi 4 untuk pencarian berdasarkan lokasi
 
             // Update export URL and set initial export URL
             var exportUrl = "{{ route('master.employee.exportExcelLocation', ['location_id' => ':location_id']) }}";
-            var locationId = $('.dataTable tbody td[data-location-id]').first().data('location-id');
-            exportUrl = exportUrl.replace(':location_id', locationId);
+            exportUrl = exportUrl.replace(':location_id', selectedLocationId);
             exportLocationBtn.attr('href', exportUrl);
 
-            console.log(locationId);
-
             // Toggle export button visibility and display message
-            if (locationId != null) {
+            if (selectedLocationId != null) {
                 exportLocationBtn.show();
                 $('#exportLocationMessage').hide();
             } else {
@@ -233,6 +173,7 @@
         });
     });
 
+    // SETUP FILTER ENTER DATE
     $(document).ready(function() {
         var table = $('.dataTable').DataTable();
         var startDate = '';
@@ -630,70 +571,6 @@
         onModalAction("formModal", "show");
     }
 
-    function onDelete(data) {
-        Swal.fire({
-            title: 'Perhatian!!!',
-            html: `Anda yakin ingin hapus data karyawan <h2><b> ${data.name} </b> ?</h2>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            onfirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "{{ route('master.employee.delete') }}",
-                    method: 'DELETE',
-                    dataType: 'json',
-                    data: {
-                        id: data.id
-                    },
-                    success: function (responses) {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 2500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                        if (responses.success == true) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: responses.message
-                            });
-
-                            window.location.reload();
-                        }
-                    },
-                    error: function (err) {
-                        // console.log(err.responseJSON.message);
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 4000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-
-                        Toast.fire({
-                            icon: 'error',
-                            title: err.responseJSON.message
-                        });
-                    }
-                });
-            }
-        });
-    }
-
     function send() {
         $("#form").submit(function (e) {
             e.preventDefault(); // Batalkan tindakan submit default
@@ -724,12 +601,14 @@
                         }
                     });
                     if (responses.success == true) {
+                        $('#formModal').modal('hide');
                         Toast.fire({
                             icon: 'success',
                             title: responses.message
                         });
 
-                        window.location.reload();
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                     }
                 },
                 error: function (err) {
@@ -755,23 +634,89 @@
         });
     }
 
+    function onDelete(data) {
+        Swal.fire({
+            title: 'Perhatian!!!',
+            html: `Anda yakin ingin hapus data karyawan <h2><b> ${data.name} </b> ?</h2>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            onfirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('master.employee.delete') }}",
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _method: 'DELETE',
+                        id: data.id
+                    },
+                    success: function(responses) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        if (responses.success == true) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
+
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                            function(json) {});
+                        }
+                    },
+                    error: function (err) {
+                        // console.log(err.responseJSON.message);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: err.responseJSON.message
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     function setupSelect() {
         $(".select2").select2();
     }
 
     function clearForm() {
-        $("#id").val("");
-        $("#nip").val("");
-        $("#nik").val("");
-        $("#name").val("");
-        $("#birth_place").val("");
-        $("#birth_date").val("");
-        $("#phone").val("");
-        $("#religion").val("").trigger("change");
-        $("#address").val("");
-        $("#photo").val("");
-        $("#photoPreview").val("");
-        $("#photoPreviewReady").hide();
+        // $("#id").val("");
+        // $("#nip").val("");
+        // $("#nik").val("");
+        // $("#name").val("");
+        // $("#birth_place").val("");
+        // $("#birth_date").val("");
+        // $("#phone").val("");
+        // $("#religion").val("").trigger("change");
+        // $("#address").val("");
+        // $("#photo").val("");
+        // $("#photoPreview").val("");
+        // $("#photoPreviewReady").hide();
     }
 </script>
 @endsection

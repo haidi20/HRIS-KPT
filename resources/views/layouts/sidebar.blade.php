@@ -284,14 +284,14 @@
                         </a>
                     </li>
                 @endcan
-                @can('lihat bahan')
+                {{-- @can('lihat bahan')
                     <li class="sidebar-item {{ isActive('master/material') }}">
                         <a href="{{ route('master.material.index') }}" class='sidebar-link'>
                             <i class="bi bi-box-seam"></i>
                             <span>Bahan</span>
                         </a>
                     </li>
-                @endcan
+                @endcan --}}
                 @can('lihat lokasi')
                     <li class="sidebar-item {{ isActive('master/location') }}">
                         <a href="{{ route('master.location.index') }}" class='sidebar-link'>

@@ -29,43 +29,13 @@
                 </button>
             </div>
             <div class="card-body">
-                <table class="table table-striped dataTable" id="table1">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nama</th>
-                            <th>Serial Number</th>
-                            <th width="20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($finger_tools as $finger_tool)
-                        <tr>
-                            <td>
-                                {{ $loop->iteration }}
-                            </td>
-                            <td>
-                                {{ $finger_tool->name }}
-                            </td>
-                            <td>
-                                {{ $finger_tool->serial_number }}
-                            </td>
-                            <td>
-                                @can('ubah alat finger')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $finger_tool }})"
-                                    class="btn btn-sm btn-info">Ubah
-                                </a>
-                                @endcan
-                                @can('hapus alat finger')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $finger_tool }})"
-                                    class="btn btn-sm btn-danger">Hapus
-                                </a>
-                                @endcan
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -80,7 +50,7 @@
 <!-- Need: Apexcharts -->
 <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
 <script src="assets/static/js/pages/dashboard.js"></script> --}}
-
+{!! $html->scripts() !!}
 <script>
     const initialState = {
         finger_tools: [],
@@ -112,6 +82,68 @@
 
         $("#titleForm").html("Ubah Alat Finger");
         onModalAction("formModal", "show");
+    }
+
+    function send() {
+        $("#form").submit(function(e) {
+            e.preventDefault();
+            let fd = new FormData(this);
+
+            $.ajax({
+                url: "{{ route('master.fingerTool.store') }}",
+                method: 'POST',
+                data: fd,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(responses) {
+
+                    // console.info(responses);
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    if (responses.success == true) {
+                        $('#formModal').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
+
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
+                    }
+                },
+                error: function(err) {
+                    console.log(err.responseJSON.message);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: err.responseJSON.message
+                    });
+                }
+            });
+        });
     }
 
     function onDelete(data) {
@@ -146,12 +178,13 @@
                             }
                         });
                         if (responses.success == true) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: responses.message
-                            });
+                        Toast.fire({
+                        icon: 'success',
+                        title: responses.message
+                        });
 
-                            window.location.reload();
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                         }
                     },
                     error: function(err) {
@@ -175,66 +208,6 @@
                     }
                 });
             }
-        });
-    }
-
-    function send() {
-        $("#form").submit(function(e) {
-            e.preventDefault();
-            let fd = new FormData(this);
-
-            $.ajax({
-                url: "{{ route('master.fingerTool.store') }}",
-                method: 'POST',
-                data: fd,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(responses) {
-
-                    // console.info(responses);
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 2500,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    });
-                    if (responses.success == true) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: responses.message
-                        });
-
-                        window.location.reload();
-                    }
-                },
-                error: function(err) {
-                    console.log(err.responseJSON.message);
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    });
-
-                    Toast.fire({
-                        icon: 'error',
-                        title: err.responseJSON.message
-                    });
-                }
-            });
         });
     }
 
