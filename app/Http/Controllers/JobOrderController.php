@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Response;
+
 
 class JobOrderController extends Controller
 {
     public function index()
     {
         $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
 
-        return view("pages.job-order.index", compact("vue"));
+        return view("pages.job-order.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()
@@ -18,12 +26,22 @@ class JobOrderController extends Controller
 
         $jobOrders = [
             (object)[
-                "id" => 1,
-                "proyek_name" => "Project A",
-                "job_name" => "Bongkar pasang cuttleas bearing",
-                // jenis waktunya hari maka tanggal saja, jika menit dan jam maka tanggal dan jam
-                "time_end_readable" => "Selasa 1 Juni 2023",
-            ]
+                'id' => 1,
+                'project_id' => 1,
+                'category' => "reguler",
+                'category_name' => "Reguler",
+                'project_name' => "Staging",
+                'project_note' => "informasi lebih lengkap tentang staging",
+                'status' => "active",
+                'status_readable' => "Aktif",
+                'employee_total' => 5,
+                'employee_active_total' => 4,
+                'status_color' => "success",
+                'assessment_count' => 1,
+                'assessment_total' => 2,
+                'is_assessment_foreman' => false,
+                'is_assessment_quality_control' => true,
+            ],
         ];
 
         return response()->json([

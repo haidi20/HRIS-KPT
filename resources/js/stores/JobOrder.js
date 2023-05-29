@@ -4,7 +4,7 @@ import moment from "moment";
 const defaultForm = {
     code: "",
     project_id: "",
-    category_id: "",
+    category: "",
     type_job_id: "",
     type_job_note: "",
     status: null,
@@ -66,15 +66,15 @@ const JobOrder = {
             ],
             categories: [
                 {
-                    id: 1,
+                    id: 'reguler',
                     name: "Reguler",
                 },
                 {
-                    id: 2,
+                    id: 'daily',
                     name: "Harian",
                 },
                 {
-                    id: 3,
+                    id: 'fixed_price',
                     name: "Borongan",
                 },
             ],
@@ -161,7 +161,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
@@ -179,20 +179,3 @@ const JobOrder = {
 }
 
 export default JobOrder;
-
-// {
-//     id: 1,
-//         project_id: 1,
-//             category_id: 1,
-//                 category_name: "Reguler",
-//                     project_name: "Staging",
-//                         project_note: "informasi lebih lengkap tentang staging",
-//                             status: "active",
-//                                 status_readable: "Aktif",
-//                                     employee_total: 5,
-//                                         employee_active_total: 4,
-//                                             status_color: "success",
-//                                                 count_assessment: 1,
-//                                                     is_assessment_foreman: false,
-//                                                         is_assessment_quality_control: true,
-//             },

@@ -95,7 +95,6 @@
         </b-tr>
       </template>
     </DatatableClient>
-    <JobOrderModal />
   </div>
 </template>
 
@@ -103,7 +102,6 @@
 import axios from "axios";
 import moment from "moment";
 
-import JobOrderModal from "../JobOrder/modal";
 import DatatableClient from "../../components/DatatableClient";
 import ButtonAction from "../../components/ButtonAction";
 
@@ -156,7 +154,6 @@ export default {
   },
   components: {
     ButtonAction,
-    JobOrderModal,
     DatatableClient,
   },
   computed: {
