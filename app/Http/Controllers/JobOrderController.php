@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobOrder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -23,30 +24,88 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        $month = Carbon::parse(request("month"));
 
-        $jobOrders = [
-            (object)[
-                'id' => 1,
-                'project_id' => 1,
-                'category' => "reguler",
-                'category_name' => "Reguler",
-                'project_name' => "Staging",
-                'project_note' => "informasi lebih lengkap tentang staging",
-                'status' => "active",
-                'status_readable' => "Aktif",
-                'employee_total' => 5,
-                'employee_active_total' => 4,
-                'status_color' => "success",
-                'assessment_count' => 1,
-                'assessment_total' => 2,
-                'is_assessment_foreman' => false,
-                'is_assessment_quality_control' => true,
-            ],
-        ];
+        $jobOrders = JobOrder::with(["jobOrderDetails", "jobOrderAssessments"])
+            ->whereYear("date_time", $month->format("Y"))
+            ->whereMonth("date_time", $month->format("m"))
+            ->orderBy("date_time", "asc")->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
-            "project_id" => request("project_id"),
         ]);
+    }
+
+    public function store()
+    {
+        // return request()->all();
+
+        try {
+            DB::beginTransaction();
+
+            if (request("id")) {
+                $jobOrder = JobOrder::find(request("id"));
+
+                $message = "diperbaharui";
+            } else {
+                $jobOrder = new JobOrder;
+
+                $message = "ditambahkan";
+                $jobOrder->status = "active";
+            }
+
+            $jobOrder->project_id = request("project_id");
+            $jobOrder->date_time = Carbon::parse(request("date") . ' ' . request("hour"));
+            $jobOrder->category = request("category");
+            $jobOrder->save();
+
+            // $this->storeContractors($jobOrder);
+            // $this->storeOrdinarySeamans($jobOrder);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function destroy()
+    {
+        try {
+            DB::beginTransaction();
+
+            $jobOrder = JobOrder::find(request("id"));
+            $jobOrder->update([
+                'deleted_by' => request("user_id"),
+            ]);
+            $jobOrder->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus',
+            ], 500);
+        }
     }
 }

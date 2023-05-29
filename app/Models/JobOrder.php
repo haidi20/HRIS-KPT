@@ -33,4 +33,24 @@ class JobOrder extends Model
             $model->updated_by = request("user_id");
         });
     }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, "project_id", "id");
+    }
+
+    public function jobOrderDetails()
+    {
+        return $this->hasMany(JobOrderDetail::class, "job_order_id", "id");
+    }
+
+    public function jobOrderAssessments()
+    {
+        return $this->hasMany(JobOrderAssessment::class, "job_order_id", "id");
+    }
 }

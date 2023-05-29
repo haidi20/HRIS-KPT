@@ -10,6 +10,20 @@
     >
       <b-row>
         <b-col cols>
+          <b-form-group label="Bulan" label-for="month">
+            <DatePicker
+              id="month"
+              v-model="params.month"
+              format="YYYY-MM"
+              type="month"
+              placeholder="pilih Bulan"
+              style="width: 100%"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
           <b-form-group label="Pilih Jenis Data" label-for="type" class>
             <VueSelect
               id="type"

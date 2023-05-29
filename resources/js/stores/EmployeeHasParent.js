@@ -21,7 +21,7 @@ const EmployeeHasParent = {
             foremans: [],
         },
         params: {
-            date_filter: new Date(),
+            date: new Date(),
         },
         form: { ...defaultForm },
         options: {

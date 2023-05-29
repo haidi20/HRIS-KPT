@@ -12,7 +12,7 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan Selesai Proyek" label-for="month" class="place_filter_table">
+          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
               id="month"
               v-model="params.month"

@@ -2,11 +2,11 @@ import axios from "axios";
 import moment from "moment";
 
 const defaultForm = {
-    code: "",
-    project_id: "",
-    category: "",
-    type_job_id: "",
-    type_job_note: "",
+    code: null,
+    project_id: null,
+    category: null,
+    job_id: null,
+    job_note: null,
     status: null,
     image: null,
     date: new Date(),
@@ -23,12 +23,7 @@ const JobOrder = {
         base_url: null,
         data: [],
         params: {
-            date: [
-                [
-                    new Date(),
-                    new Date()
-                ],
-            ],
+            month: new Date(),
             type: "all",
             type_by: "creator",
             project_id: null,
@@ -126,6 +121,12 @@ const JobOrder = {
                 ...payload.form,
             };
         },
+        INSERT_FORM_JOB_ID(state, payload) {
+            state.form.job_id = payload.job_id;
+        },
+        INSERT_FORM_CODE(state, payload) {
+            state.form.code = payload.code;
+        },
         INSERT_FORM_KIND(state, payload) {
             state.form.form_title = payload.form_title;
             state.form.form_kind = payload.form_kind;
@@ -161,7 +162,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

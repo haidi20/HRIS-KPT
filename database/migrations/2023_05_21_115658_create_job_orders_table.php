@@ -16,12 +16,15 @@ class CreateJobOrdersTable extends Migration
         Schema::create('job_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
+            $table->foreignId('job_id');
+            $table->text('job_note')->nullable();
+            $table->datetime('date_time');
             // reguler = reguler, daily = harian, fixed_price = borongan
-            $table->enum('category', ['reguler', 'daily', 'fixed_price'])->nullable();
+            $table->enum('category', ['reguler', 'daily', 'fixed_price']);
             $table->enum('status', [
-                'pending', 'active', 'finish', 'overtime',
+                'active', 'pending', 'finish', 'overtime',
                 'overtime_finish', 'correction', 'assessment',
-            ])->nullable();
+            ]);
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

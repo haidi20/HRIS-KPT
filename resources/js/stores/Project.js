@@ -225,6 +225,36 @@ const Project = {
                     console.info(err);
                 });
         },
+        fetchDataBaseDateEnd: async (context, payload) => {
+            context.commit("INSERT_DATA", {
+                projects: [],
+            });
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
+
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/project/fetch-data-base-date-end`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        projects: data.projects,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
         /**
          * Perform an action asynchronously.
          *

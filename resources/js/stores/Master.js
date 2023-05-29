@@ -33,9 +33,6 @@ const example = {
         INSERT_DATA(state, payload) {
             state.data = payload.vacations;
         },
-        INSERT_FORM(state, payload) {
-            state.form = { ...state.form, ...payload.form };
-        },
         INSERT_DATA_JOB(state, payload) {
             state.data.jobs = payload.jobs;
         },
@@ -47,6 +44,9 @@ const example = {
         },
         INSERT_DATA_COMPANY(state, payload) {
             state.data.companies = payload.companies;
+        },
+        INSERT_FORM(state, payload) {
+            state.form = { ...state.form, ...payload.form };
         },
 
         UPDATE_LOADING_TABLE(state, payload) {

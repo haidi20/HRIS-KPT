@@ -17,7 +17,6 @@ class CreateJobOrderAssessmentsTable extends Migration
             $table->id();
             $table->foreignId('employee_id');
             $table->foreignId('job_order_id');
-            $table->datetime('date_time');
             $table->string('image')->nullable();
             $table->string('note')->nullable();
             $table->foreignId('created_by')->nullable();

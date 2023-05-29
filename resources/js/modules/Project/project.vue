@@ -40,13 +40,18 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["project", "jobOrder", "employee", "contractor", "os", "master"].map(
-      (item) => {
-        this.$store.commit(`${item}/INSERT_BASE_URL`, {
-          base_url: this.baseUrl,
-        });
-      }
-    );
+    [
+      "project",
+      "jobOrder",
+      "employeeHasParent",
+      "contractor",
+      "os",
+      "master",
+    ].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
+    });
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("project/fetchData");
@@ -55,7 +60,7 @@ export default {
     this.$store.dispatch("master/fetchJob");
     this.$store.dispatch("master/fetchBarge");
     this.$store.dispatch("master/fetchCompany");
-    this.$store.dispatch("employee/fetchForeman");
+    this.$store.dispatch("employeeHasParent/fetchForeman");
 
     // this.$bvModal.show("project_form");
   },

@@ -31,8 +31,22 @@ class ProjectController extends Controller
         $monthReadAble = $month->isoFormat("MMMM YYYY");
 
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            ->whereYear("date_end", $month->format("Y"))
-            ->whereMonth("date_end", $month->format("m"))
+            ->whereYear("created_at", $month->format("Y"))
+            ->whereMonth("created_at", $month->format("m"))
+            ->orderBy("created_at", "asc")->get();
+
+        return response()->json([
+            "projects" => $projects,
+        ]);
+    }
+
+    public function fetchDataBaseDateEnd()
+    {
+        $month = Carbon::now();
+
+        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
+            ->whereYear("date_end", "=", $month->format("Y"))
+            ->whereMonth("date_end", ">", $month->format("m"))
             ->orderBy("date_end", "asc")->get();
 
         return response()->json([

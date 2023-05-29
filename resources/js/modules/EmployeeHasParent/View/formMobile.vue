@@ -27,7 +27,7 @@
             placeholder="Pilih Karyawan"
             :options="getOptionEmployees"
             :reduce="(data) => data.id"
-            label="name"
+            label="name_and_position"
             searchable
             style="min-width: 180px"
           />
@@ -50,8 +50,14 @@ export default {
     VueSelect,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getOptionPositions() {
-      return this.$store.state.employeeHasParent.data.positions;
+      return this.$store.state.master.data.positions;
     },
     getOptionEmployees() {
       return this.$store.state.employeeHasParent.data.options;

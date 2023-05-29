@@ -8,27 +8,30 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <b-row v-for="i in 3" :key="i" @click="onOpenAction(i)">
-          <b-col class="place-item">
-            <b-row>
-              <b-col cols>
-                <h5>Welder</h5>
-                <h6>Muhammad Adi</h6>
-                <span>Aktif: Ya</span>
-              </b-col>
-              <!-- <b-col cols class="place-action">
-                <b-button variant="warning" size="sm" @click="onPause(i)">Tunda</b-button>
-                <b-button variant="success" size="sm" @click="onPause(i)">Aktifkan</b-button>
-              </b-col>-->
-            </b-row>
-            <!-- <b-row>
+        <template v-if="getData.length > 0">
+          <b-row v-for="(item, index) in getData" :key="index" @click="onOpenAction(i)">
+            <b-col class="place-item">
+              <b-row>
+                <b-col cols>
+                  <h5>{{item.position_name}}</h5>
+                  <h6>{{item.name}}</h6>
+                  <span>Aktif: {{item.is_active}}</span>
+                </b-col>
+              </b-row>
+              <!-- <b-row>
               <b-col>
                 <span>Masuk : 08:10</span>
               </b-col>
-            </b-row>-->
-            <!--  -->
-          </b-col>
-        </b-row>
+              </b-row>-->
+              <!--  -->
+            </b-col>
+          </b-row>
+        </template>
+        <template v-else>
+          <b-row>
+            <b-col class="place-item">Data Kosong.</b-col>
+          </b-row>
+        </template>
       </b-col>
     </b-row>
     <vue-bottom-sheet ref="myBottomSheetEmployee">
@@ -50,6 +53,17 @@ export default {
     return {
       is_loading: false,
     };
+  },
+  computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
+    getData() {
+      return this.$store.state.employeeHasParent.data.table;
+    },
   },
   methods: {
     onOpenAction(data) {
