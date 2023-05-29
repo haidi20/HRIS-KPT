@@ -3,7 +3,7 @@
     <b-row style="align-items: self-end">
       <slot v-if="filter" name="filter"></slot>
       <b-col cols v-else></b-col>
-      <b-col col md="2">
+      <b-col cols="3">
         <b-form-input
           v-model="search"
           placeholder="cari..."

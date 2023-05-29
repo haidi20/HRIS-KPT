@@ -49,6 +49,20 @@ class SalaryAdjustmentController extends Controller
             ], 500);
         }
 
+        if ($employeeBase == "position" && request("position_id") == null) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, harus pilih salah satu jabatan",
+            ], 500);
+        }
+
+        if ($employeeBase == "job_order" && request("job_order_id") == null) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, harus pilih salah satu jabatan",
+            ], 500);
+        }
+
         try {
             DB::beginTransaction();
 

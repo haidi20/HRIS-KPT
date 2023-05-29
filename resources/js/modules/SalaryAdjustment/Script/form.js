@@ -99,7 +99,7 @@ export default {
 
             this.is_loading = true;
 
-            console.info(request);
+            // console.info(request);
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/salary-adjustment/store`, request)

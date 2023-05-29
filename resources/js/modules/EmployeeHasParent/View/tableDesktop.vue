@@ -2,21 +2,21 @@
   <div>
     <b-row>
       <b-col col md="12">
-        <b-button variant="danger" size="sm" @click="onDeleteAll()">Hapus Sama</b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col col md="12">
         <DatatableClient
           :data="getData"
           :columns="columns"
           :options="options"
           nameStore="employeeHasParent"
           nameLoading="table"
-          :filter="false"
+          :filter="true"
           :footer="false"
           bordered
         >
+          <template v-slot:filter>
+            <b-col cols>
+              <b-button variant="danger" size="sm" @click="onDeleteAll()">Hapus Semua Data</b-button>
+            </b-col>
+          </template>
           <template v-slot:tbody="{ filteredData }">
             <b-tr v-for="(item, index) in filteredData" :key="index">
               <b-td v-for="column in getColumns()" :key="column.label">{{ item[column.field] }}</b-td>
