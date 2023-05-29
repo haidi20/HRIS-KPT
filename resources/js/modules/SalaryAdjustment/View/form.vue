@@ -138,7 +138,9 @@
         <b-col>
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
           <b-button
-            v-if="!getReadOnly()"
+            v-if="
+                !getReadOnly()
+            "
             variant="success"
             @click="onSend()"
             class="ml-8"

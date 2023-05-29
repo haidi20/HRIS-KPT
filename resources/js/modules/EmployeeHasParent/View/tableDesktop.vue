@@ -2,6 +2,11 @@
   <div>
     <b-row>
       <b-col col md="12">
+        <b-button variant="danger" size="sm" @click="onDeleteAll()">Hapus Sama</b-button>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col col md="12">
         <DatatableClient
           :data="getData"
           :columns="columns"
@@ -69,6 +74,9 @@ export default {
   methods: {
     onDelete(index) {
       this.$store.commit("employeeHasParent/DELETE_DATA_SELECTED", { index });
+    },
+    onDeleteAll() {
+      this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
     },
     getColumns() {
       const columns = this.columns.filter((item) => item.label != "");

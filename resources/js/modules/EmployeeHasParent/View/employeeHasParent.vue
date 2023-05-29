@@ -22,7 +22,12 @@
       <b-row>
         <b-col>
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-          <b-button style="float: right" variant="success" @click="onSend()">Simpan</b-button>
+          <b-button
+            v-if="form.employee_base != 'job_order'"
+            style="float: right"
+            variant="success"
+            @click="onSend()"
+          >Simpan</b-button>
         </b-col>
       </b-row>
     </b-modal>

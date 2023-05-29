@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\salaryAdjustment;
 use App\Models\salaryAdjustmentDetail;
 use App\Models\salaryAdjustmentDetailHistory;
@@ -39,6 +40,14 @@ class SalaryAdjustmentController extends Controller
         // return request()->all();
 
         $employeeBase = request("employee_base");
+        $employeeSelecteds = request("employee_selecteds");
+
+        if (count($employeeSelecteds) == 0 && $employeeBase == "choose_employee") {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, minimal 1 karyawan yang dipilih",
+            ], 500);
+        }
 
         try {
             DB::beginTransaction();
@@ -53,7 +62,7 @@ class SalaryAdjustmentController extends Controller
                 $message = "dikirim";
             }
 
-            // ketika ada perubahan tidak pakai waktu, maka update kosong
+            // ketika ada update data tidak pakai waktu, maka update kosong
             $salaryAdjustment->date_start = null;
             $salaryAdjustment->date_end = null;
             $salaryAdjustment->position_id = null;
@@ -85,7 +94,7 @@ class SalaryAdjustmentController extends Controller
             $salaryAdjustment->note = request("note");
             $salaryAdjustment->save();
 
-            $this->storeSalaryAdjustmentDetail($salaryAdjustment, $employeeBase);
+            $this->storeSalaryAdjustmentDetail($salaryAdjustment, $employeeBase, $employeeSelecteds);
 
             DB::commit();
             return response()->json([
@@ -139,29 +148,42 @@ class SalaryAdjustmentController extends Controller
      *@param string $employeeBase The employee base.
      *@return void
      */
-    public function storeSalaryAdjustmentDetail($salaryAdjustment, $employeeBase)
+    public function storeSalaryAdjustmentDetail($salaryAdjustment, $employeeBase, $employeeSelecteds)
     {
+        $employees = [];
         $salaryAdjustmentDetail = salaryAdjustmentDetail::where([
             "salary_adjustment_id" => $salaryAdjustment->id,
         ]);
         $salaryAdjustmentDetail->delete();
 
-        $employeeSelecteds = request("employee_selecteds");
         if (count($employeeSelecteds) > 0) {
             if ($employeeBase == "choose_employee") {
-
                 foreach ($employeeSelecteds as $index => $item) {
-                    $salaryAdjustmentDetail = salaryAdjustmentDetail::updateOrCreate([
-                        "employee_id" => $item["employee_id"],
-                        "salary_adjustment_id" => $salaryAdjustment->id,
-                    ], [
-                        "type_amount" => $salaryAdjustment->type_amount,
-                        "amount" => $salaryAdjustment->amount,
-                    ]);
-
-                    $this->storeSalaryAdjustmentDetailHistory($salaryAdjustmentDetail);
+                    $employees[$index] = (object) [
+                        "id" => $item["employee_id"],
+                    ];
                 }
             }
+        }
+
+        if ($employeeBase == "all") {
+            $employees = Employee::all();
+        }
+
+        if ($employeeBase == "position") {
+            $employees = Employee::where("position_id", $salaryAdjustment->position_id)->get();
+        }
+
+        foreach ($employees as $index => $item) {
+            $salaryAdjustmentDetail = salaryAdjustmentDetail::updateOrCreate([
+                "employee_id" => $item->id,
+                "salary_adjustment_id" => $salaryAdjustment->id,
+            ], [
+                "type_amount" => $salaryAdjustment->type_amount,
+                "amount" => $salaryAdjustment->amount,
+            ]);
+
+            $this->storeSalaryAdjustmentDetailHistory($salaryAdjustmentDetail);
         }
     }
 
