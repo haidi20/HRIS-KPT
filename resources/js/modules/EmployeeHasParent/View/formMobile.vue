@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row>
+    <!-- <b-row>
       <b-col cols>
         <b-form-group label="Jabatan" label-for="position_id" class>
           <VueSelect
@@ -16,7 +16,7 @@
           />
         </b-form-group>
       </b-col>
-    </b-row>
+    </b-row>-->
     <b-row>
       <b-col cols>
         <b-form-group label="Karyawan" label-for="employee_id" class>

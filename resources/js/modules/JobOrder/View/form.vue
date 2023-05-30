@@ -72,7 +72,7 @@
           <input
             type="time"
             class="form-control"
-            v-model="form.hour_start"
+            v-model="hour_start"
             id="hour_start"
             name="hour_start"
           />
@@ -80,7 +80,7 @@
       </b-col>
       <b-col cols>
         <b-form-group label="Estimasi Waktu" label-for="estimation" class>
-          <b-form-input v-model="form.estimation" id="estimation" name="estimation"></b-form-input>
+          <b-form-input v-model="estimation" id="estimation" name="estimation"></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
@@ -90,7 +90,7 @@
           <VueSelect
             id="type_time"
             class="cursor-pointer"
-            v-model="form.type_time"
+            v-model="type_time"
             placeholder="Pilih Jenis Waktu"
             :options="getOptionTypTime"
             :reduce="(data) => data.id"
@@ -102,8 +102,8 @@
       </b-col>
       <b-col cols="12" md="6">
         <b-form-group label="Waktu Selesai : " label-for="type_time" class>
-          <span style="font-size: 15px">Senin, 25 Mei 2023</span>
-          <span v-if="form.type_time != 'day'">13:00</span>
+          <span style="font-size: 15px">{{form.date_end_readable}}</span>
+          <span v-if="form.type_time != 'day'">{{form.hour_end_readable}}</span>
         </b-form-group>
       </b-col>
     </b-row>

@@ -55,6 +55,36 @@ export default {
                 });
             },
         },
+        hour_start: {
+            get() {
+                return this.$store.state.jobOrder.form.hour_start;
+            },
+            set(value) {
+                this.$store.commit("jobOrder/INSERT_FORM_HOUR_START", {
+                    hour_start: value,
+                });
+            },
+        },
+        estimation: {
+            get() {
+                return this.$store.state.jobOrder.form.estimation;
+            },
+            set(value) {
+                this.$store.commit("jobOrder/INSERT_FORM_ESTIMATION", {
+                    estimation: value,
+                });
+            },
+        },
+        type_time: {
+            get() {
+                return this.$store.state.jobOrder.form.type_time;
+            },
+            set(value) {
+                this.$store.commit("jobOrder/INSERT_FORM_TYPE_TIME", {
+                    type_time: value,
+                });
+            },
+        },
     },
     watch: {
         job_id(value, oldMessage) {
@@ -102,9 +132,10 @@ export default {
                 user_id: this.getUserId,
             };
 
+            console.info(request);
+            return false;
             this.is_loading = true;
 
-            //   console.info(request);
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/job-order/store`, request)

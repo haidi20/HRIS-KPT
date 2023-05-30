@@ -10,11 +10,16 @@ const defaultForm = {
     status: null,
     image: null,
     date: new Date(),
-    hour: null,
-    note: null,
-    type_time: "hour",
     form_kind: null,
     form_title: "Job Order",
+    hour_start: null,
+    date_end: null,
+    date_end_readable: "Senin, 25 Mei 2023",
+    hour_end: null,
+    hour_end_readable: "13:00",
+    estimation: null,
+    type_time: "hour",
+    note: null,
 }
 
 const JobOrder = {
@@ -126,6 +131,15 @@ const JobOrder = {
         },
         INSERT_FORM_CODE(state, payload) {
             state.form.code = payload.code;
+        },
+        INSERT_FORM_HOUR_START(state, payload) {
+            state.form.hour_start = payload.hour_start;
+        },
+        INSERT_FORM_ESTIMATION(state, payload) {
+            state.form.estimation = payload.estimation;
+        },
+        INSERT_FORM_TYPE_TIME(state, payload) {
+            state.form.type_time = payload.type_time;
         },
         INSERT_FORM_KIND(state, payload) {
             state.form.form_title = payload.form_title;
