@@ -26,7 +26,7 @@
                         <b>{{item.project_name}}</b>
                       </h6>
                     </b-col>
-                    <b-col cols="3">
+                    <b-col cols="4" style="text-align: end">
                       <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
                     </b-col>
                   </b-row>
@@ -83,18 +83,24 @@
         <vue-bottom-sheet ref="myBottomSheet">
           <div class="flex flex-col">
             <!-- v-if="getFormStatus != 'pending'" -->
-            <div class="action-item" @click="onAction('pending', 'Tunda')">Tunda</div>
-            <!-- v-if="getFormStatus != 'active'" -->
-            <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div>
+            <!-- <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div> -->
             <div class="action-item" @click="onAction('finish', 'Selesai')">Selesai</div>
+            <div class="action-item" @click="onAction('pending', 'Tunda')">Tunda</div>
+            <div class="action-item" @click="onAction('active', 'Mulai Kembali')">Mulai Kembali</div>
+            <!-- v-if="getFormStatus != 'active'" -->
             <div class="action-item" @click="onAction('overtime', 'Lembur')">Lembur</div>
             <div
               class="action-item"
-              @click="onAction('overtime_finish', 'Selesai Lembur')"
-            >Selesai Lembur</div>
+              @click="onAction('overtime_finish', 'Lembur Selesai')"
+            >Lembur Selesai</div>
             <div class="action-item" @click="onAction('correction', 'Perbaikan')">Perbaikan</div>
+            <div
+              class="action-item"
+              @click="onAction('correction_finish', 'Selesai Perbaikan')"
+            >Perbaikan Selesai</div>
             <div class="action-item" @click="onEdit">Ubah</div>
             <div class="action-item" @click="onDetail">Detail</div>
+            <!-- khusus untuk QC -->
             <div class="action-item" @click="onAction('assessment', 'Penilaian')">Penilaian</div>
           </div>
         </vue-bottom-sheet>

@@ -3,6 +3,35 @@ import moment from "moment";
 
 import { checkNull } from '../utils';
 
+/**
+Status values
+@typedef {'active' | 'pending' | 'finish' | 'overtime' |
+'correction' | 'overtime_finish' | 'correction_finish' |
+'assessment'} Status
+*/
+
+/**
+*Default form object
+@typedef {Object} DefaultForm
+@property {null|string} code - The code value.
+@property {null|number} project_id - The project ID.
+@property {null|string} category - The category value.
+@property {null|number} job_id - The job ID.
+@property {null|string} job_note - The job note.
+@property {Status} status - The status value.
+@property {null|string} image - The image value.
+@property {null|string} form_kind - The form kind.
+@property {string} form_title - The form title.
+@property {null|string} hour_start - The hour start value.
+@property {null|string} date_time_start - The start date and time.
+@property {null|string} date_time_end - The end date and time.
+@property {null|string} date_time_end_readable - The end date and time in a readable format.
+@property {null|string} estimation - The estimation value.
+@property {string} time_type - The time type.
+@property {null|string} note - The note value.
+@property {string} form_type - The form type.
+*/
+
 const defaultForm = {
     code: null,
     project_id: null,
@@ -21,6 +50,7 @@ const defaultForm = {
     estimation: null,
     time_type: "hours",
     note: null,
+    form_type: "create",
 }
 
 const JobOrder = {
