@@ -18,7 +18,7 @@ class CreateJobOrdersTable extends Migration
             $table->foreignId('project_id');
             $table->foreignId('job_id');
             $table->text('job_note')->nullable();
-            $table->datetime('date_time');
+            $table->datetime('date_time_end');
             // reguler = reguler, daily = harian, fixed_price = borongan
             $table->enum('category', ['reguler', 'daily', 'fixed_price']);
             $table->enum('status', [

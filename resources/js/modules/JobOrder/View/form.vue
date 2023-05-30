@@ -87,23 +87,30 @@
     <b-row>
       <b-col cols="12" md="6">
         <b-form-group label="Jenis Waktu" label-for="type_time" class>
-          <VueSelect
+          <!-- <VueSelect
             id="type_time"
             class="cursor-pointer"
             v-model="type_time"
             placeholder="Pilih Jenis Waktu"
-            :options="getOptionTypTime"
+            :options="getOptionTypTimes"
             :reduce="(data) => data.id"
             label="name"
             :searchable="false"
             style="min-width: 180px"
-          />
+          />-->
+          <select v-model="type_time" name="type_time" id="type_time" class="form-control">
+            <option
+              v-for="(type_time, index) in getOptionTypTimes"
+              :key="index"
+              :value="type_time.id"
+            >{{type_time.name}}</option>
+          </select>
         </b-form-group>
       </b-col>
       <b-col cols="12" md="6">
         <b-form-group label="Waktu Selesai : " label-for="type_time" class>
-          <span style="font-size: 15px">{{form.date_end_readable}}</span>
-          <span v-if="form.type_time != 'day'">{{form.hour_end_readable}}</span>
+          <span>{{form.date_time_end_readable}}</span>
+          <!-- <span v-if="form.type_time != 'day'">{{form.hour_end_readable}}</span> -->
         </b-form-group>
       </b-col>
     </b-row>

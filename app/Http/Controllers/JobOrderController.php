@@ -27,9 +27,9 @@ class JobOrderController extends Controller
         $month = Carbon::parse(request("month"));
 
         $jobOrders = JobOrder::with(["jobOrderDetails", "jobOrderAssessments"])
-            ->whereYear("date_time", $month->format("Y"))
-            ->whereMonth("date_time", $month->format("m"))
-            ->orderBy("date_time", "asc")->get();
+            ->whereYear("date_time_end", $month->format("Y"))
+            ->whereMonth("date_time_end", $month->format("m"))
+            ->orderBy("date_time_end", "asc")->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
@@ -55,7 +55,7 @@ class JobOrderController extends Controller
             }
 
             $jobOrder->project_id = request("project_id");
-            $jobOrder->date_time = Carbon::parse(request("date") . ' ' . request("hour"));
+            $jobOrder->date_time_end = Carbon::parse(request("date") . ' ' . request("hour"));
             $jobOrder->category = request("category");
             $jobOrder->save();
 

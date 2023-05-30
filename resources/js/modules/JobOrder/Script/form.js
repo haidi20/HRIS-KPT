@@ -39,7 +39,7 @@ export default {
         getOptionJobLevels() {
             return this.$store.state.jobOrder.options.job_levels;
         },
-        getOptionTypTime() {
+        getOptionTypTimes() {
             return this.$store.state.jobOrder.options.type_times;
         },
         form() {
@@ -97,6 +97,15 @@ export default {
                     code: findJob.code,
                 });
             }
+        },
+        hour_start(value, oldMessage) {
+            this.$store.dispatch("jobOrder/onChangeDateTimeEnd");
+        },
+        estimation(value, oldMessage) {
+            this.$store.dispatch("jobOrder/onChangeDateTimeEnd");
+        },
+        type_time(value, oldMessage) {
+            this.$store.dispatch("jobOrder/onChangeDateTimeEnd");
         },
     },
     methods: {

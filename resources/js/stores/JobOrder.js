@@ -13,12 +13,11 @@ const defaultForm = {
     form_kind: null,
     form_title: "Job Order",
     hour_start: null,
-    date_end: null,
-    date_end_readable: "Senin, 25 Mei 2023",
-    hour_end: null,
-    hour_end_readable: "13:00",
+    date_time_start: null,
+    date_time_end: null,
+    date_time_end_readable: null,
     estimation: null,
-    type_time: "hour",
+    type_time: "hours",
     note: null,
 }
 
@@ -38,15 +37,15 @@ const JobOrder = {
         options: {
             type_times: [
                 {
-                    id: "minute",
+                    id: "minutes",
                     name: "Menit",
                 },
                 {
-                    id: "hour",
+                    id: "hours",
                     name: "Jam",
                 },
                 {
-                    id: "day",
+                    id: "days",
                     name: "Hari",
                 },
             ],
@@ -141,6 +140,31 @@ const JobOrder = {
         INSERT_FORM_TYPE_TIME(state, payload) {
             state.form.type_time = payload.type_time;
         },
+        INSERT_FORM_DATE_TIME_END(state, payload) {
+            // console.info(state.form);
+            if (
+                state.form.hour_start != null
+                && state.form.estimation != null
+            ) {
+                const getDateEstimation = moment().add(
+                    state.form.estimation,
+                    state.form.type_time
+                );
+
+                let addFormat = "";
+                if (state.form.type_time != "days") {
+                    addFormat = ", HH:mm";
+                }
+
+                state.form.date_time_end = getDateEstimation
+                state.form.date_time_end_readable = getDateEstimation
+                    .locale("id")
+                    .format(`dddd, D MMMM YYYY${addFormat}`);
+            } else {
+                state.form.date_end = null;
+                state.form.hour_end = null;
+            }
+        },
         INSERT_FORM_KIND(state, payload) {
             state.form.form_title = payload.form_title;
             state.form.form_kind = payload.form_kind;
@@ -189,7 +213,15 @@ const JobOrder = {
                     console.info(err);
                 });
         },
+        onChangeDateTimeEnd: (context, payload) => {
+            // Update the time initially
+            context.commit('INSERT_FORM_DATE_TIME_END');
 
+            // Start a timer to update the time every minute
+            setInterval(() => {
+                context.commit('INSERT_FORM_DATE_TIME_END');
+            }, 1000);
+        },
     }
 }
 
