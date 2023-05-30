@@ -91,6 +91,17 @@ return [
             "short_readable" => "belum",
             "color" => "info",
         ],
+        // job order
+        "active" => [
+            "readable" => "sedang aktif",
+            "short_readable" => "aktif",
+            "color" => "success",
+        ],
+        "pending" => [
+            "readable" => "tunda sementara",
+            "short_readable" => "tunda",
+            "color" => "warning",
+        ],
     ],
     // start untuk penyesuaian gaji
     "type_times" => [

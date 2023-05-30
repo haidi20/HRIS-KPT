@@ -9,6 +9,7 @@
       </b-col>
     </b-row>
     <br />
+    <hr />
     <b-row>
       <b-col class="place-data">
         <template v-if="getLoadingData">
@@ -18,44 +19,57 @@
           <b-row v-for="(item, index) in getData" :key="index">
             <b-col class="place-item">
               <b-row>
-                <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item)">
-                  <h6>
-                    <b>{{item.project_name}}</b>
-                  </h6>
-                  <span>Keterangan Pekerjaan:</span>
-                  <br />
-                  <span>{{onLimitSentence(item.job_note)}}</span>
-                  <b-row class="place-content">
-                    <b-col cols="7">
-                      <span>
-                        Status :
-                        <div :class="`badge-${item.status_color}`">{{item.status_readable}}</div>
-                      </span>
-                      <br />
-                      <span>Total Karyawan : {{item.employee_total}}</span>
-                      <br />
-                      <span>Total Karyawan Aktif: {{item.employee_active_total}}</span>
+                <b-col @click="onOpenAction(item)">
+                  <b-row>
+                    <b-col cols>
+                      <h6>
+                        <b>{{item.project_name}}</b>
+                      </h6>
                     </b-col>
-                    <b-col cols="5">
-                      <span>Penilaian :</span>
+                    <b-col cols="3">
+                      <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols>
+                      <span>{{item.job_code}} - {{item.job_name}}</span>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols>
+                      <span>ket : {{ item.job_note != null ? onLimitSentence(item.job_note) : "-"}}</span>
+                    </b-col>
+                  </b-row>
+                  <b-row class="place-content">
+                    <b-col cols="6">
+                      <span>
+                        <b>Penilaian :</b>
+                      </span>
                       <span>{{item.assessment_count}} / {{item.assessment_total}}</span>
                       <br />
-                      <!-- <div>
-                        <b-form-checkbox
-                          class="display-inline"
-                          v-model="item.is_assessment_quality_control"
-                          disabled
-                        ></b-form-checkbox>
+                      <div>
+                        <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>QC</span>
                       </div>
                       <div>
-                        <b-form-checkbox
-                          class="display-inline"
-                          v-model="item.is_assessment_foreman"
-                          disabled
-                        ></b-form-checkbox>
+                        <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>Pengawas</span>
-                      </div>-->
+                      </div>
+                    </b-col>
+                    <b-col cols="6">
+                      <span>
+                        <b>Total :</b>
+                        {{item.employee_total}}
+                        <i class="bi bi-person"></i>
+                      </span>
+                      <br />
+                      <span>
+                        <b>Aktif :</b>
+                        {{item.employee_active_total}}
+                        <i
+                          class="bi bi-person"
+                        ></i>
+                      </span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -104,6 +118,7 @@
 .place-item {
   border-bottom: 1px solid #dbdfea;
   padding: 0.5rem;
+  margin-bottom: 1rem;
 }
 .place-content {
   font-size: 15px;

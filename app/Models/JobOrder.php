@@ -6,12 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Config;
 
 class JobOrder extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [];
+    protected $appends = [
+        "status_color", "status_readable",
+        "project_name", "job_name", "job_code",
+        "employee_total", "employee_active_total", "assessment_count", "assessment_total",
+    ];
 
     public function __construct(array $attributes = [])
     {
@@ -41,7 +47,12 @@ class JobOrder extends Model
 
     public function project()
     {
-        return $this->belongsTo(Project::class, "project_id", "id");
+        return $this->belongsTo(ProjectSimple::class, "project_id", "id");
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class, "job_id", "id");
     }
 
     public function jobOrderDetails()
@@ -52,5 +63,60 @@ class JobOrder extends Model
     public function jobOrderAssessments()
     {
         return $this->hasMany(JobOrderAssessment::class, "job_order_id", "id");
+    }
+
+    public function getStatusColorAttribute()
+    {
+        $statusApprovalLibrary = Config::get("library.status.{$this->status}");
+
+        return $statusApprovalLibrary["color"];
+    }
+
+    public function getStatusReadableAttribute()
+    {
+        $statusApprovalLibrary = Config::get("library.status.{$this->status}");
+
+        return $statusApprovalLibrary["short_readable"];
+    }
+
+    public function getProjectNameAttribute()
+    {
+        if ($this->project) {
+            return $this->project->name;
+        }
+    }
+
+    public function getJobNameAttribute()
+    {
+        if ($this->job) {
+            return $this->job->name;
+        }
+    }
+
+    public function getJobCodeAttribute()
+    {
+        if ($this->job) {
+            return $this->job->code;
+        }
+    }
+
+    public function getEmployeeTotalAttribute()
+    {
+        return 10;
+    }
+
+    public function getEmployeeActiveTotalAttribute()
+    {
+        return 9;
+    }
+
+    public function getAssessmentCountAttribute()
+    {
+        return 1;
+    }
+
+    public function getAssessmentTotalAttribute()
+    {
+        return 2;
     }
 }
