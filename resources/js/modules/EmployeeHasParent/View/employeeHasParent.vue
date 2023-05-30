@@ -4,20 +4,27 @@
       id="data_employee"
       ref="data_employee"
       :title="getTitleForm"
-      :size="getIsFormMobile ?'md' : 'lg'"
+      :size="getIsMobile ?'md' : 'lg'"
       class="modal-custom"
       hide-footer
     >
-      <div v-if="getIsFormMobile">
-        <FormMobile />
-        <br />
-        <TableMobile />
-      </div>
-      <div v-else>
+      <template v-if="getIsMobile">
+        <b-tabs content-class="mt-3">
+          <b-tab title="Form">
+            <FormMobile />
+            <br />
+            <TableMobile />
+          </b-tab>
+          <!-- <b-tab title="Data">
+            <span>Data Karyawan</span>
+          </b-tab>-->
+        </b-tabs>
+      </template>
+      <template v-else>
         <FormDesktop />
         <br />
         <TableDesktop v-if="form.employee_base == 'choose_employee'" />
-      </div>
+      </template>
       <br />
       <b-row>
         <b-col>
@@ -53,8 +60,8 @@ export default {
     };
   },
   computed: {
-    getIsFormMobile() {
-      return this.$store.state.employeeHasParent.is_form_mobile;
+    getIsMobile() {
+      return this.$store.state.employeeHasParent.is_mobile;
     },
     form() {
       return this.$store.state.employeeHasParent.form;

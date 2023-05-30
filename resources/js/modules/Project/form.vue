@@ -199,7 +199,7 @@ export default {
       return this.$store.state.master.data.jobs;
     },
     getOptionForemans() {
-      return this.$store.state.employee.data.foremans;
+      return this.$store.state.employeeHasParent.data.foremans;
     },
     form() {
       return this.$store.state.project.form;

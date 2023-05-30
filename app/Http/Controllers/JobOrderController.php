@@ -29,7 +29,8 @@ class JobOrderController extends Controller
         $jobOrders = JobOrder::with(["jobOrderDetails", "jobOrderAssessments"])
             ->whereYear("date_time_end", $month->format("Y"))
             ->whereMonth("date_time_end", $month->format("m"))
-            ->orderBy("date_time_end", "asc")->get();
+            ->orderBy("date_time_end", "asc")
+            ->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
@@ -55,8 +56,15 @@ class JobOrderController extends Controller
             }
 
             $jobOrder->project_id = request("project_id");
-            $jobOrder->date_time_end = Carbon::parse(request("date") . ' ' . request("hour"));
+            $jobOrder->job_id = request("job_id");
+            $jobOrder->job_level = request("job_level");
+            $jobOrder->job_note = request("job_note");
+            $jobOrder->date_time_start = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+            $jobOrder->date_time_end = Carbon::parse(request("date_time_end"));
+            $jobOrder->estimation = request("estimation");
+            $jobOrder->time_type = request("time_type");
             $jobOrder->category = request("category");
+            $jobOrder->note = request("note");
             $jobOrder->save();
 
             // $this->storeContractors($jobOrder);

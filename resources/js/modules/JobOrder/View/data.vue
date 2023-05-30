@@ -11,7 +11,10 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <template v-if="getData.length > 0">
+        <template v-if="getLoadingData">
+          <span>loading...</span>
+        </template>
+        <template v-else-if="getData.length > 0">
           <b-row v-for="(item, index) in getData" :key="index">
             <b-col class="place-item">
               <b-row>
@@ -19,9 +22,9 @@
                   <h6>
                     <b>{{item.project_name}}</b>
                   </h6>
-                  <span>catatan:</span>
+                  <span>Keterangan Pekerjaan:</span>
                   <br />
-                  <span>{{onLimitSentence(item.project_note)}}</span>
+                  <span>{{onLimitSentence(item.job_note)}}</span>
                   <b-row class="place-content">
                     <b-col cols="7">
                       <span>
@@ -60,6 +63,9 @@
             </b-col>
           </b-row>
         </template>
+        <template v-else>
+          <span>data kosong.</span>
+        </template>
         <vue-bottom-sheet ref="myBottomSheet">
           <div class="flex flex-col">
             <!-- v-if="getFormStatus != 'pending'" -->
@@ -84,104 +90,7 @@
   </div>
 </template>
 
-<script>
-import { isMobile } from "../../../utils";
-import FilterData from "./filter.vue";
-export default {
-  data() {
-    return {
-      title: "",
-    };
-  },
-  components: { FilterData },
-  computed: {
-    getBaseUrl() {
-      return this.$store.state.base_url;
-    },
-    getUserId() {
-      return this.$store.state.user?.id;
-    },
-    getData() {
-      return this.$store.state.jobOrder.data;
-    },
-    getFormStatus() {
-      return this.$store.state.jobOrder.form.status;
-    },
-    getIsMobile() {
-      return isMobile();
-    },
-    form() {
-      return this.$store.state.jobOrder.form;
-    },
-  },
-  methods: {
-    onOpenAction(data) {
-      //   console.info(id);
-      this.$store.commit("jobOrder/INSERT_FORM", {
-        form: data,
-      });
-      this.$refs.myBottomSheet.open();
-    },
-    onAction(type, title) {
-      this.$refs.myBottomSheet.close();
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: title + " Job Order",
-        form_kind: type,
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-
-      //   console.info(this.form);
-
-      this.$bvModal.show("job_order_form_action");
-    },
-    onCreate() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Tambah Job Order",
-        form_kind: "create",
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-    },
-    onDetail() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Detail Job Order",
-        form_kind: "detail",
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-      this.$refs.myBottomSheet.close();
-    },
-    onEdit() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Ubah Job Order",
-        form_kind: "edit",
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-      this.$refs.myBottomSheet.close();
-    },
-    onFilter() {
-      this.$bvModal.show("job_order_filter");
-    },
-    onLimitSentence(sentence) {
-      const maxLength = 35;
-
-      if (sentence != null || sentence != "") {
-        if (sentence.length > maxLength) {
-          sentence = sentence.substring(0, maxLength) + "...";
-        }
-
-        return sentence;
-      }
-    },
-  },
-};
-</script>
+<script src="../Script/data.js"></script>
 
 <style lang="scss" scoped>
 .place-data {

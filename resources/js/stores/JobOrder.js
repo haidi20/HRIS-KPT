@@ -1,6 +1,8 @@
 import axios from "axios";
 import moment from "moment";
 
+import { checkNull } from '../utils';
+
 const defaultForm = {
     code: null,
     project_id: null,
@@ -9,7 +11,7 @@ const defaultForm = {
     job_note: null,
     status: null,
     image: null,
-    date: new Date(),
+    // date: new Date(),
     form_kind: null,
     form_title: "Job Order",
     hour_start: null,
@@ -17,7 +19,7 @@ const defaultForm = {
     date_time_end: null,
     date_time_end_readable: null,
     estimation: null,
-    type_time: "hours",
+    time_type: "hours",
     note: null,
 }
 
@@ -35,7 +37,7 @@ const JobOrder = {
         form: { ...defaultForm },
         is_active_form: false,
         options: {
-            type_times: [
+            time_types: [
                 {
                     id: "minutes",
                     name: "Menit",
@@ -51,15 +53,15 @@ const JobOrder = {
             ],
             job_levels: [
                 {
-                    id: 1,
+                    id: "hard",
                     name: "Sulit / Berat",
                 },
                 {
-                    id: 2,
+                    id: "middle",
                     name: "Sedang / Menengah",
                 },
                 {
-                    id: 3,
+                    id: "easy",
                     name: "Mudah / Ringan",
                 },
             ],
@@ -108,7 +110,7 @@ const JobOrder = {
             ],
         },
         loading: {
-            table: false,
+            data: false,
         },
     },
     mutations: {
@@ -137,32 +139,33 @@ const JobOrder = {
         INSERT_FORM_ESTIMATION(state, payload) {
             state.form.estimation = payload.estimation;
         },
-        INSERT_FORM_TYPE_TIME(state, payload) {
-            state.form.type_time = payload.type_time;
+        INSERT_FORM_TIME_TYPE(state, payload) {
+            state.form.time_type = payload.time_type;
         },
         INSERT_FORM_DATE_TIME_END(state, payload) {
             // console.info(state.form);
+            // console.info(checkNull(state.form.estimation));
             if (
-                state.form.hour_start != null
-                && state.form.estimation != null
+                checkNull(state.form.hour_start) != null
+                && checkNull(state.form.estimation) != null
             ) {
                 const getDateEstimation = moment().add(
                     state.form.estimation,
-                    state.form.type_time
+                    state.form.time_type
                 );
 
                 let addFormat = "";
-                if (state.form.type_time != "days") {
+                if (state.form.time_type != "days") {
                     addFormat = ", HH:mm";
                 }
 
-                state.form.date_time_end = getDateEstimation
+                state.form.date_time_end = getDateEstimation.format("YYYY-MM-DD HH:mm");
                 state.form.date_time_end_readable = getDateEstimation
                     .locale("id")
                     .format(`dddd, D MMMM YYYY${addFormat}`);
             } else {
-                state.form.date_end = null;
-                state.form.hour_end = null;
+                state.form.date_time_end = null;
+                state.form.date_time_end_readable = null;
             }
         },
         INSERT_FORM_KIND(state, payload) {
@@ -178,8 +181,8 @@ const JobOrder = {
         UPDATE_IS_ACTIVE_FORM(state, payload) {
             state.is_active_form = payload.value;
         },
-        UPDATE_LOADING_TABLE(state, payload) {
-            state.loading.table = payload.value;
+        UPDATE_LOADING_DATA(state, payload) {
+            state.loading.data = payload.value;
         },
     },
     actions: {
@@ -187,7 +190,7 @@ const JobOrder = {
             context.commit("INSERT_DATA", {
                 job_orders: [],
             });
-            context.commit("UPDATE_LOADING_TABLE", { value: true });
+            context.commit("UPDATE_LOADING_DATA", { value: true });
 
             const params = {
                 ...context.state.params,
@@ -200,27 +203,18 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
                         job_orders: data.jobOrders,
                     });
-                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
                 })
                 .catch((err) => {
-                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
                     console.info(err);
                 });
-        },
-        onChangeDateTimeEnd: (context, payload) => {
-            // Update the time initially
-            context.commit('INSERT_FORM_DATE_TIME_END');
-
-            // Start a timer to update the time every minute
-            setInterval(() => {
-                context.commit('INSERT_FORM_DATE_TIME_END');
-            }, 1000);
         },
     }
 }

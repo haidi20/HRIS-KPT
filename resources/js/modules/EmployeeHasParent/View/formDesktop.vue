@@ -80,7 +80,7 @@
   </div>
 </template>
 
-<script src="../Script/form.js"></script>
+<script src="../Script/formDesktop.js"></script>
 
 <style lang="scss" scoped>
 </style>

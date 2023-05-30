@@ -51,7 +51,7 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Kategori" label-for="category" class>
-          <VueSelect
+          <!-- <VueSelect
             id="category"
             class="cursor-pointer"
             v-model="form.category"
@@ -61,7 +61,14 @@
             label="name"
             :searchable="false"
             style="min-width: 180px"
-          />
+          />-->
+          <select v-model="form.category" name="category" id="category" class="form-control">
+            <option
+              v-for="(category, index) in getOptionCategories"
+              :key="index"
+              :value="category.id"
+            >{{category.name}}</option>
+          </select>
         </b-form-group>
       </b-col>
     </b-row>
@@ -86,31 +93,20 @@
     </b-row>
     <b-row>
       <b-col cols="12" md="6">
-        <b-form-group label="Jenis Waktu" label-for="type_time" class>
-          <!-- <VueSelect
-            id="type_time"
-            class="cursor-pointer"
-            v-model="type_time"
-            placeholder="Pilih Jenis Waktu"
-            :options="getOptionTypTimes"
-            :reduce="(data) => data.id"
-            label="name"
-            :searchable="false"
-            style="min-width: 180px"
-          />-->
-          <select v-model="type_time" name="type_time" id="type_time" class="form-control">
+        <b-form-group label="Jenis Waktu" label-for="time_type" class>
+          <select v-model="time_type" name="time_type" id="time_type" class="form-control">
             <option
-              v-for="(type_time, index) in getOptionTypTimes"
+              v-for="(time_type, index) in getOptionTimeTypes"
               :key="index"
-              :value="type_time.id"
-            >{{type_time.name}}</option>
+              :value="time_type.id"
+            >{{time_type.name}}</option>
           </select>
         </b-form-group>
       </b-col>
       <b-col cols="12" md="6">
-        <b-form-group label="Waktu Selesai : " label-for="type_time" class>
+        <b-form-group label="Waktu Selesai : " label-for="time_type" class>
           <span>{{form.date_time_end_readable}}</span>
-          <!-- <span v-if="form.type_time != 'day'">{{form.hour_end_readable}}</span> -->
+          <!-- <span v-if="form.time_type != 'day'">{{form.hour_end_readable}}</span> -->
         </b-form-group>
       </b-col>
     </b-row>
