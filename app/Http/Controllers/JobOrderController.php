@@ -102,6 +102,7 @@ class JobOrderController extends Controller
 
             if (request("status") == 'finish') {
                 $jobOrder->status = request("status");
+                $jobOrder->datetime_end = Carbon::parse(request("date") . ' ' . request("hour"));
             }
 
             $jobOrder->status = request("status");

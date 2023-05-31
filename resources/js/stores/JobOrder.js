@@ -21,7 +21,7 @@ Status values
 @property {Status} status - The status value.
 @property {null|string} image - The image value.
 @property {null|date} date - The date value.
-@property {null|time} hour_end - The hour end value.
+@property {null|time} hour - The hour end value.
 @property {null|string} form_kind - The form kind.
 @property {string} form_title - The form title.
 @property {null|string} hour_start - The hour start value.
@@ -45,7 +45,8 @@ const defaultForm = {
     image: null,
     // start form action
     date: new Date(),
-    hour_end: new Date(),
+    // hour: moment().format("HH:mm"),
+    hour: null,
     status_note: null,
     // end form action
     form_kind: null,
@@ -254,7 +255,7 @@ const JobOrder = {
         CLEAR_FORM_ACTION(state, payload) {
             state.form = {
                 ...state.form,
-                date_end: null,
+                // date_end: null,
                 status_note: null,
             };
         },

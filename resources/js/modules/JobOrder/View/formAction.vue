@@ -14,14 +14,8 @@
         </b-form-group>
       </b-col>
       <b-col cols>
-        <b-form-group label="Jam" label-for="hour_end" class>
-          <input
-            type="time"
-            v-model="form.hour_end"
-            id="hour_end"
-            name="hour_end"
-            class="form-control"
-          />
+        <b-form-group label="Jam" label-for="hour" class>
+          <input type="time" v-model="form.hour" id="hour" name="hour" class="form-control" />
         </b-form-group>
       </b-col>
     </b-row>
