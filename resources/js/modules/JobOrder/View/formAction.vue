@@ -15,6 +15,7 @@
       </b-col>
       <b-col cols>
         <b-form-group label="Jam" label-for="hour" class>
+          <!-- get data awal lembur dari pengaturan -->
           <input type="time" v-model="form.hour" id="hour" name="hour" class="form-control" />
         </b-form-group>
       </b-col>

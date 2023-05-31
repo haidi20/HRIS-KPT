@@ -189,12 +189,11 @@ const JobOrder = {
             state.form = {
                 ...state.form,
                 ...payload.form,
-                note: null,
             };
 
-            if (payload.form_kind == 'edit') {
-                state.form.note = payload.note;
-            }
+            // if (payload.form_kind == 'edit') {
+            //     state.form.note = payload.note;
+            // }
         },
         INSERT_FORM_JOB_ID(state, payload) {
             state.form.job_id = payload.job_id;

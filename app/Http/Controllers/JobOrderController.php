@@ -31,7 +31,7 @@ class JobOrderController extends Controller
         $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
             ->whereYear("datetime_start", $month->format("Y"))
             ->whereMonth("datetime_start", $month->format("m"))
-            ->orderBy("datetime_start", "asc")
+            ->orderBy("datetime_start", "desc")
             ->get();
 
         return response()->json([
@@ -57,12 +57,14 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
+            $date = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+
             $jobOrder->project_id = request("project_id");
             $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
             //datetime_end inputnya di storeAction
-            $jobOrder->datetime_start = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+            $jobOrder->datetime_start = $date;
             $jobOrder->datetime_estimation_end = Carbon::parse(request("datetime_estimation_end"));
             $jobOrder->estimation = request("estimation");
             $jobOrder->time_type = request("time_type");
@@ -70,7 +72,11 @@ class JobOrderController extends Controller
             $jobOrder->note = request("note");
             $jobOrder->save();
 
-            $this->storeJobOrderHasStatus($jobOrder);
+            // tambah data jobOrderHasStatus hanya ketika data baru
+            if (request("id") == null) {
+                $this->storeJobOrderHasStatus($jobOrder, $date);
+            }
+
             $this->storeJobOrderHistory($jobOrder);
             // $this->storeOrdinarySeamans($jobOrder);
 
@@ -99,20 +105,21 @@ class JobOrderController extends Controller
         try {
             DB::beginTransaction();
 
+            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:m");
             $message = "diperbaharui";
 
             $jobOrder = JobOrder::find(request("id"));
 
             if (request("status") == 'finish') {
                 $jobOrder->status = request("status");
-                $jobOrder->datetime_end = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:m");
+                $jobOrder->datetime_end = $date;
             }
 
             $jobOrder->status = request("status");
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
-            $this->storeJobOrderHasStatus($jobOrder);
+            $this->storeJobOrderHasStatus($jobOrder, $date);
             $this->storeJobOrderHistory($jobOrder);
 
             DB::commit();
@@ -164,19 +171,19 @@ class JobOrderController extends Controller
         }
     }
 
-    private function storeJobOrderHasStatus($jobOrder)
+    private function storeJobOrderHasStatus($jobOrder, $date = null)
     {
-        if ($jobOrder->status == 'finish') {
+        if (request("status_last") != null) {
             $jobOrderHasStatus = JobOrderHasStatus::where("status", request("status_last"));
             $jobOrderHasStatus->update([
                 "note_end" => $jobOrder->status_note,
-                "datetime_end" => $jobOrder->datetime_end,
+                "datetime_end" => $date,
             ]);
         } else {
             $jobOrderHasStatus = new JobOrderHasStatus;
             $jobOrderHasStatus->job_order_id = $jobOrder->id;
             $jobOrderHasStatus->status = $jobOrder->status;
-            $jobOrderHasStatus->datetime_start = $jobOrder->datetime_start;
+            $jobOrderHasStatus->datetime_start = $date;
             $jobOrderHasStatus->note_start = $jobOrder->status_note;
             $jobOrderHasStatus->save();
         }
