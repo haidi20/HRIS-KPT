@@ -56,9 +56,14 @@ class JobOrder extends Model
         return $this->belongsTo(Job::class, "job_id", "id");
     }
 
-    public function jobOrderDetails()
+    public function jobOrderHasEmployees()
     {
-        return $this->hasMany(JobOrderDetail::class, "job_order_id", "id");
+        return $this->hasMany(JobOrderHasEmployee::class, "job_order_id", "id");
+    }
+
+    public function jobOrderHasStasuses()
+    {
+        return $this->hasMany(JobOrderHasStatus::class, "job_order_id", "id");
     }
 
     public function jobOrderAssessments()

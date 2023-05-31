@@ -47,9 +47,12 @@ export default {
 
             const request = {
                 id: this.form.id,
+                date: moment(this.form.date).format("YYYY-MM-DD"),
+                hour: this.form.hour,
                 status: this.form.status,
+                status_last: this.form.status_last,
                 status_finish: this.form.status_finish,
-                note: this.form.note,
+                status_note: this.form.status_note,
                 user_id: this.getUserId,
             };
 
@@ -115,12 +118,13 @@ export default {
                 });
         },
         getConditionDisableDate() {
-            let result = true;
+            let result = false;
+            const listStatus = ["overtime"];
 
-            console.info(this.form.status);
+            // console.info(this.form.status);
 
-            if (this.form.status == 'overtime') {
-                result = false;
+            if (listStatus.some((item) => item == this.form.status)) {
+                result = true;
             }
 
             return result;

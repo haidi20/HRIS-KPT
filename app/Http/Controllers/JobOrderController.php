@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
+use App\Models\JobOrderHasStatus;
 use App\Models\JobOrderHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,7 @@ class JobOrderController extends Controller
     {
         $month = Carbon::parse(request("month"));
 
-        $jobOrders = JobOrder::with(["jobOrderDetails", "jobOrderAssessments"])
+        $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
             ->whereYear("datetime_start", $month->format("Y"))
             ->whereMonth("datetime_start", $month->format("m"))
             ->orderBy("datetime_start", "asc")
@@ -60,6 +61,7 @@ class JobOrderController extends Controller
             $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
+            //datetime_end inputnya di storeAction
             $jobOrder->datetime_start = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
             $jobOrder->datetime_estimation_end = Carbon::parse(request("datetime_estimation_end"));
             $jobOrder->estimation = request("estimation");
@@ -68,6 +70,7 @@ class JobOrderController extends Controller
             $jobOrder->note = request("note");
             $jobOrder->save();
 
+            $this->storeJobOrderHasStatus($jobOrder);
             $this->storeJobOrderHistory($jobOrder);
             // $this->storeOrdinarySeamans($jobOrder);
 
@@ -102,13 +105,14 @@ class JobOrderController extends Controller
 
             if (request("status") == 'finish') {
                 $jobOrder->status = request("status");
-                $jobOrder->datetime_end = Carbon::parse(request("date") . ' ' . request("hour"));
+                $jobOrder->datetime_end = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:m");
             }
 
             $jobOrder->status = request("status");
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
+            $this->storeJobOrderHasStatus($jobOrder);
             $this->storeJobOrderHistory($jobOrder);
 
             DB::commit();
@@ -139,6 +143,7 @@ class JobOrderController extends Controller
             $jobOrder->update([
                 'deleted_by' => request("user_id"),
             ]);
+            $this->storeJobOrderHistory($jobOrder, true);
             $jobOrder->delete();
 
             DB::commit();
@@ -159,7 +164,25 @@ class JobOrderController extends Controller
         }
     }
 
-    private function storeJobOrderHistory($jobOrder)
+    private function storeJobOrderHasStatus($jobOrder)
+    {
+        if ($jobOrder->status == 'finish') {
+            $jobOrderHasStatus = JobOrderHasStatus::where("status", request("status_last"));
+            $jobOrderHasStatus->update([
+                "note_end" => $jobOrder->status_note,
+                "datetime_end" => $jobOrder->datetime_end,
+            ]);
+        } else {
+            $jobOrderHasStatus = new JobOrderHasStatus;
+            $jobOrderHasStatus->job_order_id = $jobOrder->id;
+            $jobOrderHasStatus->status = $jobOrder->status;
+            $jobOrderHasStatus->datetime_start = $jobOrder->datetime_start;
+            $jobOrderHasStatus->note_start = $jobOrder->status_note;
+            $jobOrderHasStatus->save();
+        }
+    }
+
+    private function storeJobOrderHistory($jobOrder, $isDelete = false)
     {
         $jobOrderHistory = new JobOrderHistory;
         $jobOrderHistory->job_order_id = $jobOrder->id;
@@ -176,6 +199,12 @@ class JobOrderController extends Controller
         $jobOrderHistory->category = $jobOrder->category;
         $jobOrderHistory->note = $jobOrder->note;
         $jobOrderHistory->status_note = $jobOrder->status_note;
+        $jobOrderHistory->deleted_by = $jobOrder->deleted_by;
+
+        if ($isDelete) {
+            $jobOrderHistory->deleted_at = Carbon::now();
+        }
+
         $jobOrderHistory->save();
     }
 }

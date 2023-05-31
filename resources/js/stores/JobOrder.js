@@ -3,11 +3,34 @@ import moment from "moment";
 
 import { checkNull } from '../utils';
 
+export const listStatus = {
+    finish: {
+        status: "finish",
+        status_last: "active",
+    },
+    pending_finish: {
+        status: "active",
+        status_last: "pending",
+    },
+    overtime_finish: {
+        status: "active",
+        status_last: "overtime",
+    },
+    correction_finish: {
+        status: "finish",
+        status_last: "correction",
+    },
+};
+
 /**
 Status values
-@typedef {'active' | 'pending' | 'finish' | 'overtime' |
-'correction' | 'overtime_finish' | 'correction_finish' |
-'assessment'} Status
+@typedef {
+'active' | 'finish'
+| 'pending' | 'pending_finish'
+| 'overtime' | 'overtime_finish'
+| 'correction' | 'correction_finish'
+| 'assessment' | 'assessment_finish'
+} Status
 */
 
 /**
@@ -41,15 +64,16 @@ const defaultForm = {
     job_id: null,
     job_note: null,
     status: null,
+    status_last: null,
     status_finish: null,
     image: null,
     // start form action
     date: new Date(),
-    // hour: moment().format("HH:mm"),
-    hour: null,
+    hour: moment().format("HH:mm"),
+    // hour: null,
     status_note: null,
     // end form action
-    form_kind: null,
+    form_kind: 'create',
     form_title: "Job Order",
     hour_start: null,
     datetime_start: null,
@@ -223,17 +247,33 @@ const JobOrder = {
             state.form.form_title = payload.form_title;
             state.form.form_kind = payload.form_kind;
         },
-        INSERT_FORM_STATUS(state, payload) {
-            let status = payload.status;
-            const listStatusFinish = ["overtime_finish", "correction_finish"];
+        // JANGAN DI HAPUS, UNTUK BACKUP
+        // INSERT_FORM_STATUS(state, payload) {
+        //     let status = payload.status;
+        //     const listStatusFinish = ["overtime_finish", "correction_finish"];
 
-            if (listStatusFinish.some((item) => item == payload.status)) {
-                // status = "finish";
-                // status_finish = this.form.status;
-                state.form.status = "finish";
+        //     if (listStatusFinish.some((item) => item == payload.status)) {
+        //         // status = "finish";
+        //         // status_finish = this.form.status;
+        //         state.form.status = "active";
+        //         state.form.status_finish = payload.status;
+        //     } else {
+        //         state.form.status = status;
+        //         state.form.status_finish = null;
+        //     }
+        // },
+        INSERT_FORM_STATUS(state, payload) {
+            let getStatus = payload.status;
+
+            if (listStatus[getStatus]) {
+                state.form.status = listStatus[getStatus].status;
+                state.form.status_last = listStatus[getStatus].status_last;
                 state.form.status_finish = payload.status;
+                state.form.status_note = null;
             } else {
-                state.form.status = status;
+                state.form.status = getStatus;
+                state.form.status_note = null;
+                state.form.status_last = null;
                 state.form.status_finish = null;
             }
         },
@@ -250,7 +290,10 @@ const JobOrder = {
             state.loading.data = payload.value;
         },
         CLEAR_FORM(state, payload) {
-            state.form = { ...defaultForm };
+            state.form = {
+                ...defaultForm,
+                is_active_form: true,
+            };
         },
         CLEAR_FORM_ACTION(state, payload) {
             state.form = {

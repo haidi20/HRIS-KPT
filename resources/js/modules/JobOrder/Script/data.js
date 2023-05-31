@@ -65,6 +65,7 @@ export default {
                 form_title: "Tambah Job Order",
                 form_kind: "create",
             });
+            this.$store.commit("jobOrder/CLEAR_FORM");
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });

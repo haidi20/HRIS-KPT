@@ -95,9 +95,9 @@
               @click="onAction('pending', 'Tunda')"
             >Tunda</div>
             <div
-              v-if="getConditionActionActive()"
+              v-if="getFormStatus == 'pending'"
               class="action-item"
-              @click="onAction('active', 'Mulai Kembali')"
+              @click="onAction('pending_finish', 'Mulai Kembali')"
             >Mulai Kembali</div>
             <!-- v-if="getFormStatus != 'active'" -->
             <div
