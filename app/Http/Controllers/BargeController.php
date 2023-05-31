@@ -28,7 +28,7 @@ class BargeController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $barge = Barge::query()
-                ->select('barges.*');
+                ->select('barges.id', 'barges.name', 'barges.description');
 
             return $datatables->eloquent($barge)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -63,12 +63,12 @@ class BargeController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
 

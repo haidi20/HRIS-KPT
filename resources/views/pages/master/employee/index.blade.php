@@ -65,8 +65,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportLocationBtn" style="display: none;"><i
-                                class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
+                        <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportLocationBtn"
+                            style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
                     </div>
                 </div>
                 <hr>
@@ -92,7 +92,7 @@
 <link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/daterangepicker.css') }}" rel="stylesheet" />
 
 {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"> --}}
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"> --}}
 
 @endsection
 @section('script')
@@ -109,7 +109,7 @@
     $(document).ready(function () {
         // $('.dataTable').DataTable();
 
-        state.employees = {!! json_encode($employees) !!};
+        state.employees = {!!json_encode($employees) !!};
 
         setupSelect();
         // setupDateFilter();
@@ -118,19 +118,21 @@
     });
 
     // SETUP FILTER POSITION
-    $(document).ready(function() {
+    $(document).ready(function () {
         var table = $('.dataTable').DataTable();
         var exportPositionBtn = $('#exportPositionBtn');
 
         $('#jabatanFilter').select2();
 
-        $('#jabatanFilter').on('change', function() {
+        $('#jabatanFilter').on('change', function () {
             var selectedJabatan = $(this).val();
             var selectedPositionId = $(this).find(':selected').data('position-id');
-            table.column(3).search(selectedJabatan).draw(); // Mengubah angka kolom menjadi 3 untuk pencarian berdasarkan jabatan
+            table.column(3).search(selectedJabatan)
+                .draw(); // Mengubah angka kolom menjadi 3 untuk pencarian berdasarkan jabatan
 
             // Update export URL and set initial export URL
-            var exportUrl = "{{ route('master.employee.exportExcelPosition', ['position_id' => ':position_id']) }}";
+            var exportUrl =
+                "{{ route('master.employee.exportExcelPosition', ['position_id' => ':position_id']) }}";
             exportUrl = exportUrl.replace(':position_id', selectedPositionId);
             exportPositionBtn.attr('href', exportUrl);
 
@@ -146,19 +148,21 @@
     });
 
     // SETUP FILTER LOCATION
-    $(document).ready(function() {
+    $(document).ready(function () {
         var table = $('.dataTable').DataTable();
         var exportLocationBtn = $('#exportLocationBtn');
 
         $('#locationFilter').select2();
 
-        $('#locationFilter').on('change', function() {
+        $('#locationFilter').on('change', function () {
             var selectedLocation = $(this).val();
             var selectedLocationId = $(this).find(':selected').data('location-id');
-            table.column(4).search(selectedLocation).draw(); // Mengubah angka kolom menjadi 4 untuk pencarian berdasarkan lokasi
+            table.column(4).search(selectedLocation)
+                .draw(); // Mengubah angka kolom menjadi 4 untuk pencarian berdasarkan lokasi
 
             // Update export URL and set initial export URL
-            var exportUrl = "{{ route('master.employee.exportExcelLocation', ['location_id' => ':location_id']) }}";
+            var exportUrl =
+                "{{ route('master.employee.exportExcelLocation', ['location_id' => ':location_id']) }}";
             exportUrl = exportUrl.replace(':location_id', selectedLocationId);
             exportLocationBtn.attr('href', exportUrl);
 
@@ -174,7 +178,7 @@
     });
 
     // SETUP FILTER ENTER DATE
-    $(document).ready(function() {
+    $(document).ready(function () {
         var table = $('.dataTable').DataTable();
         var startDate = '';
         var endDate = '';
@@ -192,20 +196,21 @@
         }
 
         // Setup format untuk tanggal masuk
-        $('#rangeContractFilter input').each(function() {
+        $('#rangeContractFilter input').each(function () {
             $(this).datepicker({
                 autoclose: true,
                 format: "dd-mm-yyyy"
             });
         });
 
-        $('#rangeContractFilter').on('change', function() {
+        $('#rangeContractFilter').on('change', function () {
             startDate = $('#enter_date_start').val();
             endDate = $('#enter_date_end').val();
 
             table.column(6).search(startDate + ' - ' + endDate).draw();
         });
     });
+
 
     function formatDate(date) {
         var day = date.getDate();
@@ -359,7 +364,7 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $("#photoPreview").html('<img src="' + e.target.result + '" alt="Foto" width="100%">');
+                $("#photoPreview").html('<img src="' + e.target.result + '" alt="Foto" width="50%">');
             };
 
             reader.readAsDataURL(file);
@@ -370,7 +375,7 @@
         var imageElement = document.createElement("img");
         imageElement.src = photoUrl;
         imageElement.alt = "Employee Photo";
-        imageElement.style.width = "100%";
+        imageElement.style.width = "50%";
 
         var photoPreviewReady = document.getElementById("photoPreviewReady");
         photoPreviewReady.innerHTML = "";
@@ -383,6 +388,7 @@
         $("#position_id").val(data.position_id).trigger("change");
         $("#location_id").val(data.location_id).trigger("change");
         $("#employee_type_id").val(data.employee_type_id).trigger("change");
+        $("#finger_tool_id").val(data.finger_tool_id).trigger("change");
         $("#contract_start").val(data.contract_start);
         $("#contract_end").val(data.contract_end);
         $("#latest_education").val(data.latest_education).trigger("change");
@@ -415,6 +421,10 @@
         $("#bank_name").val(data.bank_name).trigger("change");
         $("#branch").val(data.branch);
 
+        // DATA FINGER
+        // $("#finger_tool_id").val(data.finger_tool_id).trigger("change");
+        // $("#id_finger").val(data.id_finger);
+
         $("#titleForm").html("Ubah Karyawan");
 
         // CHECK SLIDER CONDITION
@@ -424,7 +434,6 @@
             var _token = "{{ csrf_token() }}";
 
             var dataHide = $(this).attr('data-hide');
-
 
             $.ajax({
                 type: 'POST',
@@ -568,6 +577,130 @@
             });
         });
 
+        $(document).ready(function () {
+            var employeeId = data.id;
+
+            $.ajax({
+                url: "{{ route('master.employee.getEmployeeFingers', ['employeeId' => ':employeeId']) }}"
+                    .replace(
+                        ":employeeId",
+                        employeeId
+                    ),
+                type: "GET",
+                success: function (response) {
+                    if (response.success) {
+                        var fingers = response.data;
+
+                        $("#finger_tool_id").val("").trigger("change");
+                        $("#id_finger").val("");
+                        $("#fingerTableBody").empty();
+
+                        if (fingers.length > 0) {
+                            for (var i = 0; i < fingers.length; i++) {
+                                var finger = fingers[i];
+                                var fingerToolName = finger.finger_tool &&
+                                    finger.finger_tool.name ? finger.finger_tool.name : "";
+                                var row = $("<tr>").append(
+                                    $("<td>").text(fingerToolName),
+                                    $("<td>").text(finger.id_finger),
+                                    $("<td>").append(
+                                        $("<button>")
+                                        .addClass("btn btn-warning btn-sm")
+                                        .data("finger", finger)
+                                        .attr("type", "button")
+                                        .html('<i class="bi bi-pen"></i>')
+                                        .click(function () {
+                                            var fingerData = $(this).data("finger");
+                                            $("#finger_tool_id")
+                                                .val(fingerData.finger_tool_id)
+                                                .trigger("change");
+                                            $("#id_finger").val(fingerData.id_finger);
+                                        }),
+                                        $("<button>")
+                                        .addClass("btn btn-danger btn-sm ml-2")
+                                        .data("finger", finger)
+                                        .attr("type", "button")
+                                        .html('<i class="bi bi-trash"></i>')
+                                        .click(function () {
+                                            var fingerData = $(this).data("finger");
+                                            $.ajax({
+                                                url: "{{ route('master.employee.deleteEmployeeFingers', ['employeeId' => ':employeeId']) }}"
+                                                    .replace(
+                                                        ":employeeId",
+                                                        employeeId
+                                                    ),
+                                                type: "DELETE",
+                                                data: {
+                                                    fingerId: fingerData.id,
+                                                },
+                                                success: function (responses) {
+                                                    if (responses.success) {
+                                                        const Toast = Swal.mixin({
+                                                            toast: true,
+                                                            position: "top-end",
+                                                            showConfirmButton: false,
+                                                            timer: 2500,
+                                                            timerProgressBar: true,
+                                                            didOpen: (toast) => {
+                                                                toast
+                                                                    .addEventListener(
+                                                                        "mouseenter",
+                                                                        Swal
+                                                                        .stopTimer
+                                                                    );
+                                                                toast
+                                                                    .addEventListener(
+                                                                        "mouseleave",
+                                                                        Swal
+                                                                        .resumeTimer
+                                                                    );
+                                                            },
+                                                        });
+                                                        $("#formModal").modal("hide");
+                                                        Toast.fire({
+                                                            icon: "success",
+                                                            title: responses.message,
+                                                        });
+
+                                                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(function (json) {});
+                                                        $(this).closest("tr").remove();
+                                                    } else {
+                                                        console.log(
+                                                            responses
+                                                            .message);
+                                                    }
+                                                },
+                                                error: function (xhr, status,
+                                                    error) {
+                                                    console.log(error);
+                                                },
+                                            });
+                                        })
+                                    )
+                                );
+
+                                $("#fingerTableBody").append(row);
+                            }
+                        } else {
+                            var row = $("<tr>").append(
+                                $('<td colspan="3" class="text-center">').text(
+                                    "Data Finger Masih Kosong"
+                                )
+                            );
+                            $("#fingerTableBody").append(row);
+                        }
+
+                        console.log(employeeId);
+                    } else {
+                        console.log(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                },
+            });
+        });
+
         onModalAction("formModal", "show");
     }
 
@@ -596,8 +729,10 @@
                         timer: 2500,
                         timerProgressBar: true,
                         didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            toast.addEventListener('mouseenter', Swal
+                                .stopTimer)
+                            toast.addEventListener('mouseleave', Swal
+                                .resumeTimer)
                         }
                     });
                     if (responses.success == true) {
@@ -608,7 +743,7 @@
                         });
 
                         window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                        function(json) {});
+                            function (json) {});
                     }
                 },
                 error: function (err) {
@@ -620,8 +755,10 @@
                         timer: 4000,
                         timerProgressBar: true,
                         didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            toast.addEventListener('mouseenter', Swal
+                                .stopTimer)
+                            toast.addEventListener('mouseleave', Swal
+                                .resumeTimer)
                         }
                     });
 
@@ -654,7 +791,7 @@
                         _method: 'DELETE',
                         id: data.id
                     },
-                    success: function(responses) {
+                    success: function (responses) {
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -662,8 +799,10 @@
                             timer: 2500,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                toast.addEventListener('mouseenter', Swal
+                                    .stopTimer)
+                                toast.addEventListener('mouseleave', Swal
+                                    .resumeTimer)
                             }
                         });
                         if (responses.success == true) {
@@ -673,7 +812,7 @@
                             });
 
                             window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                            function(json) {});
+                                function (json) {});
                         }
                     },
                     error: function (err) {
@@ -685,8 +824,10 @@
                             timer: 4000,
                             timerProgressBar: true,
                             didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                toast.addEventListener('mouseenter', Swal
+                                    .stopTimer)
+                                toast.addEventListener('mouseleave', Swal
+                                    .resumeTimer)
                             }
                         });
 
@@ -704,6 +845,22 @@
         $(".select2").select2();
     }
 
+    // $(document).ready(function() {
+    //     $('#finger_tool_id').change(function() {
+    //         var selectedValue = $(this).val();
+    //         if (selectedValue !== '') {
+    //             $('#id_finger_container').show();
+    //         } else {
+    //             $('#id_finger_container').hide();
+    //         }
+    //     });
+
+    //     $('#tambah_data').click(function() {
+    //         // Tambahkan logika untuk menambahkan data ke dalam formulir atau melakukan tindakan lain
+    //         console.log('Data tambah di klik');
+    //     });
+    // });
+
     function clearForm() {
         // $("#id").val("");
         // $("#nip").val("");
@@ -718,5 +875,6 @@
         // $("#photoPreview").val("");
         // $("#photoPreviewReady").hide();
     }
+
 </script>
 @endsection

@@ -28,7 +28,7 @@ class CompanyController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $company = Company::query()
-                ->select('companies.*');
+                ->select('companies.id', 'companies.name', 'companies.description');
 
             return $datatables->eloquent($company)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -63,16 +63,15 @@ class CompanyController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
-
-        $companies = Company::all();
+        $companies = Company::paginate(10);
 
         $compact = compact('html', 'companies');
 

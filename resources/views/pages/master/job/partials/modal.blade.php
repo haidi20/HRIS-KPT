@@ -14,7 +14,7 @@
                     <div class="form-group row">
                         <label for="code" class="col-sm-4 col-form-label">Kode </label>
                         <div class="col-sm-8">
-                            <input type="number" id="code" name="code" class="form-control" value="">
+                            <input type="text" id="code" name="code" class="form-control" value="">
                         </div>
                     </div>
                     <div class="form-group row">

@@ -94,6 +94,11 @@ class Employee extends Model
         }
     }
 
+    public function finger_tool()
+    {
+        return $this->belongsTo(FingerTool::class, "finger_tool_id", "id");
+    }
+
     public function getNameAndPositionAttribute()
     {
         if ($this->position) {
@@ -104,5 +109,10 @@ class Employee extends Model
     public function scopeActive($query)
     {
         return $query->where("employee_status", "aktif");
+    }
+
+    public function finger()
+    {
+        return $this->hasMany(Finger::class, 'id', 'finger_id');
     }
 }

@@ -29,7 +29,7 @@ class JobController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $job = Job::query()
-                ->select('jobs.*');
+                ->select('jobs.id','jobs.code', 'jobs.name', 'jobs.description');
 
             return $datatables->eloquent($job)
                 ->filterColumn('code', function (Builder $query, $keyword) {
@@ -68,16 +68,16 @@ class JobController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
 
-        $jobs = Job::all();
+        $jobs = Job::paginate(10);
 
         $compact = compact('html', 'jobs');
 

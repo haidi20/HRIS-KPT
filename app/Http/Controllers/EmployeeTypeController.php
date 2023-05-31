@@ -28,7 +28,7 @@ class EmployeeTypeController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $employee_type = EmployeeType::query()
-                ->select('employee_types.*');
+                ->select('employee_types.id', 'employee_types.name', 'employee_types.description');
 
             return $datatables->eloquent($employee_type)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -58,21 +58,21 @@ class EmployeeTypeController extends Controller
 
         $columnsArrExPr = [0, 1, 2, 3];
         $html = $datatables->getHtmlBuilder()
-        ->columns($columns)
-        ->parameters([
-            'order' => [[1, 'desc']],
-            'responsive' => true,
-            'autoWidth' => false,
-            'dom' => 'lBfrtip',
-            'lengthMenu' => [
-                [10, 25, 50, -1],
-                ['10 Data', '25 Data', '50 Data', 'Semua Data']
-            ],
-            'buttons' => $this->buttonDatatables($columnsArrExPr),
-        ]);
+            ->columns($columns)
+            ->parameters([
+                'order' => [[1, 'desc']],
+                'responsive' => true,
+                'autoWidth' => false,
+                'dom' => 'lfrtip',
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 Data', '25 Data', '50 Data', 'Semua Data']
+                ],
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
+            ]);
 
 
-        $employee_types = EmployeeType::all();
+        $employee_types = EmployeeType::paginate(10);
 
         $compact = compact('html', 'employee_types');
 
