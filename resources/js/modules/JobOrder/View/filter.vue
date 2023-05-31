@@ -100,6 +100,8 @@ export default {
   methods: {
     onSend() {
       this.$bvModal.hide("job_order_filter");
+
+      this.$store.dispatch("jobOrder/fetchData");
     },
     onCloseModal() {
       this.$bvModal.hide("job_order_filter");

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
+use App\Models\JobOrderHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -27,9 +28,9 @@ class JobOrderController extends Controller
         $month = Carbon::parse(request("month"));
 
         $jobOrders = JobOrder::with(["jobOrderDetails", "jobOrderAssessments"])
-            ->whereYear("date_time_end", $month->format("Y"))
-            ->whereMonth("date_time_end", $month->format("m"))
-            ->orderBy("date_time_end", "asc")
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->orderBy("datetime_start", "asc")
             ->get();
 
         return response()->json([
@@ -59,21 +60,61 @@ class JobOrderController extends Controller
             $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
-            $jobOrder->date_time_start = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
-            $jobOrder->date_time_end = Carbon::parse(request("date_time_end"));
+            $jobOrder->datetime_start = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+            $jobOrder->datetime_estimation_end = Carbon::parse(request("datetime_estimation_end"));
             $jobOrder->estimation = request("estimation");
             $jobOrder->time_type = request("time_type");
             $jobOrder->category = request("category");
             $jobOrder->note = request("note");
             $jobOrder->save();
 
-            // $this->storeContractors($jobOrder);
+            $this->storeJobOrderHistory($jobOrder);
             // $this->storeOrdinarySeamans($jobOrder);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function storeAction()
+    {
+        // return request()->all();
+
+        try {
+            DB::beginTransaction();
+
+            $message = "diperbaharui";
+
+            $jobOrder = JobOrder::find(request("id"));
+
+            if (request("status") == 'finish') {
+                $jobOrder->status = request("status");
+            }
+
+            $jobOrder->status = request("status");
+            $jobOrder->status_note = request("status_note");
+            $jobOrder->save();
+
+            $this->storeJobOrderHistory($jobOrder);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -115,5 +156,25 @@ class JobOrderController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    private function storeJobOrderHistory($jobOrder)
+    {
+        $jobOrderHistory = new JobOrderHistory;
+        $jobOrderHistory->job_order_id = $jobOrder->id;
+        $jobOrderHistory->project_id = $jobOrder->project_id;
+        $jobOrderHistory->job_id = $jobOrder->job_id;
+        $jobOrderHistory->job_level = $jobOrder->job_level;
+        $jobOrderHistory->job_note = $jobOrder->job_note;
+        $jobOrderHistory->status = $jobOrder->status;
+        $jobOrderHistory->datetime_start = $jobOrder->datetime_start;
+        $jobOrderHistory->datetime_end = $jobOrder->datetime_end;
+        $jobOrderHistory->datetime_estimation_end = $jobOrder->datetime_estimation_end;
+        $jobOrderHistory->estimation = $jobOrder->estimation;
+        $jobOrderHistory->time_type = $jobOrder->time_type;
+        $jobOrderHistory->category = $jobOrder->category;
+        $jobOrderHistory->note = $jobOrder->note;
+        $jobOrderHistory->status_note = $jobOrder->status_note;
+        $jobOrderHistory->save();
     }
 }

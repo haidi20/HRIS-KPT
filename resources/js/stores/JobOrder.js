@@ -20,6 +20,8 @@ Status values
 @property {null|string} job_note - The job note.
 @property {Status} status - The status value.
 @property {null|string} image - The image value.
+@property {null|date} date - The date value.
+@property {null|time} hour_end - The hour end value.
 @property {null|string} form_kind - The form kind.
 @property {string} form_title - The form title.
 @property {null|string} hour_start - The hour start value.
@@ -39,14 +41,21 @@ const defaultForm = {
     job_id: null,
     job_note: null,
     status: null,
+    status_finish: null,
     image: null,
-    // date: new Date(),
+    // start form action
+    date: new Date(),
+    hour_end: new Date(),
+    status_note: null,
+    // end form action
     form_kind: null,
     form_title: "Job Order",
     hour_start: null,
-    date_time_start: null,
-    date_time_end: null,
-    date_time_end_readable: null,
+    datetime_start: null,
+    datetime_end: null,
+    datetime_end_readable: null,
+    datetime_estimation_end: null,
+    datetime_estimation_end_readable: null,
     estimation: null,
     time_type: "hours",
     note: null,
@@ -83,16 +92,16 @@ const JobOrder = {
             ],
             job_levels: [
                 {
-                    id: "hard",
-                    name: "Sulit / Berat",
+                    id: "easy",
+                    name: "Mudah / Ringan",
                 },
                 {
                     id: "middle",
                     name: "Sedang / Menengah",
                 },
                 {
-                    id: "easy",
-                    name: "Mudah / Ringan",
+                    id: "hard",
+                    name: "Sulit / Berat",
                 },
             ],
             categories: [
@@ -155,7 +164,12 @@ const JobOrder = {
             state.form = {
                 ...state.form,
                 ...payload.form,
+                note: null,
             };
+
+            if (payload.form_kind == 'edit') {
+                state.form.note = payload.note;
+            }
         },
         INSERT_FORM_JOB_ID(state, payload) {
             state.form.job_id = payload.job_id;
@@ -172,35 +186,55 @@ const JobOrder = {
         INSERT_FORM_TIME_TYPE(state, payload) {
             state.form.time_type = payload.time_type;
         },
-        INSERT_FORM_DATE_TIME_END(state, payload) {
+        INSERT_FORM_DATETIME_ESTIMATION_END(state, payload) {
             // console.info(state.form);
             // console.info(checkNull(state.form.estimation));
             if (
                 checkNull(state.form.hour_start) != null
                 && checkNull(state.form.estimation) != null
             ) {
-                const getDateEstimation = moment().add(
-                    state.form.estimation,
-                    state.form.time_type
-                );
+                const hourStart = state.form.hour_start;
+                const momentHourStart = moment().set({
+                    hour: parseInt(hourStart.split(":")[0]),
+                    minute: parseInt(hourStart.split(":")[1])
+                });
+                const getDateEstimation = momentHourStart
+                    .add(
+                        state.form.estimation,
+                        state.form.time_type
+                    );
 
                 let addFormat = "";
                 if (state.form.time_type != "days") {
-                    addFormat = ", HH:mm";
+                    addFormat = " HH:mm";
                 }
 
-                state.form.date_time_end = getDateEstimation.format("YYYY-MM-DD HH:mm");
-                state.form.date_time_end_readable = getDateEstimation
-                    .locale("id")
+                state.form.datetime_estimation_end = getDateEstimation.format("YYYY-MM-DD HH:mm");
+                state.form.datetime_estimation_end_readable = getDateEstimation
+                    // .locale("id")
                     .format(`dddd, D MMMM YYYY${addFormat}`);
             } else {
-                state.form.date_time_end = null;
-                state.form.date_time_end_readable = null;
+                state.form.datetime_estimation_end = null;
+                state.form.datetime_estimation_end_readable = null;
             }
         },
         INSERT_FORM_KIND(state, payload) {
             state.form.form_title = payload.form_title;
             state.form.form_kind = payload.form_kind;
+        },
+        INSERT_FORM_STATUS(state, payload) {
+            let status = payload.status;
+            const listStatusFinish = ["overtime_finish", "correction_finish"];
+
+            if (listStatusFinish.some((item) => item == payload.status)) {
+                // status = "finish";
+                // status_finish = this.form.status;
+                state.form.status = "finish";
+                state.form.status_finish = payload.status;
+            } else {
+                state.form.status = status;
+                state.form.status_finish = null;
+            }
         },
         INSERT_PARAM(state, payload) {
             state.params = {
@@ -213,6 +247,16 @@ const JobOrder = {
         },
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
+        },
+        CLEAR_FORM(state, payload) {
+            state.form = { ...defaultForm };
+        },
+        CLEAR_FORM_ACTION(state, payload) {
+            state.form = {
+                ...state.form,
+                date_end: null,
+                status_note: null,
+            };
         },
     },
     actions: {

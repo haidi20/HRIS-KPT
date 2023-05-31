@@ -102,13 +102,13 @@ export default {
             }
         },
         hour_start(value, oldMessage) {
-            this.$store.commit("jobOrder/INSERT_FORM_DATE_TIME_END");
+            this.$store.commit("jobOrder/INSERT_FORM_DATETIME_ESTIMATION_END");
         },
         estimation(value, oldMessage) {
-            this.$store.commit("jobOrder/INSERT_FORM_DATE_TIME_END");
+            this.$store.commit("jobOrder/INSERT_FORM_DATETIME_ESTIMATION_END");
         },
         time_type(value, oldMessage) {
-            this.$store.commit("jobOrder/INSERT_FORM_DATE_TIME_END");
+            this.$store.commit("jobOrder/INSERT_FORM_DATETIME_ESTIMATION_END");
         },
     },
     methods: {
@@ -123,9 +123,6 @@ export default {
             this.$bvModal.hide("job_order_form");
         },
         onShowEmployee() {
-            this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
-                value: true,
-            });
             this.$bvModal.show("data_employee");
         },
         onSendOld() {
@@ -141,7 +138,6 @@ export default {
         async onSend() {
             const Swal = this.$swal;
 
-            // mengambil data hexa saja
             const request = {
                 ...this.form,
                 employee_selecteds: [...this.getEmployeeSelecteds],
@@ -182,12 +178,11 @@ export default {
                             form_title: "Job Order",
                             form_kind: null,
                         });
-                        // this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-                        //     value: false,
-                        // });
+                        this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+                            value: false,
+                        });
                         this.$store.dispatch("jobOrder/fetchData");
-                        // this.$store.commit("jobOrder/CLEAR_FORM");
-                        // this.$bvModal.hide("job_order_form");
+                        this.$store.commit("jobOrder/CLEAR_FORM");
                     }
                 })
                 .catch((err) => {

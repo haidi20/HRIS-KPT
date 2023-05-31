@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +16,7 @@ class JobOrder extends Model
     protected $fillable = [];
     protected $appends = [
         "status_color", "status_readable",
-        "project_name", "job_name", "job_code",
+        "project_name", "job_name", "job_code", "hour_start",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
     ];
 
@@ -63,6 +64,11 @@ class JobOrder extends Model
     public function jobOrderAssessments()
     {
         return $this->hasMany(JobOrderAssessment::class, "job_order_id", "id");
+    }
+
+    public function getHourStartAttribute()
+    {
+        return Carbon::parse($this->datetime_start)->format("h:m");
     }
 
     public function getStatusColorAttribute()

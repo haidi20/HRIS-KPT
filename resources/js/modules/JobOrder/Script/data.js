@@ -26,27 +26,35 @@ export default {
         getIsMobile() {
             return isMobile();
         },
-        form() {
+        getForm() {
             return this.$store.state.jobOrder.form;
         },
     },
     methods: {
-        onOpenAction(data) {
+        onOpenAction(form) {
             //   console.info(id);
             this.$store.commit("jobOrder/INSERT_FORM", {
-                form: data,
+                form
             });
-            this.$refs.myBottomSheet.open();
+
+            this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
+                value: true,
+            });
+            this.$bvModal.show("action_list");
         },
         onAction(type, title) {
-            this.$refs.myBottomSheet.close();
+            this.$bvModal.hide("action_list");
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-                form_title: title + " Job Order",
+                form_title: "Job Order - " + title,
                 form_kind: type,
+            });
+            this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
+                status: type,
             });
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
+            // this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
 
             //   console.info(this.form);
 
@@ -69,7 +77,7 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            this.$refs.myBottomSheet.close();
+            this.$bvModal.hide("action_list");
         },
         onEdit() {
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
@@ -79,7 +87,7 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            this.$refs.myBottomSheet.close();
+            this.$bvModal.hide("action_list");
         },
         onFilter() {
             this.$bvModal.show("job_order_filter");
@@ -96,6 +104,18 @@ export default {
 
                 return sentence;
             }
+        },
+        getConditionActionActive() {
+            let result = false;
+            const listStatus = ["pending"];
+
+            if (this.getFormStatus != null) {
+                if (listStatus.some(item => item == this.getFormStatus)) {
+                    result = true;
+                }
+            }
+
+            return result;
         },
     },
 };

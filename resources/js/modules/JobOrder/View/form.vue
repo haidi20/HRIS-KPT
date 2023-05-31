@@ -87,12 +87,18 @@
       </b-col>
       <b-col cols>
         <b-form-group label="Estimasi Waktu" label-for="estimation" class>
-          <b-form-input v-model="estimation" id="estimation" name="estimation"></b-form-input>
+          <b-form-input
+            v-model="estimation"
+            id="estimation"
+            name="estimation"
+            type="number"
+            autocomplete="off"
+          ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="12" md="6">
+      <b-col cols="5" md="6">
         <b-form-group label="Jenis Waktu" label-for="time_type" class>
           <select v-model="time_type" name="time_type" id="time_type" class="form-control">
             <option
@@ -103,10 +109,15 @@
           </select>
         </b-form-group>
       </b-col>
-      <b-col cols="12" md="6">
-        <b-form-group label="Waktu Selesai : " label-for="time_type" class>
-          <span>{{form.date_time_end_readable}}</span>
-          <!-- <span v-if="form.time_type != 'day'">{{form.hour_end_readable}}</span> -->
+      <b-col cols="7" md="6">
+        <b-form-group label="Waktu Selesai " label-for="time_type" class>
+          <span>
+            {{
+            form.datetime_estimation_end_readable
+            ? form.datetime_estimation_end_readable
+            : "-"
+            }}
+          </span>
         </b-form-group>
       </b-col>
     </b-row>
@@ -143,7 +154,7 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Keterangan" label-for="note" class>
+        <b-form-group label="catatan tambahan" label-for="note" class>
           <b-form-input v-model="form.note" id="note" name="note"></b-form-input>
         </b-form-group>
       </b-col>

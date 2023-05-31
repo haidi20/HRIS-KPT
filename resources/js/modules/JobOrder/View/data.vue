@@ -58,17 +58,15 @@
                     </b-col>
                     <b-col cols="6">
                       <span>
+                        <i class="bi bi-person"></i>
                         <b>Total :</b>
                         {{item.employee_total}}
-                        <i class="bi bi-person"></i>
                       </span>
                       <br />
                       <span>
+                        <i class="bi bi-person"></i>
                         <b>Aktif :</b>
                         {{item.employee_active_total}}
-                        <i
-                          class="bi bi-person"
-                        ></i>
                       </span>
                     </b-col>
                   </b-row>
@@ -80,30 +78,58 @@
         <template v-else>
           <span>data kosong.</span>
         </template>
-        <vue-bottom-sheet ref="myBottomSheet">
+
+        <b-modal id="action_list" ref="action_list" title="Tombol Aksi" size="md" hide-footer>
           <div class="flex flex-col">
             <!-- v-if="getFormStatus != 'pending'" -->
             <!-- <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div> -->
-            <div class="action-item" @click="onAction('finish', 'Selesai')">Selesai</div>
-            <div class="action-item" @click="onAction('pending', 'Tunda')">Tunda</div>
-            <div class="action-item" @click="onAction('active', 'Mulai Kembali')">Mulai Kembali</div>
-            <!-- v-if="getFormStatus != 'active'" -->
-            <div class="action-item" @click="onAction('overtime', 'Lembur')">Lembur</div>
+            <!-- <div class="action-item">{{getFormStatus}}</div> -->
             <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('finish', 'Selesai')"
+            >Selesai</div>
+            <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('pending', 'Tunda')"
+            >Tunda</div>
+            <div
+              v-if="getConditionActionActive()"
+              class="action-item"
+              @click="onAction('active', 'Mulai Kembali')"
+            >Mulai Kembali</div>
+            <!-- v-if="getFormStatus != 'active'" -->
+            <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('overtime', 'Lembur')"
+            >Lembur</div>
+            <div
+              v-if="getFormStatus == 'overtime'"
               class="action-item"
               @click="onAction('overtime_finish', 'Lembur Selesai')"
             >Lembur Selesai</div>
-            <div class="action-item" @click="onAction('correction', 'Perbaikan')">Perbaikan</div>
             <div
+              v-if="getFormStatus == 'finish'"
+              class="action-item"
+              @click="onAction('correction', 'Perbaikan')"
+            >Perbaikan</div>
+            <div
+              v-if="getFormStatus == 'correction'"
               class="action-item"
               @click="onAction('correction_finish', 'Selesai Perbaikan')"
             >Perbaikan Selesai</div>
-            <div class="action-item" @click="onEdit">Ubah</div>
-            <div class="action-item" @click="onDetail">Detail</div>
             <!-- khusus untuk QC -->
-            <div class="action-item" @click="onAction('assessment', 'Penilaian')">Penilaian</div>
+            <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('assessment', 'Penilaian')"
+            >Penilaian</div>
+            <div v-if="getForm.created_by == getUserId" class="action-item" @click="onEdit">Ubah</div>
+            <div class="action-item" @click="onDetail">Detail</div>
           </div>
-        </vue-bottom-sheet>
+        </b-modal>
       </b-col>
     </b-row>
     <FilterData />
@@ -133,6 +159,9 @@
 .action-item {
   padding: 25px 0px 25px 20px;
   border-bottom: 1px solid #dbdfea;
+}
+.action-item-empty {
+  padding: 25px 0px 25px 20px;
 }
 .badge-success {
   padding: 0.115rem 0.5rem;
