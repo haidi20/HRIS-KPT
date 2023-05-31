@@ -2,20 +2,26 @@
   <div>
     <b-row style="margin-top: 10px">
       <b-col cols>
-        <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
+        <input
+          v-model="params.search"
+          @input="onSearch"
+          type="text"
+          placeholder="search..."
+          style="width: 100%"
+          class="form-control"
+        />
       </b-col>
     </b-row>
     <br />
     <b-row>
       <b-col class="place-data">
         <template v-if="getData.length > 0">
-          <b-row v-for="(item, index) in getData" :key="index" @click="onOpenAction(i)">
+          <b-row v-for="(item, index) in getData" :key="index" @click="onOpenAction(item, index)">
             <b-col class="place-item">
               <b-row>
                 <b-col cols>
-                  <h5>{{item.position_name}}</h5>
-                  <h6>{{item.name}}</h6>
-                  <span>Aktif: {{item.is_active}}</span>
+                  <h5>{{item.employee_name}} - {{item.position_name}}</h5>
+                  <span v-if="item.is_active != null">Aktif: {{item.is_active}}</span>
                 </b-col>
               </b-row>
               <!-- <b-row>
@@ -36,47 +42,45 @@
     </b-row>
     <vue-bottom-sheet ref="myBottomSheetEmployee">
       <div class="flex flex-col">
-        <div class="action-item">mulai</div>
-        <div class="action-item">tunda</div>
-        <div class="action-item">selesai</div>
-        <div class="action-item">lembur</div>
-        <div class="action-item">selesai lembur</div>
-        <div class="action-item">hapus</div>
+        <div class="action-item">
+          <h5>{{getForm.employee_name}} - {{getForm.position_name}}</h5>
+        </div>
+        <div
+          v-if="getConditionActionActive()"
+          class="action-item"
+          @click="onAction('active', 'Mulai')"
+        >mulai</div>
+        <div
+          v-if="getForm.status == 'active'"
+          class="action-item"
+          @click="onAction('pending', 'Tunda')"
+        >tunda</div>
+        <div
+          v-if="getForm.status == 'active'"
+          class="action-item"
+          @click="onAction('finish', 'Selesai')"
+        >selesai</div>
+        <div
+          v-if="getForm.status == 'active'"
+          class="action-item"
+          @click="onAction('overtime', 'Lembur')"
+        >lembur</div>
+        <div
+          v-if="getForm.status == 'overtime'"
+          class="action-item"
+          @click="onAction('overtime_finish', 'Selesai Lembur')"
+        >selesai lembur</div>
+        <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
       </div>
     </vue-bottom-sheet>
   </div>
 </template>
 
-<script >
-export default {
-  data() {
-    return {
-      is_loading: false,
-    };
-  },
-  computed: {
-    getBaseUrl() {
-      return this.$store.state.base_url;
-    },
-    getUserId() {
-      return this.$store.state.user?.id;
-    },
-    getData() {
-      return this.$store.state.employeeHasParent.data.table;
-    },
-  },
-  methods: {
-    onOpenAction(data) {
-      //   console.info(id);
-      this.$refs.myBottomSheetEmployee.open();
-    },
-  },
-};
-</script>
+<script src="../Script/tableMobile.js"></script>
 
 <style lang="scss" scoped>
 .place-data {
-  max-height: 500px;
+  max-height: 300px;
   overflow-x: scroll;
 }
 .place-item {

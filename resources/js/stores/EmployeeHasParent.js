@@ -8,6 +8,10 @@ const defaultForm = {
     job_order_id: null,
     employee_base: "all",
     form_type: "create",
+    form_type_parent: "create",
+    // start job order
+    data_index: null, // untuk hapus data yang sudah di pilih
+    status: null,
 }
 
 const EmployeeHasParent = {
@@ -21,6 +25,7 @@ const EmployeeHasParent = {
             foremans: [],
         },
         params: {
+            search: null,
             date: new Date(),
         },
         form: { ...defaultForm },
@@ -51,7 +56,7 @@ const EmployeeHasParent = {
         loading: {
             table: false,
         },
-        is_form_mobile: true,
+        is_mobile: false,
     },
     mutations: {
         INSERT_BASE_URL(state, payload) {
@@ -68,8 +73,8 @@ const EmployeeHasParent = {
         },
         INSERT_DATA_SELECTED(state, payload) {
             state.data.selecteds = [
-                ...state.data.selecteds,
                 { ...payload.employee, },
+                ...state.data.selecteds,
             ];
         },
         INSERT_DATA_ALL_SELECTED(state, payload) {
@@ -80,14 +85,18 @@ const EmployeeHasParent = {
             state.form = {
                 ...state.form,
                 ...payload.form,
-                form_type: payload.form_type,
             };
+
+            if (payload.form_type != null) {
+                // form_type: payload.form_type,
+                state.form.form_type = payload.form_type;
+            }
         },
         INSERT_FORM_FORM_TYPE(state, payload) {
             state.form.form_type = payload.from_type;
         },
-        UPDATE_IS_FORM_MOBILE(state, payload) {
-            state.is_form_mobile = payload.value;
+        UPDATE_IS_MOBILE(state, payload) {
+            state.is_mobile = payload.value;
         },
         DELETE_DATA_SELECTED(state, payload) {
             state.data.selecteds.splice(payload.index, 1);

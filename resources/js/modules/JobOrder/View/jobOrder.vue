@@ -3,18 +3,20 @@
     <b-row style="height: 100%">
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
-        <h3 style="display: inline">{{getTitle}}</h3>
-        <template v-if="!getIsActiveForm">
-          <Data />
-        </template>
-        <template v-else>
-          <template v-if="getConditionForm()">
-            <Form />
+        <h4>{{getTitle}}</h4>
+        <div style="margin-top: 15px">
+          <template v-if="!getIsActiveForm">
+            <Data />
           </template>
           <template v-else>
-            <FormAction />
+            <template v-if="getConditionForm()">
+              <Form />
+            </template>
+            <template v-else>
+              <FormAction />
+            </template>
           </template>
-        </template>
+        </div>
       </b-col>
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
     </b-row>

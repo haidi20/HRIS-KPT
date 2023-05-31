@@ -91,6 +91,33 @@ return [
             "short_readable" => "belum",
             "color" => "info",
         ],
+        // start job order
+        "active" => [
+            "readable" => "sedang aktif",
+            "short_readable" => "aktif",
+            "color" => "success",
+        ],
+        "pending" => [
+            "readable" => "tunda sementara",
+            "short_readable" => "tunda",
+            "color" => "warning",
+        ],
+        "finish" => [
+            "readable" => "sudah selesai",
+            "short_readable" => "selesai",
+            "color" => "primary",
+        ],
+        "overtime" => [
+            "readable" => "sedang lembur",
+            "short_readable" => "lembur",
+            "color" => "info",
+        ],
+        "correction" => [
+            "readable" => "perbaikan ulang",
+            "short_readable" => "perbaikan",
+            "color" => "warning",
+        ],
+        // end job order
     ],
     // start untuk penyesuaian gaji
     "type_times" => [

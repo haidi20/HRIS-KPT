@@ -9,50 +9,65 @@
       </b-col>
     </b-row>
     <br />
+    <hr />
     <b-row>
       <b-col class="place-data">
-        <template v-if="getData.length > 0">
+        <template v-if="getLoadingData">
+          <span>loading...</span>
+        </template>
+        <template v-else-if="getData.length > 0">
           <b-row v-for="(item, index) in getData" :key="index">
             <b-col class="place-item">
               <b-row>
-                <b-col :cols="getIsMobile ? '12' : '10'" @click="onOpenAction(item)">
-                  <h6>
-                    <b>{{item.project_name}}</b>
-                  </h6>
-                  <span>catatan:</span>
-                  <br />
-                  <span>{{onLimitSentence(item.project_note)}}</span>
-                  <b-row class="place-content">
-                    <b-col cols="7">
-                      <span>
-                        Status :
-                        <div :class="`badge-${item.status_color}`">{{item.status_readable}}</div>
-                      </span>
-                      <br />
-                      <span>Total Karyawan : {{item.employee_total}}</span>
-                      <br />
-                      <span>Total Karyawan Aktif: {{item.employee_active_total}}</span>
+                <b-col @click="onOpenAction(item)">
+                  <b-row>
+                    <b-col cols>
+                      <h6>
+                        <b>{{item.project_name}}</b>
+                      </h6>
                     </b-col>
-                    <b-col cols="5">
-                      <span>Penilaian :</span>
+                    <b-col cols="4" style="text-align: end">
+                      <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols>
+                      <span>{{item.job_code}} - {{item.job_name}}</span>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols>
+                      <span>ket : {{ item.job_note != null ? onLimitSentence(item.job_note) : "-"}}</span>
+                    </b-col>
+                  </b-row>
+                  <b-row class="place-content">
+                    <b-col cols="6">
+                      <span>
+                        <b>Penilaian :</b>
+                      </span>
                       <span>{{item.assessment_count}} / {{item.assessment_total}}</span>
                       <br />
-                      <!-- <div>
-                        <b-form-checkbox
-                          class="display-inline"
-                          v-model="item.is_assessment_quality_control"
-                          disabled
-                        ></b-form-checkbox>
+                      <div>
+                        <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>QC</span>
                       </div>
                       <div>
-                        <b-form-checkbox
-                          class="display-inline"
-                          v-model="item.is_assessment_foreman"
-                          disabled
-                        ></b-form-checkbox>
+                        <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>Pengawas</span>
-                      </div>-->
+                      </div>
+                    </b-col>
+                    <b-col cols="6">
+                      <span>
+                        <i class="bi bi-person"></i>
+                        <b>Total :</b>
+                        {{item.employee_total}}
+                      </span>
+                      <br />
+                      <span>
+                        <i class="bi bi-person"></i>
+                        <b>Aktif :</b>
+                        {{item.employee_active_total}}
+                      </span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -60,128 +75,68 @@
             </b-col>
           </b-row>
         </template>
-        <vue-bottom-sheet ref="myBottomSheet">
+        <template v-else>
+          <span>data kosong.</span>
+        </template>
+
+        <b-modal id="action_list" ref="action_list" title="Tombol Aksi" size="md" hide-footer>
           <div class="flex flex-col">
             <!-- v-if="getFormStatus != 'pending'" -->
-            <div class="action-item" @click="onAction('pending', 'Tunda')">Tunda</div>
-            <!-- v-if="getFormStatus != 'active'" -->
-            <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div>
-            <div class="action-item" @click="onAction('finish', 'Selesai')">Selesai</div>
-            <div class="action-item" @click="onAction('overtime', 'Lembur')">Lembur</div>
+            <!-- <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div> -->
+            <!-- <div class="action-item">{{getFormStatus}}</div> -->
             <div
+              v-if="getFormStatus == 'active'"
               class="action-item"
-              @click="onAction('overtime_finish', 'Selesai Lembur')"
-            >Selesai Lembur</div>
-            <div class="action-item" @click="onAction('correction', 'Perbaikan')">Perbaikan</div>
-            <div class="action-item" @click="onEdit">Ubah</div>
+              @click="onAction('finish', 'Selesai')"
+            >Selesai</div>
+            <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('pending', 'Tunda')"
+            >Tunda</div>
+            <div
+              v-if="getFormStatus == 'pending'"
+              class="action-item"
+              @click="onAction('pending_finish', 'Mulai Kembali')"
+            >Mulai Kembali</div>
+            <!-- v-if="getFormStatus != 'active'" -->
+            <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('overtime', 'Lembur')"
+            >Lembur</div>
+            <div
+              v-if="getFormStatus == 'overtime'"
+              class="action-item"
+              @click="onAction('overtime_finish', 'Lembur Selesai')"
+            >Lembur Selesai</div>
+            <div
+              v-if="getFormStatus == 'finish'"
+              class="action-item"
+              @click="onAction('correction', 'Perbaikan')"
+            >Perbaikan</div>
+            <div
+              v-if="getFormStatus == 'correction'"
+              class="action-item"
+              @click="onAction('correction_finish', 'Selesai Perbaikan')"
+            >Perbaikan Selesai</div>
+            <!-- khusus untuk QC -->
+            <div
+              v-if="getFormStatus == 'active'"
+              class="action-item"
+              @click="onAction('assessment', 'Penilaian')"
+            >Penilaian</div>
+            <div v-if="getForm.created_by == getUserId" class="action-item" @click="onEdit">Ubah</div>
             <div class="action-item" @click="onDetail">Detail</div>
-            <div class="action-item" @click="onAction('assessment', 'Penilaian')">Penilaian</div>
           </div>
-        </vue-bottom-sheet>
+        </b-modal>
       </b-col>
     </b-row>
     <FilterData />
   </div>
 </template>
 
-<script>
-import { isMobile } from "../../../utils";
-import FilterData from "./filter.vue";
-export default {
-  data() {
-    return {
-      title: "",
-    };
-  },
-  components: { FilterData },
-  computed: {
-    getBaseUrl() {
-      return this.$store.state.base_url;
-    },
-    getUserId() {
-      return this.$store.state.user?.id;
-    },
-    getData() {
-      return this.$store.state.jobOrder.data;
-    },
-    getFormStatus() {
-      return this.$store.state.jobOrder.form.status;
-    },
-    getIsMobile() {
-      return isMobile();
-    },
-    form() {
-      return this.$store.state.jobOrder.form;
-    },
-  },
-  methods: {
-    onOpenAction(data) {
-      //   console.info(id);
-      this.$store.commit("jobOrder/INSERT_FORM", {
-        form: data,
-      });
-      this.$refs.myBottomSheet.open();
-    },
-    onAction(type, title) {
-      this.$refs.myBottomSheet.close();
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: title + " Job Order",
-        form_kind: type,
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-
-      //   console.info(this.form);
-
-      this.$bvModal.show("job_order_form_action");
-    },
-    onCreate() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Tambah Job Order",
-        form_kind: "create",
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-    },
-    onDetail() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Detail Job Order",
-        form_kind: "detail",
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-      this.$refs.myBottomSheet.close();
-    },
-    onEdit() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Ubah Job Order",
-        form_kind: "edit",
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: true,
-      });
-      this.$refs.myBottomSheet.close();
-    },
-    onFilter() {
-      this.$bvModal.show("job_order_filter");
-    },
-    onLimitSentence(sentence) {
-      const maxLength = 35;
-
-      if (sentence != null || sentence != "") {
-        if (sentence.length > maxLength) {
-          sentence = sentence.substring(0, maxLength) + "...";
-        }
-
-        return sentence;
-      }
-    },
-  },
-};
-</script>
+<script src="../Script/data.js"></script>
 
 <style lang="scss" scoped>
 .place-data {
@@ -195,6 +150,7 @@ export default {
 .place-item {
   border-bottom: 1px solid #dbdfea;
   padding: 0.5rem;
+  margin-bottom: 1rem;
 }
 .place-content {
   font-size: 15px;
@@ -203,6 +159,9 @@ export default {
 .action-item {
   padding: 25px 0px 25px 20px;
   border-bottom: 1px solid #dbdfea;
+}
+.action-item-empty {
+  padding: 25px 0px 25px 20px;
 }
 .badge-success {
   padding: 0.115rem 0.5rem;

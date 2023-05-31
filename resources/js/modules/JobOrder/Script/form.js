@@ -1,4 +1,7 @@
 import VueSelect from "vue-select";
+import axios from "axios";
+import moment from "moment";
+
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 
 export default {
@@ -9,9 +12,6 @@ export default {
     },
     mounted() {
         // this.$bvModal.show("data_employee");
-        this.$store.commit("employeeHasParent/UPDATE_IS_FORM_MOBILE", {
-            value: true,
-        });
     },
     components: {
         VueSelect,
@@ -39,8 +39,11 @@ export default {
         getOptionJobLevels() {
             return this.$store.state.jobOrder.options.job_levels;
         },
-        getOptionTypTime() {
-            return this.$store.state.jobOrder.options.type_times;
+        getOptionTimeTypes() {
+            return this.$store.state.jobOrder.options.time_types;
+        },
+        getEmployeeSelecteds() {
+            return this.$store.state.employeeHasParent.data.selecteds;
         },
         form() {
             return this.$store.state.jobOrder.form;
@@ -75,13 +78,13 @@ export default {
                 });
             },
         },
-        type_time: {
+        time_type: {
             get() {
-                return this.$store.state.jobOrder.form.type_time;
+                return this.$store.state.jobOrder.form.time_type;
             },
             set(value) {
-                this.$store.commit("jobOrder/INSERT_FORM_TYPE_TIME", {
-                    type_time: value,
+                this.$store.commit("jobOrder/INSERT_FORM_TIME_TYPE", {
+                    time_type: value,
                 });
             },
         },
@@ -97,6 +100,15 @@ export default {
                     code: findJob.code,
                 });
             }
+        },
+        hour_start(value, oldMessage) {
+            this.$store.commit("jobOrder/INSERT_FORM_DATETIME_ESTIMATION_END");
+        },
+        estimation(value, oldMessage) {
+            this.$store.commit("jobOrder/INSERT_FORM_DATETIME_ESTIMATION_END");
+        },
+        time_type(value, oldMessage) {
+            this.$store.commit("jobOrder/INSERT_FORM_DATETIME_ESTIMATION_END");
         },
     },
     methods: {
@@ -126,14 +138,14 @@ export default {
         async onSend() {
             const Swal = this.$swal;
 
-            // mengambil data hexa saja
             const request = {
                 ...this.form,
+                employee_selecteds: [...this.getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
 
             console.info(request);
-            return false;
+            // return false;
             this.is_loading = true;
 
 
@@ -170,8 +182,7 @@ export default {
                             value: false,
                         });
                         this.$store.dispatch("jobOrder/fetchData");
-                        // this.$store.commit("jobOrder/CLEAR_FORM");
-                        // this.$bvModal.hide("job_order_form");
+                        this.$store.commit("jobOrder/CLEAR_FORM");
                     }
                 })
                 .catch((err) => {

@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class JobOrderAssessment extends Model
 {
     use HasFactory;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = request("user_id");
+            $model->updated_by = NULL;
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = request("user_id");
+        });
+    }
 }

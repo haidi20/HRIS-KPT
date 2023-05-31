@@ -36,43 +36,13 @@
     </b-row>
     <b-row>
       <b-col cols style="text-align: right">
-        <b-button variant="success" @click="onSend()">Pilih</b-button>
+        <b-button variant="success" @click="onChoose()">Pilih</b-button>
       </b-col>
     </b-row>
   </div>
 </template>
 
-<script>
-import VueSelect from "vue-select";
-
-export default {
-  components: {
-    VueSelect,
-  },
-  computed: {
-    getBaseUrl() {
-      return this.$store.state.base_url;
-    },
-    getUserId() {
-      return this.$store.state.user?.id;
-    },
-    getOptionPositions() {
-      return this.$store.state.master.data.positions;
-    },
-    getOptionEmployees() {
-      return this.$store.state.employeeHasParent.data.options;
-    },
-    form() {
-      return this.$store.state.employeeHasParent.form;
-    },
-  },
-  methods: {
-    onSend() {
-      console.info(this.form.employee_id);
-    },
-  },
-};
-</script>
+<script src="../Script/formMobile.js"></script>
 
 <style lang="scss" scoped>
 </style>

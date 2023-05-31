@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
+use App\Models\JobOrderHasStatus;
+use App\Models\JobOrderHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -26,10 +28,11 @@ class JobOrderController extends Controller
     {
         $month = Carbon::parse(request("month"));
 
-        $jobOrders = JobOrder::with(["jobOrderDetails", "jobOrderAssessments"])
-            ->whereYear("date_time", $month->format("Y"))
-            ->whereMonth("date_time", $month->format("m"))
-            ->orderBy("date_time", "asc")->get();
+        $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->orderBy("datetime_start", "desc")
+            ->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
@@ -54,18 +57,76 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
+            $date = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+
             $jobOrder->project_id = request("project_id");
-            $jobOrder->date_time = Carbon::parse(request("date") . ' ' . request("hour"));
+            $jobOrder->job_id = request("job_id");
+            $jobOrder->job_level = request("job_level");
+            $jobOrder->job_note = request("job_note");
+            //datetime_end inputnya di storeAction
+            $jobOrder->datetime_start = $date;
+            $jobOrder->datetime_estimation_end = Carbon::parse(request("datetime_estimation_end"));
+            $jobOrder->estimation = request("estimation");
+            $jobOrder->time_type = request("time_type");
             $jobOrder->category = request("category");
+            $jobOrder->note = request("note");
             $jobOrder->save();
 
-            // $this->storeContractors($jobOrder);
+            // tambah data jobOrderHasStatus hanya ketika data baru
+            if (request("id") == null) {
+                $this->storeJobOrderHasStatus($jobOrder, $date);
+            }
+
+            $this->storeJobOrderHistory($jobOrder);
             // $this->storeOrdinarySeamans($jobOrder);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function storeAction()
+    {
+        // return request()->all();
+
+        try {
+            DB::beginTransaction();
+
+            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:m");
+            $message = "diperbaharui";
+
+            $jobOrder = JobOrder::find(request("id"));
+
+            if (request("status") == 'finish') {
+                $jobOrder->status = request("status");
+                $jobOrder->datetime_end = $date;
+            }
+
+            $jobOrder->status = request("status");
+            $jobOrder->status_note = request("status_note");
+            $jobOrder->save();
+
+            $this->storeJobOrderHasStatus($jobOrder, $date);
+            $this->storeJobOrderHistory($jobOrder);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -89,6 +150,7 @@ class JobOrderController extends Controller
             $jobOrder->update([
                 'deleted_by' => request("user_id"),
             ]);
+            $this->storeJobOrderHistory($jobOrder, true);
             $jobOrder->delete();
 
             DB::commit();
@@ -107,5 +169,49 @@ class JobOrderController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    private function storeJobOrderHasStatus($jobOrder, $date = null)
+    {
+        if (request("status_last") != null) {
+            $jobOrderHasStatus = JobOrderHasStatus::where("status", request("status_last"));
+            $jobOrderHasStatus->update([
+                "note_end" => $jobOrder->status_note,
+                "datetime_end" => $date,
+            ]);
+        } else {
+            $jobOrderHasStatus = new JobOrderHasStatus;
+            $jobOrderHasStatus->job_order_id = $jobOrder->id;
+            $jobOrderHasStatus->status = $jobOrder->status;
+            $jobOrderHasStatus->datetime_start = $date;
+            $jobOrderHasStatus->note_start = $jobOrder->status_note;
+            $jobOrderHasStatus->save();
+        }
+    }
+
+    private function storeJobOrderHistory($jobOrder, $isDelete = false)
+    {
+        $jobOrderHistory = new JobOrderHistory;
+        $jobOrderHistory->job_order_id = $jobOrder->id;
+        $jobOrderHistory->project_id = $jobOrder->project_id;
+        $jobOrderHistory->job_id = $jobOrder->job_id;
+        $jobOrderHistory->job_level = $jobOrder->job_level;
+        $jobOrderHistory->job_note = $jobOrder->job_note;
+        $jobOrderHistory->status = $jobOrder->status;
+        $jobOrderHistory->datetime_start = $jobOrder->datetime_start;
+        $jobOrderHistory->datetime_end = $jobOrder->datetime_end;
+        $jobOrderHistory->datetime_estimation_end = $jobOrder->datetime_estimation_end;
+        $jobOrderHistory->estimation = $jobOrder->estimation;
+        $jobOrderHistory->time_type = $jobOrder->time_type;
+        $jobOrderHistory->category = $jobOrder->category;
+        $jobOrderHistory->note = $jobOrder->note;
+        $jobOrderHistory->status_note = $jobOrder->status_note;
+        $jobOrderHistory->deleted_by = $jobOrder->deleted_by;
+
+        if ($isDelete) {
+            $jobOrderHistory->deleted_at = Carbon::now();
+        }
+
+        $jobOrderHistory->save();
     }
 }
