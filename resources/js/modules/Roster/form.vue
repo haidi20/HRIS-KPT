@@ -76,7 +76,14 @@
       <b-row>
         <b-col>
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-          <b-button variant="success" size="sm" class="float-end" @click="onSend()">Kirim</b-button>
+          <b-button
+            :disabled="is_loading"
+            variant="success"
+            size="sm"
+            class="float-end"
+            @click="onSend()"
+          >Kirim</b-button>
+          <span v-if="is_loading" class="float-end">Loading...</span>
         </b-col>
       </b-row>
     </b-modal>
@@ -91,6 +98,7 @@ import VueSelect from "vue-select";
 export default {
   data() {
     return {
+      is_loading: false,
       title_form: null,
     };
   },

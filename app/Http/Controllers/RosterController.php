@@ -175,7 +175,7 @@ class RosterController extends Controller
             "work_schedule" => request("work_schedule"),
             "day_off_one" => request("day_off_one"),
             "day_off_two" => request("day_off_two"),
-            "month" => request("month"),
+            "month" => request("month"), // "Y-MM" moment
             "date_vacation" => request("date_vacation"),
         ];
 
@@ -294,11 +294,16 @@ class RosterController extends Controller
 
     private function storeOff($getData, $nameObject)
     {
+        $getNextMonth = Carbon::parse($getData->month)->addMonth()->format("Y-m");
         $getDataOff = $nameObject == "day_off_one" ? $getData->day_off_one : $getData->day_off_two;
         $rosterStatusId = RosterStatus::where("initial", "OFF")->first()->id;
-        $getDatesOffOne = $this->getDatesByDayName($getDataOff, $getData->month);
+        $getDateOff = [];
+        $getDatesOffCurrentMonth = $this->getDatesByDayName($getDataOff, $getData->month);
+        $getDatesOffNextMonth = $this->getDatesByDayName($getDataOff, $getNextMonth);
 
-        foreach ($getDatesOffOne as $index => $item) {
+        $getDateOff = array_merge($getDatesOffCurrentMonth, $getDatesOffNextMonth);
+
+        foreach ($getDateOff as $index => $item) {
             RosterDaily::updateOrCreate(
                 [
                     "employee_id" => $getData->employee_id,
