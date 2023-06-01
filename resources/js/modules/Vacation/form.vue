@@ -96,7 +96,7 @@ export default {
       return this.$store.state.user?.id;
     },
     getOptionEmployees() {
-      return this.$store.state.employee.data.options;
+      return this.$store.state.employeeHasParent.data.options;
     },
     getFormTitle() {
       return this.$store.state.vacation.form_title;
