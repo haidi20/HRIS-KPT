@@ -296,6 +296,7 @@ const JobOrder = {
             state.form = {
                 ...state.form,
                 // date_end: null,
+                hour: moment().format("HH:mm"),
                 status_note: null,
             };
         },

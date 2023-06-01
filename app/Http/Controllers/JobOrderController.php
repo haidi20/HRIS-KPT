@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Response;
 
 class JobOrderController extends Controller
 {
+    private $nameModel = "App\Models\JobOrder";
+
     public function index()
     {
         $vue = true;
@@ -42,6 +44,7 @@ class JobOrderController extends Controller
     public function store()
     {
         // return request()->all();
+        $jobStatusController = new JobStatusController;
 
         try {
             DB::beginTransaction();
@@ -76,7 +79,7 @@ class JobOrderController extends Controller
 
             // tambah data jobOrderHasStatus hanya ketika data baru
             if (request("id") == null) {
-                $this->storeJobOrderHasStatus($jobOrder, $date);
+                $jobStatusController->storeJobStatusHasParent($jobOrder, $date, $this->nameModel);
             }
 
             $this->storeJobOrderHistory($jobOrder);
@@ -105,6 +108,7 @@ class JobOrderController extends Controller
     public function storeAction()
     {
         // return request()->all();
+        $jobStatusController = new JobStatusController;
 
         try {
             DB::beginTransaction();
@@ -123,7 +127,7 @@ class JobOrderController extends Controller
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
-            $this->storeJobOrderHasStatus($jobOrder, $date);
+            $jobStatusController->storeJobStatusHasParent($jobOrder, $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
 
             DB::commit();
@@ -131,6 +135,7 @@ class JobOrderController extends Controller
             return response()->json([
                 'success' => true,
                 'request' => request()->all(),
+                'jobOrder' => $jobOrder,
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -172,24 +177,6 @@ class JobOrderController extends Controller
                 'success' => false,
                 'message' => 'Gagal dihapus',
             ], 500);
-        }
-    }
-
-    private function storeJobOrderHasStatus($jobOrder, $date = null)
-    {
-        if (request("status_last") != null) {
-            $jobOrderHasStatus = JobOrderHasStatus::where("status", request("status_last"));
-            $jobOrderHasStatus->update([
-                "note_end" => $jobOrder->status_note,
-                "datetime_end" => $date,
-            ]);
-        } else {
-            $jobOrderHasStatus = new JobOrderHasStatus;
-            $jobOrderHasStatus->job_order_id = $jobOrder->id;
-            $jobOrderHasStatus->status = $jobOrder->status;
-            $jobOrderHasStatus->datetime_start = $date;
-            $jobOrderHasStatus->note_start = $jobOrder->status_note;
-            $jobOrderHasStatus->save();
         }
     }
 

@@ -54,7 +54,7 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            // this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
 
             //   console.info(this.form);
 
