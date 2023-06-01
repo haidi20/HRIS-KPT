@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class JobStatusController extends Controller
 {
-    public function storeJobStatusHasParent($parent, $date, $nameModel)
+    public function storeJobStatusHasParent($parent, $statusLast = null, $date, $nameModel)
     {
-        $statusLast = request("status_last");
+        // $statusLast = request("status_last");
         $parentNote = null;
         if (isset($parent["status_note"])) {
             $parentNote = $parent["status_note"];

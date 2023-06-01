@@ -308,7 +308,7 @@ const JobOrder = {
     actions: {
         fetchData: async (context, payload) => {
 
-            if (payload.user_id) {
+            if (payload?.user_id) {
                 context.commit("INSERT_USER_ID", { user_id: payload.user_id });
             }
 

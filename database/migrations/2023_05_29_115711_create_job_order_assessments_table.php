@@ -15,8 +15,8 @@ class CreateJobOrderAssessmentsTable extends Migration
     {
         Schema::create('job_order_assessments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id');
             $table->foreignId('job_order_id');
+            $table->foreignId('employee_id');
             $table->string('image')->nullable();
             $table->string('note')->nullable();
             $table->foreignId('created_by')->nullable();

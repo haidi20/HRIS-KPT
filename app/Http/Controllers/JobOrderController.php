@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
+use App\Models\JobOrderAssessment;
 use App\Models\JobOrderHasStatus;
 use App\Models\JobOrderHistory;
 use App\Models\User;
@@ -88,7 +89,7 @@ class JobOrderController extends Controller
 
             // tambah data jobOrderHasStatus hanya ketika data baru
             if (request("id") == null) {
-                $jobStatusController->storeJobStatusHasParent($jobOrder, $date, $this->nameModel);
+                $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
             $this->storeJobOrderHistory($jobOrder);
@@ -136,7 +137,7 @@ class JobOrderController extends Controller
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
-            $jobStatusController->storeJobStatusHasParent($jobOrder, $date, $this->nameModel);
+            $jobStatusController->storeJobStatusHasParent($jobOrder, request("status_last"), $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
 
             DB::commit();
@@ -155,6 +156,56 @@ class JobOrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function storeActionAssessment()
+    {
+        // return request()->all();
+        $jobOrderId = request("id");
+        $jobStatusController = new JobStatusController;
+
+        try {
+            DB::beginTransaction();
+
+            $jobOrderAssessment = JobOrderAssessment::updateOrCreate([
+                "job_order_id" => $jobOrderId,
+                "employee_id" => request("user_id"),
+            ], [
+                "note" => request("status_note"),
+            ]);
+
+            $allJobOrderAssessmentHasEmployee = JobOrderAssessment::where([
+                "job_order_id" => $jobOrderId,
+            ]);
+
+            if ($allJobOrderAssessmentHasEmployee->count() >= 2) {
+                $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
+
+                $getJobOrder = JobOrder::find($jobOrderId);
+                $getJobOrder->status = "finish";
+                $getJobOrder->datetime_end = $date;
+                $getJobOrder->save();
+
+                $jobStatusController->storeJobStatusHasParent($getJobOrder, "active", $date, $this->nameModel);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
+                'message' => "Berhasil Penilaian",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal Penilaian",
             ], 500);
         }
     }

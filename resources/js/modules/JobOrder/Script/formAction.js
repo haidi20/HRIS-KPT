@@ -44,7 +44,6 @@ export default {
         },
         async onSend() {
             const Swal = this.$swal;
-
             const request = {
                 id: this.form.id,
                 date: moment(this.form.date).format("YYYY-MM-DD"),
@@ -56,12 +55,18 @@ export default {
                 user_id: this.getUserId,
             };
 
+            let urlAction = "store-action";
+
+            if (request.status == 'assessment') {
+                urlAction = "store-action-assessment";
+            }
+
             console.info(request);
             // return false;
             this.is_loading = true;
 
             await axios
-                .post(`${this.getBaseUrl}/api/v1/job-order/store-action`, request)
+                .post(`${this.getBaseUrl}/api/v1/job-order/${urlAction}`, request)
                 .then((responses) => {
                     console.info(responses);
                     this.is_loading = false;
