@@ -9,6 +9,16 @@ class JobOrderAssessment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'employee_id',
+        'job_order_id',
+        'image',
+        'note',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
     protected static function boot()
     {
         parent::boot();
