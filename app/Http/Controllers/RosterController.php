@@ -119,6 +119,7 @@ class RosterController extends Controller
 
         return response()->json([
             "data" => $result,
+            "dateRange" => $dateRange,
             "monthReadAble" => $monthReadAble,
             "positionId" => $positionId,
         ]);
@@ -129,9 +130,10 @@ class RosterController extends Controller
         $dataTotal = [];
         $positions = Position::all();
         $data = $this->fetchData()->original["data"];
+        $dateRange = $this->fetchData()->original["dateRange"];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($month->format("Y-m"));
+        // $dateRange = $this->dateRange($month->format("Y-m"));
 
         foreach ($positions as $key => $value) {
             $dataTotal[$value->initial] = $this->fetchTotal($value->initial)->original["data"];
