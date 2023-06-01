@@ -1,16 +1,35 @@
-<div style="display: flex;">
-        {{-- <img src="{{ public_path('/assets/img/logo.png') }}" alt="" class="" style="width: 10%;"> --}}
-        PT KARYA PACIFIC SHIPYARD
-</div>
-<table width="100%">
+@php
+    use Carbon\Carbon;
+@endphp
+
+<table>
     <thead>
-        <tr>No.</tr>
-        <tr>Nama Karyawan</tr>
-        <tr>Departemen</tr>
+        <tr>
+            <th nowrap rowspan="2">Nama Karyawan</th>
+            <th nowrap rowspan="2">Departemen</th>
+            @foreach ($dates as $date)
+                <th>{{ Carbon::parse($date)->format('d') }}</th>
+            @endforeach
+        </tr>
+        <tr>
+            @foreach ($dates as $date)
+                <th>{{ Carbon::parse($date)->locale('id')->isoFormat('dddd') }}</th>
+            @endforeach
+        </tr>
     </thead>
-    @foreach ($data as $item)
-    <tr>
-        <td>{{ $loop->iteration }}</td>
-    </tr>
-    @endforeach
+    <tbody>
+        @foreach ($data as $index => $item)
+            <tr>
+                <td>{{ $item['employee_name'] }}</td>
+                <td>{{ $item['position_name'] }}</td>
+                @foreach ($dates as $date)
+                    @if (isset($item[$date]))
+                        <td style="background-color: {{ $item[$date]['color'] }}">{{ $item[$date]['value'] }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
+            </tr>
+        @endforeach
+    </tbody>
 </table>
