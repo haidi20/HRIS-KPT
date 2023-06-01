@@ -14,6 +14,9 @@ export default {
         getUserId() {
             return this.$store.state.user?.id;
         },
+        getUserGroupName() {
+            return this.$store.state.user?.group_name;
+        },
         getData() {
             return this.$store.state.jobOrder.data;
         },
@@ -50,6 +53,24 @@ export default {
             this.$bvModal.show("action_list");
         },
         onAction(type, title) {
+            this.$bvModal.hide("action_list");
+            this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+                form_title: "Job Order - " + title,
+                form_kind: type,
+            });
+            this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
+                status: type,
+            });
+            this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+                value: true,
+            });
+            this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+
+            //   console.info(this.form);
+
+            this.$bvModal.show("job_order_form_action");
+        },
+        onActionAssessment(type, title) {
             this.$bvModal.hide("action_list");
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
                 form_title: "Job Order - " + title,

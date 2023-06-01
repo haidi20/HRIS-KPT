@@ -22,9 +22,9 @@
                 <b-col @click="onOpenAction(item)">
                   <b-row>
                     <b-col cols>
-                      <h6>
+                      <h5>
                         <b>{{item.project_name}}</b>
-                      </h6>
+                      </h5>
                     </b-col>
                     <b-col cols="4" style="text-align: end">
                       <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
@@ -89,32 +89,34 @@
             <!-- v-if="getFormStatus != 'pending'" -->
             <!-- <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div> -->
             <!-- <div class="action-item">{{getFormStatus}}</div> -->
-            <div
-              v-if="getFormStatus == 'active'"
-              class="action-item"
-              @click="onAction('finish', 'Selesai')"
-            >Selesai</div>
-            <div
-              v-if="getFormStatus == 'active'"
-              class="action-item"
-              @click="onAction('pending', 'Tunda')"
-            >Tunda</div>
-            <div
-              v-if="getFormStatus == 'pending'"
-              class="action-item"
-              @click="onAction('pending_finish', 'Mulai Kembali')"
-            >Mulai Kembali</div>
-            <!-- v-if="getFormStatus != 'active'" -->
-            <div
-              v-if="getFormStatus == 'active'"
-              class="action-item"
-              @click="onAction('overtime', 'Lembur')"
-            >Lembur</div>
-            <div
-              v-if="getFormStatus == 'overtime'"
-              class="action-item"
-              @click="onAction('overtime_finish', 'Lembur Selesai')"
-            >Lembur Selesai</div>
+            <template v-if="getUserGroupName != 'Quality Control'">
+              <div
+                v-if="getFormStatus == 'active'"
+                class="action-item"
+                @click="onAction('finish', 'Selesai')"
+              >Selesai</div>
+              <div
+                v-if="getFormStatus == 'active'"
+                class="action-item"
+                @click="onAction('pending', 'Tunda')"
+              >Tunda</div>
+              <div
+                v-if="getFormStatus == 'pending'"
+                class="action-item"
+                @click="onAction('pending_finish', 'Mulai Kembali')"
+              >Mulai Kembali</div>
+              <!-- v-if="getFormStatus != 'active'" -->
+              <div
+                v-if="getFormStatus == 'active'"
+                class="action-item"
+                @click="onAction('overtime', 'Lembur')"
+              >Lembur</div>
+              <div
+                v-if="getFormStatus == 'overtime'"
+                class="action-item"
+                @click="onAction('overtime_finish', 'Lembur Selesai')"
+              >Lembur Selesai</div>
+            </template>
             <div
               v-if="getFormStatus == 'finish'"
               class="action-item"
@@ -129,7 +131,7 @@
             <div
               v-if="getFormStatus == 'active'"
               class="action-item"
-              @click="onAction('assessment', 'Penilaian')"
+              @click="onActionAssessment('assessment', 'Penilaian')"
             >Penilaian</div>
             <div v-if="getForm.created_by == getUserId" class="action-item" @click="onEdit">Ubah</div>
             <div class="action-item" @click="onDetail">Detail</div>

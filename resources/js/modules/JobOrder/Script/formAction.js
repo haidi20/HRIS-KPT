@@ -129,5 +129,14 @@ export default {
 
             return result;
         },
+        getLabelNote() {
+            let result = "Catatan";
+
+            if (this.getKindForm == 'assessment') {
+                result = "Catatan Penilaian";
+            }
+
+            return result;
+        },
     },
 };
