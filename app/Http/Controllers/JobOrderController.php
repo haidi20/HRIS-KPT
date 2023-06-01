@@ -57,7 +57,9 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
-            $date = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+            $date = Carbon::now();
+            $date->setTimeFromTimeString(request("hour_start"));
+            // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
             $jobOrder->project_id = request("project_id");
             $jobOrder->job_id = request("job_id");
@@ -84,6 +86,8 @@ class JobOrderController extends Controller
 
             return response()->json([
                 'success' => true,
+                'requests' => request()->all(),
+                'date' => $date,
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -105,7 +109,7 @@ class JobOrderController extends Controller
         try {
             DB::beginTransaction();
 
-            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:m");
+            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
             $message = "diperbaharui";
 
             $jobOrder = JobOrder::find(request("id"));

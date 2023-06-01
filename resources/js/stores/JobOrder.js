@@ -45,7 +45,6 @@ Status values
 @property {null|string} image - The image value.
 @property {null|date} date - The date value.
 @property {null|time} hour - The hour end value.
-@property {null|string} form_kind - The form kind.
 @property {string} form_title - The form title.
 @property {null|string} hour_start - The hour start value.
 @property {null|string} date_time_start - The start date and time.
@@ -84,7 +83,6 @@ const defaultForm = {
     estimation: null,
     time_type: "hours",
     note: null,
-    form_type: "create",
 }
 
 const JobOrder = {
@@ -333,7 +331,20 @@ const JobOrder = {
                     console.info(err);
                 });
         },
-    }
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (state.form.form_kind == "detail") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default JobOrder;

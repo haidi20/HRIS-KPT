@@ -207,5 +207,11 @@ export default {
                     });
                 });
         },
+        getReadOnly() {
+            const readOnly = this.$store.getters["jobOrder/getReadOnly"];
+            //   console.info(readOnly);
+
+            return readOnly;
+        },
     },
 };

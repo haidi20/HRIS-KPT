@@ -42,11 +42,10 @@ class ProjectController extends Controller
 
     public function fetchDataBaseDateEnd()
     {
-        $month = Carbon::now();
+        $date = Carbon::now();
 
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            ->whereYear("date_end", "=", $month->format("Y"))
-            ->whereMonth("date_end", ">", $month->format("m"))
+            ->whereDate("date_end", ">=", $date)
             ->orderBy("date_end", "asc")->get();
 
         return response()->json([

@@ -13,6 +13,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -30,6 +31,7 @@
             label="name"
             searchable
             style="min-width: 180px"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
@@ -44,7 +46,12 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Keterangan Jenis Pekerjaan" label-for="job_note" class>
-          <b-form-input v-model="form.job_note" id="job_note" name="job_note"></b-form-input>
+          <b-form-input
+            v-model="form.job_note"
+            id="job_note"
+            name="job_note"
+            :disabled="getReadOnly()"
+          ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
@@ -62,7 +69,13 @@
             :searchable="false"
             style="min-width: 180px"
           />-->
-          <select v-model="form.category" name="category" id="category" class="form-control">
+          <select
+            v-model="form.category"
+            name="category"
+            id="category"
+            class="form-control"
+            :disabled="getReadOnly()"
+          >
             <option
               v-for="(category, index) in getOptionCategories"
               :key="index"
@@ -74,7 +87,7 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Jam Mulai" label-for="hour_start" class>
+        <b-form-group label="Jam Mulai" label-for="hour_start">
           <!-- <b-form-input type="hour" v-model="form.hour_start" id="hour_start" name="hour_start"></b-form-input> -->
           <input
             type="time"
@@ -82,17 +95,19 @@
             v-model="hour_start"
             id="hour_start"
             name="hour_start"
+            :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
       <b-col cols>
-        <b-form-group label="Estimasi Waktu" label-for="estimation" class>
+        <b-form-group label="Estimasi Waktu" label-for="estimation">
           <b-form-input
             v-model="estimation"
             id="estimation"
             name="estimation"
             type="number"
             autocomplete="off"
+            :disabled="getReadOnly()"
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -100,7 +115,13 @@
     <b-row>
       <b-col cols="5" md="6">
         <b-form-group label="Jenis Waktu" label-for="time_type" class>
-          <select v-model="time_type" name="time_type" id="time_type" class="form-control">
+          <select
+            v-model="time_type"
+            name="time_type"
+            id="time_type"
+            class="form-control"
+            :disabled="getReadOnly()"
+          >
             <option
               v-for="(time_type, index) in getOptionTimeTypes"
               :key="index"
@@ -124,7 +145,7 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Tingkat Kesulitan" label-for="job_level" class>
-          <VueSelect
+          <!-- <VueSelect
             id="job_level"
             class="cursor-pointer"
             v-model="form.job_level"
@@ -134,14 +155,27 @@
             label="name"
             :searchable="false"
             style="min-width: 180px"
-          />
+          />-->
+          <select
+            v-model="form.job_level"
+            name="job_level"
+            id="job_level"
+            class="form-control"
+            :disabled="getReadOnly()"
+          >
+            <option
+              v-for="(job_level, index) in getOptionJobLevels"
+              :key="index"
+              :value="job_level.id"
+            >{{job_level.name}}</option>
+          </select>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col cols>
         <b-form-group label="Masukkan Foto" label-for="image" class>
-          <b-form-file id="image" v-model="form.image"></b-form-file>
+          <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file>
         </b-form-group>
       </b-col>
     </b-row>
@@ -155,7 +189,7 @@
     <b-row>
       <b-col cols>
         <b-form-group label="catatan tambahan" label-for="note" class>
-          <b-form-input v-model="form.note" id="note" name="note"></b-form-input>
+          <b-form-input v-model="form.note" id="note" name="note" :disabled="getReadOnly()"></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
@@ -164,6 +198,7 @@
       <b-col>
         <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
         <b-button
+          v-if="!getReadOnly()"
           style="float: right"
           variant="success"
           @click="onSend()"

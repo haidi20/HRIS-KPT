@@ -74,7 +74,7 @@ class JobOrder extends Model
 
     public function getHourStartAttribute()
     {
-        return Carbon::parse($this->datetime_start)->format("h:m");
+        return Carbon::parse($this->datetime_start)->format("H:i");
     }
 
     public function getStatusColorAttribute()
