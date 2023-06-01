@@ -174,6 +174,7 @@ const JobOrder = {
         loading: {
             data: false,
         },
+        user_id: null,
     },
     mutations: {
         INSERT_BASE_URL(state, payload) {
@@ -280,6 +281,9 @@ const JobOrder = {
                 ...payload,
             }
         },
+        INSERT_USER_ID(state, payload) {
+            state.user_id = payload.user_id;
+        },
         UPDATE_IS_ACTIVE_FORM(state, payload) {
             state.is_active_form = payload.value;
         },
@@ -303,6 +307,11 @@ const JobOrder = {
     },
     actions: {
         fetchData: async (context, payload) => {
+
+            if (payload.user_id) {
+                context.commit("INSERT_USER_ID", { user_id: payload.user_id });
+            }
+
             context.commit("INSERT_DATA", {
                 job_orders: [],
             });
@@ -311,6 +320,7 @@ const JobOrder = {
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
+                user_id: context.state.user_id,
             }
 
             await axios

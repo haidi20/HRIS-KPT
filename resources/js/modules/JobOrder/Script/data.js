@@ -30,6 +30,13 @@ export default {
             return this.$store.state.jobOrder.form;
         },
     },
+    watch: {
+        getBaseUrl(value) {
+            if (value != null) {
+                this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+            }
+        },
+    },
     methods: {
         onOpenAction(form) {
             //   console.info(id);

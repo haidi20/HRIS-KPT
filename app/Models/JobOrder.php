@@ -15,7 +15,7 @@ class JobOrder extends Model
 
     protected $fillable = [];
     protected $appends = [
-        "status_color", "status_readable",
+        "status_color", "status_readable", "creator_name", "creator_group_name",
         "project_name", "job_name", "job_code", "hour_start",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
         "datetime_estimation_end_readable",
@@ -57,6 +57,11 @@ class JobOrder extends Model
         return $this->belongsTo(Job::class, "job_id", "id");
     }
 
+    public function creator()
+    {
+        return $this->belongsTo(User::class, "created_by", "id");
+    }
+
     public function jobOrderHasEmployees()
     {
         return $this->hasMany(JobOrderHasEmployee::class, "job_order_id", "id");
@@ -70,6 +75,20 @@ class JobOrder extends Model
     public function jobOrderAssessments()
     {
         return $this->hasMany(JobOrderAssessment::class, "job_order_id", "id");
+    }
+
+    public function getCreatorNameAttribute()
+    {
+        if ($this->creator) {
+            return $this->creator->name;
+        }
+    }
+
+    public function getCreatorGroupNameAttribute()
+    {
+        if ($this->creator) {
+            return $this->creator->group_name;
+        }
     }
 
     public function getHourStartAttribute()

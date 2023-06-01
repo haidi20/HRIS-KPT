@@ -47,14 +47,14 @@
                       </span>
                       <span>{{item.assessment_count}} / {{item.assessment_total}}</span>
                       <br />
-                      <!-- <div>
+                      <div>
                         <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>QC</span>
                       </div>
                       <div>
                         <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>Pengawas</span>
-                      </div>-->
+                      </div>
                     </b-col>
                     <b-col cols="6">
                       <span>
@@ -66,6 +66,13 @@
                         {{item.employee_active_total}} /
                         {{item.employee_total}}
                       </span>
+                      <br />
+                      <span>
+                        <b>{{item.creator_group_name}}</b>
+                      </span>
+                      :
+                      <br />
+                      <span>{{item.creator_name}}</span>
                     </b-col>
                   </b-row>
                 </b-col>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JobOrder;
 use App\Models\JobOrderHasStatus;
 use App\Models\JobOrderHistory;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -28,13 +29,21 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
 
         $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
             ->whereYear("datetime_start", $month->format("Y"))
             ->whereMonth("datetime_start", $month->format("m"))
-            ->orderBy("datetime_start", "desc")
-            ->get();
+            ->orderBy("datetime_start", "desc");
+
+        // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
+        // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
+        if ($user->group_name == "Pengawas" && request("type_by") == "creator") {
+            $jobOrders = $jobOrders->where("created_by", $user->id);
+        }
+
+        $jobOrders = $jobOrders->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
