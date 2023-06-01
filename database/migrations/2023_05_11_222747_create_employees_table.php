@@ -35,6 +35,7 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('position_id')->nullable();
             $table->unsignedBigInteger('location_id')->nullable();
             $table->unsignedBigInteger('employee_type_id')->nullable();
+
             $table->string('contract_start')->nullable();
             $table->string('contract_end')->nullable();
             $table->string('latest_education')->nullable();
@@ -68,8 +69,8 @@ class CreateEmployeesTable extends Migration
             $table->string('branch')->nullable();
 
             // DATA FINGER
-            $table->string('finger_doc_1')->nullable();
-            $table->string('finger_doc_2')->nullable();
+            // $table->string('id_finger')->nullable();
+            // $table->string('finger_doc_2')->nullable();
 
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
@@ -80,6 +81,7 @@ class CreateEmployeesTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
             $table->foreign('employee_type_id')->references('id')->on('employee_types')->onDelete('cascade');
+            // $table->foreign('finger_tool_id')->references('id')->on('finger_tools')->onDelete('cascade');
         });
     }
 

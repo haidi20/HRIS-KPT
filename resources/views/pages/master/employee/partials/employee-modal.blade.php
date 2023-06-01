@@ -23,12 +23,12 @@
                                 aria-controls="kepegawaian" aria-selected="false">Data Kepegawaian</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="salary-tab" data-bs-toggle="tab" href="#salary" role="tab" aria-controls="salary"
-                                aria-selected="false">Data Gaji & Rekening</a>
+                            <a class="nav-link" id="salary-tab" data-bs-toggle="tab" href="#salary" role="tab"
+                                aria-controls="salary" aria-selected="false">Data Gaji & Rekening</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="finger-tab" data-bs-toggle="tab" href="#finger" role="tab"
-                            aria-controls="finger" aria-selected="false">Data Alat Finger</a>
+                                aria-controls="finger" aria-selected="false">Data Finger</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -104,7 +104,7 @@
                                 <div class="col-sm-8">
                                     <input class="form-control" type="file" id="photo" name="photo">
                                     <label id="photoPreview"></label>
-                                    <label id="photoPreviewReady" width="100%"></label>
+                                    <label id="photoPreviewReady" width="50%"></label>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +326,8 @@
                             <div class="form-group row" id="out_date_row">
                                 <label for="out_date" class="col-sm-4 col-form-label">Tanggal Keluar</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="out_date" name="out_date" class="form-control" readonly style="cursor: pointer;">
+                                    <input type="text" id="out_date" name="out_date" class="form-control" readonly
+                                        style="cursor: pointer;">
                                 </div>
                             </div>
                         </div>
@@ -342,7 +343,8 @@
                             <div class="form-group row">
                                 <label for="rekening_number" class="col-sm-4 col-form-label">Nomor Rekening</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="rekening_number" name="rekening_number" class="form-control">
+                                    <input type="number" id="rekening_number" name="rekening_number"
+                                        class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -354,7 +356,8 @@
                             <div class="form-group row">
                                 <label for="bank_name" class="col-sm-4 col-form-label">Nama Bank </label>
                                 <div class="col-sm-8">
-                                    <select id="bank_name" name="bank_name" class="select2 form-select" style="width: 100%">
+                                    <select id="bank_name" name="bank_name" class="select2 form-select"
+                                        style="width: 100%">
                                         <option value="">-- Pilih Bank --</option>
                                         <option value="bca">BCA</option>
                                         <option value="bri">BRI</option>
@@ -374,18 +377,40 @@
                         {{-- DATA FINGER --}}
                         <div class="tab-pane fade" id="finger" role="tabpanel" aria-labelledby="finger-tab">
                             <div class="form-group row">
-                                <label for="location_id" class="col-sm-4 col-form-label"> Lokasi Karyawan
-                                </label>
+                                <label for="finger_tool_id" class="col-sm-4 col-form-label">Pilih</label>
                                 <div class="col-sm-8">
-                                    <select id="location_id" name="location_id" class="select2 form-select" style="width: 100%">
-                                        <option value="">-- Pilih Lokasi Karyawan --</option>
+                                    <select id="finger_tool_id" name="finger_tool_id" class="select2 form-select" style="width: 100%">
+                                        <option value="">-- Pilih Lokasi Absen --</option>
                                         @foreach ($finger_tools as $finger_tool)
-                                        <option value="{{ $finger_tool->id }}">{{ $finger_tool->name }}
-                                        </option>
+                                        <option value="{{ $finger_tool->id }}">{{ $finger_tool->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label for="id_finger" class="col-sm-4 col-form-label">ID Finger</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id_finger" name="id_finger" class="form-control">
+                                </div>
+                            </div>
+
+                            {{-- <div class="form-group row">
+                                <div class="col-sm-12 float-end">
+                                    <button id="addFingerButton" class="btn btn-primary">Tambah Finger</button>
+                                </div>
+                            </div> --}}
+
+                            <table id="fingerTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Lokasi Finger</th>
+                                        <th>ID Finger</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fingerTableBody"></tbody>
+                            </table>
                             {{-- <div class="form-group row">
                                 <label for="finger_doc_1" class="col-sm-4 col-form-label">Nomor ID di Finger Doc
                                     1</label>

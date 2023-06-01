@@ -15,6 +15,13 @@ use Yajra\DataTables\DataTables;
 class DepartmenController extends Controller
 {
 
+    public function getDepartmens($companyId)
+    {
+        $departmens = Departmen::with('company')->where('company_id', $companyId)->get();
+
+        return response()->json($departmens);
+    }
+
     public function getLastCode()
     {
         $companyId = request()->input('company_id');
@@ -53,7 +60,7 @@ class DepartmenController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $departmen = Departmen::query()
-                ->select('departmens.*', 'companies.name as company_name')
+                ->select('departmens.id','departmens.company_id','departmens.code', 'departmens.name', 'departmens.description', 'companies.name as company_name')
                 ->with('company')
                 ->leftJoin('companies', 'departmens.company_id', '=', 'companies.id');
 
@@ -94,22 +101,21 @@ class DepartmenController extends Controller
 
         $columnsArrExPr = [0, 1, 2, 3];
         $html = $datatables->getHtmlBuilder()
-        ->columns($columns)
-        ->parameters([
-            'order' => [[1, 'desc']],
-            'responsive' => true,
-            'autoWidth' => false,
-            'dom' => 'lBfrtip',
-            'lengthMenu' => [
-                [10, 25, 50, -1],
-                ['10 Data', '25 Data', '50 Data', 'Semua Data']
-            ],
-            'buttons' => $this->buttonDatatables($columnsArrExPr),
-        ]);
+            ->columns($columns)
+            ->parameters([
+                'order' => [[1, 'desc']],
+                'responsive' => true,
+                'autoWidth' => false,
+                'dom' => 'lfrtip',
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 Data', '25 Data', '50 Data', 'Semua Data']
+                ],
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
+            ]);
 
-
-        $departmens = Departmen::all();
         $companies = Company::all();
+        $departmens = Departmen::paginate(10);
 
         $compact = compact('html', 'departmens', 'companies');
 

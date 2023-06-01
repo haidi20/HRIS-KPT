@@ -30,10 +30,11 @@ class EmployeeSeeder extends Seeder
                     "nip" => $data[1],
                     "nik" => $data[2],
                     "name" => $data[3],
+                    "photo" => 'employee/default-icon.png',
                     "enter_date" => Carbon::now(),
                     "company_id" => $data[4],
                     "position_id" => $data[5],
-                    "finger_doc_1" => $data[6],
+                    // "finger_doc_1" => $data[6],
                 ]);
 
                 // Mengambil waktu pembuatan data dari entitas yang sesuai di database

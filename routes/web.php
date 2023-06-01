@@ -187,8 +187,10 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('employee')->name("employee.")->group(function () {
             Route::get('', [EmployeeController::class, "index"])->name("index");
-            Route::get('get-departmens/{companyId}', [EmployeeController::class, "getDepartmens"])->name("getDepartmen");
-            Route::get('get-positions/{departmenId}', [EmployeeController::class, "getPositions"])->name("getPosition");
+            Route::get('get-departmens/{companyId}', [DepartmensController::class, "getDepartmens"])->name("getDepartmen");
+            Route::get('get-positions/{departmenId}', [PositionsController::class, "getPositions"])->name("getPosition");
+            Route::get('get-fingers/{employeeId}', [EmployeeController::class, "getEmployeeFingers"])->name("getEmployeeFingers");
+            Route::delete('delete-fingers/{employeeId}', [EmployeeController::class, "deleteEmployeeFingers"])->name("deleteEmployeeFingers");
             Route::get('exportExcelPosition/{position_id}', [EmployeeController::class, 'exportExcelPositionEmployee'])->name('exportExcelPosition');
             Route::get('exportExcelLocation/{location_id}', [EmployeeController::class, 'exportExcelLocationEmployee'])->name('exportExcelLocation');
             Route::post('bpjs-tk', [EmployeeController::class, "bpjsTK"])->name("bpjsTK");
@@ -203,7 +205,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('', [WorkingHourController::class, "index"])->name("index");
             Route::post('store', [WorkingHourController::class, "store"])->name("store");
         });
+        Route::prefix('finger')->name("finger.")->group(function () {
+            Route::get('', [FingerController::class, "index"])->name("index");
+            Route::post('store', [FingerController::class, "finger"])->name("store");
+            Route::delete('delete', [FingerController::class, "destroy"])->name("delete");
+        });
     });
+
     Route::prefix("setting")->name("setting.")->group(function () {
         Route::prefix('approval-level')->name("approvalLevel.")->group(function () {
             Route::get('', [ApprovalLevelController::class, "index"])->name("index");

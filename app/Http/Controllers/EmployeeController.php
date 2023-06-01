@@ -10,6 +10,7 @@ use App\Models\EmployeeType;
 use App\Models\FingerTool;
 use App\Models\Location;
 use App\Models\Position;
+use App\Models\Finger;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,39 @@ class EmployeeController extends Controller
 
     //     return response()->json($positions);
     // }
+
+    public function getEmployeeFingers($employeeId)
+    {
+        $fingers = Finger::with('finger_tool')->where('employee_id', $employeeId)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $fingers
+        ]);
+    }
+
+    public function deleteEmployeeFingers(Request $request)
+    {
+        $fingerId = $request->input('fingerId');
+
+        // Temukan data finger berdasarkan ID
+        $finger = Finger::find($fingerId);
+
+        if ($finger) {
+            // Hapus data finger
+            $finger->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data finger berhasil dihapus.'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data finger tidak ditemukan.'
+            ]);
+        }
+    }
+
 
     public function index(Datatables $datatables)
     {
@@ -121,7 +155,7 @@ class EmployeeController extends Controller
         $html = $datatables->getHtmlBuilder()
         ->columns($columns)
         ->parameters([
-            'order' => [[1, 'desc']],
+            'order' => [[0, 'desc']],
             'responsive' => true,
             'autoWidth' => false,
             'dom' => 'lBfrtip',
@@ -132,7 +166,6 @@ class EmployeeController extends Controller
             'buttons' => $this->buttonDatatables($columnsArrExPr),
         ]);
 
-
         $employees = Employee::all();
         $companies = Company::all();
         $positions = Position::all();
@@ -141,8 +174,9 @@ class EmployeeController extends Controller
         $barges = Barge::all();
         $departments = Departmen::all();
         $finger_tools = FingerTool::all();
+        $fingers = Finger::all();
 
-        $compact = compact('html', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools');
+        $compact = compact('html', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools', 'fingers');
 
         return view("pages.master.employee.index", $compact);
     }
@@ -202,6 +236,8 @@ class EmployeeController extends Controller
                 $employee = Employee::find(request("id"));
                 $employee->updated_by = Auth::user()->id;
                 $employee->employee_status = request("employee_status");
+
+
 
                 $message = "diperbaharui";
             } else {
@@ -264,12 +300,26 @@ class EmployeeController extends Controller
             $employee->branch = request("branch");
 
             // DATA FINGER
-            $employee->finger_doc_1 = request("finger_doc_1");
-            $employee->finger_doc_2 = request("finger_doc_2");
-
+            // $employee->finger_doc_1 = request("finger_doc_1");
+            // $employee->finger_doc_2 = request("finger_doc_2");
 
             $employee->save();
 
+            $finger = Finger::firstOrCreate(
+                [
+                    'employee_id' => $employee->id,
+                    'finger_tool_id' => request('finger_tool_id')
+                ],
+                [
+                    'id_finger' => request('id_finger')
+                ]
+            );
+
+            // Jika finger sudah ada dan berhasil ditemukan, lakukan update pada id_finger
+            if (!$finger->wasRecentlyCreated) {
+                $finger->id_finger = request('id_finger');
+                $finger->save();
+            }
             DB::commit();
 
             return response()->json([
