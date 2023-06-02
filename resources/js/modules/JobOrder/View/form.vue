@@ -38,8 +38,8 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Kode" label-for="code" class>
-          <b-form-input v-model="form.code" id="code" name="code" disabled></b-form-input>
+        <b-form-group label="Kode" label-for="job_code" class>
+          <b-form-input v-model="form.job_code" id="job_code" name="job_code" disabled></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>

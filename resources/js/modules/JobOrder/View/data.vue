@@ -47,13 +47,17 @@
                       </span>
                       <span>{{item.assessment_count}} / {{item.assessment_total}}</span>
                       <br />
-                      <div>
+                      <!-- <div>
                         <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>QC</span>
                       </div>
                       <div>
                         <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
                         <span>Pengawas</span>
+                      </div>-->
+                      <div v-for="(assessment, key) in item.job_order_assessments" :key="key">
+                        <b-form-checkbox class="display-inline" v-model="isChecked" disabled></b-form-checkbox>
+                        <span>{{assessment.group_name}}</span>
                       </div>
                     </b-col>
                     <b-col cols="6">
@@ -90,11 +94,11 @@
             <!-- <div class="action-item" @click="onAction('active', 'Mulai')">Mulai</div> -->
             <!-- <div class="action-item">{{getFormStatus}}</div> -->
             <template v-if="getUserGroupName != 'Quality Control'">
-              <div
+              <!-- <div
                 v-if="getFormStatus == 'active'"
                 class="action-item"
                 @click="onAction('finish', 'Selesai')"
-              >Selesai</div>
+              >Selesai</div>-->
               <div
                 v-if="getFormStatus == 'active'"
                 class="action-item"

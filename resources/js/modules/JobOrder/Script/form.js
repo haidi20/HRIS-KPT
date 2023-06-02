@@ -96,8 +96,8 @@ export default {
 
                 console.info(findJob);
 
-                this.$store.commit("jobOrder/INSERT_FORM_CODE", {
-                    code: findJob.code,
+                this.$store.commit("jobOrder/INSERT_FORM_JOB_CODE", {
+                    job_code: findJob.code,
                 });
             }
         },

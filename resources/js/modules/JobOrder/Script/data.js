@@ -3,6 +3,7 @@ import FilterData from "../View/filter";
 export default {
     data() {
         return {
+            isChecked: true,
             title: "",
         };
     },

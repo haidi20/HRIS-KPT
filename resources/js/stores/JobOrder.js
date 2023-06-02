@@ -36,7 +36,7 @@ Status values
 /**
 *Default form object
 @typedef {Object} DefaultForm
-@property {null|string} code - The code value.
+@property {null|string} job_code - The code value.
 @property {null|number} project_id - The project ID.
 @property {null|string} category - The category value.
 @property {null|number} job_id - The job ID.
@@ -57,7 +57,8 @@ Status values
 */
 
 const defaultForm = {
-    code: null,
+    id: null,
+    job_code: null,
     project_id: null,
     category: null,
     job_id: null,
@@ -197,8 +198,8 @@ const JobOrder = {
         INSERT_FORM_JOB_ID(state, payload) {
             state.form.job_id = payload.job_id;
         },
-        INSERT_FORM_CODE(state, payload) {
-            state.form.code = payload.code;
+        INSERT_FORM_JOB_CODE(state, payload) {
+            state.form.job_code = payload.job_code;
         },
         INSERT_FORM_HOUR_START(state, payload) {
             state.form.hour_start = payload.hour_start;
