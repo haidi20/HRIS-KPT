@@ -72,9 +72,9 @@
                       </span>
                       <br />
                       <span>
-                        <b>{{item.creator_group_name}}</b>
+                        <!-- <b>{{item.creator_group_name}}</b> -->
+                        <b>dibuat oleh :</b>
                       </span>
-                      :
                       <br />
                       <span>{{item.creator_name}}</span>
                     </b-col>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
 use App\Models\JobOrderAssessment;
+use App\Models\JobOrderHasEmployee;
+use App\Models\JobOrderHasEmployeeHistory;
 use App\Models\JobOrderHasStatus;
 use App\Models\JobOrderHistory;
 use App\Models\User;
@@ -42,6 +44,8 @@ class JobOrderController extends Controller
         // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
         if ($user->group_name == "Pengawas" && request("type_by") == "creator") {
             $jobOrders = $jobOrders->where("created_by", $user->id);
+        } else {
+            $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
         }
 
         $jobOrders = $jobOrders->get();
@@ -92,8 +96,8 @@ class JobOrderController extends Controller
                 $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
             $this->storeJobOrderHistory($jobOrder);
-            // $this->storeOrdinarySeamans($jobOrder);
 
             DB::commit();
 
@@ -139,6 +143,7 @@ class JobOrderController extends Controller
 
             $jobStatusController->storeJobStatusHasParent($jobOrder, request("status_last"), $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
 
             DB::commit();
 
@@ -183,12 +188,13 @@ class JobOrderController extends Controller
             if ($allJobOrderAssessmentHasEmployee->count() >= 2) {
                 $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
 
-                $getJobOrder = JobOrder::find($jobOrderId);
-                $getJobOrder->status = "finish";
-                $getJobOrder->datetime_end = $date;
-                $getJobOrder->save();
+                $jobOrder = JobOrder::find($jobOrderId);
+                $jobOrder->status = "finish";
+                $jobOrder->datetime_end = $date;
+                $jobOrder->save();
 
-                $jobStatusController->storeJobStatusHasParent($getJobOrder, "active", $date, $this->nameModel);
+                $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
+                $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start, $jobOrder->datetime_end);
             }
 
             DB::commit();
@@ -240,6 +246,44 @@ class JobOrderController extends Controller
         }
     }
 
+    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart, $dateEnd = null)
+    {
+        $jobOrderHasEmployeeDelete = JobOrderHasEmployee::where([
+            "job_order_id" => $jobOrder->id,
+        ]);
+        $jobOrderHasEmployeeDelete->delete();
+
+        if (count(request("employee_selecteds")) > 0) {
+
+            if ($status == "correction") {
+                $status = "active";
+            }
+
+            foreach (request("employee_selecteds") as $index => $item) {
+                // $jobOrderHasEmployee = JobOrderHasEmployee::create([
+                //     "job_order_id" => $jobOrder->id,
+                //     "employee_id" => $item["employee_id"],
+                //     "status" => $status,
+                //     "datetime_start" => $dateStart,
+                // ]);
+
+                $jobOrderHasEmployee = new JobOrderHasEmployee;
+                $jobOrderHasEmployee->job_order_id = $jobOrder->id;
+                $jobOrderHasEmployee->employee_id = $item["employee_id"];
+                $jobOrderHasEmployee->status = $status;
+                $jobOrderHasEmployee->datetime_start = $dateStart;
+
+                if ($dateEnd != null) {
+                    $jobOrderHasEmployee->datetime_end = $dateEnd;
+                }
+
+                $jobOrderHasEmployee->save();
+
+                $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
+            }
+        }
+    }
+
     private function storeJobOrderHistory($jobOrder, $isDelete = false)
     {
         $jobOrderHistory = new JobOrderHistory;
@@ -264,5 +308,17 @@ class JobOrderController extends Controller
         }
 
         $jobOrderHistory->save();
+    }
+
+    private function storeJobOrderHasEmployeeHistory($jobOrderHasEmployee)
+    {
+        $jobOrderHasEmployeeHistory = new JobOrderHasEmployeeHistory;
+        $jobOrderHasEmployeeHistory->job_order_has_employee_id = $jobOrderHasEmployee->id;
+        $jobOrderHasEmployeeHistory->employee_id = $jobOrderHasEmployee->employee_id;
+        $jobOrderHasEmployeeHistory->job_order_id = $jobOrderHasEmployee->job_order_id;
+        $jobOrderHasEmployeeHistory->status = $jobOrderHasEmployee->status;
+        $jobOrderHasEmployeeHistory->datetime_start = $jobOrderHasEmployee->datetime_start;
+        $jobOrderHasEmployeeHistory->datetime_end = $jobOrderHasEmployee->datetime_end;
+        $jobOrderHasEmployeeHistory->save();
     }
 }

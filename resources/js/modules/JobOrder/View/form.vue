@@ -51,6 +51,7 @@
             id="job_note"
             name="job_note"
             :disabled="getReadOnly()"
+            autocomplete="off"
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -189,7 +190,13 @@
     <b-row>
       <b-col cols>
         <b-form-group label="catatan tambahan" label-for="note" class>
-          <b-form-input v-model="form.note" id="note" name="note" :disabled="getReadOnly()"></b-form-input>
+          <b-form-input
+            v-model="form.note"
+            id="note"
+            name="note"
+            :disabled="getReadOnly()"
+            autocomplete="off"
+          ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>

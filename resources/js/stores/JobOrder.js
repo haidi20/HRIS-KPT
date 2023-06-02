@@ -148,18 +148,22 @@ const JobOrder = {
                     name: "semua",
                 },
                 {
-                    id: "pause",
-                    name: "tunda",
-                },
-                {
                     id: "active",
                     name: "aktif",
                 },
-                // jangan ini hanya untuk pengawas
                 {
-                    id: "done_assessment_qc",
-                    name: "sudah dinilai oleh QC",
+                    id: "pending",
+                    name: "tunda",
                 },
+                {
+                    id: "overtime",
+                    name: "lembur",
+                },
+                // ini hanya untuk pengawas
+                // {
+                //     id: "done_assessment_qc",
+                //     name: "sudah dinilai oleh QC",
+                // },
             ],
             type_bys: [
                 {

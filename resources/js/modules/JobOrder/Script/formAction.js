@@ -25,6 +25,9 @@ export default {
         getKindForm() {
             return this.$store.state.jobOrder.form.form_kind;
         },
+        getEmployeeSelecteds() {
+            return this.$store.state.employeeHasParent.data.selecteds;
+        },
         form() {
             return this.$store.state.jobOrder.form;
         },
@@ -52,6 +55,7 @@ export default {
                 status_last: this.form.status_last,
                 status_finish: this.form.status_finish,
                 status_note: this.form.status_note,
+                employee_selecteds: [...this.getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
 
