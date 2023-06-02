@@ -100,7 +100,7 @@
                 @click="onAction('finish', 'Selesai')"
               >Selesai</div>-->
               <div
-                v-if="getFormStatus == 'active'"
+                v-if="getConditionPending()"
                 class="action-item"
                 @click="onAction('pending', 'Tunda')"
               >Tunda</div>
@@ -138,7 +138,7 @@
               @click="onActionAssessment('assessment', 'Penilaian')"
             >Penilaian</div>
             <div v-if="getForm.created_by == getUserId" class="action-item" @click="onEdit">Ubah</div>
-            <div class="action-item" @click="onDetail">Detail</div>
+            <div class="action-item" @click="onRead">Lihat</div>
           </div>
         </b-modal>
       </b-col>

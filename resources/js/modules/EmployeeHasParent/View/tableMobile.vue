@@ -43,7 +43,7 @@
         </template>
       </b-col>
     </b-row>
-    <vue-bottom-sheet ref="myBottomSheetEmployee">
+    <!-- <vue-bottom-sheet ref="myBottomSheetEmployee">
       <div class="flex flex-col">
         <div class="action-item">
           <h5>{{getForm.employee_name}} - {{getForm.position_name}}</h5>
@@ -75,7 +75,42 @@
         >selesai lembur</div>
         <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
       </div>
-    </vue-bottom-sheet>
+    </vue-bottom-sheet>-->
+    <b-modal id="action_list_employee" ref="action_list" title="Tombol Aksi" size="md" hide-footer>
+      <div class="flex flex-col">
+        <div class="action-item">
+          <h5>{{getForm.employee_name}} - {{getForm.position_name}}</h5>
+        </div>
+        <template v-if="getForm.form_type != 'read'">
+          <div
+            v-if="getForm.status == 'active'"
+            class="action-item"
+            @click="onAction('pending', 'Tunda')"
+          >tunda</div>
+          <div
+            v-if="getForm.status == 'pending'"
+            class="action-item"
+            @click="onAction('pending_finish', 'Mulai Kembali')"
+          >Mulai Kembali</div>
+          <div
+            v-if="getForm.status == 'active'"
+            class="action-item"
+            @click="onAction('finish', 'Selesai')"
+          >selesai</div>
+          <div
+            v-if="getForm.status == 'active'"
+            class="action-item"
+            @click="onAction('overtime', 'Lembur')"
+          >lembur</div>
+          <div
+            v-if="getForm.status == 'overtime'"
+            class="action-item"
+            @click="onAction('overtime_finish', 'Selesai Lembur')"
+          >selesai lembur</div>
+          <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
+        </template>
+      </div>
+    </b-modal>
   </div>
 </template>
 

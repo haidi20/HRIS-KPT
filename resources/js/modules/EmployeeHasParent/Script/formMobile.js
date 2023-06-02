@@ -53,6 +53,8 @@ export default {
                         position_name: getEmployee.position_name,
                     },
                 });
+
+                this.$store.commit("employeeHasParent/DELETE_FORM_EMPLOYEE_ID");
             } else {
                 const Toast = Swal.mixin({
                     toast: true,

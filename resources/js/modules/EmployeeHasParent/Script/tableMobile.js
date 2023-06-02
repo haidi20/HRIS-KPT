@@ -63,16 +63,16 @@ export default {
 
             // console.info(index);
             this.$store.commit("employeeHasParent/DELETE_DATA_SELECTED", { index });
-            this.$refs.myBottomSheetEmployee.close();
+            this.$bvModal.hide("action_list_employee");
         },
         onDeleteAll() {
             this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
         },
         onOpenAction(item, index) {
-            console.info(item);
+            // console.info(item);
 
             this.$store.commit("employeeHasParent/INSERT_FORM", { form: { ...item, data_index: index } });
-            this.$refs.myBottomSheetEmployee.open();
+            this.$bvModal.show("action_list_employee");
         },
         onAction(from_type, from_title) {
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", { from_type });
@@ -91,13 +91,14 @@ export default {
                 result = false;
             }
 
-            console.info(this.getForm.form_type);
+            // console.info(this.getForm.form_type);
 
             return result;
         },
         getConditionActionDelete() {
             let result = false;
 
+            // hapus hanya ketika buat data, kalo edit hanya bisa pending
             if (this.getForm.form_type == 'create') {
                 result = true;
             }

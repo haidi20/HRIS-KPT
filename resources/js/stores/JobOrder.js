@@ -354,7 +354,7 @@ const JobOrder = {
 
             // console.info(state.form.form_type);
 
-            if (state.form.form_kind == "detail") {
+            if (state.form.form_kind == "read") {
                 result = true;
             }
 

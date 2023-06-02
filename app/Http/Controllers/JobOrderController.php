@@ -38,7 +38,7 @@ class JobOrderController extends Controller
         $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
             ->whereYear("datetime_start", $month->format("Y"))
             ->whereMonth("datetime_start", $month->format("m"))
-            ->orderBy("datetime_start", "desc");
+            ->orderBy("created_at", "desc");
 
         // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
         // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
@@ -59,6 +59,13 @@ class JobOrderController extends Controller
     {
         // return request()->all();
         $jobStatusController = new JobStatusController;
+
+        if (count(request("employee_selecteds")) == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, harus pilih karyawan terlebih dahulu",
+            ], 500);
+        }
 
         try {
             DB::beginTransaction();
@@ -143,7 +150,7 @@ class JobOrderController extends Controller
 
             $jobStatusController->storeJobStatusHasParent($jobOrder, request("status_last"), $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
-            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start);
 
             DB::commit();
 

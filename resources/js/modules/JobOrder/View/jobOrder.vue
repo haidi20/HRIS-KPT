@@ -84,7 +84,7 @@ export default {
     getConditionForm() {
       return (
         this.form.form_kind == "edit" ||
-        this.form.form_kind == "detail" ||
+        this.form.form_kind == "read" ||
         this.form.form_kind == "create"
       );
     },

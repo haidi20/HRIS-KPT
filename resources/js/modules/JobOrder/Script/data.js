@@ -51,6 +51,11 @@ export default {
             this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
                 value: true,
             });
+            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+                selecteds: [
+                    ...form.job_order_has_employees,
+                ],
+            });
             this.$bvModal.show("action_list");
         },
         onAction(type, title) {
@@ -84,11 +89,6 @@ export default {
                 value: true,
             });
             this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [
-                    ...this.getForm.job_order_has_employees,
-                ],
-            });
 
             //   console.info(this.form);
 
@@ -107,19 +107,22 @@ export default {
             this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
                 value: true,
             });
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "create",
+                form_type_parent: "create",
+            });
         },
-        onDetail() {
+        onRead() {
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-                form_title: "Detail Job Order",
-                form_kind: "detail",
+                form_title: "Lihat Job Order",
+                form_kind: "read",
             });
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [
-                    ...this.getForm.job_order_has_employees,
-                ],
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "read",
+                form_type_parent: "read",
             });
             this.$bvModal.hide("action_list");
         },
@@ -131,10 +134,9 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [
-                    ...this.getForm.job_order_has_employees,
-                ],
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "edit",
+                form_type_parent: "edit",
             });
             this.$bvModal.hide("action_list");
         },
@@ -162,6 +164,18 @@ export default {
                 if (listStatus.some(item => item == this.getFormStatus)) {
                     result = true;
                 }
+            }
+
+            return result;
+        },
+        getConditionPending() {
+            let result = false;
+
+            if (
+                this.getFormStatus == 'active'
+                && this.getForm.created_by == this.getUserId
+            ) {
+                result = true;
             }
 
             return result;

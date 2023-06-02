@@ -93,10 +93,14 @@ const EmployeeHasParent = {
             }
         },
         INSERT_FORM_FORM_TYPE(state, payload) {
-            state.form.form_type = payload.from_type;
+            state.form.form_type = payload.form_type;
+            state.form.form_type_parent = payload.form_type_parent;
         },
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;
+        },
+        DELETE_FORM_EMPLOYEE_ID(state, payload) {
+            state.form.employee_id = null;
         },
         DELETE_DATA_SELECTED(state, payload) {
             state.data.selecteds.splice(payload.index, 1);
@@ -164,8 +168,20 @@ const EmployeeHasParent = {
                     console.info(err);
                 });
         },
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
 
-    }
+            // console.info(state.form.form_type);
+
+            if (state.form.form_type == "read") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default EmployeeHasParent;
