@@ -12,6 +12,8 @@ class JobStatusHasParent extends Model
     protected $fillable = [
         'parent_id',
         'parent_model',
+        'job_order_id',
+        'employee_id',
         'status',
         'datetime_start',
         'datetime_end',

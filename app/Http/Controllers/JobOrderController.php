@@ -209,7 +209,7 @@ class JobOrderController extends Controller
                 $jobOrder->save();
 
                 $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
-                // $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start, $jobOrder->datetime_end);
+                $this->storeActionJobOrderHasEmployee($jobOrder, "finish", $date, "active");
             }
 
             DB::commit();
@@ -282,7 +282,7 @@ class JobOrderController extends Controller
                 $jobOrderHasEmployee->save();
 
                 if (!isset($item["id"])) {
-                    $jobStatusController->storeJobStatusHasParent($jobOrder, null, $dateStart, $this->nameModelJobOrderEmployee);
+                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, null, $dateStart, $this->nameModelJobOrderEmployee);
                 }
 
                 $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
@@ -308,7 +308,7 @@ class JobOrderController extends Controller
 
                 $jobOrderHasEmployee->save();
 
-                $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModelJobOrderEmployee);
+                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $statusLast, $date, $this->nameModelJobOrderEmployee);
             }
         }
     }

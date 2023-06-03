@@ -35,9 +35,16 @@ class JobStatusController extends Controller
             $jobStatusHasParent = new JobStatusHasParent;
             $jobStatusHasParent->parent_id = $parent->id;
             $jobStatusHasParent->parent_model = $nameModel;
+            $jobStatusHasParent->job_order_id = $parent->id;
             $jobStatusHasParent->status = $parent->status;
             $jobStatusHasParent->datetime_start = $date;
             $jobStatusHasParent->note_start = $parentNote;
+
+            if ($nameModel == "App\Models\JobOrderHasEmployee") {
+                $jobStatusHasParent->job_order_id = $parent->job_order_id;
+                $jobStatusHasParent->employee_id = $parent->employee_id;
+            }
+
             $jobStatusHasParent->save();
 
             $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
