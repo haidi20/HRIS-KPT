@@ -150,7 +150,9 @@ class JobOrder extends Model
 
     public function getEmployeeActiveTotalAttribute()
     {
-        return $this->jobOrderHasEmployees->where('active')->count();
+        return $this->jobOrderHasEmployees
+            ->whereIn('status', ['active', 'finish'])
+            ->count();
     }
 
     public function getAssessmentCountAttribute()

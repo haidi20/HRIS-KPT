@@ -137,6 +137,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('store', [JobOrderController::class, "store"])->name('store');
         Route::post('store-action', [JobOrderController::class, "storeAction"])->name('storeAction');
         Route::post('store-action-assessment', [JobOrderController::class, "storeActionAssessment"])->name('storeActionAssessment');
+        Route::post('store-action-job-order-has-employee', [JobOrderController::class, "storeActionJobOrderHasEmployee"])->name('storeActionJobOrderHasEmployee');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {

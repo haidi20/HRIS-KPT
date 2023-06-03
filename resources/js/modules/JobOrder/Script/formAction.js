@@ -138,6 +138,15 @@ export default {
 
             return result;
         },
+        getConditionImage() {
+            let result = true;
+
+            if (this.form.status != 'pending' || this.form.status != 'pending_finish') {
+                result = false;
+            }
+
+            return result;
+        },
         getLabelNote() {
             let result = "Catatan";
 

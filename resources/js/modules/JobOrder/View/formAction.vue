@@ -20,7 +20,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="getConditionImage()">
       <b-col cols>
         <b-form-group label="Masukkan Foto" label-for="image" class>
           <b-form-file id="image" v-model="form.image"></b-form-file>
