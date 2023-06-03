@@ -82,9 +82,10 @@ class EmployeeController extends Controller
     public function index(Datatables $datatables)
     {
         $columns = [
-            'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
-                return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
-            }],
+            // 'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
+            //     return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
+            // }],
+            'id' => ['name' => 'id', 'title' => 'ID Pegawai'],
             'nip' => ['name' => 'nip', 'title' => 'NIP'],
             'name' => ['name' => 'name', 'title' => 'Nama'],
             'position_name' => ['name' => 'position_name', 'title' => 'Nama Jabatan'],
@@ -105,6 +106,18 @@ class EmployeeController extends Controller
                 ->leftJoin('companies', 'employees.company_id', '=', 'companies.id');
 
             return $datatables->eloquent($employee)
+                ->filterColumn('id', function (Builder $query, $keyword) {
+                    $sql = "employees.id  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('nip', function (Builder $query, $keyword) {
+                    $sql = "employees.nip  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('name', function (Builder $query, $keyword) {
+                    $sql = "employees.name  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
                 ->filterColumn('position_name', function (Builder $query, $keyword) {
                     $sql = "positions.name  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -155,7 +168,7 @@ class EmployeeController extends Controller
         $html = $datatables->getHtmlBuilder()
         ->columns($columns)
         ->parameters([
-            'order' => [[0, 'desc']],
+            'order' => [[0, 'asc']],
             'responsive' => true,
             'autoWidth' => false,
             'dom' => 'lBfrtip',

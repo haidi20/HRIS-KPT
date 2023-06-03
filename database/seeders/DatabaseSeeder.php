@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EmployeeSeeder::class);
         $this->call(JobSeeder::class);
         $this->call(SalaryAdjustmentSeeder::class);
+        $this->call(FingerSeeder::class);
         // end master
 
         /*
