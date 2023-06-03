@@ -25,6 +25,9 @@ export default {
         getKindForm() {
             return this.$store.state.jobOrder.form.form_kind;
         },
+        getEmployeeSelecteds() {
+            return this.$store.state.employeeHasParent.data.selecteds;
+        },
         form() {
             return this.$store.state.jobOrder.form;
         },
@@ -44,7 +47,6 @@ export default {
         },
         async onSend() {
             const Swal = this.$swal;
-
             const request = {
                 id: this.form.id,
                 date: moment(this.form.date).format("YYYY-MM-DD"),
@@ -53,15 +55,22 @@ export default {
                 status_last: this.form.status_last,
                 status_finish: this.form.status_finish,
                 status_note: this.form.status_note,
+                employee_selecteds: [...this.getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
+
+            let urlAction = "store-action";
+
+            if (request.status == 'assessment') {
+                urlAction = "store-action-assessment";
+            }
 
             console.info(request);
             // return false;
             this.is_loading = true;
 
             await axios
-                .post(`${this.getBaseUrl}/api/v1/job-order/store-action`, request)
+                .post(`${this.getBaseUrl}/api/v1/job-order/${urlAction}`, request)
                 .then((responses) => {
                     console.info(responses);
                     this.is_loading = false;
@@ -125,6 +134,15 @@ export default {
 
             if (listStatus.some((item) => item == this.form.status)) {
                 result = true;
+            }
+
+            return result;
+        },
+        getLabelNote() {
+            let result = "Catatan";
+
+            if (this.getKindForm == 'assessment') {
+                result = "Catatan Penilaian";
             }
 
             return result;

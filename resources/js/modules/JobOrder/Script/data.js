@@ -3,6 +3,7 @@ import FilterData from "../View/filter";
 export default {
     data() {
         return {
+            isChecked: true,
             title: "",
         };
     },
@@ -13,6 +14,9 @@ export default {
         },
         getUserId() {
             return this.$store.state.user?.id;
+        },
+        getUserGroupName() {
+            return this.$store.state.user?.group_name;
         },
         getData() {
             return this.$store.state.jobOrder.data;
@@ -28,6 +32,13 @@ export default {
         },
         getForm() {
             return this.$store.state.jobOrder.form;
+        },
+    },
+    watch: {
+        getBaseUrl(value) {
+            if (value != null) {
+                this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+            }
         },
     },
     methods: {
@@ -54,7 +65,30 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            // this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+
+            //   console.info(this.form);
+
+            this.$bvModal.show("job_order_form_action");
+        },
+        onActionAssessment(type, title) {
+            this.$bvModal.hide("action_list");
+            this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+                form_title: "Job Order - " + title,
+                form_kind: type,
+            });
+            this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
+                status: type,
+            });
+            this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+                value: true,
+            });
+            this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+                selecteds: [
+                    ...this.getForm.job_order_has_employees,
+                ],
+            });
 
             //   console.info(this.form);
 
@@ -69,6 +103,10 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
+            this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
+            this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
+                value: true,
+            });
         },
         onDetail() {
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
@@ -77,6 +115,11 @@ export default {
             });
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
+            });
+            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+                selecteds: [
+                    ...this.getForm.job_order_has_employees,
+                ],
             });
             this.$bvModal.hide("action_list");
         },
@@ -87,6 +130,11 @@ export default {
             });
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
+            });
+            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+                selecteds: [
+                    ...this.getForm.job_order_has_employees,
+                ],
             });
             this.$bvModal.hide("action_list");
         },

@@ -29,14 +29,26 @@ class RoleSeeder extends Seeder
         $roleAdmin = Role::create(['name' => 'Admin']);
         $roleAdmin->givePermissionTo($permissionAdmin);
 
-        $permissionGeneral = [
+        // karyawan office
+        $permissionGeneralOffice = [
             "lihat dashboard", "lihat laporan kasbon", "persetujuan laporan kasbon", "perwakilan laporan kasbon",
         ];
 
+        // pekerja lapangan
+        $permissionGeneralFieldWorker = [
+            "lihat dashboard", "lihat job order",
+        ];
+
         $roleHrd = Role::create(['name' => 'HRD']);
-        $roleHrd->givePermissionTo($permissionGeneral);
+        $roleHrd->givePermissionTo($permissionGeneralOffice);
 
         $roleCashier = Role::create(['name' => 'Kasir']);
-        $roleCashier->givePermissionTo($permissionGeneral);
+        $roleCashier->givePermissionTo($permissionGeneralOffice);
+
+        $roleForeman = Role::create(['name' => 'Pengawas']);
+        $roleForeman->givePermissionTo($permissionGeneralFieldWorker);
+
+        $roleQc = Role::create(['name' => 'Quality Control']);
+        $roleQc->givePermissionTo($permissionGeneralFieldWorker);
     }
 }

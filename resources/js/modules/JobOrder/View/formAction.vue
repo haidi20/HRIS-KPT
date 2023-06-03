@@ -36,7 +36,7 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Catatan" label-for="note" class>
+        <b-form-group :label="getLabelNote()" label-for="note" class>
           <b-form-input
             type="text"
             v-model="form.status_note"

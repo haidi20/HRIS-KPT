@@ -96,8 +96,8 @@ export default {
 
                 console.info(findJob);
 
-                this.$store.commit("jobOrder/INSERT_FORM_CODE", {
-                    code: findJob.code,
+                this.$store.commit("jobOrder/INSERT_FORM_JOB_CODE", {
+                    job_code: findJob.code,
                 });
             }
         },
@@ -206,6 +206,12 @@ export default {
                         title: err.response.data.message,
                     });
                 });
+        },
+        getReadOnly() {
+            const readOnly = this.$store.getters["jobOrder/getReadOnly"];
+            //   console.info(readOnly);
+
+            return readOnly;
         },
     },
 };

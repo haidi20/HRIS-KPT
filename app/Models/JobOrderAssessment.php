@@ -9,6 +9,20 @@ class JobOrderAssessment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'employee_id',
+        'job_order_id',
+        'image',
+        'note',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+    protected $appends = [
+        "group_name",
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -21,5 +35,19 @@ class JobOrderAssessment extends Model
         static::updating(function ($model) {
             $model->updated_by = request("user_id");
         });
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, "created_by", "id");
+    }
+
+    public function getGroupNameAttribute()
+    {
+        if ($this->creator) {
+            $groupName = $this->creator->group_name;
+
+            return $groupName == "Quality Control" ? "QC" : $groupName;
+        }
     }
 }

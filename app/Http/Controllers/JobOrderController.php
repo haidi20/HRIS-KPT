@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
+use App\Models\JobOrderAssessment;
+use App\Models\JobOrderHasEmployee;
+use App\Models\JobOrderHasEmployeeHistory;
 use App\Models\JobOrderHasStatus;
 use App\Models\JobOrderHistory;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +19,8 @@ use Illuminate\Support\Facades\Response;
 
 class JobOrderController extends Controller
 {
+    private $nameModel = "App\Models\JobOrder";
+
     public function index()
     {
         $vue = true;
@@ -26,13 +32,23 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
 
         $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
             ->whereYear("datetime_start", $month->format("Y"))
             ->whereMonth("datetime_start", $month->format("m"))
-            ->orderBy("datetime_start", "desc")
-            ->get();
+            ->orderBy("datetime_start", "desc");
+
+        // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
+        // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
+        if ($user->group_name == "Pengawas" && request("type_by") == "creator") {
+            $jobOrders = $jobOrders->where("created_by", $user->id);
+        } else {
+            $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
+        }
+
+        $jobOrders = $jobOrders->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
@@ -42,6 +58,7 @@ class JobOrderController extends Controller
     public function store()
     {
         // return request()->all();
+        $jobStatusController = new JobStatusController;
 
         try {
             DB::beginTransaction();
@@ -57,7 +74,9 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
-            $date = Carbon::parse(request("hour_start"))->format("Y-m-d h:m");
+            $date = Carbon::now();
+            $date->setTimeFromTimeString(request("hour_start"));
+            // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
             $jobOrder->project_id = request("project_id");
             $jobOrder->job_id = request("job_id");
@@ -74,16 +93,18 @@ class JobOrderController extends Controller
 
             // tambah data jobOrderHasStatus hanya ketika data baru
             if (request("id") == null) {
-                $this->storeJobOrderHasStatus($jobOrder, $date);
+                $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
             $this->storeJobOrderHistory($jobOrder);
-            // $this->storeOrdinarySeamans($jobOrder);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
+                'requests' => request()->all(),
+                'date' => $date,
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -101,11 +122,12 @@ class JobOrderController extends Controller
     public function storeAction()
     {
         // return request()->all();
+        $jobStatusController = new JobStatusController;
 
         try {
             DB::beginTransaction();
 
-            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:m");
+            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
             $message = "diperbaharui";
 
             $jobOrder = JobOrder::find(request("id"));
@@ -119,14 +141,16 @@ class JobOrderController extends Controller
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
-            $this->storeJobOrderHasStatus($jobOrder, $date);
+            $jobStatusController->storeJobStatusHasParent($jobOrder, request("status_last"), $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
                 'request' => request()->all(),
+                'jobOrder' => $jobOrder,
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -137,6 +161,57 @@ class JobOrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function storeActionAssessment()
+    {
+        // return request()->all();
+        $jobOrderId = request("id");
+        $jobStatusController = new JobStatusController;
+
+        try {
+            DB::beginTransaction();
+
+            $jobOrderAssessment = JobOrderAssessment::updateOrCreate([
+                "job_order_id" => $jobOrderId,
+                "employee_id" => request("user_id"),
+            ], [
+                "note" => request("status_note"),
+            ]);
+
+            $allJobOrderAssessmentHasEmployee = JobOrderAssessment::where([
+                "job_order_id" => $jobOrderId,
+            ]);
+
+            if ($allJobOrderAssessmentHasEmployee->count() >= 2) {
+                $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
+
+                $jobOrder = JobOrder::find($jobOrderId);
+                $jobOrder->status = "finish";
+                $jobOrder->datetime_end = $date;
+                $jobOrder->save();
+
+                $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
+                $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start, $jobOrder->datetime_end);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
+                'message' => "Berhasil Penilaian",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal Penilaian",
             ], 500);
         }
     }
@@ -171,21 +246,41 @@ class JobOrderController extends Controller
         }
     }
 
-    private function storeJobOrderHasStatus($jobOrder, $date = null)
+    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart, $dateEnd = null)
     {
-        if (request("status_last") != null) {
-            $jobOrderHasStatus = JobOrderHasStatus::where("status", request("status_last"));
-            $jobOrderHasStatus->update([
-                "note_end" => $jobOrder->status_note,
-                "datetime_end" => $date,
-            ]);
-        } else {
-            $jobOrderHasStatus = new JobOrderHasStatus;
-            $jobOrderHasStatus->job_order_id = $jobOrder->id;
-            $jobOrderHasStatus->status = $jobOrder->status;
-            $jobOrderHasStatus->datetime_start = $date;
-            $jobOrderHasStatus->note_start = $jobOrder->status_note;
-            $jobOrderHasStatus->save();
+        $jobOrderHasEmployeeDelete = JobOrderHasEmployee::where([
+            "job_order_id" => $jobOrder->id,
+        ]);
+        $jobOrderHasEmployeeDelete->delete();
+
+        if (count(request("employee_selecteds")) > 0) {
+
+            if ($status == "correction") {
+                $status = "active";
+            }
+
+            foreach (request("employee_selecteds") as $index => $item) {
+                // $jobOrderHasEmployee = JobOrderHasEmployee::create([
+                //     "job_order_id" => $jobOrder->id,
+                //     "employee_id" => $item["employee_id"],
+                //     "status" => $status,
+                //     "datetime_start" => $dateStart,
+                // ]);
+
+                $jobOrderHasEmployee = new JobOrderHasEmployee;
+                $jobOrderHasEmployee->job_order_id = $jobOrder->id;
+                $jobOrderHasEmployee->employee_id = $item["employee_id"];
+                $jobOrderHasEmployee->status = $status;
+                $jobOrderHasEmployee->datetime_start = $dateStart;
+
+                if ($dateEnd != null) {
+                    $jobOrderHasEmployee->datetime_end = $dateEnd;
+                }
+
+                $jobOrderHasEmployee->save();
+
+                $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
+            }
         }
     }
 
@@ -213,5 +308,17 @@ class JobOrderController extends Controller
         }
 
         $jobOrderHistory->save();
+    }
+
+    private function storeJobOrderHasEmployeeHistory($jobOrderHasEmployee)
+    {
+        $jobOrderHasEmployeeHistory = new JobOrderHasEmployeeHistory;
+        $jobOrderHasEmployeeHistory->job_order_has_employee_id = $jobOrderHasEmployee->id;
+        $jobOrderHasEmployeeHistory->employee_id = $jobOrderHasEmployee->employee_id;
+        $jobOrderHasEmployeeHistory->job_order_id = $jobOrderHasEmployee->job_order_id;
+        $jobOrderHasEmployeeHistory->status = $jobOrderHasEmployee->status;
+        $jobOrderHasEmployeeHistory->datetime_start = $jobOrderHasEmployee->datetime_start;
+        $jobOrderHasEmployeeHistory->datetime_end = $jobOrderHasEmployee->datetime_end;
+        $jobOrderHasEmployeeHistory->save();
     }
 }

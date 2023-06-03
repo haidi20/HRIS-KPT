@@ -36,7 +36,7 @@ Status values
 /**
 *Default form object
 @typedef {Object} DefaultForm
-@property {null|string} code - The code value.
+@property {null|string} job_code - The code value.
 @property {null|number} project_id - The project ID.
 @property {null|string} category - The category value.
 @property {null|number} job_id - The job ID.
@@ -45,7 +45,6 @@ Status values
 @property {null|string} image - The image value.
 @property {null|date} date - The date value.
 @property {null|time} hour - The hour end value.
-@property {null|string} form_kind - The form kind.
 @property {string} form_title - The form title.
 @property {null|string} hour_start - The hour start value.
 @property {null|string} date_time_start - The start date and time.
@@ -58,7 +57,8 @@ Status values
 */
 
 const defaultForm = {
-    code: null,
+    id: null,
+    job_code: null,
     project_id: null,
     category: null,
     job_id: null,
@@ -84,7 +84,6 @@ const defaultForm = {
     estimation: null,
     time_type: "hours",
     note: null,
-    form_type: "create",
 }
 
 const JobOrder = {
@@ -149,18 +148,22 @@ const JobOrder = {
                     name: "semua",
                 },
                 {
-                    id: "pause",
-                    name: "tunda",
-                },
-                {
                     id: "active",
                     name: "aktif",
                 },
-                // jangan ini hanya untuk pengawas
                 {
-                    id: "done_assessment_qc",
-                    name: "sudah dinilai oleh QC",
+                    id: "pending",
+                    name: "tunda",
                 },
+                {
+                    id: "overtime",
+                    name: "lembur",
+                },
+                // ini hanya untuk pengawas
+                // {
+                //     id: "done_assessment_qc",
+                //     name: "sudah dinilai oleh QC",
+                // },
             ],
             type_bys: [
                 {
@@ -176,6 +179,7 @@ const JobOrder = {
         loading: {
             data: false,
         },
+        user_id: null,
     },
     mutations: {
         INSERT_BASE_URL(state, payload) {
@@ -198,8 +202,8 @@ const JobOrder = {
         INSERT_FORM_JOB_ID(state, payload) {
             state.form.job_id = payload.job_id;
         },
-        INSERT_FORM_CODE(state, payload) {
-            state.form.code = payload.code;
+        INSERT_FORM_JOB_CODE(state, payload) {
+            state.form.job_code = payload.job_code;
         },
         INSERT_FORM_HOUR_START(state, payload) {
             state.form.hour_start = payload.hour_start;
@@ -282,6 +286,9 @@ const JobOrder = {
                 ...payload,
             }
         },
+        INSERT_USER_ID(state, payload) {
+            state.user_id = payload.user_id;
+        },
         UPDATE_IS_ACTIVE_FORM(state, payload) {
             state.is_active_form = payload.value;
         },
@@ -298,12 +305,18 @@ const JobOrder = {
             state.form = {
                 ...state.form,
                 // date_end: null,
+                hour: moment().format("HH:mm"),
                 status_note: null,
             };
         },
     },
     actions: {
         fetchData: async (context, payload) => {
+
+            if (payload?.user_id) {
+                context.commit("INSERT_USER_ID", { user_id: payload.user_id });
+            }
+
             context.commit("INSERT_DATA", {
                 job_orders: [],
             });
@@ -312,6 +325,7 @@ const JobOrder = {
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
+                user_id: context.state.user_id,
             }
 
             await axios
@@ -333,7 +347,20 @@ const JobOrder = {
                     console.info(err);
                 });
         },
-    }
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
+
+            // console.info(state.form.form_type);
+
+            if (state.form.form_kind == "detail") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default JobOrder;

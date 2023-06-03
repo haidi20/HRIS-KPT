@@ -53,6 +53,26 @@ class UserSeeder extends Seeder
             'status' => true,
         ]);
 
-        $cashier->assignRole('HRD');
+        $cashier->assignRole('Kasir');
+
+        $foreman = User::create([
+            'name' => 'pengawas',
+            'email' => 'foreman@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 5,
+            'status' => true,
+        ]);
+
+        $foreman->assignRole('Pengawas');
+
+        $qualityControl = User::create([
+            'name' => 'qc',
+            'email' => 'qualityControl@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 6,
+            'status' => true,
+        ]);
+
+        $qualityControl->assignRole('Quality Control');
     }
 }

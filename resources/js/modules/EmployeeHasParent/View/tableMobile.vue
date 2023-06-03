@@ -23,6 +23,9 @@
                   <h5>{{item.employee_name}} - {{item.position_name}}</h5>
                   <span v-if="item.is_active != null">Aktif: {{item.is_active}}</span>
                 </b-col>
+                <b-col cols="4" style="text-align: end">
+                  <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
+                </b-col>
               </b-row>
               <!-- <b-row>
               <b-col>

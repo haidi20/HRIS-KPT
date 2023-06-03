@@ -18,7 +18,7 @@ class JobOrder extends Model
         "status_color", "status_readable",
         "project_name", "job_name", "job_code", "hour_start",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
-        "datetime_estimation_end_readable",
+        "datetime_estimation_end_readable", "creator_name", "creator_group_name",
     ];
 
     public function __construct(array $attributes = [])
@@ -57,14 +57,19 @@ class JobOrder extends Model
         return $this->belongsTo(Job::class, "job_id", "id");
     }
 
+    public function creator()
+    {
+        return $this->belongsTo(User::class, "created_by", "id");
+    }
+
     public function jobOrderHasEmployees()
     {
         return $this->hasMany(JobOrderHasEmployee::class, "job_order_id", "id");
     }
 
-    public function jobOrderHasStasuses()
+    public function jobStatusHasParent()
     {
-        return $this->hasMany(JobOrderHasStatus::class, "job_order_id", "id");
+        return $this->hasMany(JobStatusHasParent::class, "job_order_id", "id");
     }
 
     public function jobOrderAssessments()
@@ -72,9 +77,23 @@ class JobOrder extends Model
         return $this->hasMany(JobOrderAssessment::class, "job_order_id", "id");
     }
 
+    public function getCreatorNameAttribute()
+    {
+        if ($this->creator) {
+            return $this->creator->name;
+        }
+    }
+
+    public function getCreatorGroupNameAttribute()
+    {
+        if ($this->creator) {
+            return $this->creator->group_name;
+        }
+    }
+
     public function getHourStartAttribute()
     {
-        return Carbon::parse($this->datetime_start)->format("h:m");
+        return Carbon::parse($this->datetime_start)->format("H:i");
     }
 
     public function getStatusColorAttribute()
@@ -126,21 +145,23 @@ class JobOrder extends Model
 
     public function getEmployeeTotalAttribute()
     {
-        return 10;
+        return $this->jobOrderHasEmployees->count();
     }
 
     public function getEmployeeActiveTotalAttribute()
     {
-        return 9;
+        return $this->jobOrderHasEmployees->where('active')->count();
     }
 
     public function getAssessmentCountAttribute()
     {
-        return 1;
+        return  $this->jobOrderAssessments->count();
     }
 
     public function getAssessmentTotalAttribute()
     {
-        return 2;
+        $count =  $this->jobOrderAssessments->count();
+
+        return $count <= 2 ? 2 : $count;
     }
 }
