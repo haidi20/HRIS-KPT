@@ -367,7 +367,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="branch" class="col-sm-4 col-form-label">Cabang</label>
+                                <label for="branch" class="col-sm-4 col-form-label">Cabang Bank</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="branch" name="branch" class="form-control">
                                 </div>

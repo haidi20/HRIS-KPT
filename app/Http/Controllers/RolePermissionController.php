@@ -22,7 +22,7 @@ class RolePermissionController extends Controller
         $nameGroupUser = Role::find($roleId)->name;
 
         $names = Config("library.feature_private");
-        $features = Feature::whereNotIn("name", $names)->get();
+        // $features = Feature::whereNotIn("name", $names)->get();
 
         $columns = [
             'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
@@ -36,23 +36,24 @@ class RolePermissionController extends Controller
         ];
 
         if ($datatables->getRequest()->ajax()) {
-            $permissions = Permission::query()
-                ->select('permissions.id', 'permissions.name', 'permissions.description');
+            $features = Feature::query()
+                ->select('features.id', 'features.name', 'features.description')
+                ->whereNotIn('features.name', $names);
 
-            return $datatables->eloquent($permissions)
+            return $datatables->eloquent($features)
                 ->filterColumn('name', function (Builder $query, $keyword) {
-                    $sql = "permissions.name  like ?";
+                    $sql = "features.name  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
                 })
                 ->filterColumn('description', function (Builder $query, $keyword) {
-                    $sql = "permissions.description  like ?";
+                    $sql = "features.description  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
                 })
-                ->addColumn('aksi', function (Permission $data) {
+                ->addColumn('aksi', function (Feature $data) {
                     $button = '';
 
                     // if (auth()->user()->can('detail hak akses')) {
-                    //     $button .= '<a href="/setting/role-permission/' . $data->id . '" class="btn btn-sm btn-info me-2"><i class="bi bi-card-checklist"></i></a>';
+                    //     $button .= '<a href="/setting/role-feature/' . $data->id . '" class="btn btn-sm btn-info me-2"><i class="bi bi-card-checklist"></i></a>';
                     // }
 
                     if (auth()->user()->can('ubah hak akses')) {
@@ -73,7 +74,7 @@ class RolePermissionController extends Controller
         $html = $datatables->getHtmlBuilder()
             ->columns($columns)
             ->parameters([
-                'order' => [[1, 'desc']],
+                'order' => [[0, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
                 'dom' => 'lfrtip',
@@ -84,9 +85,9 @@ class RolePermissionController extends Controller
                 // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
-        $permissions = Role::paginate(10);
+        // $features = Feature::whereNotIn("name", $names)->get();
 
-        $compact = compact('html', 'permissions', 'nameGroupUser', 'roleId', 'features');
+        $compact = compact('html', 'nameGroupUser', 'roleId');
 
         return view("pages.setting.role-permission", $compact);
     }

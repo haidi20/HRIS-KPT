@@ -68,7 +68,7 @@
         let state = {
             ...initialState
         };
-
+re
         $(document).ready(function() {
             $('.dataTable').DataTable();
 

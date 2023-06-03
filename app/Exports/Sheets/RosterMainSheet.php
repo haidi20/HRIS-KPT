@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
+class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles, WithDrawings
 {
     protected $data;
     protected $dates;
@@ -28,17 +28,17 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
         return 'UTAMA';
     }
 
-    // public function drawings()
-    // {
-    //     $drawing = new Drawing();
-    //     $drawing->setName('signature');
-    //     $drawing->setDescription('This is my signature');
-    //     $drawing->setPath(public_path('/assets/img/logo.png'));
-    //     $drawing->setHeight(90);
-    //     $drawing->setCoordinates('A1');
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('logo');
+        $drawing->setDescription('This is logo');
+        $drawing->setPath(public_path('/assets/img/logo.png'));
+        $drawing->setHeight(45);
+        $drawing->setCoordinates('B1');
 
-    //     return $drawing;
-    // }
+        return $drawing;
+    }
 
     public function view(): View
     {
@@ -50,6 +50,14 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
 
     public function styles(Worksheet $sheet)
     {
-        return [];
+        $range = 'A2:A10';
+        $style = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
+            ],
+        ];
+        $sheet->getStyle($range)->applyFromArray($style);
     }
 }
