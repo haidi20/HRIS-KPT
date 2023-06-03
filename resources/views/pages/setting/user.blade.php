@@ -73,6 +73,7 @@
         $('.dataTable').DataTable();
 
         state.users = {!! json_encode($users) !!};
+        setupSelect();
         send();
     });
 

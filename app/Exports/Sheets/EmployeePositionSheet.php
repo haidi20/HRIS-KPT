@@ -31,8 +31,8 @@ class EmployeePositionSheet implements FromView, WithTitle, ShouldAutoSize, With
     public function drawings()
     {
         $drawing = new Drawing();
-        $drawing->setName('signature');
-        $drawing->setDescription('This is my signature');
+        $drawing->setName('logo');
+        $drawing->setDescription('This is logo');
         $drawing->setPath(public_path('/assets/img/logo.png'));
         $drawing->setHeight(45);
         $drawing->setCoordinates('B1');

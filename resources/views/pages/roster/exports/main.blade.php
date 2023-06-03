@@ -3,6 +3,13 @@
 @endphp
 
 <table>
+    <tr>
+        <td colspan="33" style="font-size: 28px; font-weight: bold; text-align: center; vertical-align: middle;">
+            {{-- <img src="{{ public_path('/assets/img/logo.png') }}" alt="" class="" width="80%"> --}}
+            <h3 style="margin-top: 10px; padding-left: 30px;">PT KARYA PACIFIC TEKNIK SHIPYARD</h3>
+        </td>
+    </tr>
+    <tr></tr>
     <thead>
         <tr>
             <th nowrap rowspan="2">Nama Karyawan</th>
