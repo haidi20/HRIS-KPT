@@ -28,7 +28,7 @@ class LocationController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $location = Location::query()
-                ->select('locations.*');
+                ->select('locations.id', 'locations.name', 'locations.description',);
 
             return $datatables->eloquent($location)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -42,11 +42,11 @@ class LocationController extends Controller
                 ->addColumn('aksi', function (Location $data) {
                     $button = '';
 
-                    if (auth()->user()->can('ubah jenis karyawan')) {
+                    if (auth()->user()->can('ubah lokasi')) {
                         $button .= '<a href="javascript:void(0)" onclick="onEdit(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-warning me-2"><i class="bi bi-pen"></i></a>';
                     }
 
-                    if (auth()->user()->can('hapus jenis karyawan')) {
+                    if (auth()->user()->can('hapus lokasi')) {
                         $button .= '<a href="javascript:void(0)" onclick="onDelete(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>';
                     }
 
@@ -63,16 +63,16 @@ class LocationController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
 
-        $locations = Location::all();
+        $locations = Location::paginate(10);
 
         $compact = compact('html', 'locations');
 

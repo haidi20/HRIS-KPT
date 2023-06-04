@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use DatePeriod;
@@ -9,7 +10,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
+use Illuminate\Support\Str;
+use Symfony\Component\Process\Process;
 
 class Controller extends BaseController
 {
@@ -160,5 +165,52 @@ class Controller extends BaseController
         }
 
         return $dates;
+    }
+
+    /**
+
+     *Store the image for a user.
+     *@param \App\Models\User $user
+     *@param string $image Base64-encoded image data
+     *@return bool Returns true if the image was successfully stored, false otherwise.
+     */
+    public function storeImage($user, $image)
+    {
+        try {
+            $pos  = strpos($image, ';');
+            $image_extension = explode(':', substr($image, 0, $pos))[1];
+
+            preg_match("/data:image\/(.*?);/", $image, $image_extension); // extract the image extension
+            $image = preg_replace('/data:image\/(.*?);base64,/', '', $image); // remove the type part
+            $image = str_replace(' ', '+', $image);
+
+            if (!in_array(Str::lower($image_extension[1]), ['png', 'jpg', 'jpeg'])) {
+                return redirect()->back()->with('danger', 'Gagal upload foto, format Tidak Sesuai');
+            }
+
+            if (!Storage::exists('public/lokasi_folder/' . $user->id . '/cover')) {
+                Storage::makeDirectory('public/lokasi_folder/' . $user->id . '/cover');
+            }
+
+            $imageName = '/' . auth()->user()->id . Carbon::now()->format('y_s_d_m') . '.' . $image_extension[1];
+            Storage::disk('public')->put('lokasi_folder/' . $user->id . $imageName, base64_decode($image));
+            Storage::disk('public')->put($imageName, base64_decode($image));
+
+            // proses kompresi
+            $syntax = [
+                "python3",
+                "/www/wwwroot/lokasi_aplikasinya/storage/app/png_jpg.py",
+                "/www/wwwroot/lokasi_aplikasinya/storage/app/public/" . $imageName
+            ];
+
+            $process = new Process($syntax);
+            $process->run();
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return false;
+        }
     }
 }

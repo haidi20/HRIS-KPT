@@ -101,6 +101,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('project')->name('project.')->group(function () {
         Route::get('fetch-data', [ProjectController::class, "fetchData"])->name('fetchData');
+        Route::get('fetch-data-base-date-end', [ProjectController::class, "fetchDataBaseDateEnd"])->name('fetchDataBaseDateEnd');
         Route::post('store', [ProjectController::class, "store"])->name('store');
         Route::post('delete', [ProjectController::class, "destroy"])->name('delete');
     });
@@ -134,6 +135,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('job-order')->name('jobOrder.')->group(function () {
         Route::get('fetch-data', [JobOrderController::class, "fetchData"])->name('fetchData');
         Route::post('store', [JobOrderController::class, "store"])->name('store');
+        Route::post('store-action', [JobOrderController::class, "storeAction"])->name('storeAction');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {

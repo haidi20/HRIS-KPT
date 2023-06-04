@@ -24,22 +24,22 @@
             <div class="card-header">
                 <span class="fs-4 fw-bold">Data Alat Finger</span>
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                    data-toggle="modal">
-                    <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Alat Finger
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
-                        </div>
+                data-toggle="modal">
+                <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Alat Finger
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-    </section>
+</section>
 </div>
 @endsection
 
@@ -178,13 +178,13 @@
                             }
                         });
                         if (responses.success == true) {
-                        Toast.fire({
-                        icon: 'success',
-                        title: responses.message
-                        });
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
 
-                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                        function(json) {});
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                            function(json) {});
                         }
                     },
                     error: function(err) {

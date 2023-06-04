@@ -14,6 +14,14 @@ use Yajra\DataTables\DataTables;
 
 class PositionController extends Controller
 {
+
+    public function getPositions($departmenId)
+    {
+        $positions = Position::with('departmen')->where('departmen_id', $departmenId)->get();
+
+        return response()->json($positions);
+    }
+
     public function index(Datatables $datatables)
     {
         $columns = [
@@ -30,7 +38,7 @@ class PositionController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $position = Position::query()
-                ->select('positions.*', 'departmens.name as departmen_name')
+                ->select('positions.id', 'positions.name','positions.description','positions.minimum_employee', 'departmens.name as departmen_name')
                 ->with('departmen')
                 ->leftJoin('departmens', 'positions.departmen_id', '=', 'departmens.id');
 
@@ -72,17 +80,17 @@ class PositionController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
 
-        $positions = Position::all();
         $departments = Departmen::all();
+        $positions = Position::paginate(10);
 
         $compact = compact('html', 'positions', 'departments');
 

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import DatatableClient from "../../components/DatatableClient";
+import DatatableClient from "../../../components/DatatableClient";
 
 export default {
   data() {

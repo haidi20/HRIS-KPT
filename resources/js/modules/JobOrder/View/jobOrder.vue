@@ -3,18 +3,20 @@
     <b-row style="height: 100%">
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
-        <h3 style="display: inline">{{getTitle}}</h3>
-        <template v-if="!getIsActiveForm">
-          <List />
-        </template>
-        <template v-else>
-          <template v-if="getConditionForm()">
-            <Form />
+        <h4>{{getTitle}}</h4>
+        <div style="margin-top: 15px">
+          <template v-if="!getIsActiveForm">
+            <Data />
           </template>
           <template v-else>
-            <FormAction />
+            <template v-if="getConditionForm()">
+              <Form />
+            </template>
+            <template v-else>
+              <FormAction />
+            </template>
           </template>
-        </template>
+        </div>
       </b-col>
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
     </b-row>
@@ -22,26 +24,44 @@
 </template>
 
 <script>
-import { isMobile } from "../../utils";
-import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
-import List from "./list";
+import { isMobile } from "../../../utils";
+// import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
+import Data from "./data";
 import Form from "./form";
 import FormAction from "./formAction.vue";
 
 export default {
+  props: {
+    user: String,
+    baseUrl: String,
+  },
   data() {
     return {
       //
     };
   },
   components: {
-    List,
+    Data,
     Form,
     FormAction,
-    VueBottomSheet,
+    // VueBottomSheet,
   },
   mounted() {
-    // this.$bvModal.show("job_order_form");
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    ["jobOrder", "project", "employeeHasParent", "master"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
+    });
+
+    this.$store.dispatch("fetchPermission");
+    this.$store.dispatch("master/fetchJob");
+    this.$store.dispatch("jobOrder/fetchData");
+    this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("employeeHasParent/fetchOption");
+    this.$store.dispatch("project/fetchDataBaseDateEnd");
   },
   computed: {
     getIsMobile() {

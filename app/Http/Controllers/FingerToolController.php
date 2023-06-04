@@ -28,7 +28,7 @@ class FingerToolController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $finger_tool = FingerTool::query()
-                ->select('finger_tools.*');
+                ->select('finger_tools.id', 'finger_tools.name', 'finger_tools.serial_number',);
 
             return $datatables->eloquent($finger_tool)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -42,11 +42,11 @@ class FingerToolController extends Controller
                 ->addColumn('aksi', function (FingerTool $data) {
                     $button = '';
 
-                    if (auth()->user()->can('ubah jenis karyawan')) {
+                    if (auth()->user()->can('ubah alat finger')) {
                         $button .= '<a href="javascript:void(0)" onclick="onEdit(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-warning me-2"><i class="bi bi-pen"></i></a>';
                     }
 
-                    if (auth()->user()->can('hapus jenis karyawan')) {
+                    if (auth()->user()->can('hapus alat finger')) {
                         $button .= '<a href="javascript:void(0)" onclick="onDelete(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>';
                     }
 
@@ -63,12 +63,12 @@ class FingerToolController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
 

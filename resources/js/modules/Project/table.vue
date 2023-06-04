@@ -12,7 +12,7 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan Selesai Proyek" label-for="month" class="place_filter_table">
+          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
               id="month"
               v-model="params.month"
@@ -95,7 +95,6 @@
         </b-tr>
       </template>
     </DatatableClient>
-    <JobOrderModal />
   </div>
 </template>
 
@@ -103,7 +102,6 @@
 import axios from "axios";
 import moment from "moment";
 
-import JobOrderModal from "../JobOrder/modal";
 import DatatableClient from "../../components/DatatableClient";
 import ButtonAction from "../../components/ButtonAction";
 
@@ -156,7 +154,6 @@ export default {
   },
   components: {
     ButtonAction,
-    JobOrderModal,
     DatatableClient,
   },
   computed: {

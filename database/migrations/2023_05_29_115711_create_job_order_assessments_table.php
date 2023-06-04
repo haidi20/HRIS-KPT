@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJobOrdersTable extends Migration
+class CreateJobOrderAssessmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateJobOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_orders', function (Blueprint $table) {
+        Schema::create('job_order_assessments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id');
+            $table->foreignId('employee_id');
+            $table->foreignId('job_order_id');
+            $table->string('image')->nullable();
+            $table->string('note')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
@@ -31,6 +34,6 @@ class CreateJobOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_orders');
+        Schema::dropIfExists('job_order_assessments');
     }
 }

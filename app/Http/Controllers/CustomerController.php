@@ -74,18 +74,18 @@ class CustomerController extends Controller
                 'order' => [[1, 'desc']],
                 'responsive' => true,
                 'autoWidth' => false,
-                'dom' => 'lBfrtip',
+                'dom' => 'lfrtip',
                 'lengthMenu' => [
                     [10, 25, 50, -1],
                     ['10 Data', '25 Data', '50 Data', 'Semua Data']
                 ],
-                'buttons' => $this->buttonDatatables($columnsArrExPr),
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
 
         $barges = Barge::all();
         $companies = Company::all();
-        $customers = Customer::all();
+        $customers = Customer::paginate(10);
 
         $compact = compact('html', 'barges', 'companies', 'customers');
 

@@ -19,16 +19,11 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Kode" label-for="code" class>
-          <b-form-input v-model="form.code" id="code" name="code"></b-form-input>
-        </b-form-group>
-      </b-col>
-      <b-col cols>
         <b-form-group label="Pekerjaan" label-for="job_id" class>
           <VueSelect
             id="job_id"
             class="cursor-pointer"
-            v-model="form.job_id"
+            v-model="job_id"
             placeholder="Pilih Pekerjaan"
             :options="getOptionJobs"
             :reduce="(data) => data.id"
@@ -40,24 +35,40 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols sm="12" md="6">
-        <b-form-group label="Kategori" label-for="category_id" class>
-          <VueSelect
-            id="category_id"
+      <b-col cols>
+        <b-form-group label="Kode" label-for="code" class>
+          <b-form-input v-model="form.code" id="code" name="code" disabled></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
+        <b-form-group label="Keterangan Jenis Pekerjaan" label-for="job_note" class>
+          <b-form-input v-model="form.job_note" id="job_note" name="job_note"></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
+        <b-form-group label="Kategori" label-for="category" class>
+          <!-- <VueSelect
+            id="category"
             class="cursor-pointer"
-            v-model="form.category_id"
+            v-model="form.category"
             placeholder="Pilih Kategori"
-            :options="getOptionCategory"
+            :options="getOptionCategories"
             :reduce="(data) => data.id"
             label="name"
             :searchable="false"
             style="min-width: 180px"
-          />
-        </b-form-group>
-      </b-col>
-      <b-col cols sm="12" md="6">
-        <b-form-group label="Keterangan Jenis Pekerjaan" label-for="type_job_note" class>
-          <b-form-input v-model="form.type_job_note" id="type_job_note" name="type_job_note"></b-form-input>
+          />-->
+          <select v-model="form.category" name="category" id="category" class="form-control">
+            <option
+              v-for="(category, index) in getOptionCategories"
+              :key="index"
+              :value="category.id"
+            >{{category.name}}</option>
+          </select>
         </b-form-group>
       </b-col>
     </b-row>
@@ -68,7 +79,7 @@
           <input
             type="time"
             class="form-control"
-            v-model="form.hour_start"
+            v-model="hour_start"
             id="hour_start"
             name="hour_start"
           />
@@ -76,30 +87,37 @@
       </b-col>
       <b-col cols>
         <b-form-group label="Estimasi Waktu" label-for="estimation" class>
-          <b-form-input v-model="form.estimation" id="estimation" name="estimation"></b-form-input>
+          <b-form-input
+            v-model="estimation"
+            id="estimation"
+            name="estimation"
+            type="number"
+            autocomplete="off"
+          ></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="12" md="6">
-        <b-form-group label="Jenis Waktu" label-for="type_time" class>
-          <VueSelect
-            id="type_time"
-            class="cursor-pointer"
-            v-model="form.type_time"
-            placeholder="Pilih Jenis Waktu"
-            :options="getOptionTypTime"
-            :reduce="(data) => data.id"
-            label="name"
-            :searchable="false"
-            style="min-width: 180px"
-          />
+      <b-col cols="5" md="6">
+        <b-form-group label="Jenis Waktu" label-for="time_type" class>
+          <select v-model="time_type" name="time_type" id="time_type" class="form-control">
+            <option
+              v-for="(time_type, index) in getOptionTimeTypes"
+              :key="index"
+              :value="time_type.id"
+            >{{time_type.name}}</option>
+          </select>
         </b-form-group>
       </b-col>
-      <b-col cols="12" md="6">
-        <b-form-group label="Waktu Selesai : " label-for="type_time" class>
-          <span style="font-size: 15px">Senin, 25 Mei 2023</span>
-          <span v-if="form.type_time != 'day'">13:00</span>
+      <b-col cols="7" md="6">
+        <b-form-group label="Waktu Selesai " label-for="time_type" class>
+          <span>
+            {{
+            form.datetime_estimation_end_readable
+            ? form.datetime_estimation_end_readable
+            : "-"
+            }}
+          </span>
         </b-form-group>
       </b-col>
     </b-row>
@@ -136,7 +154,7 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Keterangan" label-for="note" class>
+        <b-form-group label="catatan tambahan" label-for="note" class>
           <b-form-input v-model="form.note" id="note" name="note"></b-form-input>
         </b-form-group>
       </b-col>
@@ -158,76 +176,7 @@
   </div>
 </template>
 
-<script>
-import VueSelect from "vue-select";
-import EmployeeHasParent from "../EmployeeHasParent/view/employeeHasParent";
-
-export default {
-  data() {
-    return {
-      is_loading: false,
-    };
-  },
-  mounted() {
-    // this.$bvModal.show("data_employee");
-    this.$store.commit("employeeHasParent/UPDATE_IS_FORM_MOBILE", {
-      value: true,
-    });
-  },
-  components: {
-    VueSelect,
-    EmployeeHasParent,
-  },
-  computed: {
-    getTitleForm() {
-      return this.$store.state.jobOrder.form_title;
-    },
-    getOptionProjects() {
-      return this.$store.state.jobOrder.options.projects;
-    },
-    getOptionCategory() {
-      return this.$store.state.jobOrder.options.categories;
-    },
-    getOptionJobs() {
-      return this.$store.state.jobOrder.options.jobs;
-    },
-    getOptionJobLevels() {
-      return this.$store.state.jobOrder.options.job_levels;
-    },
-    getOptionTypTime() {
-      return this.$store.state.jobOrder.options.type_times;
-    },
-    form() {
-      return this.$store.state.jobOrder.form;
-    },
-  },
-  methods: {
-    onCloseModal() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Job Order",
-        form_kind: null,
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: false,
-      });
-      this.$bvModal.hide("job_order_form");
-    },
-    onShowEmployee() {
-      this.$bvModal.show("data_employee");
-    },
-    onSend() {
-      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-        form_title: "Job Order",
-        form_kind: null,
-      });
-      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-        value: false,
-      });
-      this.$bvModal.hide("job_order_form");
-    },
-  },
-};
-</script>
+<script src="../Script/form.js"></script>
 
 <style lang="scss" scoped>
 #job_order_form {

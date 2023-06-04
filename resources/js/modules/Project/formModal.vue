@@ -19,7 +19,7 @@
             <b-tab title="OS" @click="onChangeTab('os')">
               <OrdinarySeamanHasParent />
             </b-tab>
-            <b-tab title="Job Order" @click="onChangeTab('os')">
+            <b-tab title="Job Order" @click="onChangeTab('job_order')">
               <JobOrderTable />
             </b-tab>
           </b-tabs>
@@ -51,7 +51,7 @@ import VueSelect from "vue-select";
 import Form from "./form";
 import ContractorHasParent from "../ContractorHasParent/contractorHasParent";
 import OrdinarySeamanHasParent from "../OrdinarySeamanHasParent/ordinarySeamanHasParent";
-import JobOrderTable from "../JobOrder/table";
+import JobOrderTable from "../JobOrder/View/table";
 
 export default {
   data() {

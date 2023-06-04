@@ -11,18 +11,96 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Database\Eloquent\Builder;
+use Yajra\DataTables\DataTables;
 
 class RolePermissionController extends Controller
 {
-    public function index($roleId)
+
+    public function index(Datatables $datatables, $roleId)
     {
         $nameGroupUser = Role::find($roleId)->name;
 
         $names = Config("library.feature_private");
         $features = Feature::whereNotIn("name", $names)->get();
 
-        return view("pages.setting.role-permission", compact("features", "nameGroupUser", "roleId"));
+        $columns = [
+            'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
+                return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
+            }],
+            'name' => ['name' => 'name', 'title' => 'Nama'],
+            'description' => ['name' => 'description', 'title' => 'Deskripsi'],
+            'aksi' => [
+                'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '130px', 'exportable' => false
+            ],
+        ];
+
+        if ($datatables->getRequest()->ajax()) {
+            $permissions = Permission::query()
+                ->select('permissions.id', 'permissions.name', 'permissions.description');
+
+            return $datatables->eloquent($permissions)
+                ->filterColumn('name', function (Builder $query, $keyword) {
+                    $sql = "permissions.name  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('description', function (Builder $query, $keyword) {
+                    $sql = "permissions.description  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->addColumn('aksi', function (Permission $data) {
+                    $button = '';
+
+                    // if (auth()->user()->can('detail hak akses')) {
+                    //     $button .= '<a href="/setting/role-permission/' . $data->id . '" class="btn btn-sm btn-info me-2"><i class="bi bi-card-checklist"></i></a>';
+                    // }
+
+                    if (auth()->user()->can('ubah hak akses')) {
+                        $button .= '<a href="javascript:void(0)" onclick="onEdit(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-warning me-2"><i class="bi bi-pen"></i></a>';
+                    }
+
+                    // if (auth()->user()->can('hapus hak akses')) {
+                    //     $button .= '<a href="javascript:void(0)" onclick="onDelete(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>';
+                    // }
+
+                    return $button;
+                })
+                ->rawColumns(['aksi'])
+                ->toJson();
+        }
+
+        $columnsArrExPr = [0, 1, 2, 3];
+        $html = $datatables->getHtmlBuilder()
+            ->columns($columns)
+            ->parameters([
+                'order' => [[1, 'desc']],
+                'responsive' => true,
+                'autoWidth' => false,
+                'dom' => 'lfrtip',
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 Data', '25 Data', '50 Data', 'Semua Data']
+                ],
+                // 'buttons' => $this->buttonDatatables($columnsArrExPr),
+            ]);
+
+        $permissions = Role::paginate(10);
+
+        $compact = compact('html', 'permissions', 'nameGroupUser', 'roleId', 'features');
+
+        return view("pages.setting.role-permission", $compact);
     }
+
+
+    // public function index($roleId)
+    // {
+    //     $nameGroupUser = Role::find($roleId)->name;
+
+    //     $names = Config("library.feature_private");
+    //     $features = Feature::whereNotIn("name", $names)->get();
+
+    //     return view("pages.setting.role-permission", compact("features", "nameGroupUser", "roleId"));
+    // }
 
     public function show()
     {

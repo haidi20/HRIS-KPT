@@ -18,7 +18,7 @@ export default {
         EmployeeHasParent,
     },
     mounted() {
-        this.$store.commit("employeeHasParent/UPDATE_IS_FORM_MOBILE", {
+        this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
             value: false,
         });
     },
