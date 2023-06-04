@@ -17,7 +17,7 @@
         </b-form-group>
       </b-col>
     </b-row>-->
-    <template v-if="form.form_type != 'read'">
+    <template v-if="form.form_type == 'create' || form.form_type == 'edit'">
       <b-row>
         <b-col cols>
           <b-form-group label="Karyawan" label-for="employee_id" class>

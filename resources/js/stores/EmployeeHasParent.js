@@ -99,6 +99,48 @@ const EmployeeHasParent = {
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;
         },
+        UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME(state, payload) {
+            const getSelecteds = state.data.selecteds.map(item => ({
+                ...item,
+                status: 'overtime',
+                status_readable: 'lembur',
+                status_color: 'info',
+            }));
+
+            state.data.selecteds = [...getSelecteds];
+        },
+        UPDATE_DATA_SELECTED_STATUS_ACTIVE(state, payload) {
+            const getSelecteds = state.data.selecteds.map(item => {
+                if (item.employee_id == state.form.employee_id) {
+                    return {
+                        ...item,
+                        status: 'active',
+                        status_readable: 'aktif',
+                        status_color: 'success',
+                    }
+                } else {
+                    return { ...item };
+                }
+            });
+
+            state.data.selecteds = [...getSelecteds];
+        },
+        UPDATE_DATA_SELECTED_STATUS_OVERTIME(state, payload) {
+            const getSelecteds = state.data.selecteds.map(item => {
+                if (item.employee_id == state.form.employee_id) {
+                    return {
+                        ...item,
+                        status: 'overtime',
+                        status_readable: 'lembur',
+                        status_color: 'info',
+                    }
+                } else {
+                    return { ...item };
+                }
+            });
+
+            state.data.selecteds = [...getSelecteds];
+        },
         DELETE_FORM_EMPLOYEE_ID(state, payload) {
             state.form.employee_id = null;
         },

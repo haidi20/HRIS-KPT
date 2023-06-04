@@ -45,24 +45,6 @@ export default {
         },
     },
     methods: {
-        onShowEmployee() {
-            let status = null;
-
-            if (this.getUserId == this.getForm.created_by) {
-                status = "edit";
-            } else {
-                status = "read";
-            }
-
-            // console.info(status);
-
-            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
-                form_type: status,
-                form_type_parent: status,
-            });
-            this.$bvModal.show("data_employee");
-            this.$bvModal.hide("action_list");
-        },
         onOpenAction(form) {
             //   console.info(id);
             this.$store.commit("jobOrder/INSERT_FORM", {
@@ -79,6 +61,29 @@ export default {
             });
             this.$bvModal.show("action_list");
         },
+        onShowEmployee() {
+            let status = null;
+
+            if (this.getUserId == this.getForm.created_by) {
+                if (this.getFormStatus == 'overtime') {
+                    status = 'read';
+                }
+                // else {
+                //     status = "edit";
+                // }
+                // } else {
+                //     status = "read";
+            }
+
+            // console.info(status);
+
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: status,
+                form_type_parent: status,
+            });
+            this.$bvModal.show("data_employee");
+            this.$bvModal.hide("action_list");
+        },
         onAction(type, title) {
             this.$bvModal.hide("action_list");
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
@@ -92,6 +97,14 @@ export default {
                 value: true,
             });
             this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "read",
+                form_type_parent: "read",
+            });
+
+            if (type == 'overtime') {
+                this.$store.commit("employeeHasParent/UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME");
+            }
 
             //   console.info(this.form);
 

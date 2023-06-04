@@ -38,6 +38,9 @@ export default {
         getUserId() {
             return this.$store.state.user?.id;
         },
+        getJobOrderStatus() {
+            return this.$store.state.jobOrder.form.status;
+        },
         getData() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
@@ -71,11 +74,24 @@ export default {
         onOpenAction(item, index) {
             // console.info(item);
 
-            this.$store.commit("employeeHasParent/INSERT_FORM", { form: { ...item, data_index: index } });
-            this.$bvModal.show("action_list_employee");
+            if (this.getUserId == item.created_by) {
+                this.$store.commit("employeeHasParent/INSERT_FORM", { form: { ...item, data_index: index } });
+                this.$bvModal.show("action_list_employee");
+            }
         },
-        onAction(from_type, from_title) {
-            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", { from_type });
+        onAction(form_type, form_title) {
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", { form_type });
+
+            if (form_type == 'overtime') {
+                this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS_OVERTIME");
+            }
+
+            this.$bvModal.hide("action_list_employee");
+        },
+        onNonActiveOvertime() {
+            // console.info(this.getForm.employee_id);
+            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS_ACTIVE");
+            this.$bvModal.hide("action_list_employee");
         },
         getConditionActionActive() {
             let result = true;
@@ -104,6 +120,16 @@ export default {
             }
 
             // console.info(this.getForm.form_type);
+
+            return result;
+        },
+        getConditionOvertime() {
+            let result = false;
+
+            // && this.getJobOrderStatus == 'overtime'
+            if (this.getForm.status == 'active') {
+                result = true;
+            }
 
             return result;
         },
