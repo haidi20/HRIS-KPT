@@ -9,6 +9,7 @@ import { imageToBase64 } from "../../../utils";
 export default {
     data() {
         return {
+            label_image: null,
             is_image: false,
             is_loading: false,
         };
@@ -47,6 +48,9 @@ export default {
         },
         getEmployeeSelecteds() {
             return this.$store.state.employeeHasParent.data.selecteds;
+        },
+        getLabelImage() {
+            return this.$store.state.jobOrder.form.label_image;
         },
         form() {
             return this.$store.state.jobOrder.form;
@@ -147,7 +151,9 @@ export default {
                 user_id: this.getUserId,
             };
 
-            request.image = await imageToBase64(request.image);
+            if (this.form.image != null) {
+                request.image = await imageToBase64(request.image);
+            }
 
             // console.info(request);
             // return false;
@@ -159,7 +165,7 @@ export default {
                 .then((responses) => {
                     console.info(responses);
                     this.is_loading = false;
-                    return false;
+                    // return false;
                     const data = responses.data;
 
                     const Toast = Swal.mixin({

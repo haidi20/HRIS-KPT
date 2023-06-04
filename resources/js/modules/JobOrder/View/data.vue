@@ -139,6 +139,7 @@
                   class="action-item"
                   @click="onActionAssessment('assessment', 'Penilaian')"
                 >Penilaian</div>
+                <div class="action-item" @click="onShowEmployee()">Karyawan</div>
                 <div v-if="getConditionEdit()" class="action-item" @click="onEdit">Ubah</div>
                 <div class="action-item" @click="onRead">Lihat</div>
               </div>
@@ -152,6 +153,7 @@
     </b-tabs>
 
     <FilterData />
+    <EmployeeHasParent />
   </div>
 </template>
 

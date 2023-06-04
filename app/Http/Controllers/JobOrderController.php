@@ -63,14 +63,8 @@ class JobOrderController extends Controller
     public function store()
     {
         // return request()->all();
-        $user = User::find(request("user_id"));
-        $storeImage = $this->storeImage($user, request("image"));
 
-        return response()->json([
-            'success' => $storeImage->success,
-            'message' => $storeImage->message,
-        ], $storeImage->code);
-
+        $imageController = new ImageController;
         $jobStatusController = new JobStatusController;
 
         if (count(request("employee_selecteds")) == 0) {
@@ -94,6 +88,8 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
+            $user = User::find(request("user_id"));
+            $image = request("image");
             $date = Carbon::now();
             $date->setTimeFromTimeString(request("hour_start"));
             // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
@@ -102,7 +98,7 @@ class JobOrderController extends Controller
             $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
-            //datetime_end inputnya di storeAction
+            //note: datetime_end inputnya di storeAction
             $jobOrder->datetime_start = $date;
             $jobOrder->datetime_estimation_end = Carbon::parse(request("datetime_estimation_end"));
             $jobOrder->estimation = request("estimation");
@@ -118,6 +114,18 @@ class JobOrderController extends Controller
 
             $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
             $this->storeJobOrderHistory($jobOrder);
+
+            if ($image != null) {
+                $storeImage = $imageController->storeSingleImage($user, $image, $jobOrder, $this->nameModel);
+
+                // proses masukkan gambar
+                if (!$storeImage->success && $image != null) {
+                    return response()->json([
+                        'success' => $storeImage->success,
+                        'message' => $storeImage->message,
+                    ], $storeImage->code);
+                }
+            }
 
             DB::commit();
 

@@ -175,14 +175,12 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Masukkan Foto" label-for="image" class>
+        <b-form-group :label="getLabelImage" label-for="image" class>
           <!-- <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file> -->
           <b-form-file
             id="image"
             v-model="form.image"
             :state="Boolean(is_image)"
-            placeholder="Choose a file or drop it here..."
-            drop-placeholder="Drop file here..."
             :disabled="getReadOnly()"
           ></b-form-file>
         </b-form-group>

@@ -1,5 +1,8 @@
 import { checkNull, isMobile } from "../../../utils";
 import FilterData from "../View/filter";
+import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
+import { stubArray } from "lodash";
+
 export default {
     data() {
         return {
@@ -7,7 +10,7 @@ export default {
             title: "",
         };
     },
-    components: { FilterData },
+    components: { FilterData, EmployeeHasParent },
     computed: {
         getBaseUrl() {
             return this.$store.state.base_url;
@@ -42,6 +45,23 @@ export default {
         },
     },
     methods: {
+        onShowEmployee() {
+            let status = null;
+
+            if (this.getUserId == this.getForm.created_by) {
+                status = "edit";
+            } else {
+                status = "read";
+            }
+
+            // console.info(status);
+
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: status,
+                form_type_parent: status,
+            });
+            this.$bvModal.show("data_employee");
+        },
         onOpenAction(form) {
             //   console.info(id);
             this.$store.commit("jobOrder/INSERT_FORM", {
@@ -184,7 +204,7 @@ export default {
             let result = false;
             const listStatus = ['finish'];
 
-            console.info(this.getFormStatus);
+            // console.info(this.getFormStatus);
 
             if (
                 this.getFormStatus != 'finish'
