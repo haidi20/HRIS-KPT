@@ -203,8 +203,8 @@ class Controller extends BaseController
             // proses kompresi
             $syntax = [
                 "python3",
-                "/www/wwwroot/lokasi_aplikasinya/storage/app/png_jpg.py",
-                "/www/wwwroot/lokasi_aplikasinya/storage/app/public/" . $imageName
+                "/www/wwwroot/shipyard.aplikasipelayaran.com/storage/app/png_jpg.py",
+                "/www/wwwroot/shipyard.aplikasipelayaran.com/storage/app/public/" . $imageName
             ];
 
             $process = new Process($syntax);
