@@ -4,9 +4,12 @@ import moment from "moment";
 
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 
+import { imageToBase64 } from "../../../utils";
+
 export default {
     data() {
         return {
+            is_image: false,
             is_loading: false,
         };
     },
@@ -138,13 +141,15 @@ export default {
         async onSend() {
             const Swal = this.$swal;
 
-            const request = {
+            let request = {
                 ...this.form,
                 employee_selecteds: [...this.getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
 
-            console.info(request);
+            request.image = await imageToBase64(request.image);
+
+            // console.info(request);
             // return false;
             this.is_loading = true;
 
@@ -154,6 +159,7 @@ export default {
                 .then((responses) => {
                     console.info(responses);
                     this.is_loading = false;
+                    return false;
                     const data = responses.data;
 
                     const Toast = Swal.mixin({

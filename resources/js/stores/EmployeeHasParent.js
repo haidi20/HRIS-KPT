@@ -78,7 +78,7 @@ const EmployeeHasParent = {
             ];
         },
         INSERT_DATA_ALL_SELECTED(state, payload) {
-            console.info(payload);
+            // console.info(payload);
             state.data.selecteds = [...payload.selecteds];
         },
         INSERT_FORM(state, payload) {

@@ -141,7 +141,7 @@ export default {
         getConditionImage() {
             let result = true;
 
-            if (this.form.status != 'pending' || this.form.status != 'pending_finish') {
+            if (this.form.status == 'pending' || this.form.status == 'pending_finish') {
                 result = false;
             }
 

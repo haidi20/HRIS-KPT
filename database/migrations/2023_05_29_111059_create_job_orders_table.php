@@ -18,6 +18,7 @@ class CreateJobOrdersTable extends Migration
             $table->foreignId('project_id');
             $table->foreignId('job_id');
             $table->enum('job_level', ['hard', 'middle', 'easy']);
+            $table->string('image')->nullable();
             $table->text('job_note')->nullable();
             $table->datetime('datetime_start');
             $table->datetime('datetime_end')->nullable();

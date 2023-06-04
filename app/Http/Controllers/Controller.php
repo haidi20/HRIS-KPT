@@ -172,7 +172,7 @@ class Controller extends BaseController
      *Store the image for a user.
      *@param \App\Models\User $user
      *@param string $image Base64-encoded image data
-     *@return bool Returns true if the image was successfully stored, false otherwise.
+     *@return object Returns true if the image was successfully stored, false otherwise.
      */
     public function storeImage($user, $image)
     {
@@ -185,15 +185,19 @@ class Controller extends BaseController
             $image = str_replace(' ', '+', $image);
 
             if (!in_array(Str::lower($image_extension[1]), ['png', 'jpg', 'jpeg'])) {
-                return redirect()->back()->with('danger', 'Gagal upload foto, format Tidak Sesuai');
+                return (object) [
+                    "success" => false,
+                    "message" => 'Gagal upload foto, format Tidak Sesuai',
+                    "code" => 500,
+                ];
             }
 
-            if (!Storage::exists('public/lokasi_folder/' . $user->id . '/cover')) {
-                Storage::makeDirectory('public/lokasi_folder/' . $user->id . '/cover');
+            if (!Storage::exists('public/images/' . $user->id . '/cover')) {
+                Storage::makeDirectory('public/images/' . $user->id . '/cover');
             }
 
-            $imageName = '/' . auth()->user()->id . Carbon::now()->format('y_s_d_m') . '.' . $image_extension[1];
-            Storage::disk('public')->put('lokasi_folder/' . $user->id . $imageName, base64_decode($image));
+            $imageName = '/' . $user->id . Carbon::now()->format('y_s_d_m') . '.' . $image_extension[1];
+            Storage::disk('public')->put('images/' . $user->id . $imageName, base64_decode($image));
             Storage::disk('public')->put($imageName, base64_decode($image));
 
             // proses kompresi
@@ -206,11 +210,27 @@ class Controller extends BaseController
             $process = new Process($syntax);
             $process->run();
 
-            return true;
+            if (!$process) {
+                return (object) [
+                    "success" => false,
+                    "message" => 'Gagal jalankan kompres',
+                    "code" => 500,
+                ];
+            }
+
+            return (object) [
+                "success" => true,
+                "message" => 'Berhasil upload gambar',
+                "code" => 200,
+            ];
         } catch (\Exception $e) {
             Log::error($e);
 
-            return false;
+            return (object) [
+                "success" => false,
+                "message" => 'Gagal upload gambar',
+                "code" => 500,
+            ];
         }
     }
 }

@@ -63,6 +63,14 @@ class JobOrderController extends Controller
     public function store()
     {
         // return request()->all();
+        $user = User::find(request("user_id"));
+        $storeImage = $this->storeImage($user, request("image"));
+
+        return response()->json([
+            'success' => $storeImage->success,
+            'message' => $storeImage->message,
+        ], $storeImage->code);
+
         $jobStatusController = new JobStatusController;
 
         if (count(request("employee_selecteds")) == 0) {

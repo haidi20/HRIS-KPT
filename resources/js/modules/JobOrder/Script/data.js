@@ -180,5 +180,20 @@ export default {
 
             return result;
         },
+        getConditionEdit() {
+            let result = false;
+            const listStatus = ['finish'];
+
+            console.info(this.getFormStatus);
+
+            if (
+                this.getFormStatus != 'finish'
+                && this.getForm.created_by == this.getUserId
+            ) {
+                result = true;
+            }
+
+            return result;
+        }
     },
 };
