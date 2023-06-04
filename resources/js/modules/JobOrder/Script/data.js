@@ -61,6 +61,7 @@ export default {
                 form_type_parent: status,
             });
             this.$bvModal.show("data_employee");
+            this.$bvModal.hide("action_list");
         },
         onOpenAction(form) {
             //   console.info(id);

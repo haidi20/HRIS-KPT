@@ -14,6 +14,7 @@ class JobOrderAssessment extends Model
         'job_order_id',
         'image',
         'note',
+        'date_time',
         'created_by',
         'updated_by',
         'deleted_by',

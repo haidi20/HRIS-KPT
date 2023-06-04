@@ -23,7 +23,7 @@ class ImageController extends Controller
      *@param string|null $addNameFolder - The additional name for the folder.
      *@return object Returns true if the image was successfully stored, false otherwise.
      */
-    public function storeSingleImage($user, $image, $parent, $nameModel, $nameTable, $addNameFolder = null)
+    public function storeSingle($user, $image, $parent, $nameModel, $nameTable, $addNameFolder = null)
     {
         try {
             $pos  = strpos($image, ';');
@@ -43,12 +43,12 @@ class ImageController extends Controller
                 ];
             }
 
-            if (!Storage::exists('public/images/' . $nameTable . '/cover')) {
-                Storage::makeDirectory('public/images/' . $nameTable . '/cover');
-            }
+            // if (!Storage::exists('public/images/' . $nameTable . '/cover')) {
+            //     Storage::makeDirectory('public/images/' . $nameTable . '/cover');
+            // }
 
             // y_s_d_m
-            $imageName = $user->id . Carbon::now()->format('s_i_d_m_y') . '.' . $image_extension[1];
+            $imageName = $user->id . Carbon::now()->format('s_i_h_d_m_y') . '.' . $image_extension[1];
             Storage::disk('public')->put('images/' . $nameTable . $addNameFolder . '/' . $imageName, base64_decode($image));
             // Storage::disk('public')->put($imageName, base64_decode($image));
 
@@ -73,7 +73,7 @@ class ImageController extends Controller
             $path = "app/public/images/{$nameTable}{$addNameFolder}";
             $pathName = $path . "/" . $imageName;
 
-            $this->storeDataImage($parent, $nameModel, $path, $imageName, $pathName, $format);
+            $this->storeData($user, $parent, $nameModel, $path, $imageName, $pathName, $format);
 
             return (object) [
                 "success" => true,
@@ -91,9 +91,9 @@ class ImageController extends Controller
         }
     }
 
-    private function storeDataImage($parent, $nameModel, $path, $name, $pathName, $format)
+    private function storeData($user, $parent, $nameModel, $path, $name, $pathName, $format)
     {
-        $this->deleteDataImage($parent, $nameModel, $pathName);
+        $this->destroy($parent, $nameModel, $pathName);
 
         $imageHasParent = new ImageHasParent;
         $imageHasParent->parent_id = $parent->id;
@@ -102,14 +102,16 @@ class ImageController extends Controller
         $imageHasParent->name = $name;
         $imageHasParent->path_name = $pathName;
         $imageHasParent->format = $format;
+        $imageHasParent->created_by = $user->id;
         $imageHasParent->save();
     }
 
-    private function deleteDataImage($parent, $nameModel, $pathName)
+    private function destroy($parent, $nameModel, $pathName)
     {
         $image = ImageHasParent::where([
             "parent_id" => $parent->id,
             "parent_model" => $nameModel,
+            "path_name" => $pathName,
         ])->first();
 
         if ($image) {
