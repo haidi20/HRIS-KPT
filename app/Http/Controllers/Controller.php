@@ -201,22 +201,22 @@ class Controller extends BaseController
             Storage::disk('public')->put($imageName, base64_decode($image));
 
             // proses kompresi
-            $syntax = [
-                "python3",
-                "/www/wwwroot/shipyard.aplikasipelayaran.com/storage/app/png_jpg.py",
-                "/www/wwwroot/shipyard.aplikasipelayaran.com/storage/app/public/" . $imageName
-            ];
+            // $syntax = [
+            //     "python3",
+            //     "/www/wwwroot/shipyard.aplikasipelayaran.com/storage/app/png_jpg.py",
+            //     "/www/wwwroot/shipyard.aplikasipelayaran.com/storage/app/public/" . $imageName
+            // ];
 
-            $process = new Process($syntax);
-            $process->run();
+            // $process = new Process($syntax);
+            // $process->run();
 
-            if (!$process) {
-                return (object) [
-                    "success" => false,
-                    "message" => 'Gagal jalankan kompres',
-                    "code" => 500,
-                ];
-            }
+            // if (!$process) {
+            //     return (object) [
+            //         "success" => false,
+            //         "message" => 'Gagal jalankan kompres',
+            //         "code" => 500,
+            //     ];
+            // }
 
             return (object) [
                 "success" => true,

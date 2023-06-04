@@ -219,7 +219,7 @@
           @click="onSend()"
           :disabled="is_loading"
         >Simpan</b-button>
-        <span v-if="is_loading">Loading...</span>
+        <span v-if="is_loading" style="float: right">Loading...</span>
       </b-col>
     </b-row>
     <EmployeeHasParent />
