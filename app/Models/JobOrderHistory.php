@@ -10,6 +10,26 @@ class JobOrderHistory extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'job_order_id',
+        'project_id',
+        'job_id',
+        'job_level',
+        'job_note',
+        'datetime_start',
+        'datetime_end',
+        'datetime_estimation_end',
+        'estimation',
+        'time_type',
+        'category',
+        'status',
+        'status_note',
+        'note',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
     protected static function boot()
     {
         parent::boot();

@@ -243,6 +243,7 @@ class JobOrderController extends Controller
                 $jobOrder->datetime_end = $date;
                 $jobOrder->save();
 
+                $this->storeJobOrderHistory($jobOrder);
                 $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
                 $this->storeActionJobOrderHasEmployee($jobOrder, "finish", $date, "active");
             }
@@ -333,6 +334,12 @@ class JobOrderController extends Controller
     {
         $jobStatusController = new JobStatusController;
 
+        if ($status == "correction") {
+            $getStatus = "active";
+        } else {
+            $getStatus = $status;
+        }
+
         if (count(request("employee_selecteds")) > 0) {
 
             foreach (request("employee_selecteds") as $index => $item) {
@@ -345,7 +352,7 @@ class JobOrderController extends Controller
 
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
-                $jobOrderHasEmployee->status = $status;
+                $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->datetime_start = $dateStart;
                 $jobOrderHasEmployee->save();
 
@@ -370,7 +377,15 @@ class JobOrderController extends Controller
                 if ($status == 'finish') {
                     $jobOrderHasEmployee->status = $status;
                     $jobOrderHasEmployee->datetime_end = $date;
+
+                    if ($statusLast == "correction") {
+                        $statusLast = "active";
+                    }
                 } else {
+                    if ($status == "correction") {
+                        $status = "active";
+                    }
+
                     $jobOrderHasEmployee->status = $status;
                 }
 
