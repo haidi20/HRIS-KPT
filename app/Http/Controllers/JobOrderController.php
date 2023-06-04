@@ -116,7 +116,13 @@ class JobOrderController extends Controller
             $this->storeJobOrderHistory($jobOrder);
 
             if ($image != null) {
-                $storeImage = $imageController->storeSingleImage($user, $image, $jobOrder, $this->nameModel);
+                $storeImage = $imageController->storeSingleImage(
+                    $user,
+                    $image,
+                    $jobOrder,
+                    $this->nameModel,
+                    "job_orders"
+                );
 
                 // proses masukkan gambar
                 if (!$storeImage->success && $image != null) {

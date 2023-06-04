@@ -15,11 +15,15 @@ class ImageController extends Controller
     /**
 
      *Store the image for a user.
-     *@param \App\Models\User $user
-     *@param string $image Base64-encoded image data
+     *@param \App\Models\User $user - The user model.
+     *@param string $image - The base64 encoded image.
+     *@param \App\Models\Anywhat $parent - The parent model.
+     *@param string $nameModel - The name of the model.
+     *@param string $nameTable - The name of the table.
+     *@param string|null $addNameFolder - The additional name for the folder.
      *@return object Returns true if the image was successfully stored, false otherwise.
      */
-    public function storeSingleImage($user, $image, $parent, $nameModel)
+    public function storeSingleImage($user, $image, $parent, $nameModel, $nameTable, $addNameFolder = null)
     {
         try {
             $pos  = strpos($image, ';');
@@ -39,13 +43,13 @@ class ImageController extends Controller
                 ];
             }
 
-            if (!Storage::exists('public/images/' . $user->id . '/cover')) {
-                Storage::makeDirectory('public/images/' . $user->id . '/cover');
+            if (!Storage::exists('public/images/' . $nameTable . '/cover')) {
+                Storage::makeDirectory('public/images/' . $nameTable . '/cover');
             }
 
             // y_s_d_m
             $imageName = $user->id . Carbon::now()->format('s_i_d_m_y') . '.' . $image_extension[1];
-            Storage::disk('public')->put('images/' . $user->id . '/' . $imageName, base64_decode($image));
+            Storage::disk('public')->put('images/' . $nameTable . $addNameFolder . '/' . $imageName, base64_decode($image));
             // Storage::disk('public')->put($imageName, base64_decode($image));
 
             // proses kompresi
@@ -66,7 +70,7 @@ class ImageController extends Controller
             //     ];
             // }
 
-            $path = "app/public/images/{$user->id}";
+            $path = "app/public/images/{$nameTable}{$addNameFolder}";
             $pathName = $path . "/" . $imageName;
 
             $this->storeDataImage($parent, $nameModel, $path, $imageName, $pathName, $format);
@@ -109,7 +113,7 @@ class ImageController extends Controller
         ])->first();
 
         if ($image) {
-            @unlink(storage_path($pathName));
+            @unlink(storage_path($image->path_name));
 
             $image->delete();
         }
