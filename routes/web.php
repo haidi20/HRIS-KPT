@@ -25,6 +25,8 @@ use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PayslipController;
+
+use App\Http\Controllers\PeriodPayrollController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
@@ -95,6 +97,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("payslip")->name("payslip.")->group(function () {
         Route::get('', [PayslipController::class, "index"])->name("index");
     });
+
+    Route::prefix("period_payroll")->name("period_payroll.")->group(function () {
+        Route::get('', [PeriodPayrollController::class, "index"])->name("index");
+        Route::post('', [PeriodPayrollController::class, "store"])->name("store");
+        Route::delete('delete', [PeriodPayrollController::class, "destroy"])->name("delete");
+    });
+
+    
     Route::prefix("payroll")->name("payroll.")->group(function () {
         Route::get('', [PayrollController::class, "monthly"])->name("monthly");
     });

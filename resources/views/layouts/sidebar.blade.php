@@ -122,17 +122,22 @@
                     </li>
                 @endcan
                 @php
-                    $allPermissionSalary = ['lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
+                    $allPermissionSalary = ['lihat periode gaji','lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
                 @endphp
                 @canany($allPermissionSalary)
                     <li
-                        class="sidebar-item {{ isActive('payslip') || isActive('payroll') || isActive('salary-adjustment') }} has-sub">
+                        class="sidebar-item {{ isActive('period_payroll') || isActive('payslip') || isActive('payroll') || isActive('salary-adjustment') }} has-sub">
                         <a href="#" class="sidebar-link">
                             <i class="bi bi-cash-coin"></i>
                             <span>Gaji</span>
                         </a>
-                        <ul class="submenu {{ isActive('payslip') || isActive('payroll') || isActive('salary-adjustment') }}"
+                        <ul class="submenu {{ isActive('period_payroll') || isActive('payslip') || isActive('payroll') || isActive('salary-adjustment') }}"
                             style="{{ Request::is('payslip') || Request::is('payroll') || Request::is('salary-adjustment') ? 'display: block;' : 'display: none;' }}">
+                            @can('lihat periode gaji')
+                                <li class="submenu-item {{ isActive('period_payroll') }}">
+                                    <a href="{{ route('period_payroll.index') }}">Periode Gaji</a>
+                                </li>
+                            @endcan
                             @can('lihat slip gaji')
                                 <li class="submenu-item {{ isActive('payslip') }}">
                                     <a href="{{ route('payslip.index') }}">Slip Gaji Karyawan</a>
