@@ -16,7 +16,7 @@ class ApprovalSeeder extends Seeder
      */
     public function run()
     {
-        DB::unprepared(file_get_contents(database_path('sqls/seeds/approval_level.sql')));
-        DB::unprepared(file_get_contents(database_path('sqls/seeds/approval_agreements.sql')));
+        DB::unprepared(file_get_contents(database_path('data/approval_level.sql')));
+        DB::unprepared(file_get_contents(database_path('data/approval_agreements.sql')));
     }
 }

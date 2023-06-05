@@ -45,13 +45,16 @@ export default {
     this.$store.commit("attendance/INSERT_BASE_URL", {
       base_url: this.baseUrl,
     });
-    this.$store.commit("employee/INSERT_BASE_URL", {
+    this.$store.commit("master/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+    this.$store.commit("employeeHasParent/INSERT_BASE_URL", {
       base_url: this.baseUrl,
     });
 
     this.$store.dispatch("attendance/fetchData");
     this.$store.dispatch("attendance/fetchDetail");
-    this.$store.dispatch("employee/fetchPosition");
+    this.$store.dispatch("master/fetchPosition");
   },
 };
 </script>

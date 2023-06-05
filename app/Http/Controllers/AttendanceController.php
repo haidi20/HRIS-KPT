@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AttendanceExport;
+use App\Models\Attendance;
+use App\Models\AttendanceFingerspot;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +15,17 @@ use Illuminate\Support\Facades\Response;
 class AttendanceController extends Controller
 {
     public $path = 'export\absensi.xlsx';
+    public $fingerTools = [];
+
+    function __construct()
+    {
+        $this->fingerTools = [
+            (object) [
+                "cloud_id" => "C26118515714322D",
+                "serial_number" => "Fio66208022030036",
+            ],
+        ];
+    }
 
     public function index()
     {
@@ -140,5 +153,70 @@ class AttendanceController extends Controller
         // return $data;
 
         return view("pages.attendance.partials.print", compact("data"));
+    }
+
+    public function fetchDataFinger()
+    {
+        $dateNow = Carbon::now()->format("Y-m-d");
+        $dateStart = request("date_start", $dateNow);
+        $dateEnd = request("date_end", $dateStart);
+
+        $responseData = [];
+        $url = "https://developer.fingerspot.io/api/get_attlog";
+
+        foreach ($this->fingerTools as $index => $item) {
+            $data = [
+                "trans_id" => "1",
+                "cloud_id" => $item->cloud_id,
+                "start_date" => $dateStart,
+                "end_date" => $dateEnd,
+            ];
+            $headers = [
+                "Authorization: Bearer R7Y9BW9KPPT36P36",
+                "Content-Type: application/json"
+            ];
+
+            $options = [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => json_encode($data),
+                CURLOPT_HTTPHEADER => $headers,
+            ];
+
+            $curl = curl_init();
+            curl_setopt_array($curl, $options);
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+
+            if ($response === false) {
+                // Error occurred
+                $error = curl_error($curl);
+                echo "Error: " . $error;
+            } else {
+                // Process the response
+                // $responseData = json_decode($response, true);
+                $response = json_decode($response, true);
+                array_push($responseData, ...$response["data"]);
+                // Handle the response data accordingly
+            }
+        }
+
+        foreach ($responseData as $index => $item) {
+            AttendanceFingerspot::updateOrCreate([
+                "pin" => $item['pin'],
+                "scan_date" => $item['scan_date'],
+                "cloud_id" => $item['cloud_id'],
+            ], [
+                "status_scan" => $item['status_scan'],
+                "verify" => $item['verify'],
+            ]);
+        }
+
+        return response()->json([
+            "dateStart" => $dateStart,
+            "data" => $responseData,
+        ]);
     }
 }
