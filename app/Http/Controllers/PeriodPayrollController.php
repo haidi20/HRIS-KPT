@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 // use Spatie\Permission\Models\Permission;
 
@@ -27,7 +28,7 @@ class PeriodPayrollController extends Controller
             'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
                 return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
             }],
-            'name' => ['name' => 'name', 'title' => 'Nama'],
+            'name_period' => ['name' => 'name', 'title' => 'Periode'],
             'date_start' => ['name' => 'date_start', 'title' => 'Tanggal Awal Kerja'],
             'date_end' => ['name' => 'date_end', 'title' => 'Tanggal Akhir Kerja'],
             'aksi' => [
@@ -37,12 +38,15 @@ class PeriodPayrollController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $period_payroll = PeriodPayroll::query()
-                ->select('period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
+                ->select('period_payrolls.period','period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
 
             return $datatables->eloquent($period_payroll)
                 ->filterColumn('name', function (Builder $query, $keyword) {
                     $sql = "period_payrolls.name  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->addColumn('name_period', function (PeriodPayroll $data) {
+                    return Carbon::parse($data->period)->format('F Y');
                 })
                 // ->filterColumn('description', function (Builder $query, $keyword) {
                 //     $sql = "period_payrolls.description like ?";
@@ -100,7 +104,7 @@ class PeriodPayrollController extends Controller
 
     public function fetchData()
     {
-        $period_payrolls = PeriodPayroll::orderBy("name", "asc")->get();
+        $period_payrolls = PeriodPayroll::orderBy("period", "asc")->get();
 
         return response()->json([
             "period_payrolls" => $period_payrolls,
@@ -111,6 +115,14 @@ class PeriodPayrollController extends Controller
     public function store(Request $request)
     {
         // return request()->all();
+
+        $n = PeriodPayroll::where('period',request("period")."-01")->count();
+        if($n > 0){
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal, Periode Sudah Ada",
+            ], 500);
+        }
 
         try {
             DB::beginTransaction();
@@ -127,8 +139,9 @@ class PeriodPayrollController extends Controller
                 $message = "ditambahkan";
             }
 
-            $period_payroll->name = request("name");
-            $period_payroll->description = request("description");
+            $period_payroll->period = request("period")."-01";
+            $period_payroll->date_start = request("date_start");
+            $period_payroll->date_end = request("date_end");
             $period_payroll->save();
 
             DB::commit();
@@ -144,7 +157,7 @@ class PeriodPayrollController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => "Gagal {$message}",
+                'message' => "Gagal {$message} {$e->getMessage()}",
             ], 500);
         }
     }
