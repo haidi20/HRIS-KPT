@@ -38,6 +38,9 @@ class DatabaseSeeder extends Seeder
         $this->call(SalaryAdjustmentSeeder::class);
         $this->call(FingerSeeder::class);
         $this->call(AttendanceFingerspots::class);
+        $this->call(JobOrderSeeder::class);
+        $this->call(JobStatusHasParent::class);
+        $this->call(JobOrderHasEmployeeSeeder::class);
         // end master
 
         /*
