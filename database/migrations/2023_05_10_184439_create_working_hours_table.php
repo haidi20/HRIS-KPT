@@ -17,6 +17,9 @@ class CreateWorkingHoursTable extends Migration
             $table->id();
             $table->time('start_time')->nullable();
             $table->time('after_work')->nullable();
+            $table->time('after_work_end')->nullable(); // batas maksimal jam pulang
+            $table->time('start_rest')->nullable();
+            $table->time('end_rest')->nullable();
             $table->time('maximum_delay')->nullable();
             $table->time('fastest_time')->nullable();
             $table->time('overtime_work')->nullable();
