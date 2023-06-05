@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/export
+/public/js/app.js
 /storage/*.key
 /vendor
 .env
