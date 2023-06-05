@@ -53,6 +53,9 @@
               <b-th>Jam Istirahat</b-th>
               <b-th>Jam Selesai Istirahat</b-th>
               <b-th>Durasi Jam Kerja</b-th>
+              <b-th>Jam Mulai Lembur</b-th>
+              <b-th>Jam Selesai Lembur</b-th>
+              <b-th>Durasi Lembur</b-th>
             </b-tr>
           </b-thead>
           <b-tbody>
@@ -133,7 +136,7 @@ export default {
       return this.$store.state.attendance.loading.detail;
     },
     getOptionEmployees() {
-      return this.$store.state.employee.data.options;
+      return this.$store.state.employeeHasParent.data.options;
     },
     params() {
       return this.$store.state.attendance.params.detail;
