@@ -15,17 +15,22 @@ class CreateAttendanceHasEmployeesTable extends Migration
     {
         Schema::create('attendance_has_employees', function (Blueprint $table) {
             $table->id();
-            $table->string('pin');
-            $table->foreignId('employee_id');
-            $table->foreignId('cloud_id');
-            $table->date('date');
-            $table->time('hour_start')->nullable();
-            $table->time('hour_end')->nullable();
+            $table->string('pin')->nullable();
+            $table->foreignId('employee_id')->nullable();
+            $table->foreignId('cloud_id')->nullable();
+            $table->date('date')->nullable();
+
+            $table->dateTime('hour_start')->nullable();
+            $table->dateTime('hour_end')->nullable();
             $table->integer('duration_work')->nullable();
-            $table->time('hour_rest_start')->nullable();
-            $table->time('hour_rest_end')->nullable();
-            $table->time('hour_overtime_start')->nullable();
-            $table->time('hour_overtime_end')->nullable();
+
+            $table->dateTime('hour_rest_start')->nullable();
+            $table->dateTime('hour_rest_end')->nullable();
+            $table->integer('duration_rest')->nullable();
+
+
+            $table->dateTime('hour_overtime_start')->nullable();
+            $table->dateTime('hour_overtime_end')->nullable();
             $table->integer('duration_overtime')->nullable();
             $table->timestamps();
         });
