@@ -20,7 +20,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="getConditionImage()">
       <b-col cols>
         <b-form-group label="Masukkan Foto" label-for="image" class>
           <b-form-file id="image" v-model="form.image"></b-form-file>
@@ -56,7 +56,7 @@
           @click="onSend()"
           :disabled="is_loading"
         >Simpan</b-button>
-        <span v-if="is_loading">Loading...</span>
+        <span v-if="is_loading" style="float: right">Loading...</span>
       </b-col>
     </b-row>
     <EmployeeHasParent />

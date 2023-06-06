@@ -17,28 +17,30 @@
         </b-form-group>
       </b-col>
     </b-row>-->
-    <b-row>
-      <b-col cols>
-        <b-form-group label="Karyawan" label-for="employee_id" class>
-          <VueSelect
-            id="employee_id"
-            class="cursor-pointer"
-            v-model="form.employee_id"
-            placeholder="Pilih Karyawan"
-            :options="getOptionEmployees"
-            :reduce="(data) => data.id"
-            label="name_and_position"
-            searchable
-            style="min-width: 180px"
-          />
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols style="text-align: right">
-        <b-button variant="success" @click="onChoose()">Pilih</b-button>
-      </b-col>
-    </b-row>
+    <template v-if="form.form_type == 'create' || form.form_type == 'edit'">
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Karyawan" label-for="employee_id" class>
+            <VueSelect
+              id="employee_id"
+              class="cursor-pointer"
+              v-model="form.employee_id"
+              placeholder="Pilih Karyawan"
+              :options="getOptionEmployees"
+              :reduce="(data) => data.id"
+              label="name_and_position"
+              searchable
+              style="min-width: 180px"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols style="text-align: right">
+          <b-button variant="success" @click="onChoose()">Pilih</b-button>
+        </b-col>
+      </b-row>
+    </template>
   </div>
 </template>
 

@@ -19,6 +19,10 @@ class CreateJobStatusHasParentsTable extends Migration
             $table->id();
             $table->foreignId('parent_id');
             $table->string('parent_model');
+            // start for jobOrderHasEmployee
+            $table->foreignId('job_order_id')->nullable();
+            $table->foreignId('employee_id')->nullable();
+            // end for jobOrderHasEmployee
             /*
                 active - finish,
                 pending - pending finish,

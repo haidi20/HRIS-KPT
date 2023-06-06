@@ -4,9 +4,8 @@
             <a href="#" class="burger-btn d-block">
                 <i class="bi bi-justify fs-3"></i>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -16,8 +15,8 @@
                     <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-menu d-flex">
                             <div class="user-name text-end">
-                               <h6 class="mb-0 text-gray-600">{{ Auth::user()->name }}</h6>
-                               <p class="mb-0 text-sm text-gray-600">{{ Auth::user()->role->name }}</p>
+                                <h6 class="mb-0 text-gray-600">{{ Auth::user()->name }}</h6>
+                                <p class="mb-0 text-sm text-gray-600">{{ Auth::user()->role->name }}</p>
                             </div>
                             <!-- <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
@@ -41,7 +40,7 @@
                             <a data-bs-toggle="modal" data-bs-target="#logout" class='dropdown-item text-danger'
                                 style="cursor: pointer;">
                                 <i class="icon-mid bi bi-box-arrow-left me-2 text-danger"></i>
-                                <span>Logout</span>
+                                <span>Keluar</span>
                             </a>
                         </li>
                     </ul>

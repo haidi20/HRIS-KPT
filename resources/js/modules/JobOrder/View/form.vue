@@ -175,8 +175,14 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Masukkan Foto" label-for="image" class>
-          <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file>
+        <b-form-group :label="getLabelImage" label-for="image" class>
+          <!-- <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file> -->
+          <b-form-file
+            id="image"
+            v-model="form.image"
+            :state="Boolean(is_image)"
+            :disabled="getReadOnly()"
+          ></b-form-file>
         </b-form-group>
       </b-col>
     </b-row>
@@ -211,7 +217,7 @@
           @click="onSend()"
           :disabled="is_loading"
         >Simpan</b-button>
-        <span v-if="is_loading">Loading...</span>
+        <span v-if="is_loading" style="float: right">Loading...</span>
       </b-col>
     </b-row>
     <EmployeeHasParent />

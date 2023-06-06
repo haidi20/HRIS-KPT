@@ -17,6 +17,7 @@ class CreateFingerToolsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('serial_number')->nullable();
+            $table->string('cloud_id')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

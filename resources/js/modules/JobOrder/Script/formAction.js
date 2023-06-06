@@ -1,6 +1,8 @@
 import axios from "axios";
 import moment from "moment";
 
+import { imageToBase64 } from "../../../utils";
+
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 
 export default {
@@ -58,6 +60,10 @@ export default {
                 employee_selecteds: [...this.getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
+
+            if (this.form.image != null) {
+                request.image = await imageToBase64(this.form.image);
+            }
 
             let urlAction = "store-action";
 
@@ -134,6 +140,15 @@ export default {
 
             if (listStatus.some((item) => item == this.form.status)) {
                 result = true;
+            }
+
+            return result;
+        },
+        getConditionImage() {
+            let result = true;
+
+            if (this.form.status == 'pending' || this.form.status == 'pending_finish') {
+                result = false;
             }
 
             return result;

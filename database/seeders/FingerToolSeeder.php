@@ -21,10 +21,12 @@ class FingerToolSeeder extends Seeder
                 [
                     'name' => 'Alat Finger DOC 1',
                     'serial_number' => 'Fio66208021230850',
+                    'cloud_id' => null,
                 ],
                 [
                     'name' => 'Alat Finger DOC 2',
                     'serial_number' => 'Fio66208022030036',
+                    'cloud_id' => 'C26118515714322D',
                 ],
             ],
         );

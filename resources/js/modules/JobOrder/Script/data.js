@@ -1,5 +1,8 @@
 import { checkNull, isMobile } from "../../../utils";
 import FilterData from "../View/filter";
+import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
+import { stubArray } from "lodash";
+
 export default {
     data() {
         return {
@@ -7,7 +10,7 @@ export default {
             title: "",
         };
     },
-    components: { FilterData },
+    components: { FilterData, EmployeeHasParent },
     computed: {
         getBaseUrl() {
             return this.$store.state.base_url;
@@ -51,7 +54,35 @@ export default {
             this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
                 value: true,
             });
+            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+                selecteds: [
+                    ...form.job_order_has_employees,
+                ],
+            });
             this.$bvModal.show("action_list");
+        },
+        onShowEmployee() {
+            let status = null;
+
+            if (this.getUserId == this.getForm.created_by) {
+                if (this.getFormStatus == 'overtime') {
+                    status = 'read';
+                }
+                // else {
+                //     status = "edit";
+                // }
+                // } else {
+                //     status = "read";
+            }
+
+            // console.info(status);
+
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: status,
+                form_type_parent: status,
+            });
+            this.$bvModal.show("data_employee");
+            this.$bvModal.hide("action_list");
         },
         onAction(type, title) {
             this.$bvModal.hide("action_list");
@@ -66,6 +97,14 @@ export default {
                 value: true,
             });
             this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "read",
+                form_type_parent: "read",
+            });
+
+            if (type == 'overtime') {
+                this.$store.commit("employeeHasParent/UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME");
+            }
 
             //   console.info(this.form);
 
@@ -84,11 +123,6 @@ export default {
                 value: true,
             });
             this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [
-                    ...this.getForm.job_order_has_employees,
-                ],
-            });
 
             //   console.info(this.form);
 
@@ -107,19 +141,22 @@ export default {
             this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
                 value: true,
             });
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "create",
+                form_type_parent: "create",
+            });
         },
-        onDetail() {
+        onRead() {
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-                form_title: "Detail Job Order",
-                form_kind: "detail",
+                form_title: "Lihat Job Order",
+                form_kind: "read",
             });
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [
-                    ...this.getForm.job_order_has_employees,
-                ],
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "read",
+                form_type_parent: "read",
             });
             this.$bvModal.hide("action_list");
         },
@@ -131,10 +168,9 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [
-                    ...this.getForm.job_order_has_employees,
-                ],
+            this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+                form_type: "edit",
+                form_type_parent: "edit",
             });
             this.$bvModal.hide("action_list");
         },
@@ -166,5 +202,32 @@ export default {
 
             return result;
         },
+        getConditionPending() {
+            let result = false;
+
+            if (
+                this.getFormStatus == 'active'
+                && this.getForm.created_by == this.getUserId
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
+        getConditionEdit() {
+            let result = false;
+            const listStatus = ['finish'];
+
+            // console.info(this.getFormStatus);
+
+            if (
+                this.getFormStatus != 'finish'
+                && this.getForm.created_by == this.getUserId
+            ) {
+                result = true;
+            }
+
+            return result;
+        }
     },
 };

@@ -78,7 +78,7 @@ const EmployeeHasParent = {
             ];
         },
         INSERT_DATA_ALL_SELECTED(state, payload) {
-            console.info(payload);
+            // console.info(payload);
             state.data.selecteds = [...payload.selecteds];
         },
         INSERT_FORM(state, payload) {
@@ -93,10 +93,56 @@ const EmployeeHasParent = {
             }
         },
         INSERT_FORM_FORM_TYPE(state, payload) {
-            state.form.form_type = payload.from_type;
+            state.form.form_type = payload.form_type;
+            state.form.form_type_parent = payload.form_type_parent;
         },
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;
+        },
+        UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME(state, payload) {
+            const getSelecteds = state.data.selecteds.map(item => ({
+                ...item,
+                status: 'overtime',
+                status_readable: 'lembur',
+                status_color: 'info',
+            }));
+
+            state.data.selecteds = [...getSelecteds];
+        },
+        UPDATE_DATA_SELECTED_STATUS_ACTIVE(state, payload) {
+            const getSelecteds = state.data.selecteds.map(item => {
+                if (item.employee_id == state.form.employee_id) {
+                    return {
+                        ...item,
+                        status: 'active',
+                        status_readable: 'aktif',
+                        status_color: 'success',
+                    }
+                } else {
+                    return { ...item };
+                }
+            });
+
+            state.data.selecteds = [...getSelecteds];
+        },
+        UPDATE_DATA_SELECTED_STATUS_OVERTIME(state, payload) {
+            const getSelecteds = state.data.selecteds.map(item => {
+                if (item.employee_id == state.form.employee_id) {
+                    return {
+                        ...item,
+                        status: 'overtime',
+                        status_readable: 'lembur',
+                        status_color: 'info',
+                    }
+                } else {
+                    return { ...item };
+                }
+            });
+
+            state.data.selecteds = [...getSelecteds];
+        },
+        DELETE_FORM_EMPLOYEE_ID(state, payload) {
+            state.form.employee_id = null;
         },
         DELETE_DATA_SELECTED(state, payload) {
             state.data.selecteds.splice(payload.index, 1);
@@ -164,8 +210,20 @@ const EmployeeHasParent = {
                     console.info(err);
                 });
         },
+    },
+    getters: {
+        getReadOnly: (state) => {
+            let result = false;
 
-    }
+            // console.info(state.form.form_type);
+
+            if (state.form.form_type == "read") {
+                result = true;
+            }
+
+            return result;
+        },
+    },
 }
 
 export default EmployeeHasParent;

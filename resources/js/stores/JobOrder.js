@@ -84,6 +84,7 @@ const defaultForm = {
     estimation: null,
     time_type: "hours",
     note: null,
+    label_image: "Masukkan Gambar",
 }
 
 const JobOrder = {
@@ -249,6 +250,12 @@ const JobOrder = {
         INSERT_FORM_KIND(state, payload) {
             state.form.form_title = payload.form_title;
             state.form.form_kind = payload.form_kind;
+
+            if (payload.form_kind == "edit") {
+                state.form.label_image = "Ganti Gambar";
+            } else {
+                state.form.label_image = "Masukkan Gambar";
+            }
         },
         // JANGAN DI HAPUS, UNTUK BACKUP
         // INSERT_FORM_STATUS(state, payload) {
@@ -354,7 +361,7 @@ const JobOrder = {
 
             // console.info(state.form.form_type);
 
-            if (state.form.form_kind == "detail") {
+            if (state.form.form_kind == "read") {
                 result = true;
             }
 

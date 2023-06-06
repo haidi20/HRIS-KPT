@@ -43,39 +43,48 @@
         </template>
       </b-col>
     </b-row>
-    <vue-bottom-sheet ref="myBottomSheetEmployee">
+    <b-modal id="action_list_employee" ref="action_list" title="Tombol Aksi" size="md" hide-footer>
       <div class="flex flex-col">
         <div class="action-item">
           <h5>{{getForm.employee_name}} - {{getForm.position_name}}</h5>
         </div>
+        <template v-if="getForm.form_type != 'read'">
+          <template v-if="getJobOrderStatus != 'overtime'">
+            <div
+              v-if="getForm.status == 'active'"
+              class="action-item"
+              @click="onAction('pending', 'Tunda')"
+            >tunda</div>
+            <div
+              v-if="getForm.status == 'pending'"
+              class="action-item"
+              @click="onAction('pending_finish', 'Mulai Kembali')"
+            >Mulai Kembali</div>
+            <div
+              v-if="getForm.status == 'active'"
+              class="action-item"
+              @click="onAction('finish', 'Selesai')"
+            >selesai</div>
+          </template>
+          <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
+        </template>
         <div
-          v-if="getConditionActionActive()"
+          v-if="getForm.status == 'overtime' && getJobOrderStatus == 'overtime'"
           class="action-item"
-          @click="onAction('active', 'Mulai')"
-        >mulai</div>
+          @click="onAction('overtime_finish', 'Selesai Lembur')"
+        >selesai lembur</div>
         <div
-          v-if="getForm.status == 'active'"
-          class="action-item"
-          @click="onAction('pending', 'Tunda')"
-        >tunda</div>
-        <div
-          v-if="getForm.status == 'active'"
-          class="action-item"
-          @click="onAction('finish', 'Selesai')"
-        >selesai</div>
-        <div
-          v-if="getForm.status == 'active'"
+          v-if="getConditionOvertime()"
           class="action-item"
           @click="onAction('overtime', 'Lembur')"
         >lembur</div>
         <div
-          v-if="getForm.status == 'overtime'"
+          v-if="getForm.status == 'overtime'  && getJobOrderStatus != 'overtime'"
           class="action-item"
-          @click="onAction('overtime_finish', 'Selesai Lembur')"
-        >selesai lembur</div>
-        <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
+          @click="onNonActiveOvertime()"
+        >tidak aktif lembur</div>
       </div>
-    </vue-bottom-sheet>
+    </b-modal>
   </div>
 </template>
 

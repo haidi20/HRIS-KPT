@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Response;
 class JobOrderController extends Controller
 {
     private $nameModel = "App\Models\JobOrder";
+    private $nameModelJobOrderEmployee = "App\Models\JobOrderHasEmployee";
 
     public function index()
     {
@@ -38,13 +39,17 @@ class JobOrderController extends Controller
         $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
             ->whereYear("datetime_start", $month->format("Y"))
             ->whereMonth("datetime_start", $month->format("m"))
-            ->orderBy("datetime_start", "desc");
+            ->orderBy("created_at", "desc");
 
         // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
         // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
-        if ($user->group_name == "Pengawas" && request("type_by") == "creator") {
-            $jobOrders = $jobOrders->where("created_by", $user->id);
-        } else {
+        if ($user->group_name == "Pengawas") {
+            if (request("type_by") == "creator") {
+                $jobOrders = $jobOrders->where("created_by", $user->id);
+            } else {
+                $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
+            }
+        } else if ($user->group_name == "Quality Control") {
             $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
         }
 
@@ -58,7 +63,16 @@ class JobOrderController extends Controller
     public function store()
     {
         // return request()->all();
+
+        $imageController = new ImageController;
         $jobStatusController = new JobStatusController;
+
+        if (count(request("employee_selecteds")) == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, harus pilih karyawan terlebih dahulu",
+            ], 500);
+        }
 
         try {
             DB::beginTransaction();
@@ -74,6 +88,8 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
+            $user = User::find(request("user_id"));
+            $image = request("image");
             $date = Carbon::now();
             $date->setTimeFromTimeString(request("hour_start"));
             // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
@@ -82,7 +98,7 @@ class JobOrderController extends Controller
             $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
-            //datetime_end inputnya di storeAction
+            //note: datetime_end inputnya di storeAction
             $jobOrder->datetime_start = $date;
             $jobOrder->datetime_estimation_end = Carbon::parse(request("datetime_estimation_end"));
             $jobOrder->estimation = request("estimation");
@@ -98,6 +114,25 @@ class JobOrderController extends Controller
 
             $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
             $this->storeJobOrderHistory($jobOrder);
+
+            if ($image != null) {
+                $storeImage = $imageController->storeSingle(
+                    $user,
+                    $image,
+                    $jobOrder,
+                    $this->nameModel,
+                    "job_orders",
+                    "_active",
+                );
+
+                // proses masukkan gambar
+                if (!$storeImage->success) {
+                    return response()->json([
+                        'success' => $storeImage->success,
+                        'message' => $storeImage->message,
+                    ], $storeImage->code);
+                }
+            }
 
             DB::commit();
 
@@ -124,26 +159,34 @@ class JobOrderController extends Controller
         // return request()->all();
         $jobStatusController = new JobStatusController;
 
+        $user = User::find(request("user_id"));
+        $image = request("image");
+        $statusFinish = request("status_finish");
+        $statusLast = request("status_last");
+        $status = request("status");
+        $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
+        $message = "diperbaharui";
+
         try {
             DB::beginTransaction();
 
-            $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
-            $message = "diperbaharui";
-
             $jobOrder = JobOrder::find(request("id"));
 
-            if (request("status") == 'finish') {
-                $jobOrder->status = request("status");
+            if ($status == 'finish') {
+                $jobOrder->status = $status;
                 $jobOrder->datetime_end = $date;
+            } else {
+                $jobOrder->status = $status;
             }
 
-            $jobOrder->status = request("status");
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
-            $jobStatusController->storeJobStatusHasParent($jobOrder, request("status_last"), $date, $this->nameModel);
+            $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
-            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
+            $this->storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
+
+            $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
 
             DB::commit();
 
@@ -168,8 +211,16 @@ class JobOrderController extends Controller
     public function storeActionAssessment()
     {
         // return request()->all();
-        $jobOrderId = request("id");
         $jobStatusController = new JobStatusController;
+
+        $user = User::find(request("user_id"));
+        $image = request("image");
+        $statusFinish = request("status_finish");
+        $statusLast = request("status_last");
+        $status = request("status");
+        $jobOrderId = request("id");
+        $jobOrder = JobOrder::find($jobOrderId);
+        $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
 
         try {
             DB::beginTransaction();
@@ -179,6 +230,7 @@ class JobOrderController extends Controller
                 "employee_id" => request("user_id"),
             ], [
                 "note" => request("status_note"),
+                "date_time" => $date,
             ]);
 
             $allJobOrderAssessmentHasEmployee = JobOrderAssessment::where([
@@ -186,16 +238,17 @@ class JobOrderController extends Controller
             ]);
 
             if ($allJobOrderAssessmentHasEmployee->count() >= 2) {
-                $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
 
-                $jobOrder = JobOrder::find($jobOrderId);
                 $jobOrder->status = "finish";
                 $jobOrder->datetime_end = $date;
                 $jobOrder->save();
 
+                $this->storeJobOrderHistory($jobOrder);
                 $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
-                $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start, $jobOrder->datetime_end);
+                $this->storeActionJobOrderHasEmployee($jobOrder, "finish", $date, "active");
             }
+
+            $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
 
             DB::commit();
 
@@ -246,40 +299,99 @@ class JobOrderController extends Controller
         }
     }
 
-    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart, $dateEnd = null)
+    private function storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder)
     {
-        $jobOrderHasEmployeeDelete = JobOrderHasEmployee::where([
-            "job_order_id" => $jobOrder->id,
-        ]);
-        $jobOrderHasEmployeeDelete->delete();
+        $imageController = new ImageController;
+
+        if ($image != null) {
+            // agar bisa memisahkan folder mulai dan selesai
+            if ($statusLast == 'overtime') {
+                $addNameFolder = $statusFinish;
+            } else {
+                $addNameFolder = $status;
+            }
+
+            $storeImage = $imageController->storeSingle(
+                $user,
+                $image,
+                $jobOrder,
+                $this->nameModel,
+                "job_orders",
+                "_" . $addNameFolder
+            );
+
+            // proses masukkan gambar
+            if (!$storeImage->success) {
+                return response()->json([
+                    'success' => $storeImage->success,
+                    'message' => $storeImage->message,
+                ], $storeImage->code);
+            }
+        }
+    }
+
+    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart)
+    {
+        $jobStatusController = new JobStatusController;
+
+        if ($status == "correction") {
+            $getStatus = "active";
+        } else {
+            $getStatus = $status;
+        }
 
         if (count(request("employee_selecteds")) > 0) {
 
-            if ($status == "correction") {
-                $status = "active";
-            }
-
             foreach (request("employee_selecteds") as $index => $item) {
-                // $jobOrderHasEmployee = JobOrderHasEmployee::create([
-                //     "job_order_id" => $jobOrder->id,
-                //     "employee_id" => $item["employee_id"],
-                //     "status" => $status,
-                //     "datetime_start" => $dateStart,
-                // ]);
 
-                $jobOrderHasEmployee = new JobOrderHasEmployee;
+                if (isset($item["id"])) {
+                    $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
+                } else {
+                    $jobOrderHasEmployee = new JobOrderHasEmployee;
+                }
+
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
-                $jobOrderHasEmployee->status = $status;
+                $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->datetime_start = $dateStart;
+                $jobOrderHasEmployee->save();
 
-                if ($dateEnd != null) {
-                    $jobOrderHasEmployee->datetime_end = $dateEnd;
+                if (!isset($item["id"])) {
+                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, null, $dateStart, $this->nameModelJobOrderEmployee);
+                }
+
+                $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
+            }
+        }
+    }
+
+    private function storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
+    {
+        $jobStatusController = new JobStatusController;
+
+        if (count(request("employee_selecteds")) > 0) {
+
+            foreach (request("employee_selecteds") as $index => $item) {
+                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
+
+                if ($status == 'finish') {
+                    $jobOrderHasEmployee->status = $status;
+                    $jobOrderHasEmployee->datetime_end = $date;
+
+                    if ($statusLast == "correction") {
+                        $statusLast = "active";
+                    }
+                } else {
+                    if ($status == "correction") {
+                        $status = "active";
+                    }
+
+                    $jobOrderHasEmployee->status = $status;
                 }
 
                 $jobOrderHasEmployee->save();
 
-                $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
+                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $statusLast, $date, $this->nameModelJobOrderEmployee);
             }
         }
     }
