@@ -55,6 +55,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
+                                        <label for="after_work" class="col-sm-4 col-form-label">Jam Maksimal Selesai
+                                            Kerja</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="after_work" name="after_work"
+                                                class="form-control datetime" placeholder="contoh: 05:00"
+                                                value="{{ $afterWorkLimit[0] ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
                                         <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Mulai Istirahat</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="saturday_work_hour" name="saturday_work_hour" class="form-control datetime"
@@ -163,6 +176,9 @@
             $("#id").val(data.id);
             $("#start_time").val(data.start_time);
             $("#after_work").val(data.after_work);
+            $("#after_work_limit").val(data.after_work_limit);
+            $("#start_rest").val(data.start_rest);
+            $("#end_rest").val(data.end_rest);
             $("#maximum_delay").val(data.maximum_delay);
             $("#fastest_time").val(data.fastest_time);
             $("#overtime_work").val(data.overtime_work);

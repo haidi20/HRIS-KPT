@@ -16,12 +16,15 @@ class WorkingHourController extends Controller
         $id = WorkingHour::pluck('id');
         $startTime = WorkingHour::pluck('start_time');
         $afterWork = WorkingHour::pluck('after_work');
+        $afterWorkLimit = WorkingHour::pluck('after_work_limit');
+        $startRest = WorkingHour::pluck('start_rest');
+        $endRest = WorkingHour::pluck('end_rest');
         $maximumDelay = WorkingHour::pluck('maximum_delay');
         $fastestTime = WorkingHour::pluck('fastest_time');
         $overtimeWork = WorkingHour::pluck('overtime_work');
         $saturdayWorkHour = WorkingHour::pluck('saturday_work_hour');
 
-        return view("pages.master.working-hour.index", compact("id", "startTime", "afterWork", "maximumDelay", "fastestTime", "overtimeWork", "saturdayWorkHour"));
+        return view("pages.master.working-hour.index", compact("id", "startTime", "afterWork", "afterWorkLimit", "startRest", "endRest", "maximumDelay", "fastestTime", "overtimeWork", "saturdayWorkHour"));
     }
 
     public function store(Request $request)
@@ -43,6 +46,9 @@ class WorkingHourController extends Controller
 
             $start_time = Carbon::createFromFormat('H:i', request('start_time'))->format('H:i');
             $after_work = Carbon::createFromFormat('H:i', request('after_work'))->format('H:i');
+            $after_work_limit = Carbon::createFromFormat('H:i', request('after_work_limit'))->format('H:i');
+            $start_rest = Carbon::createFromFormat('H:i', request('start_rest'))->format('H:i');
+            $end_rest = Carbon::createFromFormat('H:i', request('end_rest'))->format('H:i');
             $maximum_delay = Carbon::createFromFormat('H:i', request('maximum_delay'))->format('H:i');
             $fastest_time = Carbon::createFromFormat('H:i', request('fastest_time'))->format('H:i');
             $overtime_work = Carbon::createFromFormat('H:i', request('overtime_work'))->format('H:i');
@@ -50,6 +56,9 @@ class WorkingHourController extends Controller
 
             $workingHour->start_time = $start_time;
             $workingHour->after_work = $after_work;
+            $workingHour->after_work_limit = $after_work_limit;
+            $workingHour->start_rest = $start_rest;
+            $workingHour->end_rest = $end_rest;
             $workingHour->maximum_delay = $maximum_delay;
             $workingHour->fastest_time = $fastest_time;
             $workingHour->overtime_work = $overtime_work;
