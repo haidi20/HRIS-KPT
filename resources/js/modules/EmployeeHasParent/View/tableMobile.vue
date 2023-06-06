@@ -48,28 +48,24 @@
         <div class="action-item">
           <h5>{{getForm.employee_name}} - {{getForm.position_name}}</h5>
         </div>
-        <template v-if="getForm.form_type != 'read'">
-          <template v-if="getJobOrderStatus != 'overtime'">
-            <div
-              v-if="getForm.status == 'active'"
-              class="action-item"
-              @click="onAction('pending', 'Tunda')"
-            >tunda</div>
-            <div
-              v-if="getForm.status == 'pending'"
-              class="action-item"
-              @click="onAction('pending_finish', 'Mulai Kembali')"
-            >Mulai Kembali</div>
-            <div
-              v-if="getForm.status == 'active'"
-              class="action-item"
-              @click="onAction('finish', 'Selesai')"
-            >selesai</div>
-          </template>
-          <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
-        </template>
         <div
-          v-if="getForm.status == 'overtime' && getJobOrderStatus == 'overtime'"
+          v-if="getForm.status == 'active' && getForm.form_type != 'create'"
+          class="action-item"
+          @click="onAction('pending', 'Tunda')"
+        >tunda</div>
+        <div
+          v-if="getConditionActionActive()"
+          class="action-item"
+          @click="onAction('active', 'Aktif Kembali')"
+        >Aktif Kembali</div>
+        <div
+          v-if="getForm.status == 'active' && getForm.form_type != 'create'"
+          class="action-item"
+          @click="onAction('finish', 'Selesai')"
+        >selesai</div>
+        <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
+        <div
+          v-if="getConditionActionOvertimeFinish()"
           class="action-item"
           @click="onAction('overtime_finish', 'Selesai Lembur')"
         >selesai lembur</div>
@@ -79,7 +75,7 @@
           @click="onAction('overtime', 'Lembur')"
         >lembur</div>
         <div
-          v-if="getForm.status == 'overtime'  && getJobOrderStatus != 'overtime'"
+          v-if="getConditionActionNonActiveOvertime()"
           class="action-item"
           @click="onNonActiveOvertime()"
         >tidak aktif lembur</div>

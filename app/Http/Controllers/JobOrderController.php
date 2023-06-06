@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Config;
 class JobOrderController extends Controller
 {
     private $nameModel = "App\Models\JobOrder";
-    private $nameModelJobOrderEmployee = "App\Models\JobOrderHasEmployee";
+    private $nameModelJobOrderHasEmployee = "App\Models\JobOrderHasEmployee";
 
     public function index()
     {
@@ -276,13 +276,50 @@ class JobOrderController extends Controller
 
     // perbaharui status karyawan pada job order
     // tampilannya di tombol aksi karyawan di job order
-    // untuk 1 karyawan
-    public function storeStatusJobOrderHasEmployee()
+    public function storeActionHasEmployee()
     {
-        return response()->json([
-            'success' => true,
-            'requests' => request()->all(),
-        ], 200);
+
+        $date = Carbon::now();
+        $dataEmployees = request("data_employees");
+        $jobStatusController = new JobStatusController;
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($dataEmployees as $index => $item) {
+                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
+                $jobOrderHasEmployee->status = $item["status"];
+                $jobOrderHasEmployee->save();
+
+                if (array_key_exists('status_last', $item)) {
+                    $statusLast = $item["status_last"];
+
+                    $jobStatusController->storeJobStatusHasParent(
+                        $jobOrderHasEmployee,
+                        $statusLast,
+                        $date,
+                        $this->nameModelJobOrderHasEmployee
+                    );
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
+                'message' => "Berhasil memperbaharui status",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal memperbaharui status",
+            ], 500);
+        }
     }
 
     public function destroy()
@@ -373,7 +410,7 @@ class JobOrderController extends Controller
                 $jobOrderHasEmployee->save();
 
                 if (!isset($item["id"])) {
-                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, null, $dateStart, $this->nameModelJobOrderEmployee);
+                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, null, $dateStart, $this->nameModelJobOrderHasEmployee);
                 }
 
                 $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
@@ -408,7 +445,7 @@ class JobOrderController extends Controller
 
                 $jobOrderHasEmployee->save();
 
-                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $statusLast, $date, $this->nameModelJobOrderEmployee);
+                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $statusLast, $date, $this->nameModelJobOrderHasEmployee);
             }
         }
     }

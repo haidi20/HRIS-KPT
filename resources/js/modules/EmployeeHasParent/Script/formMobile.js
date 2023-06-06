@@ -55,6 +55,7 @@ export default {
                     employee_name: getEmployee.name,
                     position_name: getEmployee.position_name,
                     created_by: this.getUserId,
+                    status: "active",
                 };
 
                 //   console.info(getEmployee);

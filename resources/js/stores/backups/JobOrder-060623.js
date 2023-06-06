@@ -1,13 +1,13 @@
 import axios from "axios";
 import moment from "moment";
 
-import { checkNull, listStatus } from '../utils';
+import { checkNull, listStatus } from '../../utils';
 
 /**
 Status values
 @typedef {
 'active' | 'finish'
-| 'pending'
+| 'pending' | 'pending_finish'
 | 'overtime' | 'overtime_finish'
 | 'correction' | 'correction_finish'
 | 'assessment' | 'assessment_finish'
@@ -54,8 +54,7 @@ const defaultForm = {
     // hour: null,
     status_note: null,
     // end form action
-    // form_kind: 'create',
-    form_kind: null, // kebutuhan logika kirim data dari modal karyawan
+    form_kind: 'create',
     form_title: "Job Order",
     hour_start: null,
     datetime_start: null,
@@ -242,6 +241,21 @@ const JobOrder = {
                 state.form.label_image = "Masukkan Gambar";
             }
         },
+        // JANGAN DI HAPUS, UNTUK BACKUP
+        // INSERT_FORM_STATUS(state, payload) {
+        //     let status = payload.status;
+        //     const listStatusFinish = ["overtime_finish", "correction_finish"];
+
+        //     if (listStatusFinish.some((item) => item == payload.status)) {
+        //         // status = "finish";
+        //         // status_finish = this.form.status;
+        //         state.form.status = "active";
+        //         state.form.status_finish = payload.status;
+        //     } else {
+        //         state.form.status = status;
+        //         state.form.status_finish = null;
+        //     }
+        // },
         INSERT_FORM_STATUS(state, payload) {
             let getStatus = payload.status;
 

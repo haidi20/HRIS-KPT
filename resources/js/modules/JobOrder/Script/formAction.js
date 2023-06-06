@@ -24,7 +24,7 @@ export default {
         getTitleForm() {
             return this.$store.state.jobOrder.form.form_title;
         },
-        getKindForm() {
+        getFormKind() {
             return this.$store.state.jobOrder.form.form_kind;
         },
         getEmployeeSelecteds() {
@@ -49,6 +49,10 @@ export default {
         },
         async onSend() {
             const Swal = this.$swal;
+            this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
+                status: this.getFormKind,
+            });
+
             const request = {
                 id: this.form.id,
                 date: moment(this.form.date).format("YYYY-MM-DD"),
@@ -156,7 +160,7 @@ export default {
         getLabelNote() {
             let result = "Catatan";
 
-            if (this.getKindForm == 'assessment') {
+            if (this.getFormKind == 'assessment') {
                 result = "Catatan Penilaian";
             }
 

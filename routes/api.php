@@ -9,6 +9,7 @@ use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
@@ -139,10 +140,12 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('store', [JobOrderController::class, "store"])->name('store');
         Route::post('store-action', [JobOrderController::class, "storeAction"])->name('storeAction');
         Route::post('store-action-assessment', [JobOrderController::class, "storeActionAssessment"])->name('storeActionAssessment');
+        Route::post('store-action-has-employee', [JobOrderController::class, "storeActionHasEmployee"])->name('storeActionHasEmployee');
         Route::post('store-action-job-order-has-employee', [JobOrderController::class, "storeActionJobOrderHasEmployee"])->name('storeActionJobOrderHasEmployee');
-        Route::post('store-status-job-order-has-employee', [JobOrderController::class, "storeStatusJobOrderHasEmployee"])->name('storeStatusJobOrderHasEmployee');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
+    // Route::prefix('job-status')->name('jobStatus.')->group(function () {
+    // });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
         Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdjustmentController::class, "store"])->name('store');

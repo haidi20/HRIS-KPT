@@ -1,6 +1,8 @@
 import axios from "axios";
 import moment from "moment";
 
+import { checkNull, listStatus } from '../utils';
+
 const defaultForm = {
     // id: null,
     employee_id: null,
@@ -116,13 +118,24 @@ const EmployeeHasParent = {
             state.data.selecteds = [...getSelecteds];
         },
         UPDATE_DATA_SELECTED_STATUS(state, payload) {
+            let statusLast = null;
+            let getFormType = null;
+
+            if (listStatus[payload.form_type]) {
+                getFormType = listStatus[payload.form_type].status;
+                statusLast = listStatus[payload.form_type].status_last;
+            } else {
+                getFormType = payload.form_type;
+            }
+
             const getSelecteds = state.data.selecteds.map(item => {
                 if (item.employee_id == state.form.employee_id) {
-                    const getStatus = state.options.statuses[payload.form_type];
+                    const getStatus = state.options.statuses[getFormType];
 
                     return {
                         ...item,
-                        status: payload.form_type,
+                        status: getFormType,
+                        status_last: statusLast,
                         status_readable: getStatus.short_readable,
                         status_color: getStatus.color,
                     }
@@ -135,7 +148,7 @@ const EmployeeHasParent = {
 
             // console.info(state.options.statuses[payload.form_type]);
             // console.info(state.form.employee_id, payload.form_type);
-            console.info(state.data.selecteds);
+            // console.info(state.data.selecteds);
         },
         DELETE_FORM_EMPLOYEE_ID(state, payload) {
             state.form.employee_id = null;

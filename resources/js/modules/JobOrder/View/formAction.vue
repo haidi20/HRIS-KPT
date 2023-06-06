@@ -27,7 +27,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="getKindForm == 'overtime'">
+    <b-row v-if="getFormKind == 'overtime'">
       <b-col col sm="6">
         <b-form-group label="Pilih Karyawan" class>
           <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>
