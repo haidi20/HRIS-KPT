@@ -53,7 +53,7 @@ Status values
 @property {null|string} estimation - The estimation value.
 @property {string} time_type - The time type.
 @property {null|string} note - The note value.
-@property {string} form_type - The form type.
+@property {string} form_kind - The form type.
 */
 
 const defaultForm = {
@@ -190,11 +190,14 @@ const JobOrder = {
             state.data = payload.job_orders;
         },
         INSERT_FORM(state, payload) {
-            state.form.form_kind = payload?.form_kind;
             state.form = {
                 ...state.form,
                 ...payload.form,
             };
+
+            if (payload?.form_kind) {
+                state.form.form_kind = payload?.form_kind;
+            }
 
             // if (payload.form_kind == 'edit') {
             //     state.form.note = payload.note;

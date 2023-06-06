@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Config;
 
 
 class JobOrderController extends Controller
@@ -27,8 +28,12 @@ class JobOrderController extends Controller
         $vue = true;
         $baseUrl = Url::to('/');
         $user = auth()->user();
+        $statuses = Config::get("library.status");
+        $statuses = json_encode($statuses);
 
-        return view("pages.job-order.index", compact("vue", "user", "baseUrl"));
+        // return $statuses;
+
+        return view("pages.job-order.index", compact("vue", "user", "baseUrl", "statuses"));
     }
 
     public function fetchData()
@@ -269,6 +274,17 @@ class JobOrderController extends Controller
         }
     }
 
+    // perbaharui status karyawan pada job order
+    // tampilannya di tombol aksi karyawan di job order
+    // untuk 1 karyawan
+    public function storeStatusJobOrderHasEmployee()
+    {
+        return response()->json([
+            'success' => true,
+            'requests' => request()->all(),
+        ], 200);
+    }
+
     public function destroy()
     {
         try {
@@ -352,7 +368,7 @@ class JobOrderController extends Controller
 
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
-                $jobOrderHasEmployee->status = $getStatus;
+                $jobOrderHasEmployee->status = $item["status"];
                 $jobOrderHasEmployee->datetime_start = $dateStart;
                 $jobOrderHasEmployee->save();
 
@@ -365,6 +381,7 @@ class JobOrderController extends Controller
         }
     }
 
+    // untuk banyak karyawan
     private function storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
     {
         $jobStatusController = new JobStatusController;
@@ -386,7 +403,7 @@ class JobOrderController extends Controller
                         $status = "active";
                     }
 
-                    $jobOrderHasEmployee->status = $status;
+                    $jobOrderHasEmployee->status = $item["status"];
                 }
 
                 $jobOrderHasEmployee->save();

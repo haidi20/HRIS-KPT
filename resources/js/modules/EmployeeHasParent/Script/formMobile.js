@@ -5,6 +5,12 @@ export default {
         VueSelect,
     },
     computed: {
+        getBaseUrl() {
+            return this.$store.state.base_url;
+        },
+        getUserId() {
+            return this.$store.state.user?.id;
+        },
         getOptionEmplyeeBases() {
             return this.$store.state.employeeHasParent.options.employee_bases;
         },
@@ -44,15 +50,15 @@ export default {
                 const getEmployee = this.getOptionEmployees.find(
                     (item) => item.id == this.form.employee_id
                 );
+                const employee = {
+                    employee_id: getEmployee.id,
+                    employee_name: getEmployee.name,
+                    position_name: getEmployee.position_name,
+                    created_by: this.getUserId,
+                };
 
                 //   console.info(getEmployee);
-                this.$store.commit("employeeHasParent/INSERT_DATA_SELECTED", {
-                    employee: {
-                        employee_id: getEmployee.id,
-                        employee_name: getEmployee.name,
-                        position_name: getEmployee.position_name,
-                    },
-                });
+                this.$store.commit("employeeHasParent/INSERT_DATA_SELECTED", { employee });
 
                 this.$store.commit("employeeHasParent/DELETE_FORM_EMPLOYEE_ID");
             } else {

@@ -132,16 +132,6 @@ export default {
         onShowEmployee() {
             this.$bvModal.show("data_employee");
         },
-        onSendOld() {
-            this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-                form_title: "Job Order",
-                form_kind: null,
-            });
-            this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-                value: false,
-            });
-            this.$bvModal.hide("job_order_form");
-        },
         async onSend() {
             const Swal = this.$swal;
 
@@ -155,10 +145,9 @@ export default {
                 request.image = await imageToBase64(request.image);
             }
 
-            // console.info(request);
-            // return false;
+            console.info(request);
+            return false;
             this.is_loading = true;
-
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/job-order/store`, request)

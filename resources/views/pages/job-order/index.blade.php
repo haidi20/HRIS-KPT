@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="root" class="full-height">
-        <job-order base-url="{{ $baseUrl }}" user="{{ $user }}" />
+        <job-order base-url="{{ $baseUrl }}" user="{{ $user }}" statuses="{{ $statuses }}" />
     </div>
 @endsection
 

@@ -60,6 +60,15 @@ export default {
     };
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
+    getJobOrderFormKind() {
+      return this.$store.state.jobOrder.form.form_kind;
+    },
     getIsMobile() {
       return this.$store.state.employeeHasParent.is_mobile;
     },
@@ -72,6 +81,7 @@ export default {
       this.$bvModal.hide("data_employee");
     },
     onSend() {
+      console.info(this.getJobOrderFormKind);
       this.$bvModal.hide("data_employee");
     },
   },

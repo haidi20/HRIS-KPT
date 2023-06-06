@@ -81,16 +81,13 @@ export default {
         },
         onAction(form_type, form_title) {
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", { form_type });
-
-            if (form_type == 'overtime') {
-                this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS_OVERTIME");
-            }
+            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS", { form_type });
 
             this.$bvModal.hide("action_list_employee");
         },
         onNonActiveOvertime() {
             // console.info(this.getForm.employee_id);
-            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS_ACTIVE");
+            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS", { form_type: "active" });
             this.$bvModal.hide("action_list_employee");
         },
         getConditionActionActive() {
@@ -114,6 +111,8 @@ export default {
         getConditionActionDelete() {
             let result = false;
 
+            // console.info(this.getForm.form_type);
+
             // hapus hanya ketika buat data, kalo edit hanya bisa pending
             if (this.getForm.form_type == 'create') {
                 result = true;
@@ -126,10 +125,12 @@ export default {
         getConditionOvertime() {
             let result = false;
 
+            // console.info(this.getJobOrderStatus);
+
             // && this.getJobOrderStatus == 'overtime'
-            if (this.getForm.status == 'active') {
-                result = true;
-            }
+            // if (this.getForm.status == 'overtime') {
+            //     result = true;
+            // }
 
             return result;
         },

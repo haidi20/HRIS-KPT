@@ -12,6 +12,7 @@ const defaultForm = {
     // start job order
     data_index: null, // untuk hapus data yang sudah di pilih
     status: null,
+    is_hide_status: false,
 }
 
 const EmployeeHasParent = {
@@ -52,6 +53,7 @@ const EmployeeHasParent = {
                 //     name: "Proyek",
                 // },
             ],
+            statuses: {},
         },
         loading: {
             table: false,
@@ -81,6 +83,9 @@ const EmployeeHasParent = {
             // console.info(payload);
             state.data.selecteds = [...payload.selecteds];
         },
+        INSERT_OPTION_STATUS(state, payload) {
+            state.options.statuses = { ...payload.statuses };
+        },
         INSERT_FORM(state, payload) {
             state.form = {
                 ...state.form,
@@ -99,6 +104,7 @@ const EmployeeHasParent = {
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;
         },
+        // kebutuhan di job order file data.js
         UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME(state, payload) {
             const getSelecteds = state.data.selecteds.map(item => ({
                 ...item,
@@ -109,14 +115,16 @@ const EmployeeHasParent = {
 
             state.data.selecteds = [...getSelecteds];
         },
-        UPDATE_DATA_SELECTED_STATUS_ACTIVE(state, payload) {
+        UPDATE_DATA_SELECTED_STATUS(state, payload) {
             const getSelecteds = state.data.selecteds.map(item => {
                 if (item.employee_id == state.form.employee_id) {
+                    const getStatus = state.options.statuses[payload.form_type];
+
                     return {
                         ...item,
-                        status: 'active',
-                        status_readable: 'aktif',
-                        status_color: 'success',
+                        status: payload.form_type,
+                        status_readable: getStatus.short_readable,
+                        status_color: getStatus.color,
                     }
                 } else {
                     return { ...item };
@@ -124,22 +132,10 @@ const EmployeeHasParent = {
             });
 
             state.data.selecteds = [...getSelecteds];
-        },
-        UPDATE_DATA_SELECTED_STATUS_OVERTIME(state, payload) {
-            const getSelecteds = state.data.selecteds.map(item => {
-                if (item.employee_id == state.form.employee_id) {
-                    return {
-                        ...item,
-                        status: 'overtime',
-                        status_readable: 'lembur',
-                        status_color: 'info',
-                    }
-                } else {
-                    return { ...item };
-                }
-            });
 
-            state.data.selecteds = [...getSelecteds];
+            // console.info(state.options.statuses[payload.form_type]);
+            // console.info(state.form.employee_id, payload.form_type);
+            console.info(state.data.selecteds);
         },
         DELETE_FORM_EMPLOYEE_ID(state, payload) {
             state.form.employee_id = null;
