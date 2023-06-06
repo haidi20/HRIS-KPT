@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AttendanceFingerspots extends Seeder
+class AttendanceFingerspotSeeder extends Seeder
 {
     /**
      * Run the database seeds.
