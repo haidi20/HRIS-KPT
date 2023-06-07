@@ -123,6 +123,7 @@ export default {
                 value: true,
             });
             this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.dispatch("employeeHasParent/onUpdateStatusDataSelected", { form_type: type });
 
             //   console.info(this.form);
 

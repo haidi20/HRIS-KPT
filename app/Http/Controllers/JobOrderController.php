@@ -250,7 +250,7 @@ class JobOrderController extends Controller
 
                 $this->storeJobOrderHistory($jobOrder);
                 $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
-                $this->storeActionJobOrderHasEmployee($jobOrder, "finish", $date, "active");
+                $this->storeActionJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
             }
 
             $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
@@ -427,11 +427,19 @@ class JobOrderController extends Controller
         if (count(request("employee_selecteds")) > 0) {
 
             foreach (request("employee_selecteds") as $index => $item) {
+                if ($status == 'assessment_finish') {
+                    $getStatus = 'finish';
+                    $getStatusLast = 'active';
+                } else {
+                    $getStatus = $item["status"];
+                    $getStatusLast = $item["status_last"];
+                }
+
                 $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
-                $jobOrderHasEmployee->status = $item["status"];
+                $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->save();
 
-                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $item["status_last"], $date, $this->nameModelJobOrderHasEmployee);
+                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $getStatusLast, $date, $this->nameModelJobOrderHasEmployee);
             }
         }
     }

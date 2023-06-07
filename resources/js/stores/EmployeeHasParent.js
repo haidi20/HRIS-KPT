@@ -79,7 +79,7 @@ const EmployeeHasParent = {
         },
         INSERT_DATA_SELECTED(state, payload) {
             state.data.selecteds = [
-                { ...payload.employee, },
+                { ...payload.employee, status_last: null },
                 ...state.data.selecteds,
             ];
         },
@@ -125,13 +125,14 @@ const EmployeeHasParent = {
 
             if (listStatus[payload.form_type]) {
                 getFormType = listStatus[payload.form_type].status;
+
                 statusLast = listStatus[payload.form_type].status_last;
             } else {
                 getFormType = payload.form_type;
             }
 
             const getSelecteds = state.data.selecteds.map(item => {
-                if (payload.list_employee_id != undefined) {
+                if (payload.hasOwnProperty('list_employee_id')) {
                     // console.info(payload.list_employee_id);
                     const getStatus = state.options.statuses[getFormType];
                     if (payload.list_employee_id.some(value => value.employee_id == item.employee_id)) {
@@ -237,18 +238,21 @@ const EmployeeHasParent = {
         onUpdateStatusDataSelected: (context, payload) => {
             let getStatus = null;
             // console.info(listStatus[payload.form_type].status);
-            if (
+            if (payload.form_type == 'correction') {
+                getStatus = 'finish';
+            }
+            else if (
                 payload.form_type == 'pending'
-                || payload.form_type == 'correction'
+                || payload.form_type == 'assessment'
             ) {
                 getStatus = 'active';
             } else if (listStatus[payload.form_type]) {
                 getStatus = listStatus[payload.form_type].status_last;
             } else {
-                payload.form_type;
+                getStatus = payload.form_type;
             }
 
-            // console.info(getStatus);
+            console.info(getStatus, payload);
 
             const getDataSelectedOvertime = context.state.data.selecteds
                 .filter(item => item.status == getStatus)

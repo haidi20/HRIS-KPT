@@ -149,7 +149,7 @@ export default {
                 result = true;
             }
 
-            console.info(this.form.status);
+            // console.info(this.form.status);
 
             return result;
         },
