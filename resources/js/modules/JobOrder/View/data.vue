@@ -109,7 +109,7 @@
                   <div
                     v-if="getFormStatus == 'pending'"
                     class="action-item"
-                    @click="onAction('pending_finish', 'Mulai Kembali')"
+                    @click="onAction('active', 'Mulai Kembali')"
                   >Mulai Kembali</div>
                   <!-- v-if="getFormStatus != 'active'" -->
                   <div

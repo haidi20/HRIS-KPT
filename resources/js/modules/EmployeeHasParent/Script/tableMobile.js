@@ -41,6 +41,9 @@ export default {
         getJobOrderStatus() {
             return this.$store.state.jobOrder.form.status;
         },
+        getJobOrderFormKind() {
+            return this.$store.state.jobOrder.form.form_kind;
+        },
         getData() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
@@ -74,45 +77,78 @@ export default {
         onOpenAction(item, index) {
             // console.info(item);
 
-            if (this.getUserId == item.created_by) {
+            if (this.getUserId == item.created_by && this.getJobOrderFormKind != 'read') {
                 this.$store.commit("employeeHasParent/INSERT_FORM", { form: { ...item, data_index: index } });
                 this.$bvModal.show("action_list_employee");
             }
         },
         onAction(form_type, form_title) {
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", { form_type });
-
-            if (form_type == 'overtime') {
-                this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS_OVERTIME");
-            }
+            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS", { form_type });
 
             this.$bvModal.hide("action_list_employee");
         },
         onNonActiveOvertime() {
             // console.info(this.getForm.employee_id);
-            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS_ACTIVE");
+            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS", { form_type: "active" });
+            this.$bvModal.hide("action_list_employee");
+        },
+        onActionOvertimeAgain() {
+            this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS", { form_type: "overtime" });
             this.$bvModal.hide("action_list_employee");
         },
         getConditionActionActive() {
-            let result = true;
+            let result = false;
+            const listNotFormKind = ['overtime'];
+
+            // console.info(this.getJobOrderFormKind);
+            // && this.getJobOrderFormKind != null
+            // && listNotFormKind.some(item => item != this.getJobOrderFormKind)
 
             if (
                 (
-                    this.getForm.status == 'active'
+                    this.getForm.status == 'pending'
+                    || this.getForm.status == 'finish'
                     || this.getForm.status == 'overtime'
-                    || this.getForm.status == null
                 )
-                && this.getForm.form_type == 'create'
+                && this.getForm.status_clone != 'overtime'
+                && this.getJobOrderFormKind != 'overtime'
             ) {
-                result = false;
+                result = true;
             }
 
-            // console.info(this.getForm.form_type);
+            return result;
+        },
+        getConditionActionPending() {
+            let result = false;
+
+            if (
+                this.getForm.status_clone != 'overtime'
+                && this.getForm.form_type != 'create'
+                && this.getForm.status == 'active'
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
+        getConditionActionFinish() {
+            let result = false;
+
+            if (
+                this.getForm.status_clone != 'overtime'
+                && this.getForm.form_type != 'create'
+                && this.getForm.status == 'active'
+            ) {
+                result = true;
+            }
 
             return result;
         },
         getConditionActionDelete() {
             let result = false;
+
+            // console.info(this.getForm.form_type);
 
             // hapus hanya ketika buat data, kalo edit hanya bisa pending
             if (this.getForm.form_type == 'create') {
@@ -126,8 +162,75 @@ export default {
         getConditionOvertime() {
             let result = false;
 
+            // console.info(this.getJobOrderFormKind);
+
             // && this.getJobOrderStatus == 'overtime'
-            if (this.getForm.status == 'active') {
+            // if (this.getForm.status == 'overtime') {
+            //     result = true;
+            // }
+            if (
+                this.getJobOrderStatus == 'active'
+                && this.getForm.status == 'active'
+                && this.getJobOrderFormKind != null
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
+        getConditionActionOvertimeFinish() {
+            let result = false;
+
+            // console.info(this.getJobOrderStatus);
+            // console.info(this.getForm.status, this.getForm.status_clone);
+
+            // if (
+            //     this.getForm.status == 'overtime'
+            //     && (
+            //         this.getJobOrderStatus == 'overtime'
+            //         || this.getJobOrderFormKind == null
+            //     )
+            // ) {
+            //     result = true;
+            // }
+
+            if (
+                this.getForm.status_clone == 'overtime'
+                && this.getForm.status == 'overtime'
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
+        getConditionActionNonActiveOvertime() {
+            let result = false;
+
+            // console.info(this.getJobOrderFormKind);
+
+            // if (
+            //     this.getForm.status == 'overtime'
+            //     && this.getJobOrderFormKind == 'overtime'
+            // ) {
+            //     result = true;
+            // }
+
+            if (
+                this.getForm.status_clone == 'active'
+                && this.getJobOrderFormKind == 'overtime'
+            ) {
+                result = true;
+            }
+
+            return result;
+        },
+        getConditionActionOvertimeAgain() {
+            let result = false;
+
+            if (
+                this.getForm.status_clone == 'overtime'
+                && this.getForm.status == 'active'
+            ) {
                 result = true;
             }
 

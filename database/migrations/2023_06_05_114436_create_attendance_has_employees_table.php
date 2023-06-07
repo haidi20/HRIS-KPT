@@ -19,17 +19,17 @@ class CreateAttendanceHasEmployeesTable extends Migration
             $table->foreignId('employee_id')->nullable();
             $table->string('cloud_id');
             $table->date('date');
-            $table->time('hour_start')->nullable();
-            $table->time('hour_end')->nullable();
+            $table->datetime('hour_start')->nullable();
+            $table->datetime('hour_end')->nullable();
             $table->integer('duration_work')->nullable(); // dalam bentuk menit
-            $table->time('hour_rest_start')->nullable();
-            $table->time('hour_rest_end')->nullable();
+            $table->datetime('hour_rest_start')->nullable();
+            $table->datetime('hour_rest_end')->nullable();
             $table->integer('duration_rest')->nullable(); // dalam bentuk menit
-            $table->time('hour_overtime_start')->nullable();
-            $table->time('hour_overtime_end')->nullable();
+            $table->datetime('hour_overtime_start')->nullable();
+            $table->datetime('hour_overtime_end')->nullable();
             $table->integer('duration_overtime')->nullable(); // dalam bentuk menit
-            $table->time('hour_overtime_job_order_start')->nullable();
-            $table->time('hour_overtime_job_order_end')->nullable();
+            $table->datetime('hour_overtime_job_order_start')->nullable();
+            $table->datetime('hour_overtime_job_order_end')->nullable();
             $table->integer('duration_overtime_job_order')->nullable();
             $table->timestamps();
         });

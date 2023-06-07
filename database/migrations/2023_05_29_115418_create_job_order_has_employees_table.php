@@ -18,7 +18,7 @@ class CreateJobOrderHasEmployeesTable extends Migration
             $table->foreignId('employee_id');
             $table->foreignId('job_order_id');
             $table->enum('status', [
-                'active', 'pending', 'finish', 'overtime',
+                'active', 'pending', 'finish', 'overtime', 'correction'
             ])->nullable();
             $table->datetime('datetime_start');
             $table->datetime('datetime_end')->nullable();

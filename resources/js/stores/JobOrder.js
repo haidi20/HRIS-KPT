@@ -1,32 +1,13 @@
 import axios from "axios";
 import moment from "moment";
 
-import { checkNull } from '../utils';
-
-export const listStatus = {
-    finish: {
-        status: "finish",
-        status_last: "active",
-    },
-    pending_finish: {
-        status: "active",
-        status_last: "pending",
-    },
-    overtime_finish: {
-        status: "active",
-        status_last: "overtime",
-    },
-    correction_finish: {
-        status: "finish",
-        status_last: "correction",
-    },
-};
+import { checkNull, listStatus } from '../utils';
 
 /**
 Status values
 @typedef {
 'active' | 'finish'
-| 'pending' | 'pending_finish'
+| 'pending'
 | 'overtime' | 'overtime_finish'
 | 'correction' | 'correction_finish'
 | 'assessment' | 'assessment_finish'
@@ -53,7 +34,7 @@ Status values
 @property {null|string} estimation - The estimation value.
 @property {string} time_type - The time type.
 @property {null|string} note - The note value.
-@property {string} form_type - The form type.
+@property {string} form_kind - The form type.
 */
 
 const defaultForm = {
@@ -73,7 +54,8 @@ const defaultForm = {
     // hour: null,
     status_note: null,
     // end form action
-    form_kind: 'create',
+    // form_kind: 'create',
+    form_kind: null, // kebutuhan logika kirim data dari modal karyawan
     form_title: "Job Order",
     hour_start: null,
     datetime_start: null,
@@ -190,11 +172,14 @@ const JobOrder = {
             state.data = payload.job_orders;
         },
         INSERT_FORM(state, payload) {
-            state.form.form_kind = payload?.form_kind;
             state.form = {
                 ...state.form,
                 ...payload.form,
             };
+
+            if (payload?.form_kind) {
+                state.form.form_kind = payload?.form_kind;
+            }
 
             // if (payload.form_kind == 'edit') {
             //     state.form.note = payload.note;
@@ -257,21 +242,6 @@ const JobOrder = {
                 state.form.label_image = "Masukkan Gambar";
             }
         },
-        // JANGAN DI HAPUS, UNTUK BACKUP
-        // INSERT_FORM_STATUS(state, payload) {
-        //     let status = payload.status;
-        //     const listStatusFinish = ["overtime_finish", "correction_finish"];
-
-        //     if (listStatusFinish.some((item) => item == payload.status)) {
-        //         // status = "finish";
-        //         // status_finish = this.form.status;
-        //         state.form.status = "active";
-        //         state.form.status_finish = payload.status;
-        //     } else {
-        //         state.form.status = status;
-        //         state.form.status_finish = null;
-        //     }
-        // },
         INSERT_FORM_STATUS(state, payload) {
             let getStatus = payload.status;
 
