@@ -93,3 +93,22 @@ export const imageToBase64 = (file) => {
         reader.readAsDataURL(file);
     });
 }
+
+export const listStatus = {
+    finish: {
+        status: "finish",
+        status_last: "active",
+    },
+    active: {
+        status: "active",
+        status_last: "pending",
+    },
+    overtime_finish: {
+        status: "active",
+        status_last: "overtime",
+    },
+    correction_finish: {
+        status: "finish",
+        status_last: "correction",
+    },
+};

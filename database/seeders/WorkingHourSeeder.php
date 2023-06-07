@@ -20,8 +20,8 @@ class WorkingHourSeeder extends Seeder
             [
                 [
                     'start_time' => '08:00',
-                    'after_work' => '16:59',
-                    'after_work_end' => '19:00',
+                    'after_work' => '17:00',
+                    'after_work_limit' => '20:00',
                     'start_rest' => '11:30',
                     'end_rest' => '13:00',
                     'maximum_delay' => '18:00',

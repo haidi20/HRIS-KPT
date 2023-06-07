@@ -12,7 +12,7 @@ class JobOrderHasEmployee extends Model
 
     protected $appends = [
         "employee_name", "position_name",
-        "status_color", "status_readable",
+        "status_color", "status_readable", 'status_clone',
     ];
 
     protected $fillable = [
@@ -40,6 +40,11 @@ class JobOrderHasEmployee extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
+    public function getStatusCloneAttribute()
+    {
+        return $this->status;
     }
 
     public function getEmployeeNameAttribute()

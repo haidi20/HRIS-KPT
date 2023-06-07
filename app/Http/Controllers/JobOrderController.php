@@ -15,20 +15,25 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Config;
 
 
 class JobOrderController extends Controller
 {
     private $nameModel = "App\Models\JobOrder";
-    private $nameModelJobOrderEmployee = "App\Models\JobOrderHasEmployee";
+    private $nameModelJobOrderHasEmployee = "App\Models\JobOrderHasEmployee";
 
     public function index()
     {
         $vue = true;
         $baseUrl = Url::to('/');
         $user = auth()->user();
+        $statuses = Config::get("library.status");
+        $statuses = json_encode($statuses);
 
-        return view("pages.job-order.index", compact("vue", "user", "baseUrl"));
+        // return $statuses;
+
+        return view("pages.job-order.index", compact("vue", "user", "baseUrl", "statuses"));
     }
 
     public function fetchData()
@@ -245,7 +250,7 @@ class JobOrderController extends Controller
 
                 $this->storeJobOrderHistory($jobOrder);
                 $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
-                $this->storeActionJobOrderHasEmployee($jobOrder, "finish", $date, "active");
+                $this->storeActionJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
             }
 
             $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
@@ -265,6 +270,54 @@ class JobOrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Gagal Penilaian",
+            ], 500);
+        }
+    }
+
+    // perbaharui status karyawan pada job order
+    // tampilannya di tombol aksi karyawan di job order
+    public function storeActionHasEmployee()
+    {
+
+        $date = Carbon::now();
+        $dataEmployees = request("data_employees");
+        $jobStatusController = new JobStatusController;
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($dataEmployees as $index => $item) {
+                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
+                $jobOrderHasEmployee->status = $item["status"];
+                $jobOrderHasEmployee->save();
+
+                if (array_key_exists('status_last', $item)) {
+                    $statusLast = $item["status_last"];
+
+                    $jobStatusController->storeJobStatusHasParent(
+                        $jobOrderHasEmployee,
+                        $statusLast,
+                        $date,
+                        $this->nameModelJobOrderHasEmployee
+                    );
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
+                'message' => "Berhasil memperbaharui status",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal memperbaharui status",
             ], 500);
         }
     }
@@ -330,6 +383,7 @@ class JobOrderController extends Controller
         }
     }
 
+    // berdasarkan beberapa karyawan
     private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart)
     {
         $jobStatusController = new JobStatusController;
@@ -352,12 +406,12 @@ class JobOrderController extends Controller
 
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
-                $jobOrderHasEmployee->status = $getStatus;
+                $jobOrderHasEmployee->status = $item["status"];
                 $jobOrderHasEmployee->datetime_start = $dateStart;
                 $jobOrderHasEmployee->save();
 
                 if (!isset($item["id"])) {
-                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, null, $dateStart, $this->nameModelJobOrderEmployee);
+                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $item["status_last"], $dateStart, $this->nameModelJobOrderHasEmployee);
                 }
 
                 $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
@@ -365,6 +419,7 @@ class JobOrderController extends Controller
         }
     }
 
+    // berdasarkan job order
     private function storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
     {
         $jobStatusController = new JobStatusController;
@@ -372,26 +427,19 @@ class JobOrderController extends Controller
         if (count(request("employee_selecteds")) > 0) {
 
             foreach (request("employee_selecteds") as $index => $item) {
-                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
-
-                if ($status == 'finish') {
-                    $jobOrderHasEmployee->status = $status;
-                    $jobOrderHasEmployee->datetime_end = $date;
-
-                    if ($statusLast == "correction") {
-                        $statusLast = "active";
-                    }
+                if ($status == 'assessment_finish') {
+                    $getStatus = 'finish';
+                    $getStatusLast = 'active';
                 } else {
-                    if ($status == "correction") {
-                        $status = "active";
-                    }
-
-                    $jobOrderHasEmployee->status = $status;
+                    $getStatus = $item["status"];
+                    $getStatusLast = $item["status_last"];
                 }
 
+                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
+                $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->save();
 
-                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $statusLast, $date, $this->nameModelJobOrderEmployee);
+                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $getStatusLast, $date, $this->nameModelJobOrderHasEmployee);
             }
         }
     }

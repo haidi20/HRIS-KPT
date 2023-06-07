@@ -9,6 +9,7 @@ use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
@@ -66,8 +67,9 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('fetch-data-main', [AttendanceController::class, "fetchDataMain"])->name('fetchDataMain');
         Route::get('fetch-data-detail', [AttendanceController::class, "fetchDataDetail"])->name('fetchDataDetail');
-        Route::get('fetch-data-finger', [AttendanceController::class, "fetchDataFinger"])->name('fetchDataFinger');
         Route::post('store', [AttendanceController::class, "store"])->name('store');
+        Route::get('store-finger-spot', [AttendanceController::class, "storeFingerSpot"])->name('storeFingerSpot');
+        Route::get('store-has-employee', [AttendanceController::class, "storeHasEmployee"])->name('storeHasEmployee');
     });
     Route::prefix('roster')->name('roster.')->group(function () {
         Route::get('fetch-data', [RosterController::class, "fetchData"])->name('fetchData');
@@ -138,9 +140,12 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('store', [JobOrderController::class, "store"])->name('store');
         Route::post('store-action', [JobOrderController::class, "storeAction"])->name('storeAction');
         Route::post('store-action-assessment', [JobOrderController::class, "storeActionAssessment"])->name('storeActionAssessment');
+        Route::post('store-action-has-employee', [JobOrderController::class, "storeActionHasEmployee"])->name('storeActionHasEmployee');
         Route::post('store-action-job-order-has-employee', [JobOrderController::class, "storeActionJobOrderHasEmployee"])->name('storeActionJobOrderHasEmployee');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
+    // Route::prefix('job-status')->name('jobStatus.')->group(function () {
+    // });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
         Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdjustmentController::class, "store"])->name('store');

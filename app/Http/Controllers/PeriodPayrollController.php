@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\PeriodPayroll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -143,6 +144,13 @@ class PeriodPayrollController extends Controller
             $period_payroll->date_start = request("date_start");
             $period_payroll->date_end = request("date_end");
             $period_payroll->save();
+
+
+            $employees = Employee::all();
+
+            foreach ($employees as $key => $employee) {
+                # code...
+            }
 
             DB::commit();
 

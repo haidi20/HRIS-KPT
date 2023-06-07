@@ -34,6 +34,7 @@ export default {
   props: {
     user: String,
     baseUrl: String,
+    statuses: String,
   },
   data() {
     return {
@@ -54,6 +55,10 @@ export default {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });
+    });
+
+    this.$store.commit(`employeeHasParent/INSERT_OPTION_STATUS`, {
+      statuses: JSON.parse(this.statuses),
     });
 
     this.$store.dispatch("fetchPermission");
@@ -85,7 +90,8 @@ export default {
       return (
         this.form.form_kind == "edit" ||
         this.form.form_kind == "read" ||
-        this.form.form_kind == "create"
+        this.form.form_kind == "create" ||
+        this.form.form_kind == null
       );
     },
   },

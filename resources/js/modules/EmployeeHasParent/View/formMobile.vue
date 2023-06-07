@@ -41,6 +41,28 @@
         </b-col>
       </b-row>
     </template>
+    <template v-if="getConditionTime()">
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Tanggal Selesai Lembur" label-for="Tanggal" class>
+            <DatePicker
+              id="date"
+              v-model="form.date"
+              format="YYYY-MM-DD"
+              type="date"
+              placeholder="pilih tanggal"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Jam Selesai Lembur" label-for="hour" class>
+            <input type="time" class="form-control" v-model="form.hour" id="hour" name="hour" />
+          </b-form-group>
+        </b-col>
+      </b-row>
+    </template>
   </div>
 </template>
 
