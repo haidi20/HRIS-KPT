@@ -8,7 +8,7 @@
             v-model="form.date"
             format="YYYY-MM-DD"
             type="date"
-            placeholder="pilih Tanggal"
+            placeholder="pilih tanggal"
             :disabled="getConditionDisableDate()"
           />
         </b-form-group>

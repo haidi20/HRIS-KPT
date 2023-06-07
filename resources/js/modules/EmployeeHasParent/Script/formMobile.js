@@ -83,5 +83,12 @@ export default {
                 });
             }
         },
+        getConditionTime() {
+            let result = false;
+
+            // result = true;
+
+            return result;
+        },
     },
 };

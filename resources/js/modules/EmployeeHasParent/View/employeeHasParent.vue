@@ -106,6 +106,8 @@ export default {
       };
 
       console.info(request);
+      //   return false;
+      this.is_loading = true;
 
       await axios
         .post(

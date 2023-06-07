@@ -49,7 +49,7 @@
           <h5>{{getForm.employee_name}} - {{getForm.position_name}}</h5>
         </div>
         <div
-          v-if="getForm.status == 'active' && getForm.form_type != 'create'"
+          v-if="getConditionActionPending()"
           class="action-item"
           @click="onAction('pending', 'Tunda')"
         >tunda</div>
@@ -59,26 +59,31 @@
           @click="onAction('active', 'Aktif Kembali')"
         >Aktif Kembali</div>
         <div
-          v-if="getForm.status == 'active' && getForm.form_type != 'create'"
+          v-if="getConditionActionFinish()"
           class="action-item"
           @click="onAction('finish', 'Selesai')"
         >selesai</div>
         <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
-        <div
-          v-if="getConditionActionOvertimeFinish()"
-          class="action-item"
-          @click="onAction('overtime_finish', 'Selesai Lembur')"
-        >selesai lembur</div>
         <div
           v-if="getConditionOvertime()"
           class="action-item"
           @click="onAction('overtime', 'Lembur')"
         >lembur</div>
         <div
+          v-if="getConditionActionOvertimeFinish()"
+          class="action-item"
+          @click="onAction('overtime_finish', 'Selesai Lembur')"
+        >lembur selesai</div>
+        <div
           v-if="getConditionActionNonActiveOvertime()"
           class="action-item"
           @click="onNonActiveOvertime()"
-        >tidak aktif lembur</div>
+        >lembur tidak aktif</div>
+        <div
+          v-if="getConditionActionOvertimeAgain()"
+          class="action-item"
+          @click="onActionOvertimeAgain()"
+        >tidak jadi lembur selesai</div>
       </div>
     </b-modal>
   </div>

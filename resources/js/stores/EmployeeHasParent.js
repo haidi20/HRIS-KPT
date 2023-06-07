@@ -15,6 +15,8 @@ const defaultForm = {
     data_index: null, // untuk hapus data yang sudah di pilih
     status: null,
     is_hide_status: false,
+    hour: null,
+    date: new Date(),
 }
 
 const EmployeeHasParent = {
@@ -108,12 +110,12 @@ const EmployeeHasParent = {
         },
         // kebutuhan di job order file data.js
         UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME(state, payload) {
-            const getSelecteds = state.data.selecteds.map(item => ({
+            const getSelecteds = state.data.selecteds.map(item => item.status == 'active' ? ({
                 ...item,
                 status: 'overtime',
-                status_readable: 'lembur',
-                status_color: 'info',
-            }));
+                status_readable: state.options.statuses['overtime'].short_readable,
+                status_color: state.options.statuses['overtime'].color,
+            }) : ({ ...item }));
 
             state.data.selecteds = [...getSelecteds];
         },
@@ -129,7 +131,19 @@ const EmployeeHasParent = {
             }
 
             const getSelecteds = state.data.selecteds.map(item => {
-                if (item.employee_id == state.form.employee_id) {
+                if (payload.list_employee_id != undefined) {
+                    // console.info(payload.list_employee_id);
+                    const getStatus = state.options.statuses[getFormType];
+                    if (payload.list_employee_id.some(value => value.employee_id == item.employee_id)) {
+                        return {
+                            ...item,
+                            status: getFormType,
+                            status_last: statusLast,
+                            status_readable: getStatus.short_readable,
+                            status_color: getStatus.color,
+                        }
+                    }
+                } else if (item.employee_id == state.form.employee_id) {
                     const getStatus = state.options.statuses[getFormType];
 
                     return {
@@ -139,9 +153,10 @@ const EmployeeHasParent = {
                         status_readable: getStatus.short_readable,
                         status_color: getStatus.color,
                     }
-                } else {
-                    return { ...item };
                 }
+
+                // jangan tambahkan status_last
+                return { ...item };
             });
 
             state.data.selecteds = [...getSelecteds];
@@ -218,6 +233,33 @@ const EmployeeHasParent = {
                 .catch((err) => {
                     console.info(err);
                 });
+        },
+        onUpdateStatusDataSelected: (context, payload) => {
+            let getStatus = null;
+            // console.info(listStatus[payload.form_type].status);
+            if (
+                payload.form_type == 'pending'
+                || payload.form_type == 'correction'
+            ) {
+                getStatus = 'active';
+            } else if (listStatus[payload.form_type]) {
+                getStatus = listStatus[payload.form_type].status_last;
+            } else {
+                payload.form_type;
+            }
+
+            // console.info(getStatus);
+
+            const getDataSelectedOvertime = context.state.data.selecteds
+                .filter(item => item.status == getStatus)
+                .map(item => ({ employee_id: item.employee_id }));
+
+            context.commit("UPDATE_DATA_SELECTED_STATUS", {
+                list_employee_id: [...getDataSelectedOvertime],
+                form_type: payload.form_type,
+            });
+
+            // console.info(context.state.data.selecteds);
         },
     },
     getters: {

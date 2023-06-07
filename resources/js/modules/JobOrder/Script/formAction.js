@@ -52,6 +52,10 @@ export default {
             this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
                 status: this.getFormKind,
             });
+            let getEmployeeSelecteds = this.getEmployeeSelecteds
+                .filter(item => item.hasOwnProperty('status_last'));
+
+            // console.info(this.getEmployeeSelecteds, getEmployeeSelecteds);
 
             const request = {
                 id: this.form.id,
@@ -61,7 +65,7 @@ export default {
                 status_last: this.form.status_last,
                 status_finish: this.form.status_finish,
                 status_note: this.form.status_note,
-                employee_selecteds: [...this.getEmployeeSelecteds],
+                employee_selecteds: [...getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
 
@@ -138,20 +142,23 @@ export default {
         },
         getConditionDisableDate() {
             let result = false;
-            const listStatus = ["overtime"];
+            const listStatus = ["overtime", 'active'];
 
-            // console.info(this.form.status);
 
             if (listStatus.some((item) => item == this.form.status)) {
                 result = true;
             }
+
+            console.info(this.form.status);
 
             return result;
         },
         getConditionImage() {
             let result = true;
 
-            if (this.form.status == 'pending' || this.form.status == 'pending_finish') {
+            // console.info(this.form.status);
+
+            if (this.form.status == 'pending' || this.form.status_last == 'pending') {
                 result = false;
             }
 

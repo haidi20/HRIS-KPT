@@ -97,10 +97,12 @@ export default {
                 value: true,
             });
             this.$store.commit("jobOrder/CLEAR_FORM_ACTION");
+            this.$store.commit("jobOrder/INSERT_FORM_STATUS", { status: type });
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
                 form_type: "read",
                 form_type_parent: "overtime",
             });
+            this.$store.dispatch("employeeHasParent/onUpdateStatusDataSelected", { form_type: type });
 
             if (type == 'overtime') {
                 this.$store.commit("employeeHasParent/UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME");
