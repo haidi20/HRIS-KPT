@@ -122,6 +122,29 @@
     <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
 
     <script>
+
+    function formatRupiah(angka='', prefix=0){
+
+        if(angka==''){
+            return '';
+        }
+                var number_string = angka.toString().replace(/[^,\d]/g, ''),
+                split   		= number_string.split(','),
+                sisa     		= split[0].length % 3,
+                rupiah     		= split[0].substr(0, sisa),
+                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+    
+                // tambahkan titik jika yang di input sudah menjadi angka ribuan
+                if(ribuan){
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+    
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+            }
+
+
         const initialState = {
             //
         };
@@ -154,6 +177,7 @@
                 method: 'GET',
                 data: {
                     month_filter: $("#month_filter").val(),
+                    employee_id : $('#employees').val(),
                 },
                 beforeSend: function() {
                     // empty view
@@ -167,15 +191,15 @@
                     $("#employee_name").text(employee.name);
                     $("#position_name").text(employee.position_name);
                     $("#employee_number_identity").text(employee.number_identity);
-                    $("#gaji_dasar").text(`Rp. ${employee.salary}`);
-                    $("#tunjangan_tetap").text(`Rp. ${employee.tunjangan_tetap}`);
-                    $("#rate_lembur").text(`Rp. ${employee.rate_lembur}`);
-                    $("#tunjangan_makan").text(`Rp. ${employee.tunjangan_makan}`);
-                    $("#tunjangan_transportasi").text(`Rp. ${employee.tunjangan_transportasi}`);
-                    $("#tunjangan_kehadiran").text(`Rp. ${employee.tunjangan_kehadiran}`);
-                    $("#ptkp_karyawan").text(`Rp. ${employee.ptkp_karyawan}`);
-                    $("#jumlah_cuti_ijin").text(`Rp. ${employee.jumlah_cuti_ijin}`);
-                    $("#sisa_cuti").text(`Rp. ${employee.sisa_cuti}`);
+                    $("#gaji_dasar").text(`Rp. ${formatRupiah(employee.basic_salary)}`);
+                    $("#tunjangan_tetap").text(`Rp. ${formatRupiah(employee.allowance)}`);
+                    $("#rate_lembur").text(`Rp. ${formatRupiah(employee.overtime_rate_per_hour)}`);
+                    $("#tunjangan_makan").text(`Rp. ${formatRupiah(employee.meal_allowance_per_attend)}`);
+                    $("#tunjangan_transportasi").text(`Rp. ${formatRupiah(employee.transport_allowance_per_attend)}`);
+                    $("#tunjangan_kehadiran").text(`Rp. ${formatRupiah(employee.attend_allowance_per_attend)}`);
+                    $("#ptkp_karyawan").text(`Rp. ${formatRupiah(employee.ptkp_karyawan)}`);
+                    $("#jumlah_cuti_ijin").text(`${formatRupiah(employee.jumlah_cuti_ijin)}`);
+                    $("#sisa_cuti").text(`${formatRupiah(employee.sisa_cuti)}`);
 
                 },
                 error: function(err) {}
@@ -188,6 +212,7 @@
                 method: 'GET',
                 data: {
                     month_filter: $("#month_filter").val(),
+                    employee_id : $('#employees').val(),
                 },
                 beforeSend: function() {
                     // empty view
@@ -196,20 +221,22 @@
                     // console.info(responses);
                     const data = responses.data;
 
-                    $("#jumlah_gaji_dasar").text(data.jumlah_gaji_dasar);
-                    $("#nominal_gaji_dasar").text(`Rp ${data.nominal_gaji_dasar}`);
-                    $("#jumlah_tunjangan_tetap").text(data.jumlah_tunjangan_tetap);
-                    $("#nominal_tunjangan_tetap").text(`Rp ${data.nominal_tunjangan_tetap}`);
-                    $("#jumlah_uang_makan").text(data.jumlah_uang_makan);
-                    $("#nominal_uang_makan").text(`Rp ${data.nominal_uang_makan}`);
-                    $("#jumlah_lembur").text(data.jumlah_lembur);
-                    $("#nominal_lembur").text(`Rp ${data.nominal_lembur}`);
-                    $("#nominal_tambahan_lain_lain").text(`Rp ${data.nominal_tambahan_lain_lain}`);
-                    $("#jumlah_pendapatan_kotor").text(`Rp ${data.jumlah_pendapatan_kotor}`);
-                    $("#nominal_bpjs_dibayar_karyawan").text(`Rp ${data.nominal_bpjs_dibayar_karyawan}`);
-                    $("#nominal_pajak_penghasilan_pph21").text(`Rp ${data.nominal_pajak_penghasilan_pph21}`);
-                    $("#nominal_potongan_lain_lain").text(`Rp ${data.nominal_potongan_lain_lain}`);
-                    $("#jumlah_potongan").text(`Rp ${data.jumlah_potongan}`);
+                    $("#jumlah_gaji_dasar").text("1");
+                    $("#nominal_gaji_dasar").text(`Rp ${data.pendapatan_gaji_dasar}`);
+                    $("#jumlah_tunjangan_tetap").text("1");
+                    $("#nominal_tunjangan_tetap").text(`Rp ${data.pendapatan_tunjagan_tetap}`);
+                    $("#jumlah_uang_makan").text(data.jumlah_hari_tunjangan_makan);
+                    $("#nominal_uang_makan").text(`Rp ${data.pendapatan_uang_makan}`);
+                    $("#jumlah_lembur").text(data.jumlah_jam_rate_lembur);
+                    $("#nominal_lembur").text(`Rp ${data.pendapatan_lembur}`);
+                    $("#nominal_tambahan_lain_lain").text(`Rp ${data.pendapatan_tambahan_lain_lain}`);
+                    $("#jumlah_pendapatan_kotor").text(`Rp ${data.jumlah_pendapatan}`);
+
+
+                    $("#nominal_bpjs_dibayar_karyawan").text(`Rp ${data.pemotongan_bpjs_dibayar_karyawan}`);
+                    $("#nominal_pajak_penghasilan_pph21").text(`Rp ${data.pemotongan_pph_dua_satu}`);
+                    $("#nominal_potongan_lain_lain").text(`Rp ${data.pemotongan_potongan_lain_lain}`);
+                    $("#jumlah_potongan").text(`Rp ${data.jumlah_pemotongan}`);
                     $("#gaji_bersih").text(`Rp ${data.gaji_bersih}`);
                 },
                 error: function(err) {}
@@ -224,6 +251,7 @@
                 method: 'GET',
                 data: {
                     month_filter: $("#month_filter").val(),
+                    employee_id : $('#employees').val(),
                 },
                 beforeSend: function() {
                     // empty view
@@ -281,6 +309,7 @@
                 method: 'GET',
                 data: {
                     month_filter: $("#month_filter").val(),
+                    employee_id : $('#employees').val(),
                 },
                 beforeSend: function() {
                     // empty view

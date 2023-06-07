@@ -32,6 +32,18 @@ class CreateAttendanceHasEmployeesTable extends Migration
             $table->dateTime('hour_overtime_start')->nullable();
             $table->dateTime('hour_overtime_end')->nullable();
             $table->integer('duration_overtime')->nullable();
+
+            $table->dateTime('hour_overtime_job_order_start')->nullable();
+            $table->dateTime('hour_overtime_job_order_end')->nullable();
+            $table->integer('duration_overtime_job_order')->nullable();
+
+
+
+            
+
+
+
+
             $table->timestamps();
         });
     }

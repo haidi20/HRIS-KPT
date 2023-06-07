@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Payroll;
 use App\Models\PeriodPayroll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -149,7 +151,113 @@ class PeriodPayrollController extends Controller
             $employees = Employee::all();
 
             foreach ($employees as $key => $employee) {
-                # code...
+
+                $jumlah_hari_kerja  = Attendance::whereDate('date','>=',$period_payroll->date_start)
+                ->whereDate('date','<=',$period_payroll->date_end)
+                ->where('employee_id',$employee->id)
+                ->where(function($query){
+                    $query->where('hour_start','!=',NULL)->orWhere('hour_end','!=',NULL);
+                })
+                ->count();
+
+                $jumlah_jam_rate_lembur  = Attendance::whereDate('date','>=',$period_payroll->date_start)
+                ->whereDate('date','<=',$period_payroll->date_end)
+                ->where('employee_id',$employee->id)
+                ->where(function($query){
+                    $query->where('hour_start','!=',NULL)->orWhere('hour_end','!=',NULL);
+                })
+                ->sum('duration_overtime');
+
+                $jumlah_jam_rate_lembur_modulus  = $jumlah_jam_rate_lembur %60;
+
+                if($jumlah_jam_rate_lembur >= 30 && $jumlah_jam_rate_lembur <= 50){
+                    $jumlah_jam_rate_lembur+= 0.5;
+                }
+
+                if($jumlah_jam_rate_lembur > 50){
+                    $jumlah_jam_rate_lembur+= 1;
+                }
+
+
+
+
+                Payroll::create([
+                    'employee_id'=>$employee->id,
+                    'period_payroll_id'=>$period_payroll->id,
+                    'pendapatan_gaji_dasar'=>$employee->basic_salary,
+                    'pendapatan_tunjangan_tetap'=>$employee->allowance,
+                    'pendapatan_uang_makan'=>$employee->meal_allowance_per_attend,
+                    'pendapatan_lembur'=>$employee->overtime_rate_per_hour,
+                    'pendapatan_tambahan_lain_lain'=>0,
+                    'jumlah_pendapatan'=>0,
+
+
+                    'pemotongan_bpjs_dibayar_karyawan'=>0,
+                    'pemotongan_pph_dua_satu'=>0,
+                    'pemotongan_potongan_lain_lain'=>0,
+                    'jumlah_pemotongan'=>0,
+
+                    'gaji_bersih'=>0,
+                    'bulan'=>$period_payroll->period,
+                    'posisi'=>"",
+                    'gaji_dasar'=>$employee->basic_salary,
+                    'tunjangan_tetap'=>$employee->allowance,
+
+
+                    'rate_lembur'=>$employee->overtime_rate_per_hour,
+                    'jumlah_jam_rate_lembur'=>$jumlah_jam_rate_lembur,
+
+
+
+
+                    'tunjangan_makan'=>$employee->meal_allowance_per_attend,
+                    'jumlah_hari_tunjangan_makan'=>$jumlah_hari_kerja,
+
+
+
+                    'tunjangan_transport'=>$employee->transport_allowance_per_attend,
+                    'jumlah_hari_tunjangan_transport'=>$jumlah_hari_kerja,
+
+
+
+                    'tunjangan_kehadiran'=>$employee->attend_allowance_per_attend,
+                    'jumlah_hari_tunjangan_kehadiran'=>$jumlah_hari_kerja,
+
+
+                    'ptkp_karyawan'=>0,
+                    'jumlah_cuti_ijin_per_bulan'=>0,
+                    'sisa_cuti_tahun'=>0,
+
+                    'dasar_updah_bpjs_tk'=>0,
+                    'dasar_updah_bpjs_kes'=>0,
+
+
+
+                    'jht_perusahaan_persen'=>0,
+                    'jht_karyawan_persen'=>0,
+                    'jht_perusahaan_rupiah'=>0,
+                    'jht_karyawan_rupiah'=>0,
+
+                    'jkk_perusahaan_persen'=>0,
+                    'jkk_karyawan_persen'=>0,
+                    'jkk_perusahaan_rupiah'=>0,
+                    'jkk_karyawan_rupiah'=>0,
+
+                    'jkm_perusahaan_persen'=>0,
+                    'jkm_karyawan_persen'=>0,
+                    'jkm_perusahaan_rupiah'=>0,
+                    'jkm_karyawan_rupiah'=>0,
+
+                    'jp_perusahaan_persen'=>0,
+                    'jp_karyawan_persen'=>0,
+                    'jp_perusahaan_rupiah'=>0,
+                    'jp_karyawan_rupiah'=>0,
+
+                    'bpjs_perusahaan_persen'=>0,
+                    'bpjs_karyawan_persen'=>0,
+                    'bpjs_perusahaan_rupiah'=>0,
+                    'bpjs_karyawan_rupiah'=>0,
+                ]);
             }
 
             DB::commit();

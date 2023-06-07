@@ -35,6 +35,7 @@ class EmployeeSeeder extends Seeder
                     "company_id" => $data[4],
                     "position_id" => $data[5],
                     // "finger_doc_1" => $data[6],
+                    "basic_salary"=>$data[7],
                 ]);
 
                 // Mengambil waktu pembuatan data dari entitas yang sesuai di database
