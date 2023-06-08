@@ -42,6 +42,12 @@
 </div>
 @endsection
 
+
+@section('style')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
+
+@endsection
 @section('script')
 {!! $html->scripts() !!}
 <script>
@@ -55,6 +61,69 @@
 
     $(document).ready(function() {
         $('.dataTable').DataTable();
+
+        // new Litepicker({
+        //         element: document.getElementById('month_filter'),
+        //         format: 'YYYY-MM',
+        //         scrollToDate :false,
+        //         singleMode: true,
+        //         // date:false,
+        //         resetButton: true,
+        //         splitView : true,
+        //         // dropdowns  : {"minYear":1990,"maxYear":null,"months":false,"years":false}
+        //     });
+
+
+            // new Litepicker({
+            //     element: document.getElementById('start_of_workdays'),
+            //     format: 'YYYY-MM-DD',
+            //     singleMode: true,
+            //     tooltipText: {
+            //         one: 'night',
+            //         other: 'nights'
+            //     },
+            //     tooltipNumber: (totalDays) => {
+            //         return totalDays - 1;
+            //     },
+            // });
+
+            // new Litepicker({
+            //     element: document.getElementById('end_of_workdays'),
+            //     format: 'YYYY-MM-DD',
+            //     singleMode: true,
+            //     tooltipText: {
+            //         one: 'night',
+            //         other: 'nights'
+            //     },
+            //     tooltipNumber: (totalDays) => {
+            //         return totalDays - 1;
+            //     },
+            // });
+
+
+
+        $(document).on('change', '#month_filter', function() {
+            // alert();
+
+            var month_year = $(this).val().toString().split('-');
+            var month_year_end = $(this).val().toString().split('-');
+            // console.log([month_year , month_year_end]);
+
+            month_year[1] = month_year[1] - 1;
+            if(month_year[1] == 0){
+                month_year[0] = month_year[0] - 1;
+                month_year[1] = 12;
+            }
+
+            $('#start_of_workdays').val(month_year[0]+"-"+month_year[1]+"-26");
+            $('#end_of_workdays').val(month_year_end[0]+"-"+month_year_end[1]+"-25");
+           
+
+
+        // Does some stuff and logs the event to the console
+        });
+
+
 
         state.period_payrolls = {!! json_encode($period_payrolls) !!};
         send();

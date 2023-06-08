@@ -14,9 +14,8 @@ class JobOrder extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [];
-    // status_clone untuk bisa membandingkan status setelah perubahan dan yang di database
     protected $appends = [
-        "status_color", "status_readable", 'status_clone',
+        "status_color", "status_readable",
         "project_name", "job_name", "job_code", "hour_start",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
         "datetime_estimation_end_readable", "creator_name", "creator_group_name",
@@ -76,11 +75,6 @@ class JobOrder extends Model
     public function jobOrderAssessments()
     {
         return $this->hasMany(JobOrderAssessment::class, "job_order_id", "id");
-    }
-
-    public function getStatusCloneAttribute()
-    {
-        return $this->status;
     }
 
     public function getCreatorNameAttribute()
@@ -157,7 +151,7 @@ class JobOrder extends Model
     public function getEmployeeActiveTotalAttribute()
     {
         return $this->jobOrderHasEmployees
-            ->whereIn('status', ['active', 'finish', 'overtime', 'correction'])
+            ->whereIn('status', ['active', 'finish'])
             ->count();
     }
 

@@ -68,7 +68,7 @@
                                 <span id="rate_lembur"> </span>
                             </td>
                             <td>
-                                <span>/bulan</span>
+                                <span>/jam</span>
                             </td>
                         </tr>
                     </tbody>
