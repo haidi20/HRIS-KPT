@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
