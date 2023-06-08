@@ -34,8 +34,12 @@ class RoleSeeder extends Seeder
             "lihat dashboard", "lihat laporan kasbon", "persetujuan laporan kasbon", "perwakilan laporan kasbon",
         ];
 
-        // pekerja lapangan
-        $permissionGeneralFieldWorker = [
+        // pengawas
+        $permissionForeman = [
+            "lihat dashboard", "lihat job order", "tambah job order",
+        ];
+
+        $permissionQualityControl = [
             "lihat dashboard", "lihat job order",
         ];
 
@@ -46,9 +50,9 @@ class RoleSeeder extends Seeder
         $roleCashier->givePermissionTo($permissionGeneralOffice);
 
         $roleForeman = Role::create(['name' => 'Pengawas']);
-        $roleForeman->givePermissionTo($permissionGeneralFieldWorker);
+        $roleForeman->givePermissionTo($permissionForeman);
 
         $roleQc = Role::create(['name' => 'Quality Control']);
-        $roleQc->givePermissionTo($permissionGeneralFieldWorker);
+        $roleQc->givePermissionTo($permissionQualityControl);
     }
 }

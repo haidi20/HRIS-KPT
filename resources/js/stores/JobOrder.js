@@ -79,6 +79,7 @@ const JobOrder = {
             type: "all",
             type_by: "creator",
             project_id: null,
+            search: null,
         },
         form: { ...defaultForm },
         is_active_form: false,

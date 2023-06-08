@@ -229,6 +229,11 @@ export default {
             }
 
             return result;
-        }
+        },
+        getCan(permissionName) {
+            const getPermission = this.$store.getters["getCan"](permissionName);
+
+            return getPermission;
+        },
     },
 };

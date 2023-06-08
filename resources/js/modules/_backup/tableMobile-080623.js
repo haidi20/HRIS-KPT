@@ -102,6 +102,11 @@ export default {
         },
         getConditionActionActive() {
             let result = false;
+            const listNotFormKind = ['overtime'];
+
+            // console.info(this.getJobOrderFormKind);
+            // && this.getJobOrderFormKind != null
+            // && listNotFormKind.some(item => item != this.getJobOrderFormKind)
 
             if (
                 (
@@ -150,6 +155,8 @@ export default {
         getConditionActionDelete() {
             let result = false;
 
+            // console.info(this.getForm.form_type);
+
             // hapus hanya ketika buat data, kalo edit hanya bisa pending
             if (this.getForm.form_type == 'create') {
                 result = true;
@@ -162,6 +169,17 @@ export default {
         getConditionOvertime() {
             let result = false;
 
+            // console.info(this.getJobOrderFormKind);
+            // console.info(
+            //     this.getForm.status
+            //     , this.getJobOrderFormKind
+            // );
+
+            // && this.getJobOrderStatus == 'overtime'
+            // this.getJobOrderStatus == 'active'
+            // if (this.getForm.status == 'overtime') {
+            //     result = true;
+            // }
             if (
                 this.getForm.status == 'active'
                 && this.getJobOrderFormKind == 'overtime_finish'
@@ -174,6 +192,19 @@ export default {
         getConditionActionOvertimeFinish() {
             let result = false;
 
+            // console.info(this.getJobOrderStatus);
+            // console.info(this.getForm.status, this.getForm.status_clone);
+
+            // if (
+            //     this.getForm.status == 'overtime'
+            //     && (
+            //         this.getJobOrderStatus == 'overtime'
+            //         || this.getJobOrderFormKind == null
+            //     )
+            // ) {
+            //     result = true;
+            // }
+
             if (
                 this.getForm.status_clone == 'overtime'
                 && this.getForm.status == 'overtime'
@@ -185,6 +216,15 @@ export default {
         },
         getConditionActionNonActiveOvertime() {
             let result = false;
+
+            // console.info(this.getJobOrderFormKind);
+
+            // if (
+            //     this.getForm.status == 'overtime'
+            //     && this.getJobOrderFormKind == 'overtime'
+            // ) {
+            //     result = true;
+            // }
 
             if (
                 this.getForm.status_clone == 'active'

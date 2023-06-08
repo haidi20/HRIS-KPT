@@ -57,8 +57,16 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-form-group label="Kata Kunci" label-for="type_by" class>
-            <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
+          <b-form-group label="Kata Kunci" label-for="search" class>
+            <input
+              id="search"
+              name="search"
+              type="text"
+              v-model="params.search"
+              placeholder="search..."
+              style="width: 100%"
+              class="form-control"
+            />
           </b-form-group>
         </b-col>
       </b-row>

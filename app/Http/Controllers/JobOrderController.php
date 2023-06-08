@@ -38,6 +38,7 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        $search = request("search");
         $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
 
@@ -58,10 +59,24 @@ class JobOrderController extends Controller
             $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
         }
 
+        if ($search != null) {
+            $jobOrders = $jobOrders->where(function ($query) use ($search) {
+                $query->orWhereHas("project", function ($queryProject) use ($search) {
+                    $queryProject->where("name", "like", "%" . $search . "%");
+                })->orWhereHas("job", function ($queryProject) use ($search) {
+                    $queryProject->where("name", "like", "%" . $search . "%")
+                        ->orWhere("code", "like", "%" . $search . "%");
+                })->orWhereHas("creator", function ($queryProject) use ($search) {
+                    $queryProject->where("name", "like", "%" . $search . "%");
+                });
+            });
+        }
+
         $jobOrders = $jobOrders->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
+            "requests" => request()->all(),
         ]);
     }
 
