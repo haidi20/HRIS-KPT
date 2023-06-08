@@ -272,10 +272,10 @@ class PeriodPayrollController extends Controller
                 } 
                 
                 
-                $total_bpjs_perusahaan_persen = $jkk_perusahaan_persen + $jkk_perusahaan_persen + $jkm_perusahaan_persen + $jp_perusahaan_persen + $kes_perusahaan_persen;
-                $total_bpjs_karyawan_persen = $jkk_karyawan_persen + $jkk_karyawan_persen + $jkm_karyawan_persen + $jp_karyawan_persen + $kes_karyawan_persen;
-                $total_bpjs_perusahaan_rupiah = $jkk_perusahaan_rupiah + $jkk_perusahaan_rupiah + $jkm_perusahaan_rupiah + $jp_perusahaan_rupiah + $kes_perusahaan_rupiah;
-                $total_bpjs_karyawan_rupiah = $jkk_karyawan_rupiah + $jkk_karyawan_rupiah + $jkm_karyawan_rupiah + $jp_karyawan_rupiah + $kes_karyawan_rupiah;
+                $total_bpjs_perusahaan_persen = $jht_perusahaan_persen + $jkk_perusahaan_persen + $jkm_perusahaan_persen + $jp_perusahaan_persen + $kes_perusahaan_persen;
+                $total_bpjs_karyawan_persen = $jht_karyawan_persen + $jkk_karyawan_persen + $jkm_karyawan_persen + $jp_karyawan_persen + $kes_karyawan_persen;
+                $total_bpjs_perusahaan_rupiah = $jht_perusahaan_rupiah + $jkk_perusahaan_rupiah + $jkm_perusahaan_rupiah + $jp_perusahaan_rupiah + $kes_perusahaan_rupiah;
+                $total_bpjs_karyawan_rupiah = $jht_karyawan_rupiah + $jkk_karyawan_rupiah + $jkm_karyawan_rupiah + $jp_karyawan_rupiah + $kes_karyawan_rupiah;
 
 
 
@@ -336,6 +336,18 @@ class PeriodPayrollController extends Controller
 
                 $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
 
+                $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+
+
+                $pajak_gaji_kotor_kurang_potongan = $jumlah_pendapatan - $pemotongan_potongan_lain_lain;
+                $pajak_bpjs_dibayar_perusahaan = $total_bpjs_perusahaan_rupiah;
+                $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
+                $pajak_biaya_jabatan = min(500000, (0.5 * $pajak_total_penghasilan_kotor));
+                $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
+                $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
+                $pajak_gaji_bersih_setahun = 12 * ($pajak_total_penghasilan_kotor - $pajak_total_pengurang) ;
+                $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp ;
+
                 Payroll::create([
                     'employee_id'=>$employee->id,
                     'period_payroll_id'=>$period_payroll->id,
@@ -352,7 +364,7 @@ class PeriodPayrollController extends Controller
                     'pemotongan_potongan_lain_lain'=>0,
                     'jumlah_pemotongan'=>0,
 
-                    'gaji_bersih'=>0,
+                    'gaji_bersih'=>$gaji_bersih,
                     'bulan'=>$period_payroll->period,
                     'posisi'=>"",
                     'gaji_dasar'=>$employee->basic_salary,
@@ -424,6 +436,16 @@ class PeriodPayrollController extends Controller
                     'pemotongan_bpjs_dibayar_karyawan'=>$pemotongan_bpjs_dibayar_karyawan,
                     'pemotongan_pph_dua_satu'=>$pemotongan_pph_dua_satu,
                     'pemotongan_potongan_lain_lain'=>$pemotongan_potongan_lain_lain,
+
+
+                    'pajak_gaji_kotor_kurang_potongan'=>$pajak_gaji_kotor_kurang_potongan,
+                    'pajak_bpjs_dibayar_perusahaan'=>$pajak_bpjs_dibayar_perusahaan,
+                    'pajak_total_penghasilan_kotor'=>$pajak_total_penghasilan_kotor,
+                    'pajak_biaya_jabatan'=>$pajak_biaya_jabatan,
+                    'pajak_bpjs_dibayar_karyawan'=>$pajak_bpjs_dibayar_karyawan,
+                    'pajak_total_pengurang'=>$pajak_total_pengurang,
+                    'pajak_gaji_bersih_setahun'=>$pajak_gaji_bersih_setahun,
+                    'pkp_setahun'=>$pkp_setahun,
                 ]);
             }
 
