@@ -88,7 +88,7 @@ export default {
                     },
                 });
 
-                console.info(checkData);
+                // console.info(checkData);
 
                 Toast.fire({
                     icon: "warning",

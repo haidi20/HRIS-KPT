@@ -31,7 +31,7 @@
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
           <b-button
             v-if="getConditionBtnSave()"
-            :disabled="getIsDisabledBtnSave"
+            :disabled="getConditionDisabledBtnSave()"
             style="float: right"
             variant="success"
             @click="onSave()"
@@ -95,11 +95,15 @@ export default {
     onCloseModal() {
       this.$bvModal.hide("data_employee");
     },
-    onSave() {
+    async onSave() {
       //   console.info(this.getJobOrderFormKind);
+      const getValidationEmployee = await this.getValidationEmployee();
 
+      // console.info(checkEmployeeStatus);
       if (this.getJobOrderFormKind == null) {
         this.onSend();
+      } else if (getValidationEmployee) {
+        return false;
       } else {
         this.$bvModal.hide("data_employee");
       }
@@ -174,6 +178,38 @@ export default {
           });
         });
     },
+    async getValidationEmployee() {
+      this.is_loading = true;
+
+      return new Promise((resolve, reject) => {
+        // setTimeout(() => {
+        //   resolve();
+        // }, duration);
+
+        setTimeout(() => {
+          this.is_loading = false;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "warning",
+            title: "Maaf, karyawan ini masih aktif di job order lain.",
+          });
+
+          resolve(true);
+        }, 5000);
+      });
+    },
     getConditionBtnSave() {
       let result = false;
 
@@ -185,6 +221,20 @@ export default {
 
       if (this.getJobOrderFormKind == "read") {
         result = false;
+      }
+
+      return result;
+    },
+    getConditionDisabledBtnSave() {
+      let result = this.getIsDisabledBtnSave;
+
+      console.info(this.getJobOrderFormKind);
+      if (this.getJobOrderFormKind != null) {
+        result = false;
+      }
+
+      if (this.is_loading) {
+        result = true;
       }
 
       return result;

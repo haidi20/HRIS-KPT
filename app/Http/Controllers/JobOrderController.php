@@ -349,24 +349,26 @@ class JobOrderController extends Controller
 
             DB::commit();
 
-            $checkStillExistsOvertime = JobOrderHasEmployee::where([
-                "status" => "overtime",
-                "job_order_id" => request("job_order_id"),
-            ])->count();
+            if ($statusLast == "overtime") {
+                $checkStillExistsOvertime = JobOrderHasEmployee::where([
+                    "status" => "overtime",
+                    "job_order_id" => request("job_order_id"),
+                ])->count();
 
-            if ($checkStillExistsOvertime == 0) {
-                $jobOrder = JobOrder::find(request("job_order_id"));
-                $jobOrder->status = "active";
-                $jobOrder->save();
+                if ($checkStillExistsOvertime == 0) {
+                    $jobOrder = JobOrder::find(request("job_order_id"));
+                    $jobOrder->status = "active";
+                    $jobOrder->save();
 
-                $this->storeJobOrderHistory($jobOrder);
+                    $this->storeJobOrderHistory($jobOrder);
 
-                $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $datetime, $this->nameModel);
-                if (isset($getValidation->error)) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => $getValidation->message,
-                    ], 500);
+                    $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $datetime, $this->nameModel);
+                    if (isset($getValidation->error)) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => $getValidation->message,
+                        ], 500);
+                    }
                 }
             }
 
@@ -479,12 +481,6 @@ class JobOrderController extends Controller
     private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart)
     {
         $jobStatusController = new JobStatusController;
-
-        if ($status == "correction") {
-            $getStatus = "active";
-        } else {
-            $getStatus = $status;
-        }
 
         if (count(request("employee_selecteds")) > 0) {
 

@@ -25,7 +25,7 @@ class JobStatusController extends Controller
                 "parent_model" => $nameModel,
             ])->orderBy("created_at", "desc")->first();
 
-
+            // if ($jobStatusHasParent) {
             $jobStatusHasParent->update([
                 "note_end" => $parentNote,
                 "datetime_end" => $date,
@@ -41,6 +41,7 @@ class JobStatusController extends Controller
             }
 
             $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
+            // }
         } else {
             $jobStatusHasParent = new JobStatusHasParent;
             $jobStatusHasParent->parent_id = $parent->id;

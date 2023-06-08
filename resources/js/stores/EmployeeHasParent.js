@@ -271,13 +271,13 @@ const EmployeeHasParent = {
                 getStatus = payload.form_type;
             }
 
-            console.info(getStatus, payload);
+            // console.info(getStatus, payload);
 
             const getDataSelectedOvertime = context.state.data.selecteds
                 .filter(item => item.status == getStatus)
                 .map(item => ({ employee_id: item.employee_id }));
 
-            console.info(getDataSelectedOvertime);
+            // console.info(getDataSelectedOvertime);
 
             context.commit("UPDATE_DATA_SELECTED_STATUS", {
                 list_employee_id: [...getDataSelectedOvertime],

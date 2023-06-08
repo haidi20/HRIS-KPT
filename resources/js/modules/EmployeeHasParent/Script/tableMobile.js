@@ -129,7 +129,7 @@ export default {
         getConditionActionPending() {
             let result = false;
 
-            console.info(this.getForm);
+            // console.info(this.getForm);
 
             if (
                 this.getForm.form_type != 'create'

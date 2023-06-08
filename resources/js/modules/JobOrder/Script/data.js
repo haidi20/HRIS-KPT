@@ -24,6 +24,9 @@ export default {
         getData() {
             return this.$store.state.jobOrder.data;
         },
+        getDataEmployeeSelected() {
+            return this.$store.state.employeeHasParent.data.selecteds;
+        },
         getLoadingData() {
             return this.$store.state.jobOrder.loading.data;
         },
@@ -118,6 +121,14 @@ export default {
             //   console.info(this.form);
         },
         onActionAssessment(type, title) {
+            const checkEmployeeStatus = this.getCheckEmployeeStatus();
+
+            // console.info(checkEmployeeStatus);
+
+            if (checkEmployeeStatus) {
+                return this.getCheckEmployeeStatus(true);
+            }
+
             this.$bvModal.hide("action_list");
             this.$store.commit("jobOrder/INSERT_FORM_KIND", {
                 form_title: "Job Order - " + title,
@@ -233,6 +244,34 @@ export default {
                 && this.getForm.created_by == this.getUserId
             ) {
                 result = true;
+            }
+
+            return result;
+        },
+        getCheckEmployeeStatus(isShowAlert) {
+            const result = this.getDataEmployeeSelected.some(item => item.status != "active");
+
+            // console.info(this.getData);
+
+            if (result && isShowAlert) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener("mouseenter", Swal.stopTimer);
+                        toast.addEventListener("mouseleave", Swal.resumeTimer);
+                    },
+                });
+
+                Toast.fire({
+                    icon: "warning",
+                    title: "Maaf, salah satu karyawan masih belum aktif.",
+                });
+
+                return false;
             }
 
             return result;
