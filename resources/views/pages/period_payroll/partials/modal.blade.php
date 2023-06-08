@@ -13,17 +13,27 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama Kapal</label>
+                        <label for="name" class="col-sm-4 col-form-label">Periode</label>
                         <div class="col-sm-8">
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input name="period" type="month" class="form-control" id="month_filter" autocomplete="off"
+                                    value="{{ \Carbon\Carbon::now()->format('Y-m') }}">
                         </div>
                     </div>
                     <div class="form-group row">
-                       <label for="description" class="col-sm-4 col-form-label">Keterangan </label>
-                        <div class="col-sm-8">
-                            <input type="text" id="description" name="description" class="form-control">
+                       <label for="description" class="col-sm-4 col-form-label">Tanggal Mulai Kerja </label>
+                       <div class="col-sm-8">
+                        <input name="date_start" type="text" class="form-control" id="start_of_workdays" autocomplete="off"
+                                value="{{ \Carbon\Carbon::now()->addMonths(-1)->format('Y-m') }}-26">
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-4 col-form-label">Tanggal Akhir Kerja </label>
+                        <div class="col-sm-8">
+                         <input name="date_end" type="text" class="form-control" id="end_of_workdays" autocomplete="off"
+                                 value="{{ \Carbon\Carbon::now()->format('Y-m') }}-25">
+                         </div>
+                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Batal</button>

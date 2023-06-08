@@ -21,7 +21,6 @@ class FingerToolController extends Controller
             }],
             'name' => ['name' => 'name', 'title' => 'Nama'],
             'serial_number' => ['name' => 'serial_number', 'title' => 'Serial Number'],
-            'cloud_id' => ['name' => 'cloud_id', 'title' => 'Cloud ID'],
             'aksi' => [
                 'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '130px', 'exportable' => false
             ],
@@ -29,7 +28,7 @@ class FingerToolController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $finger_tool = FingerTool::query()
-                ->select('finger_tools.id', 'finger_tools.name', 'finger_tools.serial_number', 'finger_tools.cloud_id');
+                ->select('finger_tools.id', 'finger_tools.name', 'finger_tools.serial_number',);
 
             return $datatables->eloquent($finger_tool)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -38,10 +37,6 @@ class FingerToolController extends Controller
                 })
                 ->filterColumn('serial_number', function (Builder $query, $keyword) {
                     $sql = "finger_tools.serial_number like ?";
-                    $query->whereRaw($sql, ["%{$keyword}%"]);
-                })
-                ->filterColumn('cloud_id', function (Builder $query, $keyword) {
-                    $sql = "finger_tools.cloud_id like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
                 })
                 ->addColumn('aksi', function (FingerTool $data) {
@@ -114,7 +109,6 @@ class FingerToolController extends Controller
 
             $finger_tool->name = request("name");
             $finger_tool->serial_number = request("serial_number");
-            $finger_tool->cloud_id = request("cloud_id");
             $finger_tool->save();
 
             DB::commit();

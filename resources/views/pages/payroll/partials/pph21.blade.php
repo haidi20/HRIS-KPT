@@ -130,6 +130,34 @@
                         Progressive PPH21
                     </td>
                 </tr>
+
+                <tr class="table-tarif">
+                    <td>5 %</td>
+                    <td>0 jt</td>
+                    <td>50 jt</td>
+                    <td id="pkp_lima_persen">Rp 0</td>
+                </tr>
+            
+                <tr class="table-tarif">
+                    <td>15 %</td>
+                    <td>50 jt</td>
+                    <td>250 jt</td>
+                    <td id="pkp_lima_belas_persen">Rp 0</td>
+                </tr>
+            
+                <tr class="table-tarif">
+                    <td>25 %</td>
+                    <td>250 jt</td>
+                    <td>500 jt</td>
+                    <td id="pkp_dua_puluh_lima_persen">Rp 0</td>
+                </tr>
+            
+                <tr class="table-tarif">
+                    <td>30 %</td>
+                    <td>500 jt</td>
+                    <td>1.000 jt</td>
+                    <td id="pkp_tiga_puluh_persen">Rp 0</td>
+                </tr>
             </tbody>
         </table>
     </div>
