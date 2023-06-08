@@ -37,8 +37,13 @@ class CreateAttendanceHasEmployeesTable extends Migration
             $table->dateTime('hour_overtime_job_order_end')->nullable();
             $table->integer('duration_overtime_job_order')->nullable();
 
+            $table->integer('is_vacation')->default(0);
 
 
+            $table->decimal("lembur_kali_satu_lima",3,2)->default(0);
+            $table->decimal("lembur_kali_dua",3,2)->default(0);
+            $table->decimal("lembur_kali_tiga",3,2)->default(0);
+            $table->decimal("lembur_kali_empat",3,2)->default(0);
             
 
 

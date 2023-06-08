@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\BaseWagesBpjs;
+use App\Models\BpjsCalculation;
 use App\Models\Employee;
 use App\Models\Payroll;
 use App\Models\PeriodPayroll;
@@ -150,6 +152,18 @@ class PeriodPayrollController extends Controller
 
             $employees = Employee::all();
 
+            $bpjs_jht = BpjsCalculation::where('code','jht')->first();
+            $bpjs_jkk = BpjsCalculation::where('code','jkk')->first();
+            $bpjs_jkm = BpjsCalculation::where('code','jkm')->first();
+            $bpjs_jp = BpjsCalculation::where('code','jp')->first();
+            $bpjs_kes = BpjsCalculation::where('code','kes')->first();
+
+
+
+
+            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code','jk')->first()->nominal ?? 0;
+            $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code','kes')->first()->nominal ?? 0;
+
             foreach ($employees as $key => $employee) {
 
                 $jumlah_hari_kerja  = Attendance::whereDate('date','>=',$period_payroll->date_start)
@@ -178,6 +192,138 @@ class PeriodPayrollController extends Controller
                     $jumlah_jam_rate_lembur+= 1;
                 }
 
+                $pendapatan_uang_makan = $jumlah_hari_kerja * $employee->meal_allowance_per_attend;
+                $pendapatan_lembur = $jumlah_jam_rate_lembur * $employee->overtime_rate_per_hour;
+                $pendapatan_tambahan_lain_lain = 0;
+                $jumlah_pendapatan = $employee->basic_salary + $employee->allowance + $pendapatan_uang_makan + $pendapatan_lembur + $pendapatan_tambahan_lain_lain;
+
+
+                $jht_perusahaan_persen = 0;
+                $jht_karyawan_persen = 0;
+                $jht_perusahaan_rupiah = 0;
+                $jht_karyawan_rupiah = 0;
+                
+                if($employee->bpjs_jht == 'Y'){
+                    $jht_perusahaan_persen  = $bpjs_jht->company_percent ?? 0; 
+                    $jht_karyawan_persen    = $bpjs_jht->employee_percent ?? 0; 
+                    $jht_perusahaan_rupiah  = $bpjs_jht->company_nominal ?? 0; 
+                    $jht_karyawan_rupiah    = $bpjs_jht->employee_nominal ?? 0;  
+
+                }
+
+                $jkk_perusahaan_persen = 0;
+                $jkk_karyawan_persen = 0;
+                $jkk_perusahaan_rupiah = 0;
+                $jkk_karyawan_rupiah = 0;
+
+               
+
+                if($employee->bpjs_jkk == 'Y'){
+                    $jkk_perusahaan_persen  = $bpjs_jkk->company_percent ?? 0; 
+                    $jkk_karyawan_persen    = $bpjs_jkk->employee_percent ?? 0; 
+                    $jkk_perusahaan_rupiah  = $bpjs_jkk->company_nominal ?? 0; 
+                    $jkk_karyawan_rupiah    = $bpjs_jkk->employee_nominal ?? 0;  
+                    
+                }
+
+                $jkm_perusahaan_persen = 0;
+                $jkm_karyawan_persen = 0;
+                $jkm_perusahaan_rupiah = 0;
+                $jkm_karyawan_rupiah = 0;
+
+                
+
+
+                if($employee->bpjs_jkm == 'Y'){
+                    $jkm_perusahaan_persen  = $bpjs_jkm->company_percent ?? 0; 
+                    $jkm_karyawan_persen    = $bpjs_jkm->employee_percent ?? 0; 
+                    $jkm_perusahaan_rupiah  = $bpjs_jkm->company_nominal ?? 0; 
+                    $jkm_karyawan_rupiah    = $bpjs_jkm->employee_nominal ?? 0;  
+                    
+                }
+
+
+                $jp_perusahaan_persen = 0;
+                $jp_karyawan_persen = 0;
+                $jp_perusahaan_rupiah = 0;
+                $jp_karyawan_rupiah = 0;
+                
+                
+
+
+                if($employee->bpjs_jp == 'Y'){
+                    $jp_perusahaan_persen  = $bpjs_jp->company_percent ?? 0; 
+                    $jp_karyawan_persen    = $bpjs_jp->employee_percent ?? 0; 
+                    $jp_perusahaan_rupiah  = $bpjs_jp->company_nominal ?? 0; 
+                    $jp_karyawan_rupiah    = $bpjs_jp->employee_nominal ?? 0;  
+                    
+                }
+
+                $bpjs_perusahaan_persen = 0;
+                $bpjs_karyawan_persen = 0;
+                $bpjs_perusahaan_rupiah = 0;
+                $bpjs_karyawan_rupiah = 0;
+
+                if($employee->bpjs_kes == 'Y'){
+                    $kes_perusahaan_persen  = $bpjs_kes->company_percent ?? 0; 
+                    $kes_karyawan_persen    = $bpjs_kes->employee_percent ?? 0; 
+                    $kes_perusahaan_rupiah  = $bpjs_kes->company_nominal ?? 0; 
+                    $kes_karyawan_rupiah    = $bpjs_kes->employee_nominal ?? 0;  
+                }   
+
+
+                $ptkp = 0;
+
+                if($employee->ptkp == 'TK/0'){
+                    $ptkp = 54000000;
+                }
+
+                if($employee->ptkp == 'TK/1'){
+                    $ptkp = 58500000;
+                }
+
+                if($employee->ptkp == 'TK/2'){
+                    $ptkp = 63000000;
+                }
+
+                if($employee->ptkp == 'TK/3'){
+                    $ptkp = 67500000;
+                }
+
+                if($employee->ptkp == 'K/0'){
+                    $ptkp = 58500000;
+                }
+
+                if($employee->ptkp == 'K/1'){
+                    $ptkp = 63000000;
+                }
+
+                if($employee->ptkp == 'K/2'){
+                    $ptkp = 67500000;
+                }
+
+                if($employee->ptkp == 'K/3'){
+                    $ptkp = 72000000;
+                }
+
+                if($employee->ptkp == 'K/I/0'){
+                    $ptkp = 112500000;
+                }
+
+                if($employee->ptkp == 'K/I/1'){
+                    $ptkp = 117000000;
+                }
+
+                if($employee->ptkp == 'K/I/2'){
+                    $ptkp = 121500000;
+                }
+
+                if($employee->ptkp == 'K/I/3'){
+                    $ptkp = 126000000;
+                }
+
+
+
 
 
 
@@ -186,10 +332,10 @@ class PeriodPayrollController extends Controller
                     'period_payroll_id'=>$period_payroll->id,
                     'pendapatan_gaji_dasar'=>$employee->basic_salary,
                     'pendapatan_tunjangan_tetap'=>$employee->allowance,
-                    'pendapatan_uang_makan'=>$employee->meal_allowance_per_attend,
-                    'pendapatan_lembur'=>$employee->overtime_rate_per_hour,
-                    'pendapatan_tambahan_lain_lain'=>0,
-                    'jumlah_pendapatan'=>0,
+                    'pendapatan_uang_makan'=> $pendapatan_uang_makan,
+                    'pendapatan_lembur'=> $pendapatan_lembur,
+                    'pendapatan_tambahan_lain_lain'=>$pendapatan_tambahan_lain_lain,
+                    'jumlah_pendapatan'=>$jumlah_pendapatan,
 
 
                     'pemotongan_bpjs_dibayar_karyawan'=>0,
@@ -224,39 +370,39 @@ class PeriodPayrollController extends Controller
                     'jumlah_hari_tunjangan_kehadiran'=>$jumlah_hari_kerja,
 
 
-                    'ptkp_karyawan'=>0,
+                    'ptkp_karyawan'=>$ptkp,
                     'jumlah_cuti_ijin_per_bulan'=>0,
                     'sisa_cuti_tahun'=>0,
 
-                    'dasar_updah_bpjs_tk'=>0,
-                    'dasar_updah_bpjs_kes'=>0,
+                    'dasar_updah_bpjs_tk'=>$bpjs_dasar_updah_bpjs_tk,
+                    'dasar_updah_bpjs_kes'=>$dasar_updah_bpjs_kes,
 
 
 
-                    'jht_perusahaan_persen'=>0,
-                    'jht_karyawan_persen'=>0,
-                    'jht_perusahaan_rupiah'=>0,
-                    'jht_karyawan_rupiah'=>0,
+                    'jht_perusahaan_persen'=>$jht_perusahaan_persen,
+                    'jht_karyawan_persen'=>$jht_karyawan_persen,
+                    'jht_perusahaan_rupiah'=>$jht_perusahaan_rupiah,
+                    'jht_karyawan_rupiah'=>$jht_karyawan_rupiah,
 
-                    'jkk_perusahaan_persen'=>0,
-                    'jkk_karyawan_persen'=>0,
-                    'jkk_perusahaan_rupiah'=>0,
-                    'jkk_karyawan_rupiah'=>0,
+                    'jkk_perusahaan_persen'=>$jkk_perusahaan_persen,
+                    'jkk_karyawan_persen'=>$jkk_karyawan_persen,
+                    'jkk_perusahaan_rupiah'=>$jkk_perusahaan_rupiah,
+                    'jkk_karyawan_rupiah'=>$jkk_karyawan_rupiah,
 
-                    'jkm_perusahaan_persen'=>0,
-                    'jkm_karyawan_persen'=>0,
-                    'jkm_perusahaan_rupiah'=>0,
-                    'jkm_karyawan_rupiah'=>0,
+                    'jkm_perusahaan_persen'=>$jkm_perusahaan_persen,
+                    'jkm_karyawan_persen'=>$jkm_karyawan_persen,
+                    'jkm_perusahaan_rupiah'=>$jkm_perusahaan_rupiah,
+                    'jkm_karyawan_rupiah'=>$jkm_karyawan_rupiah,
 
-                    'jp_perusahaan_persen'=>0,
-                    'jp_karyawan_persen'=>0,
-                    'jp_perusahaan_rupiah'=>0,
-                    'jp_karyawan_rupiah'=>0,
+                    'jp_perusahaan_persen'=>$jp_perusahaan_persen,
+                    'jp_karyawan_persen'=>$jp_karyawan_persen,
+                    'jp_perusahaan_rupiah'=>$jp_perusahaan_rupiah,
+                    'jp_karyawan_rupiah'=>$jp_karyawan_rupiah,
 
-                    'bpjs_perusahaan_persen'=>0,
-                    'bpjs_karyawan_persen'=>0,
-                    'bpjs_perusahaan_rupiah'=>0,
-                    'bpjs_karyawan_rupiah'=>0,
+                    'bpjs_perusahaan_persen'=>$bpjs_perusahaan_persen,
+                    'bpjs_karyawan_persen'=>$bpjs_karyawan_persen,
+                    'bpjs_perusahaan_rupiah'=>$bpjs_perusahaan_rupiah,
+                    'bpjs_karyawan_rupiah'=>$bpjs_karyawan_rupiah,
                 ]);
             }
 

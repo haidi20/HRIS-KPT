@@ -42,11 +42,25 @@ class CreateEmployeesTable extends Migration
             $table->string('working_hour')->nullable();
 
             // $table->enum('bpjs', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_tk', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_tk_pt', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_jht', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_jkk', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_jkm', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_jp', ['Y', 'N'])->default('Y');
             $table->enum('bpjs_kes', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_kes_pt', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_training', ['Y', 'N'])->default('Y');
+
+
+            $table->string('ptkp')->nullable();
+            $table->bigInteger('ptkp_karyawan')->default(0);
+
+            
+
+            
+
+
+
+
+
+
 
             // DATA KELUARGA
             // $table->string('father_name')->nullable();

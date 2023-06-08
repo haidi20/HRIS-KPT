@@ -190,7 +190,7 @@
                     $("#month_year").text(month_readable);
                     $("#employee_name").text(employee.name);
                     $("#position_name").text(employee.position_name);
-                    $("#employee_number_identity").text(employee.number_identity);
+                    $("#employee_number_identity").text(employee.nip);
                     $("#gaji_dasar").text(`Rp. ${formatRupiah(employee.basic_salary)}`);
                     $("#tunjangan_tetap").text(`Rp. ${formatRupiah(employee.allowance)}`);
                     $("#rate_lembur").text(`Rp. ${formatRupiah(employee.overtime_rate_per_hour)}`);
@@ -224,7 +224,7 @@
                     $("#jumlah_gaji_dasar").text("1");
                     $("#nominal_gaji_dasar").text(`Rp ${formatRupiah(data.pendapatan_gaji_dasar)}`);
                     $("#jumlah_tunjangan_tetap").text("1");
-                    $("#nominal_tunjangan_tetap").text(`Rp ${formatRupiah(data.pendapatan_tunjagan_tetap)}`);
+                    $("#nominal_tunjangan_tetap").text(`Rp ${formatRupiah(data.pendapatan_tunjangan_tetap)}`);
                     $("#jumlah_uang_makan").text(formatRupiah(data.jumlah_hari_tunjangan_makan));
                     $("#nominal_uang_makan").text(`Rp ${formatRupiah(data.pendapatan_uang_makan)}`);
                     $("#jumlah_lembur").text(formatRupiah(data.jumlah_jam_rate_lembur));

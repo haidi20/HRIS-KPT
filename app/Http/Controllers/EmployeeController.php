@@ -206,11 +206,11 @@ class EmployeeController extends Controller
             $employee->latest_education = request("latest_education");
             $employee->working_hour = request("working_hour");
             $employee->married_status = request("married_status");
-            $employee->update(['bpjsTK' => $employee->bpjs_tk]);
-            $employee->update(['bpjsTKPT' => $employee->bpjs_tk_pt]);
-            $employee->update(['bpjsKES' => $employee->bpjs_kes]);
-            $employee->update(['bpjsKESPT' => $employee->bpjs_kes_pt]);
-            $employee->update(['bpjsTRAINING' => $employee->bpjs_training]);
+            $employee->bpjs_jht = request('bpjs_jht');
+            $employee->bpjs_jkk = request('bpjs_jkk');
+            $employee->bpjs_jkm = request('bpjs_jkm');
+            $employee->bpjs_jp = request('bpjs_jp');
+            $employee->bpjs_kes = request('bpjs_kes'); 
             $employee->out_date = request("out_date");
             $employee->reason = request("reason");
 

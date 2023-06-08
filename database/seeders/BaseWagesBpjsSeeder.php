@@ -20,10 +20,12 @@ class BaseWagesBpjsSeeder extends Seeder
             [
                 [
                     'name' => 'Dasar Upah BPJS TK',
+                    'code'=>'tk',
                     'nominal' => '3394513',
                 ],
                 [
                     'name' => 'Dasar Upah BPJS KES',
+                    'code'=>'kes',
                     'nominal' => '3394513',
                 ],
             ],
