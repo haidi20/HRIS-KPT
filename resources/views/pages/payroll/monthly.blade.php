@@ -128,7 +128,7 @@
         if(angka==''){
             return '';
         }
-                var number_string = angka.toString().replace(/[^,\d]/g, ''),
+                var number_string = parseInt(angka).toString().replace(/[^,\d]/g, ''),
                 split   		= number_string.split(','),
                 sisa     		= split[0].length % 3,
                 rupiah     		= split[0].substr(0, sisa),
@@ -157,7 +157,7 @@
             $('.dataTable').DataTable();
 
             fetchBpjs();
-            fetchPph21();
+            // fetchPph21();
             fetchSalary();
             fetchInformation();
 
@@ -166,7 +166,7 @@
 
         function onFilter() {
             fetchBpjs();
-            fetchPph21();
+            // fetchPph21();
             fetchSalary();
             fetchInformation();
         }
@@ -222,22 +222,46 @@
                     const data = responses.data;
 
                     $("#jumlah_gaji_dasar").text("1");
-                    $("#nominal_gaji_dasar").text(`Rp ${data.pendapatan_gaji_dasar}`);
+                    $("#nominal_gaji_dasar").text(`Rp ${formatRupiah(data.pendapatan_gaji_dasar)}`);
                     $("#jumlah_tunjangan_tetap").text("1");
-                    $("#nominal_tunjangan_tetap").text(`Rp ${data.pendapatan_tunjagan_tetap}`);
-                    $("#jumlah_uang_makan").text(data.jumlah_hari_tunjangan_makan);
-                    $("#nominal_uang_makan").text(`Rp ${data.pendapatan_uang_makan}`);
-                    $("#jumlah_lembur").text(data.jumlah_jam_rate_lembur);
-                    $("#nominal_lembur").text(`Rp ${data.pendapatan_lembur}`);
-                    $("#nominal_tambahan_lain_lain").text(`Rp ${data.pendapatan_tambahan_lain_lain}`);
-                    $("#jumlah_pendapatan_kotor").text(`Rp ${data.jumlah_pendapatan}`);
+                    $("#nominal_tunjangan_tetap").text(`Rp ${formatRupiah(data.pendapatan_tunjagan_tetap)}`);
+                    $("#jumlah_uang_makan").text(formatRupiah(data.jumlah_hari_tunjangan_makan));
+                    $("#nominal_uang_makan").text(`Rp ${formatRupiah(data.pendapatan_uang_makan)}`);
+                    $("#jumlah_lembur").text(formatRupiah(data.jumlah_jam_rate_lembur));
+                    $("#nominal_lembur").text(`Rp ${formatRupiah(data.pendapatan_lembur)}`);
+                    $("#nominal_tambahan_lain_lain").text(`Rp ${formatRupiah(data.pendapatan_tambahan_lain_lain)}`);
+                    $("#jumlah_pendapatan_kotor").text(`Rp ${formatRupiah(data.jumlah_pendapatan)}`);
 
 
-                    $("#nominal_bpjs_dibayar_karyawan").text(`Rp ${data.pemotongan_bpjs_dibayar_karyawan}`);
-                    $("#nominal_pajak_penghasilan_pph21").text(`Rp ${data.pemotongan_pph_dua_satu}`);
-                    $("#nominal_potongan_lain_lain").text(`Rp ${data.pemotongan_potongan_lain_lain}`);
-                    $("#jumlah_potongan").text(`Rp ${data.jumlah_pemotongan}`);
-                    $("#gaji_bersih").text(`Rp ${data.gaji_bersih}`);
+                    $("#nominal_bpjs_dibayar_karyawan").text(`Rp ${formatRupiah(data.pemotongan_bpjs_dibayar_karyawan)}`);
+                    $("#nominal_pajak_penghasilan_pph21").text(`Rp ${formatRupiah(data.pemotongan_pph_dua_satu)}`);
+                    $("#nominal_potongan_lain_lain").text(`Rp ${formatRupiah(data.pemotongan_potongan_lain_lain)}`);
+                    $("#jumlah_potongan").text(`Rp ${formatRupiah(data.jumlah_pemotongan)}`);
+                    $("#gaji_bersih").text(`Rp ${formatRupiah(data.gaji_bersih)}`);
+
+
+                    ////////////////
+
+                    $("#gaji_kotor_potongan").text(`Rp ${data.pajak_gaji_kotor_kurang_potongan}`);
+                    $("#bpjs_dibayar_perusahaan").text(`Rp ${data.pajak_bpjs_dibayar_perusahaan}`);
+                    $("#total_penghasilan_kotor").text(`Rp ${data.pajak_total_penghasilan_kotor}`);
+                    $("#biaya_jabatan").text(`Rp ${data.pajak_biaya_jabatan}`);
+                    $("#bpjs_dibayar_karyawan").text(`Rp ${data.pajak_bpjs_dibayar_karyawan}`);
+                    $("#jumlah_pengurangan").text(`Rp ${data.pajak_total_pengurang}`);
+                    $("#gaji_bersih_setahun").text(`Rp ${data.pajak_gaji_bersih_setahun}`);
+                    $("#pkp_setahun").text(`Rp ${data.pkp_setahun}`);
+
+                    $("#pkp_lima_persen").text(`Rp ${data.pkp_lima_persen}`);
+                    $("#pkp_lima_belas_persen").text(`Rp ${data.pkp_lima_belas_persen}`);
+                    $("#pkp_dua_puluh_lima_persen").text(`Rp ${data.pkp_dua_puluh_lima_persen}`);
+                    $("#pkp_tiga_puluh_persen").text(`Rp ${data.pkp_tiga_puluh_persen}`);
+
+                    
+
+
+
+
+
                 },
                 error: function(err) {}
             });
@@ -302,51 +326,7 @@
             });
         }
 
-        function fetchPph21() {
-            const tableTarif = $("#table-tarif");
-            $.ajax({
-                url: "{{ route('api.payroll.fetchPph21') }}",
-                method: 'GET',
-                data: {
-                    month_filter: $("#month_filter").val(),
-                    employee_id : $('#employees').val(),
-                },
-                beforeSend: function() {
-                    // empty view
-
-                    $(".table-tarif").empty();
-                },
-                success: function(responses) {
-                    // console.info(responses);
-                    const data = responses.data;
-                    const table = responses.table;
-
-                    $("#gaji_kotor_potongan").text(`Rp ${data.gaji_kotor_potongan}`);
-                    $("#bpjs_dibayar_perusahaan").text(`Rp ${data.bpjs_dibayar_perusahaan}`);
-                    $("#total_penghasilan_kotor").text(`Rp ${data.total_penghasilan_kotor}`);
-                    $("#biaya_jabatan").text(`Rp ${data.biaya_jabatan}`);
-                    $("#bpjs_dibayar_karyawan").text(`Rp ${data.bpjs_dibayar_karyawan}`);
-                    $("#jumlah_pengurangan").text(`Rp ${data.jumlah_pengurangan}`);
-                    $("#gaji_bersih_setahun").text(`Rp ${data.gaji_bersih_setahun}`);
-                    $("#pkp_setahun").text(`Rp ${data.pkp_setahun}`);
-
-                    let row = "";
-                    table.map(item => {
-                        row += `
-                            <tr class="table-tarif">
-                                <td>${item.tarif} %</td>
-                                <td>${item.dari_pkp} jt</td>
-                                <td>${item.ke_pkp} jt</td>
-                                <td>Rp ${item.progressive_pph21}</td>
-                            </tr>
-                        `;
-                    });
-
-                    tableTarif.after(row);
-                },
-                error: function(err) {}
-            });
-        }
+        
 
         function onCreate() {
             clearForm();

@@ -102,6 +102,31 @@ class CreatePayrollsTable extends Migration
             $table->decimal("total_bpjs_karyawan_rupiah",14,2)->default(0);
 
 
+            //perhitunagn pajak
+
+            $table->decimal("pajak_gaji_kotor_kurang_potongan",14,2)->default(0);
+            $table->decimal("pajak_bpjs_dibayar_perusahaan",14,2)->default(0);
+            $table->decimal("pajak_total_penghasilan_kotor",14,2)->default(0);
+
+            $table->decimal("pajak_biaya_jabatan",14,2)->default(0);
+            $table->decimal("pajak_bpjs_dibayar_karyawan",14,2)->default(0);
+
+            $table->decimal("pajak_total_pengurang",14,2)->default(0);
+
+            $table->decimal("pajak_gaji_bersih_setahun",14,2)->default(0);
+            $table->decimal("pkp_setahun",14,2)->default(0);
+            // $table->decimal("pajak_total_penghasilan_kotor",14,2)->default(0);
+
+            $table->decimal("pkp_lima_persen",14,2)->default(0);
+            $table->decimal("pkp_lima_belas_persen",14,2)->default(0);
+            $table->decimal("pkp_dua_puluh_lima_persen",14,2)->default(0);
+            $table->decimal("pkp_tiga_puluh_persen",14,2)->default(0);
+            $table->decimal("pajak_pph_dua_satu_setahun",14,2)->default(0);
+
+            
+
+
+
 
 
 

@@ -161,36 +161,36 @@ class PayrollController extends Controller
             "pkp_setahun" => "44.658.964",
         ];
 
-        $table = [
-            (object) [
-                "tarif" => "5",
-                "dari_pkp" => "0",
-                "ke_pkp" => "50",
-                "progressive_pph21" => "2.232.948",
-            ],
-            (object) [
-                "tarif" => "15",
-                "dari_pkp" => "50",
-                "ke_pkp" => "250",
-                "progressive_pph21" => "-",
-            ],
-            (object) [
-                "tarif" => "25",
-                "dari_pkp" => "250",
-                "ke_pkp" => "500",
-                "progressive_pph21" => "-",
-            ],
-            (object) [
-                "tarif" => "30",
-                "dari_pkp" => "500",
-                "ke_pkp" => "1.000",
-                "progressive_pph21" => "-",
-            ],
-        ];
+        // $table = [
+        //     (object) [
+        //         "tarif" => "5",
+        //         "dari_pkp" => "0",
+        //         "ke_pkp" => "50",
+        //         "progressive_pph21" => "2.232.948",
+        //     ],
+        //     (object) [
+        //         "tarif" => "15",
+        //         "dari_pkp" => "50",
+        //         "ke_pkp" => "250",
+        //         "progressive_pph21" => "-",
+        //     ],
+        //     (object) [
+        //         "tarif" => "25",
+        //         "dari_pkp" => "250",
+        //         "ke_pkp" => "500",
+        //         "progressive_pph21" => "-",
+        //     ],
+        //     (object) [
+        //         "tarif" => "30",
+        //         "dari_pkp" => "500",
+        //         "ke_pkp" => "1.000",
+        //         "progressive_pph21" => "-",
+        //     ],
+        // ];
 
         return response()->json([
             "data" => $data,
-            "table" => $table,
+            // "table" => $table,
         ]);
     }
 }
