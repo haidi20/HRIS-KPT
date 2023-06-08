@@ -269,7 +269,14 @@ class PeriodPayrollController extends Controller
                     $kes_karyawan_persen    = $bpjs_kes->employee_percent ?? 0; 
                     $kes_perusahaan_rupiah  = $bpjs_kes->company_nominal ?? 0; 
                     $kes_karyawan_rupiah    = $bpjs_kes->employee_nominal ?? 0;  
-                }   
+                } 
+                
+                
+                $total_bpjs_perusahaan_persen = $jkk_perusahaan_persen + $jkk_perusahaan_persen + $jkm_perusahaan_persen + $jp_perusahaan_persen + $kes_perusahaan_persen;
+                $total_bpjs_karyawan_persen = $jkk_karyawan_persen + $jkk_karyawan_persen + $jkm_karyawan_persen + $jp_karyawan_persen + $kes_karyawan_persen;
+                $total_bpjs_perusahaan_rupiah = $jkk_perusahaan_rupiah + $jkk_perusahaan_rupiah + $jkm_perusahaan_rupiah + $jp_perusahaan_rupiah + $kes_perusahaan_rupiah;
+                $total_bpjs_karyawan_rupiah = $jkk_karyawan_rupiah + $jkk_karyawan_rupiah + $jkm_karyawan_rupiah + $jp_karyawan_rupiah + $kes_karyawan_rupiah;
+
 
 
                 $ptkp = 0;
@@ -323,9 +330,11 @@ class PeriodPayrollController extends Controller
                 }
 
 
+                $pemotongan_bpjs_dibayar_karyawan  = $total_bpjs_karyawan_rupiah;
+                $pemotongan_pph_dua_satu = 0;
+                $pemotongan_potongan_lain_lain = 0;
 
-
-
+                $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
 
                 Payroll::create([
                     'employee_id'=>$employee->id,
@@ -403,6 +412,18 @@ class PeriodPayrollController extends Controller
                     'bpjs_karyawan_persen'=>$bpjs_karyawan_persen,
                     'bpjs_perusahaan_rupiah'=>$bpjs_perusahaan_rupiah,
                     'bpjs_karyawan_rupiah'=>$bpjs_karyawan_rupiah,
+
+                    'total_bpjs_perusahaan_persen'=>$total_bpjs_perusahaan_persen,
+                    'total_bpjs_karyawan_persen'=>$total_bpjs_karyawan_persen,
+                    'total_bpjs_perusahaan_rupiah'=>$total_bpjs_perusahaan_rupiah,
+                    'total_bpjs_karyawan_rupiah'=>$total_bpjs_karyawan_rupiah,
+
+
+                    'jumlah_pemotongan'=>$jumlah_pemotongan,
+
+                    'pemotongan_bpjs_dibayar_karyawan'=>$pemotongan_bpjs_dibayar_karyawan,
+                    'pemotongan_pph_dua_satu'=>$pemotongan_pph_dua_satu,
+                    'pemotongan_potongan_lain_lain'=>$pemotongan_potongan_lain_lain,
                 ]);
             }
 
