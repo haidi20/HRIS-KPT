@@ -31,6 +31,7 @@
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
           <b-button
             v-if="getConditionBtnSave()"
+            :disabled="getIsDisabledBtnSave"
             style="float: right"
             variant="success"
             @click="onSave()"
@@ -77,6 +78,9 @@ export default {
     getJobOrderFormKind() {
       return this.$store.state.jobOrder.form.form_kind;
     },
+    getIsDisabledBtnSave() {
+      return this.$store.state.employeeHasParent.form.is_disabled_btn_save;
+    },
     getData() {
       return this.$store.state.employeeHasParent.data.selecteds;
     },
@@ -92,7 +96,7 @@ export default {
       this.$bvModal.hide("data_employee");
     },
     onSave() {
-      console.info(this.getJobOrderFormKind);
+      //   console.info(this.getJobOrderFormKind);
 
       if (this.getJobOrderFormKind == null) {
         this.onSend();

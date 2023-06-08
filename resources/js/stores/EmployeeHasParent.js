@@ -17,6 +17,7 @@ const defaultForm = {
     is_hide_status: false,
     hour: moment().format("HH:mm"),
     date: new Date(),
+    is_disabled_btn_save: true,
 }
 
 const EmployeeHasParent = {
@@ -27,6 +28,7 @@ const EmployeeHasParent = {
             options: [],
             table: [],
             selecteds: [],
+            clone_selecteds: [],
             foremans: [],
         },
         params: {
@@ -86,6 +88,7 @@ const EmployeeHasParent = {
         INSERT_DATA_ALL_SELECTED(state, payload) {
             // console.info(payload);
             state.data.selecteds = [...payload.selecteds];
+            state.data.clone_selecteds = [...payload.selecteds];
         },
         INSERT_OPTION_STATUS(state, payload) {
             state.options.statuses = { ...payload.statuses };
@@ -94,6 +97,7 @@ const EmployeeHasParent = {
             state.form = {
                 ...state.form,
                 ...payload.form,
+                data_index: payload.data_index,
             };
 
             if (payload.form_type != null) {
@@ -107,6 +111,9 @@ const EmployeeHasParent = {
         },
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;
+        },
+        UPDATE_IS_DISABLED_BTN_SAVE(state, payload) {
+            state.form.is_disabled_btn_save = payload.value;
         },
         // kebutuhan di job order file data.js
         UPDATE_DATA_ALL_SELECTED_STATUS_OVERTIME(state, payload) {
@@ -175,7 +182,7 @@ const EmployeeHasParent = {
 
             // console.info(state.options.statuses[payload.form_type]);
             // console.info(state.form.employee_id, payload.form_type);
-            console.info(state.data.selecteds);
+            // console.info(state.data.selecteds);
         },
         DELETE_FORM_EMPLOYEE_ID(state, payload) {
             state.form.employee_id = null;

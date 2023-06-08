@@ -117,6 +117,11 @@ return [
             "short_readable" => "perbaikan",
             "color" => "warning",
         ],
+        "assessment" => [
+            "readable" => "proses penilaian",
+            "short_readable" => "penilaian",
+            "color" => "info",
+        ],
         // end job order
     ],
     // start untuk penyesuaian gaji

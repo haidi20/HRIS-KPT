@@ -47,6 +47,9 @@ export default {
         getData() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
+        getDataClone() {
+            return this.$store.state.employeeHasParent.data.clone_selecteds;
+        },
         getIsMobile() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
@@ -89,6 +92,12 @@ export default {
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", { form_type });
             this.$store.commit("employeeHasParent/UPDATE_DATA_SELECTED_STATUS", { form_type });
 
+            // console.info(form_type);
+            let isDisabledBtnSave = this.getComparetionData();
+
+            // console.info(isDisabledBtnSave);
+            this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", { value: isDisabledBtnSave });
+
             this.$bvModal.hide("action_list_employee");
         },
         onNonActiveOvertime() {
@@ -120,11 +129,11 @@ export default {
         getConditionActionPending() {
             let result = false;
 
-            // console.info(this.getForm);
+            console.info(this.getForm);
 
             if (
-                this.getForm.status_clone == 'active'
-                && this.getForm.form_type != 'create'
+                this.getForm.form_type != 'create'
+                //&& this.getForm.status_clone == 'active' // ketika coba aktif kembali tidak muncul
                 && this.getForm.status == 'active'
                 && this.getJobOrderFormKind != 'overtime'
             ) {
@@ -205,6 +214,19 @@ export default {
             ) {
                 result = true;
             }
+
+            return result;
+        },
+        getComparetionData() {
+            let result = true;
+
+            this.getData.forEach((item, index) => {
+                // console.info(item.status, this.getDataClone[index].status);
+                if (item.status !== this.getDataClone[index].status) {
+                    result = false;
+
+                }
+            });
 
             return result;
         },

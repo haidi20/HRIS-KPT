@@ -2,6 +2,14 @@
   <div>
     <b-row style="margin-top: 10px">
       <b-col cols>
+        <span>
+          Total :
+          {{getData.length}}
+        </span>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols>
         <input
           v-model="params.search"
           @input="onSearch"
@@ -58,11 +66,11 @@
           class="action-item"
           @click="onAction('active', 'Aktif Kembali')"
         >Aktif Kembali</div>
-        <div
+        <!-- <div
           v-if="getConditionActionFinish()"
           class="action-item"
           @click="onAction('finish', 'Selesai')"
-        >selesai</div>
+        >selesai</div>-->
         <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
         <div
           v-if="getConditionOvertime()"
