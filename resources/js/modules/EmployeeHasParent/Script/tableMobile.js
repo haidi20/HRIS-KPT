@@ -60,6 +60,9 @@ export default {
             return this.$store.state.employeeHasParent.params.search;
         },
     },
+    watch: {
+        //
+    },
     methods: {
         onSearch() {
             console.info(this.search);
@@ -99,11 +102,6 @@ export default {
         },
         getConditionActionActive() {
             let result = false;
-            const listNotFormKind = ['overtime'];
-
-            // console.info(this.getJobOrderFormKind);
-            // && this.getJobOrderFormKind != null
-            // && listNotFormKind.some(item => item != this.getJobOrderFormKind)
 
             if (
                 (
@@ -122,10 +120,13 @@ export default {
         getConditionActionPending() {
             let result = false;
 
+            // console.info(this.getForm);
+
             if (
-                this.getForm.status_clone != 'overtime'
+                this.getForm.status_clone == 'active'
                 && this.getForm.form_type != 'create'
                 && this.getForm.status == 'active'
+                && this.getJobOrderFormKind != 'overtime'
             ) {
                 result = true;
             }
@@ -136,9 +137,10 @@ export default {
             let result = false;
 
             if (
-                this.getForm.status_clone != 'overtime'
+                this.getForm.status_clone == 'active'
                 && this.getForm.form_type != 'create'
                 && this.getForm.status == 'active'
+                && this.getJobOrderFormKind != 'overtime'
             ) {
                 result = true;
             }
@@ -147,8 +149,6 @@ export default {
         },
         getConditionActionDelete() {
             let result = false;
-
-            // console.info(this.getForm.form_type);
 
             // hapus hanya ketika buat data, kalo edit hanya bisa pending
             if (this.getForm.form_type == 'create') {
@@ -162,16 +162,9 @@ export default {
         getConditionOvertime() {
             let result = false;
 
-            // console.info(this.getJobOrderFormKind);
-
-            // && this.getJobOrderStatus == 'overtime'
-            // if (this.getForm.status == 'overtime') {
-            //     result = true;
-            // }
             if (
-                this.getJobOrderStatus == 'active'
-                && this.getForm.status == 'active'
-                && this.getJobOrderFormKind != null
+                this.getForm.status == 'active'
+                && this.getJobOrderFormKind == 'overtime_finish'
             ) {
                 result = true;
             }
@@ -180,19 +173,6 @@ export default {
         },
         getConditionActionOvertimeFinish() {
             let result = false;
-
-            // console.info(this.getJobOrderStatus);
-            // console.info(this.getForm.status, this.getForm.status_clone);
-
-            // if (
-            //     this.getForm.status == 'overtime'
-            //     && (
-            //         this.getJobOrderStatus == 'overtime'
-            //         || this.getJobOrderFormKind == null
-            //     )
-            // ) {
-            //     result = true;
-            // }
 
             if (
                 this.getForm.status_clone == 'overtime'
@@ -206,18 +186,10 @@ export default {
         getConditionActionNonActiveOvertime() {
             let result = false;
 
-            // console.info(this.getJobOrderFormKind);
-
-            // if (
-            //     this.getForm.status == 'overtime'
-            //     && this.getJobOrderFormKind == 'overtime'
-            // ) {
-            //     result = true;
-            // }
-
             if (
                 this.getForm.status_clone == 'active'
                 && this.getJobOrderFormKind == 'overtime'
+                && this.getForm.status == 'overtime'
             ) {
                 result = true;
             }

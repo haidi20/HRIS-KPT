@@ -7,7 +7,13 @@
             <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
           </b-col>
           <b-col cols style="align-item: right">
-            <b-button variant="success" size="sm" class="float-end" @click="onCreate()">Tambah</b-button>
+            <b-button
+              v-if="getCan('tambah job order')"
+              variant="success"
+              size="sm"
+              class="float-end"
+              @click="onCreate()"
+            >Tambah</b-button>
           </b-col>
         </b-row>
         <br />
@@ -135,7 +141,7 @@
                 >Perbaikan Selesai</div>
                 <!-- khusus untuk QC -->
                 <div
-                  v-if="getFormStatus == 'active'"
+                  v-if="getFormStatus == 'active' || getFormStatus == 'assessment'"
                   class="action-item"
                   @click="onActionAssessment('assessment', 'Penilaian')"
                 >Penilaian</div>

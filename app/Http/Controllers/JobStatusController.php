@@ -25,10 +25,20 @@ class JobStatusController extends Controller
                 "parent_model" => $nameModel,
             ])->orderBy("created_at", "desc")->first();
 
+
             $jobStatusHasParent->update([
                 "note_end" => $parentNote,
                 "datetime_end" => $date,
             ]);
+
+            $getValidationDatetime = $this->getValidationDatetime($jobStatusHasParent->datetime_start, $jobStatusHasParent->datetime_end);
+
+            if ($getValidationDatetime) {
+                return (object) [
+                    'error' => true,
+                    'message' => "Maaf, waktu selesai tidak boleh kurang dari waktu mulai",
+                ];
+            }
 
             $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
         } else {
@@ -69,5 +79,14 @@ class JobStatusController extends Controller
         }
 
         $jobStatusHasParentHistory->save();
+    }
+
+    private function getValidationDatetime($start, $end)
+    {
+        if ($end < $start) {
+            return true;
+        }
+
+        return false;
     }
 }

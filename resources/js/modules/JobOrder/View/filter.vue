@@ -24,13 +24,12 @@
       </b-row>
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Jenis Data" label-for="type" class>
+          <b-form-group label="Pilih Status" label-for="status" class>
             <VueSelect
-              id="type"
+              id="status"
               class="cursor-pointer"
-              v-model="params.type"
-              placeholder="Pilih Jenis Data"
-              :options="getOptionType"
+              v-model="params.status"
+              :options="getOptionStatuses"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -41,13 +40,13 @@
       </b-row>
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Data Berdasarkan" label-for="type_by" class>
+          <b-form-group label="Pilih Data Berdasarkan" label-for="created_by" class>
             <VueSelect
-              id="type_by"
+              id="created_by"
               class="cursor-pointer"
-              v-model="params.type_by"
+              v-model="params.created_by"
               placeholder="Pilih Data Berdasarkan"
-              :options="getOptionTypeBy"
+              :options="getOptionCreateByes"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -58,8 +57,16 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-form-group label="Kata Kunci" label-for="type_by" class>
-            <input type="text" placeholder="search..." style="width: 100%" class="form-control" />
+          <b-form-group label="Kata Kunci" label-for="search" class>
+            <input
+              id="search"
+              name="search"
+              type="text"
+              v-model="params.search"
+              placeholder="search..."
+              style="width: 100%"
+              class="form-control"
+            />
           </b-form-group>
         </b-col>
       </b-row>
@@ -87,11 +94,11 @@ export default {
     VueSelect,
   },
   computed: {
-    getOptionType() {
-      return this.$store.state.jobOrder.options.types;
+    getOptionStatuses() {
+      return this.$store.state.jobOrder.options.statuses;
     },
-    getOptionTypeBy() {
-      return this.$store.state.jobOrder.options.type_bys;
+    getOptionCreateByes() {
+      return this.$store.state.jobOrder.options.create_byes;
     },
     params() {
       return this.$store.state.jobOrder.params;
