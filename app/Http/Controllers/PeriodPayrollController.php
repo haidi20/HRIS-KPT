@@ -192,11 +192,19 @@ class PeriodPayrollController extends Controller
                     $jumlah_jam_rate_lembur+= 1;
                 }
 
-                $pendapatan_uang_makan = $jumlah_hari_kerja * $employee->meal_allowance_per_attend;
-                $pendapatan_lembur = $jumlah_jam_rate_lembur * $employee->overtime_rate_per_hour;
                 $pendapatan_tambahan_lain_lain = 0;
+
+                $jumlah_jam_rate_lembur = 109.0;//contoh
+                $pendapatan_tambahan_lain_lain = 2645923; //contoh
+                $jumlah_hari_kerja = 20;//contoh
+                
+
+                $pendapatan_uang_makan = 432000;//$jumlah_hari_kerja * $employee->meal_allowance_per_attend;
+                $pendapatan_lembur = $jumlah_jam_rate_lembur * $employee->overtime_rate_per_hour;
+                
                 $jumlah_pendapatan = $employee->basic_salary + $employee->allowance + $pendapatan_uang_makan + $pendapatan_lembur + $pendapatan_tambahan_lain_lain;
 
+                
 
                 $jht_perusahaan_persen = 0;
                 $jht_karyawan_persen = 0;
@@ -331,22 +339,38 @@ class PeriodPayrollController extends Controller
 
 
                 $pemotongan_bpjs_dibayar_karyawan  = $total_bpjs_karyawan_rupiah;
-                $pemotongan_pph_dua_satu = 0;
+                
                 $pemotongan_potongan_lain_lain = 0;
 
-                $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
+                
 
-                $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+                
 
 
                 $pajak_gaji_kotor_kurang_potongan = $jumlah_pendapatan - $pemotongan_potongan_lain_lain;
                 $pajak_bpjs_dibayar_perusahaan = $total_bpjs_perusahaan_rupiah;
                 $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
-                $pajak_biaya_jabatan = min(500000, (0.5 * $pajak_total_penghasilan_kotor));
+                $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor));
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
                 $pajak_gaji_bersih_setahun = 12 * ($pajak_total_penghasilan_kotor - $pajak_total_pengurang) ;
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp ;
+
+
+                //menghitung pkp 5%
+                $pkp_lima_persen  = \max(0,$pkp_setahun > 50000000 ? ((50000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                $pkp_lima_belas_persen  = \max(0,$pkp_setahun > 250000000 ? ((250000000 - 50000000) * 0.15) : (($pkp_setahun - 50000000) * 0.15));
+                $pkp_dua_puluh_lima_persen  = \max(0,$pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
+                $pkp_tiga_puluh_persen  = \max(0,$pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+
+                $pajak_pph_dua_satu_setahun = $pkp_lima_persen+$pkp_lima_belas_persen+$pkp_dua_puluh_lima_persen+$pkp_tiga_puluh_persen;
+
+                $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun/12;
+                $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
+                $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+
+
+                
 
                 Payroll::create([
                     'employee_id'=>$employee->id,
@@ -446,6 +470,11 @@ class PeriodPayrollController extends Controller
                     'pajak_total_pengurang'=>$pajak_total_pengurang,
                     'pajak_gaji_bersih_setahun'=>$pajak_gaji_bersih_setahun,
                     'pkp_setahun'=>$pkp_setahun,
+
+                    'pkp_lima_persen'=>$pkp_lima_persen,
+                    'pkp_lima_belas_persen'=>$pkp_lima_belas_persen,
+                    'pkp_dua_puluh_lima_persen'=>$pkp_dua_puluh_lima_persen,
+                    'pkp_tiga_puluh_persen'=>$pkp_tiga_puluh_persen,
                 ]);
             }
 

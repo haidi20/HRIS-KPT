@@ -28,7 +28,7 @@ class DummyAbsenSeeder extends Seeder
 
         // Iterate over the period
 
-        foreach (Employee::all() as $key => $employe) {
+        foreach (Employee::where('id',1)->get() as $key => $employe) {
             $employe->roster = 0;
             foreach ($period as $date) {
 

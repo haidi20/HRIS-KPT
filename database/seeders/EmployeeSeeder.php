@@ -27,8 +27,8 @@ class EmployeeSeeder extends Seeder
         while (($data = fgetcsv($csvFile, 2000, ",")) !== FALSE) {
             if (!$firstline) {
                 $employee = new Employee([
-                    "ptkp"=>"TK/0",
-                    "ptkp_karyawan"=>54000000,
+                    "ptkp"=>"K/1",
+                    "ptkp_karyawan"=>63000000,
 
                     "bpjs_jht"=>"Y",
                     "bpjs_jkk"=>"Y",
@@ -62,6 +62,7 @@ class EmployeeSeeder extends Seeder
                 }
 
                 $employee->save();
+                // break;
             }
             $firstline = false;
         }

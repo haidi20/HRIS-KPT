@@ -242,19 +242,19 @@
 
                     ////////////////
 
-                    $("#gaji_kotor_potongan").text(`Rp ${data.pajak_gaji_kotor_kurang_potongan}`);
-                    $("#bpjs_dibayar_perusahaan").text(`Rp ${data.pajak_bpjs_dibayar_perusahaan}`);
-                    $("#total_penghasilan_kotor").text(`Rp ${data.pajak_total_penghasilan_kotor}`);
-                    $("#biaya_jabatan").text(`Rp ${data.pajak_biaya_jabatan}`);
-                    $("#bpjs_dibayar_karyawan").text(`Rp ${data.pajak_bpjs_dibayar_karyawan}`);
-                    $("#jumlah_pengurangan").text(`Rp ${data.pajak_total_pengurang}`);
-                    $("#gaji_bersih_setahun").text(`Rp ${data.pajak_gaji_bersih_setahun}`);
-                    $("#pkp_setahun").text(`Rp ${data.pkp_setahun}`);
+                    $("#gaji_kotor_potongan").text(`Rp ${formatRupiah(data.pajak_gaji_kotor_kurang_potongan)}`);
+                    $("#bpjs_dibayar_perusahaan").text(`Rp ${formatRupiah(data.pajak_bpjs_dibayar_perusahaan)}`);
+                    $("#total_penghasilan_kotor").text(`Rp ${formatRupiah(data.pajak_total_penghasilan_kotor)}`);
+                    $("#biaya_jabatan").text(`Rp ${formatRupiah(data.pajak_biaya_jabatan)}`);
+                    $("#bpjs_dibayar_karyawan").text(`Rp ${formatRupiah(data.pajak_bpjs_dibayar_karyawan)}`);
+                    $("#jumlah_pengurangan").text(`Rp ${formatRupiah(data.pajak_total_pengurang)}`);
+                    $("#gaji_bersih_setahun").text(`Rp ${formatRupiah(data.pajak_gaji_bersih_setahun)}`);
+                    $("#pkp_setahun").text(`Rp ${formatRupiah(data.pkp_setahun)}`);
 
-                    $("#pkp_lima_persen").text(`Rp ${data.pkp_lima_persen}`);
-                    $("#pkp_lima_belas_persen").text(`Rp ${data.pkp_lima_belas_persen}`);
-                    $("#pkp_dua_puluh_lima_persen").text(`Rp ${data.pkp_dua_puluh_lima_persen}`);
-                    $("#pkp_tiga_puluh_persen").text(`Rp ${data.pkp_tiga_puluh_persen}`);
+                    $("#pkp_lima_persen").text(`Rp ${formatRupiah(data.pkp_lima_persen)}`);
+                    $("#pkp_lima_belas_persen").text(`Rp ${formatRupiah(data.pkp_lima_belas_persen)}`);
+                    $("#pkp_dua_puluh_lima_persen").text(`Rp ${formatRupiah(data.pkp_dua_puluh_lima_persen)}`);
+                    $("#pkp_tiga_puluh_persen").text(`Rp ${formatRupiah(data.pkp_tiga_puluh_persen)}`);
 
                     
 
