@@ -24,7 +24,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form id="form" enctype="multipart/form-data">
+                        <form id="form" enctype="multipart/form-data" >
                             @csrf
                             <input type="hidden" id="id" name="id" class="form-control" value="{{ $id[0] ?? '' }}">
                             <div class="row">
@@ -55,10 +55,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="after_work" class="col-sm-4 col-form-label">Jam Maksimal Selesai
+                                        <label for="after_work_limit" class="col-sm-4 col-form-label">Jam Maksimal
+                                            Selesai
                                             Kerja</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="after_work" name="after_work"
+                                            <input type="text" id="after_work_limit" name="after_work_limit"
                                                 class="form-control datetime" placeholder="contoh: 05:00"
                                                 value="{{ $afterWorkLimit[0] ?? '' }}">
                                         </div>
@@ -68,10 +69,12 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Mulai Istirahat</label>
+                                        <label for="start_rest" class="col-sm-4 col-form-label">Jam Mulai
+                                            Istirahat</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="saturday_work_hour" name="saturday_work_hour" class="form-control datetime"
-                                                placeholder="contoh: 13:30" value="{{ $startRest[0] ?? '' }}">
+                                            <input type="text" id="start_rest" name="start_rest"
+                                                class="form-control datetime" placeholder="contoh: 13:30"
+                                                value="{{ $startRest[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -79,10 +82,12 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Selesai Istirahat</label>
+                                        <label for="end_rest" class="col-sm-4 col-form-label">Jam Selesai
+                                            Istirahat</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="saturday_work_hour" name="saturday_work_hour" class="form-control datetime"
-                                                placeholder="contoh: 13:30" value="{{ $endRest[0] ?? '' }}">
+                                            <input type="text" id="end_rest" name="end_rest"
+                                                class="form-control datetime" placeholder="contoh: 13:30"
+                                                value="{{ $endRest[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +95,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal Terlambat</label>
+                                        <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal
+                                            Terlambat</label>
                                         <div class="col-sm-8">
                                             <input type="text" id="maximum_delay" name="maximum_delay"
                                                 class="form-control datetime" placeholder="contoh: 08:30"
