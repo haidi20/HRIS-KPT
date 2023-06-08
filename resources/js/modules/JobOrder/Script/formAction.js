@@ -1,7 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 
-import { imageToBase64 } from "../../../utils";
+import { imageToBase64, checkNull, listStatus } from "../../../utils";
 
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 
@@ -49,12 +49,20 @@ export default {
         },
         async onSend() {
             const Swal = this.$swal;
+            // const statusBaseOnFormKind = listStatus[this.getFormKind] ? listStatus[this.getFormKind].status_last : this.getFormKind;
+            const getEmployeeSelecteds = this.getEmployeeSelecteds
+                .filter(item =>
+                    item.hasOwnProperty('status_last')
+                    || (
+                        this.getFormKind == 'overtime' && item.status == 'overtime'
+                    )
+                );
+
             this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
                 status: this.getFormKind,
             });
-            let getEmployeeSelecteds = this.getEmployeeSelecteds
-                .filter(item => item.hasOwnProperty('status_last'));
 
+            console.info(this.getFormKind);
             // console.info(this.getEmployeeSelecteds, getEmployeeSelecteds);
 
             const request = {
@@ -142,14 +150,14 @@ export default {
         },
         getConditionDisableDate() {
             let result = false;
-            const listStatus = ["overtime", 'active'];
+            const listStatus = ["overtime", 'pending', 'pending_finish'];
 
 
-            if (listStatus.some((item) => item == this.form.status)) {
+            if (listStatus.some((item) => item == this.form.form_kind)) {
                 result = true;
             }
 
-            // console.info(this.form.status);
+            // console.info(this.form.form_kind);
 
             return result;
         },

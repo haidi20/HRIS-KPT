@@ -117,7 +117,7 @@ class JobOrderController extends Controller
                 $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
-            $this->storeActionJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
             $this->storeJobOrderHistory($jobOrder);
 
             if ($image != null) {
@@ -188,20 +188,13 @@ class JobOrderController extends Controller
             $jobOrder->save();
 
             $this->storeJobOrderHistory($jobOrder);
-
-            $storeJobOrderHasEmployee = $this->storeJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
-            if (isset($storeJobOrderHasEmployee->error)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $storeJobOrderHasEmployee->message,
-                ], 500);
-            }
-
+            $storeJobOrderHasEmployee = $this->storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
             $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
-            if (isset($getValidation->error)) {
+
+            if (isset($getValidation->success)) {
                 return response()->json([
                     'success' => false,
-                    'message' => $getValidation->message,
+                    'message' => "Maaf, waktu selesai tidak boleh kurang dari waktu mulai",
                 ], 500);
             }
 
@@ -264,7 +257,7 @@ class JobOrderController extends Controller
 
                 $this->storeJobOrderHistory($jobOrder);
                 $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
-                $this->storeJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
+                $this->storeActionJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
             }
 
             $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
@@ -398,7 +391,7 @@ class JobOrderController extends Controller
     }
 
     // berdasarkan beberapa karyawan
-    private function storeActionJobOrderHasEmployee($jobOrder, $status, $dateStart)
+    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart)
     {
         $jobStatusController = new JobStatusController;
 
@@ -434,7 +427,7 @@ class JobOrderController extends Controller
     }
 
     // berdasarkan job order
-    private function storeJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
+    private function storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
     {
         $jobStatusController = new JobStatusController;
 
@@ -453,13 +446,12 @@ class JobOrderController extends Controller
                 $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->save();
 
-                $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
                 $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $getStatusLast, $date, $this->nameModelJobOrderHasEmployee);
             }
         } else {
             return (object) [
-                'error' => true,
-                'message' => "Maaf, minimal 1 karyawan",
+                'success' => false,
+                'message' => "Maaf, karyawan harus minimal 1",
             ];
         }
     }

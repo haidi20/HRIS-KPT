@@ -24,12 +24,11 @@
       </b-row>
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Jenis Data" label-for="type" class>
+          <b-form-group label="Pilih Status" label-for="type" class>
             <VueSelect
               id="type"
               class="cursor-pointer"
               v-model="params.type"
-              placeholder="Pilih Jenis Data"
               :options="getOptionType"
               :reduce="(data) => data.id"
               label="name"

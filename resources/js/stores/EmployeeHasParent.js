@@ -125,7 +125,6 @@ const EmployeeHasParent = {
 
             if (listStatus[payload.form_type]) {
                 getFormType = listStatus[payload.form_type].status;
-
                 statusLast = listStatus[payload.form_type].status_last;
             } else {
                 getFormType = payload.form_type;
@@ -136,12 +135,19 @@ const EmployeeHasParent = {
                     // console.info(payload.list_employee_id);
                     const getStatus = state.options.statuses[getFormType];
                     if (payload.list_employee_id.some(value => value.employee_id == item.employee_id)) {
+                        let status_added = {};
+                        if (getStatus) {
+                            status_added = {
+                                status_readable: getStatus.short_readable,
+                                status_color: getStatus.color,
+                            };
+                        }
+
                         return {
                             ...item,
                             status: getFormType,
                             status_last: statusLast,
-                            status_readable: getStatus.short_readable,
-                            status_color: getStatus.color,
+                            ...status_added,
                         }
                     }
                 } else if (item.employee_id == state.form.employee_id) {
@@ -243,6 +249,7 @@ const EmployeeHasParent = {
             }
             else if (
                 payload.form_type == 'pending'
+                || payload.form_type == 'overtime'
                 || payload.form_type == 'assessment'
             ) {
                 getStatus = 'active';
@@ -252,11 +259,13 @@ const EmployeeHasParent = {
                 getStatus = payload.form_type;
             }
 
-            console.info(getStatus, payload);
+            // console.info(getStatus, payload);
 
             const getDataSelectedOvertime = context.state.data.selecteds
                 .filter(item => item.status == getStatus)
                 .map(item => ({ employee_id: item.employee_id }));
+
+            // console.info(getDataSelectedOvertime);
 
             context.commit("UPDATE_DATA_SELECTED_STATUS", {
                 list_employee_id: [...getDataSelectedOvertime],

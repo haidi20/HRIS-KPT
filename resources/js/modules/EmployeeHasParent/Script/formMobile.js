@@ -20,6 +20,9 @@ export default {
         getOptionPositions() {
             return this.$store.state.master.data.positions;
         },
+        getJobOrderStatus() {
+            return this.$store.state.jobOrder.form.status;
+        },
         getOptionJobOrders() {
             return this.$store.state.jobOrder.data.map((item) => ({
                 ...item,
@@ -34,6 +37,11 @@ export default {
         },
         form() {
             return this.$store.state.employeeHasParent.form;
+        },
+    },
+    watch: {
+        getData(value, oldValue) {
+            //
         },
     },
     methods: {
@@ -85,6 +93,13 @@ export default {
         },
         getConditionTime() {
             let result = false;
+            const getEmployeeStatusActive = this.getData.some(item => item.status == 'active');
+            // console.info(this.getJobOrderStatus);
+
+
+            if (this.getJobOrderStatus == 'overtime' && getEmployeeStatusActive) {
+                result = true;
+            }
 
             // result = true;
 
