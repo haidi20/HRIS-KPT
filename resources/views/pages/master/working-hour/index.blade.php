@@ -1,141 +1,169 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="page-heading">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Jam Kerja</h3>
-                    {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
-                </div>
-                <div class="col-12 col-md-6 order-md-2 order-first">
-                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                        <ol class="breadcrumb">
-                            {{-- <li class="breadcrumb-item"><a href="{{ route('setting.permission.index') }}">Fitur</a>
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Jam Kerja</h3>
+                {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        {{-- <li class="breadcrumb-item"><a href="{{ route('setting.permission.index') }}">Fitur</a>
                         </li> --}}
-                            <li class="breadcrumb-item active" aria-current="page">Jam Kerja</li>
-                        </ol>
-                    </nav>
-                </div>
+                        <li class="breadcrumb-item active" aria-current="page">Jam Kerja</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-        <section class="section">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        {{-- <div class="card-header">
-
-                    </div> --}}
-
-                        <div class="card-body">
-                            <form id="form" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" id="id" name="id" class="form-control"
-                                    value="{{ $id[0] ?? '' }}">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="start_time" class="col-sm-4 col-form-label">Jam Mulai Kerja </label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="start_time" name="start_time"
-                                                    class="form-control datetime" placeholder="contoh: 08:00"
-                                                    value="{{ $startTime[0] ?? '' }}">
-                                            </div>
+    </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="form" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" id="id" name="id" class="form-control" value="{{ $id[0] ?? '' }}">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="start_time" class="col-sm-4 col-form-label">Jam Mulai Kerja </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="start_time" name="start_time"
+                                                class="form-control datetime" placeholder="contoh: 08:00"
+                                                value="{{ $startTime[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="after_work" class="col-sm-4 col-form-label">Jam Selesai
-                                                Kerja</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="after_work" name="after_work"
-                                                    class="form-control datetime" placeholder="contoh: 05:00"
-                                                    value="{{ $afterWork[0] ?? '' }}">
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="after_work" class="col-sm-4 col-form-label">Jam Selesai
+                                            Kerja</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="after_work" name="after_work"
+                                                class="form-control datetime" placeholder="contoh: 05:00"
+                                                value="{{ $afterWork[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal
-                                                Keterlambatan</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="maximum_delay" name="maximum_delay"
-                                                    class="form-control datetime" placeholder="contoh: 08:30"
-                                                    value="{{ $maximumDelay[0] ?? '' }}">
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="after_work" class="col-sm-4 col-form-label">Jam Maksimal Selesai
+                                            Kerja</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="after_work" name="after_work"
+                                                class="form-control datetime" placeholder="contoh: 05:00"
+                                                value="{{ $afterWorkLimit[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="fastest_time" class="col-sm-4 col-form-label">Jam Paling Cepat
-                                                Pulang</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="fastest_time" name="fastest_time"
-                                                    class="form-control datetime" placeholder="contoh: 16:30"
-                                                    value="{{ $fastestTime[0] ?? '' }}">
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Mulai Istirahat</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="saturday_work_hour" name="saturday_work_hour" class="form-control datetime"
+                                                placeholder="contoh: 13:30" value="{{ $startRest[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="overtime_work" class="col-sm-4 col-form-label">Jam Mulai
-                                                Lembur</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="overtime_work" name="overtime_work"
-                                                    class="form-control datetime" placeholder="contoh: 16:30"
-                                                    value="{{ $overtimeWork[0] ?? '' }}">
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Selesai Istirahat</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="saturday_work_hour" name="saturday_work_hour" class="form-control datetime"
+                                                placeholder="contoh: 13:30" value="{{ $endRest[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Selesai
-                                                Kerja Hari
-                                                Sabtu</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="saturday_work_hour" name="saturday_work_hour"
-                                                    class="form-control datetime" placeholder="contoh: 13:30"
-                                                    value="{{ $saturdayWorkHour[0] ?? '' }}">
-                                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal Terlambat</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="maximum_delay" name="maximum_delay"
+                                                class="form-control datetime" placeholder="contoh: 08:30"
+                                                value="{{ $maximumDelay[0] ?? '' }}">
                                         </div>
                                     </div>
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-8"></div>
-                                    <div class="col-md-4" style="text-align:end; ">
-                                        {{-- <button type="button" class="btn btn-sm btn-danger"
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="fastest_time" class="col-sm-4 col-form-label">Jam Paling Cepat
+                                            Pulang</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="fastest_time" name="fastest_time"
+                                                class="form-control datetime" placeholder="contoh: 16:30"
+                                                value="{{ $fastestTime[0] ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="overtime_work" class="col-sm-4 col-form-label">Jam Mulai
+                                            Lembur</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="overtime_work" name="overtime_work"
+                                                class="form-control datetime" placeholder="contoh: 16:30"
+                                                value="{{ $overtimeWork[0] ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label for="saturday_work_hour" class="col-sm-4 col-form-label">Jam Selesai
+                                            Kerja Hari
+                                            Sabtu</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="saturday_work_hour" name="saturday_work_hour"
+                                                class="form-control datetime" placeholder="contoh: 13:30"
+                                                value="{{ $saturdayWorkHour[0] ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4" style="text-align:end; ">
+                                    {{-- <button type="button" class="btn btn-sm btn-danger"
                                                     data-bs-dismiss="modal">Batal</button> --}}
-                                        <button type="submit" class="btn btn-sm btn-success">Perbaharui</button>
-                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success">Perbaharui</button>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 @endsection
 
 @section('style')
-    <link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/bootstrap-timepicker.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('assets-mazer/css/pages/bootstrap-timepicker.css') }}" rel="stylesheet" />
 @endsection
 @section('script')
-    <script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-timepicker.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
+<script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-timepicker.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
             $('.dataTable').DataTable();
             clearForm();
             setupSelect();
@@ -148,6 +176,9 @@
             $("#id").val(data.id);
             $("#start_time").val(data.start_time);
             $("#after_work").val(data.after_work);
+            $("#after_work_limit").val(data.after_work_limit);
+            $("#start_rest").val(data.start_rest);
+            $("#end_rest").val(data.end_rest);
             $("#maximum_delay").val(data.maximum_delay);
             $("#fastest_time").val(data.fastest_time);
             $("#overtime_work").val(data.overtime_work);
@@ -258,5 +289,5 @@
         function clearForm() {
             //
         }
-    </script>
+</script>
 @endsection
