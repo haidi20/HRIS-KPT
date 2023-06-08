@@ -528,7 +528,7 @@ class JobOrderController extends Controller
                 } else {
                     $getStatus = $item["status"];
                     $getStatusLast = $item["status_last"];
-                    $$datetimeEnd = null;
+                    $datetimeEnd = null;
                 }
 
                 $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);

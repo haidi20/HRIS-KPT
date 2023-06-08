@@ -24,7 +24,7 @@ class WorkingHourSeeder extends Seeder
                     'after_work_limit' => '20:00',
                     'start_rest' => '11:30',
                     'end_rest' => '13:00',
-                    'maximum_delay' => '18:00',
+                    // 'maximum_delay' => '18:00',
                     'fastest_time' => '16:00',
                     'overtime_work' => '17:00',
                     'saturday_work_hour' => '13:00',

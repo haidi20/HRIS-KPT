@@ -269,10 +269,10 @@ const JobOrder = {
                 state.form.status = listStatus[getStatus].status;
                 state.form.status_last = listStatus[getStatus].status_last;
                 state.form.status_finish = payload.status;
-                state.form.status_note = null;
+                // state.form.status_note = null;
             } else {
                 state.form.status = getStatus;
-                state.form.status_note = null;
+                // state.form.status_note = null;
                 state.form.status_last = null;
                 state.form.status_finish = null;
             }
