@@ -15,31 +15,24 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Config;
 
 
 class JobOrderController extends Controller
 {
     private $nameModel = "App\Models\JobOrder";
-    private $nameModelJobOrderHasEmployee = "App\Models\JobOrderHasEmployee";
+    private $nameModelJobOrderEmployee = "App\Models\JobOrderHasEmployee";
 
     public function index()
     {
         $vue = true;
         $baseUrl = Url::to('/');
         $user = auth()->user();
-        $statuses = Config::get("library.status");
-        $statuses = json_encode($statuses);
 
-        // return $statuses;
-
-        return view("pages.job-order.index", compact("vue", "user", "baseUrl", "statuses"));
+        return view("pages.job-order.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()
     {
-        $status = request("status");
-        $search = request("search");
         $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
 
@@ -51,7 +44,7 @@ class JobOrderController extends Controller
         // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
         // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
         if ($user->group_name == "Pengawas") {
-            if (request("created_by") == "creator") {
+            if (request("type_by") == "creator") {
                 $jobOrders = $jobOrders->where("created_by", $user->id);
             } else {
                 $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
@@ -60,28 +53,10 @@ class JobOrderController extends Controller
             $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
         }
 
-        if ($search != null) {
-            $jobOrders = $jobOrders->where(function ($query) use ($search) {
-                $query->orWhereHas("project", function ($queryProject) use ($search) {
-                    $queryProject->where("name", "like", "%" . $search . "%");
-                })->orWhereHas("job", function ($queryProject) use ($search) {
-                    $queryProject->where("name", "like", "%" . $search . "%")
-                        ->orWhere("code", "like", "%" . $search . "%");
-                })->orWhereHas("creator", function ($queryProject) use ($search) {
-                    $queryProject->where("name", "like", "%" . $search . "%");
-                });
-            });
-        }
-
-        if ($status != "all") {
-            $jobOrders = $jobOrders->where("status", $status);
-        }
-
         $jobOrders = $jobOrders->get();
 
         return response()->json([
             "jobOrders" => $jobOrders,
-            "requests" => request()->all(),
         ]);
     }
 
@@ -137,7 +112,7 @@ class JobOrderController extends Controller
                 $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
-            $this->storeActionJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
             $this->storeJobOrderHistory($jobOrder);
 
             if ($image != null) {
@@ -207,23 +182,9 @@ class JobOrderController extends Controller
             $jobOrder->status_note = request("status_note");
             $jobOrder->save();
 
+            $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder);
-
-            $storeJobOrderHasEmployee = $this->storeJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
-            if (isset($storeJobOrderHasEmployee->error)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $storeJobOrderHasEmployee->message,
-                ], 500);
-            }
-
-            $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
-            if (isset($getValidation->error)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $getValidation->message,
-                ], 500);
-            }
+            $this->storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
 
             $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
 
@@ -282,14 +243,10 @@ class JobOrderController extends Controller
                 $jobOrder->datetime_end = $date;
                 $jobOrder->save();
 
-                $this->storeJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
-            } else {
-                $jobOrder->status = "assessment";
-                $jobOrder->save();
+                $this->storeJobOrderHistory($jobOrder);
+                $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
+                $this->storeActionJobOrderHasEmployee($jobOrder, "finish", $date, "active");
             }
-
-            $this->storeJobOrderHistory($jobOrder);
-            $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
 
             $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
 
@@ -308,54 +265,6 @@ class JobOrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Gagal Penilaian",
-            ], 500);
-        }
-    }
-
-    // perbaharui status karyawan pada job order
-    // tampilannya di tombol aksi karyawan di job order
-    public function storeActionHasEmployee()
-    {
-
-        $date = Carbon::now();
-        $dataEmployees = request("data_employees");
-        $jobStatusController = new JobStatusController;
-
-        try {
-            DB::beginTransaction();
-
-            foreach ($dataEmployees as $index => $item) {
-                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
-                $jobOrderHasEmployee->status = $item["status"];
-                $jobOrderHasEmployee->save();
-
-                if (array_key_exists('status_last', $item)) {
-                    $statusLast = $item["status_last"];
-
-                    $jobStatusController->storeJobStatusHasParent(
-                        $jobOrderHasEmployee,
-                        $statusLast,
-                        $date,
-                        $this->nameModelJobOrderHasEmployee
-                    );
-                }
-            }
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'request' => request()->all(),
-                'message' => "Berhasil memperbaharui status",
-            ], 200);
-        } catch (\Exception $e) {
-            DB::rollback();
-
-            Log::error($e);
-
-            return response()->json([
-                'success' => false,
-                'message' => "Gagal memperbaharui status",
             ], 500);
         }
     }
@@ -421,8 +330,7 @@ class JobOrderController extends Controller
         }
     }
 
-    // berdasarkan beberapa karyawan
-    private function storeActionJobOrderHasEmployee($jobOrder, $status, $dateStart)
+    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart)
     {
         $jobStatusController = new JobStatusController;
 
@@ -444,12 +352,12 @@ class JobOrderController extends Controller
 
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
-                $jobOrderHasEmployee->status = $item["status"];
+                $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->datetime_start = $dateStart;
                 $jobOrderHasEmployee->save();
 
                 if (!isset($item["id"])) {
-                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $item["status_last"], $dateStart, $this->nameModelJobOrderHasEmployee);
+                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, null, $dateStart, $this->nameModelJobOrderEmployee);
                 }
 
                 $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
@@ -457,34 +365,34 @@ class JobOrderController extends Controller
         }
     }
 
-    // berdasarkan job order
-    private function storeJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
+    private function storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
     {
         $jobStatusController = new JobStatusController;
 
         if (count(request("employee_selecteds")) > 0) {
 
             foreach (request("employee_selecteds") as $index => $item) {
-                if ($status == 'assessment_finish') {
-                    $getStatus = 'finish';
-                    $getStatusLast = 'active';
+                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
+
+                if ($status == 'finish') {
+                    $jobOrderHasEmployee->status = $status;
+                    $jobOrderHasEmployee->datetime_end = $date;
+
+                    if ($statusLast == "correction") {
+                        $statusLast = "active";
+                    }
                 } else {
-                    $getStatus = $item["status"];
-                    $getStatusLast = $item["status_last"];
+                    if ($status == "correction") {
+                        $status = "active";
+                    }
+
+                    $jobOrderHasEmployee->status = $status;
                 }
 
-                $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
-                $jobOrderHasEmployee->status = $getStatus;
                 $jobOrderHasEmployee->save();
 
-                $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
-                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $getStatusLast, $date, $this->nameModelJobOrderHasEmployee);
+                $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $statusLast, $date, $this->nameModelJobOrderEmployee);
             }
-        } else {
-            return (object) [
-                'error' => true,
-                'message' => "Maaf, minimal 1 karyawan",
-            ];
         }
     }
 
