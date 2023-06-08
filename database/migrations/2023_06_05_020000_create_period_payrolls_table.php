@@ -21,7 +21,6 @@ class CreatePeriodPayrollsTable extends Migration
             $table->string("name")->nullable();
             $table->integer("status")->default(0);
             $table->integer("number_of_workdays")->nullable();
-            $table->date("period")->nullable();
             $table->date("date_start")->nullable();
             $table->date("date_end")->nullable();
 

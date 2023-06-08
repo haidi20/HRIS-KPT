@@ -53,9 +53,6 @@ class DatabaseSeeder extends Seeder
         $this->call(OrdinarySeamanSeeder::class);
         $this->call(ProjectSeeder::class);
         $this->call(SalaryAdvanceSeeder::class);
-        
         // end data biasa
-
-        $this->call(DummyAbsenSeeder::class);
     }
 }

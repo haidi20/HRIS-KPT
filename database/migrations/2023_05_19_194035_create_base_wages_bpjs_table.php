@@ -16,7 +16,6 @@ class CreateBaseWagesBpjsTable extends Migration
         Schema::create('base_wages_bpjs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code')->nullable();
             $table->string('nominal')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

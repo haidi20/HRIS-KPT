@@ -16,7 +16,6 @@ class CreateBpjsCalculationsTable extends Migration
         Schema::create('bpjs_calculations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code')->nullable();
             $table->decimal('company_percent')->nullable();
             $table->decimal('employee_percent')->nullable();
             $table->string('company_nominal')->nullable();

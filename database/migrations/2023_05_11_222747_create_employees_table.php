@@ -42,25 +42,11 @@ class CreateEmployeesTable extends Migration
             $table->string('working_hour')->nullable();
 
             // $table->enum('bpjs', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_jht', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_jkk', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_jkm', ['Y', 'N'])->default('Y');
-            $table->enum('bpjs_jp', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_tk', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_tk_pt', ['Y', 'N'])->default('Y');
             $table->enum('bpjs_kes', ['Y', 'N'])->default('Y');
-
-
-            $table->string('ptkp')->nullable();
-            $table->bigInteger('ptkp_karyawan')->default(0);
-
-            
-
-            
-
-
-
-
-
-
+            $table->enum('bpjs_kes_pt', ['Y', 'N'])->default('Y');
+            $table->enum('bpjs_training', ['Y', 'N'])->default('Y');
 
             // DATA KELUARGA
             // $table->string('father_name')->nullable();
@@ -76,16 +62,7 @@ class CreateEmployeesTable extends Migration
             $table->string('reason')->nullable();
 
             // DATA GAJI & REKENING
-            $table->bigInteger('basic_salary')->default(0);
-            $table->bigInteger('allowance')->default(0);
-            $table->bigInteger('meal_allowance_per_attend')->default(0);
-            $table->bigInteger('transport_allowance_per_attend')->default(0);
-            $table->bigInteger('attend_allowance_per_attend')->default(0);
-            $table->bigInteger('overtime_rate_per_hour')->default(0);
-
-            $table->bigInteger('vat_per_year')->default(0);
-
-
+            $table->string('basic_salary')->nullable();
             $table->string('rekening_number')->nullable();
             $table->string('rekening_name')->nullable();
             $table->string('bank_name')->nullable();

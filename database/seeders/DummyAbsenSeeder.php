@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use CreateAttendanceHasEmployeesTable;
 
 use App\Models\Attendance;
+use App\Models\AttendanceFingerspot;
 use App\Models\Employee;
 use Illuminate\Database\Seeder;
 
@@ -28,7 +29,7 @@ class DummyAbsenSeeder extends Seeder
 
         // Iterate over the period
 
-        foreach (Employee::where('id',1)->get() as $key => $employe) {
+        foreach (Employee::where('id', 1)->get() as $key => $employe) {
             $employe->roster = 0;
             foreach ($period as $date) {
 
@@ -51,14 +52,14 @@ class DummyAbsenSeeder extends Seeder
                         $hour_end = $date->format('Y-m-d') . " 17:00:00";
                         $duration_work = 7;
 
-                        $duration_overtime = \mt_rand( 0, 15 );
+                        $duration_overtime = \mt_rand(0, 15);
                         print("==============");
-                        print($duration_overtime."\n");
+                        print($duration_overtime . "\n");
                         print("==============");
 
                         $hour_overtime = Carbon::parse($date->format('Y-m-d') . " 17:00:59");
 
-                        if($duration_overtime > 0){
+                        if ($duration_overtime > 0) {
                             $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
                             $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
                         }
@@ -75,21 +76,19 @@ class DummyAbsenSeeder extends Seeder
                         $duration_work = 8;
 
                         $hour_overtime = Carbon::parse($date->format('Y-m-d') . " 17:00:59");
-                        
-                        $duration_overtime = \mt_rand( 0, 15 );
+
+                        $duration_overtime = \mt_rand(0, 15);
                         print("==============");
-                        print($duration_overtime."\n");
+                        print($duration_overtime . "\n");
                         print("==============");
-                        if($duration_overtime > 0){
+                        if ($duration_overtime > 0) {
                             $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
                             $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
                         }
-
-
                     }
                 }
 
-                Attendance::create([
+                AttendanceFingerspot::create([
                     // 'pin'=>1,
                     'employee_id' => $employe->id,
                     'cloud_id' => 12,

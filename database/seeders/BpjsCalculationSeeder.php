@@ -20,7 +20,6 @@ class BpjsCalculationSeeder extends Seeder
             [
                 [
                     'name' => 'Hari Tua (HT)',
-                    'code'=>'jht',
                     'company_percent' => '3.70',
                     'employee_percent' => '2.00',
                     'company_nominal' => '125597',
@@ -28,7 +27,6 @@ class BpjsCalculationSeeder extends Seeder
                 ],
                 [
                     'name' => 'Kecelakaan (JKK)',
-                    'code'=>'jkk',
                     'company_percent' => '1.74',
                     'employee_percent' => '0.00',
                     'company_nominal' => '59065',
@@ -36,7 +34,6 @@ class BpjsCalculationSeeder extends Seeder
                 ],
                 [
                     'name' => 'Kematian (JKM)',
-                    'code'=>'jkm',
                     'company_percent' => '0.30',
                     'employee_percent' => '0.00',
                     'company_nominal' => '10184',
@@ -44,7 +41,6 @@ class BpjsCalculationSeeder extends Seeder
                 ],
                 [
                     'name' => 'Pensiun (JP)',
-                    'code'=>'jp',
                     'company_percent' => '2.00',
                     'employee_percent' => '1.00',
                     'company_nominal' => '67890',
@@ -52,7 +48,6 @@ class BpjsCalculationSeeder extends Seeder
                 ],
                 [
                     'name' => 'Kesehatan (BPJS)',
-                    'code'=>'kes',
                     'company_percent' => '4.00',
                     'employee_percent' => '1.00',
                     'company_nominal' => '135781',
