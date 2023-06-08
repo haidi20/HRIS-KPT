@@ -43,6 +43,13 @@ export default {
                 this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
             }
         },
+        getUserGroupName(value) {
+            if (value != null) {
+                if (value == 'Quality Control') {
+                    this.$store.commit("jobOrder/INSERT_PARAM_CREATED_BY", { created_by: 'another_foreman' });
+                }
+            }
+        }
     },
     methods: {
         onOpenAction(form) {
