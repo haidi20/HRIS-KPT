@@ -24,12 +24,12 @@
       </b-row>
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Status" label-for="type" class>
+          <b-form-group label="Pilih Status" label-for="status" class>
             <VueSelect
-              id="type"
+              id="status"
               class="cursor-pointer"
-              v-model="params.type"
-              :options="getOptionType"
+              v-model="params.status"
+              :options="getOptionStatuses"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -40,13 +40,13 @@
       </b-row>
       <b-row>
         <b-col cols>
-          <b-form-group label="Pilih Data Berdasarkan" label-for="type_by" class>
+          <b-form-group label="Pilih Data Berdasarkan" label-for="created_by" class>
             <VueSelect
-              id="type_by"
+              id="created_by"
               class="cursor-pointer"
-              v-model="params.type_by"
+              v-model="params.created_by"
               placeholder="Pilih Data Berdasarkan"
-              :options="getOptionTypeBy"
+              :options="getOptionCreateByes"
               :reduce="(data) => data.id"
               label="name"
               searchable
@@ -94,11 +94,11 @@ export default {
     VueSelect,
   },
   computed: {
-    getOptionType() {
-      return this.$store.state.jobOrder.options.types;
+    getOptionStatuses() {
+      return this.$store.state.jobOrder.options.statuses;
     },
-    getOptionTypeBy() {
-      return this.$store.state.jobOrder.options.type_bys;
+    getOptionCreateByes() {
+      return this.$store.state.jobOrder.options.create_byes;
     },
     params() {
       return this.$store.state.jobOrder.params;

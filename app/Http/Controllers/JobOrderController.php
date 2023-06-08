@@ -38,6 +38,7 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        $status = request("status");
         $search = request("search");
         $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
@@ -50,7 +51,7 @@ class JobOrderController extends Controller
         // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
         // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain
         if ($user->group_name == "Pengawas") {
-            if (request("type_by") == "creator") {
+            if (request("created_by") == "creator") {
                 $jobOrders = $jobOrders->where("created_by", $user->id);
             } else {
                 $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
@@ -70,6 +71,10 @@ class JobOrderController extends Controller
                     $queryProject->where("name", "like", "%" . $search . "%");
                 });
             });
+        }
+
+        if ($status != "all") {
+            $jobOrders = $jobOrders->where("status", $status);
         }
 
         $jobOrders = $jobOrders->get();
@@ -277,10 +282,14 @@ class JobOrderController extends Controller
                 $jobOrder->datetime_end = $date;
                 $jobOrder->save();
 
-                $this->storeJobOrderHistory($jobOrder);
-                $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
                 $this->storeJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
+            } else {
+                $jobOrder->status = "assessment";
+                $jobOrder->save();
             }
+
+            $this->storeJobOrderHistory($jobOrder);
+            $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
 
             $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
 

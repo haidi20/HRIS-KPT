@@ -31,7 +31,7 @@ class CreateJobOrdersTable extends Migration
             $table->enum('status', [
                 'active', 'pending',
                 'overtime', 'correction',
-                'finish',
+                'finish', 'assessment',
             ]);
             $table->text('status_note')->nullable();
             $table->text('note')->nullable();

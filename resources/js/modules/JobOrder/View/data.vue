@@ -141,7 +141,7 @@
                 >Perbaikan Selesai</div>
                 <!-- khusus untuk QC -->
                 <div
-                  v-if="getFormStatus == 'active'"
+                  v-if="getFormStatus == 'active' || getFormStatus == 'assessment'"
                   class="action-item"
                   @click="onActionAssessment('assessment', 'Penilaian')"
                 >Penilaian</div>

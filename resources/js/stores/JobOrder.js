@@ -76,8 +76,8 @@ const JobOrder = {
         data: [],
         params: {
             month: new Date(),
-            type: "all",
-            type_by: "creator",
+            status: "all",
+            created_by: "creator",
             project_id: null,
             search: null,
         },
@@ -126,7 +126,7 @@ const JobOrder = {
                     name: "Borongan",
                 },
             ],
-            types: [
+            statuses: [
                 {
                     id: "all",
                     name: "semua",
@@ -143,13 +143,21 @@ const JobOrder = {
                     id: "overtime",
                     name: "lembur",
                 },
+                {
+                    id: "assessment",
+                    name: "penilaian",
+                },
+                {
+                    id: "finish",
+                    name: "selesai",
+                },
                 // ini hanya untuk pengawas
                 // {
                 //     id: "done_assessment_qc",
                 //     name: "sudah dinilai oleh QC",
                 // },
             ],
-            type_bys: [
+            create_byes: [
                 {
                     id: "creator",
                     name: "anda",
