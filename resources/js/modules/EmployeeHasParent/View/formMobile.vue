@@ -56,7 +56,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols>
+        <b-col cols="8">
           <b-form-group label="Jam Selesai Lembur" label-for="hour" class>
             <input type="time" class="form-control" v-model="form.hour" id="hour" name="hour" />
           </b-form-group>

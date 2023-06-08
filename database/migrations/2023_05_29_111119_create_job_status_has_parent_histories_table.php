@@ -25,7 +25,8 @@ class CreateJobStatusHasParentHistoriesTable extends Migration
                 correction - correction finish
             */
             $table->enum('status', [
-                'active', 'pending', 'overtime', 'correction'
+                'active', 'pending', 'overtime',
+                'correction', 'assessment',
             ])->nullable();
             $table->datetime('datetime_start');
             $table->datetime('datetime_end')->nullable();

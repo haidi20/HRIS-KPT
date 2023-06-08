@@ -15,28 +15,39 @@ Status values
 */
 
 /**
-*Default form object
-@typedef {Object} DefaultForm
-@property {null|string} job_code - The code value.
-@property {null|number} project_id - The project ID.
-@property {null|string} category - The category value.
-@property {null|number} job_id - The job ID.
-@property {null|string} job_note - The job note.
-@property {Status} status - The status value.
-@property {null|string} image - The image value.
-@property {null|date} date - The date value.
-@property {null|time} hour - The hour end value.
-@property {string} form_title - The form title.
-@property {null|string} hour_start - The hour start value.
-@property {null|string} date_time_start - The start date and time.
-@property {null|string} date_time_end - The end date and time.
-@property {null|string} date_time_end_readable - The end date and time in a readable format.
-@property {null|string} estimation - The estimation value.
-@property {string} time_type - The time type.
-@property {null|string} note - The note value.
-@property {string} form_kind - The form type.
-*/
+ * Default form object.
+ * @typedef {Object} DefaultForm
+ * @property {?number} id - The ID of the form.
+ * @property {?string} job_code - The job code.
+ * @property {?number} project_id - The ID of the project.
+ * @property {?string} category - The category of the job.
+ * @property {?number} job_id - The ID of the job.
+ * @property {?string} job_note - The note related to the job.
+ * @property {?string} status - The status of the job.
+ * @property {?string} status_last - The last status of the job.
+ * @property {?string} status_finish - The finish status of the job.
+ * @property {?string} image - The image related to the job.
+ * @property {Date} date - The date of the form.
+ * @property {string} hour - The hour in "HH:mm" format.
+ * @property {?string} status_note - The note related to the status.
+ * @property {?string} form_kind - The kind of form.
+ * @property {?string} form_title - The title of the form.
+ * @property {?string} hour_start - The start hour of the job.
+ * @property {?string} datetime_start - The start date and time of the job.
+ * @property {?string} datetime_end - The end date and time of the job.
+ * @property {?string} datetime_end_readable - The readable format of the end date and time.
+ * @property {?string} datetime_estimation_end - The estimated end date and time of the job.
+ * @property {?string} datetime_estimation_end_readable - The readable format of the estimated end date and time.
+ * @property {?number} estimation - The estimation value.
+ * @property {?string} time_type - The type of time (minutes, hours, days).
+ * @property {?string} note - The note related to the job.
+ * @property {string} label_image - The label for the image field.
+ */
 
+/**
+ * Default form object.
+ * @type {DefaultForm}
+ */
 const defaultForm = {
     id: null,
     job_code: null,
@@ -76,9 +87,10 @@ const JobOrder = {
         data: [],
         params: {
             month: new Date(),
-            type: "all",
-            type_by: "creator",
+            status: "all",
+            created_by: "creator",
             project_id: null,
+            search: null,
         },
         form: { ...defaultForm },
         is_active_form: false,
@@ -125,7 +137,7 @@ const JobOrder = {
                     name: "Borongan",
                 },
             ],
-            types: [
+            statuses: [
                 {
                     id: "all",
                     name: "semua",
@@ -142,19 +154,27 @@ const JobOrder = {
                     id: "overtime",
                     name: "lembur",
                 },
+                {
+                    id: "assessment",
+                    name: "penilaian",
+                },
+                {
+                    id: "finish",
+                    name: "selesai",
+                },
                 // ini hanya untuk pengawas
                 // {
                 //     id: "done_assessment_qc",
                 //     name: "sudah dinilai oleh QC",
                 // },
             ],
-            type_bys: [
+            create_byes: [
                 {
                     id: "creator",
                     name: "anda",
                 },
                 {
-                    id: "other_foreman",
+                    id: "another_foreman",
                     name: "pengawas lain",
                 },
             ],
@@ -262,6 +282,9 @@ const JobOrder = {
                 ...state.params,
                 ...payload,
             }
+        },
+        INSERT_PARAM_CREATED_BY(state, payload) {
+            state.params.created_by = payload.created_by;
         },
         INSERT_USER_ID(state, payload) {
             state.user_id = payload.user_id;

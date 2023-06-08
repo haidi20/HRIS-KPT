@@ -29,7 +29,7 @@ class CreateJobOrderHistoriesTable extends Migration
             $table->enum('category', ['reguler', 'daily', 'fixed_price']);
             $table->enum('status', [
                 'active', 'pending', 'finish',
-                'overtime', 'correction'
+                'overtime', 'correction', 'assessment',
             ]);
             $table->text('status_note')->nullable();
             $table->text('note')->nullable();
