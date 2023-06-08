@@ -23,6 +23,12 @@
                             <input type="text" id="serial_number" name="serial_number" class="form-control">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="cloud_id" class="col-sm-4 col-form-label">Cloud ID </label>
+                        <div class="col-sm-8">
+                            <input type="text" id="cloud_id" name="cloud_id" class="form-control">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Batal</button>

@@ -65,16 +65,38 @@
                                 @endforeach
                             </select>
                         </div>
-                        <a href="" target="_blank" class="btn btn-sm btn-success mt-2" id="exportLocationBtn"
+                        <a href="" target="_blank" class="btn btn-sm btn-secondary mt-2" id="exportLocationBtn"
                             style="display: none;"><i class="bi bi-file-earmark-spreadsheet"></i> Export Excel</a>
                     </div>
+
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
+                    {{-- <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="utama-tab" data-bs-toggle="tab" href="#utama" role="tab"
+                                aria-controls="utama" aria-selected="true">Data Utama Pegawai</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="exp-tab" data-bs-toggle="tab" href="#exp" role="tab"
+                                aria-controls="exp" aria-selected="false">Data Pegawai Habis Kontrak</a>
+                        </li>
+                    </ul> --}}
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="utama" role="tabpanel" aria-labelledby="utama-tab">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    {!! $dataTableBuilder->table(['class' => 'table table-striped table-bordered']) !!}
+                                </div>
+                            </div>
                         </div>
+                        {{-- <div class="tab-pane fade" id="exp" role="tabpanel" aria-labelledby="exp-tab">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    {!! $dataTableExpBuilder->table(['class' => 'table table-striped table-bordered']) !!}
+                                </div>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -96,7 +118,8 @@
 
 @endsection
 @section('script')
-{!! $html->scripts() !!}
+{!! $dataTableBuilder->scripts() !!}
+{!! $dataTableExpBuilder->scripts() !!}
 <script>
     const initialState = {
         employees: [],

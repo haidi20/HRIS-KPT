@@ -79,6 +79,7 @@
         $("#id").val(data.id);
         $("#name").val(data.name);
         $("#serial_number").val(data.serial_number);
+        $("#cloud_id").val(data.cloud_id);
 
         $("#titleForm").html("Ubah Alat Finger");
         onModalAction("formModal", "show");
@@ -215,6 +216,7 @@
         $("#id").val("");
         $("#name").val("");
         $("#serial_number").val("");
+        $("#cloud_id").val("");
     }
 </script>
 @endsection
