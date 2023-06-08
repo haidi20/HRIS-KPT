@@ -50,13 +50,16 @@ export default {
         async onSend() {
             const Swal = this.$swal;
             // const statusBaseOnFormKind = listStatus[this.getFormKind] ? listStatus[this.getFormKind].status_last : this.getFormKind;
-            const getEmployeeSelecteds = this.getEmployeeSelecteds
+            let getEmployeeSelecteds = this.getEmployeeSelecteds
                 .filter(item =>
                     item.hasOwnProperty('status_last')
-                    || (
-                        this.getFormKind == 'overtime' && item.status == 'overtime'
-                    )
                 );
+
+            if (this.getFormKind == 'overtime') {
+                getEmployeeSelecteds = getEmployeeSelecteds.filter(item =>
+                    item.status == 'overtime'
+                );
+            }
 
             this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
                 status: this.getFormKind,

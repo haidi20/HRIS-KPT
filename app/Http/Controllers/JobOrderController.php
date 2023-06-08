@@ -116,7 +116,7 @@ class JobOrderController extends Controller
             $user = User::find(request("user_id"));
             $image = request("image");
             $date = Carbon::now();
-            $date->setTimeFromTimeString(request("hour_start"));
+            $date = $date->setTimeFromTimeString(request("hour_start"));
             // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
             $jobOrder->project_id = request("project_id");
@@ -132,12 +132,14 @@ class JobOrderController extends Controller
             $jobOrder->note = request("note");
             $jobOrder->save();
 
-            // tambah data jobOrderHasStatus hanya ketika data baru
-            if (request("id") == null) {
+            if (request("id") != null) {
+                $jobStatusController->updateJobStatusHasParent($jobOrder, $this->nameModel);
+            } else {
+                // tambah data jobOrderHasStatus hanya ketika data baru
                 $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
-            $this->storeActionJobOrderHasEmployee($jobOrder, $jobOrder->status, $date);
+            $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start);
             $this->storeJobOrderHistory($jobOrder);
 
             if ($image != null) {
@@ -209,11 +211,11 @@ class JobOrderController extends Controller
 
             $this->storeJobOrderHistory($jobOrder);
 
-            $storeJobOrderHasEmployee = $this->storeJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
-            if (isset($storeJobOrderHasEmployee->error)) {
+            $storeActionJobOrderHasEmployee = $this->storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
+            if (isset($storeActionJobOrderHasEmployee->error)) {
                 return response()->json([
                     'success' => false,
-                    'message' => $storeJobOrderHasEmployee->message,
+                    'message' => $storeActionJobOrderHasEmployee->message,
                 ], 500);
             }
 
@@ -282,7 +284,7 @@ class JobOrderController extends Controller
                 $jobOrder->datetime_end = $date;
                 $jobOrder->save();
 
-                $this->storeJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
+                $this->storeActionJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
             } else {
                 $jobOrder->status = "assessment";
                 $jobOrder->save();
@@ -314,10 +316,9 @@ class JobOrderController extends Controller
 
     // perbaharui status karyawan pada job order
     // tampilannya di tombol aksi karyawan di job order
+    // di pakai langsung di menu karyawan ubah status per karyawan
     public function storeActionHasEmployee()
     {
-
-        $date = Carbon::now();
         $dataEmployees = request("data_employees");
         $jobStatusController = new JobStatusController;
 
@@ -325,6 +326,12 @@ class JobOrderController extends Controller
             DB::beginTransaction();
 
             foreach ($dataEmployees as $index => $item) {
+                if ($item["status"] == 'pending') {
+                    $datetime = Carbon::now();
+                } else {
+                    $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
+                }
+
                 $jobOrderHasEmployee = JobOrderHasEmployee::find($item["id"]);
                 $jobOrderHasEmployee->status = $item["status"];
                 $jobOrderHasEmployee->save();
@@ -335,7 +342,7 @@ class JobOrderController extends Controller
                     $jobStatusController->storeJobStatusHasParent(
                         $jobOrderHasEmployee,
                         $statusLast,
-                        $date,
+                        $datetime,
                         $this->nameModelJobOrderHasEmployee
                     );
                 }
@@ -343,9 +350,31 @@ class JobOrderController extends Controller
 
             DB::commit();
 
+            $checkStillExistsOvertime = JobOrderHasEmployee::where([
+                "status" => "overtime",
+                "job_order_id" => request("job_order_id"),
+            ])->count();
+
+            if ($checkStillExistsOvertime == 0) {
+                $jobOrder = JobOrder::find(request("job_order_id"));
+                $jobOrder->status = "active";
+                $jobOrder->save();
+
+                $this->storeJobOrderHistory($jobOrder);
+
+                $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $datetime, $this->nameModel);
+                if (isset($getValidation->error)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $getValidation->message,
+                    ], 500);
+                }
+            }
+
             return response()->json([
                 'success' => true,
                 'request' => request()->all(),
+                'datetime' => $datetime,
                 'message' => "Berhasil memperbaharui status",
             ], 200);
         } catch (\Exception $e) {
@@ -421,8 +450,34 @@ class JobOrderController extends Controller
         }
     }
 
-    // berdasarkan beberapa karyawan
-    private function storeActionJobOrderHasEmployee($jobOrder, $status, $dateStart)
+    private function storeJobOrderHistory($jobOrder, $isDelete = false)
+    {
+        $jobOrderHistory = new JobOrderHistory;
+        $jobOrderHistory->job_order_id = $jobOrder->id;
+        $jobOrderHistory->project_id = $jobOrder->project_id;
+        $jobOrderHistory->job_id = $jobOrder->job_id;
+        $jobOrderHistory->job_level = $jobOrder->job_level;
+        $jobOrderHistory->job_note = $jobOrder->job_note;
+        $jobOrderHistory->status = $jobOrder->status;
+        $jobOrderHistory->datetime_start = $jobOrder->datetime_start;
+        $jobOrderHistory->datetime_end = $jobOrder->datetime_end;
+        $jobOrderHistory->datetime_estimation_end = $jobOrder->datetime_estimation_end;
+        $jobOrderHistory->estimation = $jobOrder->estimation;
+        $jobOrderHistory->time_type = $jobOrder->time_type;
+        $jobOrderHistory->category = $jobOrder->category;
+        $jobOrderHistory->note = $jobOrder->note;
+        $jobOrderHistory->status_note = $jobOrder->status_note;
+        $jobOrderHistory->deleted_by = $jobOrder->deleted_by;
+
+        if ($isDelete) {
+            $jobOrderHistory->deleted_at = Carbon::now();
+        }
+
+        $jobOrderHistory->save();
+    }
+
+    // di pakai job order tambah dan ubah data
+    private function storeJobOrderHasEmployee($jobOrder, $status, $dateStart)
     {
         $jobStatusController = new JobStatusController;
 
@@ -450,6 +505,8 @@ class JobOrderController extends Controller
 
                 if (!isset($item["id"])) {
                     $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $item["status_last"], $dateStart, $this->nameModelJobOrderHasEmployee);
+                } else {
+                    $jobStatusController->updateJobStatusHasParent($jobOrderHasEmployee, $this->nameModelJobOrderHasEmployee);
                 }
 
                 $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
@@ -457,8 +514,8 @@ class JobOrderController extends Controller
         }
     }
 
-    // berdasarkan job order
-    private function storeJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
+    // di pakai job order memperbaharui status
+    private function storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast)
     {
         $jobStatusController = new JobStatusController;
 
@@ -486,32 +543,6 @@ class JobOrderController extends Controller
                 'message' => "Maaf, minimal 1 karyawan",
             ];
         }
-    }
-
-    private function storeJobOrderHistory($jobOrder, $isDelete = false)
-    {
-        $jobOrderHistory = new JobOrderHistory;
-        $jobOrderHistory->job_order_id = $jobOrder->id;
-        $jobOrderHistory->project_id = $jobOrder->project_id;
-        $jobOrderHistory->job_id = $jobOrder->job_id;
-        $jobOrderHistory->job_level = $jobOrder->job_level;
-        $jobOrderHistory->job_note = $jobOrder->job_note;
-        $jobOrderHistory->status = $jobOrder->status;
-        $jobOrderHistory->datetime_start = $jobOrder->datetime_start;
-        $jobOrderHistory->datetime_end = $jobOrder->datetime_end;
-        $jobOrderHistory->datetime_estimation_end = $jobOrder->datetime_estimation_end;
-        $jobOrderHistory->estimation = $jobOrder->estimation;
-        $jobOrderHistory->time_type = $jobOrder->time_type;
-        $jobOrderHistory->category = $jobOrder->category;
-        $jobOrderHistory->note = $jobOrder->note;
-        $jobOrderHistory->status_note = $jobOrder->status_note;
-        $jobOrderHistory->deleted_by = $jobOrder->deleted_by;
-
-        if ($isDelete) {
-            $jobOrderHistory->deleted_at = Carbon::now();
-        }
-
-        $jobOrderHistory->save();
     }
 
     private function storeJobOrderHasEmployeeHistory($jobOrderHasEmployee)

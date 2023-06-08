@@ -61,6 +61,20 @@ class JobStatusController extends Controller
         }
     }
 
+    public function updateJobStatusHasParent($parent, $nameModel)
+    {
+        $jobStatusHasParent = JobStatusHasParent::where([
+            "parent_id" => $parent->id,
+            "parent_model" => $nameModel,
+            "status" => $parent->status,
+            "datetime_end" => null
+        ])->orderBy("created_at", "desc")->first();
+
+        $jobStatusHasParent->datetime_start = $parent->datetime_start;
+        $jobStatusHasParent->note_start = $parent->note_start;
+        $jobStatusHasParent->save();
+    }
+
     private function storeJobStatusHasParentHistory($jobStatusHasParent, $isDelete = false)
     {
         $jobStatusHasParentHistory = new JobStatusHasParentHistory;

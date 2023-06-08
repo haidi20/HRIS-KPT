@@ -1,6 +1,11 @@
 import VueSelect from "vue-select";
 
 export default {
+    data() {
+        return {
+            is_show_form_overtime_finish: false,
+        };
+    },
     components: {
         VueSelect,
     },

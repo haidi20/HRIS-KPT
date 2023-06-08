@@ -71,6 +71,9 @@ export default {
     getUserId() {
       return this.$store.state.user?.id;
     },
+    getJobOrderId() {
+      return this.$store.state.jobOrder.form.id;
+    },
     getJobOrderFormKind() {
       return this.$store.state.jobOrder.form.form_kind;
     },
@@ -101,6 +104,9 @@ export default {
       const Swal = this.$swal;
 
       let request = {
+        job_order_id: this.getJobOrderId,
+        date: moment(this.getForm.date).format("Y-MM-DD"),
+        hour: this.getForm.hour,
         data_employees: [...this.getData],
         user_id: this.getUserId,
       };

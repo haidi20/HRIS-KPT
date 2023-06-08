@@ -15,7 +15,7 @@ const defaultForm = {
     data_index: null, // untuk hapus data yang sudah di pilih
     status: null,
     is_hide_status: false,
-    hour: null,
+    hour: moment().format("HH:mm"),
     date: new Date(),
 }
 
