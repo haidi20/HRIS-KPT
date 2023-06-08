@@ -111,8 +111,8 @@ export const listStatus = {
         status: "finish",
         status_last: "correction",
     },
-    assessment_finish: {
-        status: "finish",
-        status_last: "assessment",
-    },
+    // assessment_finish: {
+    //     status: "finish",
+    //     status_last: "assessment",
+    // },
 };

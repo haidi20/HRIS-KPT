@@ -127,7 +127,12 @@ const EmployeeHasParent = {
                 getFormType = listStatus[payload.form_type].status;
                 statusLast = listStatus[payload.form_type].status_last;
             } else {
-                getFormType = payload.form_type;
+                if (payload.form_type == "assessment") {
+                    getFormType = "finish";
+                    statusLast = "active";
+                } else {
+                    getFormType = payload.form_type;
+                }
             }
 
             const getSelecteds = state.data.selecteds.map(item => {
@@ -170,7 +175,7 @@ const EmployeeHasParent = {
 
             // console.info(state.options.statuses[payload.form_type]);
             // console.info(state.form.employee_id, payload.form_type);
-            // console.info(state.data.selecteds);
+            console.info(state.data.selecteds);
         },
         DELETE_FORM_EMPLOYEE_ID(state, payload) {
             state.form.employee_id = null;
@@ -259,13 +264,13 @@ const EmployeeHasParent = {
                 getStatus = payload.form_type;
             }
 
-            // console.info(getStatus, payload);
+            console.info(getStatus, payload);
 
             const getDataSelectedOvertime = context.state.data.selecteds
                 .filter(item => item.status == getStatus)
                 .map(item => ({ employee_id: item.employee_id }));
 
-            // console.info(getDataSelectedOvertime);
+            console.info(getDataSelectedOvertime);
 
             context.commit("UPDATE_DATA_SELECTED_STATUS", {
                 list_employee_id: [...getDataSelectedOvertime],

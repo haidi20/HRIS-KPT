@@ -59,13 +59,17 @@ export default {
                 getEmployeeSelecteds = getEmployeeSelecteds.filter(item =>
                     item.status == 'overtime'
                 );
+            } else if (this.getFormKind == 'assessment') {
+                getEmployeeSelecteds = getEmployeeSelecteds.filter(item =>
+                    item.status == 'finish'
+                );
             }
 
             this.$store.commit("jobOrder/INSERT_FORM_STATUS", {
                 status: this.getFormKind,
             });
 
-            console.info(this.getFormKind);
+            // console.info(this.getFormKind);
             // console.info(this.getEmployeeSelecteds, getEmployeeSelecteds);
 
             const request = {
