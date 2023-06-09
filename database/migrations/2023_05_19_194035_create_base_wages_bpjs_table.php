@@ -17,6 +17,7 @@ class CreateBaseWagesBpjsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('nominal')->nullable();
+            $table->string('code')->nullable();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

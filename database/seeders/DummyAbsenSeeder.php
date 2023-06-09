@@ -88,7 +88,7 @@ class DummyAbsenSeeder extends Seeder
                     }
                 }
 
-                AttendanceFingerspot::create([
+                Attendance::create([
                     // 'pin'=>1,
                     'employee_id' => $employe->id,
                     'cloud_id' => 12,
