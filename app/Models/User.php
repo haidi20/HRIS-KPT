@@ -54,7 +54,7 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'permission',
+        'permission', "group_name", "position_name",
     ];
 
     public function role()
@@ -66,6 +66,20 @@ class User extends Authenticatable
     {
         if ($this->role) {
             return $this->role->name;
+        }
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class, "position_id", "id");
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->position) {
+            return $this->position->name;
+        } else {
+            return null;
         }
     }
 

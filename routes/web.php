@@ -7,8 +7,11 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BargeController;
+use App\Http\Controllers\BaseWagesBpjsController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmenController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeTypeController;
 use App\Http\Controllers\FeatureController;
@@ -22,6 +25,8 @@ use App\Http\Controllers\OvertimeController;
 use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PayslipController;
+
+use App\Http\Controllers\PeriodPayrollController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
@@ -33,7 +38,12 @@ use App\Http\Controllers\SalaryAdvanceController;
 use App\Http\Controllers\SalaryAdvanceReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VacationController;
 use App\Http\Controllers\WorkingHourController;
+use App\Http\Controllers\FingerToolController;
+use App\Http\Controllers\BpjsCalculationController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\VacationReportController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -64,13 +74,22 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("attendance")->name("attendance.")->group(function () {
         Route::get('', [AttendanceController::class, "index"])->name("index");
+        Route::get('export', [AttendanceController::class, "export"])->name("export");
+        Route::get('download', [AttendanceController::class, "download"])->name("download");
+        Route::get('print', [AttendanceController::class, "print"])->name("print");
     });
     Route::prefix("roster")->name("roster.")->group(function () {
         Route::get('', [RosterController::class, "index"])->name("index");
-        Route::get('fetch-data', [RosterController::class, "fetchData"])->name("fetchData");
+        Route::get('export', [RosterController::class, "export"])->name("export");
+        Route::get('download', [RosterController::class, "download"])->name("download");
     });
+    // salary advance = kasbon
     Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
         Route::get('', [SalaryAdvanceController::class, "index"])->name("index");
+    });
+    // salary adjustment = penyesuaian gaji
+    Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
+        Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
     });
     Route::prefix("overtime")->name("overtime.")->group(function () {
         Route::get('', [OvertimeController::class, "index"])->name("index");
@@ -78,14 +97,28 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("payslip")->name("payslip.")->group(function () {
         Route::get('', [PayslipController::class, "index"])->name("index");
     });
+
+    Route::prefix("period_payroll")->name("period_payroll.")->group(function () {
+        Route::get('', [PeriodPayrollController::class, "index"])->name("index");
+        Route::post('', [PeriodPayrollController::class, "store"])->name("store");
+        Route::delete('delete', [PeriodPayrollController::class, "destroy"])->name("delete");
+    });
+
+    
     Route::prefix("payroll")->name("payroll.")->group(function () {
-        Route::get('', [PayrollController::class, "index"])->name("index");
+        Route::get('', [PayrollController::class, "monthly"])->name("monthly");
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");
+        Route::get('export', [ProjectController::class, "export"])->name("export");
+        Route::get('download', [ProjectController::class, "download"])->name("download");
     });
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
+    });
+    // vacation = cuti kerja
+    Route::prefix("vacation")->name("vacation.")->group(function () {
+        Route::get('', [VacationController::class, "index"])->name("index");
     });
 
     Route::prefix("report")->name("report.")->group(function () {
@@ -98,6 +131,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix("overtime")->name("overtime.")->group(function () {
             Route::get('', [OvertimeReportController::class, "index"])->name("index");
         });
+        Route::prefix("vacation")->name("vacation.")->group(function () {
+            Route::get('', [VacationReportController::class, "index"])->name("index");
+            Route::get('export', [VacationReportController::class, "export"])->name("export");
+            Route::get('download', [VacationReportController::class, "download"])->name("download");
+        });
     });
 
     Route::prefix("master")->name("master.")->group(function () {
@@ -108,8 +146,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('employee-type')->name("employeeType.")->group(function () {
             Route::get('', [EmployeeTypeController::class, "index"])->name("index");
-            Route::post('store', [PositionController::class, "store"])->name("store");
-            Route::delete('delete', [PositionController::class, "destroy"])->name("delete");
+            Route::post('store', [EmployeeTypeController::class, "store"])->name("store");
+            Route::delete('delete', [EmployeeTypeController::class, "destroy"])->name("delete");
         });
         // barge = kapal tongkang
         Route::prefix('barge')->name("barge.")->group(function () {
@@ -119,8 +157,14 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('job')->name("job.")->group(function () {
             Route::get('', [JobController::class, "index"])->name("index");
-            Route::post('store', [BargeController::class, "store"])->name("store");
-            Route::delete('delete', [BargeController::class, "destroy"])->name("delete");
+            Route::post('store', [JobController::class, "store"])->name("store");
+            Route::delete('delete', [JobController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('departmen')->name("departmen.")->group(function () {
+            Route::get('', [DepartmenController::class, "index"])->name("index");
+            Route::get('get-last-code', [DepartmenController::class, "getLastCode"])->name("getLastCode");
+            Route::post('store', [DepartmenController::class, "store"])->name("store");
+            Route::delete('delete', [DepartmenController::class, "destroy"])->name("delete");
         });
         Route::prefix('position')->name("position.")->group(function () {
             Route::get('', [PositionController::class, "index"])->name("index");
@@ -129,6 +173,18 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('location')->name("location.")->group(function () {
             Route::get('', [LocationController::class, "index"])->name("index");
+            Route::post('store', [LocationController::class, "store"])->name("store");
+            Route::delete('delete', [LocationController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('finger-tool')->name("fingerTool.")->group(function () {
+            Route::get('', [FingerToolController::class, "index"])->name("index");
+            Route::post('store', [FingerToolController::class, "store"])->name("store");
+            Route::delete('delete', [FingerToolController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('customer')->name("customer.")->group(function () {
+            Route::get('', [CustomerController::class, "index"])->name("index");
+            Route::post('store', [CustomerController::class, "store"])->name("store");
+            Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
         });
         Route::prefix('material')->name("material.")->group(function () {
             Route::get('', [MaterialController::class, "index"])->name("index");
@@ -141,19 +197,35 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('employee')->name("employee.")->group(function () {
             Route::get('', [EmployeeController::class, "index"])->name("index");
+            Route::get('get-departmens/{companyId}', [DepartmensController::class, "getDepartmens"])->name("getDepartmen");
+            Route::get('get-positions/{departmenId}', [PositionsController::class, "getPositions"])->name("getPosition");
+            Route::get('get-fingers/{employeeId}', [EmployeeController::class, "getEmployeeFingers"])->name("getEmployeeFingers");
+            Route::delete('delete-fingers/{employeeId}', [EmployeeController::class, "deleteEmployeeFingers"])->name("deleteEmployeeFingers");
+            Route::get('exportExcelPosition/{position_id}', [EmployeeController::class, 'exportExcelPositionEmployee'])->name('exportExcelPosition');
+            Route::get('exportExcelLocation/{location_id}', [EmployeeController::class, 'exportExcelLocationEmployee'])->name('exportExcelLocation');
+            Route::post('bpjs-tk', [EmployeeController::class, "bpjsTK"])->name("bpjsTK");
+            Route::post('bpjs-tk-pt', [EmployeeController::class, "bpjsTKPT"])->name("bpjsTKPT");
+            Route::post('bpjs-kes', [EmployeeController::class, "bpjsKES"])->name("bpjsKES");
+            Route::post('bpjs-kes-pt', [EmployeeController::class, "bpjsKESPT"])->name("bpjsKESPT");
+            Route::post('bpjs-training', [EmployeeController::class, "bpjsTRAINING"])->name("bpjsTRAINING");
             Route::post('store', [EmployeeController::class, "store"])->name("store");
             Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
         });
         Route::prefix('working-hour')->name("workingHour.")->group(function () {
             Route::get('', [WorkingHourController::class, "index"])->name("index");
+            Route::post('store', [WorkingHourController::class, "store"])->name("store");
+        });
+        Route::prefix('finger')->name("finger.")->group(function () {
+            Route::get('', [FingerController::class, "index"])->name("index");
+            Route::post('store', [FingerController::class, "finger"])->name("store");
+            Route::delete('delete', [FingerController::class, "destroy"])->name("delete");
         });
     });
+
     Route::prefix("setting")->name("setting.")->group(function () {
         Route::prefix('approval-level')->name("approvalLevel.")->group(function () {
             Route::get('', [ApprovalLevelController::class, "index"])->name("index");
-        });
-        Route::prefix('salary-adjustment')->name("salaryAdjustment.")->group(function () {
-            Route::get('', [SalaryAdjustmentController::class, "index"])->name("index");
+            Route::post("store", [ApprovalLevelController::class, 'store'])->name("store");
         });
         Route::prefix('user')->name("user.")->group(function () {
             Route::get('', [UserController::class, "index"])->name("index");
@@ -175,6 +247,17 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('store', [FeatureController::class, "store"])->name("store");
             Route::delete('delete', [FeatureController::class, "destroy"])->name("delete");
         });
+        Route::prefix('bpjs-calculation')->name("bpjsCalculation.")->group(function () {
+            Route::get('', [BpjsCalculationController::class, "index"])->name("index");
+            Route::post('get-base-wages', [BpjsCalculationController::class, "getBaseWages"])->name("get-base-wages");
+            Route::post('store', [BpjsCalculationController::class, "store"])->name("store");
+            Route::delete('delete', [BpjsCalculationController::class, "destroy"])->name("delete");
+        });
+        Route::prefix('base-wages-bpjs')->name("baseWagesBpjs.")->group(function () {
+            Route::get('', [BaseWagesBpjsController::class, "index"])->name("index");
+            Route::post('store', [BaseWagesBpjsController::class, "store"])->name("store");
+            Route::delete('delete', [BaseWagesBpjsController::class, "destroy"])->name("delete");
+        });
         Route::prefix("permission")->name("permission.")->group(function () {
             Route::get('{featureId}', [PermissionController::class, "index"])->name("index");
             Route::post('store', [PermissionController::class, "store"])->name("store");
@@ -184,8 +267,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

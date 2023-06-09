@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Panlak;
-use App\Models\Panggar;
-use App\Models\Media;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +16,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $superadmin = User::create([
-            'name' => 'super admin',
+            'name' => 'superadmin',
             'email' => 'superadmin@email.com',
             'password' => Hash::make('samarinda'),
             'role_id' => 1,
@@ -28,14 +25,54 @@ class UserSeeder extends Seeder
 
         $superadmin->assignRole('Super Admin');
 
-        $superadmin = User::create([
+        $admin = User::create([
             'name' => 'admin',
-            'email' => 'admin@addmin.com',
+            'email' => 'admin@email.com',
             'password' => Hash::make('samarinda'),
             'role_id' => 2,
             'status' => true,
         ]);
 
-        $superadmin->assignRole('Admin');
+        $admin->assignRole('Admin');
+
+        $hrd = User::create([
+            'name' => 'arini',
+            'email' => 'hrd@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 3,
+            'status' => true,
+        ]);
+
+        $hrd->assignRole('HRD');
+
+        $cashier = User::create([
+            'name' => 'indah',
+            'email' => 'cashier@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 4,
+            'status' => true,
+        ]);
+
+        $cashier->assignRole('Kasir');
+
+        $foreman = User::create([
+            'name' => 'pengawas',
+            'email' => 'foreman@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 5,
+            'status' => true,
+        ]);
+
+        $foreman->assignRole('Pengawas');
+
+        $qualityControl = User::create([
+            'name' => 'qc',
+            'email' => 'qualityControl@email.com',
+            'password' => Hash::make('samarinda'),
+            'role_id' => 6,
+            'status' => true,
+        ]);
+
+        $qualityControl->assignRole('Quality Control');
     }
 }

@@ -23,13 +23,36 @@ class RoleSeeder extends Seeder
         $roleSuperAdmin = Role::create(['name' => 'Super Admin']);
         $roleSuperAdmin->givePermissionTo(Permission::all());
 
-        // "lihat pengguna", "lihat grup pengguna",
         $permissionPrivate = Config("library.permission_private");
         $permissionAdmin = Permission::whereNotIn("name", $permissionPrivate)->pluck("name")->toArray();
         $permissionAdmin = array_map('strtolower', $permissionAdmin);
-        $roleSuperAdmin = Role::create(['name' => 'Admin']);
-        $roleSuperAdmin->givePermissionTo($permissionAdmin);
+        $roleAdmin = Role::create(['name' => 'Admin']);
+        $roleAdmin->givePermissionTo($permissionAdmin);
 
-        // $tRole->givePermissionTo(["lihat {$menu}"]);
+        // karyawan office
+        $permissionGeneralOffice = [
+            "lihat dashboard", "lihat laporan kasbon", "persetujuan laporan kasbon", "perwakilan laporan kasbon",
+        ];
+
+        // pengawas
+        $permissionForeman = [
+            "lihat dashboard", "lihat job order", "tambah job order",
+        ];
+
+        $permissionQualityControl = [
+            "lihat dashboard", "lihat job order",
+        ];
+
+        $roleHrd = Role::create(['name' => 'HRD']);
+        $roleHrd->givePermissionTo($permissionGeneralOffice);
+
+        $roleCashier = Role::create(['name' => 'Kasir']);
+        $roleCashier->givePermissionTo($permissionGeneralOffice);
+
+        $roleForeman = Role::create(['name' => 'Pengawas']);
+        $roleForeman->givePermissionTo($permissionForeman);
+
+        $roleQc = Role::create(['name' => 'Quality Control']);
+        $roleQc->givePermissionTo($permissionQualityControl);
     }
 }

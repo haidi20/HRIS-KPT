@@ -1,57 +1,70 @@
 <template>
   <div>
-    <DatatableClientSide
+    <DatatableClient
       :data="getData"
       :columns="columns"
       :options="options"
       nameStore="roster"
       nameLoading="table"
-      :filter="true"
       bordered
     >
-      <template v-slot:filter>
-        <b-col cols>
-          <b-form-group label="Bulan" label-for="date" class="place_filter_table">
-            <DatePicker
-              id="date"
-              v-model="params.date"
-              format="YYYY-MM"
-              type="month"
-              placeholder="pilih bulan"
-              @input="onChangeDateFilter"
-            />
-          </b-form-group>
-          <b-button
-            class="place_filter_table"
-            variant="success"
-            size="sm"
-            @click="onExport()"
-            :disabled="is_loading_export"
-          >
-            <i class="fas fa-file-excel"></i>
-            Export
-          </b-button>
-          <span v-if="is_loading_export">Loading...</span>
-        </b-col>
+      <template v-slot:thead>
+        <b-th
+          v-for="(item, index) in getDateRange"
+          v-bind:key="`thead-${index}`"
+          style="width: 30px"
+        >{{ setLabelDate(item) }}</b-th>
       </template>
-      <!-- <template v-slot:thead>
-        <b-th v-for="i in 30" :key="`thead-${i}`" style="width: 30px">{{onCustomLabelNameDate(i)}}</b-th>
-      </template>-->
-    </DatatableClientSide>
+      <template v-slot:theadSecond>
+        <b-th
+          v-for="(item, index) in getDateRange"
+          v-bind:key="`thead-${index}`"
+          style="text-align-last: center"
+        >{{ setLabelNameDate(item) }}</b-th>
+      </template>
+      <template v-slot:tbody="{ filteredData, currentPage }">
+        <b-tr v-for="(item, index) in filteredData" :key="index">
+          <b-td nowrap>
+            <b-button variant="info" size="sm" @click="onEdit(item)">Ubah</b-button>
+          </b-td>
+          <b-td nowrap>{{ item.employee_name }}</b-td>
+          <b-td nowrap>{{ item.position_name }}</b-td>
+          <b-td
+            class="cursor-pointer text-center"
+            v-for="(date, subIndex) in getDateRange"
+            :key="`date-${subIndex}`"
+            @click="onRowClick(
+                item,
+                date,
+                getNoTable(index, currentPage, options.perPage),
+                item[date]?.value
+            )"
+            :style="setStyling(
+                getNoTable(index, currentPage, options.perPage),
+                date,
+                item[date]?.color
+            )"
+          >{{ item[date]?.value }}</b-td>
+        </b-tr>
+      </template>
+    </DatatableClient>
+    <br />
+    <Form />
+    <FormChangeStatus />
   </div>
 </template>
 
 <script>
 import _ from "lodash";
-import axios from "axios";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
-import DatatableClientSide from "../../components/DatatableClient";
+import DatatableClient from "../../components/DatatableClient";
+import Form from "./form";
+import FormChangeStatus from "./formChangeStatus";
 
 export default {
   data() {
     return {
-      is_loading_export: false,
       options: {
         perPage: 20,
         // perPageValues: [5, 10, 25, 50, 100],
@@ -63,8 +76,8 @@ export default {
       },
       columns: [
         {
-          label: "No.",
-          field: "no",
+          label: "",
+          field: "actions",
           width: "10px",
           rowspan: 2,
           class: "",
@@ -72,7 +85,14 @@ export default {
         {
           label: "Nama Karyawan",
           field: "employee_name",
-          width: "40px",
+          width: "100px",
+          rowspan: 2,
+          class: "",
+        },
+        {
+          label: "Departemen",
+          field: "position_name",
+          width: "100px",
           rowspan: 2,
           class: "",
         },
@@ -80,26 +100,72 @@ export default {
     };
   },
   components: {
+    Form,
+    FormChangeStatus,
     DatePicker,
-    DatatableClientSide,
+    DatatableClient,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getData() {
-      return this.$store.state.roster.data;
+      return this.$store.state.roster.data.main;
+    },
+    getDateRange() {
+      return this.$store.state.roster.date_range;
+    },
+    getIsLoadingFilter() {
+      return this.$store.state.roster.loading.table;
+    },
+    getOptionPositions() {
+      return this.$store.state.master.data.positions;
     },
     params() {
       return this.$store.state.roster.params;
     },
   },
   methods: {
-    onChangeDateFilter() {
-      //
+    onEdit(data) {
+      this.$store.commit("roster/INSERT_FORM", { data });
+      this.$bvModal.show("roster_form");
     },
-    onCustomLabelDate(date) {
+    onRowClick(item, date_selected, row, data_roster_status) {
+      const form = { ...item[date_selected] };
+      this.$store.commit("roster/INSERT_SELECTED_FORM", { form });
+      this.$bvModal.show("roster_change_status_form");
+    },
+    getNoTable(index, currentPage, perPage) {
+      return index + 1 + (currentPage - 1) * perPage;
+    },
+    setLabelDate(date) {
       return moment(date).format("DD");
     },
-    onCustomLabelNameDate(date) {
+    setLabelNameDate(date) {
       return moment(date).format("dddd");
+    },
+    setStyling(index, date, color) {
+      // console.info(index, date);
+      let style = {};
+
+      if (color != null) {
+        style = {
+          backgroundColor: color,
+        };
+      } else {
+        // style = this.getBackgroundColor(index, date);
+        style = {
+          backgroundColor: "white",
+        };
+      }
+
+      return style;
+    },
+    setDateReadAble(date) {
+      return moment(date).format("dddd, DD MMMM YYYY");
     },
   },
 };

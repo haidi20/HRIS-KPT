@@ -1,12 +1,17 @@
 <?php
 
 return [
-    "feature_private" => ["Jam Kerja", "Fitur", "Bahan", "Lokasi", "Jadwal Kerja", "Penyesuaian Gaji", "Jenis Karyawan"],
+    "feature_private" => ["Jam Kerja", "Bahan", "Lokasi", "Jadwal Kerja", "Jenis Karyawan", "Tingkat Persetujuan", "Departemen"],
     "permission_private" => [
-        "lihat jam kerja", "lihat fitur",  "lihat bahan", "lihat penyesuaian gaji",
-        "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan",
+        "lihat jam kerja",  "lihat bahan", "lihat departemen",
+        "lihat lokasi", "lihat jadwal kerja", "lihat jenis karyawan", "lihat tingkat persetujuan",
+        "hapus hak akses",
     ],
     "permission_added" => [
+        [
+            "name" => "detail fitur",
+            "featurer_id" => 7,
+        ],
         [
             "name" => "detail grup pengguna",
             "featurer_id" => 7,
@@ -22,18 +27,115 @@ return [
         ],
         // start kasbon
         [
-            "name" => "persetujuan kasbon",
+            "name" => "ekspor laporan kasbon",
             "featurer_id" => 4,
         ],
         [
-            "name" => "perwakilan kasbon",
+            "name" => "perwakilan laporan kasbon",
             "featurer_id" => 4,
         ],
         [
-            "name" => "perwakilan persetujuan kasbon",
+            "name" => "persetujuan laporan kasbon",
             "featurer_id" => 4,
         ],
+        // [
+        //     "name" => "hapus laporan kasbon",
+        //     "featurer_id" => 4,
+        // ],
 
         // end kasbon
+
+        // start SPL
+        [
+            "name" => "detail laporan surat perintah lembur",
+            "featurer_id" => 11,
+        ],
+        [
+            "name" => "ekspor laporan surat perintah lembur",
+            "featurer_id" => 11,
+        ],
+
+        // end SPL
+        [
+            "name" => "ekspor laporan job order",
+            "featurer_id" => 9,
+        ],
+        [
+            "name" => "ekspor laporan cuti",
+            "featurer_id" => 13,
+        ],
     ],
+    "status" => [
+        "review" => [
+            "readable" => "menunggu persetujuan",
+            "short_readable" => "proses",
+            "color" => "warning",
+        ],
+        "accept" => [
+            "readable" => "di terima",
+            "short_readable" => "terima",
+            "color" => "success",
+        ],
+        "reject" => [
+            "readable" => "di tolak",
+            "short_readable" => "tolak",
+            "color" => "danger",
+        ],
+        "revision" => [
+            "readable" => "perlu diperbaiki",
+            "short_readable" => "perbaiki",
+            "color" => "info",
+        ],
+        "not yet" => [
+            "readable" => "belum dikonfirmasi",
+            "short_readable" => "belum",
+            "color" => "info",
+        ],
+        // start job order
+        "active" => [
+            "readable" => "sedang aktif",
+            "short_readable" => "aktif",
+            "color" => "success",
+        ],
+        "pending" => [
+            "readable" => "tunda sementara",
+            "short_readable" => "tunda",
+            "color" => "warning",
+        ],
+        "finish" => [
+            "readable" => "sudah selesai",
+            "short_readable" => "selesai",
+            "color" => "primary",
+        ],
+        "overtime" => [
+            "readable" => "sedang lembur",
+            "short_readable" => "lembur",
+            "color" => "info",
+        ],
+        "correction" => [
+            "readable" => "perbaikan ulang",
+            "short_readable" => "perbaikan",
+            "color" => "warning",
+        ],
+        "assessment" => [
+            "readable" => "proses penilaian",
+            "short_readable" => "penilaian",
+            "color" => "info",
+        ],
+        // end job order
+    ],
+    // start untuk penyesuaian gaji
+    "type_times" => [
+        "forever" => "selamanya",
+        "base time" => "berdasarkan bulan",
+    ],
+    "type_amounts" => [
+        "nominal" => "jumlah uang",
+        "percent" => "persen dari gaji karyawan",
+    ],
+    "type_adjustments" => [
+        "deduction" => "pengurangan",
+        "addition" => "penambahan",
+    ],
+    // end untuk penyesuaian gaji
 ];

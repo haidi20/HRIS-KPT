@@ -14,6 +14,9 @@
           <b-tab title="Utama">
             <Main />
           </b-tab>
+          <b-tab title="Berdasarkan Karyawan">
+            <Detail />
+          </b-tab>
         </b-tabs>
       </div>
     </div>
@@ -22,13 +25,36 @@
 
 <script>
 import Main from "./main.vue";
+import Detail from "./detail.vue";
 export default {
-  components: { Main },
+  props: {
+    user: String,
+    baseUrl: String,
+  },
   data() {
     return {
       title: "Absensi",
       version: "v1.1",
     };
+  },
+  components: { Main, Detail },
+  mounted() {
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    this.$store.commit("attendance/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+    this.$store.commit("master/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+    this.$store.commit("employeeHasParent/INSERT_BASE_URL", {
+      base_url: this.baseUrl,
+    });
+
+    this.$store.dispatch("attendance/fetchData");
+    this.$store.dispatch("attendance/fetchDetail");
+    this.$store.dispatch("master/fetchPosition");
   },
 };
 </script>

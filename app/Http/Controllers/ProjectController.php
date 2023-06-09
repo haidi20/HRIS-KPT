@@ -2,22 +2,223 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Exports\ProjectExport;
+use App\Models\Contractor;
+use App\Models\ContractorHasParent;
+use App\Models\OrdinarySeamanHasParent;
+use App\Models\Project;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Response;
 
 class ProjectController extends Controller
 {
     public function index()
     {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.project.index", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData()
+    {
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
+            ->whereYear("created_at", $month->format("Y"))
+            ->whereMonth("created_at", $month->format("m"))
+            ->orderBy("created_at", "asc")->get();
+
+        return response()->json([
+            "projects" => $projects,
+        ]);
+    }
+
+    public function fetchDataBaseDateEnd()
+    {
+        $date = Carbon::now();
+
+        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
+            ->whereDate("date_end", ">=", $date)
+            ->orderBy("date_end", "asc")->get();
+
+        return response()->json([
+            "projects" => $projects,
+        ]);
+    }
+
+    public function export()
+    {
+        $data = $this->fetchData()->original["projects"];
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($month->format("Y-m"));
+        $nameFile = "project_{$monthReadAble}.xlsx";
+
+        try {
+            Excel::store(new ProjectExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                "success" => true,
+                "data" => $data,
+                "linkDownload" => route('project.download', ["name_file" => $nameFile]),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal export data',
+            ], 500);
+        }
+    }
+
+    public function download()
+    {
+        $path = public_path(request("name_file"));
+
+        return Response::download($path);
+    }
+
+    public function store()
+    {
+        // return request()->all();
+
+        try {
+            DB::beginTransaction();
+
+            if (request("id")) {
+                $project = Project::find(request("id"));
+
+                $message = "diperbaharui";
+            } else {
+                $project = new Project;
+
+                $message = "ditambahkan";
+            }
+
+            $project->company_id = request("company_id");
+            $project->foreman_id = request("foreman_id");
+            $project->barge_id = request("barge_id");
+            $project->name = request("name");
+            $project->date_end = Carbon::parse(request("date_end"))->format("Y-m-d");
+            $project->day_duration = request("day_duration");
+            $project->price = request("price");
+            $project->down_payment = request("down_payment");
+            $project->remaining_payment = request("remaining_payment");
+            $project->type = request("type");
+            $project->note = request("note");
+            $project->save();
+
+            $this->storeContractors($project);
+            $this->storeOrdinarySeamans($project);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function destroy()
+    {
+        try {
+            DB::beginTransaction();
+
+            $project = Project::find(request("id"));
+            $project->update([
+                'deleted_by' => request("user_id"),
+            ]);
+            $project->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus',
+            ], 500);
+        }
+    }
+
+    private function storeContractors($project)
+    {
+        $getData = [
+            "parent_id" => $project->id,
+            "parent_model" => "App\Models\Project",
+        ];
+
+        $contractorHasParentDelete = ContractorHasParent::where($getData);
+        $contractorHasParentDelete->delete();
+
+        if (count(request("contractors")) > 0) {
+
+            foreach (request("contractors") as $index => $item) {
+                $getData["contractor_id"] =  $item["contractor_id"];
+                ContractorHasParent::create($getData);
+            }
+        }
+    }
+
+    private function storeOrdinarySeamans($project)
+    {
+        $getData = [
+            "parent_id" => $project->id,
+            "parent_model" => "App\Models\Project",
+        ];
+
+        $oridnarySeamanHasParentDelete = OrdinarySeamanHasParent::where($getData);
+        $oridnarySeamanHasParentDelete->delete();
+
+        if (count(request("ordinary_seamans")) > 0) {
+
+            foreach (request("ordinary_seamans") as $index => $item) {
+                $getData["ordinary_seaman_id"] =  $item["ordinary_seaman_id"];
+                OrdinarySeamanHasParent::create($getData);
+            }
+        }
+    }
+
+    public function fetchDataOld()
+    {
         $projects = [
             (object)[
                 "id" => 1,
-                "name" => "Kapal A",
+                "name" => "Pengerjaan Kapal A",
+                "barge_name" => "Kapal A",
                 "company_name" => "PT. Maju Jaya",
-                "total_job_order" => 4,
-                "total_job_order_finish" => 5,
+                "job_order_total" => 4,
+                "job_order_total_finish" => 5,
             ]
         ];
 
-        return view("pages.project.index", compact("projects"));
+        return response()->json([
+            "projects" => $projects,
+        ]);
     }
 }

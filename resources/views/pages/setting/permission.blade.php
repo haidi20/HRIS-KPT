@@ -23,13 +23,13 @@
             <div class="card">
                 <div class="card-header">
                     Data
-                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-right ml-2" id="addData"
+                    <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end ml-2" id="addData"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Hak Akses
+                        <i class="fas fa-plus text-white-50"></i> Tambah Hak Akses
                     </button>
-                    <a href="{{ route('setting.feature.index') }}" class="btn btn-sm btn-info shadow-sm float-right"
+                    <a href="{{ route('setting.feature.index') }}" class="btn btn-sm btn-info shadow-sm float-end"
                         data-toggle="modal">
-                        <i class="fas fa-plus fa-sm text-white-50"></i> Kembali
+                        <i class="fas fa-angle-left text-white-50"></i> Kembali
                     </a>
                 </div>
 
@@ -130,14 +130,14 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                            if (responses.success == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: responses.message
-                                });
+                             $('#formModal').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
 
-                                window.location.reload();
-                            }
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);
@@ -224,7 +224,8 @@
         }
 
         function clearForm() {
-            //
+            $("#name").val("");
+            $("#description").val("");
         }
     </script>
 @endsection

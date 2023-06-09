@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
 @section('content')
-    <div id="root">
-        <job-order />
+    <div id="root" class="full-height">
+        <job-order base-url="{{ $baseUrl }}" user="{{ $user }}" statuses="{{ $statuses }}" />
     </div>
 @endsection
 

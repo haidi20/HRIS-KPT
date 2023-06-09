@@ -11,12 +11,49 @@ class Position extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $appends = ["departmen_name"];
+    protected $fillable = [
+        'name',
+        'description',
+        'minimum_employee',
+        'departmen_id',
+        'created_by',
+        'updated_by',
+        'deleted_by'
+    ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
         $this->fillable = Schema::getColumnListing($this->getTable());
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->user()->id;
+            $model->updated_by = NULL;
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->user()->id;
+        });
+    }
+
+    public function departmen()
+    {
+        return $this->belongsTo(Departmen::class, "departmen_id", "id");
+    }
+
+    public function getDepartmenNameAttribute()
+    {
+        if ($this->departmen) {
+            return $this->departmen->name;
+        } else {
+            return "Data Departmen Masih Kosong";
+        }
     }
 }

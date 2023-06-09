@@ -12,7 +12,8 @@
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            {{-- <li class="breadcrumb-item"><a href="{{ route('setting.permission.index') }}">Fitur</a></li> --}}
+                            {{-- <li class="breadcrumb-item"><a href="{{ route('setting.permission.index') }}">Fitur</a>
+                        </li> --}}
                             <li class="breadcrumb-item active" aria-current="page">Pengguna</li>
                         </ol>
                     </nav>
@@ -22,7 +23,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    Data
+                    {{-- <span class="fs-4 fw-bold">Data Karyawan</span> --}}
                     @can('lihat grup pengguna')
                         <a href="{{ route('setting.role.index') }}" class="btn btn-sm btn-primary shadow-sm float-end ml-2"
                             id="addData" data-toggle="modal">
@@ -38,45 +39,13 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-striped dataTable" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Grup Pengguna</th>
-                                <th>Email</th>
-                                <th width="15%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $user)
-                                <tr>
-                                    <td>
-                                        {{ $user->name }}
-                                    </td>
-                                    <td>
-                                        {{ $user->group_name }}
-                                    </td>
-                                    <td>
-                                        {{ $user->email }}
-                                    </td>
-                                    <td class="flex flex-row justify-content-around ">
-                                        @can('ubah pengguna')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $user->data_parsing }})"
-                                                class="btn btn-sm btn-primary">
-                                                Ubah
-                                            </a>
-                                        @endcan
-                                        @can('hapus pengguna')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $user->data_parsing }})"
-                                                class="btn btn-sm btn-danger">
-                                                Hapus
-                                            </a>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -90,11 +59,20 @@
 
 @section('script')
     <script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
+    {!! $html->scripts() !!}
     <script>
+        const initialState = {
+            users: [],
+        };
+
+        let state = {
+            ...initialState
+        };
+re
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
-            setupSelect();
+            state.users = {!! json_encode($users) !!};
             send();
         });
 
@@ -144,12 +122,14 @@
                             }
                         });
                         if (responses.success == true) {
+                            $('#formModal').modal('hide');
                             Toast.fire({
                                 icon: 'success',
                                 title: responses.message
                             });
 
-                            window.location.reload();
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                                function(json) {});
                         }
                     },
                     error: function(err) {
@@ -206,14 +186,14 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                            if (responses.success == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: responses.message
-                                });
+                            $('#formModal').modal('hide');
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
 
-                                window.location.reload();
-                            }
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                                function(json) {});
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);

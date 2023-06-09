@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('pages.overtime.partials.modal')
+    @include('pages.overtime-report.partials.modal')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Surat Perintah Lembur</h3>
+                    <h3>Laporan Surat Perintah Lembur</h3>
                     {{-- <p class="text-subtitle text-muted">For user to check they list</p> --}}
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
@@ -21,15 +21,6 @@
         </div>
         <section class="section">
             <div class="card">
-                <div class="card-header">
-                    Data SPL
-                    {{-- @can('tambah jabatan')
-                        <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
-                            data-toggle="modal">
-                            <i class="fas fa-plus text-white-50"></i> Tambah SPL
-                        </button>
-                    @endcan --}}
-                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -38,9 +29,9 @@
                                 <input type="text" class="form-control" id="date_filter" autocomplete="off">
                             </div>
                         </div>
-                        <div class="col-md-2" style="align-self: center">
+                        <div class="col-md-4" style="align-self: center">
                             <button type="button" onclick="onFilter()" class="btn btn-sm btn-success">Kirim</button>
-                            @can('ekspor surat perintah lembur')
+                            @can('ekspor laporan surat perintah lembur')
                                 <button type="button" id="btn_export" onclick="onExport()"
                                     class="btn btn-sm btn-success mt-2 ml-4 mt-md-0">
                                     <i class="fas fa-file-excel"></i> Export
@@ -53,11 +44,13 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
+                                <th>Departemen</th>
                                 <th>Job Order</th>
-                                <th>Durasi</th>
                                 <th>Waktu Mulai</th>
                                 <th>Waktu Selesai</th>
-                                <th width="20%"></th>
+                                <th>Durasi</th>
+                                <th>Keterangan</th>
+                                {{-- <th width="10%"></th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -67,10 +60,10 @@
                                         {{ $overtime->employee_name }}
                                     </td>
                                     <td>
-                                        {{ $overtime->job_order_name }}
+                                        {{ $overtime->position_name }}
                                     </td>
                                     <td>
-                                        {{ $overtime->duration }}
+                                        {{ $overtime->job_order_code }} | {{ $overtime->job_order_name }}
                                     </td>
                                     <td>
                                         {{ $overtime->date_time_start }}
@@ -79,17 +72,18 @@
                                         {{ $overtime->date_time_end }}
                                     </td>
                                     <td>
-                                        @can('ubah jabatan')
-                                            <a href="javascript:void(0)" onclick="onEdit({{ $overtime->id }})"
-                                                class="btn btn-sm btn-info">Ubah
-                                            </a>
-                                        @endcan
-                                        @can('hapus jabatan')
-                                            <a href="javascript:void(0)" onclick="onDelete({{ $overtime->id }})"
-                                                class="btn btn-sm btn-danger">Hapus
-                                            </a>
-                                        @endcan
+                                        {{ $overtime->duration }}
                                     </td>
+                                    <td>
+                                        {{ $overtime->note }}
+                                    </td>
+                                    {{-- <td>
+                                        @can('detail laporan surat perintah lembur')
+                                            <a href="javascript:void(0)" onclick="onEdit({{ $overtime->id }})"
+                                                class="btn btn-sm btn-info">Detail
+                                            </a>
+                                        @endcan
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -134,7 +128,7 @@
         function onCreate() {
             clearForm();
             $("#titleForm").html("Tambah Fitur");
-            onModalAction("formModal", "show");
+            onModalAction("detailModal", "show");
         }
 
         function onEdit(data) {
@@ -145,7 +139,7 @@
             $("#description").val(data.description);
 
             $("#titleForm").html("Ubah Fitur");
-            onModalAction("formModal", "show");
+            onModalAction("detailModal", "show");
         }
 
         function onDelete(data) {
@@ -179,14 +173,14 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                            if (responses.success == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: responses.message
-                                });
+                             $('#formModal').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
 
-                                window.location.reload();
-                            }
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);

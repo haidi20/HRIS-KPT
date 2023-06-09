@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="root">
-        <attendance />
+        <attendance base-url="{{ $baseUrl }}" user="{{ $user }}" />
     </div>
 @endsection
 

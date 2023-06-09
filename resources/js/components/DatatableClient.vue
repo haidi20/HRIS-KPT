@@ -3,7 +3,7 @@
     <b-row style="align-items: self-end">
       <slot v-if="filter" name="filter"></slot>
       <b-col cols v-else></b-col>
-      <b-col col md="2">
+      <b-col cols="3">
         <b-form-input
           v-model="search"
           placeholder="cari..."
@@ -67,7 +67,7 @@
       <b-col></b-col>
       <b-col col md="3" sm="12">
         <b-pagination
-          class="float-right"
+          class="float-end"
           v-model="currentPage"
           :total-rows="countData"
           :per-page="options.perPage"

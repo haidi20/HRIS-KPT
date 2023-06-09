@@ -1,28 +1,48 @@
 <template>
   <div>
-    <DatatableClientSide
+    <DatatableClient
       :data="getData"
       :columns="columns"
       :options="options"
       nameStore="attendance"
-      nameLoading="table"
+      nameLoading="main"
       :filter="true"
       bordered
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="date" class="place_filter_table">
+          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
-              id="date"
-              v-model="params.date"
+              id="month"
+              v-model="params.month"
               format="YYYY-MM"
               type="month"
               placeholder="pilih bulan"
-              @input="onChangeDateFilter"
+            />
+          </b-form-group>
+          <b-form-group label="Jabatan" label-for="position_id" class="place_filter_table">
+            <VueSelect
+              id="position_id"
+              class="cursor-pointer"
+              v-model="params.position_id"
+              placeholder="Pilih Jabatan"
+              :options="getOptionPositions"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
             />
           </b-form-group>
           <b-button
             class="place_filter_table"
+            variant="success"
+            size="sm"
+            @click="onFilter()"
+            :disabled="getIsLoadingData"
+          >Kirim</b-button>
+          <span v-if="getIsLoadingData">Loading...</span>
+          <b-button
+            class="place_filter_table ml-4"
             variant="success"
             size="sm"
             @click="onExport()"
@@ -34,10 +54,38 @@
           <span v-if="is_loading_export">Loading...</span>
         </b-col>
       </template>
-      <!-- <template v-slot:thead>
-        <b-th v-for="i in 30" :key="`thead-${i}`" style="width: 30px">{{onCustomLabelNameDate(i)}}</b-th>
-      </template>-->
-    </DatatableClientSide>
+      <template v-slot:thead>
+        <b-th
+          v-for="(item, index) in getDateRange"
+          v-bind:key="`thead-${index}`"
+          style="width: 30px"
+        >{{ setLabelDate(item) }}</b-th>
+      </template>
+      <template v-slot:theadSecond>
+        <b-th
+          v-for="(item, index) in getDateRange"
+          v-bind:key="`thead-${index}`"
+          style="text-align-last: center"
+        >{{ setLabelNameDate(item) }}</b-th>
+      </template>
+      <template v-slot:tbody="{ filteredData }">
+        <b-tr v-for="(item, index) in filteredData" :key="index">
+          <b-td nowrap>{{ item.employee_name }}</b-td>
+          <b-td nowrap>{{ item.position_name }}</b-td>
+          <b-td
+            class="cursor-pointer text-center"
+            style="font-size: 12px"
+            v-for="(date, subIndex) in getDateRange"
+            :key="`date-${subIndex}`"
+          >
+            <div class="item-hour hour-reguler">{{ item[date]?.hour_start }}</div>
+            <div class="item-hour hour-rest">{{ item[date]?.hour_rest_start }}</div>
+            <div class="item-hour hour-rest">{{ item[date]?.hour_rest_end }}</div>
+            <div class="item-hour hour-reguler">{{ item[date]?.hour_end }}</div>
+          </b-td>
+        </b-tr>
+      </template>
+    </DatatableClient>
   </div>
 </template>
 
@@ -45,8 +93,9 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
+import VueSelect from "vue-select";
 import DatePicker from "vue2-datepicker";
-import DatatableClientSide from "../../components/DatatableClient";
+import DatatableClient from "../../components/DatatableClient";
 
 export default {
   data() {
@@ -63,16 +112,16 @@ export default {
       },
       columns: [
         {
-          label: "No.",
-          field: "no",
-          width: "10px",
+          label: "Nama Karyawan",
+          field: "employee_name",
+          width: "100px",
           rowspan: 2,
           class: "",
         },
         {
-          label: "Nama Karyawan",
-          field: "employee_name",
-          width: "40px",
+          label: "Departemen",
+          field: "position_name",
+          width: "100px",
           rowspan: 2,
           class: "",
         },
@@ -81,24 +130,80 @@ export default {
   },
   components: {
     DatePicker,
-    DatatableClientSide,
+    DatatableClient,
+    VueSelect,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getData() {
-      return this.$store.state.attendance.data;
+      return this.$store.state.attendance.data.main;
+    },
+    getDateRange() {
+      return this.$store.state.attendance.date_range;
+    },
+    getIsLoadingData() {
+      return this.$store.state.attendance.loading.main;
+    },
+    getOptionPositions() {
+      return this.$store.state.master.data.positions;
     },
     params() {
-      return this.$store.state.attendance.params;
+      return this.$store.state.attendance.params.main;
     },
   },
   methods: {
-    onChangeDateFilter() {
-      //
+    onFilter() {
+      this.$store.dispatch("attendance/fetchData");
     },
-    onCustomLabelDate(date) {
+    async onExport() {
+      const Swal = this.$swal;
+      this.is_loading_export = true;
+
+      await axios
+        .get(`${this.getBaseUrl}/attendance/export`, {
+          params: {
+            user_id: this.getUserId,
+            month: moment(this.params.month).format("Y-MM"),
+          },
+        })
+        .then((responses) => {
+          //   console.info(responses);
+          this.is_loading_export = false;
+          const data = responses.data;
+
+          if (data.success) {
+            window.open(data.linkDownload, "_blank");
+          }
+        })
+        .catch((err) => {
+          this.is_loading_export = false;
+          console.info(err);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
+    },
+    setLabelDate(date) {
       return moment(date).format("DD");
     },
-    onCustomLabelNameDate(date) {
+    setLabelNameDate(date) {
       return moment(date).format("dddd");
     },
   },
@@ -118,5 +223,14 @@ export default {
 
 .table-wrapper {
   overflow-x: auto;
+}
+.item-hour {
+  height: 18px;
+}
+.hour-reguler {
+  color: green;
+}
+.hour-rest {
+  color: blue;
 }
 </style>

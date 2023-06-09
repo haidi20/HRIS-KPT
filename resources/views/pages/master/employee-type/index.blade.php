@@ -22,53 +22,22 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                 <span class="fs-4 fw-bold">Data Jenis Karyawan</span>
+                <span class="fs-4 fw-bold">Data Jenis Karyawan</span>
                 <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                     data-toggle="modal">
-                    <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Jenis Karyawan
+                    <i class="fas fa-plus text-white-50"></i> Tambah Jenis Karyawan
                 </button>
             </div>
             <div class="card-body">
-                <table class="table table-striped dataTable" id="table1">
-                    <thead>
-                       <tr>
-                            <th>No.</th>
-                            <th>Nama</th>
-                            <th>Keterangan</th>
-                            <th width="20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($employeetypes as $employeetype)
-                        <tr>
-                            <td>
-                                {{ $loop->iteration }}
-                            </td>
-                            <td>
-                                {{ $employeetype->name }}
-                            </td>
-                            <td>
-                                {{ $employeetype->description }}
-                            </td>
-                            <td class="flex flex-row justify-content-around">
-                                @can('ubah jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onEdit({{ $employetype }})"
-                                    class="btn btn-sm btn-info">Ubah
-                                </a>
-                                @endcan
-                                @can('hapus jenis karyawan')
-                                <a href="javascript:void(0)" onclick="onDelete({{ $employetype }})"
-                                    class="btn btn-sm btn-danger">Hapus
-                                </a>
-                                @endcan
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            {!! $html->table(['class' => 'table table-striped table-bordered']) !!}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </section>
 </div>
 @endsection
@@ -80,111 +49,123 @@
 
 @section('script')
 <script src="{{ asset('assets/vendors/choices.js/choices.min.js') }}"></script>
+{!! $html->scripts() !!}
 <script>
+    const initialState = {
+        employee_types: [],
+    };
+
+    let state = {
+        ...initialState
+    };
+
     $(document).ready(function() {
-            $('.dataTable').DataTable();
+        // $('.dataTable').DataTable();
+        state.employee_types = {!! json_encode($employee_types) !!};
 
-            send();
-        });
+        send();
+    });
 
-        function onCreate() {
-            clearForm();
-            $("#titleForm").html("Tambah Jenis Karyawan");
-            onModalAction("formModal", "show");
-        }
+    function onCreate() {
+        clearForm();
+        $("#titleForm").html("Tambah Jenis Karyawan");
+        onModalAction("formModal", "show");
+    }
 
-        function onEdit(data) {
-            clearForm();
+    function onEdit(data) {
+        clearForm();
 
-            $("#id").val(data.id);
-            $("#name").val(data.name);
-            $("#description").val(data.description);
+        $("#id").val(data.id);
+        $("#name").val(data.name);
+        $("#description").val(data.description);
 
-            $("#titleForm").html("Ubah Jenis Karyawan");
-            onModalAction("formModal", "show");
-        }
+        $("#titleForm").html("Ubah Jenis Karyawan");
+        onModalAction("formModal", "show");
+    }
 
-        function onDelete(data) {
-            Swal.fire({
-                title: 'Perhatian!!!',
-                html: `Anda yakin ingin hapus data jenis karyawan <h2><b> ${data.name} </b> ?</h2>`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                onfirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Tidak'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "{{ route('master.employeeType.delete') }}",
-                        method: 'DELETE',
-                        dataType: 'json',
-                        data: {
-                            id: data.id
-                        },
-                        success: function(responses) {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 2500,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            });
-                            if (responses.success == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: responses.message
-                                });
+    function send() {
+        $("#form").submit(function(e) {
+            e.preventDefault();
+            let fd = new FormData(this);
 
-                                window.location.reload();
-                            }
-                        },
-                        error: function(err) {
-                            // console.log(err.responseJSON.message);
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 4000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            });
+            $.ajax({
+                url: "{{ route('master.employeeType.store') }}",
+                method: 'POST',
+                data: fd,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(responses) {
 
-                            Toast.fire({
-                                icon: 'error',
-                                title: err.responseJSON.message
-                            });
+                    // console.info(responses);
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
                         }
+                    });
+                    if (responses.success == true) {
+                        $('#formModal').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: responses.message
+                        });
+
+                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                        function(json) {});
+                    }
+                },
+                error: function(err) {
+                    console.log(err.responseJSON.message);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: err.responseJSON.message
                     });
                 }
             });
-        }
+        });
+    }
 
-        function send() {
-            $("#form").submit(function(e) {
-                e.preventDefault();
-                let fd = new FormData(this);
-
+    function onDelete(data) {
+        Swal.fire({
+            title: 'Perhatian!!!',
+            html: `Anda yakin ingin hapus data jenis karyawan <h2><b> ${data.name} </b> ?</h2>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            onfirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{ route('master.employeeType.store') }}",
+                    url: "{{ route('master.employeeType.delete') }}",
                     method: 'POST',
-                    data: fd,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
                     dataType: 'json',
+                    data: {
+                        _method: 'DELETE',
+                        id: data.id
+                    },
                     success: function(responses) {
-
-                        // console.info(responses);
-
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -202,11 +183,12 @@
                                 title: responses.message
                             });
 
-                            window.location.reload();
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                            function(json) {});
                         }
                     },
                     error: function(err) {
-                        console.log(err.responseJSON.message);
+                        // console.log(err.responseJSON.message);
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -225,18 +207,18 @@
                         });
                     }
                 });
-            });
-        }
+            }
+        });
+    }
 
-        function setupSelect() {
+    function setupSelect() {
         $(".select2").select2();
-        }
+    }
 
-        function clearForm() {
-            $("#id").val("");
-            $("#name").val("");
-            $("#description").val("");
-        }
-
+    function clearForm() {
+        $("#id").val("");
+        $("#name").val("");
+        $("#description").val("");
+    }
 </script>
 @endsection
