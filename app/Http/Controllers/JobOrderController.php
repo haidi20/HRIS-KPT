@@ -355,6 +355,10 @@ class JobOrderController extends Controller
             foreach ($dataEmployees as $index => $item) {
                 if ($item["status"] == 'pending') {
                     $datetime = Carbon::now();
+                } else if (array_key_exists('status_last', $item)) {
+                    if ($item["status_last"] == 'pending') {
+                        $datetime = Carbon::now();
+                    }
                 } else {
                     $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
                 }
