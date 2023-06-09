@@ -76,6 +76,25 @@ class JobStatusController extends Controller
         $jobStatusHasParent->save();
     }
 
+    public function destroyJobStatusHasParent($jobOrder, $nameModel)
+    {
+        $jobStatusHasParent = JobStatusHasParent::where([
+            "parent_id" => $jobOrder->id,
+            "parent_model" => $nameModel,
+        ]);
+        $jobStatusHasParent->update([
+            'deleted_by' => request("user_id"),
+        ]);
+
+        foreach ($jobStatusHasParent->get() as $index => $item) {
+            $getData = JobStatusHasParent::find($item->id);
+
+            $this->storeJobStatusHasParentHistory($getData, true);
+        }
+
+        $jobStatusHasParent->delete();
+    }
+
     private function storeJobStatusHasParentHistory($jobStatusHasParent, $isDelete = false)
     {
         $jobStatusHasParentHistory = new JobStatusHasParentHistory;

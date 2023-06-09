@@ -2,7 +2,7 @@
 
 DROP VIEW IF EXISTS `VW_ATTENDANCE`;
 
-CREATE VIEW VW_ATTENDANCE AS
+CREATE VIEW VW_ATTENDANCE AS 
 	SELECT
 	    DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	    af.pin,
@@ -50,6 +50,7 @@ CREATE VIEW VW_ATTENDANCE AS
 	    LEFT JOIN fingers fi ON af.pin = fi.id_finger
 	    LEFT JOIN employees em ON fi.employee_id = em.id
 	    LEFT JOIN job_status_has_parents jt ON fi.employee_id = jt.employee_id
+	    AND jt.deleted_at IS NULL
 	    AND DATE_FORMAT(jt.datetime_start, "%Y-%m-%d") = DATE_FORMAT(af.scan_date, "%Y-%m-%d")
 	    AND jt.status = "overtime"
 	    LEFT JOIN (

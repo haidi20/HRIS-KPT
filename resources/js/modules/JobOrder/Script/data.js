@@ -1,3 +1,6 @@
+import axios from "axios";
+import moment from "moment";
+
 import { checkNull, isMobile } from "../../../utils";
 import FilterData from "../View/filter";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
@@ -192,6 +195,76 @@ export default {
                 form_type_parent: "edit",
             });
             this.$bvModal.hide("action_list");
+        },
+        async onDelete() {
+            const data = this.getForm;
+            // console.info(data);
+
+            const Swal = this.$swal;
+            await Swal.fire({
+                title: "Perhatian!!!",
+                html: `Anda yakin ingin hapus Job Order <h2><b>${data.project_name}</b> ?</h2>`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya hapus",
+                cancelButtonText: "Batal",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await axios
+                        .post(`${this.getBaseUrl}/api/v1/job-order/delete`, {
+                            id: data.id,
+                            user_id: this.getUserId,
+                        })
+                        .then((responses) => {
+                            //   console.info(responses);
+                            const data = responses.data;
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                                },
+                            });
+
+                            if (data.success == true) {
+                                Toast.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                });
+
+                                this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+                                this.$bvModal.hide("action_list");
+                            }
+                        })
+                        .catch((err) => {
+                            console.info(err);
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                                },
+                            });
+
+                            Toast.fire({
+                                icon: "error",
+                                title: err.response.data.message,
+                            });
+                        });
+                }
+            });
         },
         onFilter() {
             this.$bvModal.show("job_order_filter");

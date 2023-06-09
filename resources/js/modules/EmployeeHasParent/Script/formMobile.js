@@ -73,7 +73,7 @@ export default {
                     position_name: getEmployee.position_name,
                     created_by: this.getUserId,
                     status: "active",
-                    status_data: this.getJobOrderFormKind == 'edit' ? 'new' : 'old',
+                    status_data: 'new',
                 };
 
                 //   console.info(getEmployee);

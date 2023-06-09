@@ -96,7 +96,7 @@
             v-model="hour_start"
             id="hour_start"
             name="hour_start"
-            :disabled="getReadOnly()"
+            :disabled="getReadOnly() || form.form_kind == 'edit'"
           />
         </b-form-group>
       </b-col>
