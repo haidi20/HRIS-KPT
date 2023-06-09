@@ -14,6 +14,7 @@ const defaultForm = {
     // start job order
     data_index: null, // untuk hapus data yang sudah di pilih
     status: null,
+    status_data: null,
     is_hide_status: false,
     hour: moment().format("HH:mm"),
     date: new Date(),
@@ -107,7 +108,7 @@ const EmployeeHasParent = {
                 ];
             });
 
-            console.info(state.data.selecteds);
+            // console.info(state.data.selecteds);
         },
         INSERT_DATA_SELECTED(state, payload) {
             state.data.selecteds = [

@@ -12,7 +12,7 @@ class JobOrderHasEmployee extends Model
 
     protected $appends = [
         "employee_name", "position_name",
-        "project_name", "creator_name",
+        "project_name", "creator_name", "status_data",
         "status_color", "status_readable", 'status_clone',
     ];
 
@@ -46,6 +46,12 @@ class JobOrderHasEmployee extends Model
     public function jobOrder()
     {
         return $this->belongsTo(JobOrderSimple::class, "job_order_id", "id");
+    }
+
+    // untuk membedakan data dari server dan web
+    public function getStatusDataAttribute()
+    {
+        return "old";
     }
 
     public function getStatusCloneAttribute()

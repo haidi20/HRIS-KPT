@@ -28,8 +28,9 @@
             <b-col class="place-item">
               <b-row>
                 <b-col cols>
-                  <h5>{{item.employee_name}} - {{item.position_name}}</h5>
+                  <h6>{{item.employee_name}} ({{item.position_name}})</h6>
                   <span v-if="item.is_active != null">Aktif: {{item.is_active}}</span>
+                  <!-- <span>{{item?.status_data}}</span> -->
                 </b-col>
                 <b-col cols="4" style="text-align: end">
                   <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
@@ -82,7 +83,6 @@
           class="action-item"
           @click="onAction('finish', 'Selesai')"
         >selesai</div>-->
-        <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
         <div
           v-if="getConditionOvertime()"
           class="action-item"
@@ -103,6 +103,7 @@
           class="action-item"
           @click="onActionOvertimeAgain()"
         >tidak jadi lembur selesai</div>
+        <div v-if="getConditionActionDelete()" class="action-item" @click="onDelete()">hapus</div>
       </div>
     </b-modal>
   </div>

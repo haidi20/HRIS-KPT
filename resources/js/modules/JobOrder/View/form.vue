@@ -186,7 +186,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="form.form_kind == 'create'">
+    <b-row>
       <b-col col sm="6">
         <b-form-group label="Pilih Karyawan" label-for="image" class>
           <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>

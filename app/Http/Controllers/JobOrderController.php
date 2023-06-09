@@ -94,7 +94,8 @@ class JobOrderController extends Controller
             $findData = JobOrderHasEmployee::where([
                 "employee_id" => $item["employee_id"],
                 "datetime_end" => null,
-            ])->where("status", "!=", "pending");
+            ])->where("status", "!=", "pending")
+                ->where("job_order_id", "!=", request("job_order_id"));
 
             if ($findData->count() > 0) {
                 $result = true;
