@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
 {
+
+    // tes
     use HasFactory;
 
     protected $table = 'attendance_has_employees';
