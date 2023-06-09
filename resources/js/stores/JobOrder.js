@@ -78,6 +78,7 @@ const defaultForm = {
     time_type: "hours",
     note: null,
     label_image: "Masukkan Gambar",
+    is_disabled_btn_send: true,
 }
 
 const JobOrder = {
@@ -292,13 +293,16 @@ const JobOrder = {
         UPDATE_IS_ACTIVE_FORM(state, payload) {
             state.is_active_form = payload.value;
         },
+        UPDATE_IS_DISABLED_BTN_SEND(state, payload) {
+            state.form.is_disabled_btn_send = payload.value;
+        },
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
         },
         CLEAR_FORM(state, payload) {
             state.form = {
                 ...defaultForm,
-                is_active_form: true,
+                // is_active_form: true,
             };
         },
         CLEAR_FORM_ACTION(state, payload) {

@@ -24,6 +24,7 @@ use App\Exports\LaporanMutasiExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Sheets\EmployeePositionSheet;
 use App\Exports\Sheets\EmployeeLocationSheet;
+use App\Models\JobOrderHasEmployee;
 use Illuminate\Database\Eloquent\Builder;
 use Yajra\DataTables\DataTables;
 
@@ -166,18 +167,18 @@ class EmployeeController extends Controller
 
         $columnsArrExPr = [0, 1, 2, 3];
         $html = $datatables->getHtmlBuilder()
-        ->columns($columns)
-        ->parameters([
-            'order' => [[0, 'asc']],
-            'responsive' => true,
-            'autoWidth' => false,
-            'dom' => 'lBfrtip',
-            'lengthMenu' => [
-                [10, 25, 50, -1],
-                ['10 Data', '25 Data', '50 Data', 'Semua Data']
-            ],
-            'buttons' => $this->buttonDatatables($columnsArrExPr),
-        ]);
+            ->columns($columns)
+            ->parameters([
+                'order' => [[0, 'asc']],
+                'responsive' => true,
+                'autoWidth' => false,
+                'dom' => 'lBfrtip',
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 Data', '25 Data', '50 Data', 'Semua Data']
+                ],
+                'buttons' => $this->buttonDatatables($columnsArrExPr),
+            ]);
 
         $employees = Employee::all();
         $companies = Company::all();

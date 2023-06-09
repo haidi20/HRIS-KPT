@@ -12,6 +12,7 @@ class JobOrderHasEmployee extends Model
 
     protected $appends = [
         "employee_name", "position_name",
+        "project_name", "creator_name",
         "status_color", "status_readable", 'status_clone',
     ];
 
@@ -40,6 +41,11 @@ class JobOrderHasEmployee extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
+    public function jobOrder()
+    {
+        return $this->belongsTo(JobOrderSimple::class, "job_order_id", "id");
     }
 
     public function getStatusCloneAttribute()
@@ -73,5 +79,19 @@ class JobOrderHasEmployee extends Model
         $statusApprovalLibrary = Config::get("library.status.{$this->status}");
 
         return $statusApprovalLibrary["short_readable"];
+    }
+
+    public function getProjectNameAttribute()
+    {
+        if ($this->jobOrder) {
+            return $this->jobOrder->project_name;
+        }
+    }
+
+    public function getCreatorNameAttribute()
+    {
+        if ($this->jobOrder) {
+            return $this->jobOrder->creator_name;
+        }
     }
 }

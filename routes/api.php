@@ -137,6 +137,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('job-order')->name('jobOrder.')->group(function () {
         Route::get('fetch-data', [JobOrderController::class, "fetchData"])->name('fetchData');
+        Route::get('find-employee-status', [JobOrderController::class, "findEmployeeStatus"])->name('findEmployeeStatus');
         Route::post('store', [JobOrderController::class, "store"])->name('store');
         Route::post('store-action', [JobOrderController::class, "storeAction"])->name('storeAction');
         Route::post('store-action-assessment', [JobOrderController::class, "storeActionAssessment"])->name('storeActionAssessment');

@@ -35,6 +35,17 @@
                   <span :class="`badge bg-${item.status_color}`">{{ item.status_readable }}</span>
                 </b-col>
               </b-row>
+              <b-row v-if="getConditionAddInformation(item)">
+                <b-col cols>
+                  <span>Nama Proyek :</span>
+                  <br />
+                  <span>{{item?.project_name}}</span>
+                </b-col>
+                <b-col cols>
+                  <span>Nama Pengawas :</span>
+                  <span>{{item?.creator_name}}</span>
+                </b-col>
+              </b-row>
               <!-- <b-row>
               <b-col>
                 <span>Masuk : 08:10</span>

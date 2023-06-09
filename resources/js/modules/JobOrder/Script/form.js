@@ -52,6 +52,9 @@ export default {
         getLabelImage() {
             return this.$store.state.jobOrder.form.label_image;
         },
+        getIsDisabledBtnSend() {
+            return this.$store.state.jobOrder.form.is_disabled_btn_send;
+        },
         form() {
             return this.$store.state.jobOrder.form;
         },

@@ -230,6 +230,15 @@ export default {
 
             return result;
         },
+        getConditionAddInformation(item) {
+            let result = false;
+
+            if (item?.job_order_id && this.getJobOrderFormKind != null) {
+                result = true;
+            }
+
+            return result;
+        },
         getColumns() {
             const columns = this.columns.filter((item) => item.label != "");
             return columns;

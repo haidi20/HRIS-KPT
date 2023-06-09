@@ -215,7 +215,7 @@
           style="float: right"
           variant="success"
           @click="onSend()"
-          :disabled="is_loading"
+          :disabled="is_loading || getIsDisabledBtnSend"
         >Simpan</b-button>
         <span v-if="is_loading" style="float: right">Loading...</span>
       </b-col>

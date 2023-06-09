@@ -10,7 +10,7 @@
     >
       <template v-if="getIsMobile">
         <b-tabs content-class="mt-3">
-          <b-tab title="Form">
+          <b-tab title="Utama">
             <FormMobile />
             <br />
             <TableMobile />
@@ -84,6 +84,9 @@ export default {
     getData() {
       return this.$store.state.employeeHasParent.data.selecteds;
     },
+    getDataActives() {
+      return this.$store.state.employeeHasParent.data.actives;
+    },
     getIsMobile() {
       return this.$store.state.employeeHasParent.is_mobile;
     },
@@ -97,15 +100,17 @@ export default {
     },
     async onSave() {
       //   console.info(this.getJobOrderFormKind);
-      const getValidationEmployee = await this.getValidationEmployee();
 
-      // console.info(checkEmployeeStatus);
       if (this.getJobOrderFormKind == null) {
         this.onSend();
-      } else if (getValidationEmployee) {
-        return false;
       } else {
-        this.$bvModal.hide("data_employee");
+        const getValidationEmployee = await this.getValidationEmployee();
+
+        if (getValidationEmployee) {
+          return false;
+        } else {
+          this.$bvModal.hide("data_employee");
+        }
       }
     },
     async onSend() {
@@ -186,28 +191,77 @@ export default {
         //   resolve();
         // }, duration);
 
-        setTimeout(() => {
-          this.is_loading = false;
+        let params = {
+          data_selecteds: [...this.getData],
+        };
 
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
+        axios
+          .get(`${this.getBaseUrl}/api/v1/job-order/find-employee-status`, {
+            params: params,
+          })
+          .then((responses) => {
+            // console.info(responses);
+            const data = responses.data;
+
+            // jika hasilnya 'true', maka di temukan
+            //beberapa karyawan ada di job order lain
+            if (!data.result) {
+              resolve(false);
+              this.$store.commit("jobOrder/UPDATE_IS_DISABLED_BTN_SEND", {
+                value: false,
+              });
+            } else {
+              this.$store.commit("employeeHasParent/INSERT_DATA_ACTIVE", {
+                actives: data.actives,
+              });
+              this.$store.commit("jobOrder/UPDATE_IS_DISABLED_BTN_SEND", {
+                value: true,
+              });
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              Toast.fire({
+                icon: "warning",
+                title: "Maaf, beberapa karyawan aktif di job order lain.",
+              });
+
+              resolve(true);
+            }
+          })
+          .catch((err) => {
+            console.info(err);
+
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 4000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: "error",
+              title: "Gagal mencari data",
+            });
+
+            resolve(false);
           });
 
-          Toast.fire({
-            icon: "warning",
-            title: "Maaf, karyawan ini masih aktif di job order lain.",
-          });
-
-          resolve(true);
-        }, 5000);
+        this.is_loading = false;
       });
     },
     getConditionBtnSave() {
@@ -228,7 +282,7 @@ export default {
     getConditionDisabledBtnSave() {
       let result = this.getIsDisabledBtnSave;
 
-      console.info(this.getJobOrderFormKind);
+      //   console.info(this.getJobOrderFormKind);
       if (this.getJobOrderFormKind != null) {
         result = false;
       }

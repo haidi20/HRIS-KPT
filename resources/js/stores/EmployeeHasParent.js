@@ -30,6 +30,8 @@ const EmployeeHasParent = {
             selecteds: [],
             clone_selecteds: [],
             foremans: [],
+            // data karyawan yang aktif di job order lain
+            actives: [],
         },
         params: {
             search: null,
@@ -78,6 +80,34 @@ const EmployeeHasParent = {
         },
         INSERT_DATA_FOREMAN(state, payload) {
             state.data.foremans = payload.foremans;
+        },
+        INSERT_DATA_ACTIVE(state, payload) {
+            let data_clone_selecteds = [];
+            const actives = payload.actives;
+            state.data.actives = actives;
+
+            actives.map(item => {
+                const getData = state.data.selecteds.map(value => {
+                    if (value.employee_id == item.employee_id) {
+                        return {
+                            ...value,
+                            job_order_id: item.job_order_id,
+                            project_name: item.project_name,
+                            creator_name: item.creator_name,
+                        }
+                    } else {
+                        return {
+                            ...value,
+                        }
+                    }
+                });
+
+                state.data.selecteds = [
+                    ...getData,
+                ];
+            });
+
+            console.info(state.data.selecteds);
         },
         INSERT_DATA_SELECTED(state, payload) {
             state.data.selecteds = [

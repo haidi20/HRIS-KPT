@@ -85,6 +85,34 @@ class JobOrderController extends Controller
         ]);
     }
 
+    public function findEmployeeStatus()
+    {
+        $actives = [];
+        $result = false;
+
+        foreach (request("data_selecteds") as $index => $item) {
+            $findData = JobOrderHasEmployee::where([
+                "employee_id" => $item["employee_id"],
+                "datetime_end" => null,
+            ])->where("status", "!=", "pending");
+
+            if ($findData->count() > 0) {
+                $result = true;
+                $getData = $findData
+                    ->select("employee_id", "job_order_id", "status")
+                    ->first();
+
+                array_push($actives, $getData);
+            }
+        }
+
+        return response()->json([
+            "actives" => $actives,
+            "request" => request()->all(),
+            "result" => $result,
+        ]);
+    }
+
     public function store()
     {
         // return request()->all();
