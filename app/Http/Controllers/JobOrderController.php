@@ -8,6 +8,7 @@ use App\Models\JobOrderHasEmployee;
 use App\Models\JobOrderHasEmployeeHistory;
 use App\Models\JobOrderHasStatus;
 use App\Models\JobOrderHistory;
+use App\Models\JobStatusHasParent;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +95,8 @@ class JobOrderController extends Controller
             $findData = JobOrderHasEmployee::where([
                 "employee_id" => $item["employee_id"],
                 "datetime_end" => null,
-            ])->where("status", "!=", "pending");
+            ])->where("status", "!=", "pending")
+                ->where("job_order_id", "!=", request("job_order_id"));
 
             if ($findData->count() > 0) {
                 $result = true;
@@ -355,6 +357,10 @@ class JobOrderController extends Controller
             foreach ($dataEmployees as $index => $item) {
                 if ($item["status"] == 'pending') {
                     $datetime = Carbon::now();
+                } else if (array_key_exists('status_last', $item)) {
+                    if ($item["status_last"] == 'pending') {
+                        $datetime = Carbon::now();
+                    }
                 } else {
                     $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
                 }
@@ -420,6 +426,8 @@ class JobOrderController extends Controller
 
     public function destroy()
     {
+        $jobStatusController = new JobStatusController;
+
         try {
             DB::beginTransaction();
 
@@ -427,7 +435,10 @@ class JobOrderController extends Controller
             $jobOrder->update([
                 'deleted_by' => request("user_id"),
             ]);
+            $this->destroyJobOrderHasEmployee($jobOrder);
+            $jobStatusController->destroyJobStatusHasParent($jobOrder, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder, true);
+
             $jobOrder->delete();
 
             DB::commit();
@@ -520,16 +531,25 @@ class JobOrderController extends Controller
                     $jobOrderHasEmployee = new JobOrderHasEmployee;
                 }
 
+                if ($item["status_data"] == 'new') {
+                    $getDateStart = Carbon::now();
+                } else {
+                    $getDateStart = $dateStart;
+                }
+
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
                 $jobOrderHasEmployee->status = $item["status"];
-                $jobOrderHasEmployee->datetime_start = $dateStart;
+                $jobOrderHasEmployee->datetime_start = $getDateStart;
                 $jobOrderHasEmployee->save();
 
-                if (!isset($item["id"])) {
-                    $jobStatusController->storeJobStatusHasParent($jobOrderHasEmployee, $item["status_last"], $dateStart, $this->nameModelJobOrderHasEmployee);
-                } else {
-                    $jobStatusController->updateJobStatusHasParent($jobOrderHasEmployee, $this->nameModelJobOrderHasEmployee);
+                if ($item["status_data"] == 'new') {
+                    $jobStatusController->storeJobStatusHasParent(
+                        $jobOrderHasEmployee,
+                        $item["status_last"],
+                        $jobOrderHasEmployee->datetime_start,
+                        $this->nameModelJobOrderHasEmployee
+                    );
                 }
 
                 $this->storeJobOrderHasEmployeeHistory($jobOrderHasEmployee);
@@ -571,7 +591,7 @@ class JobOrderController extends Controller
         }
     }
 
-    private function storeJobOrderHasEmployeeHistory($jobOrderHasEmployee)
+    private function storeJobOrderHasEmployeeHistory($jobOrderHasEmployee, $isDelete = false)
     {
         $jobOrderHasEmployeeHistory = new JobOrderHasEmployeeHistory;
         $jobOrderHasEmployeeHistory->job_order_has_employee_id = $jobOrderHasEmployee->id;
@@ -580,6 +600,30 @@ class JobOrderController extends Controller
         $jobOrderHasEmployeeHistory->status = $jobOrderHasEmployee->status;
         $jobOrderHasEmployeeHistory->datetime_start = $jobOrderHasEmployee->datetime_start;
         $jobOrderHasEmployeeHistory->datetime_end = $jobOrderHasEmployee->datetime_end;
+
+        if ($isDelete) {
+            $jobOrderHasEmployeeHistory->deleted_at = Carbon::now();
+        }
+
         $jobOrderHasEmployeeHistory->save();
+    }
+
+    public function destroyJobOrderHasEmployee($jobOrder)
+    {
+        $jobOrderHasEmployee = JobOrderHasEmployee::where([
+            "job_order_id" => $jobOrder->id,
+        ]);
+
+        $jobOrderHasEmployee->update([
+            'deleted_by' => request("user_id"),
+        ]);
+
+        foreach ($jobOrderHasEmployee->get() as $index => $item) {
+            $getData = JobOrderHasEmployee::find($item->id);
+
+            $this->storeJobOrderHasEmployeeHistory($getData, true);
+        }
+
+        $jobOrderHasEmployee->delete();
     }
 }

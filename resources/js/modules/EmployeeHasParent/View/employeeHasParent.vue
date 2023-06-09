@@ -192,6 +192,7 @@ export default {
         // }, duration);
 
         let params = {
+          job_order_id: this.getJobOrderId,
           data_selecteds: [...this.getData],
         };
 

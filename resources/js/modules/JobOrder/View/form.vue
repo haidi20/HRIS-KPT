@@ -96,7 +96,7 @@
             v-model="hour_start"
             id="hour_start"
             name="hour_start"
-            :disabled="getReadOnly()"
+            :disabled="getReadOnly() || form.form_kind == 'edit'"
           />
         </b-form-group>
       </b-col>
@@ -186,7 +186,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="form.form_kind == 'create'">
+    <b-row>
       <b-col col sm="6">
         <b-form-group label="Pilih Karyawan" label-for="image" class>
           <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>

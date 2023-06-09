@@ -133,6 +133,7 @@ export default {
 
             if (
                 this.getForm.form_type != 'create'
+                && this.getForm.status_data != 'new'
                 //&& this.getForm.status_clone == 'active' // ketika coba aktif kembali tidak muncul
                 && this.getForm.status == 'active'
                 && this.getJobOrderFormKind != 'overtime'
@@ -160,7 +161,9 @@ export default {
             let result = false;
 
             // hapus hanya ketika buat data, kalo edit hanya bisa pending
-            if (this.getForm.form_type == 'create') {
+            if (
+                this.getForm.status_data == 'new'
+            ) {
                 result = true;
             }
 
@@ -233,7 +236,10 @@ export default {
         getConditionAddInformation(item) {
             let result = false;
 
-            if (item?.job_order_id && this.getJobOrderFormKind != null) {
+            if (
+                item?.job_order_id
+                && item?.status_data == 'new'
+                && this.getJobOrderFormKind != null) {
                 result = true;
             }
 

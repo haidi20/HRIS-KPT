@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobOrderHasEmployee extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $appends = [
         "employee_name", "position_name",
-        "project_name", "creator_name",
+        "project_name", "creator_name", "status_data",
         "status_color", "status_readable", 'status_clone',
     ];
 
@@ -46,6 +47,12 @@ class JobOrderHasEmployee extends Model
     public function jobOrder()
     {
         return $this->belongsTo(JobOrderSimple::class, "job_order_id", "id");
+    }
+
+    // untuk membedakan data dari server dan web
+    public function getStatusDataAttribute()
+    {
+        return "old";
     }
 
     public function getStatusCloneAttribute()

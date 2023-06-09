@@ -28,6 +28,9 @@ export default {
         getJobOrderStatus() {
             return this.$store.state.jobOrder.form.status;
         },
+        getJobOrderFormKind() {
+            return this.$store.state.jobOrder.form.form_kind;
+        },
         getOptionJobOrders() {
             return this.$store.state.jobOrder.data.map((item) => ({
                 ...item,
@@ -60,6 +63,7 @@ export default {
 
             // jika sudah ada datanya tidak perlu di masukkan lagi
             if (!checkData) {
+                // console.info(this.getJobOrderFormKind);
                 const getEmployee = this.getOptionEmployees.find(
                     (item) => item.id == this.form.employee_id
                 );
@@ -69,6 +73,7 @@ export default {
                     position_name: getEmployee.position_name,
                     created_by: this.getUserId,
                     status: "active",
+                    status_data: 'new',
                 };
 
                 //   console.info(getEmployee);
