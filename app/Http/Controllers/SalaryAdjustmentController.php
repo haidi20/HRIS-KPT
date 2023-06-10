@@ -132,11 +132,12 @@ class SalaryAdjustmentController extends Controller
         try {
             DB::beginTransaction();
 
-            // $salaryAdjustment = salaryAdjustment::find(request("id"));
-            // $salaryAdjustment->update([
-            //     'deleted_by' => request("user_id"),
-            // ]);
-            // $salaryAdjustment->delete();
+            $salaryAdjustment = salaryAdjustment::find(request("id"));
+            $salaryAdjustment->update([
+                'deleted_by' => request("user_id"),
+            ]);
+            $this->destroySalaryAdjustmentDetail($salaryAdjustment);
+            $salaryAdjustment->delete();
 
             DB::commit();
 
@@ -192,22 +193,35 @@ class SalaryAdjustmentController extends Controller
             $salaryAdjustmentDetail = salaryAdjustmentDetail::create([
                 "employee_id" => $item->id,
                 "salary_adjustment_id" => $salaryAdjustment->id,
-                "type_time" => $salaryAdjustment->type_time,
+                "type_amount" => $salaryAdjustment->type_amount,
                 "amount" => $salaryAdjustment->amount,
+                "type_time" => $salaryAdjustment->type_time,
                 "month_start" => $salaryAdjustment->month_start,
                 "month_end" => $salaryAdjustment->month_end,
             ]);
-
-            $salaryAdjustmentDetail["type_amount"] = $salaryAdjustment->type_amount;
-            // $salaryAdjustmentDetail["amount"] = $salaryAdjustment->amount;
 
             $this->storeSalaryAdjustmentDetailHistory($salaryAdjustmentDetail);
         }
     }
 
+    private function destroySalaryAdjustmentDetail($salaryAdjustment)
+    {
+        $salaryAdjustmentDetail = salaryAdjustmentDetail::where([
+            "salary_adjustment_id" => $salaryAdjustment->id,
+        ]);
+        $salaryAdjustment->update([
+            "deleted_at" => $salaryAdjustment->deleted_at,
+        ]);
+        foreach ($salaryAdjustmentDetail->get() as $index => $item) {
+            $this->storeSalaryAdjustmentDetailHistory($item);
+        }
+        $salaryAdjustmentDetail->delete();
+    }
+
     private function storeSalaryAdjustmentDetailHistory($data)
     {
         $salaryAdjustmentDetailHistory = new salaryAdjustmentDetailHistory;
+        $salaryAdjustmentDetailHistory->salary_adjustment_detail_id = $data->id;
         $salaryAdjustmentDetailHistory->salary_adjustment_id = $data->salary_adjustment_id;
         $salaryAdjustmentDetailHistory->employee_id = $data->employee_id;
         $salaryAdjustmentDetailHistory->type_amount = $data->type_amount;
@@ -220,7 +234,7 @@ class SalaryAdjustmentController extends Controller
         $salaryAdjustmentDetailHistory->deleted_by = $data->deleted_by;
         $salaryAdjustmentDetailHistory->created_at = $data->created_at;
         $salaryAdjustmentDetailHistory->updated_at = $data->updated_at;
-        $salaryAdjustmentDetailHistory->deleted_at = $data->deleted_at;
+        $salaryAdjustmentDetailHistory->deleted_at = Carbon::now();
         $salaryAdjustmentDetailHistory->save();
     }
 

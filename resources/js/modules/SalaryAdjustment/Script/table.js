@@ -109,12 +109,77 @@ export default {
                 selecteds: [...form.salary_adjustment_details],
             });
         },
-        onDelete(id) {
-            //
-        },
         onFilter() {
             //   console.info(this.params);
             this.$store.dispatch("salaryAdjustment/fetchData");
+        },
+        async onDelete(data) {
+            // console.info(data);
+
+            const Swal = this.$swal;
+            await Swal.fire({
+                title: "Perhatian!!!",
+                html: `Anda yakin ingin hapus data <h2><b>${data.name}</b> ?</h2>`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya hapus",
+                cancelButtonText: "Batal",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await axios
+                        .post(`${this.getBaseUrl}/api/v1/salary-adjustment/delete`, {
+                            id: data.id,
+                            user_id: this.getUserId,
+                        })
+                        .then((responses) => {
+                            //   console.info(responses);
+                            const data = responses.data;
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                                },
+                            });
+
+                            if (data.success == true) {
+                                Toast.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                });
+
+                                this.$store.dispatch("salaryAdjustment/fetchData");
+                            }
+                        })
+                        .catch((err) => {
+                            console.info(err);
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                                },
+                            });
+
+                            Toast.fire({
+                                icon: "error",
+                                title: err.response.data.message,
+                            });
+                        });
+                }
+            });
         },
         getColumns() {
             const columns = this.columns.filter((item) => item.label != "");

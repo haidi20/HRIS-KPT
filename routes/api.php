@@ -150,5 +150,6 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
         Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdjustmentController::class, "store"])->name('store');
+        Route::post('delete', [SalaryAdjustmentController::class, "destroy"])->name('delete');
     });
 });

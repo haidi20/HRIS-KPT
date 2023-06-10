@@ -18,6 +18,7 @@ class salaryAdjustmentDetail extends Model
     protected $fillable = [
         'salary_adjustment_id',
         'employee_id',
+        'type_amount',
         'amount',
         'type_time',
         'month_start',

@@ -17,6 +17,7 @@ class CreateSalaryAdjustmentDetailsTable extends Migration
             $table->id();
             $table->foreignId('salary_adjustment_id');
             $table->foreignId('employee_id');
+            $table->enum('type_amount', ['nominal', 'percent']);
             $table->double("amount");
             $table->enum('type_time', ['forever', 'base_time']);
             $table->date("month_start")->nullable();
