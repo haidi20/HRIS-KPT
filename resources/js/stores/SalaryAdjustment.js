@@ -10,11 +10,11 @@ const defaultForm = {
     type_amount: "nominal",
     amount: null,
     amount_readable: null,
-    date_start: new Date(),
-    date_end: new Date(moment().add({ month: 1 })),
+    month_start: new Date(),
+    month_end: new Date(),
     type_adjustment: "addition",
     note: null,
-    is_date_end: false,
+    is_month_end: false,
     form_type: "create",
 }
 
@@ -79,6 +79,8 @@ const SalaryAdjustment = {
                 ...state.form,
                 ...payload.form,
                 form_type: payload.form_type,
+                month_start: payload.form.month_start != null ? new Date(payload.form.month_start) : new Date(),
+                month_end: payload.form.month_end != null ? new Date(payload.form.month_end) : new Date(),
             };
         },
         INSERT_FORM_FORM_TYPE(state, payload) {
@@ -101,7 +103,7 @@ const SalaryAdjustment = {
 
 
         UPDATE_FORM_IS_DATE_END(state, payload) {
-            state.form.is_date_end = payload.value;
+            state.form.is_month_end = payload.value;
         },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;

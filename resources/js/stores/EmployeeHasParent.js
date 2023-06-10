@@ -11,6 +11,7 @@ const defaultForm = {
     employee_base: "all",
     form_type: "create",
     form_type_parent: "create",
+    parent_name: null,
     // start job order
     data_index: null, // untuk hapus data yang sudah di pilih
     status: null,
@@ -30,6 +31,7 @@ const EmployeeHasParent = {
             table: [],
             selecteds: [],
             clone_selecteds: [],
+            filter_selecteds: [],
             foremans: [],
             // data karyawan yang aktif di job order lain
             actives: [],
@@ -83,12 +85,12 @@ const EmployeeHasParent = {
             state.data.foremans = payload.foremans;
         },
         INSERT_DATA_ACTIVE(state, payload) {
-            let data_clone_selecteds = [];
             const actives = payload.actives;
             state.data.actives = actives;
 
             actives.map(item => {
                 const getData = state.data.selecteds.map(value => {
+                    // console.info(item.job_order_id);
                     if (value.employee_id == item.employee_id) {
                         return {
                             ...value,
@@ -103,9 +105,8 @@ const EmployeeHasParent = {
                     }
                 });
 
-                state.data.selecteds = [
-                    ...getData,
-                ];
+                state.data.selecteds = [...getData];
+                state.data.filter_selecteds = [...getData];
             });
 
             // console.info(state.data.selecteds);
@@ -115,20 +116,24 @@ const EmployeeHasParent = {
                 { ...payload.employee, status_last: null },
                 ...state.data.selecteds,
             ];
+
+            // state.data.clone_selecteds = [...state.data.selecteds];
+            state.data.filter_selecteds = [...state.data.selecteds];
         },
         INSERT_DATA_ALL_SELECTED(state, payload) {
             // console.info(payload);
             state.data.selecteds = [...payload.selecteds];
             state.data.clone_selecteds = [...payload.selecteds];
+            state.data.filter_selecteds = [...payload.selecteds];
         },
         INSERT_OPTION_STATUS(state, payload) {
             state.options.statuses = { ...payload.statuses };
         },
         INSERT_FORM(state, payload) {
+            // console.info(payload.form.data_index);
             state.form = {
                 ...state.form,
                 ...payload.form,
-                data_index: payload.data_index,
             };
 
             if (payload.form_type != null) {
@@ -136,9 +141,15 @@ const EmployeeHasParent = {
                 state.form.form_type = payload.form_type;
             }
         },
+        INSERT_FORM_PARENT_NAME(state, payload) {
+            state.form.parent_name = payload.parent_name;
+        },
         INSERT_FORM_FORM_TYPE(state, payload) {
             state.form.form_type = payload.form_type;
             state.form.form_type_parent = payload.form_type_parent;
+        },
+        INSERT_FORM_EMPLOYEE_BASE(state, payload) {
+            state.form.employee_base = payload.employee_base;
         },
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;
@@ -156,6 +167,7 @@ const EmployeeHasParent = {
             }) : ({ ...item }));
 
             state.data.selecteds = [...getSelecteds];
+            state.data.filter_selecteds = [...getSelecteds];
         },
         UPDATE_DATA_SELECTED_STATUS(state, payload) {
             let statusLast = null;
@@ -210,6 +222,7 @@ const EmployeeHasParent = {
             });
 
             state.data.selecteds = [...getSelecteds];
+            state.data.filter_selecteds = [...getSelecteds];
 
             // console.info(state.options.statuses[payload.form_type]);
             // console.info(state.form.employee_id, payload.form_type);
@@ -219,13 +232,19 @@ const EmployeeHasParent = {
             state.form.employee_id = null;
         },
         DELETE_DATA_SELECTED(state, payload) {
-            state.data.selecteds.splice(payload.index, 1);
+            const getIndex = state.form.data_index;
+
+            // console.info(getIndex);
+
+            state.data.selecteds.splice(getIndex, 1);
+            state.data.filter_selecteds.splice(getIndex, 1);
         },
         CLEAR_FORM(state, payload) {
             state.form = { ...defaultForm };
         },
         CLEAR_DATA_SELECTED(state, payload) {
             state.data.selecteds = [];
+            state.data.filter_selecteds = [];
         },
     },
     actions: {

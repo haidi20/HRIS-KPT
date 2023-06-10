@@ -81,6 +81,9 @@ export default {
     getIsDisabledBtnSave() {
       return this.$store.state.employeeHasParent.form.is_disabled_btn_save;
     },
+    getParentName() {
+      return this.$store.state.employeeHasParent.form.parent_name;
+    },
     getData() {
       return this.$store.state.employeeHasParent.data.selecteds;
     },
@@ -101,16 +104,20 @@ export default {
     async onSave() {
       //   console.info(this.getJobOrderFormKind);
 
-      if (this.getJobOrderFormKind == null) {
-        this.onSend();
-      } else {
-        const getValidationEmployee = await this.getValidationEmployee();
-
-        if (getValidationEmployee) {
-          return false;
+      if (this.getParentName == "job_order") {
+        if (this.getJobOrderFormKind == null) {
+          this.onSend();
         } else {
-          this.$bvModal.hide("data_employee");
+          const getValidationEmployee = await this.getValidationEmployee();
+
+          if (getValidationEmployee) {
+            return false;
+          } else {
+            this.$bvModal.hide("data_employee");
+          }
         }
+      } else {
+        this.$bvModal.hide("data_employee");
       }
     },
     async onSend() {
@@ -281,7 +288,9 @@ export default {
       return result;
     },
     getConditionDisabledBtnSave() {
-      let result = this.getIsDisabledBtnSave;
+      let result =
+        this.getParentName == "job_order" ? this.getIsDisabledBtnSave : false;
+      //   let result = false;
 
       //   console.info(this.getJobOrderFormKind);
       if (this.getJobOrderFormKind != null) {

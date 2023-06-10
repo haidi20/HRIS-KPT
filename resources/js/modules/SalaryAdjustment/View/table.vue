@@ -47,7 +47,7 @@
               v-if="item.created_by == getUserId"
               variant="danger"
               size="sm"
-              @click="onDelete(item.id)"
+              @click="onDelete(item)"
             >Hapus</b-button>
           </b-td>
         </b-tr>

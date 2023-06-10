@@ -40,7 +40,10 @@ class salaryAdjustment extends Model
 
     public function salaryAdjustmentDetails()
     {
-        return $this->hasMany(salaryAdjustmentDetail::class, "salary_adjustment_id", "id");
+        return $this->hasMany(salaryAdjustmentDetail::class, "salary_adjustment_id", "id")
+            ->whereHas('salaryAdjustment', function ($query) {
+                $query->where('employee_base', 'choose_employee');
+            });
     }
 
     public function getAmountReadableAttribute()

@@ -29,6 +29,23 @@ export default {
         form() {
             return this.$store.state.employeeHasParent.form;
         },
+        employee_base: {
+            get() {
+                return this.$store.state.employeeHasParent.form.employee_base;
+            },
+            set(value) {
+                this.$store.commit("employeeHasParent/INSERT_FORM_EMPLOYEE_BASE", {
+                    employee_base: value,
+                });
+            },
+        },
+    },
+    watch: {
+        employee_base(value) {
+            if (value == 'all') {
+                this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", { value: false });
+            }
+        },
     },
     methods: {
         onChoose() {
@@ -53,6 +70,7 @@ export default {
                         position_name: getEmployee.position_name,
                     },
                 });
+                this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", { value: false });
             } else {
                 const Toast = Swal.mixin({
                     toast: true,

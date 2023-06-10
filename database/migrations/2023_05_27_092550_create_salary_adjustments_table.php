@@ -22,9 +22,9 @@ class CreateSalaryAdjustmentsTable extends Migration
             // end employee form
             $table->string("name");
             $table->enum('type_time', ['forever', 'base_time']);
-            $table->boolean("is_date_end")->default(false);
-            $table->date("date_start")->nullable();
-            $table->date("date_end")->nullable();
+            $table->boolean("is_month_end")->default(false);
+            $table->date("month_start")->nullable();
+            $table->date("month_end")->nullable();
             $table->enum('type_amount', ['nominal', 'percent']);
             $table->double("amount");
             $table->enum('type_adjustment', ['deduction', 'addition']);

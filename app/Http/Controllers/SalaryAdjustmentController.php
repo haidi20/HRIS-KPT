@@ -77,16 +77,16 @@ class SalaryAdjustmentController extends Controller
             }
 
             // ketika ada update data tidak pakai waktu, maka update kosong
-            $salaryAdjustment->date_start = null;
-            $salaryAdjustment->date_end = null;
+            $salaryAdjustment->month_start = null;
+            $salaryAdjustment->month_end = null;
             $salaryAdjustment->position_id = null;
             $salaryAdjustment->job_order_id = null;
 
-            if (request("type_time") == "base time") {
-                $salaryAdjustment->date_start = Carbon::parse(request("date_start"))->format("Y-m-d");
+            if (request("type_time") == "base_time") {
+                $salaryAdjustment->month_start = Carbon::parse(request("month_start"))->endOfMonth()->format("Y-m-d");
 
-                if (request("is_date_end")) {
-                    $salaryAdjustment->date_end = Carbon::parse(request("date_end"))->format("Y-m-d");
+                if (request("is_month_end")) {
+                    $salaryAdjustment->month_end = Carbon::parse(request("month_end"))->endOfMonth()->format("Y-m-d");
                 }
             }
 
@@ -101,7 +101,7 @@ class SalaryAdjustmentController extends Controller
 
             $salaryAdjustment->name = request("name");
             $salaryAdjustment->type_time = request("type_time");
-            $salaryAdjustment->is_date_end = request("is_date_end", false);
+            $salaryAdjustment->is_month_end = request("is_month_end", false);
             $salaryAdjustment->type_amount = request("type_amount");
             $salaryAdjustment->amount = request("amount");
             $salaryAdjustment->type_adjustment = request("type_adjustment");
@@ -192,10 +192,14 @@ class SalaryAdjustmentController extends Controller
             $salaryAdjustmentDetail = salaryAdjustmentDetail::create([
                 "employee_id" => $item->id,
                 "salary_adjustment_id" => $salaryAdjustment->id,
+                "type_time" => $salaryAdjustment->type_time,
+                "amount" => $salaryAdjustment->amount,
+                "month_start" => $salaryAdjustment->month_start,
+                "month_end" => $salaryAdjustment->month_end,
             ]);
 
             $salaryAdjustmentDetail["type_amount"] = $salaryAdjustment->type_amount;
-            $salaryAdjustmentDetail["amount"] = $salaryAdjustment->amount;
+            // $salaryAdjustmentDetail["amount"] = $salaryAdjustment->amount;
 
             $this->storeSalaryAdjustmentDetailHistory($salaryAdjustmentDetail);
         }
@@ -207,7 +211,10 @@ class SalaryAdjustmentController extends Controller
         $salaryAdjustmentDetailHistory->salary_adjustment_id = $data->salary_adjustment_id;
         $salaryAdjustmentDetailHistory->employee_id = $data->employee_id;
         $salaryAdjustmentDetailHistory->type_amount = $data->type_amount;
+        $salaryAdjustmentDetailHistory->type_time = $data->type_time;
         $salaryAdjustmentDetailHistory->amount = $data->amount;
+        $salaryAdjustmentDetailHistory->month_start = $data->month_start;
+        $salaryAdjustmentDetailHistory->month_end = $data->month_end;
         $salaryAdjustmentDetailHistory->created_by = $data->created_by;
         $salaryAdjustmentDetailHistory->updated_by = $data->updated_by;
         $salaryAdjustmentDetailHistory->deleted_by = $data->deleted_by;

@@ -6,7 +6,7 @@
           <VueSelect
             id="employee_base"
             class="cursor-pointer"
-            v-model="form.employee_base"
+            v-model="employee_base"
             :options="getOptionEmplyeeBases"
             :reduce="(data) => data.id"
             label="name"

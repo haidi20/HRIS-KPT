@@ -72,7 +72,6 @@ export default {
         },
         onDetail(form) {
             //   this.$store.commit("salaryAdjustment/CLEAR_FORM");
-            this.$bvModal.show("salary_adjustment_form");
             this.$store.commit("salaryAdjustment/INSERT_FORM", {
                 form,
                 form_type: "detail",
@@ -88,8 +87,10 @@ export default {
             this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
                 selecteds: [...form.salary_adjustment_details],
             });
+            this.$bvModal.show("salary_adjustment_form");
         },
         onEdit(form) {
+            // console.info(form);
             //   this.$store.commit("salaryAdjustment/CLEAR_FORM");
             this.$bvModal.show("salary_adjustment_form");
             this.$store.commit("salaryAdjustment/INSERT_FORM", {

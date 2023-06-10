@@ -64,6 +64,13 @@ export default {
     this.$store.dispatch("master/fetchPosition");
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("salaryAdjustment/fetchData");
+
+    this.$store.commit("employeeHasParent/INSERT_FORM_PARENT_NAME", {
+      parent_name: "job_order",
+    });
+    this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", {
+      value: false,
+    });
   },
   methods: {
     onCreate() {

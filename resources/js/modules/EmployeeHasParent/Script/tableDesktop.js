@@ -45,6 +45,11 @@ export default {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
     },
+    watch: {
+        getBaseUrl(value) {
+            //
+        },
+    },
     methods: {
         onDelete(index) {
             this.$store.commit("employeeHasParent/DELETE_DATA_SELECTED", { index });

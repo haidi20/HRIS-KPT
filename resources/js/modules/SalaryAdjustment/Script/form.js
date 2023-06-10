@@ -66,9 +66,9 @@ export default {
             //
         },
         onActiveDateEnd() {
-            //   this.is_date_end = !this.is_date_end;
+            // console.info(this.form.is_month_end);
             this.$store.commit("salaryAdjustment/UPDATE_FORM_IS_DATE_END", {
-                value: !this.form.is_date_end,
+                value: !this.form.is_month_end,
             });
         },
         onShowEmployee() {
@@ -90,6 +90,8 @@ export default {
             // mengambil data hexa saja
             const request = {
                 ...this.form,
+                month_start: moment(this.form.month_start).format("Y-MM-DD"),
+                month_end: moment(this.form.month_end).format("Y-MM-DD"),
                 position_id: this.getEmployeeForm.position_id,
                 job_order_id: this.getEmployeeForm.job_order_id,
                 employee_base: this.getEmployeeForm.employee_base,
@@ -99,7 +101,7 @@ export default {
 
             this.is_loading = true;
 
-            // console.info(request);
+            console.info(request);
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/salary-adjustment/store`, request)

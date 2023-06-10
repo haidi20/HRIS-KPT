@@ -16,7 +16,16 @@ class salaryAdjustmentDetailHistory extends Model
         "employee_name", "position_name",
     ];
     protected $fillable = [
-        "salary_adjustment_id",  "employee_id", "type_amount", "amount",
+        'salary_adjustment_detail_id',
+        'salary_adjustment_id',
+        'employee_id',
+        'amount',
+        'type_time',
+        'month_start',
+        'month_end',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected static function boot()

@@ -107,13 +107,6 @@ export default {
     this.countData = this.data.length;
     this.countColumn = this.columns.length;
   },
-  watch: {
-    data(newValue, oldValue) {
-      this.newData = newValue;
-      // this.countData = newValue.length;
-    },
-    newData(newValue, oldValue) {},
-  },
   computed: {
     getLoadingTable() {
       return this.$store.state[this.nameStore].loading[this.nameLoading];
@@ -156,6 +149,13 @@ export default {
         this.newData = [...value];
       },
     },
+  },
+  watch: {
+    data(newValue, oldValue) {
+      this.newData = newValue;
+      // this.countData = newValue.length;
+    },
+    newData(newValue, oldValue) {},
   },
   methods: {
     onUpdateData() {
