@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
+use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -12,16 +14,7 @@ class PayrollController extends Controller
         $month = Carbon::now();
         $monthNow = $month->format("Y-m");
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $employees =  [
-            (object)[
-                "id" => 1,
-                "name" => "AVET ATAN",
-            ],
-            (object)[
-                "id" => 2,
-                "name" => "MUHAMMAD ADI",
-            ],
-        ];
+        $employees =  Employee::select('id','name')->get();
 
         $data = (object) [
             //
@@ -42,21 +35,7 @@ class PayrollController extends Controller
         $monthNow = $month->format("Y-m");
         $monthReadAble = $month->isoFormat("MMMM YYYY");
 
-        $employee =  (object)[
-            "id" => 1,
-            "name" => "AVET ATAN",
-            "number_identity" => "112201001",
-            "position_name" => "DRIVER",
-            "salary" => "3.394.000",
-            "tunjangan_tetap" => "",
-            "rate_lembur" => "19.618",
-            "tunjangan_makan" => "12.000",
-            "tunjangan_transportasi" => "-",
-            "tunjangan_kehadiran" => "-",
-            "ptkp_karyawan" => "-",
-            "jumlah_cuti_ijin" => "-",
-            "sisa_cuti" => "-",
-        ];
+        $employee =  Employee::findOrFail($employeeId);
 
         return response()->json([
             "employee" => $employee,
@@ -66,31 +45,38 @@ class PayrollController extends Controller
 
     public function fetchSalary()
     {
-        $employeeId = request("employee_id");
-        $month = Carbon::parse(request("month_filter", Carbon::now()));
-        $monthNow = $month->format("Y-m");
-        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $employee_id = request("employee_id");
 
-        $data = (object) [
-            // A. Pendapatan
-            "jumlah_gaji_dasar" => 1,
-            "nominal_gaji_dasar" => "3.394.000",
-            "jumlah_tunjangan_tetap" => 1,
-            "nominal_tunjangan_tetap" => "-",
-            "jumlah_uang_makan" => 10,
-            "nominal_uang_makan" => "-",
-            // total berapa jam lembur
-            "jumlah_lembur" => 7,
-            "nominal_lembur" => "137.326",
-            "nominal_tambahan_lain_lain" => "130.538",
-            "jumlah_pendapatan_kotor" => "3.661.864",
-            // B. Pemotongan
-            "nominal_bpjs_dibayar_karyawan" => "135.781",
-            "nominal_pajak_penghasilan_pph21" => "-",
-            "nominal_potongan_lain_lain" => "-",
-            "jumlah_potongan" => "135.781",
-            "gaji_bersih" => "3.526.083",
-        ];
+        $month_filter  = request('month_filter').'-01';
+       
+        $data = Payroll::whereDate('bulan',$month_filter)->where('employee_id',$employee_id)->firstOrFail();
+
+
+        // Payroll::whereDate('')
+        // $month = Carbon::parse(request("month_filter", Carbon::now()));
+        // $monthNow = $month->format("Y-m");
+        // $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        // $data = (object) [
+        //     // A. Pendapatan
+        //     "jumlah_gaji_dasar" => 1,
+        //     "nominal_gaji_dasar" => "3.394.000",
+        //     "jumlah_tunjangan_tetap" => 1,
+        //     "nominal_tunjangan_tetap" => "-",
+        //     "jumlah_uang_makan" => 10,
+        //     "nominal_uang_makan" => "-",
+        //     // total berapa jam lembur
+        //     "jumlah_lembur" => 7,
+        //     "nominal_lembur" => "137.326",
+        //     "nominal_tambahan_lain_lain" => "130.538",
+        //     "jumlah_pendapatan_kotor" => "3.661.864",
+        //     // B. Pemotongan
+        //     "nominal_bpjs_dibayar_karyawan" => "135.781",
+        //     "nominal_pajak_penghasilan_pph21" => "-",
+        //     "nominal_potongan_lain_lain" => "-",
+        //     "jumlah_potongan" => "135.781",
+        //     "gaji_bersih" => "3.526.083",
+        // ];
 
         return response()->json([
             "data" => $data,
@@ -175,36 +161,36 @@ class PayrollController extends Controller
             "pkp_setahun" => "44.658.964",
         ];
 
-        $table = [
-            (object) [
-                "tarif" => "5",
-                "dari_pkp" => "0",
-                "ke_pkp" => "50",
-                "progressive_pph21" => "2.232.948",
-            ],
-            (object) [
-                "tarif" => "15",
-                "dari_pkp" => "50",
-                "ke_pkp" => "250",
-                "progressive_pph21" => "-",
-            ],
-            (object) [
-                "tarif" => "25",
-                "dari_pkp" => "250",
-                "ke_pkp" => "500",
-                "progressive_pph21" => "-",
-            ],
-            (object) [
-                "tarif" => "30",
-                "dari_pkp" => "500",
-                "ke_pkp" => "1.000",
-                "progressive_pph21" => "-",
-            ],
-        ];
+        // $table = [
+        //     (object) [
+        //         "tarif" => "5",
+        //         "dari_pkp" => "0",
+        //         "ke_pkp" => "50",
+        //         "progressive_pph21" => "2.232.948",
+        //     ],
+        //     (object) [
+        //         "tarif" => "15",
+        //         "dari_pkp" => "50",
+        //         "ke_pkp" => "250",
+        //         "progressive_pph21" => "-",
+        //     ],
+        //     (object) [
+        //         "tarif" => "25",
+        //         "dari_pkp" => "250",
+        //         "ke_pkp" => "500",
+        //         "progressive_pph21" => "-",
+        //     ],
+        //     (object) [
+        //         "tarif" => "30",
+        //         "dari_pkp" => "500",
+        //         "ke_pkp" => "1.000",
+        //         "progressive_pph21" => "-",
+        //     ],
+        // ];
 
         return response()->json([
             "data" => $data,
-            "table" => $table,
+            // "table" => $table,
         ]);
     }
 }
