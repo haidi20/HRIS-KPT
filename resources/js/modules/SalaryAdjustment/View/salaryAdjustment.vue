@@ -54,14 +54,17 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["salaryAdjustment", "employeeHasParent", "master"].map((item) => {
-      this.$store.commit(`${item}/INSERT_BASE_URL`, {
-        base_url: this.baseUrl,
-      });
-    });
+    ["salaryAdjustment", "employeeHasParent", "master", "jobOrder"].map(
+      (item) => {
+        this.$store.commit(`${item}/INSERT_BASE_URL`, {
+          base_url: this.baseUrl,
+        });
+      }
+    );
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("jobOrder/fetchDataFinish");
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("salaryAdjustment/fetchData");
 

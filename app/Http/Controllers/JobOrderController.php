@@ -86,6 +86,21 @@ class JobOrderController extends Controller
         ]);
     }
 
+    public function fetchDataFinish()
+    {
+        $month = Carbon::parse(request("month"));
+
+        $jobOrders = JobOrder::where("status", "finish")
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->get();
+
+        return response()->json([
+            "jobOrders" => $jobOrders,
+            "requests" => request()->all(),
+        ]);
+    }
+
     public function findEmployeeStatus()
     {
         $actives = [];

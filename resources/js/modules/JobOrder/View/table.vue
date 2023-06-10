@@ -5,13 +5,42 @@
       :columns="columns"
       :options="options"
       nameStore="jobOrder"
-      nameLoading="table"
-      :filter="false"
+      nameLoading="data"
+      :filter="true"
       :footer="false"
       bordered
     >
+      <template v-slot:filter>
+        <b-col cols>
+          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
+            <DatePicker
+              id="month"
+              v-model="params.month"
+              format="YYYY-MM"
+              type="month"
+              placeholder="pilih bulan"
+            />
+          </b-form-group>
+          <b-button
+            class="place_filter_table"
+            variant="success"
+            size="sm"
+            @click="onFilter()"
+            :disabled="getIsLoadingData"
+          >Kirim</b-button>
+        </b-col>
+      </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
+          <b-td>
+            <label for="scope_id">
+              <b-form-checkbox
+                style="display: inline"
+                v-model="item.is_selected"
+                @click="onChoose(item)"
+              ></b-form-checkbox>
+            </label>
+          </b-td>
           <b-td v-for="column in getColumns()" :key="column.label">{{ item[column.field] }}</b-td>
         </b-tr>
       </template>
@@ -19,69 +48,7 @@
   </div>
 </template>
 
-<script>
-import DatatableClient from "../../../components/DatatableClient";
-
-export default {
-  data() {
-    return {
-      columns: [
-        {
-          label: "Nama Proyek",
-          field: "proyek_name",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Pekerjaan",
-          field: "job_name",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Pengawas",
-          field: "foreman_name",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Waktu Selesai",
-          field: "time_end_readable",
-          width: "100px",
-          class: "",
-        },
-      ],
-      options: {
-        perPage: 5,
-        // perPageValues: [5, 10, 25, 50, 100],
-      },
-    };
-  },
-  components: {
-    DatatableClient,
-  },
-  computed: {
-    getBaseUrl() {
-      return this.$store.state.base_url;
-    },
-    getUserId() {
-      return this.$store.state.user?.id;
-    },
-    getData() {
-      return this.$store.state.jobOrder.data;
-    },
-  },
-  methods: {
-    getColumns() {
-      const columns = this.columns.filter((item) => item.label != "");
-      return columns;
-    },
-    getPermissionAdd() {
-      return true;
-    },
-  },
-};
-</script>
+<script src="../Script/table.js"></script>
 
 <style lang="scss" scoped>
 </style>
