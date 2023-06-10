@@ -4,7 +4,7 @@
       id="data_employee"
       ref="data_employee"
       :title="getTitleForm"
-      :size="getIsMobile ?'md' : 'lg'"
+      :size="getIsMobile ?'md' : 'xl'"
       class="modal-custom"
       hide-footer
     >
@@ -276,13 +276,13 @@ export default {
       });
     },
     getConditionBtnSave() {
-      let result = false;
+      let result = true;
 
-      //   console.info(this.getJobOrderFormKind);
+      //   console.info(this.getForm.employee_base);
 
-      if (this.getForm.employee_base != "job_order") {
-        result = true;
-      }
+      //   if (this.getForm.employee_base != "job_order") {
+      //     result = true;
+      //   }
 
       if (this.getJobOrderFormKind == "read") {
         result = false;

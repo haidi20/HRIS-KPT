@@ -11,37 +11,37 @@ export default {
                 {
                     label: "",
                     field: "",
-                    width: "50px",
+                    width: "10px",
                     class: "",
                 },
                 {
                     label: "Nama Proyek",
                     field: "project_name",
-                    width: "100px",
+                    width: "400px",
                     class: "",
                 },
                 {
                     label: "Pekerjaan",
                     field: "job_name",
-                    width: "100px",
+                    width: "400px",
                     class: "",
                 },
                 {
                     label: "Catatan Pekerjaan",
                     field: "job_note",
-                    width: "100px",
+                    width: "400px",
                     class: "",
                 },
                 {
                     label: "Pengawas",
                     field: "creator_name",
-                    width: "100px",
+                    width: "400px",
                     class: "",
                 },
                 {
                     label: "Waktu Selesai",
                     field: "datetime_end_readable",
-                    width: "100px",
+                    width: "400px",
                     class: "",
                 },
             ],
@@ -85,8 +85,9 @@ export default {
         onFilter() {
             this.$store.dispatch("jobOrder/fetchDataFinish");
         },
-        onChoose(item) {
-            console.info(item);
+        onChoose(index) {
+            // console.info(item);
+            this.$store.commit("jobOrder/INSERT_DATA_SELECTED", { index });
         },
         getColumns() {
             const columns = this.columns.filter((item) => checkNull(item.label) != null);

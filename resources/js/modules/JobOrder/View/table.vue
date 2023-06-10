@@ -31,14 +31,10 @@
         </b-col>
       </template>
       <template v-slot:tbody="{ filteredData }">
-        <b-tr v-for="(item, index) in filteredData" :key="index">
+        <b-tr v-for="(item, index) in filteredData" :key="index" @click="onChoose(index)">
           <b-td>
             <label for="scope_id">
-              <b-form-checkbox
-                style="display: inline"
-                v-model="item.is_selected"
-                @click="onChoose(item)"
-              ></b-form-checkbox>
+              <b-form-checkbox style="display: inline" v-model="item.is_selected"></b-form-checkbox>
             </label>
           </b-td>
           <b-td v-for="column in getColumns()" :key="column.label">{{ item[column.field] }}</b-td>

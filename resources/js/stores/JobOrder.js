@@ -193,6 +193,17 @@ const JobOrder = {
         INSERT_DATA(state, payload) {
             state.data = payload.job_orders;
         },
+        INSERT_DATA_SELECTED(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
+            dataClone[payload.index] = {
+                ...dataClone[payload.index],
+                is_selected: true,
+            }
+            // console.info(dataClone, payload);
+
+            state.data = [...dataClone];
+        },
         INSERT_FORM(state, payload) {
             state.form = {
                 ...state.form,
