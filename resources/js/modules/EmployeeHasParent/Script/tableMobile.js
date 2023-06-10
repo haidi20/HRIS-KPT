@@ -68,7 +68,7 @@ export default {
     },
     methods: {
         onSearch() {
-            console.info(this.search);
+            // console.info(this.search);
         },
         onDelete() {
             const index = this.getForm.data_index;

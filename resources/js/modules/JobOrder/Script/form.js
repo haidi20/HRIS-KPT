@@ -104,7 +104,7 @@ export default {
             if (value != null) {
                 const findJob = this.getOptionJobs.find(item => item.id == value);
 
-                console.info(findJob);
+                // console.info(findJob);
 
                 this.$store.commit("jobOrder/INSERT_FORM_JOB_CODE", {
                     job_code: findJob.code,
@@ -148,14 +148,14 @@ export default {
                 request.image = await imageToBase64(request.image);
             }
 
-            console.info(request);
+            // console.info(request);
             // return false;
             this.is_loading = true;
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/job-order/store`, request)
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     this.is_loading = false;
                     // return false;
                     const data = responses.data;
