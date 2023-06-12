@@ -9,7 +9,7 @@ const defaultForm = {
     position_id: null,
     job_order_id: null,
     project_id: null,
-    employee_base: "all",
+    employee_base: "choose_employee",
     form_type: "create",
     form_type_parent: "create",
     parent_name: null,

@@ -44,6 +44,14 @@ export default {
         getEmployeeSelecteds() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
+        getJobOrderMonthFilter() {
+            const month = this.$store.state.jobOrder.params.month;
+            return moment(month).format("Y-MM-01");
+        },
+        getProjectMonthFilter() {
+            const month = this.$store.state.project.params.month;
+            return moment(month).format("Y-MM-01");
+        },
         // getJobOrderId() {
         //     return this.$store.state.jobOrder.data.find(item => item.is_selected)?.id;
         // },
@@ -93,7 +101,14 @@ export default {
         async onSend() {
             const Swal = this.$swal;
 
-            // mengambil data hexa saja
+            let getMonthFilter = null;
+
+            if (this.getEmployeeHasParentForm.employee_base == 'job_order') {
+                getMonthFilter = this.getJobOrderMonthFilter;
+            } else if (this.getEmployeeHasParentForm.employee_base == 'project') {
+                getMonthFilter = this.getProjectMonthFilter;
+            }
+
             const request = {
                 ...this.form,
                 month_start: moment(this.form.month_start).format("Y-MM-DD"),
@@ -103,6 +118,7 @@ export default {
                 project_id: this.getEmployeeHasParentForm.project_id,
                 employee_base: this.getEmployeeHasParentForm.employee_base,
                 employee_selecteds: this.getEmployeeSelecteds,
+                month_filter_has_parent: getMonthFilter,
                 user_id: this.getUserId,
             };
 

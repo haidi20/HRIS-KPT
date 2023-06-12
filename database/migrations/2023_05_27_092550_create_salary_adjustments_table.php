@@ -32,6 +32,8 @@ class CreateSalaryAdjustmentsTable extends Migration
             $table->boolean("is_month_end")->default(false);
             $table->date("month_start")->nullable();
             $table->date("month_end")->nullable();
+            // kebutuhan di form employee has parent bagian proyek dan job order
+            $table->date("month_filter_has_parent")->nullable();
             $table->enum('type_amount', ['nominal', 'percent']);
             $table->double("amount");
             $table->enum('type_adjustment', ['deduction', 'addition']);

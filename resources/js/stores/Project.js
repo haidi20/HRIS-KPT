@@ -96,6 +96,9 @@ const Project = {
                 date_end: new Date(payload.form.date_end),
             };
         },
+        INSERT_FORM_ID(state, payload) {
+            state.form.id = payload.id;
+        },
         INSERT_FORM_NEW_CONTRACTOR(state, payload) {
             state.form.contractors = [
                 ...state.form.contractors,
@@ -179,6 +182,9 @@ const Project = {
             // console.info(day_duration);
             state.form.day_duration = `${dayDuration}`;
         },
+        INSERT_PARAM_MONTH(state, payload) {
+            state.params.month = new Date(payload.month);
+        },
         INSERT_OPTION_POSITION(state, payload) {
             state.options.positions = payload.positions;
         },
@@ -196,9 +202,9 @@ const Project = {
         },
         UPDATE_DATA_IS_SELECTED_TRUE(state, payload) {
             let dataClone = [...state.data];
-            console.info(dataClone.length);
+            // console.info(dataClone.length);
             dataClone = dataClone.map(item => {
-                console.info(item.id, payload.id);
+                // console.info(item.id, payload.id);
                 if (item.id == payload.id) {
                     return {
                         ...item,
@@ -300,12 +306,27 @@ const Project = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     const data = responses.data;
                     let projects = data.projects;
 
                     if (context.state.form.form_type != 'edit') {
-                        projects = projects.map(item => ({ ...item, is_selected: false }));
+                        projects = projects.map(item => {
+                            if (
+                                checkNull(context.state.form.id) != null
+                                && item.id == context.state.form.id
+                            ) {
+                                return {
+                                    ...item,
+                                    is_selected: true,
+                                }
+                            } else {
+                                return {
+                                    ...item,
+                                    is_selected: false,
+                                }
+                            }
+                        });
                     }
 
                     context.commit("INSERT_DATA", {
