@@ -73,6 +73,13 @@ class Project extends Model
             ->where("parent_model", "App\Models\Project")->orderBy("created_at", "desc");
     }
 
+    public function scopeJobOrderFinish($query)
+    {
+        return $query->whereHas("jobOrders", function ($query) {
+            $query->where("status", "finish");
+        });
+    }
+
     public function getCompanyNameAttribute()
     {
         if ($this->company) {

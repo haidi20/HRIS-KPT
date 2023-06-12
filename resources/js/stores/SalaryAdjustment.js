@@ -78,7 +78,7 @@ const SalaryAdjustment = {
             state.form = {
                 ...state.form,
                 ...payload.form,
-                form_type: payload.form_type,
+                form_type: payload?.form_type,
                 month_start: payload.form.month_start != null ? new Date(payload.form.month_start) : new Date(),
                 month_end: payload.form.month_end != null ? new Date(payload.form.month_end) : new Date(),
             };
@@ -131,7 +131,7 @@ const SalaryAdjustment = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

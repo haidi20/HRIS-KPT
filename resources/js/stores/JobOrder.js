@@ -311,6 +311,12 @@ const JobOrder = {
         UPDATE_IS_DISABLED_BTN_SEND(state, payload) {
             state.form.is_disabled_btn_send = payload.value;
         },
+        UPDATE_DATA_IS_SELECTED_FALSE(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
+
+            state.data = [...dataClone];
+        },
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
         },

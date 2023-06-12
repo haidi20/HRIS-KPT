@@ -37,6 +37,8 @@ export default {
                 this.$store.commit("employeeHasParent/INSERT_FORM_EMPLOYEE_BASE", {
                     employee_base: value,
                 });
+                this.$store.commit("jobOrder/UPDATE_DATA_IS_SELECTED_FALSE");
+                this.$store.commit("project/UPDATE_DATA_IS_SELECTED_FALSE");
             },
         },
     },

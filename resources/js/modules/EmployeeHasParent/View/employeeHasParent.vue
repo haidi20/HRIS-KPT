@@ -24,7 +24,8 @@
         <FormDesktop />
         <br />
         <TableDesktop v-if="getForm.employee_base == 'choose_employee'" />
-        <JobOrderTable v-else-if="getForm.employee_base == 'job_order'" />
+        <JobOrderTableHasParent v-else-if="getForm.employee_base == 'job_order'" />
+        <ProjectTableHasParent v-else-if="getForm.employee_base == 'project'" />
       </template>
       <br />
       <b-row>
@@ -52,7 +53,8 @@ import FormMobile from "./formMobile";
 import TableMobile from "./tableMobile";
 import FormDesktop from "./formDesktop";
 import TableDesktop from "./tableDesktop";
-import JobOrderTable from "../../JobOrder/View/table";
+import JobOrderTableHasParent from "../../JobOrder/View/tableHasParent";
+import ProjectTableHasParent from "../../Project/View/tableHasParent";
 
 export default {
   components: {
@@ -60,7 +62,8 @@ export default {
     FormMobile,
     TableDesktop,
     FormDesktop,
-    JobOrderTable,
+    JobOrderTableHasParent,
+    ProjectTableHasParent,
   },
   data() {
     return {

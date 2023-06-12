@@ -59,10 +59,10 @@ const EmployeeHasParent = {
                     id: 'job_order',
                     name: "Job Order",
                 },
-                // {
-                //     id: 'project',
-                //     name: "Proyek",
-                // },
+                {
+                    id: 'project',
+                    name: "Proyek",
+                },
             ],
             statuses: {},
         },

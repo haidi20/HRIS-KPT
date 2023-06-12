@@ -29,7 +29,7 @@ moment.locale("id");
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component("project", require("./modules/Project/project.vue").default);
+Vue.component("project", require("./modules/Project/View/project.vue").default);
 Vue.component("roster", require("./modules/Roster/roster.vue").default);
 Vue.component("vacation", require("./modules/Vacation/vacation.vue").default);
 Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
