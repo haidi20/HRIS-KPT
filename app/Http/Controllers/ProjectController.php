@@ -50,6 +50,7 @@ class ProjectController extends Controller
             ->orderBy("created_at", "asc")->get();
 
         return response()->json([
+            "month" => $month->format("m"),
             "projects" => $projects,
         ]);
     }

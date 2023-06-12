@@ -61,7 +61,14 @@ class SalaryAdjustmentController extends Controller
         if ($employeeBase == "job_order" && request("job_order_id") == null) {
             return response()->json([
                 'success' => false,
-                'message' => "Maaf, harus pilih salah satu jabatan",
+                'message' => "Maaf, harus pilih salah satu job order",
+            ], 500);
+        }
+
+        if ($employeeBase == "project" && request("project_id") == null) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, harus pilih salah satu proyek",
             ], 500);
         }
 
@@ -103,6 +110,7 @@ class SalaryAdjustmentController extends Controller
             }
 
             $salaryAdjustment->employee_base = request("employee_base");
+            $salaryAdjustment->month_filter_has_parent = request("month_filter_has_parent");
             // end employee form
 
             $salaryAdjustment->name = request("name");

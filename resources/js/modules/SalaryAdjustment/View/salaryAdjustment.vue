@@ -68,6 +68,9 @@ export default {
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("master/fetchPosition");
+    // dapatkan data job order dan project harus di atas salary adjustment
+    this.$store.dispatch("jobOrder/fetchDataFinish");
+    this.$store.dispatch("project/fetchDataBaseJobOrderFinish");
     this.$store.dispatch("salaryAdjustment/fetchData");
     this.$store.dispatch("employeeHasParent/fetchOption");
 
@@ -83,7 +86,8 @@ export default {
   },
   methods: {
     onCreate() {
-      this.$bvModal.show("salary_adjustment_form");
+      //   this.$store.dispatch("jobOrder/fetchDataFinish");
+      //   this.$store.dispatch("project/fetchDataBaseJobOrderFinish");
 
       this.$store.commit("salaryAdjustment/CLEAR_FORM");
       this.$store.commit("salaryAdjustment/INSERT_FORM_FORM_TYPE", {
@@ -92,6 +96,7 @@ export default {
 
       this.$store.commit("employeeHasParent/CLEAR_FORM");
       this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
+      this.$bvModal.show("salary_adjustment_form");
     },
   },
 };

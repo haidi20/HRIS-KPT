@@ -73,6 +73,7 @@ export default {
         // edit or detail
         onAction(type, form) {
             //   this.$store.commit("salaryAdjustment/CLEAR_FORM");
+
             this.$store.commit("salaryAdjustment/INSERT_FORM", {
                 form,
                 form_type: type,
@@ -93,11 +94,15 @@ export default {
                     selecteds: [...form.salary_adjustment_details],
                 });
             } else if (form.employee_base == 'project') {
-                this.$store.dispatch("project/fetchDataBaseJobOrderFinish");
                 this.$store.commit("project/UPDATE_DATA_IS_SELECTED_TRUE", { id: form.project_id });
+                this.$store.commit("project/INSERT_FORM_ID", { id: form.project_id });
+                this.$store.commit("project/INSERT_PARAM_MONTH", { month: form.month_filter_has_parent });
+                this.$store.dispatch("project/fetchDataBaseJobOrderFinish");
             } else if (form.employee_base == 'job_order') {
-                this.$store.dispatch("jobOrder/fetchDataFinish");
                 this.$store.commit("jobOrder/UPDATE_DATA_IS_SELECTED_TRUE", { id: form.job_order_id });
+                this.$store.commit("jobOrder/INSERT_FORM_ID", { id: form.job_order_id });
+                this.$store.commit("jobOrder/INSERT_PARAM_MONTH", { month: form.month_filter_has_parent });
+                this.$store.dispatch("jobOrder/fetchDataFinish");
             }
 
             this.$bvModal.show("salary_adjustment_form");
