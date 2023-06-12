@@ -72,11 +72,14 @@ const Project = {
         },
         INSERT_DATA_SELECTED(state, payload) {
             let dataClone = [...state.data];
-            dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
-            dataClone[payload.index] = {
-                ...dataClone[payload.index],
-                is_selected: true,
-            }
+            dataClone = dataClone.map((item, index) => ({
+                ...item,
+                is_selected: index == payload.index ? true : false,
+            }));
+            // dataClone[payload.index] = {
+            //     ...dataClone[payload.index],
+            //     is_selected: true,
+            // }
             // console.info(dataClone, payload);
 
             state.data = [...dataClone];
@@ -191,6 +194,25 @@ const Project = {
 
             state.data = [...dataClone];
         },
+        UPDATE_DATA_IS_SELECTED_TRUE(state, payload) {
+            let dataClone = [...state.data];
+            console.info(dataClone.length);
+            dataClone = dataClone.map(item => {
+                console.info(item.id, payload.id);
+                if (item.id == payload.id) {
+                    return {
+                        ...item,
+                        is_selected: true,
+                    }
+                } else {
+                    return {
+                        ...item,
+                    }
+                }
+            });
+
+            state.data = [...dataClone];
+        },
         DELETE_FORM_CONTRACTOR(state, payload) {
             // const index = state.form.contractors.findIndex(obj => obj.id === payload.id);
 
@@ -280,9 +302,14 @@ const Project = {
                 .then((responses) => {
                     // console.info(responses);
                     const data = responses.data;
+                    let projects = data.projects;
+
+                    if (context.state.form.form_type != 'edit') {
+                        projects = projects.map(item => ({ ...item, is_selected: false }));
+                    }
 
                     context.commit("INSERT_DATA", {
-                        projects: data.projects.map(item => ({ ...item, is_selected: false })),
+                        projects: projects,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })

@@ -110,6 +110,8 @@ export default {
     async onSave() {
       //   console.info(this.getJobOrderFormKind);
 
+      //   console.info(this.getParentName);
+
       if (this.getParentName == "job_order") {
         if (this.getJobOrderFormKind == null) {
           this.onSend();

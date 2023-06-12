@@ -85,9 +85,10 @@ export default {
         onFilter() {
             this.$store.dispatch("jobOrder/fetchDataFinish");
         },
-        onChoose(index) {
+        onChoose(id, index) {
             // console.info(item);
             this.$store.commit("jobOrder/INSERT_DATA_SELECTED", { index });
+            this.$store.commit("employeeHasParent/INSERT_FORM_JOB_ORDER_ID", { job_order_id: id });
         },
         getColumns() {
             const columns = this.columns.filter((item) => checkNull(item.label) != null);

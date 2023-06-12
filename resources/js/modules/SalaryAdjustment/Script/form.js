@@ -38,18 +38,18 @@ export default {
         getOptionTypeAdjustments() {
             return this.$store.state.salaryAdjustment.options.type_adjustments;
         },
-        getEmployeeForm() {
+        getEmployeeHasParentForm() {
             return this.$store.state.employeeHasParent.form;
         },
         getEmployeeSelecteds() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
-        getJobOrderId() {
-            return this.$store.state.jobOrder.data.find(item => item.is_selected)?.id;
-        },
-        getProjectId() {
-            return this.$store.state.project.data.find(item => item.is_selected)?.id;
-        },
+        // getJobOrderId() {
+        //     return this.$store.state.jobOrder.data.find(item => item.is_selected)?.id;
+        // },
+        // getProjectId() {
+        //     return this.$store.state.project.data.find(item => item.is_selected)?.id;
+        // },
         form() {
             return this.$store.state.salaryAdjustment.form;
         },
@@ -98,10 +98,10 @@ export default {
                 ...this.form,
                 month_start: moment(this.form.month_start).format("Y-MM-DD"),
                 month_end: moment(this.form.month_end).format("Y-MM-DD"),
-                position_id: this.getEmployeeForm.position_id,
-                job_order_id: this.getJobOrderId,
-                project_id: this.getProjectId,
-                employee_base: this.getEmployeeForm.employee_base,
+                position_id: this.getEmployeeHasParentForm.position_id,
+                job_order_id: this.getEmployeeHasParentForm.job_order_id,
+                project_id: this.getEmployeeHasParentForm.project_id,
+                employee_base: this.getEmployeeHasParentForm.employee_base,
                 employee_selecteds: this.getEmployeeSelecteds,
                 user_id: this.getUserId,
             };

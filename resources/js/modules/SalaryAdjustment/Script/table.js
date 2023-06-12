@@ -70,44 +70,37 @@ export default {
         onExport() {
             //
         },
-        onDetail(form) {
+        // edit or detail
+        onAction(type, form) {
             //   this.$store.commit("salaryAdjustment/CLEAR_FORM");
             this.$store.commit("salaryAdjustment/INSERT_FORM", {
                 form,
-                form_type: "detail",
+                form_type: type,
             });
             this.$store.commit("employeeHasParent/INSERT_FORM", {
                 form: {
                     position_id: form.position_id,
                     job_order_id: form.job_order_id,
+                    project_id: form.project_id,
                     employee_base: form.employee_base,
                 },
-                form_type: "detail",
+                form_type: type,
             });
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [...form.salary_adjustment_details],
-            });
+
+
+            if (form.employee_base == 'choose_employee') {
+                this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+                    selecteds: [...form.salary_adjustment_details],
+                });
+            } else if (form.employee_base == 'project') {
+                this.$store.dispatch("project/fetchDataBaseJobOrderFinish");
+                this.$store.commit("project/UPDATE_DATA_IS_SELECTED_TRUE", { id: form.project_id });
+            } else if (form.employee_base == 'job_order') {
+                this.$store.dispatch("jobOrder/fetchDataFinish");
+                this.$store.commit("jobOrder/UPDATE_DATA_IS_SELECTED_TRUE", { id: form.job_order_id });
+            }
+
             this.$bvModal.show("salary_adjustment_form");
-        },
-        onEdit(form) {
-            // console.info(form);
-            //   this.$store.commit("salaryAdjustment/CLEAR_FORM");
-            this.$bvModal.show("salary_adjustment_form");
-            this.$store.commit("salaryAdjustment/INSERT_FORM", {
-                form,
-                form_type: "edit",
-            });
-            this.$store.commit("employeeHasParent/INSERT_FORM", {
-                form: {
-                    position_id: form.position_id,
-                    job_order_id: form.job_order_id,
-                    employee_base: form.employee_base,
-                },
-                form_type: "detail",
-            });
-            this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
-                selecteds: [...form.salary_adjustment_details],
-            });
         },
         onFilter() {
             //   console.info(this.params);

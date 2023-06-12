@@ -70,9 +70,10 @@ export default {
         },
     },
     methods: {
-        onChoose(index) {
+        onChoose(id, index) {
             // console.info(item);
             this.$store.commit("project/INSERT_DATA_SELECTED", { index });
+            this.$store.commit("employeeHasParent/INSERT_FORM_PROJECT_ID", { project_id: id });
         },
         onFilter() {
             this.$store.dispatch("project/fetchDataBaseJobOrderFinish");

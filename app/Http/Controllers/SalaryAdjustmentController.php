@@ -83,6 +83,7 @@ class SalaryAdjustmentController extends Controller
             $salaryAdjustment->month_end = null;
             $salaryAdjustment->position_id = null;
             $salaryAdjustment->job_order_id = null;
+            $salaryAdjustment->project_id = null;
 
             if (request("type_time") == "base_time") {
                 $salaryAdjustment->month_start = Carbon::parse(request("month_start"))->endOfMonth()->format("Y-m-d");
@@ -196,6 +197,7 @@ class SalaryAdjustmentController extends Controller
             $employees = Employee::whereIn("id", $getJobOrderEmployeeids)->get();
         } else if ($employeeBase == "project") {
             $getJobOrderEmployeeids = JobOrderHasEmployee::where("project_id", request("project_id"))
+                ->groupBy("employee_id")
                 ->pluck("employee_id");
 
             $employees = Employee::whereIn("id", $getJobOrderEmployeeids)->get();

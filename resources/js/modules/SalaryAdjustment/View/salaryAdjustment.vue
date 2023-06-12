@@ -68,13 +68,11 @@ export default {
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("master/fetchPosition");
-    this.$store.dispatch("jobOrder/fetchDataFinish");
     this.$store.dispatch("salaryAdjustment/fetchData");
     this.$store.dispatch("employeeHasParent/fetchOption");
-    this.$store.dispatch("project/fetchDataBaseJobOrderFinish");
 
     this.$store.commit("employeeHasParent/INSERT_FORM_PARENT_NAME", {
-      parent_name: "job_order",
+      parent_name: "salary_adjustment",
     });
     this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", {
       value: false,

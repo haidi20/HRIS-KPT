@@ -8,6 +8,7 @@ const defaultForm = {
     employee_id: null,
     position_id: null,
     job_order_id: null,
+    project_id: null,
     employee_base: "all",
     form_type: "create",
     form_type_parent: "create",
@@ -150,6 +151,12 @@ const EmployeeHasParent = {
         },
         INSERT_FORM_EMPLOYEE_BASE(state, payload) {
             state.form.employee_base = payload.employee_base;
+        },
+        INSERT_FORM_JOB_ORDER_ID(state, payload) {
+            state.form.job_order_id = payload.job_order_id;
+        },
+        INSERT_FORM_PROJECT_ID(state, payload) {
+            state.form.project_id = payload.project_id;
         },
         UPDATE_IS_MOBILE(state, payload) {
             state.is_mobile = payload.value;

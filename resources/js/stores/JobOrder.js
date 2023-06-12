@@ -320,6 +320,12 @@ const JobOrder = {
 
             state.data = [...dataClone];
         },
+        UPDATE_DATA_IS_SELECTED_TRUE(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: payload.id == item.id ? true : false }));
+
+            state.data = [...dataClone];
+        },
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
         },

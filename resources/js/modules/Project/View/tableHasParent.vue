@@ -34,7 +34,7 @@
         <b-tr
           v-for="(item, index) in filteredData"
           :key="index"
-          @click="onChoose(index)"
+          @click="onChoose(item.id, index)"
           class="cursor-pointer"
         >
           <b-td>
