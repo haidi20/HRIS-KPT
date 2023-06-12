@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Response;
 
 class AttendanceController extends Controller
 {
-    public $path = 'export\absensi.xlsx';
-
     public function index()
     {
         $vue = true;
@@ -101,10 +99,11 @@ class AttendanceController extends Controller
     public function export()
     {
         $totalRoster = [];
-        $data = $this->fetchData()->original["data"];
+        $data = $this->fetchDataMain()->original["data"];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRange($month->format("Y-m"));
+        $nameFile = "export/absensi_{$monthReadAble}.xlsx";
 
         // foreach ($rosterStatsuses as $key => $value) {
         //     $totalRoster[$value->initial] = $this->fetchTotalRoster($value->initial)->original["data"];
@@ -112,12 +111,12 @@ class AttendanceController extends Controller
         // $totalRoster["ALL"] = $this->fetchTotalRoster("ALL")->original["data"];
 
         try {
-            Excel::store(new AttendanceExport($data, $dateRange), $this->path, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+            Excel::store(new AttendanceExport($data, $dateRange), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
                 "data" => $data,
-                "linkDownload" => route('attendance.download'),
+                "linkDownload" => route('attendance.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -131,7 +130,7 @@ class AttendanceController extends Controller
 
     public function download()
     {
-        $path = public_path($this->path);
+        $path = public_path(request("path"));
 
         return Response::download($path);
     }

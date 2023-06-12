@@ -24,7 +24,7 @@ class AttendanceExport implements FromView, WithTitle, WithStyles, ShouldAutoSiz
 
     public function title(): string
     {
-        return 'Attendance';
+        return 'Absensi Karyawan';
     }
 
     public function view(): View
