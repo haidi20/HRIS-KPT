@@ -6,7 +6,7 @@
           <VueSelect
             id="employee_base"
             class="cursor-pointer"
-            v-model="form.employee_base"
+            v-model="employee_base"
             :options="getOptionEmplyeeBases"
             :reduce="(data) => data.id"
             label="name"
@@ -52,7 +52,7 @@
             style="min-width: 180px"
           />
         </b-form-group>
-        <b-form-group
+        <!-- <b-form-group
           v-if="form.employee_base == 'job_order'"
           label="Job Order"
           label-for="job_order_id"
@@ -69,7 +69,7 @@
             searchable
             style="min-width: 180px"
           />
-        </b-form-group>
+        </b-form-group>-->
       </b-col>
     </b-row>
     <b-row v-if="form.employee_base == 'choose_employee'">

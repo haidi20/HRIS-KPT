@@ -23,8 +23,12 @@
     <br />
     <b-row>
       <b-col class="place-data">
-        <template v-if="getData.length > 0">
-          <b-row v-for="(item, index) in getData" :key="index" @click="onOpenAction(item, index)">
+        <template v-if="getFilteredData.length > 0">
+          <b-row
+            v-for="(item, index) in getFilteredData"
+            :key="index"
+            @click="onOpenAction(item, index)"
+          >
             <b-col class="place-item">
               <b-row>
                 <b-col cols>

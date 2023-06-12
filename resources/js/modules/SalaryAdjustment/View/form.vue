@@ -37,8 +37,8 @@
             <span>Pilih Bulan</span>
           </label>
           <DatePicker
-            id="date_start"
-            v-model="form.date_start"
+            id="month_start"
+            v-model="form.month_start"
             format="YYYY-MM"
             type="month"
             placeholder="pilih bulan"
@@ -49,15 +49,15 @@
           <label for="scope_id">
             <b-form-checkbox
               style="display: inline"
-              v-model="form.is_date_end"
+              v-model="form.is_month_end"
               :disabled="getReadOnly()"
             ></b-form-checkbox>
             <span @click="onActiveDateEnd">Lebih dari 1 bulan</span>
           </label>
           <DatePicker
-            v-if="form.is_date_end"
-            id="date_end"
-            v-model="form.date_end"
+            v-if="form.is_month_end"
+            id="month_end"
+            v-model="form.month_end"
             format="YYYY-MM"
             type="month"
             placeholder="pilih bulan"

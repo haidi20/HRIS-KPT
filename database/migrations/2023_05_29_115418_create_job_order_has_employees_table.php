@@ -16,6 +16,7 @@ class CreateJobOrderHasEmployeesTable extends Migration
         Schema::create('job_order_has_employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
+            $table->foreignId('project_id');
             $table->foreignId('job_order_id');
             $table->enum('status', [
                 'active', 'pending', 'finish', 'overtime', 'correction'

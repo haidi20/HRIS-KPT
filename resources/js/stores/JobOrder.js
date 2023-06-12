@@ -79,6 +79,7 @@ const defaultForm = {
     note: null,
     label_image: "Masukkan Gambar",
     is_disabled_btn_send: true,
+    job_order_id: null, // kebutuhan penyesuaian gaji
 }
 
 const JobOrder = {
@@ -192,6 +193,17 @@ const JobOrder = {
         INSERT_DATA(state, payload) {
             state.data = payload.job_orders;
         },
+        INSERT_DATA_SELECTED(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
+            dataClone[payload.index] = {
+                ...dataClone[payload.index],
+                is_selected: true,
+            }
+            // console.info(dataClone, payload);
+
+            state.data = [...dataClone];
+        },
         INSERT_FORM(state, payload) {
             state.form = {
                 ...state.form,
@@ -206,8 +218,14 @@ const JobOrder = {
             //     state.form.note = payload.note;
             // }
         },
+        INSERT_FORM_ID(state, payload) {
+            state.form.id = payload.id;
+        },
         INSERT_FORM_JOB_ID(state, payload) {
             state.form.job_id = payload.job_id;
+        },
+        INSERT_FORM_JOB_ORDER_ID(state, payload) {
+            state.form.job_order_id = payload.job_order_id;
         },
         INSERT_FORM_JOB_CODE(state, payload) {
             state.form.job_code = payload.job_code;
@@ -296,6 +314,18 @@ const JobOrder = {
         UPDATE_IS_DISABLED_BTN_SEND(state, payload) {
             state.form.is_disabled_btn_send = payload.value;
         },
+        UPDATE_DATA_IS_SELECTED_FALSE(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
+
+            state.data = [...dataClone];
+        },
+        UPDATE_DATA_IS_SELECTED_TRUE(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: payload.id == item.id ? true : false }));
+
+            state.data = [...dataClone];
+        },
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
         },
@@ -338,11 +368,41 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
                         job_orders: data.jobOrders,
+                    });
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchDataFinish: async (context, payload) => {
+
+            context.commit("UPDATE_LOADING_DATA", { value: true });
+
+            const params = {
+                // ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+                // user_id: context.state.user_id,
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/job-order/fetch-data-finish`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+                    const jobOrders = data.jobOrders.map(item => ({ ...item, is_selected: false }));
+
+                    context.commit("INSERT_DATA", {
+                        job_orders: jobOrders,
                     });
                     context.commit("UPDATE_LOADING_DATA", { value: false });
                 })

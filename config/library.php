@@ -127,7 +127,7 @@ return [
     // start untuk penyesuaian gaji
     "type_times" => [
         "forever" => "selamanya",
-        "base time" => "berdasarkan bulan",
+        "base_time" => "berdasarkan bulan",
     ],
     "type_amounts" => [
         "nominal" => "jumlah uang",

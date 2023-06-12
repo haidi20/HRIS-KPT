@@ -29,6 +29,25 @@ export default {
         form() {
             return this.$store.state.employeeHasParent.form;
         },
+        employee_base: {
+            get() {
+                return this.$store.state.employeeHasParent.form.employee_base;
+            },
+            set(value) {
+                this.$store.commit("employeeHasParent/INSERT_FORM_EMPLOYEE_BASE", {
+                    employee_base: value,
+                });
+                this.$store.commit("jobOrder/UPDATE_DATA_IS_SELECTED_FALSE");
+                this.$store.commit("project/UPDATE_DATA_IS_SELECTED_FALSE");
+            },
+        },
+    },
+    watch: {
+        employee_base(value) {
+            if (value == 'all') {
+                this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", { value: false });
+            }
+        },
     },
     methods: {
         onChoose() {
@@ -53,6 +72,7 @@ export default {
                         position_name: getEmployee.position_name,
                     },
                 });
+                this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", { value: false });
             } else {
                 const Toast = Swal.mixin({
                     toast: true,
@@ -73,6 +93,8 @@ export default {
                     title: `Maaf, karyawan atas nama ${checkData.employee_name} sudah dipilih`,
                 });
             }
+
+            this.$store.commit("employeeHasParent/DELETE_FORM_EMPLOYEE_ID");
         },
     },
 };

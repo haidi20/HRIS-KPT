@@ -20,7 +20,7 @@
           <template v-slot:tbody="{ filteredData }">
             <b-tr v-for="(item, index) in filteredData" :key="index">
               <b-td v-for="column in getColumns()" :key="column.label">{{ item[column.field] }}</b-td>
-              <b-td>
+              <b-td style="text-align: center;">
                 <!-- <a href="#" @click="onDelete(item)" class="fomr-control">Hapus</a> -->
                 <b-button variant="danger" size="sm" @click="onDelete(index)">Hapus</b-button>
               </b-td>

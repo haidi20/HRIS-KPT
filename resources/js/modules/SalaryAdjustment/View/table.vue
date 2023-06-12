@@ -41,13 +41,13 @@
           <b-td v-for="column in getColumns()" :key="column.label">{{ item[column.field] }}</b-td>
           <b-td>
             <!-- <a href="#" @click="onDelete(item)" class="fomr-control">Hapus</a> -->
-            <b-button variant="primary" size="sm" @click="onDetail(item)">Detail</b-button>
-            <b-button variant="info" size="sm" @click="onEdit(item)">Ubah</b-button>
+            <b-button variant="primary" size="sm" @click="onAction('detail', item)">Detail</b-button>
+            <b-button variant="info" size="sm" @click="onAction('edit', item)">Ubah</b-button>
             <b-button
               v-if="item.created_by == getUserId"
               variant="danger"
               size="sm"
-              @click="onDelete(item.id)"
+              @click="onDelete(item)"
             >Hapus</b-button>
           </b-td>
         </b-tr>

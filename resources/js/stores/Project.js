@@ -19,19 +19,8 @@ const defaultForm = {
     company_id: null,
     foreman_id: null,
     type: null,
-    // contractors: [
-    //     {
-    //         id: null,
-    //     },
-    // ],
-    // ordinary_seamans: [
-    //     {
-    //         id: null,
-    //     },
-    // ],
     form_type: "create", // create, edit, detail
     form_title: "Tambah Proyek",
-
 }
 
 const Project = {
@@ -43,6 +32,10 @@ const Project = {
             month: new Date(),
         },
         form: { ...defaultForm },
+        // kebutuhan di form penyesuaian gaji bagian karyawan
+        parent: {
+            type: null,
+        }, // create, edit, read
         options: {
             types: [
                 {
@@ -76,6 +69,25 @@ const Project = {
         },
         INSERT_DATA(state, payload) {
             state.data = payload.projects;
+        },
+        INSERT_DATA_SELECTED(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map((item, index) => ({
+                ...item,
+                is_selected: index == payload.index ? true : false,
+            }));
+            // dataClone[payload.index] = {
+            //     ...dataClone[payload.index],
+            //     is_selected: true,
+            // }
+            // console.info(dataClone, payload);
+
+            state.data = [...dataClone];
+        },
+        INSERT_PARENT(state, payload) {
+            if (payload?.type) {
+                state.parent.type = payload?.type;
+            }
         },
         INSERT_FORM(state, payload) {
             state.form = {
@@ -176,6 +188,31 @@ const Project = {
         UPDATE_LOADING_POSITION(state, payload) {
             state.loading.position = payload.value;
         },
+        UPDATE_DATA_IS_SELECTED_FALSE(state, payload) {
+            let dataClone = [...state.data];
+            dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
+
+            state.data = [...dataClone];
+        },
+        UPDATE_DATA_IS_SELECTED_TRUE(state, payload) {
+            let dataClone = [...state.data];
+            console.info(dataClone.length);
+            dataClone = dataClone.map(item => {
+                console.info(item.id, payload.id);
+                if (item.id == payload.id) {
+                    return {
+                        ...item,
+                        is_selected: true,
+                    }
+                } else {
+                    return {
+                        ...item,
+                    }
+                }
+            });
+
+            state.data = [...dataClone];
+        },
         DELETE_FORM_CONTRACTOR(state, payload) {
             // const index = state.form.contractors.findIndex(obj => obj.id === payload.id);
 
@@ -196,9 +233,6 @@ const Project = {
     },
     actions: {
         fetchData: async (context, payload) => {
-            context.commit("INSERT_DATA", {
-                projects: [],
-            });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
             const params = {
@@ -226,9 +260,6 @@ const Project = {
                 });
         },
         fetchDataBaseDateEnd: async (context, payload) => {
-            context.commit("INSERT_DATA", {
-                projects: [],
-            });
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
             const params = {
@@ -247,6 +278,38 @@ const Project = {
 
                     context.commit("INSERT_DATA", {
                         projects: data.projects,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchDataBaseJobOrderFinish: async (context, payload) => {
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
+
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/project/fetch-data-base-joborder-finish`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+                    let projects = data.projects;
+
+                    if (context.state.form.form_type != 'edit') {
+                        projects = projects.map(item => ({ ...item, is_selected: false }));
+                    }
+
+                    context.commit("INSERT_DATA", {
+                        projects: projects,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })

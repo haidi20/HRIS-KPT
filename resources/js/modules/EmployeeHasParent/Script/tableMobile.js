@@ -50,11 +50,37 @@ export default {
         getDataClone() {
             return this.$store.state.employeeHasParent.data.clone_selecteds;
         },
+        getDataSearch() {
+            return this.$store.state.employeeHasParent.data.filter_selecteds;
+        },
         getIsMobile() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
         getForm() {
             return this.$store.state.employeeHasParent.form;
+        },
+        getFilteredData() {
+            let data = this.$store.state.employeeHasParent.data.filter_selecteds;
+            if (this.search) {
+                data = data.filter((item) => {
+                    let found = false;
+                    for (const key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            if (
+                                typeof item[key] === 'string' &&
+                                item[key]
+                                    .toLowerCase()
+                                    .includes(this.search.toLowerCase())
+                            ) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    return found;
+                });
+            }
+            return data;
         },
         params() {
             return this.$store.state.employeeHasParent.params;
@@ -64,24 +90,37 @@ export default {
         },
     },
     watch: {
-        //
+        getData(value) {
+            // this.getFilteredData();
+        },
     },
     methods: {
         onSearch() {
-            console.info(this.search);
+            // console.info(this.search);
+            if (this.getData.length > 0) {
+                let searchTerm = this.search.toLowerCase();
+                let filteredData = this.getData.filter(item => {
+                    for (let key in item) {
+                        if (item[key] && item[key].toString().toLowerCase().includes(searchTerm)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+
+                // Use the filteredData as needed
+                // console.log('Filtered data:', filteredData);
+            }
         },
         onDelete() {
-            const index = this.getForm.data_index;
-
-            // console.info(index);
-            this.$store.commit("employeeHasParent/DELETE_DATA_SELECTED", { index });
+            this.$store.commit("employeeHasParent/DELETE_DATA_SELECTED");
             this.$bvModal.hide("action_list_employee");
         },
         onDeleteAll() {
             this.$store.commit("employeeHasParent/CLEAR_DATA_SELECTED");
         },
         onOpenAction(item, index) {
-            // console.info(item);
+            // console.info(index);
 
             if (this.getUserId == item.created_by && this.getJobOrderFormKind != 'read') {
                 this.$store.commit("employeeHasParent/INSERT_FORM", { form: { ...item, data_index: index } });
@@ -236,10 +275,13 @@ export default {
         getConditionAddInformation(item) {
             let result = false;
 
+            // console.info(item);
+
             if (
                 item?.job_order_id
-                && item?.status_data == 'new'
-                && this.getJobOrderFormKind != null) {
+                // && item?.status_data == 'new'
+                && this.getJobOrderFormKind != null
+            ) {
                 result = true;
             }
 

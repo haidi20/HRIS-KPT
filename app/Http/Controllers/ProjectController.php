@@ -40,6 +40,20 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function fetchDataBaseJobOrderFinish()
+    {
+        $month = Carbon::parse(request("month"));
+
+        $projects = Project::jobOrderFinish()
+            ->whereYear("created_at", $month->format("Y"))
+            ->whereMonth("created_at", $month->format("m"))
+            ->orderBy("created_at", "asc")->get();
+
+        return response()->json([
+            "projects" => $projects,
+        ]);
+    }
+
     public function fetchDataBaseDateEnd()
     {
         $date = Carbon::now();
@@ -52,6 +66,7 @@ class ProjectController extends Controller
             "projects" => $projects,
         ]);
     }
+
 
     public function export()
     {

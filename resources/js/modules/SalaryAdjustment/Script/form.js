@@ -38,12 +38,18 @@ export default {
         getOptionTypeAdjustments() {
             return this.$store.state.salaryAdjustment.options.type_adjustments;
         },
-        getEmployeeForm() {
+        getEmployeeHasParentForm() {
             return this.$store.state.employeeHasParent.form;
         },
         getEmployeeSelecteds() {
             return this.$store.state.employeeHasParent.data.selecteds;
         },
+        // getJobOrderId() {
+        //     return this.$store.state.jobOrder.data.find(item => item.is_selected)?.id;
+        // },
+        // getProjectId() {
+        //     return this.$store.state.project.data.find(item => item.is_selected)?.id;
+        // },
         form() {
             return this.$store.state.salaryAdjustment.form;
         },
@@ -66,9 +72,9 @@ export default {
             //
         },
         onActiveDateEnd() {
-            //   this.is_date_end = !this.is_date_end;
+            // console.info(this.form.is_month_end);
             this.$store.commit("salaryAdjustment/UPDATE_FORM_IS_DATE_END", {
-                value: !this.form.is_date_end,
+                value: !this.form.is_month_end,
             });
         },
         onShowEmployee() {
@@ -90,16 +96,19 @@ export default {
             // mengambil data hexa saja
             const request = {
                 ...this.form,
-                position_id: this.getEmployeeForm.position_id,
-                job_order_id: this.getEmployeeForm.job_order_id,
-                employee_base: this.getEmployeeForm.employee_base,
+                month_start: moment(this.form.month_start).format("Y-MM-DD"),
+                month_end: moment(this.form.month_end).format("Y-MM-DD"),
+                position_id: this.getEmployeeHasParentForm.position_id,
+                job_order_id: this.getEmployeeHasParentForm.job_order_id,
+                project_id: this.getEmployeeHasParentForm.project_id,
+                employee_base: this.getEmployeeHasParentForm.employee_base,
                 employee_selecteds: this.getEmployeeSelecteds,
                 user_id: this.getUserId,
             };
 
+            console.info(request);
+            // return false;
             this.is_loading = true;
-
-            // console.info(request);
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/salary-adjustment/store`, request)

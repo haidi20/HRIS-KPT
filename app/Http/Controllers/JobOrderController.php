@@ -86,6 +86,21 @@ class JobOrderController extends Controller
         ]);
     }
 
+    public function fetchDataFinish()
+    {
+        $month = Carbon::parse(request("month"));
+
+        $jobOrders = JobOrder::where("status", "finish")
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->get();
+
+        return response()->json([
+            "jobOrders" => $jobOrders,
+            "requests" => request()->all(),
+        ]);
+    }
+
     public function findEmployeeStatus()
     {
         $actives = [];
@@ -537,6 +552,7 @@ class JobOrderController extends Controller
                     $getDateStart = $dateStart;
                 }
 
+                $jobOrderHasEmployee->project_id = $jobOrder->project_id;
                 $jobOrderHasEmployee->job_order_id = $jobOrder->id;
                 $jobOrderHasEmployee->employee_id = $item["employee_id"];
                 $jobOrderHasEmployee->status = $item["status"];
@@ -594,6 +610,7 @@ class JobOrderController extends Controller
     private function storeJobOrderHasEmployeeHistory($jobOrderHasEmployee, $isDelete = false)
     {
         $jobOrderHasEmployeeHistory = new JobOrderHasEmployeeHistory;
+        $jobOrderHasEmployeeHistory->project_id = $jobOrderHasEmployee->project_id;
         $jobOrderHasEmployeeHistory->job_order_has_employee_id = $jobOrderHasEmployee->id;
         $jobOrderHasEmployeeHistory->employee_id = $jobOrderHasEmployee->employee_id;
         $jobOrderHasEmployeeHistory->job_order_id = $jobOrderHasEmployee->job_order_id;

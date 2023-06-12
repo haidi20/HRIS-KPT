@@ -19,7 +19,7 @@ class JobOrder extends Model
         "status_color", "status_readable", 'status_clone',
         "project_name", "job_name", "job_code", "hour_start",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
-        "datetime_estimation_end_readable", "creator_name", "creator_group_name",
+        "datetime_estimation_end_readable", "datetime_end_readable", "creator_name", "creator_group_name",
     ];
 
     public function __construct(array $attributes = [])
@@ -147,6 +147,11 @@ class JobOrder extends Model
         }
 
         return Carbon::parse($this->datetime_estimation_end)->locale('id')->isoFormat("dddd, D MMMM YYYY {$formatHour}");
+    }
+
+    public function getDatetimeEndReadableAttribute()
+    {
+        return Carbon::parse($this->datetime_end)->locale('id')->isoFormat("dddd, D MMMM YYYY HH:mm");
     }
 
     public function getEmployeeTotalAttribute()

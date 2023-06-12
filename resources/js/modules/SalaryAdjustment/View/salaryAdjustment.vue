@@ -19,7 +19,7 @@
         <div class="card-header">
           <button
             @click="onCreate"
-            class="btn btn-sm btn-success shadow-sm float-end ml-2"
+            class="btn btn-sm btn-success shadow-sm"
             id="addData"
             data-toggle="modal"
           >
@@ -54,7 +54,13 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["salaryAdjustment", "employeeHasParent", "master"].map((item) => {
+    [
+      "salaryAdjustment",
+      "employeeHasParent",
+      "master",
+      "jobOrder",
+      "project",
+    ].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });
@@ -62,8 +68,18 @@ export default {
 
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("master/fetchPosition");
-    this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("salaryAdjustment/fetchData");
+    this.$store.dispatch("employeeHasParent/fetchOption");
+
+    this.$store.commit("employeeHasParent/INSERT_FORM_PARENT_NAME", {
+      parent_name: "salary_adjustment",
+    });
+    this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", {
+      value: false,
+    });
+    this.$store.commit("project/INSERT_PARENT", {
+      type: "create",
+    });
   },
   methods: {
     onCreate() {
