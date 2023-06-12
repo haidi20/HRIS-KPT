@@ -104,7 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('delete', [PeriodPayrollController::class, "destroy"])->name("delete");
     });
 
-    
+
     Route::prefix("payroll")->name("payroll.")->group(function () {
         Route::get('', [PayrollController::class, "monthly"])->name("monthly");
     });
@@ -127,6 +127,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
             Route::get('', [SalaryAdvanceReportController::class, "index"])->name("index");
+            Route::get('export', [SalaryAdvanceReportController::class, "export"])->name("export");
+            Route::get('download', [SalaryAdvanceReportController::class, "download"])->name("download");
         });
         Route::prefix("overtime")->name("overtime.")->group(function () {
             Route::get('', [OvertimeReportController::class, "index"])->name("index");

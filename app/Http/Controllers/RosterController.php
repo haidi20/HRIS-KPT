@@ -18,8 +18,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RosterController extends Controller
 {
-    public $path = 'export\roster.xlsx';
-
     public function index()
     {
         $vue = true;
@@ -133,6 +131,7 @@ class RosterController extends Controller
         $dateRange = $this->fetchData()->original["dateRange"];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $nameFile = "export/roster_{$monthReadAble}.xlsx";
         // $dateRange = $this->dateRange($month->format("Y-m"));
 
         foreach ($positions as $key => $value) {
@@ -141,12 +140,12 @@ class RosterController extends Controller
         $dataTotal["ALL"] = $this->fetchTotal("ALL")->original["data"];
 
         try {
-            Excel::store(new RosterExport($data, $dataTotal, $dateRange), $this->path, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+            Excel::store(new RosterExport($data, $dataTotal, $dateRange), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
                 "data" => $data,
-                "linkDownload" => route('roster.download'),
+                "linkDownload" => route('roster.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -160,7 +159,7 @@ class RosterController extends Controller
 
     public function download()
     {
-        $path = public_path($this->path);
+        $path = public_path(request("path"));
 
         return Response::download($path);
     }

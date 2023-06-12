@@ -44,7 +44,7 @@ export default {
     });
 
     this.$store.dispatch("vacation/fetchData");
-    this.$store.dispatch("employeeHasParent/fetchData");
+    this.$store.dispatch("employeeHasParent/fetchOption");
   },
   computed: {
     getIsMobile() {

@@ -305,6 +305,9 @@ const JobOrder = {
         INSERT_PARAM_CREATED_BY(state, payload) {
             state.params.created_by = payload.created_by;
         },
+        INSERT_PARAM_MONTH(state, payload) {
+            state.params.month = new Date(payload.month);
+        },
         INSERT_USER_ID(state, payload) {
             state.user_id = payload.user_id;
         },
@@ -399,7 +402,22 @@ const JobOrder = {
                 .then((responses) => {
                     // console.info(responses);
                     const data = responses.data;
-                    const jobOrders = data.jobOrders.map(item => ({ ...item, is_selected: false }));
+                    const jobOrders = data.jobOrders.map(item => {
+                        if (
+                            checkNull(context.state.form.id) != null
+                            && item.id == context.state.form.id
+                        ) {
+                            return {
+                                ...item,
+                                is_selected: true,
+                            }
+                        } else {
+                            return {
+                                ...item,
+                                is_selected: false,
+                            }
+                        }
+                    });
 
                     context.commit("INSERT_DATA", {
                         job_orders: jobOrders,

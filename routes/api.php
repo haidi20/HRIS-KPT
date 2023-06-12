@@ -9,7 +9,6 @@ use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
-use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;

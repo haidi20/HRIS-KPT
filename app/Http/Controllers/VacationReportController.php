@@ -45,7 +45,7 @@ class VacationReportController extends Controller
         $dateEnd = Carbon::parse(request("date_end"));
         $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
         $data = $this->fetchData()->original["vacations"];
-        $nameFile = "cuti_{$dateStartReadable}-{$dateEndReadable}.xlsx";
+        $nameFile = "export/cuti_{$dateStartReadable}-{$dateEndReadable}.xlsx";
 
         try {
             Excel::store(new VacationReportExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
@@ -53,7 +53,7 @@ class VacationReportController extends Controller
             return response()->json([
                 "success" => true,
                 "data" => $data,
-                "linkDownload" => route('project.download', ["name_file" => $nameFile]),
+                "linkDownload" => route('project.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -67,7 +67,7 @@ class VacationReportController extends Controller
 
     public function download()
     {
-        $path = public_path(request("name_file"));
+        $path = public_path(request("path"));
 
         return Response::download($path);
     }

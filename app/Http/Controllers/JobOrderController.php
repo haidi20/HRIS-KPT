@@ -72,6 +72,7 @@ class JobOrderController extends Controller
                     $queryProject->where("name", "like", "%" . $search . "%");
                 });
             });
+            $jobOrders = $jobOrders->orWhere("job_note", "like", "%" . $search . "%");
         }
 
         if ($status != "all") {
