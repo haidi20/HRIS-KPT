@@ -107,9 +107,8 @@ export default {
             };
 
             console.info(request);
-            return false;
+            // return false;
             this.is_loading = true;
-
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/salary-adjustment/store`, request)

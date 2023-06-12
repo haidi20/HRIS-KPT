@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\JobOrder;
+use App\Models\JobOrderHasEmployee;
 use App\Models\salaryAdjustment;
 use App\Models\salaryAdjustmentDetail;
 use App\Models\salaryAdjustmentDetailHistory;
@@ -183,11 +185,15 @@ class SalaryAdjustmentController extends Controller
 
         if ($employeeBase == "all") {
             $employees = Employee::all();
+        } else if ($employeeBase == "position") {
+            $employees = Employee::where("position_id", $salaryAdjustment->position_id)->get();
+        } else if ($employeeBase == "job_order") {
+            $getJobOrderEmployeeids = JobOrderHasEmployee::where("job_order_id", request("job_order_id"))
+                ->pluck("employee_id");
+            $employees = Employee::whereIn("id", $getJobOrderEmployeeids)->get();
         }
 
-        if ($employeeBase == "position") {
-            $employees = Employee::where("position_id", $salaryAdjustment->position_id)->get();
-        }
+
 
         foreach ($employees as $index => $item) {
             $salaryAdjustmentDetail = salaryAdjustmentDetail::create([

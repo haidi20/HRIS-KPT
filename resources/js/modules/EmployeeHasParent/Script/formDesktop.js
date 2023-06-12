@@ -93,6 +93,8 @@ export default {
                     title: `Maaf, karyawan atas nama ${checkData.employee_name} sudah dipilih`,
                 });
             }
+
+            this.$store.commit("employeeHasParent/DELETE_FORM_EMPLOYEE_ID");
         },
     },
 };

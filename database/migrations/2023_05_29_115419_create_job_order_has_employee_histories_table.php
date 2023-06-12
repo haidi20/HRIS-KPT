@@ -17,6 +17,7 @@ class CreateJobOrderHasEmployeeHistoriesTable extends Migration
             $table->id();
             $table->foreignId('job_order_has_employee_id');
             $table->foreignId('employee_id');
+            $table->foreignId('project_id');
             $table->foreignId('job_order_id');
             $table->enum('status', [
                 'active', 'pending', 'finish', 'overtime', 'correction'

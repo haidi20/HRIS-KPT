@@ -221,6 +221,9 @@ const JobOrder = {
         INSERT_FORM_ID(state, payload) {
             state.form.id = payload.id;
         },
+        INSERT_FORM_JOB_ID(state, payload) {
+            state.form.job_id = payload.job_id;
+        },
         INSERT_FORM_JOB_ORDER_ID(state, payload) {
             state.form.job_order_id = payload.job_order_id;
         },
