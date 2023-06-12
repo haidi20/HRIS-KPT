@@ -97,7 +97,10 @@ class SalaryAdjustmentController extends Controller
                 $salaryAdjustment->position_id = request("position_id");
             } else if ($employeeBase == "job_order") {
                 $salaryAdjustment->job_order_id = request("job_order_id");
+            } else if ($employeeBase == "project") {
+                $salaryAdjustment->project_id = request("project_id");
             }
+
             $salaryAdjustment->employee_base = request("employee_base");
             // end employee form
 
@@ -191,9 +194,12 @@ class SalaryAdjustmentController extends Controller
             $getJobOrderEmployeeids = JobOrderHasEmployee::where("job_order_id", request("job_order_id"))
                 ->pluck("employee_id");
             $employees = Employee::whereIn("id", $getJobOrderEmployeeids)->get();
+        } else if ($employeeBase == "project") {
+            $getJobOrderEmployeeids = JobOrderHasEmployee::where("project_id", request("project_id"))
+                ->pluck("employee_id");
+
+            $employees = Employee::whereIn("id", $getJobOrderEmployeeids)->get();
         }
-
-
 
         foreach ($employees as $index => $item) {
             $salaryAdjustmentDetail = salaryAdjustmentDetail::create([

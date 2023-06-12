@@ -18,7 +18,14 @@ class CreateSalaryAdjustmentsTable extends Migration
             // start employee form
             $table->foreignId('position_id')->nullable();
             $table->foreignId('job_order_id')->nullable();
-            $table->enum('employee_base', ['all', 'choose_employee', 'position', 'job_order']);
+            $table->foreignId('project_id')->nullable();
+            $table->enum('employee_base', [
+                'all',
+                'project',
+                'position',
+                'job_order',
+                'choose_employee',
+            ]);
             // end employee form
             $table->string("name");
             $table->enum('type_time', ['forever', 'base_time']);
