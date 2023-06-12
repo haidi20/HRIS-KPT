@@ -101,8 +101,6 @@ class EmployeeController extends Controller
         return $dataTable->render('pages.master.employee.index', $compact);
     }
 
-
-
     private function buttonDatatables($columnsArrExPr)
     {
         return [
