@@ -16,14 +16,14 @@
           variant="success"
           size="sm"
           @click="onFilter()"
-          :disabled="getIsLoadingData"
+          :disabled="getIsLoadingData || is_loading_export"
         >Kirim</b-button>
         <b-button
           class="place_filter_table ml-4"
           variant="success"
           size="sm"
           @click="onExport()"
-          :disabled="is_loading_export"
+          :disabled="is_loading_export || getIsLoadingData"
         >
           <i class="fas fa-file-excel"></i>
           Export
@@ -72,15 +72,17 @@ export default {
       const Swal = this.$swal;
       this.is_loading_export = true;
 
+      //   console.info(moment(this.params.month).format("Y-MM"));
+
       await axios
         .get(`${this.getBaseUrl}/roster/export`, {
           params: {
             user_id: this.getUserId,
-            date_filter: moment(this.getDateFilter).format("Y-MM"),
+            month: moment(this.params.month).format("Y-MM"),
           },
         })
         .then((responses) => {
-          //   console.info(responses);
+          console.info(responses);
           this.is_loading_export = false;
           const data = responses.data;
 

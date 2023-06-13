@@ -25,7 +25,7 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
 
     public function title(): string
     {
-        return 'UTAMA';
+        return 'Roster';
     }
 
     public function drawings()
@@ -50,7 +50,7 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
 
     public function styles(Worksheet $sheet)
     {
-        $range = 'A2:A10';
+        $range = 'A2:A1';
         $style = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
