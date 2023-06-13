@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OvertimeExport;
 use App\Models\JobStatusHasParent;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class OvertimeReportController extends Controller
 {
@@ -23,18 +26,57 @@ class OvertimeReportController extends Controller
     public function fetchData()
     {
         $nameModel = "App\Models\JobOrderHasEmployee";
-        $month = Carbon::parse(request("month"));
-        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
 
         $overtimes = JobStatusHasParent::where(["status" => "overtime"])
-            ->whereYear("datetime_start", $month->format("Y"))
-            ->whereMonth("datetime_start", $month->format("m"))
+            ->whereDate("datetime_start", ">=", $dateStart)
+            ->whereDate("datetime_start", "<=", $dateEnd)
             ->get();
 
         return response()->json([
             "overtimes" => $overtimes,
-            "monthReadAble" => $monthReadAble,
         ]);
+    }
+
+    public function export()
+    {
+        $data = $this->fetchData()->original["overtimes"];
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
+        $dateStartReadable = $dateStart->isoFormat("dddd, D MMMM YYYY");
+        $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
+        $nameFile = "export/SPL_{$dateStartReadable}-{$dateEndReadable}.xlsx";
+
+        try {
+            $path = public_path($nameFile);
+
+            if ($path) {
+                @unlink($path);
+            }
+
+            Excel::store(new OvertimeExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                "success" => true,
+                "data" => $data,
+                "linkDownload" => route('report.overtime.download', ["path" => $nameFile]),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal export data',
+            ], 500);
+        }
+    }
+
+    public function download()
+    {
+        $path = public_path(request("path"));
+
+        return Response::download($path);
     }
 
     private function fetchDataOld()

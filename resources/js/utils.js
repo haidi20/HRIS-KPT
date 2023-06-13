@@ -83,6 +83,36 @@ export const dateDuration = (date_start, date_end) => {
     return days;
 }
 
+export const datetimeDuration = (datetime_start, datetime_end, is_readable = false) => {
+    // const duration = moment.duration(moment(datetime_end).diff(datetime_start));
+    const start = moment(datetime_start);
+    const end = moment(datetime_end);
+    const totalMinutes = end.diff(start, 'minutes');
+    const duration = moment.duration(totalMinutes, 'minutes');
+
+    if (!is_readable) {
+        return totalMinutes;
+    } else {
+        const days = duration.days();
+        const hours = duration.hours();
+        const minutes = duration.minutes();
+
+        let durationString = '';
+
+        if (days > 0) {
+            durationString += `${days} hari `;
+        }
+        if (hours > 0) {
+            durationString += `${hours} jam `;
+        }
+        if (minutes > 0) {
+            durationString += `${minutes} menit`;
+        }
+
+        return durationString;
+    }
+}
+
 export const imageToBase64 = (file) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();

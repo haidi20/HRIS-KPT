@@ -11,13 +11,14 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="date" class="place_filter_table">
+          <b-form-group label="Tanggal" label-for="date" class="place_filter_table">
             <DatePicker
               id="date"
-              v-model="params.month"
-              format="YYYY-MM"
-              type="month"
-              placeholder="pilih bulan"
+              v-model="params.date"
+              format="YYYY-MM-DD"
+              type="date"
+              range
+              placeholder="pilih tanggal"
             />
           </b-form-group>
           <b-button
@@ -42,14 +43,14 @@
       </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <!-- <b-td style="text-align: center">
+          <b-td style="text-align: center">
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <a href="#" @click="onEdit(item)">Ubah</a>
-                <a href="#" @click="onRead(item)">Lihat</a>
+                <!-- <a href="#" @click="onRead(item)">Lihat</a> -->
               </template>
             </ButtonAction>
-          </b-td>-->
+          </b-td>
           <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>
           </template>
@@ -82,12 +83,12 @@ export default {
         },
       },
       columns: [
-        // {
-        //   label: "",
-        //   field: "",
-        //   width: "10px",
-        //   class: "",
-        // },
+        {
+          label: "",
+          field: "",
+          width: "10px",
+          class: "",
+        },
         {
           label: "Nama Karyawan",
           field: "employee_name",
@@ -159,14 +160,55 @@ export default {
     onFilter() {
       this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
     },
-    onExport() {
+    onEdit(form) {
+      this.$store.commit("jobOrder/INSERT_FORM", { form });
+      this.$bvModal.show("overtime_report_form");
+    },
+    onRead(data) {
       //
     },
-    onEdit() {
-      //
-    },
-    onRead() {
-      //
+    async onExport() {
+      const Swal = this.$swal;
+      this.is_loading_export = true;
+
+      //   console.info(moment(this.params.month).format("Y-MM"));
+
+      await axios
+        .get(`${this.getBaseUrl}/report/overtime/export`, {
+          params: {
+            user_id: this.getUserId,
+            date_start: moment(this.params.date[0]).format("Y-MM-DD"),
+            date_end: moment(this.params.date[1]).format("Y-MM-DD"),
+          },
+        })
+        .then((responses) => {
+          //   console.info(responses);
+          this.is_loading_export = false;
+          const data = responses.data;
+
+          if (data.success) {
+            window.open(data.linkDownload, "_blank");
+          }
+        })
+        .catch((err) => {
+          this.is_loading_export = false;
+          console.info(err);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
     getColumns() {
       const columns = this.columns.filter((item) => item.label != "");

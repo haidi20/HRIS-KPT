@@ -9,6 +9,7 @@ use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
@@ -150,8 +151,9 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('store-action-job-order-has-employee', [JobOrderController::class, "storeActionJobOrderHasEmployee"])->name('storeActionJobOrderHasEmployee');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
-    // Route::prefix('job-status')->name('jobStatus.')->group(function () {
-    // });
+    Route::prefix('job-status-has-parent')->name('jobStatusHasParent.')->group(function () {
+        Route::post('store-overtime-revision', [JobStatusController::class, "storeOvertimeRevision"])->name('storeOvertimeRevision');
+    });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
         Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdjustmentController::class, "store"])->name('store');
