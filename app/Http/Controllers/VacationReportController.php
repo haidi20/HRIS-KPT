@@ -40,11 +40,11 @@ class VacationReportController extends Controller
 
     public function export()
     {
-        $dateStart = Carbon::parse(request("date_start"));
-        $dateStartReadable = $dateStart->isoFormat("dddd, D MMMM YYYY");
-        $dateEnd = Carbon::parse(request("date_end"));
-        $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
         $data = $this->fetchData()->original["vacations"];
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
+        $dateStartReadable = $dateStart->isoFormat("dddd, D MMMM YYYY");
+        $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
         $nameFile = "export/cuti_{$dateStartReadable}-{$dateEndReadable}.xlsx";
 
         try {

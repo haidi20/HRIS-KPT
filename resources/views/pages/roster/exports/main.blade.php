@@ -9,7 +9,7 @@
             <h3 style="margin-top: 10px; padding-left: 30px;">PT KARYA PACIFIC TEKNIK SHIPYARD</h3>
         </td>
     </tr>
-    <tr></tr>
+    {{-- <tr></tr> --}}
     <thead>
         <tr>
             <th nowrap rowspan="2">Nama Karyawan</th>

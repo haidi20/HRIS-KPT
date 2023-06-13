@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RosterExport;
+use App\Models\Employee;
 use App\Models\Roster;
 use App\Models\RosterDaily;
 use App\Models\RosterStatus;
@@ -32,17 +33,9 @@ class RosterController extends Controller
         $result = [];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($month->format("Y-m"));
+        $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
 
-        $employees = [
-            (object)[
-                "id" => 1,
-                "id_finger" => 04,
-                "employee_name" => "Muhammad Adi",
-                "position_name" => "Welder",
-                "work_schedule" => "6,1",
-            ]
-        ];
+        $employees = Employee::active()->orderBy("name", "asc")->get();
 
         foreach ($employees as $key => $item) {
             $roster = Roster::where([
@@ -55,8 +48,9 @@ class RosterController extends Controller
             $mainData['id'] = $item->id;
             $mainData['id_finger'] = $item->id_finger;
             $mainData['employee_id'] = $item->id;
-            $mainData['employee_name'] = $item->employee_name;
+            $mainData['employee_name'] = $item->name;
             $mainData['position_name'] = $item->position_name;
+            $mainData['position_id'] = $item->position_id;
             $mainData['work_schedule'] = $item->work_schedule;
             $mainData['day_off_one'] = $roster ? $roster->day_off_one : null;
             $mainData['day_off_two'] = $roster ? $roster->day_off_two : null;
@@ -78,10 +72,11 @@ class RosterController extends Controller
                     ->first();
 
                 $mainData[$date] = [
+                    "id" => $rosterDaily != null ? $rosterDaily->id : null,
                     "value" => $rosterDaily != null ? $rosterDaily->roster_status_initial : null,
+                    "roster_status_id" => $rosterDaily != null ? $rosterDaily->roster_status_id : null,
                     "color" => $rosterDaily != null ? $rosterDaily->roster_status_color : null,
-                    "date_start" => $rosterDaily != null ? $rosterDaily->date_start : null,
-                    "date_end" => $rosterDaily != null ? $rosterDaily->date_end : null,
+                    "date" => $rosterDaily != null ? $rosterDaily->date : null,
                 ];
             }
 
