@@ -174,6 +174,8 @@ class PeriodPayrollController extends Controller
                 })
                 ->count();
 
+                // $jumlah_hari_kerja  = 
+
                 $jumlah_jam_rate_lembur  = Attendance::whereDate('date','>=',$period_payroll->date_start)
                 ->whereDate('date','<=',$period_payroll->date_end)
                 ->where('employee_id',$employee->id)
@@ -372,7 +374,7 @@ class PeriodPayrollController extends Controller
 
                 
 
-                Payroll::create([
+                $new_payroll = Payroll::create([
                     'employee_id'=>$employee->id,
                     'period_payroll_id'=>$period_payroll->id,
                     'pendapatan_gaji_dasar'=>$employee->basic_salary,
@@ -476,6 +478,18 @@ class PeriodPayrollController extends Controller
                     'pkp_dua_puluh_lima_persen'=>$pkp_dua_puluh_lima_persen,
                     'pkp_tiga_puluh_persen'=>$pkp_tiga_puluh_persen,
                 ]);
+
+                Attendance::whereDate('date','>=',$period_payroll->date_start)
+                ->whereDate('date','<=',$period_payroll->date_end)
+                ->where('employee_id',$employee->id)
+                ->where(function($query){
+                    $query->where('hour_start','!=',NULL)->orWhere('hour_end','!=',NULL);
+                })
+                ->update([
+                    'payroll_id'=>$new_payroll->id
+                ]);
+
+
             }
 
             DB::commit();
