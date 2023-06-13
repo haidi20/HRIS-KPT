@@ -29,58 +29,59 @@ class RosterController extends Controller
 
     public function fetchData()
     {
-        $result = [];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
 
-        $employees = Employee::active()->orderBy("name", "asc")->get();
+        $employees = Employee::active()
+            ->with('roster', 'rosterDailies')
+            ->orderBy("name", "asc")
+            ->get();
 
-        foreach ($employees as $key => $item) {
-            $roster = Roster::where([
-                "employee_id" => $item->id,
-            ])->whereYear("month", $month->format("Y"))
-                ->whereMonth("month", $month->format("m"))
-                ->first();
+        $result = $employees->map(function ($employee) use ($dateRange, $month) {
+            $roster = null;
 
-            $mainData = [];
-            $mainData['id'] = $item->id;
-            $mainData['id_finger'] = $item->id_finger;
-            $mainData['employee_id'] = $item->id;
-            $mainData['employee_name'] = $item->name;
-            $mainData['position_name'] = $item->position_name;
-            $mainData['position_id'] = $item->position_id;
-            $mainData['work_schedule'] = $item->work_schedule;
-            $mainData['day_off_one'] = $roster ? $roster->day_off_one : null;
-            $mainData['day_off_two'] = $roster ? $roster->day_off_two : null;
-            $mainData['month'] = $roster ? $roster->month : null;
-
-            if ($roster) {
-                $mainData['date_vacation'] = [
-                    $roster->date_vacation_start,
-                    $roster->date_vacation_end,
-                ];
-            } else {
-                $mainData['date_vacation'] = [null, null];
+            if ($employee->roster) {
+                $roster = $employee->roster
+                    ->whereYear("month", $month->format("Y"))
+                    ->whereMonth("month", $month->format("m"))
+                    ->first();
             }
 
-            foreach ($dateRange as $index => $date) {
-                $rosterDaily = RosterDaily::where(["employee_id" => $item->id])
-                    ->whereDate("date", $date)
-                    ->orderBy("created_at", "desc")
-                    ->first();
+            $mainData = [
+                'id' => $employee->id,
+                'id_finger' => $employee->id_finger,
+                'employee_id' => $employee->id,
+                'employee_name' => $employee->name,
+                'position_name' => $employee->position_name,
+                'position_id' => $employee->position_id,
+                'work_schedule' => $employee->work_schedule,
+                'day_off_one' => optional($roster)->day_off_one,
+                'day_off_two' => optional($roster)->day_off_two,
+                'month' => optional($roster)->month,
+                'date_vacation' => optional($roster)->date_vacation_start
+                    ? [
+                        optional($roster)->date_vacation_start,
+                        optional($roster)->date_vacation_end,
+                    ]
+                    : [null, null],
+            ];
+
+            foreach ($dateRange as $date) {
+                $rosterDaily = $employee->rosterDailies
+                    ->firstWhere('date', $date);
 
                 $mainData[$date] = [
-                    "id" => $rosterDaily != null ? $rosterDaily->id : null,
-                    "value" => $rosterDaily != null ? $rosterDaily->roster_status_initial : null,
-                    "roster_status_id" => $rosterDaily != null ? $rosterDaily->roster_status_id : null,
-                    "color" => $rosterDaily != null ? $rosterDaily->roster_status_color : null,
-                    "date" => $rosterDaily != null ? $rosterDaily->date : null,
+                    "id" => optional($rosterDaily)->id,
+                    "value" => optional($rosterDaily)->roster_status_initial,
+                    "roster_status_id" => optional($rosterDaily)->roster_status_id,
+                    "color" => optional($rosterDaily)->roster_status_color,
+                    "date" => optional($rosterDaily)->date,
                 ];
             }
 
-            array_push($result, $mainData);
-        }
+            return $mainData;
+        });
 
         return response()->json([
             "data" => $result,
@@ -96,20 +97,20 @@ class RosterController extends Controller
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
 
-        $listEmployeeId = [1];
+        $listEmployeeId = Employee::pluck("id");
         $positionId = request("position_id", $setRosterStatusInitial);
 
 
         foreach ($dateRange as $index => $date) {
-            $query = RosterDaily::whereIn("employee_id", $listEmployeeId);
+            $rosterDaily = RosterDaily::whereIn("employee_id", $listEmployeeId);
 
             if ($positionId != "all") {
-                $query = $query->where("position_id", $positionId);
+                $rosterDaily = $rosterDaily->where("position_id", $positionId);
             }
 
-            $result[$date] = $query
+            $result[$date] = $rosterDaily
                 ->whereHas("rosterStatus", function ($query) {
-                    $query->where("name", "Masuk");
+                    $query->where("initial", "M");
                 })
                 ->whereDate("date", $date)
                 ->count();
@@ -135,16 +136,25 @@ class RosterController extends Controller
         // $dateRange = $this->dateRange($month->format("Y-m"));
 
         foreach ($positions as $key => $value) {
-            $dataTotal[$value->initial] = $this->fetchTotal($value->initial)->original["data"];
+            $dataTotal[$value->id] = $this->fetchTotal($value->id)->original["data"];
         }
         $dataTotal["ALL"] = $this->fetchTotal("ALL")->original["data"];
 
         try {
-            Excel::store(new RosterExport($data, $dataTotal, $dateRange), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+            $path = public_path($nameFile);
+
+            if ($path) {
+                @unlink($path);
+            }
+
+            Excel::store(new RosterExport($data, $dataTotal, $dateRange, $positions), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
+                "request" => request()->all(),
+                "month" => $month,
                 "data" => $data,
+                "dataTotal" => $dataTotal,
                 "linkDownload" => route('roster.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
@@ -265,7 +275,6 @@ class RosterController extends Controller
 
     private function storeVacation($getData)
     {
-        $employee = Employee::find($getData->employee_id);
         $rosterStatusId = RosterStatus::where("initial", "C")->first()->id;
         $rosterDailyData = [];
 
@@ -293,10 +302,11 @@ class RosterController extends Controller
 
     private function storeOff($getData, $nameObject)
     {
+        $getDateOff = [];
         $getNextMonth = Carbon::parse($getData->month)->addMonth()->format("Y-m");
         $getDataOff = $nameObject == "day_off_one" ? $getData->day_off_one : $getData->day_off_two;
+
         $rosterStatusId = RosterStatus::where("initial", "OFF")->first()->id;
-        $getDateOff = [];
         $getDatesOffCurrentMonth = $this->getDatesByDayName($getDataOff, $getData->month);
         $getDatesOffNextMonth = $this->getDatesByDayName($getDataOff, $getNextMonth);
 
@@ -339,7 +349,7 @@ class RosterController extends Controller
 
     private function storeRoster($getData)
     {
-        $roster = Roster::updateOrCreate([
+        Roster::updateOrCreate([
             "employee_id" => $getData->employee_id,
             "month" => Carbon::parse($getData->month),
         ], [

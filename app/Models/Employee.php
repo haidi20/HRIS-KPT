@@ -29,6 +29,16 @@ class Employee extends Model
         return $this->belongsTo(Company::class, "company_id", "id");
     }
 
+    public function roster()
+    {
+        return $this->hasOne(Roster::class);
+    }
+
+    public function rosterDailies()
+    {
+        return $this->hasMany(RosterDaily::class);
+    }
+
     public function getCompanyNameAttribute()
     {
         if ($this->company) {

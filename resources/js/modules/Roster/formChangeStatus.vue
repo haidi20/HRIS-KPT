@@ -134,7 +134,7 @@ export default {
     },
     setStyle() {
       return {
-        padding: "5px",
+        padding: "1px 8px 1px 8px",
         backgroundColor: this.form.color,
       };
     },

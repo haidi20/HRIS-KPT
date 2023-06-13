@@ -2,12 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobStatusHasParent;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 
 class OvertimeReportController extends Controller
 {
     public function index()
     {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.overtime-report.index", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData()
+    {
+        $nameModel = "App\Models\JobOrderHasEmployee";
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $overtimes = JobStatusHasParent::where(["status" => "overtime"])
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->get();
+
+        return response()->json([
+            "overtimes" => $overtimes,
+            "monthReadAble" => $monthReadAble,
+        ]);
+    }
+
+    private function fetchDataOld()
+    {
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
         $overtimes = [
             (object)[
                 "id" => 1,
@@ -22,6 +56,9 @@ class OvertimeReportController extends Controller
             ],
         ];
 
-        return view("pages.overtime-report.index", compact("overtimes"));
+        return response()->json([
+            "overtimes" => $overtimes,
+            "monthReadAble" => $monthReadAble,
+        ]);
     }
 }

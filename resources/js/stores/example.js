@@ -31,13 +31,11 @@ const example = {
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
         },
-
-        CLEAR_FORM(state, payload) {
-            // console.info(defaultForm);
-            state.form = { ...defaultForm };
-        },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
+        },
+        CLEAR_FORM(state, payload) {
+            state.form = { ...defaultForm };
         },
     },
     actions: {

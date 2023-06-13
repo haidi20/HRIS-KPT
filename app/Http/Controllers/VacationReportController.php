@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
-
+// vacation = cuti
 class VacationReportController extends Controller
 {
     public function index()
@@ -40,20 +40,26 @@ class VacationReportController extends Controller
 
     public function export()
     {
-        $dateStart = Carbon::parse(request("date_start"));
-        $dateStartReadable = $dateStart->isoFormat("dddd, D MMMM YYYY");
-        $dateEnd = Carbon::parse(request("date_end"));
-        $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
         $data = $this->fetchData()->original["vacations"];
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
+        $dateStartReadable = $dateStart->isoFormat("dddd, D MMMM YYYY");
+        $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
         $nameFile = "export/cuti_{$dateStartReadable}-{$dateEndReadable}.xlsx";
 
         try {
+            $path = public_path($nameFile);
+
+            if ($path) {
+                @unlink($path);
+            }
+
             Excel::store(new VacationReportExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
                 "data" => $data,
-                "linkDownload" => route('project.download', ["path" => $nameFile]),
+                "linkDownload" => route('report.vacation.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
             Log::error($e);
