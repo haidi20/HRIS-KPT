@@ -4,8 +4,8 @@
       :data="getData"
       :columns="columns"
       :options="options"
-      nameStore="roster"
-      nameLoading="table"
+      nameStore="jobOrder"
+      nameLoading="data"
       :filter="true"
       bordered
     >
@@ -24,8 +24,15 @@
             class="place_filter_table"
             variant="success"
             size="sm"
+            @click="onFilter()"
+            :disabled="getIsLoadingData || is_loading_export"
+          >Kirim</b-button>
+          <b-button
+            class="place_filter_table ml-4"
+            variant="success"
+            size="sm"
             @click="onExport()"
-            :disabled="is_loading_export"
+            :disabled="is_loading_export || getIsLoadingData"
           >
             <i class="fas fa-file-excel"></i>
             Export
@@ -35,7 +42,15 @@
       </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <template v-for="(column, index) in columns">
+          <!-- <b-td style="text-align: center">
+            <ButtonAction class="cursor-pointer" type="click">
+              <template v-slot:list_detail_button>
+                <a href="#" @click="onEdit(item)">Ubah</a>
+                <a href="#" @click="onRead(item)">Lihat</a>
+              </template>
+            </ButtonAction>
+          </b-td>-->
+          <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>
           </template>
         </b-tr>
@@ -49,6 +64,8 @@ import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
 import DatePicker from "vue2-datepicker";
+
+import ButtonAction from "../../components/ButtonAction";
 import DatatableClientSide from "../../components/DatatableClient";
 
 export default {
@@ -65,52 +82,52 @@ export default {
         },
       },
       columns: [
-        {
-          label: "",
-          field: "action",
-          width: "40px",
-          class: "",
-        },
+        // {
+        //   label: "",
+        //   field: "",
+        //   width: "10px",
+        //   class: "",
+        // },
         {
           label: "Nama Karyawan",
           field: "employee_name",
-          width: "40px",
+          width: "100px",
           class: "",
         },
         {
           label: "Jabatan",
           field: "position_name",
-          width: "40px",
+          width: "100px",
           class: "",
         },
         {
-          label: "Jenis Pekerjaan",
+          label: "Pekerjaan",
           field: "job_name",
-          width: "40px",
+          width: "100px",
           class: "",
         },
         {
           label: "Waktu Mulai",
-          field: "date_time_start",
-          width: "40px",
+          field: "datetime_start_readable",
+          width: "100px",
           class: "",
         },
         {
           label: "Waktu Selesai",
-          field: "date_time_end",
-          width: "40px",
+          field: "datetime_end_readable",
+          width: "100px",
           class: "",
         },
         {
           label: "Durasi",
-          field: "duration",
-          width: "40px",
+          field: "duration_readable",
+          width: "100px",
           class: "",
         },
         {
           label: "Catatan",
-          field: "note",
-          width: "40px",
+          field: "note_start",
+          width: "100px",
           class: "",
         },
       ],
@@ -118,6 +135,7 @@ export default {
   },
   components: {
     DatePicker,
+    ButtonAction,
     DatatableClientSide,
   },
   computed: {
@@ -130,13 +148,34 @@ export default {
     getData() {
       return this.$store.state.jobOrder.data;
     },
+    getIsLoadingData() {
+      return this.$store.state.jobOrder.loading.table;
+    },
     params() {
       return this.$store.state.jobOrder.params;
     },
   },
   methods: {
+    onFilter() {
+      this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
+    },
     onExport() {
       //
+    },
+    onEdit() {
+      //
+    },
+    onRead() {
+      //
+    },
+    getColumns() {
+      const columns = this.columns.filter((item) => item.label != "");
+      return columns;
+    },
+    getCan(permissionName) {
+      const getPermission = this.$store.getters["getCan"](permissionName);
+
+      return getPermission;
     },
   },
 };

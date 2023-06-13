@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobStatusHasParent;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +21,23 @@ class OvertimeReportController extends Controller
     }
 
     public function fetchData()
+    {
+        $nameModel = "App\Models\JobOrderHasEmployee";
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $overtimes = JobStatusHasParent::where(["status" => "overtime"])
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->get();
+
+        return response()->json([
+            "overtimes" => $overtimes,
+            "monthReadAble" => $monthReadAble,
+        ]);
+    }
+
+    private function fetchDataOld()
     {
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
