@@ -10,6 +10,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\OrdinarySeamanController;
+use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
@@ -47,6 +48,9 @@ Route::prefix("v1")->name("api.")->group(function () {
         });
         Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
             Route::get('fetch-data', [SalaryAdvanceReportController::class, "fetchData"])->name('fetchData');
+        });
+        Route::prefix('overtime')->name('overtime.')->group(function () {
+            Route::get('fetch-data', [OvertimeReportController::class, "fetchData"])->name('fetchData');
         });
     });
     // END LAPORAN

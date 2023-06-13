@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+// vacation = cuti
 class VacationController extends Controller
 {
-    // vacation = cuti
     public function index()
     {
         $vue = true;

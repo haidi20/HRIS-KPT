@@ -2,12 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 
 class OvertimeReportController extends Controller
 {
     public function index()
     {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.overtime-report.index", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData()
+    {
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
         $overtimes = [
             (object)[
                 "id" => 1,
@@ -22,6 +38,9 @@ class OvertimeReportController extends Controller
             ],
         ];
 
-        return view("pages.overtime-report.index", compact("overtimes"));
+        return response()->json([
+            "overtimes" => $overtimes,
+            "monthReadAble" => $monthReadAble,
+        ]);
     }
 }

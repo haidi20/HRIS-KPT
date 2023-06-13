@@ -191,7 +191,7 @@ const JobOrder = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA(state, payload) {
-            state.data = payload.job_orders;
+            state.data = payload.data;
         },
         INSERT_DATA_SELECTED(state, payload) {
             let dataClone = [...state.data];
@@ -354,9 +354,6 @@ const JobOrder = {
                 context.commit("INSERT_USER_ID", { user_id: payload.user_id });
             }
 
-            context.commit("INSERT_DATA", {
-                job_orders: [],
-            });
             context.commit("UPDATE_LOADING_DATA", { value: true });
 
             const params = {
@@ -375,7 +372,7 @@ const JobOrder = {
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {
-                        job_orders: data.jobOrders,
+                        data: data.jobOrders,
                     });
                     context.commit("UPDATE_LOADING_DATA", { value: false });
                 })
@@ -420,7 +417,35 @@ const JobOrder = {
                     });
 
                     context.commit("INSERT_DATA", {
-                        job_orders: jobOrders,
+                        data: jobOrders,
+                    });
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchDataOvertimeReport: async (context, payload) => {
+            context.commit("UPDATE_LOADING_DATA", { value: true });
+
+            const params = {
+                ...context.state.params,
+                month: moment(context.state.params.month).format("Y-MM"),
+                user_id: context.state.user_id,
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/report/overtime/fetch-data`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        data: data.overtimes,
                     });
                     context.commit("UPDATE_LOADING_DATA", { value: false });
                 })
