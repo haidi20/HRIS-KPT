@@ -136,25 +136,25 @@ class RosterController extends Controller
         // $dateRange = $this->dateRange($month->format("Y-m"));
 
         foreach ($positions as $key => $value) {
-            $dataTotal[$value->initial] = $this->fetchTotal($value->initial)->original["data"];
+            $dataTotal[$value->id] = $this->fetchTotal($value->id)->original["data"];
         }
         $dataTotal["ALL"] = $this->fetchTotal("ALL")->original["data"];
 
         try {
-
             $path = public_path($nameFile);
 
             if ($path) {
                 @unlink($path);
             }
 
-            Excel::store(new RosterExport($data, $dataTotal, $dateRange), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+            Excel::store(new RosterExport($data, $dataTotal, $dateRange, $positions), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
                 "success" => true,
                 "request" => request()->all(),
                 "month" => $month,
                 "data" => $data,
+                "dataTotal" => $dataTotal,
                 "linkDownload" => route('roster.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {

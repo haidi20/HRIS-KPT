@@ -19,7 +19,8 @@
           <circle cx="12" cy="19" r="1" />
         </svg>-->
         <span class="cursor-pointer">
-          <i class="fas fa-edit" style="color: #31D2F2;"></i>
+          <!-- <i class="fas fa-edit" style="color: #31D2F2;"></i> -->
+          <i class="bi bi-pencil" style="color: #31D2F2;"></i>
         </span>
       </div>
       <div v-if="is_show_content" class="dropdown-content">

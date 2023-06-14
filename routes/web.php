@@ -132,6 +132,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("overtime")->name("overtime.")->group(function () {
             Route::get('', [OvertimeReportController::class, "index"])->name("index");
+            Route::get('export', [OvertimeReportController::class, "export"])->name("export");
+            Route::get('download', [OvertimeReportController::class, "download"])->name("download");
         });
         Route::prefix("vacation")->name("vacation.")->group(function () {
             Route::get('', [VacationReportController::class, "index"])->name("index");

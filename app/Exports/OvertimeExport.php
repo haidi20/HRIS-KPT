@@ -5,14 +5,16 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithStyles, WithDrawings
+class OvertimeExport implements FromView, WithTitle, WithStyles, ShouldAutoSize, WithDrawings
 {
+
     protected $data;
 
     function __construct($data)
@@ -22,7 +24,7 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
 
     public function title(): string
     {
-        return 'Data Cuti';
+        return 'Surat Perintah Lembur';
     }
 
     public function drawings()
@@ -39,7 +41,7 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
 
     public function view(): View
     {
-        return view('pages.vacation-report.partials.export', [
+        return view('pages.overtime-report.partials.export', [
             'data' => $this->data,
         ]);
     }
