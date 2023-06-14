@@ -176,14 +176,14 @@ export default {
     },
     async onExport() {
       const Swal = this.$swal;
-      this.is_loading_export = true;
 
       //   console.info(moment(this.params.month).format("Y-MM"));
 
-      return false;
+      //   return false;
+      this.is_loading_export = true;
 
       await axios
-        .get(`${this.getBaseUrl}/report/overtime/export`, {
+        .get(`${this.getBaseUrl}/report/job-order/export`, {
           params: {
             user_id: this.getUserId,
             date_start: moment(this.params.date[0]).format("Y-MM-DD"),

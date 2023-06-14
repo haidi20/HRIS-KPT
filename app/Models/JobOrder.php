@@ -17,10 +17,10 @@ class JobOrder extends Model
     // status_clone untuk bisa membandingkan status setelah perubahan dan yang di database
     protected $appends = [
         "status_color", "status_readable", 'status_clone',
-        "project_name", "job_name", "job_code", "hour_start",
-        "category_name",
+        "project_name", "job_name", "job_code", "hour_start", "category_name",
+        "creator_name", "creator_group_name",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
-        "datetime_estimation_end_readable", "datetime_end_readable", "creator_name", "creator_group_name",
+        "datetime_estimation_end_readable", "datetime_end_readable", "datetime_start_readable",
     ];
 
     public function __construct(array $attributes = [])
@@ -153,6 +153,11 @@ class JobOrder extends Model
     public function getDatetimeEndReadableAttribute()
     {
         return Carbon::parse($this->datetime_end)->locale('id')->isoFormat("dddd, D MMMM YYYY HH:mm");
+    }
+
+    public function getDatetimeStartReadableAttribute()
+    {
+        return Carbon::parse($this->datetime_start)->locale('id')->isoFormat("dddd, D MMMM YYYY HH:mm");
     }
 
     public function getEmployeeTotalAttribute()

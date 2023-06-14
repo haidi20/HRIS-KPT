@@ -45,7 +45,7 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["jobOrder", "project", , "employeeHasParent", "master"].map((item) => {
+    ["jobOrder", "project", "employeeHasParent", "master"].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });

@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class OvertimeExport implements FromView, WithTitle, WithStyles, ShouldAutoSize, WithDrawings
+class JobOrderExport implements FromView, WithTitle, WithStyles, ShouldAutoSize, WithDrawings
 {
 
     protected $data;
@@ -23,7 +23,7 @@ class OvertimeExport implements FromView, WithTitle, WithStyles, ShouldAutoSize,
 
     public function title(): string
     {
-        return 'Surat Perintah Lembur';
+        return 'Job Order';
     }
 
     public function drawings()
@@ -33,14 +33,14 @@ class OvertimeExport implements FromView, WithTitle, WithStyles, ShouldAutoSize,
         $drawing->setDescription('This is logo');
         $drawing->setPath(public_path('/assets/img/logo.png'));
         $drawing->setHeight(45);
-        $drawing->setCoordinates('A1');
+        $drawing->setCoordinates('B1');
 
         return $drawing;
     }
 
     public function view(): View
     {
-        return view('pages.overtime-report.partials.export', [
+        return view('pages.job-order-report.partials.export', [
             'data' => $this->data,
         ]);
     }
