@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 
 if (
     !function_exists('isActive')
@@ -55,5 +56,48 @@ if (
         $duration = $getDateEnd->diffInDays($getDateStart);
 
         return $duration;
+    }
+}
+
+if (
+    !function_exists('dateTimeDuration')
+) {
+
+    /**
+     * Calculate the duration between two datetime values and optionally format it in a readable format.
+     *
+     * @param string $datetime_start The start datetime value.
+     * @param string $datetime_end The end datetime value.
+     * @param bool $is_readable Whether to format the duration in a readable format.
+     * @return int|string The duration in minutes or a formatted duration string.
+     */
+    function dateTimeDuration($datetime_start, $datetime_end, $is_readable = false)
+    {
+        $start = Carbon::parse($datetime_start);
+        $end = Carbon::parse($datetime_end);
+        $totalMinutes = $end->diffInMinutes($start);
+        $duration = $start->diff($end);
+
+        if (!$is_readable) {
+            return $totalMinutes;
+        } else {
+            $days = $duration->days;
+            $hours = $duration->h;
+            $minutes = $duration->i;
+
+            $durationString = '';
+
+            if ($days > 0) {
+                $durationString .= $days . ' hari ';
+            }
+            if ($hours > 0) {
+                $durationString .= $hours . ' jam ';
+            }
+            if ($minutes > 0) {
+                $durationString .= $minutes . ' menit';
+            }
+
+            return $durationString;
+        }
     }
 }

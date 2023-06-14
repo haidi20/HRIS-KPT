@@ -10,11 +10,11 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3" active>
+        <b-tabs content-class="mt-3">
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <b-tab title="Berdasarkan Karyawan">
+          <b-tab title="Berdasarkan Karyawan" active>
             <Detail />
           </b-tab>
         </b-tabs>
@@ -54,6 +54,7 @@ export default {
 
     this.$store.dispatch("attendance/fetchData");
     this.$store.dispatch("attendance/fetchDetail");
+    this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("master/fetchPosition");
   },
 };

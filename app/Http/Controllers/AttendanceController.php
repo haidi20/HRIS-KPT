@@ -85,22 +85,38 @@ class AttendanceController extends Controller
     {
         $result = [];
         $employeeId = request("employee_id");
+        $employee = null;
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        if ($employeeId) {
+            $employee = Employee::find($employeeId);
+        }
 
         $dateRange = $this->dateRangeCustom($month, "d", "object", true);
 
         foreach ($dateRange as $index => $date) {
             $row = (object) [
                 "date" => $date->date,
-                "day" => $date->day, // Add the value for "day"
-                "hour_start" => "", // Add the value for "hour_start"
-                "hour_end" => "", // Add the value for "hour_end"
-                "duration" => "", // Add the value for "duration"
-                "hour_rest_start" => "", // Add the value for "hour_rest_start"
-                "hour_rest_end" => "", // Add the value for "hour_rest_end"
-                "duration_hour_work" => "", // Add the value for "duration_hour_work"
+                "day" => $date->day,
             ];
+
+            if ($employee != null) {
+                $attendanceHasEmployee =  $employee->attendanceHasEmployees
+                    ->firstWhere('date', $date->date_full);
+
+                if ($attendanceHasEmployee) {
+                    $row->hour_start = $this->setTime($attendanceHasEmployee->hour_start);
+                    $row->hour_end = $this->setTime($attendanceHasEmployee->hour_end);
+                    $row->duration_work = $attendanceHasEmployee->duration_work_readable;
+                    $row->hour_rest_start = $this->setTime($attendanceHasEmployee->hour_rest_start);
+                    $row->hour_rest_end = $this->setTime($attendanceHasEmployee->hour_rest_end);
+                    $row->duration_rest = $attendanceHasEmployee->duration_rest_readable;
+                    $row->hour_overtime_start = $this->setTime($attendanceHasEmployee->hour_overtime_start);
+                    $row->hour_overtime_end = $this->setTime($attendanceHasEmployee->hour_overtime_end);
+                    $row->duration_overtime = $attendanceHasEmployee->duration_overtime_readable;
+                }
+            }
 
             array_push($result, $row);
         }
@@ -108,6 +124,8 @@ class AttendanceController extends Controller
         return response()->json([
             "data" => $result,
             "monthReadAble" => $monthReadAble,
+            "employee" => $employee,
+            "request" => request()->all(),
         ]);
     }
 
@@ -303,6 +321,36 @@ class AttendanceController extends Controller
         return response()->json([
             "data" => $result,
             "dateRange" => $dateRange,
+        ]);
+    }
+
+    private function fetchDataDetailOld()
+    {
+        $result = [];
+        $employeeId = request("employee_id");
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+
+        $dateRange = $this->dateRangeCustom($month, "d", "object", true);
+
+        foreach ($dateRange as $index => $date) {
+            $row = (object) [
+                "date" => $date->date,
+                "day" => $date->day, // Add the value for "day"
+                "hour_start" => "", // Add the value for "hour_start"
+                "hour_end" => "", // Add the value for "hour_end"
+                "duration" => "", // Add the value for "duration"
+                "hour_rest_start" => "", // Add the value for "hour_rest_start"
+                "hour_rest_end" => "", // Add the value for "hour_rest_end"
+                "duration_hour_work" => "", // Add the value for "duration_hour_work"
+            ];
+
+            array_push($result, $row);
+        }
+
+        return response()->json([
+            "data" => $result,
+            "monthReadAble" => $monthReadAble,
         ]);
     }
 }

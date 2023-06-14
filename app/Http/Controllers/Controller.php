@@ -125,6 +125,7 @@ class Controller extends BaseController
             if ($typeResult == "object") {
                 $range[] = (object) [
                     "date" => Carbon::parse(new Carbon($day))->format($formatDate),
+                    "date_full" => Carbon::parse(new Carbon($day))->format("Y-m-d"),
                     "day" => Carbon::parse(new Carbon($day))->isoFormat("dddd"),
                 ];
             } else {

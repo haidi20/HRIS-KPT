@@ -117,7 +117,7 @@ class Employee extends Model
     public function getNameAndPositionAttribute()
     {
         if ($this->position) {
-            return $this->name . " - " . $this->position_name;
+            return $this->name . " ({$this->position_name})";
         }
     }
 
