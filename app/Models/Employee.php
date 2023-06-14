@@ -39,6 +39,11 @@ class Employee extends Model
         return $this->hasMany(RosterDaily::class);
     }
 
+    public function attendanceHasEmployees()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     public function getCompanyNameAttribute()
     {
         if ($this->company) {

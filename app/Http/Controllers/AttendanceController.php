@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AttendanceExport;
 use App\Models\AttendanceFingerspot;
+use App\Models\Employee;
 use App\Models\FingerTool;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use LDAP\Result;
 
 class AttendanceController extends Controller
 {
@@ -29,40 +31,53 @@ class AttendanceController extends Controller
         $result = [];
         $positionId = request("position_id");
         $month = Carbon::parse(request("month"));
-        $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($month->format("Y-m"));
+        // $dateRange = $this->dateRange($month->format("Y-m"));
+        $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
+        $employees = new Employee;
 
-        $rosters = [
-            (object)[
-                "id" => 1,
-                "id_finger" => 04,
-                "employee_name" => "Muhammad Adi",
-                "position_name" => "Welder",
-            ]
-        ];
+        if ($positionId != 'all') {
+            $employees = $employees->where("position_id", $positionId);
+        }
 
-        foreach ($rosters as $key => $item) {
-            $mainData = [];
-            $mainData['id'] = $item->id;
-            $mainData['id_finger'] = $item->id_finger;
-            $mainData['employee_name'] = $item->employee_name;
-            $mainData['position_name'] = $item->position_name;
+        $employees = $employees->orderBy("name", "desc")->get();
 
-            foreach ($dateRange as $index => $date) {
-                $mainData[$date] = (object) [
-                    "hour_start" => "08:00",
-                    "hour_rest_start" => "12:00",
-                    "hour_rest_end" => "13:00",
-                    "hour_end" => "17:00",
-                ];
+        $result = $employees->map(function ($employee) use ($dateRange, $month) {
+            $mainData = [
+                'id_finger' => $employee->id_finger,
+                'employee_name' => $employee->name,
+                'position_name' => $employee->position_name,
+            ];
+
+            foreach ($dateRange as $date) {
+                $attendanceHasEmployee =  $employee->attendanceHasEmployees
+                    ->firstWhere('date', $date);
+
+                if ($attendanceHasEmployee) {
+                    $mainData[$date] = (object) [
+                        "is_exists" => true,
+                        "hour_start" => $this->setTime($attendanceHasEmployee->hour_start),
+                        "hour_rest_start" => $this->setTime($attendanceHasEmployee->hour_rest_start),
+                        "hour_rest_end" => $this->setTime($attendanceHasEmployee->hour_rest_end),
+                        "hour_end" => $this->setTime($attendanceHasEmployee->hour_end),
+                    ];
+                } else {
+                    $mainData[$date] = (object) [
+                        "is_exists" => false,
+                        "hour_start" => "00:00",
+                        "hour_rest_start" => "00:00",
+                        "hour_rest_end" => "00:00",
+                        "hour_end" => "00:00",
+                    ];
+                }
             }
 
-            array_push($result, $mainData);
-        }
+            return $mainData;
+        });
 
         return response()->json([
             "data" => $result,
             "dateRange" => $dateRange,
+            "request" => request()->all(),
         ]);
     }
 
@@ -235,6 +250,59 @@ class AttendanceController extends Controller
         return response()->json([
             "date" => $date,
             "data" => $result,
+        ]);
+    }
+
+    private function setTime($time)
+    {
+        $result = "00:00";
+
+        if ($time != null) {
+            $result = Carbon::parse($time)->format("H:i");
+        }
+
+        return $result;
+    }
+
+    private function fetchDataMainOld()
+    {
+        $result = [];
+        $positionId = request("position_id");
+        $month = Carbon::parse(request("month"));
+        $monthReadAble = $month->isoFormat("MMMM YYYY");
+        $dateRange = $this->dateRange($month->format("Y-m"));
+
+        $rosters = [
+            (object)[
+                "id" => 1,
+                "id_finger" => 04,
+                "employee_name" => "Muhammad Adi",
+                "position_name" => "Welder",
+            ]
+        ];
+
+        foreach ($rosters as $key => $item) {
+            $mainData = [];
+            $mainData['id'] = $item->id;
+            $mainData['id_finger'] = $item->id_finger;
+            $mainData['employee_name'] = $item->employee_name;
+            $mainData['position_name'] = $item->position_name;
+
+            foreach ($dateRange as $index => $date) {
+                $mainData[$date] = (object) [
+                    "hour_start" => "08:00",
+                    "hour_rest_start" => "12:00",
+                    "hour_rest_end" => "13:00",
+                    "hour_end" => "17:00",
+                ];
+            }
+
+            array_push($result, $mainData);
+        }
+
+        return response()->json([
+            "data" => $result,
+            "dateRange" => $dateRange,
         ]);
     }
 }

@@ -38,7 +38,7 @@
             variant="success"
             size="sm"
             @click="onFilter()"
-            :disabled="getIsLoadingData"
+            :disabled="getIsLoadingData || is_loading_export"
           >Kirim</b-button>
           <span v-if="getIsLoadingData">Loading...</span>
           <b-button
@@ -46,7 +46,7 @@
             variant="success"
             size="sm"
             @click="onExport()"
-            :disabled="is_loading_export"
+            :disabled="is_loading_export || getIsLoadingData"
           >
             <i class="fas fa-file-excel"></i>
             Export
@@ -78,10 +78,13 @@
             v-for="(date, subIndex) in getDateRange"
             :key="`date-${subIndex}`"
           >
-            <div class="item-hour hour-reguler">{{ item[date]?.hour_start }}</div>
-            <div class="item-hour hour-rest">{{ item[date]?.hour_rest_start }}</div>
-            <div class="item-hour hour-rest">{{ item[date]?.hour_rest_end }}</div>
-            <div class="item-hour hour-reguler">{{ item[date]?.hour_end }}</div>
+            <!-- is_exists -->
+            <template v-if="item[date]?.is_exists">
+              <div class="item-hour hour-reguler">{{ item[date]?.hour_start }}</div>
+              <div class="item-hour hour-rest">{{ item[date]?.hour_rest_start }}</div>
+              <div class="item-hour hour-rest">{{ item[date]?.hour_rest_end }}</div>
+              <div class="item-hour hour-reguler">{{ item[date]?.hour_end }}</div>
+            </template>
           </b-td>
         </b-tr>
       </template>
