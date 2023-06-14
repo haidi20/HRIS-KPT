@@ -13,31 +13,50 @@
         <b-tabs content-class="mt-3" active>
           <!-- semua data -->
           <b-tab title="Semua">
-            <All />
-          </b-tab>
-          <!-- data yang statusnya tunda -->
-          <!-- <b-tab title="Tunda">
-            <All />
-          </b-tab>-->
-          <!-- data yang di lanjutkan lembur -->
-          <b-tab title="Lembur">
-            <All />
+            <Main />
           </b-tab>
         </b-tabs>
       </div>
     </div>
+    <Modal />
   </div>
 </template>
 
 <script>
-import All from "./all.vue";
+import Main from "./main";
+import Modal from "../jobOrder/View/modal";
 export default {
-  components: { All },
+  props: {
+    user: String,
+    baseUrl: String,
+    statuses: String,
+  },
+  components: {
+    Main,
+    Modal,
+  },
   data() {
     return {
       title: "Laporan Job Order",
       version: "v1.1",
     };
+  },
+  mounted() {
+    this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
+    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+
+    ["jobOrder", "project", , "employeeHasParent", "master"].map((item) => {
+      this.$store.commit(`${item}/INSERT_BASE_URL`, {
+        base_url: this.baseUrl,
+      });
+    });
+    this.$store.dispatch("fetchPermission");
+
+    this.$store.dispatch("master/fetchJob");
+    this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("employeeHasParent/fetchOption");
+    this.$store.dispatch("project/fetchDataBaseDateEnd");
+    this.$store.dispatch("jobOrder/fetchDataReport");
   },
 };
 </script>

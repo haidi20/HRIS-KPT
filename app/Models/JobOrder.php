@@ -18,6 +18,7 @@ class JobOrder extends Model
     protected $appends = [
         "status_color", "status_readable", 'status_clone',
         "project_name", "job_name", "job_code", "hour_start",
+        "category_name",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
         "datetime_estimation_end_readable", "datetime_end_readable", "creator_name", "creator_group_name",
     ];
@@ -176,5 +177,12 @@ class JobOrder extends Model
         $count =  $this->jobOrderAssessments->count();
 
         return $count <= 2 ? 2 : $count;
+    }
+
+    public function getCategoryNameAttribute()
+    {
+        $categoryName = Config::get("library.category.{$this->category}");
+
+        return $categoryName;
     }
 }

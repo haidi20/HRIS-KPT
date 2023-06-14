@@ -489,6 +489,34 @@ const JobOrder = {
                     console.info(err);
                 });
         },
+        fetchDataReport: async (context, payload) => {
+            context.commit("UPDATE_LOADING_DATA", { value: true });
+
+            const params = {
+                ...context.state.params,
+                date_start: moment(context.state.params.date[0]).format("Y-MM-DD"),
+                date_end: moment(context.state.params.date[1]).format("Y-MM-DD"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/report/job-order/fetch-data`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        data: data.jobOrders,
+                    });
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                    console.info(err);
+                });
+        },
         fetchDataOvertimeReport: async (context, payload) => {
             context.commit("UPDATE_LOADING_DATA", { value: true });
 

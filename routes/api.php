@@ -9,6 +9,7 @@ use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobOrderReportController;
 use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\OrdinarySeamanController;
 use App\Http\Controllers\OvertimeReportController;
@@ -52,6 +53,9 @@ Route::prefix("v1")->name("api.")->group(function () {
         });
         Route::prefix('overtime')->name('overtime.')->group(function () {
             Route::get('fetch-data', [OvertimeReportController::class, "fetchData"])->name('fetchData');
+        });
+        Route::prefix('job-order')->name('jobOrder.')->group(function () {
+            Route::get('fetch-data', [JobOrderReportController::class, "fetchData"])->name('fetchData');
         });
     });
     // END LAPORAN

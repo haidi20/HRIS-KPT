@@ -2,11 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobOrder;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class JobOrderReportController extends Controller
 {
     public function index()
+    {
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.job-order-report.index", compact("vue", "user", "baseUrl"));
+    }
+
+    public function fetchData()
+    {
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
+        $jobOrders = JobOrder::whereDate("datetime_start", ">=", $dateStart)
+            ->whereDate("datetime_start", "<=", $dateEnd)
+            ->orderBy("created_at", "desc")
+            ->get();
+
+        return response()->json([
+            "jobOrders" => $jobOrders,
+        ]);
+    }
+
+    private function fetchDataOld()
     {
         $jobOrders = [
             (object)[
@@ -26,6 +56,8 @@ class JobOrderReportController extends Controller
             ]
         ];
 
-        return view("pages.job-order-report.index", compact("jobOrders"));
+        return response()->json([
+            "jobOrders" => $jobOrders,
+        ]);
     }
 }
