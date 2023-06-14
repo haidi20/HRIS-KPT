@@ -122,7 +122,7 @@ export default {
           class: "",
         },
         {
-          label: "Departemen",
+          label: "Jabatan",
           field: "position_name",
           width: "100px",
           rowspan: 2,
@@ -172,10 +172,11 @@ export default {
           params: {
             user_id: this.getUserId,
             month: moment(this.params.month).format("Y-MM"),
+            position_id: this.params.position_id,
           },
         })
         .then((responses) => {
-          //   console.info(responses);
+          console.info(responses);
           this.is_loading_export = false;
           const data = responses.data;
 

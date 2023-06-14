@@ -10,11 +10,11 @@
           </b-col>
         </b-row>
         <br />
-        <b-tabs content-class="mt-3">
+        <b-tabs content-class="mt-3" active>
           <b-tab title="Utama">
             <Main />
           </b-tab>
-          <b-tab title="Berdasarkan Karyawan" active>
+          <b-tab title="Berdasarkan Karyawan">
             <Detail />
           </b-tab>
         </b-tabs>

@@ -131,19 +131,19 @@ class AttendanceController extends Controller
 
     public function export()
     {
-        $totalRoster = [];
         $data = $this->fetchDataMain()->original["data"];
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $dateRange = $this->dateRange($month->format("Y-m"));
+        $dateRange = $this->dateRangeCustom($month, "Y-m-d", "string", true);
         $nameFile = "export/absensi_{$monthReadAble}.xlsx";
 
-        // foreach ($rosterStatsuses as $key => $value) {
-        //     $totalRoster[$value->initial] = $this->fetchTotalRoster($value->initial)->original["data"];
-        // }
-        // $totalRoster["ALL"] = $this->fetchTotalRoster("ALL")->original["data"];
-
         try {
+            $path = public_path($nameFile);
+
+            if ($path) {
+                @unlink($path);
+            }
+
             Excel::store(new AttendanceExport($data, $dateRange), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
 
             return response()->json([
