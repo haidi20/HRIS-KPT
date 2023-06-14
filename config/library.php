@@ -65,6 +65,11 @@ return [
             "featurer_id" => 13,
         ],
     ],
+    "category" => [
+        'reguler' => "Reguler",
+        'daily' => "Harian",
+        'fixed_price' => "Borongan",
+    ],
     "status" => [
         "review" => [
             "readable" => "menunggu persetujuan",

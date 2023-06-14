@@ -22,6 +22,11 @@ class CreateSalaryAdjustmentDetailsTable extends Migration
             $table->enum('type_time', ['forever', 'base_time']);
             $table->date("month_start")->nullable();
             $table->date("month_end")->nullable();
+
+            $table->string("name_salary_adjustment")->nullable();
+            $table->text("note_salary_adjustment")->nullable();
+            $table->integer("is_payroll_use")->default(0); // menandakan sudah terpakai di payroll
+
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

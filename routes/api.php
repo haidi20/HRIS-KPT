@@ -9,7 +9,10 @@ use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobOrderReportController;
+use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\OrdinarySeamanController;
+use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProjectController;
@@ -47,6 +50,12 @@ Route::prefix("v1")->name("api.")->group(function () {
         });
         Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
             Route::get('fetch-data', [SalaryAdvanceReportController::class, "fetchData"])->name('fetchData');
+        });
+        Route::prefix('overtime')->name('overtime.')->group(function () {
+            Route::get('fetch-data', [OvertimeReportController::class, "fetchData"])->name('fetchData');
+        });
+        Route::prefix('job-order')->name('jobOrder.')->group(function () {
+            Route::get('fetch-data', [JobOrderReportController::class, "fetchData"])->name('fetchData');
         });
     });
     // END LAPORAN
@@ -146,8 +155,9 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('store-action-job-order-has-employee', [JobOrderController::class, "storeActionJobOrderHasEmployee"])->name('storeActionJobOrderHasEmployee');
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
-    // Route::prefix('job-status')->name('jobStatus.')->group(function () {
-    // });
+    Route::prefix('job-status-has-parent')->name('jobStatusHasParent.')->group(function () {
+        Route::post('store-overtime-revision', [JobStatusController::class, "storeOvertimeRevision"])->name('storeOvertimeRevision');
+    });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {
         Route::get('fetch-data', [SalaryAdjustmentController::class, "fetchData"])->name('fetchData');
         Route::post('store', [SalaryAdjustmentController::class, "store"])->name('store');

@@ -8,11 +8,11 @@
       class="modal-custom"
       hide-footer
     >
+      <FormRead />
       <br />
-      <b-row>
+      <b-row class="float-right">
         <b-col>
           <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-          <b-button variant="success" size="sm" class="float-end" @click="onSend()">Kirim</b-button>
         </b-col>
       </b-row>
     </b-modal>
@@ -20,17 +20,19 @@
 </template>
 
 <script>
+import FormRead from "./formRead";
+
 export default {
   data() {
     return {
-      title_form: "Daftar Job Order",
+      title_form: "Data Job Order",
     };
+  },
+  components: {
+    FormRead,
   },
   methods: {
     onCloseModal() {
-      this.$bvModal.hide("job_order_modal");
-    },
-    async onSend() {
       this.$bvModal.hide("job_order_modal");
     },
   },

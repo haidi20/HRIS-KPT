@@ -12,51 +12,56 @@
         <br />
         <b-tabs content-class="mt-3" active>
           <!-- semua data -->
-          <b-tab title="Semua">
+          <b-tab title="Utama">
             <Main />
           </b-tab>
         </b-tabs>
       </div>
     </div>
-    <Modal />
+
+    <Form />
   </div>
 </template>
 
 <script>
-import Main from "./main";
-import Modal from "../jobOrder/View/modal";
+import Main from "./main.vue";
+import Form from "./form.vue";
 export default {
   props: {
     user: String,
     baseUrl: String,
     statuses: String,
   },
-  components: {
-    Main,
-    Modal,
-  },
   data() {
     return {
-      title: "Laporan Job Order",
+      title: "Laporan SPL",
       version: "v1.1",
     };
+  },
+  components: {
+    Main,
+    Form,
   },
   mounted() {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["jobOrder", "project", "employeeHasParent", "master"].map((item) => {
+    ["jobOrder", "master"].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });
     });
     this.$store.dispatch("fetchPermission");
 
-    this.$store.dispatch("master/fetchJob");
-    this.$store.dispatch("master/fetchPosition");
-    this.$store.dispatch("employeeHasParent/fetchOption");
-    this.$store.dispatch("project/fetchDataBaseDateEnd");
-    this.$store.dispatch("jobOrder/fetchDataReport");
+    this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
+  },
+  computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
   },
 };
 </script>

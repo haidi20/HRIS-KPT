@@ -13,8 +13,8 @@ const defaultForm = {
     day_off_two: null,
     month: new Date(),
     date_vacation: [
-        null,
-        null,
+        new Date(),
+        new Date(),
     ],
     roster_status_id: null,
     roster_status_initial: null,
@@ -99,6 +99,9 @@ const Roster = {
         },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
+        },
+        CLEAR_FORM(state, payload) {
+            state.form = { ...defaultForm };
         },
     },
     actions: {

@@ -124,6 +124,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("report")->name("report.")->group(function () {
         Route::prefix("job-order")->name("jobOrder.")->group(function () {
             Route::get('', [JobOrderReportController::class, "index"])->name("index");
+            Route::get('export', [JobOrderReportController::class, "export"])->name("export");
+            Route::get('download', [JobOrderReportController::class, "download"])->name("download");
         });
         Route::prefix("salary-advance")->name("salaryAdvance.")->group(function () {
             Route::get('', [SalaryAdvanceReportController::class, "index"])->name("index");
@@ -132,6 +134,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix("overtime")->name("overtime.")->group(function () {
             Route::get('', [OvertimeReportController::class, "index"])->name("index");
+            Route::get('export', [OvertimeReportController::class, "export"])->name("export");
+            Route::get('download', [OvertimeReportController::class, "download"])->name("download");
         });
         Route::prefix("vacation")->name("vacation.")->group(function () {
             Route::get('', [VacationReportController::class, "index"])->name("index");

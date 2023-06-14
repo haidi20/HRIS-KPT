@@ -3,13 +3,7 @@
     <b-table-simple hover medium caption-top responsive :bordered="true">
       <b-thead>
         <b-tr>
-          <b-th
-            rowspan="2"
-            width="15"
-            style="vertical-align: middle"
-            class="fixed-column"
-            nowrap
-          >Total Data</b-th>
+          <b-th rowspan="2" width="15" style="vertical-align: middle" class="fixed-column" nowrap></b-th>
           <b-th
             v-for="(date, index) in getDateRange"
             v-bind:key="`date-${index}`"

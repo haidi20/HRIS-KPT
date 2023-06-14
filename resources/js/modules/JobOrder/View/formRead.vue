@@ -6,7 +6,7 @@
           <VueSelect
             id="project_id"
             class="cursor-pointer"
-            v-model="form.project_id"
+            v-model="getForm.project_id"
             placeholder="Pilih Proyek"
             :options="getOptionProjects"
             :reduce="(data) => data.id"
@@ -24,7 +24,7 @@
           <VueSelect
             id="job_id"
             class="cursor-pointer"
-            v-model="job_id"
+            v-model="getForm.job_id"
             placeholder="Pilih Pekerjaan"
             :options="getOptionJobs"
             :reduce="(data) => data.id"
@@ -39,7 +39,7 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Kode" label-for="job_code" class>
-          <b-form-input v-model="form.job_code" id="job_code" name="job_code" disabled></b-form-input>
+          <b-form-input v-model="getForm.job_code" id="job_code" name="job_code" disabled></b-form-input>
         </b-form-group>
       </b-col>
     </b-row>
@@ -47,7 +47,7 @@
       <b-col cols>
         <b-form-group label="Keterangan Jenis Pekerjaan" label-for="job_note" class>
           <b-form-input
-            v-model="form.job_note"
+            v-model="getForm.job_note"
             id="job_note"
             name="job_note"
             :disabled="getReadOnly()"
@@ -62,7 +62,7 @@
           <!-- <VueSelect
             id="category"
             class="cursor-pointer"
-            v-model="form.category"
+            v-model="getForm.category"
             placeholder="Pilih Kategori"
             :options="getOptionCategories"
             :reduce="(data) => data.id"
@@ -71,7 +71,7 @@
             style="min-width: 180px"
           />-->
           <select
-            v-model="form.category"
+            v-model="getForm.category"
             name="category"
             id="category"
             class="form-control"
@@ -89,21 +89,21 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Jam Mulai" label-for="hour_start">
-          <!-- <b-form-input type="hour" v-model="form.hour_start" id="hour_start" name="hour_start"></b-form-input> -->
+          <!-- <b-form-input type="hour" v-model="getForm.hour_start" id="hour_start" name="hour_start"></b-form-input> -->
           <input
             type="time"
             class="form-control"
-            v-model="hour_start"
+            v-model="getForm.hour_start"
             id="hour_start"
             name="hour_start"
-            :disabled="getReadOnly() || form.form_kind == 'edit'"
+            :disabled="getReadOnly() || getForm.form_kind == 'edit'"
           />
         </b-form-group>
       </b-col>
       <b-col cols>
         <b-form-group label="Estimasi Waktu" label-for="estimation">
           <b-form-input
-            v-model="estimation"
+            v-model="getForm.estimation"
             id="estimation"
             name="estimation"
             type="number"
@@ -117,7 +117,7 @@
       <b-col cols="5" md="6">
         <b-form-group label="Jenis Waktu" label-for="time_type" class>
           <select
-            v-model="time_type"
+            v-model="getForm.time_type"
             name="time_type"
             id="time_type"
             class="form-control"
@@ -135,8 +135,8 @@
         <b-form-group label="Waktu Selesai " label-for="time_type" class>
           <span>
             {{
-            form.datetime_estimation_end_readable
-            ? form.datetime_estimation_end_readable
+            getForm.datetime_estimation_end_readable
+            ? getForm.datetime_estimation_end_readable
             : "-"
             }}
           </span>
@@ -146,8 +146,19 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Tingkat Kesulitan" label-for="job_level" class>
+          <!-- <VueSelect
+            id="job_level"
+            class="cursor-pointer"
+            v-model="getForm.job_level"
+            placeholder="Pilih Pekerjaan"
+            :options="getOptionJobLevels"
+            :reduce="(data) => data.id"
+            label="name"
+            :searchable="false"
+            style="min-width: 180px"
+          />-->
           <select
-            v-model="form.job_level"
+            v-model="getForm.job_level"
             name="job_level"
             id="job_level"
             class="form-control"
@@ -162,22 +173,9 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="!getReadOnly()">
-      <b-col cols>
-        <b-form-group :label="getLabelImage" label-for="image" class>
-          <!-- <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file> -->
-          <b-form-file
-            id="image"
-            v-model="form.image"
-            :state="Boolean(is_image)"
-            :disabled="getReadOnly()"
-          ></b-form-file>
-        </b-form-group>
-      </b-col>
-    </b-row>
     <b-row>
       <b-col col sm="6">
-        <b-form-group label="Pilih Karyawan" class>
+        <b-form-group label="Pilih Karyawan" label-for="image" class>
           <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>
         </b-form-group>
       </b-col>
@@ -186,7 +184,7 @@
       <b-col cols>
         <b-form-group label="catatan tambahan" label-for="note" class>
           <b-form-input
-            v-model="form.note"
+            v-model="getForm.note"
             id="note"
             name="note"
             :disabled="getReadOnly()"
@@ -196,24 +194,67 @@
       </b-col>
     </b-row>
     <br />
-    <b-row>
-      <b-col>
-        <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-        <b-button
-          v-if="!getReadOnly()"
-          style="float: right"
-          variant="success"
-          @click="onSend()"
-          :disabled="is_loading || getIsDisabledBtnSend"
-        >Simpan</b-button>
-        <span v-if="is_loading" style="float: right">Loading...</span>
-      </b-col>
-    </b-row>
     <EmployeeHasParent />
   </div>
 </template>
 
-<script src="../Script/form.js"></script>
+<script>
+import VueSelect from "vue-select";
+import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
+
+export default {
+  data() {
+    return {
+      is_image: false,
+      is_loading: false,
+    };
+  },
+  components: {
+    VueSelect,
+    EmployeeHasParent,
+  },
+  computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
+    getOptionProjects() {
+      return this.$store.state.project.data;
+    },
+    getOptionCategories() {
+      return this.$store.state.jobOrder.options.categories;
+    },
+    getOptionJobs() {
+      return this.$store.state.master.data.jobs;
+    },
+    getOptionJobLevels() {
+      return this.$store.state.jobOrder.options.job_levels;
+    },
+    getOptionTimeTypes() {
+      return this.$store.state.jobOrder.options.time_types;
+    },
+    getLabelImage() {
+      return this.$store.state.jobOrder.form.label_image;
+    },
+    getForm() {
+      return this.$store.state.jobOrder.form;
+    },
+  },
+  methods: {
+    onShowEmployee() {
+      this.$bvModal.show("data_employee");
+    },
+    getReadOnly() {
+      const readOnly = this.$store.getters["jobOrder/getReadOnly"];
+      //   console.info(readOnly);
+
+      return readOnly;
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 #job_order_form {
@@ -222,6 +263,6 @@
   overflow-y: scroll;
 }
 #job_order_form::-webkit-scrollbar {
-  display: none;
+  //
 }
 </style>

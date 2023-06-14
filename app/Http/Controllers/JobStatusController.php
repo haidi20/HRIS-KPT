@@ -6,6 +6,8 @@ use App\Models\JobStatusHasParent;
 use App\Models\JobStatusHasParentHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class JobStatusController extends Controller
 {
@@ -59,6 +61,42 @@ class JobStatusController extends Controller
             $jobStatusHasParent->save();
 
             $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
+        }
+    }
+
+    public function storeOvertimeRevision()
+    {
+        $datetimeStart = Carbon::parse(request("datetime_start"));
+        $datetimeEnd = Carbon::parse(request("datetime_end"));
+
+        if ($datetimeStart->greaterThan($datetimeEnd)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur",
+            ], 500);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $jobStatusHasParent = JobStatusHasParent::find(request("id"));
+            $jobStatusHasParent->datetime_start = request("datetime_start");
+            $jobStatusHasParent->datetime_end = request("datetime_end");
+            $jobStatusHasParent->save();
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil Perbaharui Data'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Maaf, gagal Perbaharui data'
+            ], 500);
         }
     }
 

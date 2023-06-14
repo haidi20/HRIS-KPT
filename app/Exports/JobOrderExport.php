@@ -5,14 +5,15 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithStyles, WithDrawings
+class JobOrderExport implements FromView, WithTitle, WithStyles, ShouldAutoSize, WithDrawings
 {
+
     protected $data;
 
     function __construct($data)
@@ -22,7 +23,7 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
 
     public function title(): string
     {
-        return 'Data Cuti';
+        return 'Job Order';
     }
 
     public function drawings()
@@ -32,14 +33,14 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
         $drawing->setDescription('This is logo');
         $drawing->setPath(public_path('/assets/img/logo.png'));
         $drawing->setHeight(45);
-        $drawing->setCoordinates('A1');
+        $drawing->setCoordinates('B1');
 
         return $drawing;
     }
 
     public function view(): View
     {
-        return view('pages.vacation-report.partials.export', [
+        return view('pages.job-order-report.partials.export', [
             'data' => $this->data,
         ]);
     }
