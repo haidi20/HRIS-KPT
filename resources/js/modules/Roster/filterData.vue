@@ -82,7 +82,7 @@ export default {
           },
         })
         .then((responses) => {
-          console.info(responses);
+          //   console.info(responses);
           this.is_loading_export = false;
           const data = responses.data;
 

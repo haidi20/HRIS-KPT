@@ -1,7 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 
-import { checkNull, listStatus } from '../utils';
+import { checkNull, listStatus, datetimeDuration } from '../utils';
 
 /**
 Status values
@@ -69,7 +69,10 @@ const defaultForm = {
     form_kind: null, // kebutuhan logika kirim data dari modal karyawan
     form_title: "Job Order",
     hour_start: moment().format("HH:mm"),
+    date_start: null,
     datetime_start: null,
+    hour_end: moment().format("HH:mm"),
+    date_end: null,
     datetime_end: null,
     datetime_end_readable: null,
     datetime_estimation_end: null,
@@ -80,6 +83,8 @@ const defaultForm = {
     label_image: "Masukkan Gambar",
     is_disabled_btn_send: true,
     job_order_id: null, // kebutuhan penyesuaian gaji
+    duration: null,
+    duration_readable: null,
 }
 
 const JobOrder = {
@@ -89,6 +94,10 @@ const JobOrder = {
         data: [],
         params: {
             month: new Date(),
+            date: [
+                new Date(moment().startOf("month")),
+                new Date(),
+            ],
             status: "all",
             created_by: "creator",
             project_id: null,
@@ -205,14 +214,34 @@ const JobOrder = {
             state.data = [...dataClone];
         },
         INSERT_FORM(state, payload) {
+            // console.info(payload);
             state.form = {
                 ...state.form,
                 ...payload.form,
             };
 
+            if (checkNull(payload.form.datetime_start) != null) {
+                state.form = {
+                    ...state.form,
+                    date_start: new Date(payload.form.datetime_start),
+                    hour_start: moment(payload.form.datetime_start).format("HH:mm"),
+                }
+            }
+            if (checkNull(payload.form.datetime_end) != null) {
+                state.form = {
+                    ...state.form,
+                    date_end: new Date(payload.form.datetime_end),
+                    hour_end: moment(payload.form.datetime_end).format("HH:mm"),
+                    duration: datetimeDuration(payload.form.datetime_start, payload.form.datetime_end),
+                    duration_readable: datetimeDuration(payload.form.datetime_start, payload.form.datetime_end, true),
+                }
+            }
+
             if (payload?.form_kind) {
                 state.form.form_kind = payload?.form_kind;
             }
+
+            // console.info(state.form);
 
             // if (payload.form_kind == 'edit') {
             //     state.form.note = payload.note;
@@ -230,8 +259,42 @@ const JobOrder = {
         INSERT_FORM_JOB_CODE(state, payload) {
             state.form.job_code = payload.job_code;
         },
+        INSERT_FORM_DATE_START(state, payload) {
+            state.form.date_start = new Date(payload.date_start);
+
+            const date = moment(payload.date_start).format('YYYY-MM-DD');
+            state.form.datetime_start = moment(`${date} ${state.form.hour_start}`)
+                .format('YYYY-MM-DD HH:mm:ss');
+        },
         INSERT_FORM_HOUR_START(state, payload) {
             state.form.hour_start = payload.hour_start;
+
+            const date = moment(state.form.date_start).format('YYYY-MM-DD');
+            state.form.datetime_start = moment(`${date} ${payload.hour_start}`)
+                .format('YYYY-MM-DD HH:mm:ss');
+        },
+        INSERT_FORM_DATE_END(state, payload) {
+            state.form.date_end = new Date(payload.date_end);
+
+            const date = moment(payload.date_end).format('YYYY-MM-DD');
+            state.form.datetime_end = moment(`${date} ${state.form.hour_end}`)
+                .format('YYYY-MM-DD HH:mm:ss');
+        },
+        INSERT_FORM_HOUR_END(state, payload) {
+            state.form.hour_end = payload.hour_end;
+
+            const date = moment(state.form.date_end).format('YYYY-MM-DD');
+            state.form.datetime_end = moment(`${date} ${payload.hour_end}`)
+                .format('YYYY-MM-DD HH:mm:ss');
+        },
+        INSERT_FORM_DURATION(state, payload) {
+            state.form = {
+                ...state.form,
+                duration: datetimeDuration(state.form.datetime_start, state.form.datetime_end),
+                duration_readable: datetimeDuration(state.form.datetime_start, state.form.datetime_end, true),
+            }
+
+            console.info(state.form.datetime_start);
         },
         INSERT_FORM_ESTIMATION(state, payload) {
             state.form.estimation = payload.estimation;
@@ -426,12 +489,41 @@ const JobOrder = {
                     console.info(err);
                 });
         },
+        fetchDataReport: async (context, payload) => {
+            context.commit("UPDATE_LOADING_DATA", { value: true });
+
+            const params = {
+                ...context.state.params,
+                date_start: moment(context.state.params.date[0]).format("Y-MM-DD"),
+                date_end: moment(context.state.params.date[1]).format("Y-MM-DD"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/report/job-order/fetch-data`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA", {
+                        data: data.jobOrders,
+                    });
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DATA", { value: false });
+                    console.info(err);
+                });
+        },
         fetchDataOvertimeReport: async (context, payload) => {
             context.commit("UPDATE_LOADING_DATA", { value: true });
 
             const params = {
                 ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
+                date_start: moment(context.state.params.date[0]).format("Y-MM-DD"),
+                date_end: moment(context.state.params.date[1]).format("Y-MM-DD"),
                 user_id: context.state.user_id,
             }
 
@@ -441,7 +533,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

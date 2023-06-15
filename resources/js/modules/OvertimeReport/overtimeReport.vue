@@ -18,11 +18,14 @@
         </b-tabs>
       </div>
     </div>
+
+    <Form />
   </div>
 </template>
 
 <script>
 import Main from "./main.vue";
+import Form from "./form.vue";
 export default {
   props: {
     user: String,
@@ -31,11 +34,14 @@ export default {
   },
   data() {
     return {
-      title: "Laporan Lembur",
+      title: "Laporan SPL",
       version: "v1.1",
     };
   },
-  components: { Main },
+  components: {
+    Main,
+    Form,
+  },
   mounted() {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });

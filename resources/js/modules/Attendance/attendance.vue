@@ -54,6 +54,7 @@ export default {
 
     this.$store.dispatch("attendance/fetchData");
     this.$store.dispatch("attendance/fetchDetail");
+    this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("master/fetchPosition");
   },
 };

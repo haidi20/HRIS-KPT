@@ -46,7 +46,7 @@
           <b-td style="text-align: center">
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
-                <a href="#" @click="onEdit(item)">Ubah</a>
+                <a href="#" @click="onRead(item)">Lihat</a>
                 <!-- <a href="#" @click="onRead(item)">Lihat</a> -->
               </template>
             </ButtonAction>
@@ -87,47 +87,40 @@ export default {
           label: "",
           field: "",
           width: "10px",
-          class: "",
         },
         {
-          label: "Nama Karyawan",
-          field: "employee_name",
+          label: "Pengawas",
+          field: "creator_name",
           width: "100px",
           class: "",
         },
         {
-          label: "Jabatan",
-          field: "position_name",
+          label: "Nama Proyek",
+          field: "project_name",
           width: "100px",
           class: "",
         },
         {
-          label: "Pekerjaan",
+          label: "Nama Pekerjaan",
           field: "job_name",
           width: "100px",
           class: "",
         },
         {
-          label: "Waktu Mulai",
+          label: "Catatan Pekerjaan",
+          field: "job_note",
+          width: "100px",
+          class: "",
+        },
+        {
+          label: "Status",
+          field: "status_readable",
+          width: "100px",
+          class: "",
+        },
+        {
+          label: "Tanggal dan Waktu",
           field: "datetime_start_readable",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Waktu Selesai",
-          field: "datetime_end_readable",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Durasi",
-          field: "duration_readable",
-          width: "100px",
-          class: "",
-        },
-        {
-          label: "Catatan",
-          field: "note_start",
           width: "100px",
           class: "",
         },
@@ -158,23 +151,39 @@ export default {
   },
   methods: {
     onFilter() {
-      this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
+      this.$store.dispatch("jobOrder/fetchDataReport");
     },
-    onEdit(form) {
+    onRead(form) {
       this.$store.commit("jobOrder/INSERT_FORM", { form });
-      this.$bvModal.show("overtime_report_form");
-    },
-    onRead(data) {
-      //
+      this.$store.commit("jobOrder/INSERT_FORM_KIND", {
+        form_title: "Lihat Job Order",
+        form_kind: "read",
+      });
+      this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
+        value: true,
+      });
+      this.$store.commit("employeeHasParent/INSERT_DATA_ALL_SELECTED", {
+        selecteds: [...form.job_order_has_employees],
+      });
+      this.$store.commit("employeeHasParent/UPDATE_IS_MOBILE", {
+        value: true,
+      });
+      this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
+        form_type: "read",
+        form_type_parent: "read",
+      });
+      this.$bvModal.show("job_order_modal");
     },
     async onExport() {
       const Swal = this.$swal;
-      this.is_loading_export = true;
 
       //   console.info(moment(this.params.month).format("Y-MM"));
 
+      //   return false;
+      this.is_loading_export = true;
+
       await axios
-        .get(`${this.getBaseUrl}/report/overtime/export`, {
+        .get(`${this.getBaseUrl}/report/job-order/export`, {
           params: {
             user_id: this.getUserId,
             date_start: moment(this.params.date[0]).format("Y-MM-DD"),

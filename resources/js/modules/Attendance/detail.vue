@@ -19,9 +19,9 @@
             placeholder="Pilih Karyawan"
             :options="getOptionEmployees"
             :reduce="(data) => data.id"
-            label="name"
+            label="name_and_position"
             searchable
-            style="min-width: 180px"
+            style="min-width: 250px"
           />
         </b-form-group>
         <b-button
@@ -49,10 +49,10 @@
               <b-th>Hari</b-th>
               <b-th>Jam Masuk</b-th>
               <b-th>Jam Pulang</b-th>
-              <b-th>Durasi</b-th>
+              <b-th>Durasi Kerja</b-th>
               <b-th>Jam Istirahat</b-th>
               <b-th>Jam Selesai Istirahat</b-th>
-              <b-th>Durasi Jam Kerja</b-th>
+              <b-th>Durasi Istirahat</b-th>
               <b-th>Jam Mulai Lembur</b-th>
               <b-th>Jam Selesai Lembur</b-th>
               <b-th>Durasi Lembur</b-th>
@@ -66,14 +66,17 @@
             </template>
             <template v-else>
               <b-tr v-for="(data, index) in getData" :key="index">
-                <b-td>{{data.date}}</b-td>
-                <b-td>{{data.day}}</b-td>
-                <b-td>{{data.hour_start}}</b-td>
-                <b-td>{{data.hour_end}}</b-td>
-                <b-td>{{data.duration}}</b-td>
-                <b-td>{{data.hour_rest_start}}</b-td>
-                <b-td>{{data.hour_rest_end}}</b-td>
-                <b-td>{{data.duration_hour_work}}</b-td>
+                <b-td>{{data?.date}}</b-td>
+                <b-td>{{data?.day}}</b-td>
+                <b-td>{{data?.hour_start}}</b-td>
+                <b-td>{{data?.hour_end}}</b-td>
+                <b-td>{{data?.duration_work}}</b-td>
+                <b-td>{{data?.hour_rest_start}}</b-td>
+                <b-td>{{data?.hour_rest_end}}</b-td>
+                <b-td>{{data?.duration_rest}}</b-td>
+                <b-td>{{data?.hour_overtime_start}}</b-td>
+                <b-td>{{data?.hour_overtime_end}}</b-td>
+                <b-td>{{data?.duration_overtime}}</b-td>
               </b-tr>
             </template>
           </b-tbody>

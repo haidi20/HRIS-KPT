@@ -92,7 +92,8 @@ class JobStatusHasParent extends Model
         $datetimeStart = Carbon::parse($this->datetime_start);
         $datetimeEnd = Carbon::parse($this->datetime_end);
 
-        return $datetimeStart->diffAsCarbonInterval($datetimeEnd)->format("%H:%I");
+        // return $datetimeStart->diffAsCarbonInterval($datetimeEnd)->format("%H:%I");
+        return $datetimeStart->diffInMinutes($datetimeEnd);
     }
 
     public function getDurationReadableAttribute()
