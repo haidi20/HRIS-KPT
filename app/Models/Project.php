@@ -12,8 +12,11 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ["company_name", "job_order_total", "date_end_readable"];
     protected $fillable = [];
+    protected $appends = [
+        "company_name", "job_order_total", "date_end_readable",
+        "job_order_finish_total",
+    ];
 
     public function __construct(array $attributes = [])
     {
@@ -86,6 +89,13 @@ class Project extends Model
             return $this->company->name;
         } else {
             return null;
+        }
+    }
+
+    public function getJobOrderFinishTotalAttribute()
+    {
+        if ($this->jobOrders) {
+            return $this->jobOrders->where("status", "finish")->count();
         }
     }
 

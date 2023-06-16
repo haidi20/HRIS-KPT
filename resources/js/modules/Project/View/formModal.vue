@@ -107,7 +107,7 @@ export default {
       await axios
         .post(`${this.getBaseUrl}/api/v1/project/store`, request)
         .then((responses) => {
-          // console.info(responses);
+          console.info(responses);
           this.is_loading = false;
           const data = responses.data;
 

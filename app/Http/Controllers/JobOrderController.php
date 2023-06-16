@@ -41,6 +41,7 @@ class JobOrderController extends Controller
     {
         $status = request("status");
         $search = request("search");
+        $projectId = request("project_id");
         $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
 
@@ -77,6 +78,10 @@ class JobOrderController extends Controller
 
         if ($status != "all") {
             $jobOrders = $jobOrders->where("status", $status);
+        }
+
+        if ($projectId != null) {
+            $jobOrders = $jobOrders->where("project_id", $projectId);
         }
 
         $jobOrders = $jobOrders->get();

@@ -85,7 +85,7 @@
           <b-td>{{ item.day_duration }} Hari</b-td>
           <b-td>
             <template v-if="item.job_order_total > 0">
-              {{ item.job_order_total_finish }}
+              {{ item.job_order_finish_total }}
               \ {{ item.job_order_total }}
             </template>
             <template v-else>

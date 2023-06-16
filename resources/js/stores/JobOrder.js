@@ -365,6 +365,9 @@ const JobOrder = {
                 ...payload,
             }
         },
+        INSERT_PARAM_PROJECT_ID(state, payload) {
+            state.params.project_id = payload.project_id;
+        },
         INSERT_PARAM_CREATED_BY(state, payload) {
             state.params.created_by = payload.created_by;
         },
@@ -417,12 +420,17 @@ const JobOrder = {
                 context.commit("INSERT_USER_ID", { user_id: payload.user_id });
             }
 
+            if (payload?.project_id) {
+                context.commit("INSERT_PARAM_PROJECT_ID", { project_id: payload.project_id });
+            }
+
             context.commit("UPDATE_LOADING_DATA", { value: true });
 
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
                 user_id: context.state.user_id,
+                project_id: context.state.params.project_id,
             }
 
             await axios
