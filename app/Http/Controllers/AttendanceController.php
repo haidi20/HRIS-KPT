@@ -106,15 +106,18 @@ class AttendanceController extends Controller
                     ->firstWhere('date', $date->date_full);
 
                 if ($attendanceHasEmployee) {
-                    $row->hour_start = $this->setTime($attendanceHasEmployee->hour_start);
-                    $row->hour_end = $this->setTime($attendanceHasEmployee->hour_end);
+                    $row->is_exists = true;
+                    $row->hour_start = $this->setTime($attendanceHasEmployee->hour_start, true);
+                    $row->hour_end = $this->setTime($attendanceHasEmployee->hour_end, true);
                     $row->duration_work = $attendanceHasEmployee->duration_work_readable;
-                    $row->hour_rest_start = $this->setTime($attendanceHasEmployee->hour_rest_start);
-                    $row->hour_rest_end = $this->setTime($attendanceHasEmployee->hour_rest_end);
+                    $row->hour_rest_start = $this->setTime($attendanceHasEmployee->hour_rest_start, true);
+                    $row->hour_rest_end = $this->setTime($attendanceHasEmployee->hour_rest_end, true);
                     $row->duration_rest = $attendanceHasEmployee->duration_rest_readable;
-                    $row->hour_overtime_start = $this->setTime($attendanceHasEmployee->hour_overtime_start);
-                    $row->hour_overtime_end = $this->setTime($attendanceHasEmployee->hour_overtime_end);
+                    $row->hour_overtime_start = $this->setTime($attendanceHasEmployee->hour_overtime_start, true);
+                    $row->hour_overtime_end = $this->setTime($attendanceHasEmployee->hour_overtime_end, true);
                     $row->duration_overtime = $attendanceHasEmployee->duration_overtime_readable;
+                } else {
+                    $row->is_exists = false;
                 }
             }
 
@@ -171,10 +174,11 @@ class AttendanceController extends Controller
     public function print()
     {
         $data = $this->fetchDataDetail()->original["data"];
+        $employee = $this->fetchDataDetail()->original["employee"];
 
         // return $data;
 
-        return view("pages.attendance.partials.print", compact("data"));
+        return view("pages.attendance.partials.print", compact("data", "employee"));
     }
 
     public function storeFingerSpot()
@@ -271,9 +275,13 @@ class AttendanceController extends Controller
         ]);
     }
 
-    private function setTime($time)
+    private function setTime($time, $isNull = false)
     {
-        $result = "00:00";
+        if ($isNull) {
+            $result = null;
+        } else {
+            $result = "00:00";
+        }
 
         if ($time != null) {
             $result = Carbon::parse($time)->format("H:i");
