@@ -118,7 +118,7 @@ const SalaryAdvance = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                     const data = responses.data;
 

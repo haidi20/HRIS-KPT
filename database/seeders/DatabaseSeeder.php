@@ -49,10 +49,10 @@ class DatabaseSeeder extends Seeder
             ketika production data ini tidak wajib diinput
         */
         // start data biasa
-        $this->call(ContractorSeeder::class);
-        $this->call(OrdinarySeamanSeeder::class);
-        $this->call(ProjectSeeder::class);
-        $this->call(SalaryAdvanceSeeder::class);
+        // $this->call(ContractorSeeder::class);
+        // $this->call(OrdinarySeamanSeeder::class);
+        // $this->call(ProjectSeeder::class);
+        // $this->call(SalaryAdvanceSeeder::class);
         // end data biasa
     }
 }

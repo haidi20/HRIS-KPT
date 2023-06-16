@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       options: {
-        perPage: 20,
+        perPage: 10,
         // perPageValues: [5, 10, 25, 50, 100],
         filterByColumn: true,
         texts: {
