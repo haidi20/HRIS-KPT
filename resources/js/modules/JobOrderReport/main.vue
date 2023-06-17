@@ -119,8 +119,8 @@ export default {
           class: "",
         },
         {
-          label: "Kategori",
-          field: "category_name",
+          label: "Tanggal dan Waktu",
+          field: "datetime_start_readable",
           width: "100px",
           class: "",
         },

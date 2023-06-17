@@ -4,6 +4,11 @@ import moment from "moment";
 import { checkNull } from "../../../utils";
 import DatatableClient from "../../../components/DatatableClient";
 
+/*
+fitur yang menggunakan jobOrder tableHasParent
+proyek, penyesuaian gaji -> karyawan
+*/
+
 export default {
     data() {
         return {
@@ -41,6 +46,12 @@ export default {
                 {
                     label: "Waktu Selesai",
                     field: "datetime_end_readable",
+                    width: "400px",
+                    class: "",
+                },
+                {
+                    label: "Status",
+                    field: "status_readable",
                     width: "400px",
                     class: "",
                 },

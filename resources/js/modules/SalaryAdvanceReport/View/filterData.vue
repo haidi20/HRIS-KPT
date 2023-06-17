@@ -90,14 +90,16 @@ export default {
       this.is_loading_export = true;
 
       await axios
-        .get(`${this.getBaseUrl}/report/salaryAdvance/export`, {
+        .get(`${this.getBaseUrl}/report/salary-advance/export`, {
           params: {
+            ...this.params,
             user_id: this.getUserId,
-            date_filter: moment(this.getDateFilter).format("Y-MM"),
+            date_start: moment(this.params.date[0]).format("Y-MM-DD"),
+            date_end: moment(this.params.date[1]).format("Y-MM-DD"),
           },
         })
         .then((responses) => {
-          //   console.info(responses);
+          console.info(responses);
           this.is_loading_export = false;
           const data = responses.data;
 

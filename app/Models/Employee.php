@@ -39,6 +39,11 @@ class Employee extends Model
         return $this->hasMany(RosterDaily::class);
     }
 
+    public function attendanceHasEmployees()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     public function getCompanyNameAttribute()
     {
         if ($this->company) {
@@ -112,7 +117,7 @@ class Employee extends Model
     public function getNameAndPositionAttribute()
     {
         if ($this->position) {
-            return $this->name . " - " . $this->position_name;
+            return $this->name . " ({$this->position_name})";
         }
     }
 

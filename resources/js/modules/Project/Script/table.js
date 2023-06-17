@@ -39,7 +39,7 @@ export default {
                     class: "",
                 },
                 {
-                    label: "Total Job Order",
+                    label: "Job Order",
                     field: "job_order_total",
                     width: "200px",
                     class: "",
@@ -96,7 +96,7 @@ export default {
             });
 
             this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
-            this.$store.dispatch("jobOrder/fetchData");
+            this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
 
             this.$bvModal.show("project_form");
         },
@@ -108,7 +108,7 @@ export default {
             });
 
             this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
-            this.$store.dispatch("jobOrder/fetchData");
+            this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
 
             this.$bvModal.show("project_form");
         },

@@ -75,7 +75,7 @@ class ProjectController extends Controller
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRange($month->format("Y-m"));
-        $nameFile = "project_{$monthReadAble}.xlsx";
+        $nameFile = "export/project_{$monthReadAble}.xlsx";
 
         try {
             Excel::store(new ProjectExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
@@ -83,7 +83,7 @@ class ProjectController extends Controller
             return response()->json([
                 "success" => true,
                 "data" => $data,
-                "linkDownload" => route('project.download', ["name_file" => $nameFile]),
+                "linkDownload" => route('project.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -97,7 +97,7 @@ class ProjectController extends Controller
 
     public function download()
     {
-        $path = public_path(request("name_file"));
+        $path = public_path(request("path"));
 
         return Response::download($path);
     }
@@ -105,6 +105,26 @@ class ProjectController extends Controller
     public function store()
     {
         // return request()->all();
+
+        $checkDuplicateContractor = $this->detectDuplicateData(request("contractors"), ['contractor_id']);
+
+        if ($checkDuplicateContractor) {
+            return response()->json([
+                'success' => false,
+                'checkDuplicateContractor' => $checkDuplicateContractor,
+                'message' => "Maaf, Data Kepala Pemborong tidak boleh sama",
+            ], 401);
+        }
+
+        $checkDuplicateOs = $this->detectDuplicateData(request("ordinary_seamans"), ['ordinary_seaman_id']);
+
+        if ($checkDuplicateOs) {
+            return response()->json([
+                'success' => false,
+                'checkDuplicateOs' => $checkDuplicateOs,
+                'message' => "Maaf, Data OS tidak boleh sama",
+            ], 401);
+        }
 
         try {
             DB::beginTransaction();
@@ -139,6 +159,7 @@ class ProjectController extends Controller
 
             return response()->json([
                 'success' => true,
+                'checkDuplicateContractor' => $checkDuplicateContractor,
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -220,7 +241,28 @@ class ProjectController extends Controller
         }
     }
 
-    public function fetchDataOld()
+    private function detectDuplicateData($array, $properties)
+    {
+        $uniqueData = [];
+        $duplicates = [];
+
+        foreach ($array as $item) {
+            $data = '';
+            foreach ($properties as $property) {
+                $data .= $item[$property];
+            }
+
+            if (in_array($data, $uniqueData)) {
+                $duplicates[] = $item;
+            } else {
+                $uniqueData[] = $data;
+            }
+        }
+
+        return $duplicates;
+    }
+
+    private function fetchDataOld()
     {
         $projects = [
             (object)[

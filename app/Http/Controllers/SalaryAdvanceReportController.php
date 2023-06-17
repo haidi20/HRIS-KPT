@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SalaryAdvanceExport;
 use App\Models\SalaryAdvance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryAdvanceReportController extends Controller
 {
@@ -24,8 +27,8 @@ class SalaryAdvanceReportController extends Controller
 
     public function fetchData($reqStatus = null)
     {
-        $dateStart = request("date_start");
-        $dateEnd = request("date_end");
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
         $nameModel = $this->nameModel;
         $userId = (int) request("user_id");
         $status = request("status");
@@ -38,7 +41,9 @@ class SalaryAdvanceReportController extends Controller
         $isByUser = true;
 
         $approvalAgreement = new ApprovalAgreementController;
-        $salaryAdvances = new SalaryAdvance;
+
+        $salaryAdvances = SalaryAdvance::whereDate("created_at", ">=", $dateStart->format("Y-m-d"))
+            ->whereDate("created_at", "<=", $dateEnd->format("Y-m-d"));
 
         $salaryAdvances = $approvalAgreement->whereByApproval(
             $salaryAdvances,
@@ -95,12 +100,43 @@ class SalaryAdvanceReportController extends Controller
 
     public function export()
     {
-        //
+        $data = $this->fetchData()->original["salaryAdvances"];
+        $dateStart = Carbon::parse(request("date_start"));
+        $dateEnd = Carbon::parse(request("date_end"));
+        $dateStartReadable = $dateStart->isoFormat("dddd, D MMMM YYYY");
+        $dateEndReadable = $dateEnd->isoFormat("dddd, D MMMM YYYY");
+        $nameFile = "export/kasbon_{$dateStartReadable}-{$dateEndReadable}.xlsx";
+
+        try {
+            $path = public_path($nameFile);
+
+            if ($path) {
+                @unlink($path);
+            }
+
+            Excel::store(new SalaryAdvanceExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                "success" => true,
+                "request" => request()->all(),
+                "data" => $data,
+                "linkDownload" => route('roster.download', ["path" => $nameFile]),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal export data',
+            ], 500);
+        }
     }
 
     public function download()
     {
-        //
+        $path = public_path(request("path"));
+
+        return Response::download($path);
     }
 
     // LAPORAN KASBON

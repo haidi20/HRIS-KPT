@@ -52,6 +52,16 @@
             CV. KARYA PACIFIC TEHNIK
         </span>
     </div>
+    <div>
+        <span>
+            Nama : {{ $employee->name }}
+        </span>
+        <br>
+        <span>
+            Jabatan : {{ $employee->position_name }}
+        </span>
+    </div>
+    <br>
     <table border="1">
         <thead>
             <tr>
@@ -62,7 +72,10 @@
                 <th nowrap>Durasi</th>
                 <th nowrap>Jam Istirahat</th>
                 <th nowrap>Jam Selesai Istirahat</th>
-                <th nowrap>Durasi Jam Kerja</th>
+                <th nowrap>Durasi Jam Istirahat</th>
+                <th nowrap>Jam Lembur</th>
+                <th nowrap>Jam Selesai Lembur</th>
+                <th nowrap>Durasi Jam Lembur</th>
             </tr>
         </thead>
         <tbody>
@@ -70,12 +83,27 @@
                 <tr>
                     <td>{{ $item->date }}</td>
                     <td nowrap>{{ $item->day }}</td>
-                    <td nowrap>{{ $item->hour_start }}</td>
-                    <td nowrap>{{ $item->hour_end }}</td>
-                    <td nowrap>{{ $item->duration }}</td>
-                    <td nowrap>{{ $item->hour_rest_start }}</td>
-                    <td nowrap>{{ $item->hour_rest_end }}</td>
-                    <td nowrap>{{ $item->duration_hour_work }}</td>
+                    @if ($item->is_exists)
+                        <td nowrap>{{ $item->hour_start }}</td>
+                        <td nowrap>{{ $item->hour_end }}</td>
+                        <td nowrap>{{ $item->duration_work }}</td>
+                        <td nowrap>{{ $item->hour_rest_start }}</td>
+                        <td nowrap>{{ $item->hour_rest_end }}</td>
+                        <td nowrap>{{ $item->duration_rest }}</td>
+                        <td nowrap>{{ $item->hour_overtime_start }}</td>
+                        <td nowrap>{{ $item->hour_overtime_end }}</td>
+                        <td nowrap>{{ $item->duration_overtime }}</td>
+                    @else
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

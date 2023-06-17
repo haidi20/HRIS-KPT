@@ -47,7 +47,7 @@ const Attendance = {
             state.date_range = payload.date_range;
         },
         UPDATE_LOADING_MAIN(state, payload) {
-            state.loading.table = payload.value;
+            state.loading.main = payload.value;
         },
         UPDATE_LOADING_DETAIL(state, payload) {
             state.loading.detail = payload.value;
@@ -69,7 +69,7 @@ const Attendance = {
                 }
                 )
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA_MAIN", {

@@ -47,12 +47,12 @@
                   <span>Rp. 1.000.000</span>-->
                 </b-col>
                 <b-col cols="6" class="flex flex-col">
-                  <span>
+                  <!-- <span>
                     <b>Status :</b>
-                  </span>
+                  </span>-->
                   <span
                     :class="`badge bg-${data.approval_color}`"
-                    style="width:6rem"
+                    style="width:6rem; align-self: end;"
                   >{{data.approval_status_readable}}</span>
                   <template v-if="data.approval_status == 'reject'">
                     <span class="title-item">
