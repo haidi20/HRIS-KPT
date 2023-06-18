@@ -5,7 +5,7 @@
     - [Kasbon](/{{route}}/{{version}}/menu/kasbon)
     - [Cuti](/{{route}}/{{version}}/menu/cuti)
     - [Roster](/{{route}}/{{version}}/menu/roster)
-    - [absensi](/{{route}}/{{version}}/menu/absensi)
+    - [Absensi](/{{route}}/{{version}}/menu/absensi)
     - [Periode Gaji](/{{route}}/{{version}}/menu/periode-gaji)
     - [Slip Gaji Karyawan](/{{route}}/{{version}}/menu/slip-gaji-karyawan)
     - [Penggajian Bulanan](/{{route}}/{{version}}/menu/penggajian-bulanan)
