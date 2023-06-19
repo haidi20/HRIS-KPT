@@ -252,20 +252,20 @@ class ApprovalAgreementController extends Controller
                 $userId,
                 1
             )->checkNextLevelApproval;
-            $nextLevelTwiceApproval = $this->approvalNextLevel(
-                $approvalLevelId,
-                $modelId,
-                $nameModel,
-                $userId,
-                2
-            )->nextLevelApproval;
-            $checkNextLevelTwiceApproval = $this->approvalNextLevel(
-                $approvalLevelId,
-                $modelId,
-                $nameModel,
-                $userId,
-                2
-            )->checkNextLevelApproval;
+            // $nextLevelTwiceApproval = $this->approvalNextLevel(
+            //     $approvalLevelId,
+            //     $modelId,
+            //     $nameModel,
+            //     $userId,
+            //     2
+            // )->nextLevelApproval;
+            // $checkNextLevelTwiceApproval = $this->approvalNextLevel(
+            //     $approvalLevelId,
+            //     $modelId,
+            //     $nameModel,
+            //     $userId,
+            //     2
+            // )->checkNextLevelApproval;
 
             // status approval di next level akan menjadi 'review'
             if ($statusApproval == "accept") {
@@ -296,28 +296,28 @@ class ApprovalAgreementController extends Controller
                 // untuk atas nama approval
             } else if ($statusApproval == "accept_onbehalf") {
                 // check apakah masih ada next level atau tidak
-                if ($checkNextLevelApproval != null) {
-                    // update status approval on next level can be 'accept'
-                    ApprovalAgreement::byApprovalLevelId($approvalLevelId)
-                        ->byModel($modelId, $nameModel)
-                        ->where("level_approval", $nextLevelApproval)
-                        ->update([
-                            "status_approval" => "accept",
-                            "user_behalf_id" => $userBehalfId,
-                            "note" => $note,
-                        ]);
+                // if ($checkNextLevelApproval != null) {
+                //     // update status approval on next level can be 'accept'
+                //     ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                //         ->byModel($modelId, $nameModel)
+                //         ->where("level_approval", $nextLevelApproval)
+                //         ->update([
+                //             "status_approval" => "accept",
+                //             "user_behalf_id" => $userBehalfId,
+                //             "note" => $note,
+                //         ]);
 
-                    if ($checkNextLevelTwiceApproval != null) {
-                        ApprovalAgreement::byApprovalLevelId($approvalLevelId)
-                            ->byModel($modelId, $nameModel)
-                            ->updateOrCreate([
-                                "level_approval" => $nextLevelTwiceApproval,
-                            ], [
-                                "note" => $note,
-                                "status_approval" => "review",
-                            ]);
-                    }
-                }
+                //     if ($checkNextLevelTwiceApproval != null) {
+                //         ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+                //             ->byModel($modelId, $nameModel)
+                //             ->updateOrCreate([
+                //                 "level_approval" => $nextLevelTwiceApproval,
+                //             ], [
+                //                 "note" => $note,
+                //                 "status_approval" => "review",
+                //             ]);
+                //     }
+                // }
             }
         }
 
@@ -329,10 +329,16 @@ class ApprovalAgreementController extends Controller
         $nextLevelApproval = ApprovalAgreement::byApprovalLevelId($approvalLevelId)
             ->byModel($modelId, $nameModel)
             ->where("user_id", $userId)
-            ->first()->level_approval + $addLevel;
+            ->first();
+
+        $getNextLevelApproval = 1;
+
+        if ($nextLevelApproval) {
+            $getNextLevelApproval = $nextLevelApproval->level_approval + $addLevel;
+        }
 
         $checkNextLevelApproval = ApprovalLevelDetail::byApprovalLevelId($approvalLevelId)
-            ->where("level", $nextLevelApproval)
+            ->where("level", $getNextLevelApproval)
             ->first();
 
         return (object) compact("nextLevelApproval", "checkNextLevelApproval");
