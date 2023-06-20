@@ -308,6 +308,7 @@ const Project = {
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
+                user_id: payload.user_id,
             }
 
             await axios

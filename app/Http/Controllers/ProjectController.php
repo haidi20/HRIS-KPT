@@ -7,6 +7,7 @@ use App\Models\Contractor;
 use App\Models\ContractorHasParent;
 use App\Models\OrdinarySeamanHasParent;
 use App\Models\Project;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -57,11 +58,25 @@ class ProjectController extends Controller
 
     public function fetchDataBaseDateEnd()
     {
+        $user = null;
         $date = Carbon::now();
 
+        if (request("user_id")) {
+            $user = User::find(request("user_id"));
+        }
+
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            ->whereDate("date_end", ">=", $date)
-            ->orderBy("date_end", "asc")->get();
+            ->whereDate("date_end", ">=", $date);
+
+        if ($user != null) {
+            $locationId = $user->location_id ? $user->location_id : null;
+
+            if ($locationId != null) {
+                $projects = $projects->where("location_id", $locationId);
+            }
+        }
+
+        $projects = $projects->orderBy("date_end", "asc")->get();
 
         return response()->json([
             "projects" => $projects,
