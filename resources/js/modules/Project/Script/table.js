@@ -71,6 +71,9 @@ export default {
         getParentType() {
             return this.$store.state.project.parent.type;
         },
+        getForm() {
+            return this.$store.state.project.form;
+        },
         params() {
             return this.$store.state.project.params;
         },
@@ -101,14 +104,18 @@ export default {
             this.$bvModal.show("project_form");
         },
         onEdit(item) {
+            // console.info(item);
+            const form = { ...item };
             this.$store.dispatch("project/onAction", {
-                form: item,
+                form: form,
                 form_type: "edit",
                 form_title: "Ubah Proyek",
             });
 
             this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
             this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+
+            // console.info(this.getForm);
 
             this.$bvModal.show("project_form");
         },

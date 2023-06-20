@@ -25,7 +25,7 @@
           />
         </b-form-group>
       </b-col>
-      <b-col cols="1" style="align-self: center;">
+      <b-col v-if="!getReadOnly()" cols="1" style="align-self: center;">
         <span @click="onDelete(index)" class="cursor-pointer">
           <!-- <i class="fas fa-trash" style="color: #BB2D3B;"></i> -->
           <i class="bi bi-trash" style="color: #BB2D3B;"></i>
@@ -70,6 +70,7 @@ export default {
       this.$store.commit("project/INSERT_FORM_NEW_CONTRACTOR");
     },
     onDelete(index) {
+      console.info(index);
       this.$store.commit("project/DELETE_FORM_CONTRACTOR", { index });
     },
     getReadOnly() {
