@@ -101,3 +101,17 @@ if (
         }
     }
 }
+
+if (
+    !function_exists('limitString')
+) {
+    function limitString($string, $limit = 200, $suffix = '...')
+    {
+        if (mb_strlen($string) <= $limit) {
+            return $string;
+        } else {
+            $trimmedString = mb_substr($string, 0, $limit);
+            return $trimmedString . $suffix;
+        }
+    }
+}

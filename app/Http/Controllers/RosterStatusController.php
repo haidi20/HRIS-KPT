@@ -6,6 +6,7 @@ use App\Models\RosterStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 class RosterStatusController extends Controller
@@ -110,6 +111,10 @@ class RosterStatusController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal ' . $message,
@@ -146,6 +151,10 @@ class RosterStatusController extends Controller
             ], 201);
         } catch (\Exception $e) {
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,
@@ -188,6 +197,10 @@ class RosterStatusController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,

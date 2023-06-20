@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 // use Spatie\Permission\Models\Permission;
 
@@ -25,7 +26,7 @@ class PeriodPayrollController extends Controller
         $columns = [
 
             // name
-// number_of_workdays
+            // number_of_workdays
 
 
 
@@ -43,7 +44,7 @@ class PeriodPayrollController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $period_payroll = PeriodPayroll::query()
-                ->select('period_payrolls.period','period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
+                ->select('period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
 
             return $datatables->eloquent($period_payroll)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -121,8 +122,8 @@ class PeriodPayrollController extends Controller
     {
         // return request()->all();
 
-        $n = PeriodPayroll::where('period',request("period")."-01")->count();
-        if($n > 0){
+        $n = PeriodPayroll::where('period', request("period") . "-01")->count();
+        if ($n > 0) {
             return response()->json([
                 'success' => false,
                 'message' => "Gagal, Periode Sudah Ada",
@@ -144,7 +145,7 @@ class PeriodPayrollController extends Controller
                 $message = "ditambahkan";
             }
 
-            $period_payroll->period = request("period")."-01";
+            $period_payroll->period = request("period") . "-01";
             $period_payroll->date_start = request("date_start");
             $period_payroll->date_end = request("date_end");
             $period_payroll->save();
@@ -152,73 +153,72 @@ class PeriodPayrollController extends Controller
 
             $employees = Employee::all();
 
-            $bpjs_jht = BpjsCalculation::where('code','jht')->first();
-            $bpjs_jkk = BpjsCalculation::where('code','jkk')->first();
-            $bpjs_jkm = BpjsCalculation::where('code','jkm')->first();
-            $bpjs_jp = BpjsCalculation::where('code','jp')->first();
-            $bpjs_kes = BpjsCalculation::where('code','kes')->first();
+            $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
+            $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
+            $bpjs_jkm = BpjsCalculation::where('code', 'jkm')->first();
+            $bpjs_jp = BpjsCalculation::where('code', 'jp')->first();
+            $bpjs_kes = BpjsCalculation::where('code', 'kes')->first();
 
 
 
 
-            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code','jk')->first()->nominal ?? 0;
-            $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code','kes')->first()->nominal ?? 0;
+            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'jk')->first()->nominal ?? 0;
+            $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code', 'kes')->first()->nominal ?? 0;
 
             foreach ($employees as $key => $employee) {
 
-                $jumlah_hari_kerja  = Attendance::whereDate('date','>=',$period_payroll->date_start)
-                ->whereDate('date','<=',$period_payroll->date_end)
-                ->where('employee_id',$employee->id)
-                ->where(function($query){
-                    $query->where('hour_start','!=',NULL)->orWhere('hour_end','!=',NULL);
-                })
-                ->count();
+                $jumlah_hari_kerja  = Attendance::whereDate('date', '>=', $period_payroll->date_start)
+                    ->whereDate('date', '<=', $period_payroll->date_end)
+                    ->where('employee_id', $employee->id)
+                    ->where(function ($query) {
+                        $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
+                    })
+                    ->count();
 
-                // $jumlah_hari_kerja  = 
+                // $jumlah_hari_kerja  =
 
-                $jumlah_jam_rate_lembur  = Attendance::whereDate('date','>=',$period_payroll->date_start)
-                ->whereDate('date','<=',$period_payroll->date_end)
-                ->where('employee_id',$employee->id)
-                ->where(function($query){
-                    $query->where('hour_start','!=',NULL)->orWhere('hour_end','!=',NULL);
-                })
-                ->sum('duration_overtime');
+                $jumlah_jam_rate_lembur  = Attendance::whereDate('date', '>=', $period_payroll->date_start)
+                    ->whereDate('date', '<=', $period_payroll->date_end)
+                    ->where('employee_id', $employee->id)
+                    ->where(function ($query) {
+                        $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
+                    })
+                    ->sum('duration_overtime');
 
-                $jumlah_jam_rate_lembur_modulus  = $jumlah_jam_rate_lembur %60;
+                $jumlah_jam_rate_lembur_modulus  = $jumlah_jam_rate_lembur % 60;
 
-                if($jumlah_jam_rate_lembur >= 30 && $jumlah_jam_rate_lembur <= 50){
-                    $jumlah_jam_rate_lembur+= 0.5;
+                if ($jumlah_jam_rate_lembur >= 30 && $jumlah_jam_rate_lembur <= 50) {
+                    $jumlah_jam_rate_lembur += 0.5;
                 }
 
-                if($jumlah_jam_rate_lembur > 50){
-                    $jumlah_jam_rate_lembur+= 1;
+                if ($jumlah_jam_rate_lembur > 50) {
+                    $jumlah_jam_rate_lembur += 1;
                 }
 
                 $pendapatan_tambahan_lain_lain = 0;
 
-                $jumlah_jam_rate_lembur = 109.0;//contoh
+                $jumlah_jam_rate_lembur = 109.0; //contoh
                 $pendapatan_tambahan_lain_lain = 2645923; //contoh
-                $jumlah_hari_kerja = 20;//contoh
-                
+                $jumlah_hari_kerja = 20; //contoh
 
-                $pendapatan_uang_makan = 432000;//$jumlah_hari_kerja * $employee->meal_allowance_per_attend;
+
+                $pendapatan_uang_makan = 432000; //$jumlah_hari_kerja * $employee->meal_allowance_per_attend;
                 $pendapatan_lembur = $jumlah_jam_rate_lembur * $employee->overtime_rate_per_hour;
-                
+
                 $jumlah_pendapatan = $employee->basic_salary + $employee->allowance + $pendapatan_uang_makan + $pendapatan_lembur + $pendapatan_tambahan_lain_lain;
 
-                
+
 
                 $jht_perusahaan_persen = 0;
                 $jht_karyawan_persen = 0;
                 $jht_perusahaan_rupiah = 0;
                 $jht_karyawan_rupiah = 0;
-                
-                if($employee->bpjs_jht == 'Y'){
-                    $jht_perusahaan_persen  = $bpjs_jht->company_percent ?? 0; 
-                    $jht_karyawan_persen    = $bpjs_jht->employee_percent ?? 0; 
-                    $jht_perusahaan_rupiah  = $bpjs_jht->company_nominal ?? 0; 
-                    $jht_karyawan_rupiah    = $bpjs_jht->employee_nominal ?? 0;  
 
+                if ($employee->bpjs_jht == 'Y') {
+                    $jht_perusahaan_persen  = $bpjs_jht->company_percent ?? 0;
+                    $jht_karyawan_persen    = $bpjs_jht->employee_percent ?? 0;
+                    $jht_perusahaan_rupiah  = $bpjs_jht->company_nominal ?? 0;
+                    $jht_karyawan_rupiah    = $bpjs_jht->employee_nominal ?? 0;
                 }
 
                 $jkk_perusahaan_persen = 0;
@@ -226,14 +226,13 @@ class PeriodPayrollController extends Controller
                 $jkk_perusahaan_rupiah = 0;
                 $jkk_karyawan_rupiah = 0;
 
-               
 
-                if($employee->bpjs_jkk == 'Y'){
-                    $jkk_perusahaan_persen  = $bpjs_jkk->company_percent ?? 0; 
-                    $jkk_karyawan_persen    = $bpjs_jkk->employee_percent ?? 0; 
-                    $jkk_perusahaan_rupiah  = $bpjs_jkk->company_nominal ?? 0; 
-                    $jkk_karyawan_rupiah    = $bpjs_jkk->employee_nominal ?? 0;  
-                    
+
+                if ($employee->bpjs_jkk == 'Y') {
+                    $jkk_perusahaan_persen  = $bpjs_jkk->company_percent ?? 0;
+                    $jkk_karyawan_persen    = $bpjs_jkk->employee_percent ?? 0;
+                    $jkk_perusahaan_rupiah  = $bpjs_jkk->company_nominal ?? 0;
+                    $jkk_karyawan_rupiah    = $bpjs_jkk->employee_nominal ?? 0;
                 }
 
                 $jkm_perusahaan_persen = 0;
@@ -241,15 +240,14 @@ class PeriodPayrollController extends Controller
                 $jkm_perusahaan_rupiah = 0;
                 $jkm_karyawan_rupiah = 0;
 
-                
 
 
-                if($employee->bpjs_jkm == 'Y'){
-                    $jkm_perusahaan_persen  = $bpjs_jkm->company_percent ?? 0; 
-                    $jkm_karyawan_persen    = $bpjs_jkm->employee_percent ?? 0; 
-                    $jkm_perusahaan_rupiah  = $bpjs_jkm->company_nominal ?? 0; 
-                    $jkm_karyawan_rupiah    = $bpjs_jkm->employee_nominal ?? 0;  
-                    
+
+                if ($employee->bpjs_jkm == 'Y') {
+                    $jkm_perusahaan_persen  = $bpjs_jkm->company_percent ?? 0;
+                    $jkm_karyawan_persen    = $bpjs_jkm->employee_percent ?? 0;
+                    $jkm_perusahaan_rupiah  = $bpjs_jkm->company_nominal ?? 0;
+                    $jkm_karyawan_rupiah    = $bpjs_jkm->employee_nominal ?? 0;
                 }
 
 
@@ -257,16 +255,15 @@ class PeriodPayrollController extends Controller
                 $jp_karyawan_persen = 0;
                 $jp_perusahaan_rupiah = 0;
                 $jp_karyawan_rupiah = 0;
-                
-                
 
 
-                if($employee->bpjs_jp == 'Y'){
-                    $jp_perusahaan_persen  = $bpjs_jp->company_percent ?? 0; 
-                    $jp_karyawan_persen    = $bpjs_jp->employee_percent ?? 0; 
-                    $jp_perusahaan_rupiah  = $bpjs_jp->company_nominal ?? 0; 
-                    $jp_karyawan_rupiah    = $bpjs_jp->employee_nominal ?? 0;  
-                    
+
+
+                if ($employee->bpjs_jp == 'Y') {
+                    $jp_perusahaan_persen  = $bpjs_jp->company_percent ?? 0;
+                    $jp_karyawan_persen    = $bpjs_jp->employee_percent ?? 0;
+                    $jp_perusahaan_rupiah  = $bpjs_jp->company_nominal ?? 0;
+                    $jp_karyawan_rupiah    = $bpjs_jp->employee_nominal ?? 0;
                 }
 
                 $bpjs_perusahaan_persen = 0;
@@ -274,14 +271,14 @@ class PeriodPayrollController extends Controller
                 $bpjs_perusahaan_rupiah = 0;
                 $bpjs_karyawan_rupiah = 0;
 
-                if($employee->bpjs_kes == 'Y'){
-                    $kes_perusahaan_persen  = $bpjs_kes->company_percent ?? 0; 
-                    $kes_karyawan_persen    = $bpjs_kes->employee_percent ?? 0; 
-                    $kes_perusahaan_rupiah  = $bpjs_kes->company_nominal ?? 0; 
-                    $kes_karyawan_rupiah    = $bpjs_kes->employee_nominal ?? 0;  
-                } 
-                
-                
+                if ($employee->bpjs_kes == 'Y') {
+                    $kes_perusahaan_persen  = $bpjs_kes->company_percent ?? 0;
+                    $kes_karyawan_persen    = $bpjs_kes->employee_percent ?? 0;
+                    $kes_perusahaan_rupiah  = $bpjs_kes->company_nominal ?? 0;
+                    $kes_karyawan_rupiah    = $bpjs_kes->employee_nominal ?? 0;
+                }
+
+
                 $total_bpjs_perusahaan_persen = $jht_perusahaan_persen + $jkk_perusahaan_persen + $jkm_perusahaan_persen + $jp_perusahaan_persen + $kes_perusahaan_persen;
                 $total_bpjs_karyawan_persen = $jht_karyawan_persen + $jkk_karyawan_persen + $jkm_karyawan_persen + $jp_karyawan_persen + $kes_karyawan_persen;
                 $total_bpjs_perusahaan_rupiah = $jht_perusahaan_rupiah + $jkk_perusahaan_rupiah + $jkm_perusahaan_rupiah + $jp_perusahaan_rupiah + $kes_perusahaan_rupiah;
@@ -291,62 +288,62 @@ class PeriodPayrollController extends Controller
 
                 $ptkp = 0;
 
-                if($employee->ptkp == 'TK/0'){
+                if ($employee->ptkp == 'TK/0') {
                     $ptkp = 54000000;
                 }
 
-                if($employee->ptkp == 'TK/1'){
+                if ($employee->ptkp == 'TK/1') {
                     $ptkp = 58500000;
                 }
 
-                if($employee->ptkp == 'TK/2'){
+                if ($employee->ptkp == 'TK/2') {
                     $ptkp = 63000000;
                 }
 
-                if($employee->ptkp == 'TK/3'){
+                if ($employee->ptkp == 'TK/3') {
                     $ptkp = 67500000;
                 }
 
-                if($employee->ptkp == 'K/0'){
+                if ($employee->ptkp == 'K/0') {
                     $ptkp = 58500000;
                 }
 
-                if($employee->ptkp == 'K/1'){
+                if ($employee->ptkp == 'K/1') {
                     $ptkp = 63000000;
                 }
 
-                if($employee->ptkp == 'K/2'){
+                if ($employee->ptkp == 'K/2') {
                     $ptkp = 67500000;
                 }
 
-                if($employee->ptkp == 'K/3'){
+                if ($employee->ptkp == 'K/3') {
                     $ptkp = 72000000;
                 }
 
-                if($employee->ptkp == 'K/I/0'){
+                if ($employee->ptkp == 'K/I/0') {
                     $ptkp = 112500000;
                 }
 
-                if($employee->ptkp == 'K/I/1'){
+                if ($employee->ptkp == 'K/I/1') {
                     $ptkp = 117000000;
                 }
 
-                if($employee->ptkp == 'K/I/2'){
+                if ($employee->ptkp == 'K/I/2') {
                     $ptkp = 121500000;
                 }
 
-                if($employee->ptkp == 'K/I/3'){
+                if ($employee->ptkp == 'K/I/3') {
                     $ptkp = 126000000;
                 }
 
 
                 $pemotongan_bpjs_dibayar_karyawan  = $total_bpjs_karyawan_rupiah;
-                
+
                 $pemotongan_potongan_lain_lain = 0;
 
-                
 
-                
+
+
 
 
                 $pajak_gaji_kotor_kurang_potongan = $jumlah_pendapatan - $pemotongan_potongan_lain_lain;
@@ -355,141 +352,139 @@ class PeriodPayrollController extends Controller
                 $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor));
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
-                $pajak_gaji_bersih_setahun = 12 * ($pajak_total_penghasilan_kotor - $pajak_total_pengurang) ;
-                $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp ;
+                $pajak_gaji_bersih_setahun = 12 * ($pajak_total_penghasilan_kotor - $pajak_total_pengurang);
+                $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
 
 
                 //menghitung pkp 5%
-                $pkp_lima_persen  = \max(0,$pkp_setahun > 50000000 ? ((50000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
-                $pkp_lima_belas_persen  = \max(0,$pkp_setahun > 250000000 ? ((250000000 - 50000000) * 0.15) : (($pkp_setahun - 50000000) * 0.15));
-                $pkp_dua_puluh_lima_persen  = \max(0,$pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
-                $pkp_tiga_puluh_persen  = \max(0,$pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                $pkp_lima_persen  = \max(0, $pkp_setahun > 50000000 ? ((50000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 50000000) * 0.15) : (($pkp_setahun - 50000000) * 0.15));
+                $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
+                $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
 
-                $pajak_pph_dua_satu_setahun = $pkp_lima_persen+$pkp_lima_belas_persen+$pkp_dua_puluh_lima_persen+$pkp_tiga_puluh_persen;
+                $pajak_pph_dua_satu_setahun = $pkp_lima_persen + $pkp_lima_belas_persen + $pkp_dua_puluh_lima_persen + $pkp_tiga_puluh_persen;
 
-                $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun/12;
+                $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun / 12;
                 $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
                 $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
 
 
-                
+
 
                 $new_payroll = Payroll::create([
-                    'employee_id'=>$employee->id,
-                    'period_payroll_id'=>$period_payroll->id,
-                    'pendapatan_gaji_dasar'=>$employee->basic_salary,
-                    'pendapatan_tunjangan_tetap'=>$employee->allowance,
-                    'pendapatan_uang_makan'=> $pendapatan_uang_makan,
-                    'pendapatan_lembur'=> $pendapatan_lembur,
-                    'pendapatan_tambahan_lain_lain'=>$pendapatan_tambahan_lain_lain,
-                    'jumlah_pendapatan'=>$jumlah_pendapatan,
+                    'employee_id' => $employee->id,
+                    'period_payroll_id' => $period_payroll->id,
+                    'pendapatan_gaji_dasar' => $employee->basic_salary,
+                    'pendapatan_tunjangan_tetap' => $employee->allowance,
+                    'pendapatan_uang_makan' => $pendapatan_uang_makan,
+                    'pendapatan_lembur' => $pendapatan_lembur,
+                    'pendapatan_tambahan_lain_lain' => $pendapatan_tambahan_lain_lain,
+                    'jumlah_pendapatan' => $jumlah_pendapatan,
 
 
-                    'pemotongan_bpjs_dibayar_karyawan'=>0,
-                    'pemotongan_pph_dua_satu'=>0,
-                    'pemotongan_potongan_lain_lain'=>0,
-                    'jumlah_pemotongan'=>0,
+                    'pemotongan_bpjs_dibayar_karyawan' => 0,
+                    'pemotongan_pph_dua_satu' => 0,
+                    'pemotongan_potongan_lain_lain' => 0,
+                    'jumlah_pemotongan' => 0,
 
-                    'gaji_bersih'=>$gaji_bersih,
-                    'bulan'=>$period_payroll->period,
-                    'posisi'=>"",
-                    'gaji_dasar'=>$employee->basic_salary,
-                    'tunjangan_tetap'=>$employee->allowance,
-
-
-                    'rate_lembur'=>$employee->overtime_rate_per_hour,
-                    'jumlah_jam_rate_lembur'=>$jumlah_jam_rate_lembur,
+                    'gaji_bersih' => $gaji_bersih,
+                    'bulan' => $period_payroll->period,
+                    'posisi' => "",
+                    'gaji_dasar' => $employee->basic_salary,
+                    'tunjangan_tetap' => $employee->allowance,
 
 
-
-
-                    'tunjangan_makan'=>$employee->meal_allowance_per_attend,
-                    'jumlah_hari_tunjangan_makan'=>$jumlah_hari_kerja,
+                    'rate_lembur' => $employee->overtime_rate_per_hour,
+                    'jumlah_jam_rate_lembur' => $jumlah_jam_rate_lembur,
 
 
 
-                    'tunjangan_transport'=>$employee->transport_allowance_per_attend,
-                    'jumlah_hari_tunjangan_transport'=>$jumlah_hari_kerja,
+
+                    'tunjangan_makan' => $employee->meal_allowance_per_attend,
+                    'jumlah_hari_tunjangan_makan' => $jumlah_hari_kerja,
 
 
 
-                    'tunjangan_kehadiran'=>$employee->attend_allowance_per_attend,
-                    'jumlah_hari_tunjangan_kehadiran'=>$jumlah_hari_kerja,
-
-
-                    'ptkp_karyawan'=>$ptkp,
-                    'jumlah_cuti_ijin_per_bulan'=>0,
-                    'sisa_cuti_tahun'=>0,
-
-                    'dasar_updah_bpjs_tk'=>$bpjs_dasar_updah_bpjs_tk,
-                    'dasar_updah_bpjs_kes'=>$dasar_updah_bpjs_kes,
+                    'tunjangan_transport' => $employee->transport_allowance_per_attend,
+                    'jumlah_hari_tunjangan_transport' => $jumlah_hari_kerja,
 
 
 
-                    'jht_perusahaan_persen'=>$jht_perusahaan_persen,
-                    'jht_karyawan_persen'=>$jht_karyawan_persen,
-                    'jht_perusahaan_rupiah'=>$jht_perusahaan_rupiah,
-                    'jht_karyawan_rupiah'=>$jht_karyawan_rupiah,
-
-                    'jkk_perusahaan_persen'=>$jkk_perusahaan_persen,
-                    'jkk_karyawan_persen'=>$jkk_karyawan_persen,
-                    'jkk_perusahaan_rupiah'=>$jkk_perusahaan_rupiah,
-                    'jkk_karyawan_rupiah'=>$jkk_karyawan_rupiah,
-
-                    'jkm_perusahaan_persen'=>$jkm_perusahaan_persen,
-                    'jkm_karyawan_persen'=>$jkm_karyawan_persen,
-                    'jkm_perusahaan_rupiah'=>$jkm_perusahaan_rupiah,
-                    'jkm_karyawan_rupiah'=>$jkm_karyawan_rupiah,
-
-                    'jp_perusahaan_persen'=>$jp_perusahaan_persen,
-                    'jp_karyawan_persen'=>$jp_karyawan_persen,
-                    'jp_perusahaan_rupiah'=>$jp_perusahaan_rupiah,
-                    'jp_karyawan_rupiah'=>$jp_karyawan_rupiah,
-
-                    'bpjs_perusahaan_persen'=>$bpjs_perusahaan_persen,
-                    'bpjs_karyawan_persen'=>$bpjs_karyawan_persen,
-                    'bpjs_perusahaan_rupiah'=>$bpjs_perusahaan_rupiah,
-                    'bpjs_karyawan_rupiah'=>$bpjs_karyawan_rupiah,
-
-                    'total_bpjs_perusahaan_persen'=>$total_bpjs_perusahaan_persen,
-                    'total_bpjs_karyawan_persen'=>$total_bpjs_karyawan_persen,
-                    'total_bpjs_perusahaan_rupiah'=>$total_bpjs_perusahaan_rupiah,
-                    'total_bpjs_karyawan_rupiah'=>$total_bpjs_karyawan_rupiah,
+                    'tunjangan_kehadiran' => $employee->attend_allowance_per_attend,
+                    'jumlah_hari_tunjangan_kehadiran' => $jumlah_hari_kerja,
 
 
-                    'jumlah_pemotongan'=>$jumlah_pemotongan,
+                    'ptkp_karyawan' => $ptkp,
+                    'jumlah_cuti_ijin_per_bulan' => 0,
+                    'sisa_cuti_tahun' => 0,
 
-                    'pemotongan_bpjs_dibayar_karyawan'=>$pemotongan_bpjs_dibayar_karyawan,
-                    'pemotongan_pph_dua_satu'=>$pemotongan_pph_dua_satu,
-                    'pemotongan_potongan_lain_lain'=>$pemotongan_potongan_lain_lain,
+                    'dasar_updah_bpjs_tk' => $bpjs_dasar_updah_bpjs_tk,
+                    'dasar_updah_bpjs_kes' => $dasar_updah_bpjs_kes,
 
 
-                    'pajak_gaji_kotor_kurang_potongan'=>$pajak_gaji_kotor_kurang_potongan,
-                    'pajak_bpjs_dibayar_perusahaan'=>$pajak_bpjs_dibayar_perusahaan,
-                    'pajak_total_penghasilan_kotor'=>$pajak_total_penghasilan_kotor,
-                    'pajak_biaya_jabatan'=>$pajak_biaya_jabatan,
-                    'pajak_bpjs_dibayar_karyawan'=>$pajak_bpjs_dibayar_karyawan,
-                    'pajak_total_pengurang'=>$pajak_total_pengurang,
-                    'pajak_gaji_bersih_setahun'=>$pajak_gaji_bersih_setahun,
-                    'pkp_setahun'=>$pkp_setahun,
 
-                    'pkp_lima_persen'=>$pkp_lima_persen,
-                    'pkp_lima_belas_persen'=>$pkp_lima_belas_persen,
-                    'pkp_dua_puluh_lima_persen'=>$pkp_dua_puluh_lima_persen,
-                    'pkp_tiga_puluh_persen'=>$pkp_tiga_puluh_persen,
+                    'jht_perusahaan_persen' => $jht_perusahaan_persen,
+                    'jht_karyawan_persen' => $jht_karyawan_persen,
+                    'jht_perusahaan_rupiah' => $jht_perusahaan_rupiah,
+                    'jht_karyawan_rupiah' => $jht_karyawan_rupiah,
+
+                    'jkk_perusahaan_persen' => $jkk_perusahaan_persen,
+                    'jkk_karyawan_persen' => $jkk_karyawan_persen,
+                    'jkk_perusahaan_rupiah' => $jkk_perusahaan_rupiah,
+                    'jkk_karyawan_rupiah' => $jkk_karyawan_rupiah,
+
+                    'jkm_perusahaan_persen' => $jkm_perusahaan_persen,
+                    'jkm_karyawan_persen' => $jkm_karyawan_persen,
+                    'jkm_perusahaan_rupiah' => $jkm_perusahaan_rupiah,
+                    'jkm_karyawan_rupiah' => $jkm_karyawan_rupiah,
+
+                    'jp_perusahaan_persen' => $jp_perusahaan_persen,
+                    'jp_karyawan_persen' => $jp_karyawan_persen,
+                    'jp_perusahaan_rupiah' => $jp_perusahaan_rupiah,
+                    'jp_karyawan_rupiah' => $jp_karyawan_rupiah,
+
+                    'bpjs_perusahaan_persen' => $bpjs_perusahaan_persen,
+                    'bpjs_karyawan_persen' => $bpjs_karyawan_persen,
+                    'bpjs_perusahaan_rupiah' => $bpjs_perusahaan_rupiah,
+                    'bpjs_karyawan_rupiah' => $bpjs_karyawan_rupiah,
+
+                    'total_bpjs_perusahaan_persen' => $total_bpjs_perusahaan_persen,
+                    'total_bpjs_karyawan_persen' => $total_bpjs_karyawan_persen,
+                    'total_bpjs_perusahaan_rupiah' => $total_bpjs_perusahaan_rupiah,
+                    'total_bpjs_karyawan_rupiah' => $total_bpjs_karyawan_rupiah,
+
+
+                    'jumlah_pemotongan' => $jumlah_pemotongan,
+
+                    'pemotongan_bpjs_dibayar_karyawan' => $pemotongan_bpjs_dibayar_karyawan,
+                    'pemotongan_pph_dua_satu' => $pemotongan_pph_dua_satu,
+                    'pemotongan_potongan_lain_lain' => $pemotongan_potongan_lain_lain,
+
+
+                    'pajak_gaji_kotor_kurang_potongan' => $pajak_gaji_kotor_kurang_potongan,
+                    'pajak_bpjs_dibayar_perusahaan' => $pajak_bpjs_dibayar_perusahaan,
+                    'pajak_total_penghasilan_kotor' => $pajak_total_penghasilan_kotor,
+                    'pajak_biaya_jabatan' => $pajak_biaya_jabatan,
+                    'pajak_bpjs_dibayar_karyawan' => $pajak_bpjs_dibayar_karyawan,
+                    'pajak_total_pengurang' => $pajak_total_pengurang,
+                    'pajak_gaji_bersih_setahun' => $pajak_gaji_bersih_setahun,
+                    'pkp_setahun' => $pkp_setahun,
+
+                    'pkp_lima_persen' => $pkp_lima_persen,
+                    'pkp_lima_belas_persen' => $pkp_lima_belas_persen,
+                    'pkp_dua_puluh_lima_persen' => $pkp_dua_puluh_lima_persen,
+                    'pkp_tiga_puluh_persen' => $pkp_tiga_puluh_persen,
                 ]);
 
-                Attendance::whereDate('date','>=',$period_payroll->date_start)
-                ->whereDate('date','<=',$period_payroll->date_end)
-                ->where('employee_id',$employee->id)
-                ->where(function($query){
-                    $query->where('hour_start','!=',NULL)->orWhere('hour_end','!=',NULL);
-                })
-                ->update([
-                    'payroll_id'=>$new_payroll->id
-                ]);
-
-
+                Attendance::whereDate('date', '>=', $period_payroll->date_start)
+                    ->whereDate('date', '<=', $period_payroll->date_end)
+                    ->where('employee_id', $employee->id)
+                    ->where(function ($query) {
+                        $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
+                    })
+                    ->update([
+                        'payroll_id' => $new_payroll->id
+                    ]);
             }
 
             DB::commit();
@@ -502,6 +497,11 @@ class PeriodPayrollController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,
@@ -531,6 +531,11 @@ class PeriodPayrollController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

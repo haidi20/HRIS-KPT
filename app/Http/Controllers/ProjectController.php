@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 
 class ProjectController extends Controller
 {
@@ -68,6 +69,8 @@ class ProjectController extends Controller
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
             ->whereDate("date_end", ">=", $date);
 
+        // data proyek berdasarkan lokasi pengguna,
+        // jadi jika pengawas tersebut ada di DOC 2, maka yg muncul proyek DOC 2
         if ($user != null) {
             $locationId = $user->location_id ? $user->location_id : null;
 
@@ -183,6 +186,10 @@ class ProjectController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -211,6 +218,10 @@ class ProjectController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,

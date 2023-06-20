@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryAdvanceReportController extends Controller
@@ -125,6 +126,10 @@ class SalaryAdvanceReportController extends Controller
         } catch (\Exception $e) {
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal export data',
@@ -142,7 +147,6 @@ class SalaryAdvanceReportController extends Controller
     // LAPORAN KASBON
     public function indexOld()
     {
-
         // selanjutnya pindah ke fetchData dapatkan datanya.
         $salaryAdvances = [
             (object)[

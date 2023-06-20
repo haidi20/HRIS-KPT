@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 
 class DepartmenController extends Controller
@@ -60,7 +61,7 @@ class DepartmenController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $departmen = Departmen::query()
-                ->select('departmens.id','departmens.company_id','departmens.code', 'departmens.name', 'departmens.description', 'companies.name as company_name')
+                ->select('departmens.id', 'departmens.company_id', 'departmens.code', 'departmens.name', 'departmens.description', 'companies.name as company_name')
                 ->with('company')
                 ->leftJoin('companies', 'departmens.company_id', '=', 'companies.id');
 
@@ -195,6 +196,11 @@ class DepartmenController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -223,6 +229,11 @@ class DepartmenController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

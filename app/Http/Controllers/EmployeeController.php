@@ -28,6 +28,7 @@ use Yajra\DataTables\DataTables;
 use App\DataTables\EmployeesDatatable;
 use App\DataTables\EmployeesExpDatatable;
 use App\Models\Departmen;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
 
@@ -251,6 +252,11 @@ class EmployeeController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -385,6 +391,11 @@ class EmployeeController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

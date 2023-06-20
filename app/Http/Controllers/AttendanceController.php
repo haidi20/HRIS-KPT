@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 use LDAP\Result;
 
 class AttendanceController extends Controller
@@ -156,6 +157,10 @@ class AttendanceController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error($e);
+
+            // $routeAction = Route::currentRouteAction();
+            // $log = new LogController;
+            // $log->store(request("user_id"), $e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,
