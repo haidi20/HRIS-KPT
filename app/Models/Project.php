@@ -51,7 +51,7 @@ class Project extends Model
 
     public function location()
     {
-        return $this->belongsTo(location::class, "location_id", "id");
+        return $this->belongsTo(Location::class, "location_id", "id");
     }
 
     public function job()
