@@ -79,16 +79,16 @@ class LocationController extends Controller
         return view("pages.master.location.index", $compact);
     }
 
-    private function buttonDatatables($columnsArrExPr)
-    {
-        return [
-            ['extend' => 'csv', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export CSV'],
-            ['extend' => 'pdf', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export PDF'],
-            ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
-            ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
-        ];
-    }
 
+
+    public function fetchData()
+    {
+        $locations = Location::orderBy("name", "asc")->get();
+
+        return response()->json([
+            "locations" => $locations,
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -158,5 +158,15 @@ class LocationController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    private function buttonDatatables($columnsArrExPr)
+    {
+        return [
+            ['extend' => 'csv', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export CSV'],
+            ['extend' => 'pdf', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export PDF'],
+            ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
+            ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
+        ];
     }
 }

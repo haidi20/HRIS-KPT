@@ -16,7 +16,7 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->foreignId('location_id'); // lokasi doc 1 / 2
-            $table->foreignId('company_id')->nullable(); // perusahaan
+            // $table->foreignId('company_id')->nullable(); // perusahaan
             $table->foreignId('foreman_id')->nullable(); // pengawas
             $table->foreignId('barge_id')->nullable(); // kapal
             $table->string("name"); // nama proyek

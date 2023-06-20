@@ -24,6 +24,9 @@ export default {
         getOptionCompanies() {
             return this.$store.state.master.data.companies;
         },
+        getOptionLocations() {
+            return this.$store.state.master.data.locations;
+        },
         getOptionTypes() {
             return this.$store.state.project.options.types;
         },

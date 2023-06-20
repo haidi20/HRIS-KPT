@@ -80,7 +80,7 @@
             </b-dropdown>-->
           </b-td>
           <b-td>{{ item.name }}</b-td>
-          <b-td>{{ item.company_name }}</b-td>
+          <b-td>{{ item.location_name }}</b-td>
           <b-td>{{ item.date_end_readable }}</b-td>
           <b-td>{{ item.day_duration }} Hari</b-td>
           <b-td>

@@ -21,8 +21,8 @@ export default {
                     class: "",
                 },
                 {
-                    label: "Perusahaan",
-                    field: "company_name",
+                    label: "Lokasi",
+                    field: "location_name",
                     width: "200px",
                     class: "",
                 },

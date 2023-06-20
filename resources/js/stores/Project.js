@@ -17,6 +17,7 @@ const defaultForm = {
     remaining_payment: null,
     remaining_payment_readable: null,
     company_id: null,
+    location_id: null,
     foreman_id: null,
     type: null,
     form_type: "create", // create, edit, detail

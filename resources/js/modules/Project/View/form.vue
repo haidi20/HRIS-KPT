@@ -62,6 +62,22 @@
         </b-form-group>
       </b-col>
       <b-col cols>
+        <b-form-group label="Lokasi" label-for="location_id" class>
+          <VueSelect
+            id="location_id"
+            class="cursor-pointer"
+            v-model="form.location_id"
+            placeholder="Pilih Lokasi"
+            :options="getOptionLocations"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+            :disabled="getReadOnly()"
+          />
+        </b-form-group>
+      </b-col>
+      <!-- <b-col cols>
         <b-form-group label="Perusahaan" label-for="company_id" class>
           <VueSelect
             id="company_id"
@@ -76,7 +92,7 @@
             :disabled="getReadOnly()"
           />
         </b-form-group>
-      </b-col>
+      </b-col>-->
     </b-row>
     <b-row>
       <b-col cols>

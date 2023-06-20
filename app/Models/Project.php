@@ -14,7 +14,7 @@ class Project extends Model
 
     protected $fillable = [];
     protected $appends = [
-        "company_name", "job_order_total", "date_end_readable",
+        "location_name", "job_order_total", "date_end_readable",
         "job_order_finish_total",
     ];
 
@@ -44,9 +44,14 @@ class Project extends Model
         return $this->belongsTo(Barge::class, "barge_id", "id");
     }
 
-    public function company()
+    // public function company()
+    // {
+    //     return $this->belongsTo(Company::class, "company_id", "id");
+    // }
+
+    public function location()
     {
-        return $this->belongsTo(Company::class, "company_id", "id");
+        return $this->belongsTo(location::class, "location_id", "id");
     }
 
     public function job()
@@ -83,10 +88,10 @@ class Project extends Model
         });
     }
 
-    public function getCompanyNameAttribute()
+    public function getLocationNameAttribute()
     {
-        if ($this->company) {
-            return $this->company->name;
+        if ($this->location) {
+            return $this->location->name;
         } else {
             return null;
         }
