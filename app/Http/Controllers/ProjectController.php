@@ -213,7 +213,7 @@ class ProjectController extends Controller
         $contractorHasParentDelete = ContractorHasParent::where($getData);
         $contractorHasParentDelete->delete();
 
-        if (count(request("contractors")) > 0) {
+        if (request("contractors") != null) {
 
             foreach (request("contractors") as $index => $item) {
                 $getData["contractor_id"] =  $item["contractor_id"];
@@ -232,7 +232,7 @@ class ProjectController extends Controller
         $oridnarySeamanHasParentDelete = OrdinarySeamanHasParent::where($getData);
         $oridnarySeamanHasParentDelete->delete();
 
-        if (count(request("ordinary_seamans")) > 0) {
+        if (request("ordinary_seamans") != null) {
 
             foreach (request("ordinary_seamans") as $index => $item) {
                 $getData["ordinary_seaman_id"] =  $item["ordinary_seaman_id"];
@@ -246,16 +246,18 @@ class ProjectController extends Controller
         $uniqueData = [];
         $duplicates = [];
 
-        foreach ($array as $item) {
-            $data = '';
-            foreach ($properties as $property) {
-                $data .= $item[$property];
-            }
+        if ($array) {
+            foreach ($array as $item) {
+                $data = '';
+                foreach ($properties as $property) {
+                    $data .= $item[$property];
+                }
 
-            if (in_array($data, $uniqueData)) {
-                $duplicates[] = $item;
-            } else {
-                $uniqueData[] = $data;
+                if (in_array($data, $uniqueData)) {
+                    $duplicates[] = $item;
+                } else {
+                    $uniqueData[] = $data;
+                }
             }
         }
 
