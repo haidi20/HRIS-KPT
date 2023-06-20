@@ -28,9 +28,8 @@
       <br />
       <b-row>
         <b-col>
-          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+          <b-button style="float: right" variant="info" @click="onCloseModal()">Tutup</b-button>
           <b-button
-            style="float: right"
             variant="success"
             @click="onSend()"
             v-if="!getReadOnly()"

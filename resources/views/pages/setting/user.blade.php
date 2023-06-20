@@ -83,10 +83,12 @@
         }
 
         function onEdit(data) {
+            // console.info(data);
             clearForm();
             $("#id").val(data.id);
             $("#name").val(data.name);
             $("#email").val(data.email);
+            $("#location_id").val(data.location_id).trigger("change");
             $("#role_id").val(data.role_id).trigger("change");
 
             $("#titleForm").html("Ubah Pengguna");

@@ -142,6 +142,7 @@ class ProjectController extends Controller
             $project->company_id = request("company_id");
             $project->foreman_id = request("foreman_id");
             $project->barge_id = request("barge_id");
+            $project->location_id = request("location_id");
             $project->name = request("name");
             $project->date_end = Carbon::parse(request("date_end"))->format("Y-m-d");
             $project->day_duration = request("day_duration");
