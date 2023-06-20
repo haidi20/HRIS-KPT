@@ -32,7 +32,7 @@ moment.locale("id");
 Vue.component("project", require("./modules/Project/View/project.vue").default);
 Vue.component("roster", require("./modules/Roster/roster.vue").default);
 Vue.component("vacation", require("./modules/Vacation/vacation.vue").default);
-// Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
+Vue.component("dashboard", require("./modules/Dashboard/dashboard.vue").default);
 Vue.component("job-order", require("./modules/JobOrder/View/jobOrder.vue").default);
 Vue.component("attendance", require("./modules/Attendance/attendance.vue").default);
 Vue.component("overtimeReport", require("./modules/OvertimeReport/overtimeReport.vue").default);
