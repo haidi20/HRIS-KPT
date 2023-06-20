@@ -108,20 +108,39 @@ const Project = {
             state.form.id = payload.id;
         },
         INSERT_FORM_NEW_CONTRACTOR(state, payload) {
-            state.form.contractors = [
-                ...state.form.contractors,
-                {
-                    id: null,
-                },
-            ]
+            // console.info(state.form);
+            if (state.form.contractors) {
+                state.form.contractors = [
+                    ...state.form.contractors,
+                    {
+                        id: null,
+                    },
+                ]
+            } else {
+                state.form = {
+                    ...state.form,
+                    contractors: [{
+                        id: null,
+                    }]
+                }
+            }
         },
         INSERT_FORM_NEW_OS(state, payload) {
-            state.form.ordinary_seamans = [
-                ...state.form.ordinary_seamans,
-                {
-                    id: null,
-                },
-            ]
+            if (state.form.ordinary_seamans) {
+                state.form.ordinary_seamans = [
+                    ...state.form.ordinary_seamans,
+                    {
+                        id: null,
+                    },
+                ]
+            } else {
+                state.form = {
+                    ...state.form,
+                    ordinary_seamans: [{
+                        id: null,
+                    }]
+                }
+            }
         },
         INSERT_FORM_PRICE(state, payload) {
             if (payload.price != null) {

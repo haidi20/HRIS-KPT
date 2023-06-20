@@ -70,7 +70,7 @@ export default {
       this.$store.commit("project/INSERT_FORM_NEW_CONTRACTOR");
     },
     onDelete(index) {
-      console.info(index);
+      //   console.info(index);
       this.$store.commit("project/DELETE_FORM_CONTRACTOR", { index });
     },
     getReadOnly() {

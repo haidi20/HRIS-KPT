@@ -84,7 +84,7 @@ export default {
             this.$bvModal.hide("project_form");
         },
         onChangeTab(type) {
-            console.info(type);
+            // console.info(type);
         },
         getReadOnly() {
             const readOnly = this.$store.getters["project/getReadOnly"];
