@@ -43,6 +43,7 @@ use App\Http\Controllers\WorkingHourController;
 use App\Http\Controllers\FingerToolController;
 use App\Http\Controllers\BpjsCalculationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\VacationReportController;
 use Illuminate\Support\Facades\Auth;
 
@@ -268,6 +269,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('{featureId}', [PermissionController::class, "index"])->name("index");
             Route::post('store', [PermissionController::class, "store"])->name("store");
             Route::delete('delete', [PermissionController::class, "destroy"])->name("delete");
+        });
+        Route::prefix("log")->name("log.")->group(function () {
+            Route::get('', [LogController::class, "index"])->name("index");
         });
     });
 });

@@ -136,7 +136,7 @@ class PositionController extends Controller
                 $message = "ditambahkan";
             }
 
-            $position->name = request("name");
+            // $position->name = request("name");
             $position->description = request("description");
             $position->minimum_employee = request("minimum_employee");
             $position->departmen_id = request("departmen_id");
