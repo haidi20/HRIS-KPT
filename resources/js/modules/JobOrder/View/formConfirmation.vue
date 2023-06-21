@@ -14,43 +14,98 @@
             <b>Proyek :</b>
           </span>
           <br />
-          <span>nama proyek</span>
-        </b-col>
-        <b-col cols>
-          <span>
-            <b>Proyek :</b>
-          </span>
-          <br />
-          <span>nama proyek</span>
+          <span>{{projectName ? projectName : '-'}}</span>
         </b-col>
       </b-row>
+      <br />
       <b-row>
         <b-col cols>
           <span>
-            <b>Proyek :</b>
+            <b>Pekerjaan :</b>
           </span>
           <br />
-          <span>nama proyek</span>
+          <span>{{jobName ? jobName : '-'}}</span>
         </b-col>
       </b-row>
+      <br />
       <b-row>
         <b-col cols>
           <span>
-            <b>Proyek :</b>
+            <b>Keterangan Pekerjaan :</b>
           </span>
           <br />
-          <span>nama proyek</span>
+          <span>{{form.job_note ? form.job_note : '-'}}</span>
         </b-col>
       </b-row>
+      <br />
       <b-row>
         <b-col cols>
           <span>
-            <b>Proyek :</b>
+            <b>Kategori :</b>
           </span>
           <br />
-          <span>nama proyek</span>
+          <span>{{categoryName ? categoryName : '-'}}</span>
         </b-col>
       </b-row>
+      <br />
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Tingkat Kesulitan :</b>
+          </span>
+          <br />
+          <span>{{jobLevelName ? jobLevelName : '-'}}</span>
+        </b-col>
+      </b-row>
+      <br />
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Catatan :</b>
+          </span>
+          <br />
+          <span>{{form.note ? form.note : '-'}}</span>
+        </b-col>
+      </b-row>
+      <br />
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Jam Mulai :</b>
+          </span>
+          <br />
+          <span>{{form.hour_start}}</span>
+        </b-col>
+        <b-col cols>
+          <span>
+            <b>Waktu Selesai :</b>
+          </span>
+          <br />
+          <span>{{form.datetime_estimation_end_readable ? form.datetime_estimation_end_readable : "-"}}</span>
+        </b-col>
+      </b-row>
+
+      <br />
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Gambar :</b>
+          </span>
+          <br />
+          <span>___</span>
+        </b-col>
+      </b-row>
+      <br />
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Karyawan :</b>
+          </span>
+          <br />
+          <span>___</span>
+        </b-col>
+      </b-row>
+
       <br />
       <b-row>
         <b-col>

@@ -20,12 +20,12 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Pekerjaan" label-for="job_id" class>
+        <b-form-group label=" Jenis Pekerjaan" label-for="job_id" class>
           <VueSelect
             id="job_id"
             class="cursor-pointer"
             v-model="job_id"
-            placeholder="Pilih Pekerjaan"
+            placeholder="Pilih jenis Pekerjaan"
             :options="getOptionJobs"
             :reduce="(data) => data.id"
             label="name"

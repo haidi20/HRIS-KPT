@@ -27,17 +27,17 @@ export default {
         getTitleForm() {
             return this.$store.state.jobOrder.form_title;
         },
-        getOptionProjects() {
-            return this.$store.state.project.data;
+        projectName() {
+            return this.$store.state.project.data.find(item => item.id == this.form.project_id)?.name;
         },
-        getOptionCategories() {
-            return this.$store.state.jobOrder.options.categories;
+        categoryName() {
+            return this.$store.state.jobOrder.options.categories.find(item => item.id == this.form.category)?.name;
         },
-        getOptionJobs() {
-            return this.$store.state.master.data.jobs;
+        jobName() {
+            return this.$store.state.master.data.jobs.find(item => item.id == this.form.job_id)?.name;
         },
-        getOptionJobLevels() {
-            return this.$store.state.jobOrder.options.job_levels;
+        jobLevelName() {
+            return this.$store.state.jobOrder.options.job_levels.find(item => item.id == this.form.job_level)?.name;
         },
         getOptionTimeTypes() {
             return this.$store.state.jobOrder.options.time_types;
