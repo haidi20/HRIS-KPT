@@ -89,7 +89,12 @@ class LogController extends Controller
         if (request("user_id") != null) {
             $userId = request("user_id");
         } else {
-            $userId = Auth::user()->id;
+            $userId = null;
+            $user = Auth::user();
+
+            if ($user) {
+                $userId = $user->id;
+            }
         }
 
         try {

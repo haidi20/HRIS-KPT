@@ -189,6 +189,10 @@ class AttendanceController extends Controller
 
     public function store()
     {
+        $dateNow = Carbon::now()->format("Y-m-d");
+        $dateStart = request("date_start", $dateNow);
+        $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
+
         try {
             // DB::beginTransaction();
 
@@ -200,6 +204,7 @@ class AttendanceController extends Controller
 
             return response()->json([
                 'success' => true,
+                'dateStart' => $dateStart,
                 'message' => "Berhasil Proses Data Finger",
             ], 200);
         } catch (\Exception $e) {
