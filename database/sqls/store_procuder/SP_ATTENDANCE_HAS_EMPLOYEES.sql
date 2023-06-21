@@ -56,7 +56,7 @@ VARCHAR(25)) BEGIN
 	    hour_overtime_job_order_start,
 	    hour_overtime_job_order_end,
 	    duration_overtime_job_order
-	FROM vw_attendance
+	FROM VW_ATTENDANCE
 	WHERE
 	    DATE_FORMAT(`date`, '%Y-%m-%d') = DATE_FILTER;
 	END// 
