@@ -276,7 +276,7 @@ class AttendanceController extends Controller
 
         return response()->json([
             "date" => $date,
-            "data" => $result,
+            // "data" => $result,
         ]);
     }
 

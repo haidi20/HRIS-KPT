@@ -105,7 +105,7 @@ export default {
     return {
       is_loading_export: false,
       options: {
-        perPage: 20,
+        perPage: 10,
         // perPageValues: [5, 10, 25, 50, 100],
         filterByColumn: true,
         texts: {

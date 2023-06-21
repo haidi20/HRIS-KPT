@@ -203,13 +203,14 @@
           v-if="!getReadOnly()"
           style="float: right"
           variant="success"
-          @click="onSend()"
+          @click="onConfirmation()"
           :disabled="is_loading || getIsDisabledBtnSend"
         >Simpan</b-button>
-        <span v-if="is_loading" style="float: right">Loading...</span>
+        <!-- <span v-if="is_loading" style="float: right">Loading...</span> -->
       </b-col>
     </b-row>
     <EmployeeHasParent />
+    <FormConfirmation />
   </div>
 </template>
 
