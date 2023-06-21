@@ -25,7 +25,8 @@ VARCHAR(25)) BEGIN
 	        duration_overtime,
 	        hour_overtime_job_order_start,
 	        hour_overtime_job_order_end,
-	        duration_overtime_job_order
+	        duration_overtime_job_order,
+	        created_at
 	    )
 	SELECT
 	    pin,
@@ -55,7 +56,8 @@ VARCHAR(25)) BEGIN
 	    ) as duration_overtime,
 	    hour_overtime_job_order_start,
 	    hour_overtime_job_order_end,
-	    duration_overtime_job_order
+	    duration_overtime_job_order,
+	    NOW()
 	FROM VW_ATTENDANCE
 	WHERE
 	    DATE_FORMAT(`date`, '%Y-%m-%d') = DATE_FILTER;
