@@ -199,12 +199,12 @@
     <b-row>
       <b-col>
         <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+        <!-- :disabled="is_loading || getIsDisabledBtnSend" -->
         <b-button
           v-if="!getReadOnly()"
           style="float: right"
           variant="success"
           @click="onConfirmation()"
-          :disabled="is_loading || getIsDisabledBtnSend"
         >Simpan</b-button>
         <!-- <span v-if="is_loading" style="float: right">Loading...</span> -->
       </b-col>

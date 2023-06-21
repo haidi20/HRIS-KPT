@@ -6,6 +6,7 @@ CREATE VIEW VW_ATTENDANCE AS
 	SELECT
 	    DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	    af.pin,
+	    af.cloud_id,
 	    af_hour_start.datetime_start AS hour_start,
 	    af_hour_end.datetime_end AS hour_end,
 	    TIMESTAMPDIFF(
@@ -42,7 +43,6 @@ CREATE VIEW VW_ATTENDANCE AS
 	        jt.datetime_start,
 	        jt.datetime_end
 	    ) as duration_overtime_job_order,
-	    af.cloud_id,
 	    em.id as employee_id,
 	    em.name
 	FROM
@@ -56,6 +56,7 @@ CREATE VIEW VW_ATTENDANCE AS
 	    LEFT JOIN (
 	        SELECT
 	            af.pin,
+	            af.cloud_id,
 	            DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	            DATE_FORMAT(min(af.scan_date), "%H:%i") as hour_rest_start,
 	            min(af.scan_date) as datetime_start, (
@@ -83,12 +84,15 @@ CREATE VIEW VW_ATTENDANCE AS
 	            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.end_rest, "%H:%i")
 	        GROUP BY
 	            af.pin,
+	            af.cloud_id,
 	            date
 	    ) AS af_hour_rest ON af.pin = af_hour_rest.pin
+	    AND af.cloud_id = af_hour_rest.cloud_id
 	    AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = af_hour_rest.date
 	    LEFT JOIN (
 	        SELECT
 	            af.pin,
+	            af.cloud_id,
 	            DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	            DATE_FORMAT(min(af.scan_date), "%H:%i") AS hour_start,
 	            min(af.scan_date) AS datetime_start
@@ -106,12 +110,15 @@ CREATE VIEW VW_ATTENDANCE AS
 	            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.start_rest, "%H:%i")
 	        GROUP BY
 	            af.pin,
+	            af.cloud_id,
 	            date
 	    ) AS af_hour_start ON af.pin = af_hour_start.pin
+	    AND af.cloud_id = af_hour_start.cloud_id
 	    AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = af_hour_start.date
 	    LEFT JOIN (
 	        SELECT
 	            af.pin,
+	            af.cloud_id,
 	            DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	            DATE_FORMAT(max(af.scan_date), "%H:%i") AS hour_end,
 	            max(af.scan_date) AS datetime_end
@@ -129,12 +136,15 @@ CREATE VIEW VW_ATTENDANCE AS
 	            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.after_work_limit, "%H:%i")
 	        GROUP BY
 	            af.pin,
+	            af.cloud_id,
 	            date
 	    ) AS af_hour_end ON af.pin = af_hour_end.pin
+	    AND af.cloud_id = af_hour_end.cloud_id
 	    AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = af_hour_end.date
 	    LEFT JOIN (
 	        SELECT
 	            af.pin,
+	            af.cloud_id,
 	            DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	            DATE_FORMAT(min(af.scan_date), "%H:%i") AS hour_overtime_start,
 	            min(af.scan_date) AS datetime_overtime_start
@@ -158,12 +168,15 @@ CREATE VIEW VW_ATTENDANCE AS
 	            )
 	        GROUP BY
 	            af.pin,
+	            af.cloud_id,
 	            date
 	    ) AS af_hour_overtime_start ON af.pin = af_hour_overtime_start.pin
+	    AND af.cloud_id = af_hour_overtime_start.cloud_id
 	    AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = af_hour_overtime_start.date
 	    LEFT JOIN (
 	        SELECT
 	            af.pin,
+	            af.cloud_id,
 	            DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date", (
 	                CASE
 	                    WHEN max(af.scan_date) = min(af.scan_date) THEN NULL
@@ -184,8 +197,10 @@ CREATE VIEW VW_ATTENDANCE AS
 	            DATE_FORMAT(af.scan_date, "%H:%i") >= DATE_FORMAT(wh.overtime_work, "%H:%i")
 	        GROUP BY
 	            af.pin,
+	            af.cloud_id,
 	            date
 	    ) AS af_hour_overtime_end ON af.pin = af_hour_overtime_end.pin
+	    AND af.cloud_id = af_hour_overtime_end.cloud_id
 	    AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") <= af_hour_overtime_end.date
 	    AND af_hour_overtime_end.date <= DATE_FORMAT(
 	        DATE_ADD(af.scan_date, INTERVAL 1 DAY),

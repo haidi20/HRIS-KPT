@@ -8,6 +8,49 @@
       class="modal-custom"
       hide-footer
     >
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Proyek :</b>
+          </span>
+          <br />
+          <span>nama proyek</span>
+        </b-col>
+        <b-col cols>
+          <span>
+            <b>Proyek :</b>
+          </span>
+          <br />
+          <span>nama proyek</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Proyek :</b>
+          </span>
+          <br />
+          <span>nama proyek</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Proyek :</b>
+          </span>
+          <br />
+          <span>nama proyek</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <span>
+            <b>Proyek :</b>
+          </span>
+          <br />
+          <span>nama proyek</span>
+        </b-col>
+      </b-row>
       <br />
       <b-row>
         <b-col>
