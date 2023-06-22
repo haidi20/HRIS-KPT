@@ -82,7 +82,7 @@ class EmployeeController extends Controller
         }
     }
 
-    public function index(EmployeesDataTable $dataTable, EmployeesExpDataTable $dataTableExp)
+    public function index(EmployeesDatatable $dataTable, EmployeesExpDatatable $dataTableExp)
     {
         $employees = Employee::all();
         $companies = Company::all();
