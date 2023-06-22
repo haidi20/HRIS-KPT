@@ -45,8 +45,12 @@ class DatabaseSeeder extends Seeder
         // $this->call(JobOrderSeeder::class);
         // $this->call(JobStatusHasParent::class);
         // $this->call(JobOrderHasEmployeeSeeder::class);
-        $this->call(AttendanceFingerspotSeeder::class);
-        $this->call(AttendanceHasEmployeeSeeder::class);
+
+        // di ganti dengan mysql data/attendance.sql
+        // $this->call(AttendanceFingerspotSeeder::class);
+        // $this->call(AttendanceHasEmployeeSeeder::class);
+        $this->call(AttendanceSeeder::class);
+
         // end master
 
         /*
