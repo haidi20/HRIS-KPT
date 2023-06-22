@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApprovalLevel;
+use App\Models\ApprovalLevelDetail;
 use App\Models\SalaryAdvance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -145,6 +146,20 @@ class SalaryAdvanceController extends Controller
 
             $salaryAdvance = SalaryAdvance::find(request("id"));
             $message = "melakukan persetujuan";
+
+            if ($approvalStatus == 'reject') {
+                $salaryAdvance->status = "reject";
+            } else {
+                $approval = ApprovalLevel::where("name", "Kasbon")->first();
+
+                $getMaxLevelApproval = ApprovalLevelDetail::where([
+                    "approval_level_id" => $approval->id,
+                ])->orderBy("level", "desc")->first();
+
+                if ($userId == $getMaxLevelApproval->user_id) {
+                    $salaryAdvance->status = "accept";
+                }
+            }
 
             // $salaryAdvance->note = $note;
             $salaryAdvance->loan_amount =  $loanAmount;
