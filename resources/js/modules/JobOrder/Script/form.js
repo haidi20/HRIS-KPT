@@ -5,8 +5,6 @@ import moment from "moment";
 import FormConfirmation from "../View/formConfirmation";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 
-import { imageToBase64 } from "../../../utils";
-
 export default {
     data() {
         return {
@@ -132,6 +130,21 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: false,
             });
+        },
+        onInsertImage(event) {
+            const reader = new FileReader();
+
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+                reader.onload = (readerEvent) => {
+                    this.$store.commit("jobOrder/INSERT_FORM_IMAGE", {
+                        file: event.target.files[0],
+                        bit: readerEvent.target.result,
+                    });
+                };
+
+                // this.$store.dispatch("onEvent", { nameForm: "business_photo" });
+            }
         },
         onShowEmployee() {
             this.$bvModal.show("data_employee");

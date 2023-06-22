@@ -92,7 +92,9 @@
             <b>Gambar :</b>
           </span>
           <br />
-          <span>___</span>
+          <span>
+            <img :src="form.image_bit" class="show-image" v-if="form.image_bit != null" />
+          </span>
         </b-col>
       </b-row>
       <br />
@@ -102,7 +104,7 @@
             <b>Karyawan :</b>
           </span>
           <br />
-          <span>___</span>
+          <EmployeeTable />
         </b-col>
       </b-row>
 
@@ -116,7 +118,7 @@
             variant="success"
             @click="onSend()"
             :disabled="is_loading || getIsDisabledBtnSend"
-          >Simpan</b-button>
+          >Kirim</b-button>
           <span v-if="is_loading" style="float: right">Loading...</span>
         </b-col>
       </b-row>
@@ -127,4 +129,8 @@
 <script src="../Script/formConfirmation.js"></script>
 
 <style lang="scss" scoped>
+.show-image {
+  max-width: 200px;
+  max-height: 150px;
+}
 </style>

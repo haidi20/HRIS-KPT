@@ -166,11 +166,12 @@
       <b-col cols>
         <b-form-group :label="getLabelImage" label-for="image" class>
           <!-- <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file> -->
+          <!-- v-model="form.image" -->
           <b-form-file
             id="image"
-            v-model="form.image"
             :state="Boolean(is_image)"
             :disabled="getReadOnly()"
+            @change="onInsertImage($event)"
           ></b-form-file>
         </b-form-group>
       </b-col>
