@@ -11,7 +11,7 @@ class VwAttendance extends Model
 {
     use HasFactory;
 
-    protected $table = "vw_attendance";
+    protected $table = "VW_ATTENDANCE";
     protected $fillable = [];
 
     public function __construct(array $attributes = [])
