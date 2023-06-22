@@ -17,10 +17,15 @@ class DatabaseSeeder extends Seeder
             data master merupakan data wajib ada, jadi harus di input ulang ketika migrate ulang.
         */
         // start data master
-        $this->call(FeatureSeeder::class);
-        $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
+
+        // di ganti dengan mysql data/role_permission.sql
+        // $this->call(FeatureSeeder::class);
+        // $this->call(PermissionSeeder::class);
+        // $this->call(RoleSeeder::class);
+        // $this->call(UserSeeder::class);
+        $this->call(RolePermissionSeeder::class);
+
+
         $this->call(RosterStatusSeeder::class);
         $this->call(CompanySeeder::class);
         $this->call(DepartmenSeeder::class);
