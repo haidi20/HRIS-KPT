@@ -360,8 +360,8 @@ class PeriodPayrollController extends Controller
 
 
                 //menghitung pkp 5%
-                $pkp_lima_persen  = \max(0,$pkp_setahun > 50000000 ? ((50000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
-                $pkp_lima_belas_persen  = \max(0,$pkp_setahun > 250000000 ? ((250000000 - 50000000) * 0.15) : (($pkp_setahun - 50000000) * 0.15));
+                $pkp_lima_persen  = \max(0,$pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                $pkp_lima_belas_persen  = \max(0,$pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
                 $pkp_dua_puluh_lima_persen  = \max(0,$pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
                 $pkp_tiga_puluh_persen  = \max(0,$pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
 
