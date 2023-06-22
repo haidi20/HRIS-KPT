@@ -122,7 +122,7 @@
                     </li>
                 @endcan
                 @php
-                    $allPermissionSalary = ['lihat periode gaji','lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
+                    $allPermissionSalary = ['lihat periode gaji', 'lihat slip gaji karyawan', 'lihat penggajian', 'lihat penyesuaian gaji'];
                 @endphp
                 @canany($allPermissionSalary)
                     <li
@@ -373,6 +373,11 @@
                             @can('lihat tingkat persetujuan')
                                 <li class="submenu-item {{ isActive('setting/approvalLevel') }}">
                                     <a href="{{ route('setting.approvalLevel.index') }}">Tingkat Persetujuan</a>
+                                </li>
+                            @endcan
+                            @can('lihat log')
+                                <li class="submenu-item {{ isActive('setting/log') }}">
+                                    <a href="{{ route('setting.log.index') }}">Log</a>
                                 </li>
                             @endcan
                         </ul>

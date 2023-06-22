@@ -76,7 +76,8 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('fetch-data-main', [AttendanceController::class, "fetchDataMain"])->name('fetchDataMain');
         Route::get('fetch-data-detail', [AttendanceController::class, "fetchDataDetail"])->name('fetchDataDetail');
-        Route::post('store', [AttendanceController::class, "store"])->name('store');
+
+        Route::get('store', [AttendanceController::class, "store"])->name('store');
         Route::get('store-finger-spot', [AttendanceController::class, "storeFingerSpot"])->name('storeFingerSpot');
         Route::get('store-has-employee', [AttendanceController::class, "storeHasEmployee"])->name('storeHasEmployee');
     });

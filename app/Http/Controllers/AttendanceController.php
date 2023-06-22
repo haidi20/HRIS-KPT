@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use LDAP\Result;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AttendanceController extends Controller
 {
@@ -186,12 +187,53 @@ class AttendanceController extends Controller
         return view("pages.attendance.partials.print", compact("data", "employee"));
     }
 
+    public function store()
+    {
+        $dateNow = Carbon::now()->format("Y-m-d");
+        $dateStart = request("date_start", $dateNow);
+        $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
+
+        try {
+            // DB::beginTransaction();
+
+            $this->storeFingerSpot();
+
+            $this->storeHasEmployee();
+
+            // DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'dateStart' => $dateStart,
+                'message' => "Berhasil Proses Data Finger",
+            ], 200);
+        } catch (\Exception $e) {
+            // DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal Proses Data Finger",
+            ], 500);
+        }
+    }
+
     public function storeFingerSpot()
     {
         $fingerTools = FingerTool::all();
         $dateNow = Carbon::now()->format("Y-m-d");
         $dateStart = request("date_start", $dateNow);
-        $dateEnd = request("date_end", $dateStart);
+        $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
+        $dateEnd = request(
+            "date_end",
+            $dateStart
+        );
+        $dateEnd = Carbon::parse($dateEnd)->format("Y-m-d");
 
         $responseData = [];
         $url = "https://developer.fingerspot.io/api/get_attlog";
@@ -260,10 +302,10 @@ class AttendanceController extends Controller
             ]);
         }
 
-        return response()->json([
-            "dateStart" => $dateStart,
-            "data" => $responseData,
-        ]);
+        // return response()->json([
+        //     "dateStart" => $dateStart,
+        //     "data" => $responseData,
+        // ]);
     }
 
     public function storeHasEmployee()
@@ -271,13 +313,19 @@ class AttendanceController extends Controller
         $dateNow = Carbon::now()->format("Y-m-d");
         $date = request("date", $dateNow);
 
+        if (request("date_start") != null) {
+            $date = request("date_start");
+        }
+
+        $date = Carbon::parse($date)->format("Y-m-d");
+
         $query = "CALL SP_ATTENDANCE_HAS_EMPLOYEES('{$date}')";
         $result = DB::select($query);
 
-        return response()->json([
-            "date" => $date,
-            "data" => $result,
-        ]);
+        // return response()->json([
+        //     "date" => $date,
+        //     // "data" => $result,
+        // ]);
     }
 
     private function setTime($time, $isNull = false)

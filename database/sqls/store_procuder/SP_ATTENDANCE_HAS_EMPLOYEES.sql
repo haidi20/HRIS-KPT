@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS `SP_ATTENDANCE_HAS_EMPLOYEES`;
 DELIMITER //
 
 CREATE PROCEDURE `SP_ATTENDANCE_HAS_EMPLOYEES`(IN `DATE_FILTER` 
-VARCHAR(10)) BEGIN 
+VARCHAR(25)) BEGIN 
 	DELETE FROM
 	    attendance_has_employees
 	WHERE
@@ -25,7 +25,8 @@ VARCHAR(10)) BEGIN
 	        duration_overtime,
 	        hour_overtime_job_order_start,
 	        hour_overtime_job_order_end,
-	        duration_overtime_job_order
+	        duration_overtime_job_order,
+	        created_at
 	    )
 	SELECT
 	    pin,
@@ -55,8 +56,9 @@ VARCHAR(10)) BEGIN
 	    ) as duration_overtime,
 	    hour_overtime_job_order_start,
 	    hour_overtime_job_order_end,
-	    duration_overtime_job_order
-	FROM vw_attendance
+	    duration_overtime_job_order,
+	    NOW()
+	FROM VW_ATTENDANCE
 	WHERE
 	    DATE_FORMAT(`date`, '%Y-%m-%d') = DATE_FILTER;
 	END// 
