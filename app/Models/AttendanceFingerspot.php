@@ -11,8 +11,8 @@ class AttendanceFingerspot extends Model
 
     protected $fillable = [
         'pin',
-        'scan_date',
         'cloud_id',
+        'scan_date',
         'verify',
         'status_scan',
     ];

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AttendanceExport;
+use App\Models\Attendance;
 use App\Models\AttendanceFingerspot;
 use App\Models\Employee;
 use App\Models\FingerTool;
+use App\Models\VwAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -309,6 +311,48 @@ class AttendanceController extends Controller
     }
 
     public function storeHasEmployee()
+    {
+        set_time_limit(840); // 14 menit
+        $dateNow = Carbon::now()->format("Y-m-d");
+        $date = request("date", $dateNow);
+
+        if (request("date_start") != null) {
+            $date = request("date_start");
+        }
+
+        $date = Carbon::parse($date)->format("Y-m-d");
+
+        $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
+        $attendanceFingerspot->map(function ($query) {
+            Attendance::updateOrCreate(
+                [
+                    "pin" => $query->pin,
+                    "date" => $query->date,
+                ],
+                [
+                    "hour_start" => $query->hour_start,
+                    "hour_end" => $query->hour_end,
+                    "duration_work" => $query->duration_work,
+                    "hour_rest_start" => $query->hour_rest_start,
+                    "hour_rest_end" => $query->hour_rest_end,
+                    "duration_rest" => $query->duration_rest,
+                    "hour_overtime_start" => $query->hour_overtime_start,
+                    "hour_overtime_end" => $query->hour_overtime_end,
+                    "duration_overtime" => $query->duration_overtime,
+                    "hour_overtime_job_order_start" => $query->hour_overtime_job_order_start,
+                    "hour_overtime_job_order_end" => $query->hour_overtime_job_order_end,
+                    "duration_overtime_job_order" => $query->duration_overtime_job_order,
+                    // "date_overtime_job_order_start" => $query->date_overtime_job_order_start,
+                    // "date_overtime_job_order_end" => $query->date_overtime_job_order_end,
+                    "employee_id" => $query->employee_id,
+                    // "name" => $query->name,
+                    "cloud_id" => $query->cloud_id,
+                ],
+            );
+        });
+    }
+
+    public function storeHasEmployeeOld()
     {
         $dateNow = Carbon::now()->format("Y-m-d");
         $date = request("date", $dateNow);
