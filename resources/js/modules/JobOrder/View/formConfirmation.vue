@@ -100,6 +100,7 @@
       <br />
       <b-row>
         <b-col cols>
+          <!-- update -->
           <span>
             <b>Karyawan :</b>
           </span>
