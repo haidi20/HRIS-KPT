@@ -128,6 +128,6 @@ class Employee extends Model
 
     public function finger()
     {
-        return $this->hasMany(Finger::class, 'finger_id', 'id');
+        return $this->hasMany(Finger::class);
     }
 }

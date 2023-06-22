@@ -48,19 +48,8 @@ class CreateEmployeesTable extends Migration
             $table->enum('bpjs_jp', ['Y', 'N'])->default('Y');
             $table->enum('bpjs_kes', ['Y', 'N'])->default('Y');
 
-
             $table->string('ptkp')->nullable();
             $table->bigInteger('ptkp_karyawan')->default(0);
-
-            
-
-            
-
-
-
-
-
-
 
             // DATA KELUARGA
             // $table->string('father_name')->nullable();
@@ -84,7 +73,6 @@ class CreateEmployeesTable extends Migration
             $table->bigInteger('overtime_rate_per_hour')->default(0);
 
             $table->bigInteger('vat_per_year')->default(0);
-
 
             $table->string('rekening_number')->nullable();
             $table->string('rekening_name')->nullable();

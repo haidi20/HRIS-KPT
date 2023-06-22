@@ -86,14 +86,14 @@
                         <div class="tab-pane fade show active" id="utama" role="tabpanel" aria-labelledby="utama-tab">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    {!! $dataTableBuilder->table(['class' => 'table table-striped table-bordered']) !!}
+                                    {!! $dataTableEmployee->table(['id' => 'employee-table', 'class' => 'table table-striped table-bordered']) !!}
                                 </div>
                             </div>
                         </div>
                         {{-- <div class="tab-pane fade" id="exp" role="tabpanel" aria-labelledby="exp-tab">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    {!! $dataTableExpBuilder->table(['class' => 'table table-striped table-bordered']) !!}
+                                    {!! $dataTableExpEmployee->table(['class' => 'table table-striped table-bordered']) !!}
                                 </div>
                             </div>
                         </div> --}}
@@ -118,8 +118,8 @@
 
 @endsection
 @section('script')
-{!! $dataTableBuilder->scripts() !!}
-{!! $dataTableExpBuilder->scripts() !!}
+{!! $dataTableEmployee->scripts() !!}
+{{-- {!! $dataTableExpBuilder->scripts() !!} --}}
 <script>
     const initialState = {
         employees: [],
@@ -685,7 +685,7 @@
                                                             title: responses.message,
                                                         });
 
-                                                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(function (json) {});
+                                                        window.LaravelDataTables["employee-table"].ajax.reload(function (json) {});
                                                         $(this).closest("tr").remove();
                                                     } else {
                                                         console.log(
@@ -765,8 +765,7 @@
                             title: responses.message
                         });
 
-                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                            function (json) {});
+                        window.LaravelDataTables["employee-table"].ajax.reload(function (json) {});
                     }
                 },
                 error: function (err) {
@@ -834,8 +833,7 @@
                                 title: responses.message
                             });
 
-                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                                function (json) {});
+                            window.LaravelDataTables["employee-table"].ajax.reload(function (json) {});
                         }
                     },
                     error: function (err) {

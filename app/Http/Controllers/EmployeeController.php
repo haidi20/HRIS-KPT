@@ -28,6 +28,7 @@ use Yajra\DataTables\DataTables;
 use App\DataTables\EmployeesDatatable;
 use App\DataTables\EmployeesExpDatatable;
 use App\Models\Departmen;
+use App\Models\salaryAdjustment;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
@@ -94,10 +95,10 @@ class EmployeeController extends Controller
         $finger_tools = FingerTool::all();
         $fingers = Finger::all();
 
-        $dataTableBuilder = $dataTable->html();
-        $dataTableExpBuilder = $dataTableExp->html();
+        $dataTableEmployee = $dataTable->html();
+        // $dataTableExpEmployee = $dataTableExp->html();
 
-        $compact = compact('dataTableBuilder', 'dataTableExpBuilder', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools', 'fingers');
+        $compact = compact('dataTableEmployee', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools', 'fingers');
 
         return $dataTable->render('pages.master.employee.index', $compact);
     }
@@ -157,8 +158,6 @@ class EmployeeController extends Controller
                 $employee = Employee::find(request("id"));
                 $employee->updated_by = Auth::user()->id;
                 $employee->employee_status = request("employee_status");
-
-
 
                 $message = "diperbaharui";
             } else {
@@ -241,6 +240,12 @@ class EmployeeController extends Controller
                 $finger->id_finger = request('id_finger');
                 $finger->save();
             }
+
+            // $salary_adjustment = SalaryAdjustment::create([
+            //     'name' => $request->name,
+            // ]);
+            // $salary_adjustment->save();
+
             DB::commit();
 
             return response()->json([

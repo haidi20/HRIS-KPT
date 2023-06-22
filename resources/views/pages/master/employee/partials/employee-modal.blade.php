@@ -32,6 +32,7 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
+
                         {{-- DATA PERSONAL --}}
                         <div class="tab-pane fade show active" id="personal" role="tabpanel"
                             aria-labelledby="personal-tab">
