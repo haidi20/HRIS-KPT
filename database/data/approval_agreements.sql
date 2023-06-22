@@ -42,7 +42,9 @@
 
 ;
 
--- Dumping data for table hris_kpt.approval_agreements: ~0 rows (approximately)
+-- Dumping data for table hris_kpt.approval_agreements: ~3 rows (approximately)
+
+DELETE FROM `approval_agreements`;
 
 INSERT INTO
     `approval_agreements` (
@@ -54,6 +56,7 @@ INSERT INTO
         `name_model`,
         `status_approval`,
         `level_approval`,
+        `note`,
         `created_by`,
         `updated_by`,
         `deleted_by`,
@@ -70,6 +73,7 @@ VALUES (
         'App\\Models\\SalaryAdvance',
         'review',
         1,
+        NULL,
         1,
         NULL,
         NULL,
@@ -85,6 +89,7 @@ VALUES (
         'App\\Models\\SalaryAdvance',
         'not yet',
         2,
+        NULL,
         1,
         NULL,
         NULL,
@@ -100,6 +105,7 @@ VALUES (
         'App\\Models\\SalaryAdvance',
         'not yet',
         3,
+        NULL,
         1,
         NULL,
         NULL,

@@ -280,7 +280,7 @@ const EmployeeHasParent = {
                     params: {},
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     let data = responses.data;
 
                     context.commit("INSERT_DATA_OPTION", {
