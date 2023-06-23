@@ -12,7 +12,7 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
+          <!-- <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
               id="month"
               v-model="params.month"
@@ -27,7 +27,7 @@
             size="sm"
             @click="onFilter()"
             :disabled="getIsLoadingData"
-          >Kirim</b-button>
+          >Kirim</b-button>-->
           <b-button
             v-if="getCan('ekspor proyek')"
             class="place_filter_table ml-4"

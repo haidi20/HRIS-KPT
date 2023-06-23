@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(AttendanceFingerspotSeeder::class);
         // $this->call(AttendanceHasEmployeeSeeder::class);
         $this->call(AttendanceSeeder::class);
+        $this->call(ProjectSeeder::class);
 
         // end master
 
@@ -60,8 +61,7 @@ class DatabaseSeeder extends Seeder
         // start data biasa
         // $this->call(ContractorSeeder::class);
         // $this->call(OrdinarySeamanSeeder::class);
-        // $this->call(ProjectSeeder::class);
-        $this->call(SalaryAdvanceSeeder::class);
+        // $this->call(SalaryAdvanceSeeder::class);
         // end data biasa
     }
 }
