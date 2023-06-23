@@ -82,7 +82,7 @@
           <b-td>{{ item.name }}</b-td>
           <b-td>{{ item.location_name }}</b-td>
           <b-td>{{ item.date_end_readable }}</b-td>
-          <b-td>{{ item.day_duration }} {{item.day_duration ? ' Harii' : null}}</b-td>
+          <b-td>{{ item.day_duration }} {{item.day_duration ? ' Hari' : 'null'}}</b-td>
           <b-td>
             <template v-if="item.job_order_total > 0">
               {{ item.job_order_finish_total }}
