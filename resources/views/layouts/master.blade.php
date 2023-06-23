@@ -464,6 +464,7 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script> --}}
     {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script> --}}
     @isset($vue)
+        {{-- di kasih angka supaya di vps terupdate --}}
         <script src="{{ asset('js/app-230623.js') }}"></script>
     @endisset
     <script>
