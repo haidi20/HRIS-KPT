@@ -33,8 +33,8 @@ class ProjectController extends Controller
         $monthReadAble = $month->isoFormat("MMMM YYYY");
 
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            ->whereYear("created_at", $month->format("Y"))
-            ->whereMonth("created_at", $month->format("m"))
+            // ->whereYear("created_at", $month->format("Y"))
+            // ->whereMonth("created_at", $month->format("m"))
             ->orderBy("created_at", "asc")->get();
 
         return response()->json([
@@ -46,10 +46,11 @@ class ProjectController extends Controller
     {
         $month = Carbon::parse(request("month"));
 
-        $projects = Project::jobOrderFinish()
-            ->whereYear("created_at", $month->format("Y"))
-            ->whereMonth("created_at", $month->format("m"))
-            ->orderBy("created_at", "asc")->get();
+        // $projects = Project::jobOrderFinish()
+        //     ->whereYear("created_at", $month->format("Y"))
+        //     ->whereMonth("created_at", $month->format("m"))
+        //     ->orderBy("created_at", "asc")->get();
+        $projects = Project::orderBy('created_at')->get();
 
         return response()->json([
             "month" => $month->format("m"),
@@ -66,11 +67,11 @@ class ProjectController extends Controller
             $user = User::find(request("user_id"));
         }
 
-        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            ->whereDate("date_end", ">=", $date);
+        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"]);
+        // ->whereDate("date_end", ">=", $date);
 
         // data proyek berdasarkan lokasi pengguna,
-        // jadi jika pengawas tersebut ada di DOC 2, maka yg muncul proyek DOC 2
+        // jadi jika pengawas tersebut ada di DOC 2, maka yg muncul proyek di DOC 2
         if ($user != null) {
             $locationId = $user->location_id ? $user->location_id : null;
 

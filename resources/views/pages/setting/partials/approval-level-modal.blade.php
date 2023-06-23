@@ -22,8 +22,8 @@
                         <div class="col-md-6">
                             <b>Detail</b>
                             <a href="javascript:void(0)" onclick="onAddApprovalDetail()"
-                                class="btn btn-success btn-sm btn-circle ml-2">
-                                <i class="fas fa-plus"></i>
+                                class="btn btn-success btn-sm btn-circle ml-1">
+                                <i class="bi bi-plus"></i>
                             </a>
                         </div>
                         <div class="col-md-6">

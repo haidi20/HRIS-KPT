@@ -46,7 +46,7 @@ export default {
                 },
             ],
             options: {
-                perPage: 5,
+                perPage: 10,
                 // perPageValues: [5, 10, 25, 50, 100],
             },
         };
@@ -138,7 +138,7 @@ export default {
                     },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     this.is_loading_export = false;
                     const data = responses.data;
 

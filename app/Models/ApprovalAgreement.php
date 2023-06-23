@@ -44,12 +44,12 @@ class ApprovalAgreement extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, "user_id", "id");
+        return $this->belongsTo(UserSimple::class, "user_id", "id");
     }
 
     public function userBehalf()
     {
-        return $this->belongsTo(User::class, "user_behalf_id", "id");
+        return $this->belongsTo(UserSimple::class, "user_behalf_id", "id");
     }
 
     public function getEmployeeNameAttribute()
@@ -119,6 +119,7 @@ class ApprovalAgreement extends Model
         if ($this->user_id == $userId) {
             $by = "Anda";
         } else {
+
             if ($this->user) {
                 $by = "{$this->user->name} - {$this->user->group_name}";
             } else {

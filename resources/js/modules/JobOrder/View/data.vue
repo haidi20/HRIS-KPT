@@ -148,7 +148,12 @@
                 <div class="action-item" @click="onShowEmployee()">Karyawan</div>
                 <div v-if="getConditionEdit()" class="action-item" @click="onEdit">Ubah</div>
                 <div class="action-item" @click="onRead">Lihat</div>
-                <div class="action-item" style="color: red;" @click="onDelete()">Hapus</div>
+                <div
+                  v-if="this.getForm.created_by == this.getUserId"
+                  class="action-item"
+                  style="color: red;"
+                  @click="onDelete()"
+                >Hapus</div>
               </div>
             </b-modal>
           </b-col>

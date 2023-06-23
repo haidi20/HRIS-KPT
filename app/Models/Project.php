@@ -113,6 +113,10 @@ class Project extends Model
 
     public function getDateEndReadableAttribute()
     {
-        return dateReadable($this->date_end);
+        if ($this->date_end != null) {
+            return dateReadable($this->date_end);
+        } else {
+            return null;
+        }
     }
 }

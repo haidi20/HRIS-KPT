@@ -99,6 +99,12 @@ export default {
         user_id: this.getUserId,
       };
 
+      const getValidation = this.getValidation();
+
+      if (getValidation) {
+        return false;
+      }
+
       //   console.info(request);
       //   return false;
       this.is_loading = true;
@@ -154,6 +160,34 @@ export default {
             title: err.response.data.message,
           });
         });
+    },
+    getValidation() {
+      let result = false;
+
+      //   console.info(this.form.remaining_payment);
+
+      if (this.form.remaining_payment < 0) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "warning",
+          title: "Maaf, DP tidak boleh lebih dari biaya proyek",
+        });
+
+        result = true;
+      }
+
+      return result;
     },
     getReadOnly() {
       const readOnly = this.$store.getters["project/getReadOnly"];

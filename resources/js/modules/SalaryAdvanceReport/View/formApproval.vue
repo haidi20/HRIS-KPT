@@ -78,6 +78,7 @@
             <b-col cols="6">
               <b-form-group label="Lama Pembayaran (bulan)" label-for="duration" class>
                 <b-form-input
+                  type="number"
                   v-model="form.duration"
                   id="duration"
                   name="duration"

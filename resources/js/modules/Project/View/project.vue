@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       title: "Proyek",
-      version: "v1.1",
+      version: "v1.5",
     };
   },
   components: {

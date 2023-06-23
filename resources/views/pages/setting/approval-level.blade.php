@@ -198,14 +198,14 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                             $('#formModal').modal('hide');
-                        Toast.fire({
-                            icon: 'success',
-                            title: responses.message
-                        });
+                            $('#formModal').modal('hide');
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
 
-                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                        function(json) {});
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                                function(json) {});
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);
@@ -350,7 +350,7 @@
                     <div class="col-sm-1">
                         <a href="javascript:void(0)" onclick="onRemoveDetailForm(${state.count_detail})"
                             class="btn btn-danger btn-sm btn-circle">
-                            <i class="fas fa-minus"></i>
+                            <i class="bi bi-x"></i>
                         </a>
                     </div>
                 </div>

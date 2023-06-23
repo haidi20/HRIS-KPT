@@ -72,6 +72,7 @@ export default {
     },
     watch: {
         price(value, oldValue) {
+            // console.info(value);
             this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
         },
         down_payment(value, oldValue) {

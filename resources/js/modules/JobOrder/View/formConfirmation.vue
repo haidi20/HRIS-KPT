@@ -104,7 +104,7 @@
             <b>Karyawan :</b>
           </span>
           <br />
-          <EmployeeTable />
+          <EmployeeTableConfirmation />
         </b-col>
       </b-row>
 
