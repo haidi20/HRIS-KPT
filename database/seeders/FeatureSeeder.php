@@ -197,6 +197,11 @@ class FeatureSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                "name" => "Log", "description" => null,  'created_by' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
 
         ]);
     }

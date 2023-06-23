@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Route;
 
 class PositionController extends Controller
 {
@@ -38,7 +39,7 @@ class PositionController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $position = Position::query()
-                ->select('positions.id', 'positions.name','positions.description','positions.minimum_employee', 'departmens.name as departmen_name')
+                ->select('positions.id', 'positions.name', 'positions.description', 'positions.minimum_employee', 'departmens.name as departmen_name')
                 ->with('departmen')
                 ->leftJoin('departmens', 'positions.departmen_id', '=', 'departmens.id');
 
@@ -152,6 +153,10 @@ class PositionController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -180,6 +185,10 @@ class PositionController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,

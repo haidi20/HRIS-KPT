@@ -59,7 +59,8 @@ export default {
     this.$store.dispatch("os/fetchData");
     this.$store.dispatch("master/fetchJob");
     this.$store.dispatch("master/fetchBarge");
-    this.$store.dispatch("master/fetchCompany");
+    this.$store.dispatch("master/fetchLocation");
+    // this.$store.dispatch("master/fetchCompany");
     this.$store.dispatch("employeeHasParent/fetchForeman");
 
     // this.$bvModal.show("project_form");

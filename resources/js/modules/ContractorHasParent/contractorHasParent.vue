@@ -14,9 +14,6 @@
 </template>
 
 <script>
-import VueSelect from "vue-select";
-import DatePicker from "vue2-datepicker";
-
 // partials
 import Form from "./form";
 import Table from "./table";

@@ -14,6 +14,7 @@ const example = {
             barges: [],
             positions: [],
             companies: [],
+            locations: [],
         },
         params: {
             month: new Date(),
@@ -44,6 +45,9 @@ const example = {
         },
         INSERT_DATA_COMPANY(state, payload) {
             state.data.companies = payload.companies;
+        },
+        INSERT_DATA_LOCATION(state, payload) {
+            state.data.locations = payload.locations;
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
@@ -114,6 +118,25 @@ const example = {
 
                     context.commit("INSERT_DATA_COMPANY", {
                         companies: data.companies,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
+        fetchLocation: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/location/fetch-data`, {
+                    params: {},
+                }
+                )
+                .then((responses) => {
+                    console.info(responses);
+                    let data = responses.data;
+
+                    context.commit("INSERT_DATA_LOCATION", {
+                        locations: data.locations,
                     });
                 })
                 .catch((err) => {

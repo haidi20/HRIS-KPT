@@ -92,19 +92,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <label for="maximum_delay" class="col-sm-4 col-form-label">Jam Maksimal
-                                            Terlambat</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" id="maximum_delay" name="maximum_delay"
-                                                class="form-control datetime" placeholder="contoh: 08:30"
-                                                value="{{ $maximumDelay[0] ?? '' }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">

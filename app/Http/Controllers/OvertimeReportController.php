@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 
 class OvertimeReportController extends Controller
 {
@@ -64,6 +65,11 @@ class OvertimeReportController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

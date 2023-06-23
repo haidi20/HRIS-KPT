@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 
 class RolePermissionController extends Controller
@@ -151,6 +152,11 @@ class RolePermissionController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json(['success' => false, 'message' => 'Maaf, gagal kirim data'], 500);
         }
     }

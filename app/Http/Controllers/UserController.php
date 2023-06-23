@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 use Spatie\Permission\Models\Role;
 
@@ -24,6 +26,7 @@ class UserController extends Controller
             'name' => ['name' => 'name', 'title' => 'Nama'],
             'role_name' => ['name' => 'role_name', 'title' => 'Grup Pengguna'],
             'email' => ['name' => 'email', 'title' => 'Email'],
+            'location_name' => ['name' => 'location_name', 'title' => 'Lokasi'],
             'aksi' => [
                 'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '130px', 'exportable' => false
             ],
@@ -32,7 +35,7 @@ class UserController extends Controller
         if ($datatables->getRequest()->ajax()) {
             $userRoleId = auth()->user()->role_id;
             $users = User::query()
-                ->select('users.id', 'users.name', 'users.role_id', 'users.email', 'roles.name as role_name')
+                ->select('users.id', 'users.location_id', 'users.name', 'users.role_id', 'users.email', 'roles.name as role_name')
                 ->with('role')
                 ->leftJoin('roles', 'users.role_id', '=', 'roles.id');
 
@@ -53,6 +56,13 @@ class UserController extends Controller
                     $sql = "users.email  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
                 })
+                ->addColumn('location_name', function (User $data) {
+                    if ($data->location_id != null) {
+                        return Location::find($data->location_id)->name;
+                    } else {
+                        return null;
+                    }
+                })
                 ->addColumn('aksi', function (User $data) {
                     $role = $data->load('roles');
                     $button = '';
@@ -67,7 +77,7 @@ class UserController extends Controller
 
                     return $button;
                 })
-                ->rawColumns(['aksi'])
+                ->rawColumns(['location_name', 'aksi'])
                 ->toJson();
         }
 
@@ -88,8 +98,9 @@ class UserController extends Controller
 
         $roles = Role::paginate(10);
         $users = User::paginate(10);
+        $locations = Location::all();
 
-        $compact = compact('html', 'roles', 'users');
+        $compact = compact('html', 'roles', 'users', 'locations');
 
         return view("pages.setting.user", $compact);
     }
@@ -145,6 +156,7 @@ class UserController extends Controller
             }
 
             $user->name = request("name");
+            $user->location_id = request("location_id");
             $user->email = request("email");
             $user->role_id = request("role_id");
             $user->save();
@@ -164,6 +176,10 @@ class UserController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,
@@ -193,6 +209,10 @@ class UserController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,

@@ -17,6 +17,7 @@ const defaultForm = {
     remaining_payment: null,
     remaining_payment_readable: null,
     company_id: null,
+    location_id: null,
     foreman_id: null,
     type: null,
     form_type: "create", // create, edit, detail
@@ -68,7 +69,7 @@ const Project = {
             state.base_url = payload.base_url;
         },
         INSERT_DATA(state, payload) {
-            state.data = payload.projects;
+            state.data = [...payload.projects];
         },
         INSERT_DATA_SELECTED(state, payload) {
             let dataClone = [...state.data];
@@ -90,30 +91,57 @@ const Project = {
             }
         },
         INSERT_FORM(state, payload) {
-            state.form = {
-                ...state.form,
+            let getCloneForm = state.form;
+
+            getCloneForm = {
+                getCloneForm,
                 ...payload.form,
+                contractors: [...payload.contractors],
+                ordinary_seamans: [...payload.ordinary_seamans],
                 date_end: new Date(payload.form.date_end),
             };
+
+            state.form = { ...getCloneForm };
+
+            // console.info(payload.form.contractors, state.form.contractors);
         },
         INSERT_FORM_ID(state, payload) {
             state.form.id = payload.id;
         },
         INSERT_FORM_NEW_CONTRACTOR(state, payload) {
-            state.form.contractors = [
-                ...state.form.contractors,
-                {
-                    id: null,
-                },
-            ]
+            // console.info(state.form);
+            if (state.form.contractors) {
+                state.form.contractors = [
+                    ...state.form.contractors,
+                    {
+                        id: null,
+                    },
+                ]
+            } else {
+                state.form = {
+                    ...state.form,
+                    contractors: [{
+                        id: null,
+                    }]
+                }
+            }
         },
         INSERT_FORM_NEW_OS(state, payload) {
-            state.form.ordinary_seamans = [
-                ...state.form.ordinary_seamans,
-                {
-                    id: null,
-                },
-            ]
+            if (state.form.ordinary_seamans) {
+                state.form.ordinary_seamans = [
+                    ...state.form.ordinary_seamans,
+                    {
+                        id: null,
+                    },
+                ]
+            } else {
+                state.form = {
+                    ...state.form,
+                    ordinary_seamans: [{
+                        id: null,
+                    }]
+                }
+            }
         },
         INSERT_FORM_PRICE(state, payload) {
             if (payload.price != null) {
@@ -228,6 +256,15 @@ const Project = {
             // }
 
             state.form.contractors.splice(payload.index, 1);
+            // const indexToRemove = state.form.contractors.findIndex(item => item.id == payload.id);
+
+            // // Remove the element from the array
+            // if (indexToRemove !== -1) {
+            //     state.form.contractors.splice(indexToRemove, 1);
+            // }
+
+            // console.info(state.data);
+
         },
         DELETE_FORM_OS(state, payload) {
             state.form.ordinary_seamans.splice(payload.index, 1);
@@ -271,6 +308,7 @@ const Project = {
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
+                user_id: payload.user_id,
             }
 
             await axios
@@ -350,8 +388,16 @@ const Project = {
          * @returns {Promise} A promise that resolves after the action is performed.
          */
         onAction: async (context, payload) => {
+            const getCloneForm = { ...payload.form };
+            const getCloneFormContractors = [...payload.form.contractors];
+            const getCloneFormOrdinarySeamans = [...payload.form.ordinary_seamans];
+
+            // console.info(context.state.data);
+
             context.commit("INSERT_FORM", {
-                form: payload.form,
+                form: { ...getCloneForm },
+                contractors: [...getCloneFormContractors],
+                ordinary_seamans: [...getCloneFormOrdinarySeamans],
             });
             context.commit("INSERT_FORM_FORM_TYPE", {
                 form_type: payload.form_type,

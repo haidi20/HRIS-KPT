@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 use LDAP\Result;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AttendanceController extends Controller
 {
@@ -106,15 +108,18 @@ class AttendanceController extends Controller
                     ->firstWhere('date', $date->date_full);
 
                 if ($attendanceHasEmployee) {
-                    $row->hour_start = $this->setTime($attendanceHasEmployee->hour_start);
-                    $row->hour_end = $this->setTime($attendanceHasEmployee->hour_end);
+                    $row->is_exists = true;
+                    $row->hour_start = $this->setTime($attendanceHasEmployee->hour_start, true);
+                    $row->hour_end = $this->setTime($attendanceHasEmployee->hour_end, true);
                     $row->duration_work = $attendanceHasEmployee->duration_work_readable;
-                    $row->hour_rest_start = $this->setTime($attendanceHasEmployee->hour_rest_start);
-                    $row->hour_rest_end = $this->setTime($attendanceHasEmployee->hour_rest_end);
+                    $row->hour_rest_start = $this->setTime($attendanceHasEmployee->hour_rest_start, true);
+                    $row->hour_rest_end = $this->setTime($attendanceHasEmployee->hour_rest_end, true);
                     $row->duration_rest = $attendanceHasEmployee->duration_rest_readable;
-                    $row->hour_overtime_start = $this->setTime($attendanceHasEmployee->hour_overtime_start);
-                    $row->hour_overtime_end = $this->setTime($attendanceHasEmployee->hour_overtime_end);
+                    $row->hour_overtime_start = $this->setTime($attendanceHasEmployee->hour_overtime_start, true);
+                    $row->hour_overtime_end = $this->setTime($attendanceHasEmployee->hour_overtime_end, true);
                     $row->duration_overtime = $attendanceHasEmployee->duration_overtime_readable;
+                } else {
+                    $row->is_exists = false;
                 }
             }
 
@@ -154,6 +159,10 @@ class AttendanceController extends Controller
         } catch (\Exception $e) {
             Log::error($e);
 
+            // $routeAction = Route::currentRouteAction();
+            // $log = new LogController;
+            // $log->store(request("user_id"), $e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal export data',
@@ -171,10 +180,47 @@ class AttendanceController extends Controller
     public function print()
     {
         $data = $this->fetchDataDetail()->original["data"];
+        $employee = $this->fetchDataDetail()->original["employee"];
 
         // return $data;
 
-        return view("pages.attendance.partials.print", compact("data"));
+        return view("pages.attendance.partials.print", compact("data", "employee"));
+    }
+
+    public function store()
+    {
+        $dateNow = Carbon::now()->format("Y-m-d");
+        $dateStart = request("date_start", $dateNow);
+        $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
+
+        try {
+            // DB::beginTransaction();
+
+            $this->storeFingerSpot();
+
+            $this->storeHasEmployee();
+
+            // DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'dateStart' => $dateStart,
+                'message' => "Berhasil Proses Data Finger",
+            ], 200);
+        } catch (\Exception $e) {
+            // DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal Proses Data Finger",
+            ], 500);
+        }
     }
 
     public function storeFingerSpot()
@@ -182,7 +228,12 @@ class AttendanceController extends Controller
         $fingerTools = FingerTool::all();
         $dateNow = Carbon::now()->format("Y-m-d");
         $dateStart = request("date_start", $dateNow);
-        $dateEnd = request("date_end", $dateStart);
+        $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
+        $dateEnd = request(
+            "date_end",
+            $dateStart
+        );
+        $dateEnd = Carbon::parse($dateEnd)->format("Y-m-d");
 
         $responseData = [];
         $url = "https://developer.fingerspot.io/api/get_attlog";
@@ -251,10 +302,10 @@ class AttendanceController extends Controller
             ]);
         }
 
-        return response()->json([
-            "dateStart" => $dateStart,
-            "data" => $responseData,
-        ]);
+        // return response()->json([
+        //     "dateStart" => $dateStart,
+        //     "data" => $responseData,
+        // ]);
     }
 
     public function storeHasEmployee()
@@ -262,18 +313,28 @@ class AttendanceController extends Controller
         $dateNow = Carbon::now()->format("Y-m-d");
         $date = request("date", $dateNow);
 
+        if (request("date_start") != null) {
+            $date = request("date_start");
+        }
+
+        $date = Carbon::parse($date)->format("Y-m-d");
+
         $query = "CALL SP_ATTENDANCE_HAS_EMPLOYEES('{$date}')";
         $result = DB::select($query);
 
-        return response()->json([
-            "date" => $date,
-            "data" => $result,
-        ]);
+        // return response()->json([
+        //     "date" => $date,
+        //     // "data" => $result,
+        // ]);
     }
 
-    private function setTime($time)
+    private function setTime($time, $isNull = false)
     {
-        $result = "00:00";
+        if ($isNull) {
+            $result = null;
+        } else {
+            $result = "00:00";
+        }
 
         if ($time != null) {
             $result = Carbon::parse($time)->format("H:i");

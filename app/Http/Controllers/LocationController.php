@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 use Spatie\Permission\Models\Permission;
 
@@ -79,16 +80,16 @@ class LocationController extends Controller
         return view("pages.master.location.index", $compact);
     }
 
-    private function buttonDatatables($columnsArrExPr)
-    {
-        return [
-            ['extend' => 'csv', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export CSV'],
-            ['extend' => 'pdf', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export PDF'],
-            ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
-            ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
-        ];
-    }
 
+
+    public function fetchData()
+    {
+        $locations = Location::orderBy("name", "asc")->get();
+
+        return response()->json([
+            "locations" => $locations,
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -124,6 +125,11 @@ class LocationController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -153,10 +159,25 @@ class LocationController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    private function buttonDatatables($columnsArrExPr)
+    {
+        return [
+            ['extend' => 'csv', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export CSV'],
+            ['extend' => 'pdf', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export PDF'],
+            ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
+            ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
+        ];
     }
 }

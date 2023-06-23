@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 class OrdinarySeamanController extends Controller
 {
@@ -58,6 +59,11 @@ class OrdinarySeamanController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -86,6 +92,11 @@ class OrdinarySeamanController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

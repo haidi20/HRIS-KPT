@@ -27,7 +27,8 @@
       </b-col>
       <b-col cols="1" style="align-self: center;">
         <span @click="onDelete(index)" class="cursor-pointer">
-          <i class="fas fa-trash" style="color: #BB2D3B;"></i>
+          <!-- <i class="fas fa-trash" style="color: #BB2D3B;"></i> -->
+          <i class="bi bi-trash" style="color: #BB2D3B;"></i>
         </span>
       </b-col>
     </b-row>

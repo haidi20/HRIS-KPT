@@ -30,6 +30,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'role_id',
+        'location_id',
         'email',
         'password',
     ];
@@ -60,6 +61,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, "role_id", "id");
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, "location_id", "id");
     }
 
     public function getGroupNameAttribute()

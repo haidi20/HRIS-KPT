@@ -12,8 +12,11 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ["company_name", "job_order_total", "date_end_readable"];
     protected $fillable = [];
+    protected $appends = [
+        "location_name", "job_order_total", "date_end_readable",
+        "job_order_finish_total",
+    ];
 
     public function __construct(array $attributes = [])
     {
@@ -41,9 +44,14 @@ class Project extends Model
         return $this->belongsTo(Barge::class, "barge_id", "id");
     }
 
-    public function company()
+    // public function company()
+    // {
+    //     return $this->belongsTo(Company::class, "company_id", "id");
+    // }
+
+    public function location()
     {
-        return $this->belongsTo(Company::class, "company_id", "id");
+        return $this->belongsTo(Location::class, "location_id", "id");
     }
 
     public function job()
@@ -80,12 +88,19 @@ class Project extends Model
         });
     }
 
-    public function getCompanyNameAttribute()
+    public function getLocationNameAttribute()
     {
-        if ($this->company) {
-            return $this->company->name;
+        if ($this->location) {
+            return $this->location->name;
         } else {
             return null;
+        }
+    }
+
+    public function getJobOrderFinishTotalAttribute()
+    {
+        if ($this->jobOrders) {
+            return $this->jobOrders->where("status", "finish")->count();
         }
     }
 

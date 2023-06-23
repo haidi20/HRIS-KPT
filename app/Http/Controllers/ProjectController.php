@@ -7,12 +7,14 @@ use App\Models\Contractor;
 use App\Models\ContractorHasParent;
 use App\Models\OrdinarySeamanHasParent;
 use App\Models\Project;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
 
 class ProjectController extends Controller
 {
@@ -57,11 +59,27 @@ class ProjectController extends Controller
 
     public function fetchDataBaseDateEnd()
     {
+        $user = null;
         $date = Carbon::now();
 
+        if (request("user_id")) {
+            $user = User::find(request("user_id"));
+        }
+
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            ->whereDate("date_end", ">=", $date)
-            ->orderBy("date_end", "asc")->get();
+            ->whereDate("date_end", ">=", $date);
+
+        // data proyek berdasarkan lokasi pengguna,
+        // jadi jika pengawas tersebut ada di DOC 2, maka yg muncul proyek DOC 2
+        if ($user != null) {
+            $locationId = $user->location_id ? $user->location_id : null;
+
+            if ($locationId != null) {
+                $projects = $projects->where("location_id", $locationId);
+            }
+        }
+
+        $projects = $projects->orderBy("date_end", "asc")->get();
 
         return response()->json([
             "projects" => $projects,
@@ -75,7 +93,7 @@ class ProjectController extends Controller
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
         $dateRange = $this->dateRange($month->format("Y-m"));
-        $nameFile = "project_{$monthReadAble}.xlsx";
+        $nameFile = "export/project_{$monthReadAble}.xlsx";
 
         try {
             Excel::store(new ProjectExport($data), $nameFile, 'real_public', \Maatwebsite\Excel\Excel::XLSX);
@@ -83,7 +101,7 @@ class ProjectController extends Controller
             return response()->json([
                 "success" => true,
                 "data" => $data,
-                "linkDownload" => route('project.download', ["name_file" => $nameFile]),
+                "linkDownload" => route('project.download', ["path" => $nameFile]),
             ]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -97,7 +115,7 @@ class ProjectController extends Controller
 
     public function download()
     {
-        $path = public_path(request("name_file"));
+        $path = public_path(request("path"));
 
         return Response::download($path);
     }
@@ -105,6 +123,26 @@ class ProjectController extends Controller
     public function store()
     {
         // return request()->all();
+
+        $checkDuplicateContractor = $this->detectDuplicateData(request("contractors"), ['contractor_id']);
+
+        if ($checkDuplicateContractor) {
+            return response()->json([
+                'success' => false,
+                'checkDuplicateContractor' => $checkDuplicateContractor,
+                'message' => "Maaf, Data Kepala Pemborong tidak boleh sama",
+            ], 401);
+        }
+
+        $checkDuplicateOs = $this->detectDuplicateData(request("ordinary_seamans"), ['ordinary_seaman_id']);
+
+        if ($checkDuplicateOs) {
+            return response()->json([
+                'success' => false,
+                'checkDuplicateOs' => $checkDuplicateOs,
+                'message' => "Maaf, Data OS tidak boleh sama",
+            ], 401);
+        }
 
         try {
             DB::beginTransaction();
@@ -119,9 +157,10 @@ class ProjectController extends Controller
                 $message = "ditambahkan";
             }
 
-            $project->company_id = request("company_id");
+            // $project->company_id = request("company_id");
             $project->foreman_id = request("foreman_id");
             $project->barge_id = request("barge_id");
+            $project->location_id = request("location_id");
             $project->name = request("name");
             $project->date_end = Carbon::parse(request("date_end"))->format("Y-m-d");
             $project->day_duration = request("day_duration");
@@ -139,12 +178,17 @@ class ProjectController extends Controller
 
             return response()->json([
                 'success' => true,
+                'checkDuplicateContractor' => $checkDuplicateContractor,
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
 
             return response()->json([
                 'success' => false,
@@ -175,6 +219,10 @@ class ProjectController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal dihapus',
@@ -192,7 +240,7 @@ class ProjectController extends Controller
         $contractorHasParentDelete = ContractorHasParent::where($getData);
         $contractorHasParentDelete->delete();
 
-        if (count(request("contractors")) > 0) {
+        if (request("contractors") != null) {
 
             foreach (request("contractors") as $index => $item) {
                 $getData["contractor_id"] =  $item["contractor_id"];
@@ -211,7 +259,7 @@ class ProjectController extends Controller
         $oridnarySeamanHasParentDelete = OrdinarySeamanHasParent::where($getData);
         $oridnarySeamanHasParentDelete->delete();
 
-        if (count(request("ordinary_seamans")) > 0) {
+        if (request("ordinary_seamans") != null) {
 
             foreach (request("ordinary_seamans") as $index => $item) {
                 $getData["ordinary_seaman_id"] =  $item["ordinary_seaman_id"];
@@ -220,7 +268,30 @@ class ProjectController extends Controller
         }
     }
 
-    public function fetchDataOld()
+    private function detectDuplicateData($array, $properties)
+    {
+        $uniqueData = [];
+        $duplicates = [];
+
+        if ($array) {
+            foreach ($array as $item) {
+                $data = '';
+                foreach ($properties as $property) {
+                    $data .= $item[$property];
+                }
+
+                if (in_array($data, $uniqueData)) {
+                    $duplicates[] = $item;
+                } else {
+                    $uniqueData[] = $data;
+                }
+            }
+        }
+
+        return $duplicates;
+    }
+
+    private function fetchDataOld()
     {
         $projects = [
             (object)[

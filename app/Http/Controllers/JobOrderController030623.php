@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
-
+use Illuminate\Support\Facades\Route;
 
 class JobOrderController extends Controller
 {
@@ -126,6 +126,11 @@ class JobOrderController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -174,6 +179,11 @@ class JobOrderController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,
@@ -226,6 +236,11 @@ class JobOrderController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal Penilaian",
@@ -262,6 +277,11 @@ class JobOrderController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

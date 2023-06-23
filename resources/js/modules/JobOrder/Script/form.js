@@ -2,9 +2,8 @@ import VueSelect from "vue-select";
 import axios from "axios";
 import moment from "moment";
 
+import FormConfirmation from "../View/formConfirmation";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
-
-import { imageToBase64 } from "../../../utils";
 
 export default {
     data() {
@@ -19,6 +18,7 @@ export default {
     },
     components: {
         VueSelect,
+        FormConfirmation,
         EmployeeHasParent,
     },
     computed: {
@@ -130,86 +130,27 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: false,
             });
-            this.$bvModal.hide("job_order_form");
+        },
+        onInsertImage(event) {
+            const reader = new FileReader();
+
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+                reader.onload = (readerEvent) => {
+                    this.$store.commit("jobOrder/INSERT_FORM_IMAGE", {
+                        file: event.target.files[0],
+                        bit: readerEvent.target.result,
+                    });
+                };
+
+                // this.$store.dispatch("onEvent", { nameForm: "business_photo" });
+            }
         },
         onShowEmployee() {
             this.$bvModal.show("data_employee");
         },
-        async onSend() {
-            const Swal = this.$swal;
-
-            let request = {
-                ...this.form,
-                employee_selecteds: [...this.getEmployeeSelecteds],
-                user_id: this.getUserId,
-            };
-
-            if (this.form.image != null) {
-                request.image = await imageToBase64(request.image);
-            }
-
-            // console.info(request);
-            // return false;
-            this.is_loading = true;
-
-            await axios
-                .post(`${this.getBaseUrl}/api/v1/job-order/store`, request)
-                .then((responses) => {
-                    // console.info(responses);
-                    this.is_loading = false;
-                    // return false;
-                    const data = responses.data;
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener("mouseenter", Swal.stopTimer);
-                            toast.addEventListener("mouseleave", Swal.resumeTimer);
-                        },
-                    });
-
-                    if (data.success == true) {
-                        Toast.fire({
-                            icon: "success",
-                            title: data.message,
-                        });
-
-                        this.$store.commit("jobOrder/INSERT_FORM_KIND", {
-                            form_title: "Job Order",
-                            form_kind: null,
-                        });
-                        this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
-                            value: false,
-                        });
-                        this.$store.dispatch("jobOrder/fetchData");
-                        this.$store.commit("jobOrder/CLEAR_FORM");
-                    }
-                })
-                .catch((err) => {
-                    console.info(err);
-                    this.is_loading = false;
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 4000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener("mouseenter", Swal.stopTimer);
-                            toast.addEventListener("mouseleave", Swal.resumeTimer);
-                        },
-                    });
-
-                    Toast.fire({
-                        icon: "error",
-                        title: err.response.data.message,
-                    });
-                });
+        onConfirmation() {
+            this.$bvModal.show("job_order_confirmation");
         },
         getReadOnly() {
             const readOnly = this.$store.getters["jobOrder/getReadOnly"];

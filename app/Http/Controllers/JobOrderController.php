@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Config;
-
+use Illuminate\Support\Facades\Route;
 
 class JobOrderController extends Controller
 {
@@ -41,6 +41,7 @@ class JobOrderController extends Controller
     {
         $status = request("status");
         $search = request("search");
+        $projectId = request("project_id");
         $user = User::find(request("user_id"));
         $month = Carbon::parse(request("month"));
 
@@ -77,6 +78,10 @@ class JobOrderController extends Controller
 
         if ($status != "all") {
             $jobOrders = $jobOrders->where("status", $status);
+        }
+
+        if ($projectId != null) {
+            $jobOrders = $jobOrders->where("project_id", $projectId);
         }
 
         $jobOrders = $jobOrders->get();
@@ -220,6 +225,11 @@ class JobOrderController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -288,6 +298,11 @@ class JobOrderController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message}",
@@ -351,6 +366,11 @@ class JobOrderController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,
@@ -433,6 +453,11 @@ class JobOrderController extends Controller
 
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
             return response()->json([
                 'success' => false,
                 'message' => "Gagal memperbaharui status",
@@ -467,6 +492,11 @@ class JobOrderController extends Controller
             DB::rollback();
 
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,

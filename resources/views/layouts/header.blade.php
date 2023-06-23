@@ -27,12 +27,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
                         style="min-width: 11rem; margin-top: 20%;">
-                        {{-- <li><a class="dropdown-item" href="{% url 'profil' %}"><i
-                                    class="icon-mid bi bi-person me-2"></i>
-                                Profil</a></li>
+                        <li><a class="dropdown-item" target="_blank" href="/dokumentasi/1.0/menu/dashboard"><i
+                                    class="icon-mid bi bi-book me-2"></i>
+                                Dokumentasi</a></li>
                         <li>
                             <hr class="dropdown-divider">
-                        </li> --}}
+                        </li>
                         <li>
                             <!-- <a class="dropdown-item" href="logout"><i
                                     class="icon-mid bi bi-box-arrow-left me-2"></i>

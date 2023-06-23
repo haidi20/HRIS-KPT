@@ -107,6 +107,7 @@ const Roster = {
     actions: {
         fetchData: async (context, payload) => {
             context.commit("UPDATE_LOADING_TABLE", { value: true });
+            context.commit("INSERT_DATE_RANGE", { date_range: [] });
 
             const params = {
                 // ...context.state.params,

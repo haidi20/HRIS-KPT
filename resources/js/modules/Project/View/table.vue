@@ -80,12 +80,12 @@
             </b-dropdown>-->
           </b-td>
           <b-td>{{ item.name }}</b-td>
-          <b-td>{{ item.company_name }}</b-td>
+          <b-td>{{ item.location_name }}</b-td>
           <b-td>{{ item.date_end_readable }}</b-td>
           <b-td>{{ item.day_duration }} Hari</b-td>
           <b-td>
             <template v-if="item.job_order_total > 0">
-              {{ item.job_order_total_finish }}
+              {{ item.job_order_finish_total }}
               \ {{ item.job_order_total }}
             </template>
             <template v-else>

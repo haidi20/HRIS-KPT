@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 class ApprovalAgreementController extends Controller
 {
@@ -38,6 +39,11 @@ class ApprovalAgreementController extends Controller
             ], 201);
         } catch (\Exception $e) {
             Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
 
             return response()->json([
                 'success' => false,
@@ -329,10 +335,16 @@ class ApprovalAgreementController extends Controller
         $nextLevelApproval = ApprovalAgreement::byApprovalLevelId($approvalLevelId)
             ->byModel($modelId, $nameModel)
             ->where("user_id", $userId)
-            ->first()->level_approval + $addLevel;
+            ->first();
+
+        $getNextLevelApproval = 1;
+
+        if ($nextLevelApproval) {
+            $getNextLevelApproval = $nextLevelApproval->level_approval + $addLevel;
+        }
 
         $checkNextLevelApproval = ApprovalLevelDetail::byApprovalLevelId($approvalLevelId)
-            ->where("level", $nextLevelApproval)
+            ->where("level", $getNextLevelApproval)
             ->first();
 
         return (object) compact("nextLevelApproval", "checkNextLevelApproval");

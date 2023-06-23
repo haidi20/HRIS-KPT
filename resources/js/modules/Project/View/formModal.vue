@@ -28,9 +28,8 @@
       <br />
       <b-row>
         <b-col>
-          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+          <b-button style="float: right" variant="info" @click="onCloseModal()">Tutup</b-button>
           <b-button
-            style="float: right"
             variant="success"
             @click="onSend()"
             v-if="!getReadOnly()"
@@ -107,7 +106,7 @@ export default {
       await axios
         .post(`${this.getBaseUrl}/api/v1/project/store`, request)
         .then((responses) => {
-          // console.info(responses);
+          //   console.info(responses);
           this.is_loading = false;
           const data = responses.data;
 

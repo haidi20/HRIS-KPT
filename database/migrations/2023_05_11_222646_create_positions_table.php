@@ -15,7 +15,7 @@ class CreatePositionsTable extends Migration
     {
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->text('description')->nullable();
             $table->integer('minimum_employee')->nullable()->default(0);
             $table->unsignedBigInteger('departmen_id')->nullable();

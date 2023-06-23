@@ -17,10 +17,15 @@ class DatabaseSeeder extends Seeder
             data master merupakan data wajib ada, jadi harus di input ulang ketika migrate ulang.
         */
         // start data master
-        $this->call(FeatureSeeder::class);
-        $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
+
+        // di ganti dengan mysql data/role_permission.sql
+        // $this->call(FeatureSeeder::class);
+        // $this->call(PermissionSeeder::class);
+        // $this->call(RoleSeeder::class);
+        // $this->call(UserSeeder::class);
+        $this->call(RolePermissionSeeder::class);
+
+
         $this->call(RosterStatusSeeder::class);
         $this->call(CompanySeeder::class);
         $this->call(DepartmenSeeder::class);
@@ -40,8 +45,12 @@ class DatabaseSeeder extends Seeder
         // $this->call(JobOrderSeeder::class);
         // $this->call(JobStatusHasParent::class);
         // $this->call(JobOrderHasEmployeeSeeder::class);
-        $this->call(AttendanceFingerspotSeeder::class);
-        $this->call(AttendanceHasEmployeeSeeder::class);
+
+        // di ganti dengan mysql data/attendance.sql
+        // $this->call(AttendanceFingerspotSeeder::class);
+        // $this->call(AttendanceHasEmployeeSeeder::class);
+        $this->call(AttendanceSeeder::class);
+
         // end master
 
         /*
@@ -49,10 +58,10 @@ class DatabaseSeeder extends Seeder
             ketika production data ini tidak wajib diinput
         */
         // start data biasa
-        $this->call(ContractorSeeder::class);
-        $this->call(OrdinarySeamanSeeder::class);
-        $this->call(ProjectSeeder::class);
-        $this->call(SalaryAdvanceSeeder::class);
+        // $this->call(ContractorSeeder::class);
+        // $this->call(OrdinarySeamanSeeder::class);
+        // $this->call(ProjectSeeder::class);
+        // $this->call(SalaryAdvanceSeeder::class);
         // end data biasa
     }
 }

@@ -18,10 +18,10 @@
 
             </b-button>-->
             <span @click="onEdit(item)" class="cursor-pointer">
-              <i class="fas fa-edit" style="color: #31D2F2;"></i>
+              <i class="bi bi-pencil" style="color: #31D2F2;"></i>
             </span>
             <span @click="onDelete(item)" class="cursor-pointer float-end">
-              <i class="fas fa-trash" style="color: #BB2D3B;"></i>
+              <i class="bi bi-trash" style="color: #BB2D3B;"></i>
             </span>
           </b-td>
         </b-tr>
@@ -44,7 +44,7 @@ export default {
         {
           label: "Nama",
           field: "name",
-          width: "100px",
+          width: "200px",
           class: "",
         },
         {

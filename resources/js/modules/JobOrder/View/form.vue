@@ -20,12 +20,12 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Pekerjaan" label-for="job_id" class>
+        <b-form-group label=" Jenis Pekerjaan" label-for="job_id" class>
           <VueSelect
             id="job_id"
             class="cursor-pointer"
             v-model="job_id"
-            placeholder="Pilih Pekerjaan"
+            placeholder="Pilih jenis Pekerjaan"
             :options="getOptionJobs"
             :reduce="(data) => data.id"
             label="name"
@@ -166,11 +166,12 @@
       <b-col cols>
         <b-form-group :label="getLabelImage" label-for="image" class>
           <!-- <b-form-file id="image" v-model="form.image" :disabled="getReadOnly()"></b-form-file> -->
+          <!-- v-model="form.image" -->
           <b-form-file
             id="image"
-            v-model="form.image"
             :state="Boolean(is_image)"
             :disabled="getReadOnly()"
+            @change="onInsertImage($event)"
           ></b-form-file>
         </b-form-group>
       </b-col>
@@ -199,17 +200,18 @@
     <b-row>
       <b-col>
         <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+        <!-- :disabled="is_loading || getIsDisabledBtnSend" -->
         <b-button
           v-if="!getReadOnly()"
           style="float: right"
           variant="success"
-          @click="onSend()"
-          :disabled="is_loading || getIsDisabledBtnSend"
+          @click="onConfirmation()"
         >Simpan</b-button>
-        <span v-if="is_loading" style="float: right">Loading...</span>
+        <!-- <span v-if="is_loading" style="float: right">Loading...</span> -->
       </b-col>
     </b-row>
     <EmployeeHasParent />
+    <FormConfirmation />
   </div>
 </template>
 

@@ -48,8 +48,9 @@ export default {
     // VueBottomSheet,
   },
   mounted() {
+    const user = JSON.parse(this.user);
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
-    this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
+    this.$store.commit("INSERT_USER", { user });
 
     ["jobOrder", "project", "employeeHasParent", "master"].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
@@ -66,7 +67,7 @@ export default {
     // this.$store.dispatch("jobOrder/fetchData");
     this.$store.dispatch("master/fetchPosition");
     this.$store.dispatch("employeeHasParent/fetchOption");
-    this.$store.dispatch("project/fetchDataBaseDateEnd");
+    this.$store.dispatch("project/fetchDataBaseDateEnd", { user_id: user.id });
 
     this.$store.commit("employeeHasParent/INSERT_FORM_PARENT_NAME", {
       parent_name: "job_order",

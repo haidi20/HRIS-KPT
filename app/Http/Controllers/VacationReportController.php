@@ -64,6 +64,10 @@ class VacationReportController extends Controller
         } catch (\Exception $e) {
             Log::error($e);
 
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal export data',
