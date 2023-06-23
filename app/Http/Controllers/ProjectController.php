@@ -71,7 +71,7 @@ class ProjectController extends Controller
         // ->whereDate("date_end", ">=", $date);
 
         // data proyek berdasarkan lokasi pengguna,
-        // jadi jika pengawas tersebut ada di DOC 2, maka yg muncul proyek DOC 2
+        // jadi jika pengawas tersebut ada di DOC 2, maka yg muncul proyek di DOC 2
         if ($user != null) {
             $locationId = $user->location_id ? $user->location_id : null;
 

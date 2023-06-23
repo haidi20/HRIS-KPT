@@ -94,11 +94,11 @@ const Project = {
             let getCloneForm = state.form;
 
             getCloneForm = {
-                getCloneForm,
+                ...getCloneForm,
                 ...payload.form,
                 contractors: [...payload.contractors],
                 ordinary_seamans: [...payload.ordinary_seamans],
-                date_end: new Date(payload.form.date_end),
+                date_end: checkNull(payload.date_end) != null ? new Date(payload.form.date_end) : new Date(),
             };
 
             state.form = { ...getCloneForm };
@@ -144,7 +144,7 @@ const Project = {
             }
         },
         INSERT_FORM_PRICE(state, payload) {
-            if (payload.price != null) {
+            if (checkNull(payload.price) != null) {
                 // console.info(typeof payload.amount);
                 const numericValue = numbersOnly(payload.price.toString());
                 const readAble = formatCurrency(payload.price, ".");
@@ -158,7 +158,7 @@ const Project = {
             }
         },
         INSERT_FORM_DOWN_PAYMENT(state, payload) {
-            if (payload.down_payment != null) {
+            if (checkNull(payload.down_payment) != null) {
                 // console.info(typeof payload.amount);
                 const numericValue = numbersOnly(payload.down_payment.toString());
                 const readAble = formatCurrency(payload.down_payment, ".");
@@ -196,7 +196,7 @@ const Project = {
         },
         INSERT_FORM_DATE_END(state, payload) {
             // console.info(payload.date_end);
-            state.form.date_end = payload.date_end;
+            state.form.date_end = checkNull(payload.date_end) != null ? payload.date_end : new Date();
         },
         INSERT_FORM_FORM_TYPE(state, payload) {
             state.form.form_type = payload.form_type;
