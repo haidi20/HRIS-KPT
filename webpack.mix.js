@@ -10,15 +10,6 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
-mix.override(webpackConfig => {
-    const chunkFileName = webpackConfig.output.chunkFilename;
-
-    webpackConfig.output.chunkFilename = (pathData, assetInfo) => {
-        return `${chunkFileName(pathData, assetInfo)}?id=[chunkhash]`;
-    };
-});
-
-mix.js('resources/js/app.js', 'public/js').vue({ version: 2 })
+mix.js('resources/js/app.js', 'public/js').vue()
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps();
