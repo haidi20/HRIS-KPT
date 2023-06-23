@@ -11,7 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.options({ runtimeChunkPath: '.' });
+mix.override(webpackConfig => {
+    const chunkFileName = webpackConfig.output.chunkFilename;
+
+    webpackConfig.output.chunkFilename = (pathData, assetInfo) => {
+        return `${chunkFileName(pathData, assetInfo)}?id=[chunkhash]`;
+    };
+});
 
 mix.js('resources/js/app.js', 'public/js').vue({ version: 2 })
     .sass('resources/sass/app.scss', 'public/css')
