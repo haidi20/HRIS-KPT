@@ -241,10 +241,10 @@ class EmployeeController extends Controller
                 $finger->save();
             }
 
-            // $salary_adjustment = SalaryAdjustment::create([
-            //     'name' => $request->name,
-            // ]);
-            // $salary_adjustment->save();
+            $salary_adjustment = SalaryAdjustment::create([
+                'name' => $request->name,
+            ]);
+            $salary_adjustment->save();
 
             DB::commit();
 

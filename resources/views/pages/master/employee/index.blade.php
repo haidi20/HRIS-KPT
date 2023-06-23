@@ -248,7 +248,8 @@
     }
 
     function onCreate() {
-        clearForm();
+        clearFormCreate();
+        $("#personal-tab").tab("show");
         $("#titleForm").html("Tambah Karyawan");
         $("#kepegawaian-tab").hide();
         $("#salary-tab").hide();
@@ -895,6 +896,21 @@
         // $("#photo").val("");
         // $("#photoPreview").val("");
         // $("#photoPreviewReady").hide();
+    }
+
+    function clearFormCreate() {
+        $("#id").val("");
+        $("#nip").val("");
+        $("#nik").val("");
+        $("#name").val("");
+        $("#birth_place").val("");
+        $("#birth_date").val("");
+        $("#phone").val("");
+        $("#religion").val("").trigger("change");
+        $("#address").val("");
+        $("#photo").val("");
+        $("#photoPreview").val("");
+        $("#photoPreviewReady").hide();
     }
 
 </script>

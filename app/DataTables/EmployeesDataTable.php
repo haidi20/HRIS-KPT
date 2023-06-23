@@ -50,15 +50,15 @@ class EmployeesDataTable extends DataTable
             ->filterColumn('employee_status', function ($query, $keyword) {
                 $sql = "employees.employee_status like ?";
                 $query->whereRaw($sql, ["%{$keyword}%"]);
-            })
-            ->filterColumn('finger_employee', function ($query, $keyword) {
-                $sql = "fingers.id_finger like ?";
-                $query->whereRaw($sql, ["%{$keyword}%"]);
-            })
-            ->filterColumn('finger_tool', function ($query, $keyword) {
-                $sql = "fingers.finger_tool_id like ?";
-                $query->whereRaw($sql, ["%{$keyword}%"]);
             });
+            // ->filterColumn('finger_employee', function ($query, $keyword) {
+            //     $sql = "fingers.id_finger like ?";
+            //     $query->whereRaw($sql, ["%{$keyword}%"]);
+            // })
+            // ->filterColumn('finger_tool', function ($query, $keyword) {
+            //     $sql = "fingers.finger_tool_id like ?";
+            //     $query->whereRaw($sql, ["%{$keyword}%"]);
+            // });
     }
 
     public function query(Employee $employee)
@@ -116,8 +116,8 @@ class EmployeesDataTable extends DataTable
             ['data' => 'location_name', 'name' => 'location_name', 'title' => 'Nama Lokasi'],
             ['data' => 'company_name', 'name' => 'company_name', 'title' => 'Nama Perusahaan'],
             ['data' => 'employee_status', 'name' => 'employee_status', 'title' => 'Status'],
-            ['data' => 'finger_employee', 'name' => 'finger_employee', 'title' => 'Finger'],
-            ['data' => 'finger_tool', 'name' => 'finger_tool', 'title' => 'Finger'],
+            // ['data' => 'finger_employee', 'name' => 'finger_employee', 'title' => 'Finger'],
+            // ['data' => 'finger_tool', 'name' => 'finger_tool', 'title' => 'Finger'],
             ['data' => 'aksi', 'title' => 'Aksi', 'width' => '110px', 'orderable' => false, 'searchable' => false, 'exportable' => false],
         ];
     }

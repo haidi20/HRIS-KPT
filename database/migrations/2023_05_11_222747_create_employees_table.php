@@ -65,14 +65,14 @@ class CreateEmployeesTable extends Migration
             $table->string('reason')->nullable();
 
             // DATA GAJI & REKENING
-            $table->bigInteger('basic_salary')->default(0);
-            $table->bigInteger('allowance')->default(0);
-            $table->bigInteger('meal_allowance_per_attend')->default(0);
-            $table->bigInteger('transport_allowance_per_attend')->default(0);
-            $table->bigInteger('attend_allowance_per_attend')->default(0);
-            $table->bigInteger('overtime_rate_per_hour')->default(0);
+            $table->bigInteger('basic_salary')->default(0)->nullable();
+            $table->bigInteger('allowance')->default(0)->nullable();
+            $table->bigInteger('meal_allowance_per_attend')->default(0)->nullable();
+            $table->bigInteger('transport_allowance_per_attend')->default(0)->nullable();
+            $table->bigInteger('attend_allowance_per_attend')->default(0)->nullable();
+            $table->bigInteger('overtime_rate_per_hour')->default(0)->nullable();
 
-            $table->bigInteger('vat_per_year')->default(0);
+            $table->bigInteger('vat_per_year')->default(0)->nullable();
 
             $table->string('rekening_number')->nullable();
             $table->string('rekening_name')->nullable();

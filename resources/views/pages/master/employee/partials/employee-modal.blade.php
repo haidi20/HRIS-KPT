@@ -338,7 +338,7 @@
                             <div class="form-group row">
                                 <label for="basic_salary" class="col-sm-4 col-form-label">Gaji Pokok</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="basic_salary" name="basic_salary" class="form-control">
+                                    <input type="number" id="basic_salary" name="basic_salary" min="0" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
