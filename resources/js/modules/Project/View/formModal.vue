@@ -51,6 +51,7 @@ import Form from "../View/form";
 import ContractorHasParent from "../../ContractorHasParent/contractorHasParent";
 import OrdinarySeamanHasParent from "../../OrdinarySeamanHasParent/ordinarySeamanHasParent";
 import JobOrderTableHasParent from "../../JobOrder/View/tableHasParent";
+import { checkNull } from "../../../utils";
 
 export default {
   data() {
@@ -164,9 +165,13 @@ export default {
     getValidation() {
       let result = false;
 
-      //   console.info(this.form.remaining_payment);
+      //   console.info(this.form.price, this.form.remaining_payment);
 
-      if (this.form.remaining_payment < 0) {
+      if (
+        (this.form.remaining_payment < 0) &
+        (checkNull(this.form.price) != null &&
+          checkNull(this.form.remaining_payment) != null)
+      ) {
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",

@@ -13,7 +13,7 @@ const defaultForm = {
     // DP
     down_payment: null,
     down_payment_readable: null,
-    // sisa pembyaaran
+    // sisa pembayaran
     remaining_payment: null,
     remaining_payment_readable: null,
     company_id: null,
@@ -93,12 +93,14 @@ const Project = {
         INSERT_FORM(state, payload) {
             let getCloneForm = state.form;
 
+            // console.info(payload.form.date_end);
+
             getCloneForm = {
                 ...getCloneForm,
                 ...payload.form,
                 contractors: [...payload.contractors],
                 ordinary_seamans: [...payload.ordinary_seamans],
-                date_end: checkNull(payload.date_end) != null ? new Date(payload.form.date_end) : new Date(),
+                date_end: checkNull(payload.form.date_end) != null ? new Date(payload.form.date_end) : null,
             };
 
             state.form = { ...getCloneForm };
@@ -147,7 +149,7 @@ const Project = {
             if (checkNull(payload.price) != null) {
                 // console.info(typeof payload.amount);
                 const numericValue = numbersOnly(payload.price.toString());
-                const readAble = formatCurrency(payload.price, ".");
+                let readAble = formatCurrency(payload.price, ".");
 
                 // console.info(readAble.replace(/[^\d.:]/g, ''));
 
@@ -155,20 +157,25 @@ const Project = {
                 state.form.price_readable = readAble;
 
                 // console.info(state);
+            } else {
+                state.form.price = null;
+                state.form.price_readable = null;
             }
         },
         INSERT_FORM_DOWN_PAYMENT(state, payload) {
             if (checkNull(payload.down_payment) != null) {
                 // console.info(typeof payload.amount);
                 const numericValue = numbersOnly(payload.down_payment.toString());
-                const readAble = formatCurrency(payload.down_payment, ".");
-
-                // console.info(readAble.replace(/[^\d.:]/g, ''));
+                let readAble = formatCurrency(payload.down_payment, ".");
+                // readAble = readAble.replace(/[^\d.:]/g, '');
 
                 state.form.down_payment = numericValue;
                 state.form.down_payment_readable = readAble;
 
                 // console.info(state);
+            } else {
+                state.form.down_payment = null;
+                state.form.down_payment_readable = null;
             }
         },
         INSERT_FORM_REMAINING_PAYMENT(state, payload) {
@@ -196,7 +203,7 @@ const Project = {
         },
         INSERT_FORM_DATE_END(state, payload) {
             // console.info(payload.date_end);
-            state.form.date_end = checkNull(payload.date_end) != null ? payload.date_end : new Date();
+            state.form.date_end = checkNull(payload.date_end) != null ? payload.date_end : null;
         },
         INSERT_FORM_FORM_TYPE(state, payload) {
             state.form.form_type = payload.form_type;
@@ -204,11 +211,18 @@ const Project = {
         },
         INSERT_FORM_DAY_DURATION(state, payload) {
             // console.info(state.form.date_end);
-            const dateNow = moment().format("YYYY-MM-DD");
-            const dayDuration = dateDuration(dateNow, state.form.date_end);
+            if (
+                checkNull(state.form.date_end) != null
+                && moment(state.form.date_end).format("YYYY-mm-dd") != moment(new Date()).format("YYYY-mm-dd")
+            ) {
+                const dateNow = moment().format("YYYY-MM-DD");
+                const dayDuration = dateDuration(dateNow, state.form.date_end);
 
-            // console.info(day_duration);
-            state.form.day_duration = `${dayDuration}`;
+                // console.info(day_duration);
+                state.form.day_duration = `${dayDuration}`;
+            } else {
+                state.form.day_duration = null;
+            }
         },
         INSERT_PARAM_MONTH(state, payload) {
             state.params.month = new Date(payload.month);

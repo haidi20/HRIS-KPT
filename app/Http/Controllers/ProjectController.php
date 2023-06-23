@@ -125,6 +125,8 @@ class ProjectController extends Controller
     {
         // return request()->all();
 
+        $dateEnd = null;
+
         $checkDuplicateContractor = $this->detectDuplicateData(request("contractors"), ['contractor_id']);
 
         if ($checkDuplicateContractor) {
@@ -158,12 +160,16 @@ class ProjectController extends Controller
                 $message = "ditambahkan";
             }
 
+            if (request("date_end") != null) {
+                $dateEnd = Carbon::parse(request("date_end"))->format("Y-m-d");
+            }
+
             // $project->company_id = request("company_id");
             $project->foreman_id = request("foreman_id");
             $project->barge_id = request("barge_id");
             $project->location_id = request("location_id");
             $project->name = request("name");
-            $project->date_end = Carbon::parse(request("date_end"))->format("Y-m-d");
+            $project->date_end = $dateEnd;
             $project->day_duration = request("day_duration");
             $project->price = request("price");
             $project->down_payment = request("down_payment");
