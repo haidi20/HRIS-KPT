@@ -51,6 +51,7 @@ import Form from "../View/form";
 import ContractorHasParent from "../../ContractorHasParent/contractorHasParent";
 import OrdinarySeamanHasParent from "../../OrdinarySeamanHasParent/ordinarySeamanHasParent";
 import JobOrderTableHasParent from "../../JobOrder/View/tableHasParent";
+import { checkNull } from "../../../utils";
 
 export default {
   data() {
@@ -98,6 +99,12 @@ export default {
         ...this.form,
         user_id: this.getUserId,
       };
+
+      const getValidation = this.getValidation();
+
+      if (getValidation) {
+        return false;
+      }
 
       //   console.info(request);
       //   return false;
@@ -154,6 +161,38 @@ export default {
             title: err.response.data.message,
           });
         });
+    },
+    getValidation() {
+      let result = false;
+
+      //   console.info(this.form.price, this.form.remaining_payment);
+
+      if (
+        (this.form.remaining_payment < 0) &
+        (checkNull(this.form.price) != null &&
+          checkNull(this.form.remaining_payment) != null)
+      ) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "warning",
+          title: "Maaf, DP tidak boleh lebih dari biaya proyek",
+        });
+
+        result = true;
+      }
+
+      return result;
     },
     getReadOnly() {
       const readOnly = this.$store.getters["project/getReadOnly"];

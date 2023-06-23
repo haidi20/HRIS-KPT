@@ -96,7 +96,14 @@ class UserController extends Controller
                 // 'buttons' => $this->buttonDatatables($columnsArrExPr),
             ]);
 
-        $roles = Role::paginate(10);
+        $roles = new Role;
+
+        if (auth()->user()->role_id != 1) {
+            $roles = $roles->where("id", "!=", 1);
+        }
+
+        $roles = $roles->get();
+
         $users = User::paginate(10);
         $locations = Location::all();
 

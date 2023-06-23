@@ -19,10 +19,11 @@ class CreateProjectsTable extends Migration
             // $table->foreignId('company_id')->nullable(); // perusahaan
             $table->foreignId('foreman_id')->nullable(); // pengawas
             $table->foreignId('barge_id')->nullable(); // kapal
+            $table->string("code"); // kode proyek
             $table->string("name"); // nama proyek
-            $table->date('date_end'); // tanggal selesai
+            $table->date('date_end')->nullable(); // tanggal selesai
             $table->integer('day_duration')->nullable(); // berapa lama hari pengerjaan
-            $table->double('price'); // biaya proyek
+            $table->double('price')->nullable(); // biaya proyek
             $table->double('down_payment')->nullable(); // DP
             $table->double('remaining_payment')->nullable(); // sisa pembayaran
             $table->enum('type', ['contract', 'daily'])->nullable(); // jenis proyek borongan atau harian

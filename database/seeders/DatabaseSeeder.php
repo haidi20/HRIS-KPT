@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(FeatureSeeder::class);
         // $this->call(PermissionSeeder::class);
         // $this->call(RoleSeeder::class);
-        // $this->call(UserSeeder::class);
         $this->call(RolePermissionSeeder::class);
+        $this->call(UserSeeder::class);
 
 
         $this->call(RosterStatusSeeder::class);
@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(AttendanceFingerspotSeeder::class);
         // $this->call(AttendanceHasEmployeeSeeder::class);
         $this->call(AttendanceSeeder::class);
+        $this->call(ProjectSeeder::class);
 
         // end master
 
@@ -60,7 +61,6 @@ class DatabaseSeeder extends Seeder
         // start data biasa
         // $this->call(ContractorSeeder::class);
         // $this->call(OrdinarySeamanSeeder::class);
-        // $this->call(ProjectSeeder::class);
         // $this->call(SalaryAdvanceSeeder::class);
         // end data biasa
     }

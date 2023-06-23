@@ -28,7 +28,7 @@ class CreateSalaryAdvancesTable extends Migration
             // dari HRD
             $table->text('note')->nullable();
             // status sudah di handle oleh approval_aggrement
-            // $table->enum('status', ['accept', 'reject', 'review'])->default('review');
+            $table->enum('status', ['accept', 'reject', 'review'])->default('review');
             $table->enum('payment_status', ['paid', 'unpaid'])->nullable();
             $table->enum('payment_method', ['cash', 'transfer'])->nullable();
             $table->date('month_loan_complite')->nullable(); // bulan selesai kasbon

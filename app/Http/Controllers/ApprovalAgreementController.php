@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApprovalAgreement;
 use App\Models\ApprovalLevel;
 use App\Models\ApprovalLevelDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -101,11 +102,12 @@ class ApprovalAgreementController extends Controller
                             ->from('approval_agreements')
                             ->where('name_model', $nameModel)
                             ->where('user_id', $userId)
-                            ->where('status_approval', '!=', 'not yet')
-                            ->whereBetween(DB::raw("date_format(`created_at`, '%Y-%m-%d')"), [$dateStart, $dateEnd]);
+                            // ->whereBetween(DB::raw("date_format(`created_at`, '%Y-%m-%d')"), [$dateStart, $dateEnd]);
+                            // ->whereDate("created_at", ">=", Carbon::parse($dateStart)->format("Y-m-d"))
+                            // ->whereDate("created_at", "<=", Carbon::parse($dateEnd)->format("Y-m-d"));
+                            ->where('status_approval', '!=', 'not yet');
                     });
             } else {
-                //
             }
         });
     }
@@ -142,8 +144,7 @@ class ApprovalAgreementController extends Controller
             //                     keterangan : menunggu persetujuan / terima / tolak dengan warna biru jika belum di approve.
             //
 
-            $approvalAgreementQuery = $approvalAgreement = ApprovalAgreement::byApprovalLevelId($query->approval_level_id)
-                // ->byModel($query["id"], $nameModel)
+            $approvalAgreementQuery = ApprovalAgreement::byApprovalLevelId($query->approval_level_id)
                 ->byModel($query["id"], $nameModel);
 
             $approvalAgreementUsers = $approvalAgreementQuery->pluck("user_id")->toArray();
@@ -153,10 +154,12 @@ class ApprovalAgreementController extends Controller
                 ->where(function ($subQuery) use ($query, $userId, $isByUser) {
 
                     // berdasarkan user yang selain pembuat data.
-                    if ($query->created_by != $userId && $isByUser) {
-                        $subQuery->where(function ($queryUser) use ($userId) {
-                            $queryUser->where("user_id", $userId);
-                        });
+                    if ($isByUser) {
+                        if ($query->created_by != $userId) {
+                            $subQuery->where(function ($queryUser) use ($userId) {
+                                $queryUser->where("user_id", $userId);
+                            });
+                        }
                     }
 
                     $subQuery->where("status_approval", "!=", "not yet");
@@ -265,6 +268,13 @@ class ApprovalAgreementController extends Controller
                 $userId,
                 2
             )->nextLevelApproval;
+            $currentLevelTwiceApproval = $this->approvalNextLevel(
+                $approvalLevelId,
+                $modelId,
+                $nameModel,
+                $userId,
+                2
+            )->currentLevelApproval;
             $checkNextLevelTwiceApproval = $this->approvalNextLevel(
                 $approvalLevelId,
                 $modelId,
@@ -281,7 +291,7 @@ class ApprovalAgreementController extends Controller
                     ApprovalAgreement::byApprovalLevelId($approvalLevelId)
                         ->byModel($modelId, $nameModel)
                         ->updateOrCreate([
-                            "level_approval" => $nextLevelApproval,
+                            "level_approval" => (int) $nextLevelApproval,
                         ], [
                             "note" => $note,
                             "status_approval" => "review",
@@ -332,21 +342,23 @@ class ApprovalAgreementController extends Controller
 
     private function approvalNextLevel($approvalLevelId, $modelId, $nameModel, $userId, $addLevel)
     {
-        $nextLevelApproval = ApprovalAgreement::byApprovalLevelId($approvalLevelId)
+        $getNextLevelApproval = ApprovalAgreement::byApprovalLevelId($approvalLevelId)
             ->byModel($modelId, $nameModel)
             ->where("user_id", $userId)
             ->first();
 
-        $getNextLevelApproval = 1;
+        $nextLevelApproval = 1;
+        $currentLevelApproval = 0;
 
-        if ($nextLevelApproval) {
-            $getNextLevelApproval = $nextLevelApproval->level_approval + $addLevel;
+        if ($getNextLevelApproval) {
+            $nextLevelApproval = $getNextLevelApproval->level_approval + $addLevel;
+            $currentLevelApproval = $getNextLevelApproval->level_approval;
         }
 
         $checkNextLevelApproval = ApprovalLevelDetail::byApprovalLevelId($approvalLevelId)
-            ->where("level", $getNextLevelApproval)
+            ->where("level", $nextLevelApproval)
             ->first();
 
-        return (object) compact("nextLevelApproval", "checkNextLevelApproval");
+        return (object) compact("nextLevelApproval", "currentLevelApproval", "checkNextLevelApproval");
     }
 }

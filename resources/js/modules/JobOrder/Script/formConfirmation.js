@@ -4,7 +4,7 @@ import moment from "moment";
 
 import { imageToBase64 } from "../../../utils";
 
-import EmployeeTable from '../../EmployeeHasParent/View/tableConfirmation';
+import EmployeeTableConfirmation from '../../EmployeeHasParent/View/tableConfirmation';
 
 export default {
     data() {
@@ -21,7 +21,7 @@ export default {
     },
     components: {
         VueSelect,
-        EmployeeTable,
+        EmployeeTableConfirmation,
     },
     computed: {
         getBaseUrl() {

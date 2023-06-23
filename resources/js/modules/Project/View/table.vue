@@ -12,7 +12,7 @@
     >
       <template v-slot:filter>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="month" class="place_filter_table">
+          <!-- <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
               id="month"
               v-model="params.month"
@@ -27,7 +27,7 @@
             size="sm"
             @click="onFilter()"
             :disabled="getIsLoadingData"
-          >Kirim</b-button>
+          >Kirim</b-button>-->
           <b-button
             v-if="getCan('ekspor proyek')"
             class="place_filter_table ml-4"
@@ -82,7 +82,7 @@
           <b-td>{{ item.name }}</b-td>
           <b-td>{{ item.location_name }}</b-td>
           <b-td>{{ item.date_end_readable }}</b-td>
-          <b-td>{{ item.day_duration }} Hari</b-td>
+          <b-td>{{ item.day_duration }} {{item.day_duration ? ' Hari' : null}}</b-td>
           <b-td>
             <template v-if="item.job_order_total > 0">
               {{ item.job_order_finish_total }}

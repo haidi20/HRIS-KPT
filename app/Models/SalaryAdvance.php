@@ -66,6 +66,12 @@ class SalaryAdvance extends Model
         return $this->belongsTo(User::class, "created_by", "id");
     }
 
+    public function approvalAgreement()
+    {
+        return $this->belongsTo(ApprovalAgreement::class, "id", "model_id")
+            ->where("name_model", "App\Models\SalaryAdvance");
+    }
+
     public function getEmployeeNameAttribute()
     {
         if ($this->employee) {

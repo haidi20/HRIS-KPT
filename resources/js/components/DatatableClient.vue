@@ -2,14 +2,16 @@
   <div>
     <b-row style="align-items: self-end">
       <slot v-if="filter" name="filter"></slot>
-      <b-col cols v-else></b-col>
-      <b-col :cols="filter ? 3 : 6">
+      <b-col cols="v-else"></b-col>
+      <!-- <b-col :cols="filter ? 3 : 6"> -->
+      <b-col cols>
         <b-form-input
           v-model="search"
           placeholder="cari..."
           @input="onSearch"
           :append-outer-icon="search ? 'times' : ''"
           @click:append-outer="search = ''"
+          style="max-width: 200px; float:right"
         ></b-form-input>
       </b-col>
     </b-row>

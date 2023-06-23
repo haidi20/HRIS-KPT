@@ -133,13 +133,16 @@
     <b-row>
       <b-col cols>
         <b-form-group label="Biaya Proyek" label-for="price" class>
-          <b-form-input
+          <input
+            type="text"
+            class="form-control"
             v-model="price"
             id="price"
             name="price"
             autocomplete="off"
             :disabled="getReadOnly()"
-          ></b-form-input>
+            @keypress="onNumberOnly"
+          />
         </b-form-group>
       </b-col>
       <b-col cols>
@@ -150,6 +153,7 @@
             name="down_payment"
             autocomplete="off"
             :disabled="getReadOnly()"
+            @keypress="onNumberOnly"
           ></b-form-input>
         </b-form-group>
       </b-col>

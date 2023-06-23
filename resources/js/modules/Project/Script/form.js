@@ -71,10 +71,15 @@ export default {
         },
     },
     watch: {
-        price(value, oldValue) {
-            this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
+        price: {
+            deep: true,
+            handler(newValue, oldValue) {
+                // console.info(newValue);
+                this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
+            }
         },
         down_payment(value, oldValue) {
+            // console.info(value);
             this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
         },
         date_end(value, oldValue) {
@@ -88,6 +93,10 @@ export default {
         },
         onChangeTab(type) {
             // console.info(type);
+        },
+        onNumberOnly(evt) {
+            // console.info("change");
+            this.$store.dispatch("onNumberOnly", { evt: evt });
         },
         getReadOnly() {
             const readOnly = this.$store.getters["project/getReadOnly"];
