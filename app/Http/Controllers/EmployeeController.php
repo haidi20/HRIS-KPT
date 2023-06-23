@@ -25,8 +25,8 @@ use App\Exports\Sheets\EmployeePositionSheet;
 use App\Exports\Sheets\EmployeeLocationSheet;
 use Illuminate\Database\Eloquent\Builder;
 use Yajra\DataTables\DataTables;
-use App\DataTables\EmployeesDatatable;
-use App\DataTables\EmployeesExpDatatable;
+use App\DataTables\EmployeesDataTable;
+use App\DataTables\EmployeesExpDataTable;
 use App\Models\Departmen;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
@@ -82,7 +82,7 @@ class EmployeeController extends Controller
         }
     }
 
-    public function index(EmployeesDatatable $dataTable, EmployeesExpDatatable $dataTableExp)
+    public function index(EmployeesDataTable $dataTable, EmployeesExpDataTable $dataTableExp)
     {
         $employees = Employee::all();
         $companies = Company::all();

@@ -357,10 +357,10 @@ class PeriodPayrollController extends Controller
 
 
                 //menghitung pkp 5%
-                $pkp_lima_persen  = \max(0, $pkp_setahun > 50000000 ? ((50000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
-                $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 50000000) * 0.15) : (($pkp_setahun - 50000000) * 0.15));
-                $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
-                $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                $pkp_lima_persen  = \max(0,$pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                $pkp_lima_belas_persen  = \max(0,$pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
+                $pkp_dua_puluh_lima_persen  = \max(0,$pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
+                $pkp_tiga_puluh_persen  = \max(0,$pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
 
                 $pajak_pph_dua_satu_setahun = $pkp_lima_persen + $pkp_lima_belas_persen + $pkp_dua_puluh_lima_persen + $pkp_tiga_puluh_persen;
 
@@ -396,9 +396,6 @@ class PeriodPayrollController extends Controller
 
                     'rate_lembur' => $employee->overtime_rate_per_hour,
                     'jumlah_jam_rate_lembur' => $jumlah_jam_rate_lembur,
-
-
-
 
                     'tunjangan_makan' => $employee->meal_allowance_per_attend,
                     'jumlah_hari_tunjangan_makan' => $jumlah_hari_kerja,

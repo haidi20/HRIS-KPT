@@ -134,13 +134,13 @@
                 <tr class="table-tarif">
                     <td>5 %</td>
                     <td>0 jt</td>
-                    <td>50 jt</td>
+                    <td>60 jt</td>
                     <td id="pkp_lima_persen">Rp 0</td>
                 </tr>
             
                 <tr class="table-tarif">
                     <td>15 %</td>
-                    <td>50 jt</td>
+                    <td>60 jt</td>
                     <td>250 jt</td>
                     <td id="pkp_lima_belas_persen">Rp 0</td>
                 </tr>

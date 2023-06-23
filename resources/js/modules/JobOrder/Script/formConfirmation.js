@@ -2,9 +2,14 @@ import VueSelect from "vue-select";
 import axios from "axios";
 import moment from "moment";
 
+import { imageToBase64 } from "../../../utils";
+
+import EmployeeTable from '../../EmployeeHasParent/View/tableConfirmation';
+
 export default {
     data() {
         return {
+            sourceImage: null,
             label_image: null,
             is_image: false,
             is_loading: false,
@@ -16,6 +21,7 @@ export default {
     },
     components: {
         VueSelect,
+        EmployeeTable,
     },
     computed: {
         getBaseUrl() {
@@ -54,6 +60,17 @@ export default {
         form() {
             return this.$store.state.jobOrder.form;
         },
+    },
+    mounted() {
+        const file = this.form.image;
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.sourceImage = reader.result;
+            };
+            reader.readAsDataURL(file);
+        }
     },
     methods: {
         onCloseModal() {

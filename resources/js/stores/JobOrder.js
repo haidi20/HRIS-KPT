@@ -59,6 +59,7 @@ const defaultForm = {
     status_last: null,
     status_finish: null,
     image: null,
+    image_bit: null,
     // start form action
     date: new Date(),
     hour: moment().format("HH:mm"),
@@ -258,6 +259,10 @@ const JobOrder = {
         },
         INSERT_FORM_JOB_CODE(state, payload) {
             state.form.job_code = payload.job_code;
+        },
+        INSERT_FORM_IMAGE(state, payload) {
+            state.form.image = payload.file;
+            state.form.image_bit = payload.bit;
         },
         INSERT_FORM_DATE_START(state, payload) {
             state.form.date_start = new Date(payload.date_start);
