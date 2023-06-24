@@ -9,6 +9,7 @@ use App\Models\BpjsCalculation;
 use App\Models\Employee;
 use App\Models\Payroll;
 use App\Models\PeriodPayroll;
+use App\Models\salaryAdjustmentDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -137,12 +138,12 @@ class PeriodPayrollController extends Controller
 
             if (request("id")) {
                 $period_payroll = PeriodPayroll::find(request("id"));
-                $period_payroll->updated_by = Auth::user()->id;
+                $period_payroll->updated_by = Auth::user()->id ?? null;
 
                 $message = "diperbaharui";
             } else {
                 $period_payroll = new PeriodPayroll;
-                $period_payroll->created_by = Auth::user()->id;
+                $period_payroll->created_by = Auth::user()->id ?? null;
 
                 $message = "ditambahkan";
             }
@@ -167,7 +168,62 @@ class PeriodPayrollController extends Controller
             $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'jk')->first()->nominal ?? 0;
             $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code', 'kes')->first()->nominal ?? 0;
 
+
+            $tanggal_tambahan_lain =  Carbon::parse(request("period") . "-30");
+
             foreach ($employees as $key => $employee) {
+
+                $total_tambahan_dari_sa =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
+                ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))->where('type_amount','nominal')->where('type_time','base_time')->where('employee_id',$employee->id)->sum('amount');
+
+
+                $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
+                ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))
+                ->where('type_amount','percent')
+                ->where('type_time','base_time')
+                ->where('employee_id',$employee->id)
+                ->get();
+
+                foreach ($sa_percents as $key => $v) {
+                    $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                }
+
+                $sa_percents =  salaryAdjustmentDetail::whereDate('month_start','>=',$tanggal_tambahan_lain)
+                ->whereDate('month_end','<=',$tanggal_tambahan_lain)
+                // ->where('type_amount','percent')
+                ->where('type_time','base_time')
+                ->where('employee_id',$employee->id)
+                ->get();
+
+                foreach ($sa_percents as $key => $v) {
+
+                    if($v->type_amount == 'nominal' ){
+                        $total_tambahan_dari_sa += $v->amount;
+                    }else{
+                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    }
+                    
+                }
+
+
+                $sa_percents =  salaryAdjustmentDetail::whereNull('month_start')
+                ->whereNull('month_end')
+                ->where('type_time','forever')
+                ->where('employee_id',$employee->id)
+                ->get();
+
+                foreach ($sa_percents as $key => $v) {
+
+                    if($v->type_amount == 'nominal' ){
+                        $total_tambahan_dari_sa += $v->amount;
+                    }else{
+                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    }
+                    
+                }
+
+
+
 
                 $jumlah_hari_kerja  = Attendance::whereDate('date', '>=', $period_payroll->date_start)
                     ->whereDate('date', '<=', $period_payroll->date_end)
@@ -197,7 +253,7 @@ class PeriodPayrollController extends Controller
                     $jumlah_jam_rate_lembur += 1;
                 }
 
-                $pendapatan_tambahan_lain_lain = 0;
+                $pendapatan_tambahan_lain_lain = $total_tambahan_dari_sa;
 
                 // $jumlah_jam_rate_lembur = 109.0; //contoh
                 // $pendapatan_tambahan_lain_lain = 2645923; //contoh
@@ -372,18 +428,20 @@ class PeriodPayrollController extends Controller
                 $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
                 $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
 
-
-
-
-                $new_payroll = Payroll::create([
+                $new_payroll = Payroll::firstOrCreate([
                     'employee_id' => $employee->id,
                     'period_payroll_id' => $period_payroll->id,
+                ]);
+
+
+                $new_payroll->update([
                     'pendapatan_gaji_dasar' => $employee->basic_salary,
                     'pendapatan_tunjangan_tetap' => $employee->allowance,
                     'pendapatan_uang_makan' => $pendapatan_uang_makan,
                     'pendapatan_lembur' => $pendapatan_lembur,
                     'pendapatan_tambahan_lain_lain' => $pendapatan_tambahan_lain_lain,
                     'jumlah_pendapatan' => $jumlah_pendapatan,
+                    'pajak_pph_dua_satu_setahun'=>$pajak_pph_dua_satu_setahun,
 
 
                     'pemotongan_bpjs_dibayar_karyawan' => 0,
