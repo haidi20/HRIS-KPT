@@ -128,28 +128,33 @@ class PeriodPayrollController extends Controller
     {
         // return request()->all();
 
-        $n = PeriodPayroll::where('period', request("period") . "-01")->count();
-        if ($n > 0) {
-            return response()->json([
-                'success' => false,
-                'message' => "Gagal, Periode Sudah Ada",
-            ], 500);
-        }
+        
+        
 
         try {
             DB::beginTransaction();
 
-            if (request("id")) {
-                $period_payroll = PeriodPayroll::find(request("id"));
-                $period_payroll->updated_by = Auth::user()->id ?? null;
+            $n = PeriodPayroll::where('period', request("period") . "-01")->count();
 
+            if ($n > 0) {
+                $period_payroll = PeriodPayroll::where('period', request("period") . "-01")->first();
                 $message = "diperbaharui";
-            } else {
-                $period_payroll = new PeriodPayroll;
-                $period_payroll->created_by = Auth::user()->id ?? null;
-
-                $message = "ditambahkan";
+            }else{
+                if (request("id")) {
+                    $period_payroll = PeriodPayroll::find(request("id"));
+                    $period_payroll->updated_by = Auth::user()->id ?? null;
+    
+                    $message = "diperbaharui";
+                } else {
+                    $period_payroll = new PeriodPayroll;
+                    $period_payroll->created_by = Auth::user()->id ?? null;
+    
+                    $message = "ditambahkan";
+                }
             }
+
+
+           
 
             $period_payroll->period = request("period") . "-01";
             $period_payroll->date_start = request("date_start");
@@ -162,17 +167,21 @@ class PeriodPayrollController extends Controller
             // ->get();
             // AttendancePayrol::create();
 
-            DB::select("
-            INSERT INTO attendance(pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id)
-            SELECT pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id
-            FROM attendance_has_employees where date(date) >= '".$period_payroll->date_start."' AND date(date) <= '".$period_payroll->date_end."'
-            ");
+            if($message == 'ditambahkan'){
+                    DB::select("
+                INSERT INTO attendance(pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id)
+                SELECT pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id
+                FROM attendance_has_employees where date(date) >= '".$period_payroll->date_start."' AND date(date) <= '".$period_payroll->date_end."'
+                ");
+            }
+
+            
 
 
             
 
 
-            $employees = Employee::get();
+            $employees = Employee::orderBy('name','asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();

@@ -36,65 +36,61 @@
         <td><br></td>
         <td>Bulan</td>
         <td><br></td>
+        <td>{{\Carbon\Carbon::parse($period_payroll->period)->translatedFormat('F')}}</td>
+        <td>{{\Carbon\Carbon::parse($period_payroll->period)->translatedFormat('Y')}}</td>
+        <td>Gaji Dasar</td>
         <td><br></td>
+        <td colspan="2">{{$employee->basic_salary}}</td>
+        <td>/bulan</td>
+        <td>Tunj. Makan</td>
         <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
+        <td colspan="2">{{$employee->meal_allowance_per_attend}}</td>
+        <td>/hadir</td>
     </tr>
     <tr>
         <td><br></td>
         <td>Id</td>
         <td><br></td>
+        <td colspan="2">{{$employee->nip}}</td>
+        <td>Tunjangan Tetap</td>
         <td><br></td>
+        <td colspan="2">{{$employee->allowance}}</td>
+        <td>/bulan</td>
+        <td>Tunj. Transport</td>
         <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
+        <td colspan="2">{{$employee->transport_allowance_per_attend}}</td>
+        <td>/hadir</td>
     </tr>
     <tr>
         <td><br></td>
         <td>Nama</td>
         <td><br></td>
+        <td colspan="2">{{$employee->name}}</td>
+        <td>Rate Lembur</td>
         <td><br></td>
+        <td colspan="2">{{$employee->overtime_rate_per_hour}}</td>
+        <td>/jam</td>
+        <td>Tunj. Kehadiran</td>
         <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
+        <td colspan="2">{{$employee->attend_allowance_per_attend}}</td>
+        <td>/hadir</td>
     </tr>
+
+    {{-- position --}}
     <tr>
         <td><br></td>
         <td>Posisi</td>
         <td><br></td>
+        <td colspan="2">{{$employee->position->name}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
+        <td>PTKP Karyawan</td>
         <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
+        <td colspan="2">{{$employee->ptkp_karyawan}}</td>
+        <td>/tahun</td>
     </tr>
     <tr>
         <td><br></td>
@@ -107,10 +103,10 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
+        <td>Jumlah Cuti/Ijin</td>
         <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
+        <td colspan="2">-</td>
+        <td>/bulan</td>
     </tr>
     <tr>
         <td><br></td>
@@ -123,10 +119,10 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
+        <td>Sisa Cuti</td>
         <td><br></td>
-        <td><br></td>
-        <td><br></td>
-        <td><br></td>
+        <td colspan="2">-</td>
+        <td>hari/tahun</td>
     </tr>
 
     <tr>
@@ -158,17 +154,66 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
+        <td><br></td>
         <td>x1</td>
         <td>x2</td>
         <td>x3</td>
         <td>x4</td>
     </tr>
 
-    @for ($i = 1; $i <= 31; $i++)
+
+    @php
+        $iter=0;
+    @endphp
+    @foreach ($attendance as $a)
+
+    @if (($iter > 0 && $tanggal_lama != $a->date) or ($iter==0))
+    @php
+
+ 
+
+    $tanggal_lama  = $a->date;
+
+
+
+    $iter++;
+    $tanggal  = \Carbon\Carbon::parse($a->date);
+
+    $d_hour = \floor($a->duration_work / 60);
+    $d_minute = $a->duration_work%60 ;
+@endphp
+        <tr>
+            <td><br></td>
+            <td><br></td>
+            <td>{{round($tanggal->translatedFormat('d'))}}</td>
+            <td>{{$tanggal->translatedFormat('l')}}</td>
+            <td>{{\Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i')}}</td>
+            <td>{{\Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i')}}</td>
+            <td>{{$d_hour}} : {{$d_minute}}</td>
+            <td><br></td>
+            <td> $a->duration_work => {{$a->duration_work}}</td>
+            <td> $a->date => {{$a->date}}</td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+        </tr>
+    @endif
+
+   
+   
+    @endforeach
+
+    @if ($iter < 32)
+    @for ($i = 0; $i < (32 - $iter); $i++)
     <tr>
         <td><br></td>
         <td><br></td>
-        <td>{{$i}}</td>
+        <td><br></td>
+        <td><br></td>
+        <td><br></td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -182,6 +227,8 @@
         <td><br></td>
     </tr>
     @endfor
+@endif
+    
 
     <tr>
         <td><br></td>
@@ -206,11 +253,11 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td>t1</td>
+        <td>{{$payroll->jumlah_hari_tunjangan_makan}}</td>
         <td>hari</td>
         <td><br></td>
         <td>Total Jam Lembur</td>
-        <td>-</td>
+        <td>{{$payroll->jumlah_jam_rate_lembur}}</td>
         <td>jam</td>
         <td><br></td>
         <td><br></td>
@@ -230,7 +277,7 @@
         <td><br></td>
         <td>Dasar Upah BPJS TK</td>
         <td><br></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->dasar_updah_bpjs_tk}}</td>
     </tr>
     <tr>
         <td><br></td>
@@ -246,7 +293,7 @@
         <td><br></td>
         <td>Dasar Upah BPJS KES</td>
         <td><br></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->dasar_updah_bpjs_kes}}</td>
     </tr>
 
     <tr>
@@ -256,7 +303,7 @@
         <td><br></td>
         <td>1</td>
         <td>Bulan</td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->gaji_dasar}}</td>
         <td>Jaminan Sosial</td>
         <td><br></td>
         <td><br></td>
@@ -274,7 +321,7 @@
         <td><br></td>
         <td>1</td>
         <td>Bulan</td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->pendapatan_tunjangan_tetap}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -290,16 +337,16 @@
         <td>3</td>
         <td>Uang Makan</td>
         <td><br></td>
-        <td>1</td>
+        <td>{{$payroll->jumlah_hari_tunjangan_makan}}</td>
         <td>Hari</td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->pendapatan_uang_makan}}</td>
         <td>1. Hari Tua (JHT)</td>
         <td><br></td>
         <td><br></td>
-        <td>%Perusahaan</td>
-        <td>%Karyawan</td>
-        <td>Rp Perusahaan</td>
-        <td>Rp Karyawan</td>
+        <td>{{$payroll->jht_perusahaan_persen}}</td>
+        <td>{{$payroll->jht_karyawan_persen}}</td>
+        <td>{{$payroll->jht_perusahaan_rupiah}}</td>
+        <td>{{$payroll->jht_karyawan_rupiah}}</td>
         
     </tr>
 
@@ -308,16 +355,16 @@
         <td>4</td>
         <td>Lembur</td>
         <td><br></td>
-        <td>1</td>
+        <td>{{$payroll->jumlah_jam_rate_lembur}}</td>
         <td>Jam</td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->pendapatan_lembur}}</td>
         <td>2. Kecelakaan (JKK)</td>
         <td><br></td>
         <td><br></td>
-        <td>%Perusahaan</td>
-        <td>%Karyawan</td>
-        <td>Rp Perusahaan</td>
-        <td>Rp Karyawan</td>
+        <td>{{$payroll->jkk_perusahaan_persen}}</td>
+        <td>{{$payroll->jkk_karyawan_persen}}</td>
+        <td>{{$payroll->jkk_perusahaan_rupiah}}</td>
+        <td>{{$payroll->jkk_karyawan_rupiah}}</td>
         
     </tr>
 
@@ -328,14 +375,14 @@
         <td><br></td>
         <td></td>
         <td></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->pendapatan_tambahan_lain_lain}}</td>
         <td>3. Kematian (JKM)</td>
         <td><br></td>
         <td><br></td>
-        <td>%Perusahaan</td>
-        <td>%Karyawan</td>
-        <td>Rp Perusahaan</td>
-        <td>Rp Karyawan</td>
+        <td>{{$payroll->jkm_perusahaan_persen}}</td>
+        <td>{{$payroll->jkm_karyawan_persen}}</td>
+        <td>{{$payroll->jkm_perusahaan_rupiah}}</td>
+        <td>{{$payroll->jkm_karyawan_rupiah}}</td>
         
     </tr>
 
@@ -346,14 +393,14 @@
         <td><br></td>
         <td></td>
         <td></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{$payroll->jumlah_pendapatan}}</td>
         <td>4. Pensiun (JP)</td>
         <td><br></td>
         <td><br></td>
-        <td>%Perusahaan</td>
-        <td>%Karyawan</td>
-        <td>Rp Perusahaan</td>
-        <td>Rp Karyawan</td>
+        <td>{{$payroll->jp_perusahaan_persen}}</td>
+        <td>{{$payroll->jp_karyawan_persen}}</td>
+        <td>{{$payroll->jp_perusahaan_rupiah}}</td>
+        <td>{{$payroll->jp_karyawan_rupiah}}</td>
         
     </tr>
 
@@ -370,10 +417,10 @@
         <td>5. Kesehatan (BPJS)</td>
         <td><br></td>
         <td><br></td>
-        <td>%Perusahaan</td>
-        <td>%Karyawan</td>
-        <td>Rp Perusahaan</td>
-        <td>Rp Karyawan</td>
+        <td>{{$payroll->bpjs_perusahaan_persen}}</td>
+        <td>{{$payroll->bpjs_karyawan_persen}}</td>
+        <td>{{$payroll->bpjs_perusahaan_rupiah}}</td>
+        <td>{{$payroll->bpjs_karyawan_rupiah}}</td>
         
     </tr>
 
@@ -475,7 +522,7 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. 300.000</td>
+        <td colspan="2">Rp. {{$payroll->gaji_bersih}}</td>
         <td>2. BPJS dibayar Perusahaan </td>
         <td><br></td>
         <td><br></td>
