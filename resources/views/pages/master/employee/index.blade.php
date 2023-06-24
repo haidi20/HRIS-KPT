@@ -440,6 +440,12 @@
 
         // DATA GAJI DAN REKENING
         $("#basic_salary").val(data.basic_salary);
+        $("#allowance").val(data.allowance);
+        $("#meal_allowance_per_attend").val(data.meal_allowance_per_attend);
+        $("#transport_allowance_per_attend").val(data.transport_allowance_per_attend);
+        $("#attend_allowance_per_attend").val(data.attend_allowance_per_attend);
+        $("#overtime_rate_per_hour").val(data.overtime_rate_per_hour);
+        $("#vat_per_year").val(data.vat_per_year);
         $("#rekening_number").val(data.rekening_number);
         $("#rekening_name").val(data.rekening_name);
         $("#bank_name").val(data.bank_name).trigger("change");

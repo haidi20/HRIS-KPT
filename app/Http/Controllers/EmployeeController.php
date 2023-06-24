@@ -214,6 +214,12 @@ class EmployeeController extends Controller
 
             // DATA GAJI DAN REKENING
             $employee->basic_salary = request("basic_salary");
+            $employee->allowance = request("allowance");
+            $employee->meal_allowance_per_attend = request("meal_allowance_per_attend");
+            $employee->transport_allowance_per_attend = request("transport_allowance_per_attend");
+            $employee->attend_allowance_per_attend = request("attend_allowance_per_attend");
+            $employee->overtime_rate_per_hour = request("overtime_rate_per_hour");
+            $employee->vat_per_year = request("vat_per_year");
             $employee->rekening_number = request("rekening_number");
             $employee->rekening_name = request("rekening_name");
             $employee->bank_name = request("bank_name");
