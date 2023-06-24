@@ -256,6 +256,8 @@
                     $("#pkp_dua_puluh_lima_persen").text(`Rp ${formatRupiah(data.pkp_dua_puluh_lima_persen)}`);
                     $("#pkp_tiga_puluh_persen").text(`Rp ${formatRupiah(data.pkp_tiga_puluh_persen)}`);
 
+                    $("#pajak_pph_dua_satu_setahun").text(`Rp ${formatRupiah(data.pajak_pph_dua_satu_setahun)}`);
+
                     
 
 

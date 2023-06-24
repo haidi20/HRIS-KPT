@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttendanceHasEmployeesTable extends Migration
+class CreateAttendanceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAttendanceHasEmployeesTable extends Migration
      */
     public function up()
     {
-        Schema::create('attendance_has_employees', function (Blueprint $table) {
+        Schema::create('attendance', function (Blueprint $table) {
             $table->id();
             $table->string('pin');
             $table->foreignId('employee_id')->nullable();
@@ -54,6 +54,6 @@ class CreateAttendanceHasEmployeesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendance_has_employees');
+        Schema::dropIfExists('attendance');
     }
 }
