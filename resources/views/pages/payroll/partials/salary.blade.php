@@ -1,6 +1,6 @@
 <hr>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <table style="width: 100%">
             <tbody>
                 <tr>

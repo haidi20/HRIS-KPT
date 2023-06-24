@@ -101,6 +101,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix("period_payroll")->name("period_payroll.")->group(function () {
         Route::get('', [PeriodPayrollController::class, "index"])->name("index");
+        Route::get('export', [PeriodPayrollController::class, "export"])->name("export");
         Route::post('', [PeriodPayrollController::class, "store"])->name("store");
         Route::delete('delete', [PeriodPayrollController::class, "destroy"])->name("delete");
     });

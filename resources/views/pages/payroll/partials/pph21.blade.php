@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <table style="width: 100%">
             <tbody id="table-pph21">
                 <tr>
@@ -158,18 +158,16 @@
                     <td>1.000 jt</td>
                     <td id="pkp_tiga_puluh_persen">Rp 0</td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-6">
-        <table style="width: 100%">
-            <tbody id="table-pph21">
+
+                {{-- pajak_pph_dua_satu_setahun --}}
                 <tr>
                     <td colspan="3">
                         <h6 class="head-color">G. PPH21 Tahunan</h6>
                     </td>
+                    <td id="pajak_pph_dua_satu_setahun">Rp 0</td>
                 </tr>
             </tbody>
         </table>
     </div>
+    
 </div>

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PayrollExport;
 use App\Models\Attendance;
 use App\Models\BaseWagesBpjs;
 use App\Models\BpjsCalculation;
 use App\Models\Employee;
 use App\Models\Payroll;
 use App\Models\PeriodPayroll;
+use App\Models\salaryAdjustmentDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +17,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
+use Carbon\CarbonPeriod;
 // use Spatie\Permission\Models\Permission;
 
 class PeriodPayrollController extends Controller
@@ -135,12 +139,12 @@ class PeriodPayrollController extends Controller
 
             if (request("id")) {
                 $period_payroll = PeriodPayroll::find(request("id"));
-                $period_payroll->updated_by = Auth::user()->id;
+                $period_payroll->updated_by = Auth::user()->id ?? null;
 
                 $message = "diperbaharui";
             } else {
                 $period_payroll = new PeriodPayroll;
-                $period_payroll->created_by = Auth::user()->id;
+                $period_payroll->created_by = Auth::user()->id ?? null;
 
                 $message = "ditambahkan";
             }
@@ -151,7 +155,7 @@ class PeriodPayrollController extends Controller
             $period_payroll->save();
 
 
-            $employees = Employee::all();
+            $employees = Employee::where('id','28')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -165,45 +169,170 @@ class PeriodPayrollController extends Controller
             $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'jk')->first()->nominal ?? 0;
             $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code', 'kes')->first()->nominal ?? 0;
 
+
+            $tanggal_tambahan_lain =  Carbon::parse(request("period") . "-30");
+
+            $period = CarbonPeriod::create($period_payroll->date_start, $period_payroll->date_end);
+
             foreach ($employees as $key => $employee) {
 
-                $jumlah_hari_kerja  = Attendance::whereDate('date', '>=', $period_payroll->date_start)
-                    ->whereDate('date', '<=', $period_payroll->date_end)
-                    ->where('employee_id', $employee->id)
-                    ->where(function ($query) {
-                        $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
-                    })
-                    ->count();
+                $data_absens = Attendance::where('employee_id',$employee->id)
+                ->whereDate('date','>=',$period_payroll->date_start)
+                ->whereDate('date','<=',$period_payroll->date_end)
+                ->get();
 
-                // $jumlah_hari_kerja  =
+                $jumlah_jam_lembur_tmp =0;
+                $jumlah_hari_kerja_tmp = 0;
+                $jumlah_hari_tidak_masuk_tmp = 0;
 
-                $jumlah_jam_rate_lembur  = Attendance::whereDate('date', '>=', $period_payroll->date_start)
-                    ->whereDate('date', '<=', $period_payroll->date_end)
-                    ->where('employee_id', $employee->id)
-                    ->where(function ($query) {
-                        $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
-                    })
-                    ->sum('duration_overtime');
+                foreach ($period as $key => $p) {
+                      $new_old_d = $data_absens->where('date',$p->format('Y-m-d'))->first();
 
-                $jumlah_jam_rate_lembur_modulus  = $jumlah_jam_rate_lembur % 60;
+                    //  if( $p->format('Y-m-d')=='2023-06-19'){
+                    //     return $new_old_d;
+                    //  }
+                     $kali_1 = 0.00; 
+                     $kali_2 = 0.00; 
+                     $kali_3 = 0.00; 
+                     $kali_4 = 0.00; 
 
-                if ($jumlah_jam_rate_lembur >= 30 && $jumlah_jam_rate_lembur <= 50) {
-                    $jumlah_jam_rate_lembur += 0.5;
+                     if(isset($new_old_d->id)){
+                        $jumlah_hari_kerja_tmp +=1;
+                        if(($new_old_d->duration_overtime != null) && ($new_old_d->duration_overtime > 0)){
+
+                            $hour_lembur_x = $new_old_d->duration_overtime % 60;
+                            $hour_lembur_y =  \floor($new_old_d->duration_overtime / 60);
+                            
+
+
+                            for ($i=1; $i <=$hour_lembur_y ; $i++) { 
+                                if($i == 1){
+                                    $jumlah_jam_lembur_tmp += 1.5;
+                                    $kali_1 += 1.5;
+                                }
+
+                                if($i > 1){
+                                    $jumlah_jam_lembur_tmp += 2.00;
+                                    $kali_2 += 2.00;
+                                }
+                            }
+
+                            if(($hour_lembur_x > 29) &&  ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp == 0)){
+                                $jumlah_jam_lembur_tmp += 1.5 * 0.5;
+                                $kali_1 += 1.5 * 0.5;
+                            }
+
+                            if(($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp == 0)){
+                                $jumlah_jam_lembur_tmp += 1.5;
+                                $kali_1 += 1.5;
+                            }
+
+
+                            if(($hour_lembur_x > 29) &&  ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp > 0)){
+                                $jumlah_jam_lembur_tmp += 2 * 0.5;
+                                $kali_2 += 2 * 0.5;
+                            }
+
+                            if(($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp > 0)){
+                                $jumlah_jam_lembur_tmp += 2.00;
+                                $kali_2 += 2.00;
+                            }
+
+
+                        }
+
+                        Attendance::where('id',$new_old_d->id)->update([
+                            'lembur_kali_satu_lima' =>$kali_1,
+                            'lembur_kali_dua' =>$kali_2,
+                            'lembur_kali_tiga' =>$kali_3,
+                            'lembur_kali_empat' =>$kali_4,
+                        ]);
+                     }else{
+                        $jumlah_hari_tidak_masuk_tmp +=1;
+                        // Attendance::create([
+                        //     ''
+                        // ]);
+                     }
                 }
 
-                if ($jumlah_jam_rate_lembur > 50) {
-                    $jumlah_jam_rate_lembur += 1;
+                $total_tambahan_dari_sa = 0;
+                $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
+                ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))
+                // ->where('type_amount','nominal')
+                ->where('type_time','base_time')
+                ->where('employee_id',$employee->id)
+                ->get();
+
+                foreach ($sa_percents as $key => $v) {
+
+                    if($v->type_amount == 'nominal' ){
+                        $total_tambahan_dari_sa += $v->amount;
+                    }else{
+                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    }
+                    
                 }
 
-                $pendapatan_tambahan_lain_lain = 0;
-
-                $jumlah_jam_rate_lembur = 109.0; //contoh
-                $pendapatan_tambahan_lain_lain = 2645923; //contoh
-                $jumlah_hari_kerja = 20; //contoh
 
 
-                $pendapatan_uang_makan = 432000; //$jumlah_hari_kerja * $employee->meal_allowance_per_attend;
-                $pendapatan_lembur = $jumlah_jam_rate_lembur * $employee->overtime_rate_per_hour;
+                // $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
+                // ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))
+                // ->where('type_amount','percent')
+                // ->where('type_time','base_time')
+                // ->where('employee_id',$employee->id)
+                // ->get();
+
+                // foreach ($sa_percents as $key => $v) {
+                //     $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                // }
+
+                $sa_percents =  salaryAdjustmentDetail::whereDate('month_start','>=',$tanggal_tambahan_lain)
+                ->whereDate('month_end','<=',$tanggal_tambahan_lain)
+                // ->where('type_amount','percent')
+                ->where('type_time','base_time')
+                ->where('employee_id',$employee->id)
+                ->get();
+
+                foreach ($sa_percents as $key => $v) {
+
+                    if($v->type_amount == 'nominal' ){
+                        $total_tambahan_dari_sa += $v->amount;
+                    }else{
+                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    }
+                    
+                }
+
+
+                $sa_percents =  salaryAdjustmentDetail::whereNull('month_start')
+                ->whereNull('month_end')
+                ->where('type_time','forever')
+                ->where('employee_id',$employee->id)
+                ->get();
+
+                foreach ($sa_percents as $key => $v) {
+
+                    if($v->type_amount == 'nominal' ){
+                        $total_tambahan_dari_sa += $v->amount;
+                    }else{
+                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    }
+                    
+                }
+
+
+
+
+                $jumlah_hari_kerja  = $jumlah_hari_kerja_tmp;
+                $pendapatan_tambahan_lain_lain = $total_tambahan_dari_sa;
+
+                // $jumlah_jam_rate_lembur = 109.0; //contoh
+                // $pendapatan_tambahan_lain_lain = 2645923; //contoh
+                // $jumlah_hari_kerja = 20; //contoh
+
+
+                $pendapatan_uang_makan = $jumlah_hari_kerja * $employee->meal_allowance_per_attend;
+                $pendapatan_lembur = $jumlah_jam_lembur_tmp * $employee->overtime_rate_per_hour;
 
                 $jumlah_pendapatan = $employee->basic_salary + $employee->allowance + $pendapatan_uang_makan + $pendapatan_lembur + $pendapatan_tambahan_lain_lain;
 
@@ -349,10 +478,12 @@ class PeriodPayrollController extends Controller
                 $pajak_gaji_kotor_kurang_potongan = $jumlah_pendapatan - $pemotongan_potongan_lain_lain;
                 $pajak_bpjs_dibayar_perusahaan = $total_bpjs_perusahaan_rupiah;
                 $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
-                $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor));
+
+
+                $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor)) * 12;
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
-                $pajak_gaji_bersih_setahun = 12 * ($pajak_total_penghasilan_kotor - $pajak_total_pengurang);
+                $pajak_gaji_bersih_setahun = (($pajak_total_penghasilan_kotor * 12)  - $pajak_total_pengurang);
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
 
 
@@ -368,18 +499,20 @@ class PeriodPayrollController extends Controller
                 $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
                 $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
 
-
-
-
-                $new_payroll = Payroll::create([
+                $new_payroll = Payroll::firstOrCreate([
                     'employee_id' => $employee->id,
                     'period_payroll_id' => $period_payroll->id,
+                ]);
+
+
+                $new_payroll->update([
                     'pendapatan_gaji_dasar' => $employee->basic_salary,
                     'pendapatan_tunjangan_tetap' => $employee->allowance,
                     'pendapatan_uang_makan' => $pendapatan_uang_makan,
                     'pendapatan_lembur' => $pendapatan_lembur,
                     'pendapatan_tambahan_lain_lain' => $pendapatan_tambahan_lain_lain,
                     'jumlah_pendapatan' => $jumlah_pendapatan,
+                    'pajak_pph_dua_satu_setahun'=>$pajak_pph_dua_satu_setahun,
 
 
                     'pemotongan_bpjs_dibayar_karyawan' => 0,
@@ -395,7 +528,7 @@ class PeriodPayrollController extends Controller
 
 
                     'rate_lembur' => $employee->overtime_rate_per_hour,
-                    'jumlah_jam_rate_lembur' => $jumlah_jam_rate_lembur,
+                    'jumlah_jam_rate_lembur' => $jumlah_jam_lembur_tmp,
 
                     'tunjangan_makan' => $employee->meal_allowance_per_attend,
                     'jumlah_hari_tunjangan_makan' => $jumlah_hari_kerja,
@@ -539,5 +672,10 @@ class PeriodPayrollController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    function export(){
+        return Excel::download(new PayrollExport,'payroll_export.xlsx');
+        return 'export';
     }
 }
