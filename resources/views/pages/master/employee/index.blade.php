@@ -86,14 +86,14 @@
                         <div class="tab-pane fade show active" id="utama" role="tabpanel" aria-labelledby="utama-tab">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    {!! $dataTableBuilder->table(['class' => 'table table-striped table-bordered']) !!}
+                                    {!! $dataTableEmployee->table(['id' => 'employee-table', 'class' => 'table table-striped table-bordered']) !!}
                                 </div>
                             </div>
                         </div>
                         {{-- <div class="tab-pane fade" id="exp" role="tabpanel" aria-labelledby="exp-tab">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    {!! $dataTableExpBuilder->table(['class' => 'table table-striped table-bordered']) !!}
+                                    {!! $dataTableExpEmployee->table(['class' => 'table table-striped table-bordered']) !!}
                                 </div>
                             </div>
                         </div> --}}
@@ -118,8 +118,8 @@
 
 @endsection
 @section('script')
-{!! $dataTableBuilder->scripts() !!}
-{!! $dataTableExpBuilder->scripts() !!}
+{!! $dataTableEmployee->scripts() !!}
+{{-- {!! $dataTableExpBuilder->scripts() !!} --}}
 <script>
     const initialState = {
         employees: [],
@@ -248,7 +248,8 @@
     }
 
     function onCreate() {
-        clearForm();
+        clearFormCreate();
+        $("#personal-tab").tab("show");
         $("#titleForm").html("Tambah Karyawan");
         $("#kepegawaian-tab").hide();
         $("#salary-tab").hide();
@@ -439,6 +440,12 @@
 
         // DATA GAJI DAN REKENING
         $("#basic_salary").val(data.basic_salary);
+        $("#allowance").val(data.allowance);
+        $("#meal_allowance_per_attend").val(data.meal_allowance_per_attend);
+        $("#transport_allowance_per_attend").val(data.transport_allowance_per_attend);
+        $("#attend_allowance_per_attend").val(data.attend_allowance_per_attend);
+        $("#overtime_rate_per_hour").val(data.overtime_rate_per_hour);
+        $("#vat_per_year").val(data.vat_per_year);
         $("#rekening_number").val(data.rekening_number);
         $("#rekening_name").val(data.rekening_name);
         $("#bank_name").val(data.bank_name).trigger("change");
@@ -685,7 +692,7 @@
                                                             title: responses.message,
                                                         });
 
-                                                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(function (json) {});
+                                                        window.LaravelDataTables["employee-table"].ajax.reload(function (json) {});
                                                         $(this).closest("tr").remove();
                                                     } else {
                                                         console.log(
@@ -765,8 +772,7 @@
                             title: responses.message
                         });
 
-                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                            function (json) {});
+                        window.LaravelDataTables["employee-table"].ajax.reload(function (json) {});
                     }
                 },
                 error: function (err) {
@@ -834,8 +840,7 @@
                                 title: responses.message
                             });
 
-                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                                function (json) {});
+                            window.LaravelDataTables["employee-table"].ajax.reload(function (json) {});
                         }
                     },
                     error: function (err) {
@@ -897,6 +902,21 @@
         // $("#photo").val("");
         // $("#photoPreview").val("");
         // $("#photoPreviewReady").hide();
+    }
+
+    function clearFormCreate() {
+        $("#id").val("");
+        $("#nip").val("");
+        $("#nik").val("");
+        $("#name").val("");
+        $("#birth_place").val("");
+        $("#birth_date").val("");
+        $("#phone").val("");
+        $("#religion").val("").trigger("change");
+        $("#address").val("");
+        $("#photo").val("");
+        $("#photoPreview").val("");
+        $("#photoPreviewReady").hide();
     }
 
 </script>

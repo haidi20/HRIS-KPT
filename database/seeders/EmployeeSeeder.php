@@ -36,8 +36,6 @@ class EmployeeSeeder extends Seeder
                     "bpjs_jp"=>"Y",
                     "bpjs_kes"=>"Y",
 
-
-
                     "nip" => $data[1],
                     "nik" => $data[2],
                     "name" => $data[3],
@@ -46,13 +44,12 @@ class EmployeeSeeder extends Seeder
                     "company_id" => $data[4],
                     "position_id" => $data[5],
                     // "finger_doc_1" => $data[6],
-                    "basic_salary"=>$data[7],
-
-                    "overtime_rate_per_hour"=>$data[8],
-                    "allowance"=>$data[9],
-                    "meal_allowance_per_attend"=>$data[10],
-                    "transport_allowance_per_attend"=>$data[11],
-                    "attend_allowance_per_attend"=>$data[12],
+                    "basic_salary"=>$data[8],
+                    "overtime_rate_per_hour"=>$data[9],
+                    "allowance"=>$data[10],
+                    "meal_allowance_per_attend"=>$data[11],
+                    "transport_allowance_per_attend"=>$data[12],
+                    "attend_allowance_per_attend"=>$data[13],
                 ]);
 
                 // Mengambil waktu pembuatan data dari entitas yang sesuai di database

@@ -28,6 +28,7 @@ use Yajra\DataTables\DataTables;
 use App\DataTables\EmployeesDataTable;
 use App\DataTables\EmployeesExpDataTable;
 use App\Models\Departmen;
+use App\Models\salaryAdjustment;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
@@ -94,10 +95,10 @@ class EmployeeController extends Controller
         $finger_tools = FingerTool::all();
         $fingers = Finger::all();
 
-        $dataTableBuilder = $dataTable->html();
-        $dataTableExpBuilder = $dataTableExp->html();
+        $dataTableEmployee = $dataTable->html();
+        // $dataTableExpEmployee = $dataTableExp->html();
 
-        $compact = compact('dataTableBuilder', 'dataTableExpBuilder', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools', 'fingers');
+        $compact = compact('dataTableEmployee', 'employees', 'companies', 'barges', 'departments', 'positions', 'employee_types', 'locations', 'finger_tools', 'fingers');
 
         return $dataTable->render('pages.master.employee.index', $compact);
     }
@@ -158,8 +159,6 @@ class EmployeeController extends Controller
                 $employee->updated_by = Auth::user()->id;
                 $employee->employee_status = request("employee_status");
 
-
-
                 $message = "diperbaharui";
             } else {
                 // Logika saat menambahkan data baru
@@ -215,6 +214,12 @@ class EmployeeController extends Controller
 
             // DATA GAJI DAN REKENING
             $employee->basic_salary = request("basic_salary");
+            $employee->allowance = request("allowance");
+            $employee->meal_allowance_per_attend = request("meal_allowance_per_attend");
+            $employee->transport_allowance_per_attend = request("transport_allowance_per_attend");
+            $employee->attend_allowance_per_attend = request("attend_allowance_per_attend");
+            $employee->overtime_rate_per_hour = request("overtime_rate_per_hour");
+            $employee->vat_per_year = request("vat_per_year");
             $employee->rekening_number = request("rekening_number");
             $employee->rekening_name = request("rekening_name");
             $employee->bank_name = request("bank_name");
@@ -241,6 +246,12 @@ class EmployeeController extends Controller
                 $finger->id_finger = request('id_finger');
                 $finger->save();
             }
+
+            $salary_adjustment = SalaryAdjustment::create([
+                'name' => $request->name,
+            ]);
+            $salary_adjustment->save();
+
             DB::commit();
 
             return response()->json([
