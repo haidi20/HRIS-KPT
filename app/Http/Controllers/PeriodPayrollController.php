@@ -173,20 +173,36 @@ class PeriodPayrollController extends Controller
 
             foreach ($employees as $key => $employee) {
 
-                $total_tambahan_dari_sa =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
-                ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))->where('type_amount','nominal')->where('type_time','base_time')->where('employee_id',$employee->id)->sum('amount');
-
-
+                $total_tambahan_dari_sa = 0;
                 $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
                 ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))
-                ->where('type_amount','percent')
+                // ->where('type_amount','nominal')
                 ->where('type_time','base_time')
                 ->where('employee_id',$employee->id)
                 ->get();
 
                 foreach ($sa_percents as $key => $v) {
-                    $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+
+                    if($v->type_amount == 'nominal' ){
+                        $total_tambahan_dari_sa += $v->amount;
+                    }else{
+                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    }
+                    
                 }
+
+
+
+                // $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
+                // ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))
+                // ->where('type_amount','percent')
+                // ->where('type_time','base_time')
+                // ->where('employee_id',$employee->id)
+                // ->get();
+
+                // foreach ($sa_percents as $key => $v) {
+                //     $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                // }
 
                 $sa_percents =  salaryAdjustmentDetail::whereDate('month_start','>=',$tanggal_tambahan_lain)
                 ->whereDate('month_end','<=',$tanggal_tambahan_lain)
