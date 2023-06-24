@@ -10,6 +10,15 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class PayrollExportPerEmployee implements FromView,WithTitle
 {
+
+    protected  $period_payroll= null;
+    protected  $employees= null;
+
+    public function __construct($period_payroll,$employees) {
+        $this->period_payroll = $period_payroll;
+        $this->employees = $employees;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -22,6 +31,6 @@ class PayrollExportPerEmployee implements FromView,WithTitle
 
     public function title(): string
     {
-        return 'Month ';
+        return $this->employees->name ?? 'no-name';
     }
 }

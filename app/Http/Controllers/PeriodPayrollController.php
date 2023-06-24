@@ -172,7 +172,7 @@ class PeriodPayrollController extends Controller
             
 
 
-            $employees = Employee::where('id','28')->get();
+            $employees = Employee::get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -645,6 +645,9 @@ class PeriodPayrollController extends Controller
 
             DB::commit();
 
+            Excel::store(new PayrollExport($period_payroll,$employees),'payroll_export.xlsx','local');
+
+
             return response()->json([
                 'success' => true,
                 'message' => "Berhasil {$message}",
@@ -701,7 +704,8 @@ class PeriodPayrollController extends Controller
     }
 
     function export(){
-        return Excel::download(new PayrollExport,'payroll_export.xlsx');
-        return 'export';
+        // Excel::store(new PayrollExport($payroll),'payroll_export.xlsx','local');
+        // return Excel::download(new PayrollExport($payroll),'payroll_export.xlsx');
+        // return 'export';
     }
 }
