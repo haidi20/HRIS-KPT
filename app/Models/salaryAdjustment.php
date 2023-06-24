@@ -15,7 +15,9 @@ class salaryAdjustment extends Model
     protected $appends = [
         "type_time_readable", "type_adjustment_name", "amount_readable",
     ];
-    protected $fillable = [];
+    protected $fillable = [
+        'name',
+    ];
 
     public function __construct(array $attributes = [])
     {
