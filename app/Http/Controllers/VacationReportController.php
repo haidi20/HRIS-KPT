@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
+
 // vacation = cuti
 class VacationReportController extends Controller
 {
@@ -23,17 +25,24 @@ class VacationReportController extends Controller
 
     public function fetchData()
     {
-        $dateStart = Carbon::parse(request("date_start"));
-        $dateEnd = Carbon::parse(request("date_end"));
+        // $dateStart = Carbon::parse(request("date_start"));
+        // $dateEnd = Carbon::parse(request("date_end"));
+        $month = Carbon::parse(request("month"));
 
-        $vacations = Vacation::whereDate("date_start", ">=", $dateStart->format("Y-m-d"))
-            ->whereDate("date_start", "<=", $dateEnd->format("Y-m-d"))
+        // $vacations = Vacation::whereDate("date_start", ">=", $dateStart->format("Y-m-d"))
+        //     ->whereDate("date_start", "<=", $dateEnd->format("Y-m-d"))
+        //     ->orderBy("created_at", "desc")
+        //     ->get();
+
+        $vacations = Vacation::whereYear("date_start", $month->format("Y"))
+            ->whereMonth("date_start", $month->format("m"))
             ->orderBy("created_at", "desc")
             ->get();
 
         return response()->json([
-            "dateStart" => $dateStart->format("Y-m-d"),
-            "dateEnd" => $dateEnd->format("Y-m-d"),
+            // "dateStart" => $dateStart->format("Y-m-d"),
+            // "dateEnd" => $dateEnd->format("Y-m-d"),
+            "month" => $month->format("Y-m-d"),
             "vacations" => $vacations,
         ]);
     }

@@ -25,8 +25,8 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="basicInput">Pilih Tanggal</label>
-                                <input type="text" class="form-control" id="month" autocomplete="off">
+                                <label for="basicInput">Bulan Cuti</label>
+                                <input type="month" class="form-control" id="month" autocomplete="off" value="">
                             </div>
                         </div>
                         <div class="col-md-4" style="align-self: center">
@@ -80,13 +80,13 @@
 
 
             fetchData();
-            setupDateFilter();
+            // setupDateFilter();
         });
 
         function setupDateFilter() {
             new Litepicker({
                 element: document.getElementById('month'),
-                singleMode: false,
+                singleMode: true,
                 tooltipText: {
                     one: 'night',
                     other: 'nights'
@@ -94,20 +94,90 @@
                 tooltipNumber: (totalDays) => {
                     return totalDays - 1;
                 },
-                setup: (picker) => {
-                    picker.on('selected', (startDate, endDate) => {
-                        startDate = moment(startDate.dateInstance).format("YYYY-MM-DD");
-                        endDate = moment(endDate.dateInstance).format("YYYY-MM-DD");
+                // setup: (picker) => {
+                //     picker.on('selected', (startDate, endDate) => {
+                //         startDate = moment(startDate.dateInstance).format("YYYY-MM-DD");
+                //         endDate = moment(endDate.dateInstance).format("YYYY-MM-DD");
 
-                        state.date_start = startDate;
-                        state.date_end = endDate;
-                    });
-                },
+                //         state.date_start = startDate;
+                //         state.date_end = endDate;
+                //     });
+                // },
             });
         }
 
         function onFilter() {
             fetchData();
+        }
+
+        function onApprove(id, name, dateStart, dateEnd) {
+            Swal.fire({
+                title: 'Persetujuan Cuti',
+                html: `Anda menyetujui cuti <b>${name}</b> dari tanggal <b>${dateStart}</b> sampai <b>${dateEnd}</b> ?</h2>`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('master.employee.delete') }}",
+                        method: 'POST',
+                        dataType: 'json',
+                        data: {
+                            _method: 'DELETE',
+                            id: data.id
+                        },
+                        success: function(responses) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                }
+                            });
+                            if (responses.success == true) {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: responses.message
+                                });
+
+                                window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                                    function(json) {});
+                            }
+                        },
+                        error: function(err) {
+                            // console.log(err.responseJSON.message);
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal
+                                        .stopTimer)
+                                    toast.addEventListener('mouseleave', Swal
+                                        .resumeTimer)
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: err.responseJSON.message
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function onExport() {
@@ -166,8 +236,9 @@
                 url: "{{ route('api.report.vacation.fetchData') }}",
                 method: 'GET',
                 data: {
-                    date_start: state.date_start,
-                    date_end: state.date_end,
+                    // date_start: state.date_start,
+                    // date_end: state.date_end,
+                    month: $("#month").val(),
                 },
                 beforeSend: function() {
                     // empty view
@@ -187,6 +258,13 @@
                         vacations.map(vacation => {
                             rows += `
                             <tr>
+                                <td>
+                                    <a
+                                        href="javascript:void(0)"
+                                        onclick="onApprove('${vacation.id}', '${vacation.employee_name}', '${vacation.date_start_readable}', '${vacation.date_end_readable}')"
+                                        class="btn btn-sm btn-info me-2"><i class="bi bi-pen"></i>
+                                    </a>
+                                </td>
                                 <td>${vacation.creator_name}</td>
                                 <td>${vacation.employee_name}</td>
                                 <td>${vacation.position_name}</td>
@@ -227,6 +305,7 @@
                 <table class="table table-striped dataTable" id="table1">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Di Buat Oleh</th>
                             <th>Nama Karyawan</th>
                             <th>Jabatan</th>

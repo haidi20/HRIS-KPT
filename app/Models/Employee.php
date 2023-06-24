@@ -41,7 +41,7 @@ class Employee extends Model
 
     public function attendanceHasEmployees()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(AttendanceHasEmployee::class);
     }
 
     public function getCompanyNameAttribute()

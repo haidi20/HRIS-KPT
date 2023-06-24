@@ -9,7 +9,7 @@ class Attendance extends Model
 {
     use HasFactory;
 
-    protected $table = 'attendance_has_employees';
+    protected $table = 'attendance';
 
     protected $appends = [
         "duration_work_readable",  "duration_rest_readable",  "duration_overtime_readable",

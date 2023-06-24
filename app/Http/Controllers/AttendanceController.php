@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AttendanceExport;
 use App\Models\Attendance;
 use App\Models\AttendanceFingerspot;
+use App\Models\AttendanceHasEmployee;
 use App\Models\Employee;
 use App\Models\FingerTool;
 use App\Models\VwAttendance;
@@ -191,42 +192,48 @@ class AttendanceController extends Controller
 
     public function store()
     {
+        set_time_limit(840); // 14 menit
         $dateNow = Carbon::now()->format("Y-m-d");
         $dateStart = request("date_start", $dateNow);
         $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
 
-        try {
-            // DB::beginTransaction();
+        // try {
+        //     // DB::beginTransaction();
 
-            $this->storeFingerSpot();
+        //     $this->storeFingerSpot();
 
-            $this->storeHasEmployee();
+        //     $this->storeHasEmployee();
 
-            // DB::commit();
+        //     // DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'dateStart' => $dateStart,
-                'message' => "Berhasil Proses Data Finger",
-            ], 200);
-        } catch (\Exception $e) {
-            // DB::rollback();
+        //     return response()->json([
+        //         'success' => true,
+        //         'dateStart' => $dateStart,
+        //         'message' => "Berhasil Proses Data Finger",
+        //     ], 200);
+        // } catch (\Exception $e) {
+        //     // DB::rollback();
 
-            Log::error($e);
+        //     Log::error($e);
 
-            $routeAction = Route::currentRouteAction();
-            $log = new LogController;
-            $log->store($e->getMessage(), $routeAction);
+        //     $routeAction = Route::currentRouteAction();
+        //     $log = new LogController;
+        //     $log->store($e->getMessage(), $routeAction);
 
-            return response()->json([
-                'success' => false,
-                'message' => "Gagal Proses Data Finger",
-            ], 500);
-        }
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => "Gagal Proses Data Finger",
+        //     ], 500);
+        // }
+
+        $this->storeFingerSpot();
+
+        $this->storeHasEmployee();
     }
 
     public function storeFingerSpot()
     {
+        set_time_limit(840); // 14 menit
         $fingerTools = FingerTool::all();
         $dateNow = Carbon::now()->format("Y-m-d");
         $dateStart = request("date_start", $dateNow);
@@ -319,6 +326,7 @@ class AttendanceController extends Controller
 
         if (request("date_start") != null) {
             $date = request("date_start");
+            $dateSecond = request("date_end");
         }
 
         $date = Carbon::parse($date)->format("Y-m-d");
@@ -326,7 +334,7 @@ class AttendanceController extends Controller
 
         $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
         $attendanceFingerspot->map(function ($query) {
-            Attendance::updateOrCreate(
+            AttendanceHasEmployee::updateOrCreate(
                 [
                     "pin" => $query->pin,
                     "date" => $query->date,
@@ -356,7 +364,7 @@ class AttendanceController extends Controller
         if ($dateSecond != null) {
             $attendanceFingerspot = VwAttendance::whereDate("date", $dateSecond)->get();
             $attendanceFingerspot->map(function ($query) {
-                Attendance::updateOrCreate(
+                AttendanceHasEmployee::updateOrCreate(
                     [
                         "pin" => $query->pin,
                         "date" => $query->date,

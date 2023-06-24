@@ -9,12 +9,17 @@ use Illuminate\Support\Facades\Hash;
 
 class FingerSeeder extends Seeder
 {
+    public function run()
+    {
+        DB::unprepared(file_get_contents(database_path('data/finger.sql')));
+    }
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function runOld()
     {
         DB::table('fingers')->insert(
             [

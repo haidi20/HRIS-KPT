@@ -15,6 +15,6 @@ class AttendanceSeeder extends Seeder
      */
     public function run()
     {
-        DB::unprepared(file_get_contents(database_path('data/attendance.sql')));
+        DB::unprepared(file_get_contents(database_path('data/attendance_all_v2.sql')));
     }
 }
