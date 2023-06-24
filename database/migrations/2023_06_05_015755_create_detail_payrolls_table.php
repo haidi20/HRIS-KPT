@@ -13,6 +13,7 @@ class CreateDetailPayrollsTable extends Migration
      */
     public function up()
     {
+        // php artisan make:migration add_importtan_detail_to_detail_payrolls_table --table=detail_payrolls
         Schema::create('detail_payrolls', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

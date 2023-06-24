@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApprovalLevel;
 use App\Models\ApprovalLevelDetail;
 use App\Models\SalaryAdvance;
+use App\Models\SalaryAdvanceDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -159,6 +160,32 @@ class SalaryAdvanceController extends Controller
                 if ($userId == $getMaxLevelApproval->user_id) {
                     $salaryAdvance->status = "accept";
                 }
+            }
+
+
+            if($salaryAdvance->status == "accept"){
+                // $this->insertDetailSalaryAdvance();
+
+                $dt = Carbon::now();
+
+
+                if($dt->format('d') >= 25){
+                    $date_start = $dt->addMonth(1)->startOfMonth()->format('Y-m-d');
+                    $date_end = Carbon::now()->addMonth(($salaryAdvance->duration + 1))->startOfMonth()->format('Y-m-d');
+                }else{
+                    $date_start = $dt->format('Y-m-d');
+                    $date_end = Carbon::now()->addMonth(($salaryAdvance->duration - 1))->format('Y-m-d');
+                }
+
+                // SalaryAdvanceDetail
+                $new_salary_advance_detail = SalaryAdvanceDetail::create([
+                    'salary_advance_id'=>$salaryAdvance->id,
+                    'employee_id'=>$salaryAdvance->employee_id,
+                    'date_start'=>$date_start,
+                    'date_end'=>$date_end,
+                    'amount'=>$salaryAdvance->monthly_deduction,
+                ]);
+
             }
 
             // $salaryAdvance->note = $note;

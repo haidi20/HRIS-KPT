@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Exports\PayrollExport;
 use App\Models\Attendance;
+use App\Models\AttendancePayrol;
 use App\Models\BaseWagesBpjs;
 use App\Models\BpjsCalculation;
 use App\Models\Employee;
 use App\Models\Payroll;
 use App\Models\PeriodPayroll;
 use App\Models\salaryAdjustmentDetail;
+use App\Models\SalaryAdvanceDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -155,6 +157,21 @@ class PeriodPayrollController extends Controller
             $period_payroll->save();
 
 
+            // AttendancePayrol::whereDate('date','>=',$period_payroll->date_start)
+            // ->whereDate('date','<=',$period_payroll->date_end)
+            // ->get();
+            // AttendancePayrol::create();
+
+            DB::select("
+            INSERT INTO attendance(pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id)
+            SELECT pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id
+            FROM attendance_has_employees where date(date) >= '".$period_payroll->date_start."' AND date(date) <= '".$period_payroll->date_end."'
+            ");
+
+
+            
+
+
             $employees = Employee::where('id','28')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
@@ -176,14 +193,23 @@ class PeriodPayrollController extends Controller
 
             foreach ($employees as $key => $employee) {
 
-                $data_absens = Attendance::where('employee_id',$employee->id)
+                $data_absens = AttendancePayrol::where('employee_id',$employee->id)
                 ->whereDate('date','>=',$period_payroll->date_start)
-                ->whereDate('date','<=',$period_payroll->date_end)
+                ->whereDate('date','<=',$period_payroll->date_start)
                 ->get();
 
                 $jumlah_jam_lembur_tmp =0;
                 $jumlah_hari_kerja_tmp = 0;
                 $jumlah_hari_tidak_masuk_tmp = 0;
+
+
+                $jumlah_hutang  = 0;
+
+                // return [$period_payroll->date_start, $period_payroll->date_end];
+
+                $jumlah_hutang =  SalaryAdvanceDetail::whereDate('date_start','<=',$period_payroll->date_end)
+                ->whereDate('date_end','>=',$period_payroll->date_end)
+                ->sum('amount') ;
 
                 foreach ($period as $key => $p) {
                       $new_old_d = $data_absens->where('date',$p->format('Y-m-d'))->first();
@@ -241,7 +267,7 @@ class PeriodPayrollController extends Controller
 
                         }
 
-                        Attendance::where('id',$new_old_d->id)->update([
+                        AttendancePayrol::where('id',$new_old_d->id)->update([
                             'lembur_kali_satu_lima' =>$kali_1,
                             'lembur_kali_dua' =>$kali_2,
                             'lembur_kali_tiga' =>$kali_3,
@@ -249,7 +275,7 @@ class PeriodPayrollController extends Controller
                         ]);
                      }else{
                         $jumlah_hari_tidak_masuk_tmp +=1;
-                        // Attendance::create([
+                        // AttendancePayrol::create([
                         //     ''
                         // ]);
                      }
@@ -471,7 +497,7 @@ class PeriodPayrollController extends Controller
                 $pemotongan_potongan_lain_lain = 0;
 
 
-
+                // SalaryAdvanceDetail
 
 
 
@@ -520,7 +546,7 @@ class PeriodPayrollController extends Controller
                     'pemotongan_potongan_lain_lain' => 0,
                     'jumlah_pemotongan' => 0,
 
-                    'gaji_bersih' => $gaji_bersih,
+                    'gaji_bersih' => $gaji_bersih - $jumlah_hutang,
                     'bulan' => $period_payroll->period,
                     'posisi' => "",
                     'gaji_dasar' => $employee->basic_salary,
@@ -584,11 +610,11 @@ class PeriodPayrollController extends Controller
                     'total_bpjs_karyawan_rupiah' => $total_bpjs_karyawan_rupiah,
 
 
-                    'jumlah_pemotongan' => $jumlah_pemotongan,
+                    'jumlah_pemotongan' => $jumlah_pemotongan + $jumlah_hutang ,
 
                     'pemotongan_bpjs_dibayar_karyawan' => $pemotongan_bpjs_dibayar_karyawan,
                     'pemotongan_pph_dua_satu' => $pemotongan_pph_dua_satu,
-                    'pemotongan_potongan_lain_lain' => $pemotongan_potongan_lain_lain,
+                    'pemotongan_potongan_lain_lain' => $pemotongan_potongan_lain_lain + $jumlah_hutang,
 
 
                     'pajak_gaji_kotor_kurang_potongan' => $pajak_gaji_kotor_kurang_potongan,
@@ -606,7 +632,7 @@ class PeriodPayrollController extends Controller
                     'pkp_tiga_puluh_persen' => $pkp_tiga_puluh_persen,
                 ]);
 
-                Attendance::whereDate('date', '>=', $period_payroll->date_start)
+                AttendancePayrol::whereDate('date', '>=', $period_payroll->date_start)
                     ->whereDate('date', '<=', $period_payroll->date_end)
                     ->where('employee_id', $employee->id)
                     ->where(function ($query) {

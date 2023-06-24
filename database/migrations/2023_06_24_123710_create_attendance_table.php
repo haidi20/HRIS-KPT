@@ -15,10 +15,10 @@ class CreateAttendanceTable extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->string('pin');
+            $table->string('pin')->nullable();
             $table->foreignId('employee_id')->nullable();
-            $table->string('cloud_id');
-            $table->date('date');
+            $table->string('cloud_id')->nullable();
+            $table->date('date')->nullable();
             $table->datetime('hour_start')->nullable();
             $table->datetime('hour_end')->nullable();
             $table->integer('duration_work')->nullable(); // dalam bentuk menit
