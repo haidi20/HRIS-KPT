@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PayrollExport;
 use App\Models\Attendance;
 use App\Models\BaseWagesBpjs;
 use App\Models\BpjsCalculation;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 // use Spatie\Permission\Models\Permission;
 
@@ -197,12 +199,12 @@ class PeriodPayrollController extends Controller
 
                 $pendapatan_tambahan_lain_lain = 0;
 
-                $jumlah_jam_rate_lembur = 109.0; //contoh
-                $pendapatan_tambahan_lain_lain = 2645923; //contoh
-                $jumlah_hari_kerja = 20; //contoh
+                // $jumlah_jam_rate_lembur = 109.0; //contoh
+                // $pendapatan_tambahan_lain_lain = 2645923; //contoh
+                // $jumlah_hari_kerja = 20; //contoh
 
 
-                $pendapatan_uang_makan = 432000; //$jumlah_hari_kerja * $employee->meal_allowance_per_attend;
+                $pendapatan_uang_makan = $jumlah_hari_kerja * $employee->meal_allowance_per_attend;
                 $pendapatan_lembur = $jumlah_jam_rate_lembur * $employee->overtime_rate_per_hour;
 
                 $jumlah_pendapatan = $employee->basic_salary + $employee->allowance + $pendapatan_uang_makan + $pendapatan_lembur + $pendapatan_tambahan_lain_lain;
@@ -349,10 +351,12 @@ class PeriodPayrollController extends Controller
                 $pajak_gaji_kotor_kurang_potongan = $jumlah_pendapatan - $pemotongan_potongan_lain_lain;
                 $pajak_bpjs_dibayar_perusahaan = $total_bpjs_perusahaan_rupiah;
                 $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
-                $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor));
+
+
+                $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor)) * 12;
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
-                $pajak_gaji_bersih_setahun = 12 * ($pajak_total_penghasilan_kotor - $pajak_total_pengurang);
+                $pajak_gaji_bersih_setahun = (($pajak_total_penghasilan_kotor * 12)  - $pajak_total_pengurang);
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
 
 
@@ -539,5 +543,10 @@ class PeriodPayrollController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    function export(){
+        return Excel::download(new PayrollExport,'payroll_export.xlsx');
+        return 'export';
     }
 }
