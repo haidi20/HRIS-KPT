@@ -81,13 +81,46 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
                 'color' => ['rgb' => 'FFFFFF'],
             ],
         ]);
-
-        // BAGIAN : NAMA
-        $sheet->getStyle('A3')->applyFromArray([
+        $sheet->getStyle('C2:AG2')->applyFromArray([
             'fill' => [
                 'fillType' => 'solid',
                 'rotation' => 0,
-                'color' => ['rgb' => '9fc9eb'],
+                'color' => ['rgb' => 'CCFFFF'],
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000'],
+            ],
+        ]);
+
+        // BAGIAN : NAMA
+        $sheet->getStyle('A2')->applyFromArray([
+            'fill' => [
+                'fillType' => 'solid',
+                'rotation' => 0,
+                'color' => ['rgb' => '99CCFF'],
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'font' => [
+                'bold' => true,
+            ],
+        ]);
+
+        // BAGIAN : DEPARTEMEN
+        $sheet->getStyle('B2')->applyFromArray([
+            'fill' => [
+                'fillType' => 'solid',
+                'rotation' => 0,
+                'color' => ['rgb' => '99CCFF'],
             ],
             'borders' => [
                 'allBorders' => [
@@ -103,7 +136,7 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
         $columnCount = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString('A');
         $maxRow = $sheet->getHighestRow();
 
-        for ($row = 5; $row <= $maxRow; $row++) {
+        for ($row = 4; $row <= $maxRow; $row++) {
             $range = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnCount) . $row;
             $color = $row % 2 == 0 ? 'fcf9ce' : 'fbf49b';
             $sheet->getStyle($range)->applyFromArray([
@@ -119,7 +152,7 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
         $columnCountB = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString('B');
         $maxRowB = $sheet->getHighestRow();
 
-        for ($row = 5; $row <= $maxRowB; $row++) {
+        for ($row = 4; $row <= $maxRowB; $row++) {
             $range = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnCountB) . $row;
             $color = $row % 2 == 0 ? 'fcf9ce' : 'fbf49b';
             $sheet->getStyle($range)->applyFromArray([
@@ -131,40 +164,23 @@ class RosterMainSheet implements FromView, WithTitle, ShouldAutoSize, WithStyles
             ]);
         }
 
-        // BAGIAN : DEPARTEMEN
-        $sheet->getStyle('B3')->applyFromArray([
-            'fill' => [
-                'fillType' => 'solid',
-                'rotation' => 0,
-                'color' => ['rgb' => '9fc9eb'],
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
-            ],
-            'font' => [
-                'bold' => true,
-            ],
-        ]);
-
         // BAGIAN : HARI
-        $sheet->getStyle('C4:AG4')->applyFromArray([
-            'fill' => [
-                'fillType' => 'solid',
-                'rotation' => 0,
-                'color' => ['rgb' => 'D9D9D9'],
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
-            ],
-            'font' => [
-                'bold' => true,
-                'color' => ['rgb' => '000000'],
-            ],
-        ]);
+        // $sheet->getStyle('C4:AG4')->applyFromArray([
+        //     'fill' => [
+        //         'fillType' => 'solid',
+        //         'rotation' => 0,
+        //         'color' => ['rgb' => 'D9D9D9'],
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //         ],
+        //     ],
+        //     'font' => [
+        //         'bold' => true,
+        //         'color' => ['rgb' => '000000'],
+        //     ],
+        // ]);
         // $sheet->getStyle('B12:J12')->applyFromArray($Border);
         // $sheet->getStyle('B12:J12')->getFill()->applyFromArray(['fillType' => 'solid', 'rotation' => 0, 'color' => ['rgb' => 'D9D9D9'], 'border' => 'thin']);
         // $sheet->getStyle('B12:J12')->getAlignment()->setHorizontal('center');
