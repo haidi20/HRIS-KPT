@@ -431,7 +431,7 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{\round($payroll->pemotongan_bpjs_dibayar_karyawan)}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -449,7 +449,7 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{\round($payroll->pemotongan_pph_dua_satu)}}</td>
         <td>Total</td>
         <td><br></td>
         <td><br></td>
@@ -468,7 +468,7 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{\round($payroll->pemotongan_potongan_lain_lain)}}</td>
         <td>IV. Perhitungan Pajak Penghasilan (PPH21) </td>
         <td><br></td>
         <td><br></td>
@@ -486,7 +486,7 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. 3.000.000</td>
+        <td colspan="2">{{\round($payroll->jumlah_pemotongan)}}</td>
         <td>D. Penghasilan kotor </td>
         <td><br></td>
         <td><br></td>
@@ -508,7 +508,7 @@
         <td>1. Gaji Kotor - Potongan </td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_gaji_kotor_kurang_potongan}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -522,11 +522,11 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. {{$payroll->gaji_bersih}}</td>
+        <td colspan="2">{{round($payroll->gaji_bersih)}}</td>
         <td>2. BPJS dibayar Perusahaan </td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_bpjs_dibayar_perusahaan}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -535,16 +535,17 @@
 
     <tr>
         <td><br></td>
-        <td>C. Gaji Bersih (A)-(B)</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td colspan="2">Rp. 300.000</td>
+        <td><br></td>
+        <td><br></td>
+        <td><br></td>
         <td>Total Penghasilan Kotor (D) </td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_total_penghasilan_kotor}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -582,7 +583,7 @@
         <td>1. Biaya Jabatan (5% x (D)) </td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_biaya_jabatan}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -601,7 +602,7 @@
         <td>2. BPJS dibayar Karyawan </td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_bpjs_dibayar_karyawan}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -619,7 +620,7 @@
         <td>Jumlah Pengurang (E) </td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_total_pengurang}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -636,7 +637,7 @@
         <td>F. Gaji Bersih 12 Bulan</td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_gaji_bersih_setahun}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -653,7 +654,7 @@
         <td>G. PKP 12 Bulan = (F)- PTKP</td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pkp_setahun > 0 ? $payroll->pkp_setahun : 0}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -688,7 +689,7 @@
         <td>5%</td>
         <td> 0 Jt</td>
         <td>60 Jt</td>
-        <td>Rp. 300.00000</td>
+        <td>{{$payroll->pkp_lima_persen}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -705,7 +706,7 @@
         <td>15%</td>
         <td> 60 Jt</td>
         <td>250 Jt</td>
-        <td>Rp. 300.00000</td>
+        <td>{{$payroll->pkp_lima_belas_persen}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -722,7 +723,7 @@
         <td>25%</td>
         <td> 250 Jt</td>
         <td> 500 Jt</td>
-        <td>Rp. 300.00000</td>
+        <td>{{$payroll->pkp_dua_puluh_lima_persen}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -739,7 +740,7 @@
         <td>30%</td>
         <td> 500 Jt</td>
         <td> 1000 Jt</td>
-        <td>Rp. 300.00000</td>
+        <td>{{$payroll->pkp_tiga_puluh_persen}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>
@@ -757,7 +758,7 @@
         <td>G. PPH21 Setahun</td>
         <td><br></td>
         <td><br></td>
-        <td>Rp. 300.000</td>
+        <td>{{$payroll->pajak_pph_dua_satu_setahun > 0 ? $payroll->pajak_pph_dua_satu_setahun : 0}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>

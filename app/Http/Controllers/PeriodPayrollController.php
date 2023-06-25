@@ -550,10 +550,10 @@ class PeriodPayrollController extends Controller
                     'pajak_pph_dua_satu_setahun'=>$pajak_pph_dua_satu_setahun,
 
 
-                    'pemotongan_bpjs_dibayar_karyawan' => 0,
-                    'pemotongan_pph_dua_satu' => 0,
-                    'pemotongan_potongan_lain_lain' => 0,
-                    'jumlah_pemotongan' => 0,
+                    // 'pemotongan_bpjs_dibayar_karyawan' => 0,
+                    // 'pemotongan_pph_dua_satu' => 0,
+                    // 'pemotongan_potongan_lain_lain' => 0,
+                    // 'jumlah_pemotongan' => 0,
 
                     'gaji_bersih' => $gaji_bersih - $jumlah_hutang,
                     'bulan' => $period_payroll->period,
