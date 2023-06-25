@@ -181,7 +181,7 @@ class PeriodPayrollController extends Controller
             
 
 
-            $employees = Employee::orderBy('name','asc')->get();
+            $employees = Employee::where('id',28)->orderBy('name','asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();

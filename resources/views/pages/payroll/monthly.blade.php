@@ -157,6 +157,7 @@
             $('.dataTable').DataTable();
 
             fetchBpjs();
+            fetchAttendance();
             // fetchPph21();
             fetchSalary();
             fetchInformation();
@@ -166,10 +167,33 @@
 
         function onFilter() {
             fetchBpjs();
+            fetchAttendance()
             // fetchPph21();
             fetchSalary();
             fetchInformation();
         }
+
+        function fetchAttendance() {
+            $.ajax({
+                url: "{{ route('api.payroll.attendance') }}",
+                method: 'GET',
+                data: {
+                    month_filter: $("#month_filter").val(),
+                    employee_id : $('#employees').val(),
+                },
+                beforeSend: function() {
+                    // empty view
+                },
+                success: function(responses) {
+                    // console.info(responses);
+                    $('#div_attendace').html(responses);
+                    
+
+                },
+                error: function(err) {}
+            });
+        }
+
 
         function fetchInformation() {
             $.ajax({

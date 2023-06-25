@@ -37,8 +37,6 @@ class CreateAttendanceTable extends Migration
             $table->double("lembur_kali_tiga")->default(0);
             $table->double("lembur_kali_empat")->default(0);
 
-
-
             $table->integer("is_weekend")->default(0);
             $table->integer("is_vacation")->default(0);
             $table->integer("is_payroll_use")->default(0);
