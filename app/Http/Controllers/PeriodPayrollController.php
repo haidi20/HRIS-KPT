@@ -57,7 +57,7 @@ class PeriodPayrollController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $period_payroll = PeriodPayroll::query()
-                ->select('period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
+                ->select('period_payrolls.last_excel','period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
 
             return $datatables->eloquent($period_payroll)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -74,13 +74,11 @@ class PeriodPayrollController extends Controller
                 ->addColumn('aksi', function (PeriodPayroll $data) {
                     $button = '';
 
-                    if (auth()->user()->can('ubah kapal')) {
-                        $button .= '<a href="javascript:void(0)" onclick="onEdit(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-warning me-2"><i class="bi bi-pen"></i></a>';
+                    if (auth()->user()->can('download payroll')) {
+                        $button .= '<a href="javascript:void(0)" data-download="'.url()->current()."/export?a=".$data->last_excel.'" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
                     }
 
-                    if (auth()->user()->can('hapus kapal')) {
-                        $button .= '<a href="javascript:void(0)" onclick="onDelete(' . htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8') . ')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>';
-                    }
+                   
 
                     return $button;
                 })
