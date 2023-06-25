@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\PayrollExport;
 use App\Models\Attendance;
+use App\Models\AttendanceHasEmployee;
 use App\Models\AttendancePayrol;
 use App\Models\BaseWagesBpjs;
 use App\Models\BpjsCalculation;
@@ -23,9 +24,15 @@ use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 use Carbon\CarbonPeriod;
 // use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
 class PeriodPayrollController extends Controller
 {
+    public $period_payrol_month_year;
+    public function __construct($period_payrol_month_year = null)
+    {
+        $this->$period_payrol_month_year = $period_payrol_month_year;
+    }
     public function index(Datatables $datatables)
     {
         // return "a";
@@ -126,10 +133,6 @@ class PeriodPayrollController extends Controller
 
     public function store(Request $request)
     {
-        // return request()->all();
-
-        
-        
 
         try {
             DB::beginTransaction();
@@ -139,22 +142,22 @@ class PeriodPayrollController extends Controller
             if ($n > 0) {
                 $period_payroll = PeriodPayroll::where('period', request("period") . "-01")->first();
                 $message = "diperbaharui";
-            }else{
+            } else {
                 if (request("id")) {
                     $period_payroll = PeriodPayroll::find(request("id"));
                     $period_payroll->updated_by = Auth::user()->id ?? null;
-    
+
                     $message = "diperbaharui";
                 } else {
                     $period_payroll = new PeriodPayroll;
                     $period_payroll->created_by = Auth::user()->id ?? null;
-    
+
                     $message = "ditambahkan";
                 }
             }
 
 
-           
+
 
             $period_payroll->period = request("period") . "-01";
             $period_payroll->date_start = request("date_start");
@@ -167,21 +170,25 @@ class PeriodPayrollController extends Controller
             // ->get();
             // AttendancePayrol::create();
 
-            if($message == 'ditambahkan'){
-                    DB::select("
-                INSERT INTO attendance(pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id)
-                SELECT pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id
-                FROM attendance_has_employees where date(date) >= '".$period_payroll->date_start."' AND date(date) <= '".$period_payroll->date_end."'
-                ");
-            }
-
-            
+            // if ($message == 'ditambahkan') {
+            //     DB::select("
+            //     INSERT INTO attendance(pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id)
+            //     SELECT pin, cloud_id,employee_id,date,hour_start,hour_end,duration_work,hour_rest_start,hour_rest_end,duration_rest,hour_overtime_start,hour_overtime_end,duration_overtime,hour_overtime_job_order_start,hour_overtime_job_order_end,duration_overtime_job_order,is_weekend,is_vacation,is_payroll_use,payroll_id
+            //     FROM attendance_has_employees where date(date) >= '" . $period_payroll->date_start . "' AND date(date) <= '" . $period_payroll->date_end . "'
+            //     ");
+            // }
 
 
-            
 
 
-            $employees = Employee::where('id',28)->orderBy('name','asc')->get();
+
+
+
+
+
+
+
+            $employees = Employee::orderBy('name', 'asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -201,13 +208,50 @@ class PeriodPayrollController extends Controller
             $period = CarbonPeriod::create($period_payroll->date_start, $period_payroll->date_end);
 
             foreach ($employees as $key => $employee) {
+                $employee_id = $employee->id;
+                $start_date = $period_payroll->date_start;
+                $end_date =  $period_payroll->date_end;
+                // AttendanceHasEmployee
+                $attende_fingers = AttendanceHasEmployee::where('employee_id', $employee_id)
+                    ->whereDate('date', '>=', $start_date)
+                    ->whereDate('date', '<=', $end_date)
+                    ->groupBy('date')
+                    ->orderBy('date', 'asc')
+                    ->get();
 
-                $data_absens = AttendancePayrol::where('employee_id',$employee->id)
-                ->whereDate('date','>=',$period_payroll->date_start)
-                ->whereDate('date','<=',$period_payroll->date_start)
-                ->get();
+                // return $sql = Str::replaceArray('?', $attende_fingers->getBindings(), $attende_fingers->toSql());
 
-                $jumlah_jam_lembur_tmp =0;
+                foreach ($attende_fingers as $key => $v) {
+                    $new_at  = AttendancePayrol::firstOrCreate([
+                        'employee_id' => $employee_id,
+                        'date' => $v->date,
+                    ]);
+
+                    if ($new_at->is_koreksi == 0) {
+                        $new_at->update([
+                            'hour_start' => $v->hour_start,
+                            'hour_end' => $v->hour_end,
+                            'duration_work' => $v->duration_work,
+
+                            'hour_rest_start' => $v->hour_rest_start,
+                            'hour_rest_end' => $v->hour_rest_end,
+                            'duration_rest' => $v->duration_rest,
+
+                            'hour_overtime_start' => $v->hour_overtime_start,
+                            'hour_overtime_end' => $v->hour_overtime_end,
+                            'duration_overtime' => $v->duration_overtime,
+                        ]);
+                    }
+                }
+
+
+
+                $data_absens = AttendancePayrol::where('employee_id', $employee->id)
+                    ->whereDate('date', '>=', $period_payroll->date_start)
+                    ->whereDate('date', '<=', $period_payroll->date_start)
+                    ->get();
+
+                $jumlah_jam_lembur_tmp = 0;
                 $jumlah_hari_kerja_tmp = 0;
                 $jumlah_hari_tidak_masuk_tmp = 0;
 
@@ -216,96 +260,93 @@ class PeriodPayrollController extends Controller
 
                 // return [$period_payroll->date_start, $period_payroll->date_end];
 
-                $jumlah_hutang =  SalaryAdvanceDetail::whereDate('date_start','<=',$period_payroll->date_end)
-                ->whereDate('date_end','>=',$period_payroll->date_end)
-                ->sum('amount') ;
+                $jumlah_hutang =  SalaryAdvanceDetail::whereDate('date_start', '<=', $period_payroll->date_end)
+                    ->whereDate('date_end', '>=', $period_payroll->date_end)
+                    ->sum('amount');
 
                 foreach ($period as $key => $p) {
-                      $new_old_d = $data_absens->where('date',$p->format('Y-m-d'))->first();
+                    $new_old_d = $data_absens->where('date', $p->format('Y-m-d'))->first();
 
                     //  if( $p->format('Y-m-d')=='2023-06-19'){
                     //     return $new_old_d;
                     //  }
-                     $kali_1 = 0.00; 
-                     $kali_2 = 0.00; 
-                     $kali_3 = 0.00; 
-                     $kali_4 = 0.00; 
+                    $kali_1 = 0.00;
+                    $kali_2 = 0.00;
+                    $kali_3 = 0.00;
+                    $kali_4 = 0.00;
 
-                     if(isset($new_old_d->id)){
-                        $jumlah_hari_kerja_tmp +=1;
-                        if(($new_old_d->duration_overtime != null) && ($new_old_d->duration_overtime > 0)){
+                    if (isset($new_old_d->id)) {
+                        $jumlah_hari_kerja_tmp += 1;
+                        if (($new_old_d->duration_overtime != null) && ($new_old_d->duration_overtime > 0)) {
 
                             $hour_lembur_x = $new_old_d->duration_overtime % 60;
                             $hour_lembur_y =  \floor($new_old_d->duration_overtime / 60);
-                            
 
 
-                            for ($i=1; $i <=$hour_lembur_y ; $i++) { 
-                                if($i == 1){
+
+                            for ($i = 1; $i <= $hour_lembur_y; $i++) {
+                                if ($i == 1) {
                                     $jumlah_jam_lembur_tmp += 1.5;
                                     $kali_1 += 1.5;
                                 }
 
-                                if($i > 1){
+                                if ($i > 1) {
                                     $jumlah_jam_lembur_tmp += 2.00;
                                     $kali_2 += 2.00;
                                 }
                             }
 
-                            if(($hour_lembur_x > 29) &&  ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp == 0)){
+                            if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp == 0)) {
                                 $jumlah_jam_lembur_tmp += 1.5 * 0.5;
                                 $kali_1 += 1.5 * 0.5;
                             }
 
-                            if(($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp == 0)){
+                            if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp == 0)) {
                                 $jumlah_jam_lembur_tmp += 1.5;
                                 $kali_1 += 1.5;
                             }
 
 
-                            if(($hour_lembur_x > 29) &&  ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp > 0)){
+                            if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp > 0)) {
                                 $jumlah_jam_lembur_tmp += 2 * 0.5;
                                 $kali_2 += 2 * 0.5;
                             }
 
-                            if(($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp > 0)){
+                            if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp > 0)) {
                                 $jumlah_jam_lembur_tmp += 2.00;
                                 $kali_2 += 2.00;
                             }
-
-
                         }
 
-                        AttendancePayrol::where('id',$new_old_d->id)->update([
-                            'lembur_kali_satu_lima' =>$kali_1,
-                            'lembur_kali_dua' =>$kali_2,
-                            'lembur_kali_tiga' =>$kali_3,
-                            'lembur_kali_empat' =>$kali_4,
+                        AttendancePayrol::where('id', $new_old_d->id)->update([
+                            'lembur_kali_satu_lima' => $kali_1,
+                            'lembur_kali_dua' => $kali_2,
+                            'lembur_kali_tiga' => $kali_3,
+                            'lembur_kali_empat' => $kali_4,
                         ]);
-                     }else{
-                        $jumlah_hari_tidak_masuk_tmp +=1;
+                    } else {
+                        $jumlah_hari_tidak_masuk_tmp += 1;
                         // AttendancePayrol::create([
                         //     ''
                         // ]);
-                     }
+                    }
                 }
 
                 $total_tambahan_dari_sa = 0;
-                $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start',$tanggal_tambahan_lain->format('m'))
-                ->whereYear('month_start',$tanggal_tambahan_lain->format('Y'))
-                // ->where('type_amount','nominal')
-                ->where('type_time','base_time')
-                ->where('employee_id',$employee->id)
-                ->get();
+                $sa_percents =  salaryAdjustmentDetail::whereMonth('month_start', $tanggal_tambahan_lain->format('m'))
+                    ->whereYear('month_start', $tanggal_tambahan_lain->format('Y'))
+                    // ->where('type_amount','nominal')
+                    ->where('type_time', 'base_time')
+                    ->where('employee_id', $employee->id)
+                    ->get();
 
                 foreach ($sa_percents as $key => $v) {
 
-                    if($v->type_amount == 'nominal' ){
+                    if ($v->type_amount == 'nominal') {
                         $total_tambahan_dari_sa += $v->amount;
-                    }else{
-                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    } else {
+                        $total_tambahan_dari_sa += ($v->amount / 100) * $employee->basic_salary;
                     }
-                    
                 }
 
 
@@ -321,38 +362,36 @@ class PeriodPayrollController extends Controller
                 //     $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
                 // }
 
-                $sa_percents =  salaryAdjustmentDetail::whereDate('month_start','>=',$tanggal_tambahan_lain)
-                ->whereDate('month_end','<=',$tanggal_tambahan_lain)
-                // ->where('type_amount','percent')
-                ->where('type_time','base_time')
-                ->where('employee_id',$employee->id)
-                ->get();
+                $sa_percents =  salaryAdjustmentDetail::whereDate('month_start', '>=', $tanggal_tambahan_lain)
+                    ->whereDate('month_end', '<=', $tanggal_tambahan_lain)
+                    // ->where('type_amount','percent')
+                    ->where('type_time', 'base_time')
+                    ->where('employee_id', $employee->id)
+                    ->get();
 
                 foreach ($sa_percents as $key => $v) {
 
-                    if($v->type_amount == 'nominal' ){
+                    if ($v->type_amount == 'nominal') {
                         $total_tambahan_dari_sa += $v->amount;
-                    }else{
-                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    } else {
+                        $total_tambahan_dari_sa += ($v->amount / 100) * $employee->basic_salary;
                     }
-                    
                 }
 
 
                 $sa_percents =  salaryAdjustmentDetail::whereNull('month_start')
-                ->whereNull('month_end')
-                ->where('type_time','forever')
-                ->where('employee_id',$employee->id)
-                ->get();
+                    ->whereNull('month_end')
+                    ->where('type_time', 'forever')
+                    ->where('employee_id', $employee->id)
+                    ->get();
 
                 foreach ($sa_percents as $key => $v) {
 
-                    if($v->type_amount == 'nominal' ){
+                    if ($v->type_amount == 'nominal') {
                         $total_tambahan_dari_sa += $v->amount;
-                    }else{
-                        $total_tambahan_dari_sa += ($v->amount/100) * $employee->basic_salary;
+                    } else {
+                        $total_tambahan_dari_sa += ($v->amount / 100) * $employee->basic_salary;
                     }
-                    
                 }
 
 
@@ -523,10 +562,10 @@ class PeriodPayrollController extends Controller
 
 
                 //menghitung pkp 5%
-                $pkp_lima_persen  = \max(0,$pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
-                $pkp_lima_belas_persen  = \max(0,$pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
-                $pkp_dua_puluh_lima_persen  = \max(0,$pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
-                $pkp_tiga_puluh_persen  = \max(0,$pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                $pkp_lima_persen  = \max(0, $pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
+                $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
+                $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
 
                 $pajak_pph_dua_satu_setahun = $pkp_lima_persen + $pkp_lima_belas_persen + $pkp_dua_puluh_lima_persen + $pkp_tiga_puluh_persen;
 
@@ -547,7 +586,7 @@ class PeriodPayrollController extends Controller
                     'pendapatan_lembur' => $pendapatan_lembur,
                     'pendapatan_tambahan_lain_lain' => $pendapatan_tambahan_lain_lain,
                     'jumlah_pendapatan' => $jumlah_pendapatan,
-                    'pajak_pph_dua_satu_setahun'=>$pajak_pph_dua_satu_setahun,
+                    'pajak_pph_dua_satu_setahun' => $pajak_pph_dua_satu_setahun,
 
 
                     // 'pemotongan_bpjs_dibayar_karyawan' => 0,
@@ -619,7 +658,7 @@ class PeriodPayrollController extends Controller
                     'total_bpjs_karyawan_rupiah' => $total_bpjs_karyawan_rupiah,
 
 
-                    'jumlah_pemotongan' => $jumlah_pemotongan + $jumlah_hutang ,
+                    'jumlah_pemotongan' => $jumlah_pemotongan + $jumlah_hutang,
 
                     'pemotongan_bpjs_dibayar_karyawan' => $pemotongan_bpjs_dibayar_karyawan,
                     'pemotongan_pph_dua_satu' => $pemotongan_pph_dua_satu,
@@ -652,9 +691,18 @@ class PeriodPayrollController extends Controller
                     ]);
             }
 
+
+            $unik_name_excel = 'Periode_'.$period_payroll->period.'_'.Str::uuid().'.xlsx';
+
+            $period_payroll->update([
+                'last_excel'=>$unik_name_excel
+            ]);
+
+
+
             DB::commit();
 
-            Excel::store(new PayrollExport($period_payroll,$employees),'payroll_export.xlsx','local');
+            Excel::store(new PayrollExport($period_payroll, $employees), $unik_name_excel, 'local');
 
 
             return response()->json([
@@ -712,9 +760,9 @@ class PeriodPayrollController extends Controller
         }
     }
 
-    function export(){
-        // Excel::store(new PayrollExport($payroll),'payroll_export.xlsx','local');
-        // return Excel::download(new PayrollExport($payroll),'payroll_export.xlsx');
-        // return 'export';
+    function export()
+    {
+        $path = storage_path('app\\'.request()->get('a'));
+        return response()->download($path);
     }
 }
