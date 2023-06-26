@@ -77,6 +77,9 @@
                 <b-td>{{data?.hour_overtime_start}}</b-td>
                 <b-td>{{data?.hour_overtime_end}}</b-td>
                 <b-td>{{data?.duration_overtime}}</b-td>
+                <!-- <b-td>{{data?.hour_overtime_job_order_start}}</b-td>
+                <b-td>{{data?.hour_overtime_job_order_end}}</b-td>
+                <b-td>{{data?.duration_overtime_job_order}}</b-td>-->
               </b-tr>
             </template>
           </b-tbody>

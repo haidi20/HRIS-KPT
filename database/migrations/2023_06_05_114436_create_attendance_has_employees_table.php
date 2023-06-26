@@ -16,9 +16,9 @@ class CreateAttendanceHasEmployeesTable extends Migration
         Schema::create('attendance_has_employees', function (Blueprint $table) {
             $table->id();
             // $table->string('pin');
+            // $table->string('cloud_id');
             $table->date('date');
             $table->foreignId('employee_id')->nullable();
-            // $table->string('cloud_id');
             $table->datetime('hour_start')->nullable();
             $table->datetime('hour_end')->nullable();
             $table->integer('duration_work')->nullable(); // dalam bentuk menit

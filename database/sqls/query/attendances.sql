@@ -42,7 +42,7 @@ having COUNT(date) > 1;
 delete from
     attendance_has_employees
 where
-    MONTH(date) = '06'
+    MONTH(date) = '05'
     AND YEAR(date) = '2023';
 
 select * from employees where id = 19;
