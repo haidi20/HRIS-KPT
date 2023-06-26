@@ -354,7 +354,7 @@
         <td><br></td>
         <td>{{$payroll->jumlah_jam_rate_lembur}}</td>
         <td>Jam</td>
-        <td colspan="2">{{$payroll->pendapatan_lembur}}</td>
+        <td data-format="#,##" colspan="2">{{$payroll->pendapatan_lembur}}</td>
         <td>2. Kecelakaan (JKK)</td>
         <td><br></td>
         <td><br></td>
