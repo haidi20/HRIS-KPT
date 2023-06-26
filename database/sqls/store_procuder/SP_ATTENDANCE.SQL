@@ -1,8 +1,9 @@
--- Active: 1685931372338@@127.0.0.1@3306@hris_kpt
+DROP PROCEDURE IF EXISTS `SP_ATTENDANCE`;
 
-DROP VIEW IF EXISTS `VW_ATTENDANCE`;
+DELIMITER /
 
-CREATE VIEW VW_ATTENDANCE AS 
+CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
+(25)) BEGIN 
 	SELECT
 	    DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	    em.id as employee_id,
@@ -251,6 +252,7 @@ CREATE VIEW VW_ATTENDANCE AS
 	    -- af.pin = 23
 	    -- AND
 	    DATE_FORMAT(af.scan_date, "%H:%i") >= wh.start_time
+	    AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = DATE_FILTER
 	GROUP BY
 	    -- af.pin,
 	    DATE_FORMAT(af.scan_date, "%Y-%m-%d"),
@@ -276,3 +278,8 @@ CREATE VIEW VW_ATTENDANCE AS
 	    DATE_FORMAT(jt.datetime_end, "%Y-%m-%d"),
 	    duration_overtime_job_order -- af.cloud_id,
 	    -- em.name
+	;
+	END / 
+
+
+DELIMITER ;

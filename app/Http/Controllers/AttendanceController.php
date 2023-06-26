@@ -321,7 +321,9 @@ class AttendanceController extends Controller
     {
         set_time_limit(840); // 14 menit
         $dateNow = Carbon::now()->format("Y-m-d");
+        $monthNow = Carbon::now()->format("Y-m");
         $date = request("date", $dateNow);
+        $month = Carbon::parse(request("month", $monthNow));
         $dateSecond = request("date_second", $dateNow);
 
         if (request("date_start") != null) {
@@ -331,65 +333,109 @@ class AttendanceController extends Controller
 
         $date = Carbon::parse($date)->format("Y-m-d");
         $dateSecond = Carbon::parse($dateSecond)->format("Y-m-d");
+        $dateRange = $this->dateRange($month->format("Y-m"));
 
-        $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
-        $attendanceFingerspot->map(function ($query) {
-            AttendanceHasEmployee::updateOrCreate(
-                [
-                    "pin" => $query->pin,
-                    "date" => $query->date,
-                ],
-                [
-                    "hour_start" => $query->hour_start,
-                    "hour_end" => $query->hour_end,
-                    "duration_work" => $query->duration_work,
-                    "hour_rest_start" => $query->hour_rest_start,
-                    "hour_rest_end" => $query->hour_rest_end,
-                    "duration_rest" => $query->duration_rest,
-                    "hour_overtime_start" => $query->hour_overtime_start,
-                    "hour_overtime_end" => $query->hour_overtime_end,
-                    "duration_overtime" => $query->duration_overtime,
-                    "hour_overtime_job_order_start" => $query->hour_overtime_job_order_start,
-                    "hour_overtime_job_order_end" => $query->hour_overtime_job_order_end,
-                    "duration_overtime_job_order" => $query->duration_overtime_job_order,
-                    // "date_overtime_job_order_start" => $query->date_overtime_job_order_start,
-                    // "date_overtime_job_order_end" => $query->date_overtime_job_order_end,
-                    "employee_id" => $query->employee_id,
-                    // "name" => $query->name,
-                    "cloud_id" => $query->cloud_id,
-                ],
-            );
-        });
+        // return $getAttendance;
 
-        if ($dateSecond != null) {
-            $attendanceFingerspot = VwAttendance::whereDate("date", $dateSecond)->get();
-            $attendanceFingerspot->map(function ($query) {
+        // $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
+        // $attendanceFingerspot->map(function ($query) {
+        if ($month != null) {
+            foreach ($dateRange as $index => $date) {
+                $spAttendance = "CALL sp_attendance('{$date}')";
+                $getAttendance = DB::select($spAttendance);
+
+                foreach ($getAttendance as $index => $item) {
+                    AttendanceHasEmployee::updateOrCreate(
+                        [
+                            // "pin" => $item->pin,
+                            "employee_id" => $item->employee_id,
+                            "date" => $item->date,
+                        ],
+                        [
+                            "hour_start" => $item->hour_start,
+                            "hour_end" => $item->hour_end,
+                            "duration_work" => $item->duration_work,
+                            "hour_rest_start" => $item->hour_rest_start,
+                            "hour_rest_end" => $item->hour_rest_end,
+                            "duration_rest" => $item->duration_rest,
+                            "hour_overtime_start" => $item->hour_overtime_start,
+                            "hour_overtime_end" => $item->hour_overtime_end,
+                            "duration_overtime" => $item->duration_overtime,
+                            "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
+                            "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
+                            "duration_overtime_job_order" => $item->duration_overtime_job_order,
+                            // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
+                            // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
+                            // "name" => $item->name,
+                            // "cloud_id" => $item->cloud_id,
+                        ],
+                    );
+                }
+            }
+        } else {
+            $spAttendance = "CALL sp_attendance('{$date}')";
+            $getAttendance = DB::select($spAttendance);
+
+            foreach ($getAttendance as $index => $item) {
                 AttendanceHasEmployee::updateOrCreate(
                     [
-                        "pin" => $query->pin,
-                        "date" => $query->date,
+                        // "pin" => $item->pin,
+                        "employee_id" => $item->employee_id,
+                        "date" => $item->date,
                     ],
                     [
-                        "hour_start" => $query->hour_start,
-                        "hour_end" => $query->hour_end,
-                        "duration_work" => $query->duration_work,
-                        "hour_rest_start" => $query->hour_rest_start,
-                        "hour_rest_end" => $query->hour_rest_end,
-                        "duration_rest" => $query->duration_rest,
-                        "hour_overtime_start" => $query->hour_overtime_start,
-                        "hour_overtime_end" => $query->hour_overtime_end,
-                        "duration_overtime" => $query->duration_overtime,
-                        "hour_overtime_job_order_start" => $query->hour_overtime_job_order_start,
-                        "hour_overtime_job_order_end" => $query->hour_overtime_job_order_end,
-                        "duration_overtime_job_order" => $query->duration_overtime_job_order,
-                        // "date_overtime_job_order_start" => $query->date_overtime_job_order_start,
-                        // "date_overtime_job_order_end" => $query->date_overtime_job_order_end,
-                        "employee_id" => $query->employee_id,
-                        // "name" => $query->name,
-                        "cloud_id" => $query->cloud_id,
+                        "hour_start" => $item->hour_start,
+                        "hour_end" => $item->hour_end,
+                        "duration_work" => $item->duration_work,
+                        "hour_rest_start" => $item->hour_rest_start,
+                        "hour_rest_end" => $item->hour_rest_end,
+                        "duration_rest" => $item->duration_rest,
+                        "hour_overtime_start" => $item->hour_overtime_start,
+                        "hour_overtime_end" => $item->hour_overtime_end,
+                        "duration_overtime" => $item->duration_overtime,
+                        "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
+                        "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
+                        "duration_overtime_job_order" => $item->duration_overtime_job_order,
+                        // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
+                        // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
+                        // "name" => $item->name,
+                        // "cloud_id" => $item->cloud_id,
                     ],
                 );
-            });
+            }
+        }
+
+        if ($dateSecond != null) {
+            $spAttendanceSecond = "CALL sp_attendance('{$date}')";
+            $getAttendanceSecond = DB::select($spAttendanceSecond);
+
+            foreach ($getAttendanceSecond as $index => $item) {
+                AttendanceHasEmployee::updateOrCreate(
+                    [
+                        // "pin" => $item->pin,
+                        "employee_id" => $item->employee_id,
+                        "date" => $item->date,
+                    ],
+                    [
+                        "hour_start" => $item->hour_start,
+                        "hour_end" => $item->hour_end,
+                        "duration_work" => $item->duration_work,
+                        "hour_rest_start" => $item->hour_rest_start,
+                        "hour_rest_end" => $item->hour_rest_end,
+                        "duration_rest" => $item->duration_rest,
+                        "hour_overtime_start" => $item->hour_overtime_start,
+                        "hour_overtime_end" => $item->hour_overtime_end,
+                        "duration_overtime" => $item->duration_overtime,
+                        "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
+                        "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
+                        "duration_overtime_job_order" => $item->duration_overtime_job_order,
+                        // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
+                        // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
+                        // "name" => $item->name,
+                        // "cloud_id" => $item->cloud_id,
+                    ],
+                );
+            }
         }
     }
 
