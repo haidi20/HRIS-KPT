@@ -32,6 +32,7 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
+
                         {{-- DATA PERSONAL --}}
                         <div class="tab-pane fade show active" id="personal" role="tabpanel"
                             aria-labelledby="personal-tab">
@@ -337,7 +338,43 @@
                             <div class="form-group row">
                                 <label for="basic_salary" class="col-sm-4 col-form-label">Gaji Pokok</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="basic_salary" name="basic_salary" class="form-control">
+                                    <input type="number" id="basic_salary" name="basic_salary" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="allowance" class="col-sm-4 col-form-label">Uang Saku</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="allowance" name="allowance" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="meal_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Makan Per Hadir</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="meal_allowance_per_attend" name="meal_allowance_per_attend" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="transport_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Transport Per Hadir</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="transport_allowance_per_attend" name="transport_allowance_per_attend" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="attend_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Kehadiran Per Hadir</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="attend_allowance_per_attend" name="attend_allowance_per_attend" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="overtime_rate_per_hour" class="col-sm-4 col-form-label">Tunjangan Lembur Per Jam</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="overtime_rate_per_hour" name="overtime_rate_per_hour" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="vat_per_year" class="col-sm-4 col-form-label">PPN Per Tahun</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="vat_per_year" name="vat_per_year" min="0" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">

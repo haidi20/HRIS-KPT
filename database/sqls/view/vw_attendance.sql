@@ -5,8 +5,9 @@ DROP VIEW IF EXISTS `VW_ATTENDANCE`;
 CREATE VIEW VW_ATTENDANCE AS 
 	SELECT
 	    DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
-	    af.pin,
-	    af.cloud_id,
+	    em.id as employee_id,
+	    -- af.pin,
+	    -- af.cloud_id,
 	    af_hour_start.datetime_start AS hour_start,
 	    af_hour_end.datetime_end AS hour_end,
 	    TIMESTAMPDIFF(
@@ -54,13 +55,17 @@ CREATE VIEW VW_ATTENDANCE AS
 	        MINUTE,
 	        jt.datetime_start,
 	        jt.datetime_end
-	    ) as duration_overtime_job_order,
-	    em.id as employee_id,
-	    em.name
-	FROM attendance_fingerspots af
+	    ) as duration_overtime_job_order -- em.name
+	FROM
+	    attendance_fingerspots af
 	    LEFT JOIN fingers fi ON af.pin = fi.id_finger
 	    LEFT JOIN employees em ON fi.employee_id = em.id
-	    LEFT JOIN job_status_has_parents jt ON fi.employee_id = jt.employee_id AND jt.deleted_at IS NULL AND DATE_FORMAT(jt.datetime_start, "%Y-%m-%d") = DATE_FORMAT(af.scan_date, "%Y-%m-%d") AND jt.status = "overtime"
+	    AND em.employee_status = 'aktif'
+	    AND em.deleted_at IS NULL
+	    LEFT JOIN job_status_has_parents jt ON fi.employee_id = jt.employee_id
+	    AND jt.deleted_at IS NULL
+	    AND DATE_FORMAT(jt.datetime_start, "%Y-%m-%d") = DATE_FORMAT(af.scan_date, "%Y-%m-%d")
+	    AND jt.status = "overtime"
 	    LEFT JOIN (
 	        SELECT *
 	        FROM working_hours
@@ -247,8 +252,9 @@ CREATE VIEW VW_ATTENDANCE AS
 	    -- AND
 	    DATE_FORMAT(af.scan_date, "%H:%i") >= wh.start_time
 	GROUP BY
+	    -- af.pin,
 	    DATE_FORMAT(af.scan_date, "%Y-%m-%d"),
-	    af.pin,
+	    employee_id,
 	    af_hour_start.datetime_start,
 	    af_hour_end.datetime_end,
 	    duration_work,
@@ -268,7 +274,5 @@ CREATE VIEW VW_ATTENDANCE AS
 	    ),
 	    DATE_FORMAT(jt.datetime_start, "%Y-%m-%d"),
 	    DATE_FORMAT(jt.datetime_end, "%Y-%m-%d"),
-	    duration_overtime_job_order,
-	    af.cloud_id,
-	    employee_id,
-	    em.name
+	    duration_overtime_job_order -- af.cloud_id,
+	    -- em.name

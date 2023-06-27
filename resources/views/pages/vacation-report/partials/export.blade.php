@@ -5,7 +5,7 @@
     <tr>
         <td colspan="7" style="font-size: 28px; font-weight: bold; text-align: center; vertical-align: middle;">
             {{-- <img src="{{ public_path('/assets/img/logo.png') }}" alt="" class="" width="80%"> --}}
-            <h3 style="margin-top: 10px; padding-left: 30px;">PT KARYA PACIFIC TEKNIK SHIPYARD</h3>
+            <h3 style="margin-top: 10px; padding-left: 50px;">PT KARYA PACIFIC TEKNIK SHIPYARD</h3>
         </td>
     </tr>
     <thead>

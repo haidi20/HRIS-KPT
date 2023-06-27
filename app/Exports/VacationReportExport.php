@@ -22,7 +22,7 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
 
     public function title(): string
     {
-        return 'Data Cuti';
+        return 'Laporan Cuti';
     }
 
     public function drawings()
@@ -32,7 +32,7 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
         $drawing->setDescription('This is logo');
         $drawing->setPath(public_path('/assets/img/logo.png'));
         $drawing->setHeight(45);
-        $drawing->setCoordinates('A1');
+        $drawing->setCoordinates('B1');
 
         return $drawing;
     }
@@ -46,14 +46,54 @@ class VacationReportExport implements FromView, WithTitle, ShouldAutoSize, WithS
 
     public function styles(Worksheet $sheet)
     {
-        $range = 'A2:A1';
-        $style = [
+
+        $alignmentStyle = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                 'wrapText' => true,
             ],
         ];
-        $sheet->getStyle($range)->applyFromArray($style);
+
+        $allDataRange = $sheet->calculateWorksheetDimension();
+        $sheet->getStyle($allDataRange)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        $sheet->getStyle($allDataRange)->applyFromArray($alignmentStyle);
+
+        // BAGIAN : TANGGAL
+        $sheet->getStyle('A2:G2')->applyFromArray([
+            'fill' => [
+                'fillType' => 'solid',
+                'rotation' => 0,
+                'color' => ['rgb' => '000000'],
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+        ]);
+
+        $columnCount = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString('A');
+        $maxRow = $sheet->getHighestRow();
+
+        for ($row = 3; $row <= $maxRow; $row++) {
+            for ($column = 1; $column <= 7; $column++) {
+                $range = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnCount + $column - 1) . $row;
+                $color = $row % 2 == 0 ? 'fcf9ce' : 'fbf49b';
+                $sheet->getStyle($range)->applyFromArray([
+                    'fill' => [
+                        'fillType' => 'solid',
+                        'rotation' => 0,
+                        'startColor' => ['rgb' => $color],
+                        'endColor' => ['rgb' => $color],
+                    ],
+                ]);
+            }
+        }
     }
 }
