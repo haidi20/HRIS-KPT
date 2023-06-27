@@ -193,6 +193,9 @@ export default {
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
             });
+            this.$store.commit("jobOrder/UPDATE_IS_DISABLED_BTN_SEND", {
+                value: false,
+            });
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
                 form_type: "edit",
                 form_type_parent: "edit",
