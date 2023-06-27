@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
+use App\Models\AttendanceHasEmployee;
+use App\Models\AttendancePayrol;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PayrollController extends Controller
 {
@@ -192,5 +196,70 @@ class PayrollController extends Controller
             "data" => $data,
             // "table" => $table,
         ]);
+    }
+
+    function attendance(){
+        // return request()->all();
+        
+        $employee_id = request()->get('employee_id') ?? '';
+
+        $employee = Employee::findOrFail($employee_id);
+        $month_filter = request()->get('month_filter') ?? '';
+
+        $end_date = Carbon::parse($month_filter.'-25')->format('Y-m-d');
+        $start_date = Carbon::parse($month_filter.'-26')->addMonth(-1)->format('Y-m-d');
+
+        // return [$start_date,$end_date];
+
+        // 
+        $attende_fingers = AttendanceHasEmployee::where('employee_id',$employee_id)
+        ->whereDate('date', '>=',$start_date)
+        ->whereDate('date', '<=',$end_date)
+        ->groupBy('date')
+        ->orderBy('date','asc')
+        ->get();
+
+        // return $sql = Str::replaceArray('?', $attende_fingers->getBindings(), $attende_fingers->toSql());
+
+        foreach ($attende_fingers as $key => $v) {
+            $new_at  = AttendancePayrol::firstOrCreate([
+                'employee_id'=>$employee_id,
+                'date'=>$v->date,
+            ]);
+
+            if($new_at->is_koreksi == 0){
+                $new_at->update([
+                    'hour_start'=>$v->hour_start,
+                    'hour_end'=>$v->hour_end,
+                    'duration_work'=>$v->duration_work,
+
+                    'hour_rest_start'=>$v->hour_rest_start,
+                    'hour_rest_end'=>$v->hour_rest_end,
+                    'duration_rest'=>$v->duration_rest,
+                    
+                    'hour_overtime_start'=>$v->hour_overtime_start,
+                    'hour_overtime_end'=>$v->hour_overtime_end,
+                    'duration_overtime'=>$v->duration_overtime,
+                ]);
+            }
+        }
+
+        // Str
+        // $sql = \str_replace_array('?', $query->getBindings(), $query->toSql());
+        // Str
+
+        // for laravel 5.8^
+        //  return $sql = Str::replaceArray('?', $query->getBindings(), $query->toSql());
+        // \dd($sql);
+        
+        
+        $attendance = AttendancePayrol::where('employee_id',$employee_id)
+        ->whereDate('date', '>=',$start_date)
+        ->whereDate('date', '<=',$end_date)
+        ->get();
+
+        $data = compact('attendance','employee');
+
+        return view("pages.payroll.partials.attendance_ajax", $data);
     }
 }

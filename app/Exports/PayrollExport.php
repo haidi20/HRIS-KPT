@@ -12,6 +12,13 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class PayrollExport implements WithMultipleSheets
 {
+    protected  $period_payroll= null;
+    protected  $employees= null;
+
+    public function __construct($period_payroll,$employees) {
+        $this->period_payroll = $period_payroll;
+        $this->employees = $employees;
+    }
     use Exportable;
     /**
     * @return \Illuminate\Support\Collection
@@ -20,9 +27,11 @@ class PayrollExport implements WithMultipleSheets
     {
         $sheets = [];
 
-        for ($month = 1; $month <= 12; $month++) {
-            $sheets[] = new PayrollExportPerEmployee();
+        foreach ($this->employees as $key => $employee) {
+            $sheets[] = new PayrollExportPerEmployee($this->period_payroll,$employee);
         }
+
+    
 
         return $sheets;
     }

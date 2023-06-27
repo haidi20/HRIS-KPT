@@ -62,6 +62,12 @@
     $(document).ready(function() {
         $('.dataTable').DataTable();
 
+        // 
+
+        $(document).on('click', '.btn-download', function() {
+            window.open($(this).data('download') , '_blank');
+        });
+
         // new Litepicker({
         //         element: document.getElementById('month_filter'),
         //         format: 'YYYY-MM',

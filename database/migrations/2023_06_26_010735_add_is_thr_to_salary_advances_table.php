@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailPayrollsTable extends Migration
+class AddIsThrToSalaryAdvancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateDetailPayrollsTable extends Migration
      */
     public function up()
     {
-        // php artisan make:migration add_importtan_detail_to_detail_payrolls_table --table=detail_payrolls
-        Schema::create('detail_payrolls', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('salary_advances', function (Blueprint $table) {
+            $table->integer('is_thr')->default(0);
         });
     }
 
@@ -27,6 +25,8 @@ class CreateDetailPayrollsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_payrolls');
+        Schema::table('salary_advances', function (Blueprint $table) {
+            //
+        });
     }
 }

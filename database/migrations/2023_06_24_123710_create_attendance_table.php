@@ -15,10 +15,10 @@ class CreateAttendanceTable extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->string('pin');
+            $table->string('pin')->nullable();
             $table->foreignId('employee_id')->nullable();
-            $table->string('cloud_id');
-            $table->date('date');
+            $table->string('cloud_id')->nullable();
+            $table->date('date')->nullable();
             $table->datetime('hour_start')->nullable();
             $table->datetime('hour_end')->nullable();
             $table->integer('duration_work')->nullable(); // dalam bentuk menit
@@ -36,8 +36,6 @@ class CreateAttendanceTable extends Migration
             $table->double("lembur_kali_dua")->default(0);
             $table->double("lembur_kali_tiga")->default(0);
             $table->double("lembur_kali_empat")->default(0);
-
-
 
             $table->integer("is_weekend")->default(0);
             $table->integer("is_vacation")->default(0);
