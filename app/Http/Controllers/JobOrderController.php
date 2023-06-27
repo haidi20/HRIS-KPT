@@ -188,6 +188,9 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
+            $jobOrder->job_id = null;
+            $jobOrder->job_another_name = null;
+
             // kondisi pekerjaan pilih yang "lainnya"
             if (request("job_id") != 'another') {
                 $jobOrder->job_id = request("job_id");
