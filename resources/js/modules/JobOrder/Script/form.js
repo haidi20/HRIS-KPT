@@ -4,6 +4,7 @@ import moment from "moment";
 
 import FormConfirmation from "../View/formConfirmation";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
+import { checkNull } from "../../../utils";
 
 export default {
     data() {
@@ -71,16 +72,15 @@ export default {
         },
         job_id: {
             get() {
-                return this.$store.state.jobOrder.form.job_id;
-            },
-            set(value) {
-                if (value != 'another') {
+                let jobId = this.$store.state.jobOrder.form.job_id;
 
-                    this.is_show_another_job = false;
-                } else {
-                    this.is_show_another_job = true;
+                if (checkNull(jobId) == null) {
+                    jobId = 'another';
                 }
 
+                return jobId;
+            },
+            set(value) {
                 this.$store.commit("jobOrder/INSERT_FORM_JOB_ID", {
                     job_id: value,
                 });
