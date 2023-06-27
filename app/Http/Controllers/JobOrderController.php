@@ -111,29 +111,48 @@ class JobOrderController extends Controller
     {
         $actives = [];
         $result = false;
+        $dataSelecteds = request("data_selecteds");
 
-        foreach (request("data_selecteds") as $index => $item) {
-            $findData = JobOrderHasEmployee::where([
-                "employee_id" => $item["employee_id"],
-                "datetime_end" => null,
-            ])->where("status", "!=", "pending")
-                ->where("job_order_id", "!=", request("job_order_id"));
+        try {
+            if ($dataSelecteds != null) {
+                foreach (request("data_selecteds") as $index => $item) {
+                    $findData = JobOrderHasEmployee::where([
+                        "employee_id" => $item["employee_id"],
+                        "datetime_end" => null,
+                    ])->where("status", "!=", "pending")
+                        ->where("job_order_id", "!=", request("job_order_id"));
 
-            if ($findData->count() > 0) {
-                $result = true;
-                $getData = $findData
-                    ->select("employee_id", "job_order_id", "status")
-                    ->first();
+                    if ($findData->count() > 0) {
+                        $result = true;
+                        $getData = $findData
+                            ->select("employee_id", "job_order_id", "status")
+                            ->first();
 
-                array_push($actives, $getData);
+                        array_push($actives, $getData);
+                    }
+                }
             }
-        }
 
-        return response()->json([
-            "actives" => $actives,
-            "request" => request()->all(),
-            "result" => $result,
-        ]);
+            return response()->json([
+                "actives" => $actives,
+                "request" => request()->all(),
+                "result" => $result,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal cari status karyawan",
+            ], 500);
+        }
     }
 
     public function store()

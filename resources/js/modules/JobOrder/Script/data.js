@@ -94,6 +94,9 @@ export default {
                 form_type: status,
                 form_type_parent: status,
             });
+            this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", {
+                value: true,
+            });
             this.$bvModal.show("data_employee");
             this.$bvModal.hide("action_list");
         },
