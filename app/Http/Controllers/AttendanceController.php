@@ -335,6 +335,25 @@ class AttendanceController extends Controller
         $dateSecond = Carbon::parse($dateSecond)->format("Y-m-d");
         $dateRange = $this->dateRange($month->format("Y-m"));
 
+        $conditionHourEnd = function ($item) {
+            $result = $item->hour_end;
+
+            if ($item->hour_overtime_start != null) {
+                if ($item->hour_end > $item->hour_overtime_start) {
+                    return $item->hour_overtime_start;
+                }
+            }
+
+            return $result;
+        };
+
+        $differentMinuteWork = function ($item, $hourEnd) {
+            $hourStart = Carbon::parse($item->hour_start);
+            $hourEnd = Carbon::parse($hourEnd);
+
+            return $hourStart->diffInMinutes($hourEnd);
+        };
+
         // return $getAttendance;
 
         // $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
@@ -353,8 +372,9 @@ class AttendanceController extends Controller
                         ],
                         [
                             "hour_start" => $item->hour_start,
-                            "hour_end" => $item->hour_end,
-                            "duration_work" => $item->duration_work,
+                            "hour_end" => $conditionHourEnd($item),
+                            // "duration_work" => $item->duration_work,
+                            "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                             "hour_rest_start" => $item->hour_rest_start,
                             "hour_rest_end" => $item->hour_rest_end,
                             "duration_rest" => $item->duration_rest,
@@ -385,8 +405,8 @@ class AttendanceController extends Controller
                     ],
                     [
                         "hour_start" => $item->hour_start,
-                        "hour_end" => $item->hour_end,
-                        "duration_work" => $item->duration_work,
+                        "hour_end" => $conditionHourEnd($item),
+                        "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                         "hour_rest_start" => $item->hour_rest_start,
                         "hour_rest_end" => $item->hour_rest_end,
                         "duration_rest" => $item->duration_rest,
@@ -418,8 +438,8 @@ class AttendanceController extends Controller
                     ],
                     [
                         "hour_start" => $item->hour_start,
-                        "hour_end" => $item->hour_end,
-                        "duration_work" => $item->duration_work,
+                        "hour_end" => $conditionHourEnd($item),
+                        "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                         "hour_rest_start" => $item->hour_rest_start,
                         "hour_rest_end" => $item->hour_rest_end,
                         "duration_rest" => $item->duration_rest,

@@ -56,6 +56,9 @@
               <b-th>Jam Mulai Lembur</b-th>
               <b-th>Jam Selesai Lembur</b-th>
               <b-th>Durasi Lembur</b-th>
+              <!-- <b-th>Jam Mulai Lembur Job Order</b-th>
+              <b-th>Jam Selesai Lembur Job Order</b-th>
+              <b-th>Durasi Lembur Job Order</b-th>-->
             </b-tr>
           </b-thead>
           <b-tbody>
