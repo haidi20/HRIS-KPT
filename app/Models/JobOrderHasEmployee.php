@@ -15,6 +15,7 @@ class JobOrderHasEmployee extends Model
         "employee_name", "position_name",
         "project_name", "creator_name", "status_data",
         "status_color", "status_readable", 'status_clone',
+        "is_add_information",
     ];
 
     protected $fillable = [
@@ -100,5 +101,11 @@ class JobOrderHasEmployee extends Model
         if ($this->jobOrder) {
             return $this->jobOrder->creator_name;
         }
+    }
+
+    // data dari server tidak perlu tampilkan informasi lebih lanjut
+    public function getIsAddInformationAttribute()
+    {
+        return false;
     }
 }

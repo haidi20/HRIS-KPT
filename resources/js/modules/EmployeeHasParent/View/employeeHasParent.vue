@@ -113,16 +113,17 @@ export default {
       //   console.info(this.getParentName);
 
       if (this.getParentName == "job_order") {
+        // console.info(this.getJobOrderFormKind);
+        const getValidationEmployee = await this.getValidationEmployee();
+
+        if (getValidationEmployee) {
+          return false;
+        } else {
+          this.$bvModal.hide("data_employee");
+        }
+
         if (this.getJobOrderFormKind == null) {
           this.onSend();
-        } else {
-          const getValidationEmployee = await this.getValidationEmployee();
-
-          if (getValidationEmployee) {
-            return false;
-          } else {
-            this.$bvModal.hide("data_employee");
-          }
         }
       } else {
         this.$bvModal.hide("data_employee");
@@ -211,7 +212,7 @@ export default {
           data_selecteds: [...this.getData],
         };
 
-        console.info(request);
+        // console.info(request);
 
         axios
           .post(`${this.getBaseUrl}/api/v1/job-order/find-employee-status`, {

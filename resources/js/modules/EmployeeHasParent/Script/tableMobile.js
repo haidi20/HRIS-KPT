@@ -280,7 +280,8 @@ export default {
             if (
                 item?.job_order_id
                 // && item?.status_data == 'new'
-                && this.getJobOrderFormKind != null
+                // && this.getJobOrderFormKind != null
+                && item?.is_add_information
             ) {
                 result = true;
             }
