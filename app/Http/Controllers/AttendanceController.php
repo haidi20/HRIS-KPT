@@ -33,7 +33,7 @@ class AttendanceController extends Controller
 
     public function fetchDataMain()
     {
-        $result = [];
+        $data = [];
         $positionId = request("position_id");
         $month = Carbon::parse(request("month"));
         // $dateRange = $this->dateRange($month->format("Y-m"));
@@ -44,9 +44,23 @@ class AttendanceController extends Controller
             $employees = $employees->where("position_id", $positionId);
         }
 
+        $setTime = function ($time, $isNull = false) {
+            $result = "00:00";
+
+            if ($isNull) {
+                $result = null;
+            }
+
+            if ($time != null) {
+                $result = Carbon::parse($time)->format("H:i");
+            }
+
+            return $result;
+        };
+
         $employees = $employees->orderBy("name", "desc")->get();
 
-        $result = $employees->map(function ($employee) use ($dateRange, $month) {
+        $data = $employees->map(function ($employee) use ($dateRange, $month, $setTime) {
             $mainData = [
                 'id_finger' => $employee->id_finger,
                 'employee_name' => $employee->name,
@@ -60,10 +74,10 @@ class AttendanceController extends Controller
                 if ($attendanceHasEmployee) {
                     $mainData[$date] = (object) [
                         "is_exists" => true,
-                        "hour_start" => $this->setTime($attendanceHasEmployee->hour_start),
-                        "hour_rest_start" => $this->setTime($attendanceHasEmployee->hour_rest_start),
-                        "hour_rest_end" => $this->setTime($attendanceHasEmployee->hour_rest_end),
-                        "hour_end" => $this->setTime($attendanceHasEmployee->hour_end),
+                        "hour_start" => $setTime($attendanceHasEmployee->hour_start),
+                        "hour_rest_start" => $setTime($attendanceHasEmployee->hour_rest_start),
+                        "hour_rest_end" => $setTime($attendanceHasEmployee->hour_rest_end),
+                        "hour_end" => $setTime($attendanceHasEmployee->hour_end),
                     ];
                 } else {
                     $mainData[$date] = (object) [
@@ -80,7 +94,7 @@ class AttendanceController extends Controller
         });
 
         return response()->json([
-            "data" => $result,
+            "data" => $data,
             "dateRange" => $dateRange,
             "request" => request()->all(),
         ]);
@@ -477,21 +491,6 @@ class AttendanceController extends Controller
         //     "date" => $date,
         //     // "data" => $result,
         // ]);
-    }
-
-    private function setTime($time, $isNull = false)
-    {
-        if ($isNull) {
-            $result = null;
-        } else {
-            $result = "00:00";
-        }
-
-        if ($time != null) {
-            $result = Carbon::parse($time)->format("H:i");
-        }
-
-        return $result;
     }
 
     private function fetchDataMainOld()
