@@ -161,6 +161,11 @@ class JobOrderController extends Controller
 
         $imageController = new ImageController;
         $jobStatusController = new JobStatusController;
+        $user = User::find(request("user_id"));
+        $image = request("image");
+        $date = Carbon::now();
+        $date = $date->setTimeFromTimeString(request("hour_start"));
+        // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
         if (count(request("employee_selecteds")) == 0) {
             return response()->json([
@@ -183,14 +188,14 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
-            $user = User::find(request("user_id"));
-            $image = request("image");
-            $date = Carbon::now();
-            $date = $date->setTimeFromTimeString(request("hour_start"));
-            // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
+            // kondisi pekerjaan pilih yang "lainnya"
+            if (request("job_id") != 'another') {
+                $jobOrder->job_id = request("job_id");
+            } else {
+                $jobOrder->job_another_name = request("job_another_name");
+            }
 
             $jobOrder->project_id = request("project_id");
-            $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
             //note: datetime_end inputnya di storeAction
@@ -561,6 +566,7 @@ class JobOrderController extends Controller
         $jobOrderHistory->job_order_id = $jobOrder->id;
         $jobOrderHistory->project_id = $jobOrder->project_id;
         $jobOrderHistory->job_id = $jobOrder->job_id;
+        $jobOrderHistory->job_another_name = $jobOrder->job_another_name;
         $jobOrderHistory->job_level = $jobOrder->job_level;
         $jobOrderHistory->job_note = $jobOrder->job_note;
         $jobOrderHistory->status = $jobOrder->status;

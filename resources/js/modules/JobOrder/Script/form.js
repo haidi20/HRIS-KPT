@@ -11,6 +11,7 @@ export default {
             label_image: null,
             is_image: false,
             is_loading: false,
+            is_show_another_job: false,
         };
     },
     mounted() {
@@ -38,7 +39,17 @@ export default {
             return this.$store.state.jobOrder.options.categories;
         },
         getOptionJobs() {
-            return this.$store.state.master.data.jobs;
+            let jobs = this.$store.state.master.data.jobs;
+
+            jobs = [
+                ...jobs,
+                {
+                    id: 'another',
+                    name: 'Lainnya'
+                }
+            ];
+
+            return jobs;
         },
         getOptionJobLevels() {
             return this.$store.state.jobOrder.options.job_levels;
@@ -63,6 +74,13 @@ export default {
                 return this.$store.state.jobOrder.form.job_id;
             },
             set(value) {
+                if (value != 'another') {
+
+                    this.is_show_another_job = false;
+                } else {
+                    this.is_show_another_job = true;
+                }
+
                 this.$store.commit("jobOrder/INSERT_FORM_JOB_ID", {
                     job_id: value,
                 });

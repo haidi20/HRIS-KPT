@@ -16,10 +16,11 @@ class CreateJobOrdersTable extends Migration
         Schema::create('job_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
-            $table->foreignId('job_id');
+            $table->foreignId('job_id')->nullable();
             $table->enum('job_level', ['hard', 'middle', 'easy']);
             // gambar di store table image_has_parent
             // $table->string('image')->nullable();
+            $table->string('job_another_name')->nullable();
             $table->text('job_note')->nullable();
             $table->datetime('datetime_start');
             $table->datetime('datetime_end')->nullable();
