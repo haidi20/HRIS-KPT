@@ -30,6 +30,7 @@ class CreateSalaryAdjustmentsTable extends Migration
             $table->string("name");
             $table->enum('type_time', ['forever', 'base_time'])->default('forever');
             $table->boolean("is_month_end")->default(false);
+            $table->boolean("is_thr")->default(false);
             $table->date("month_start")->nullable();
             $table->date("month_end")->nullable();
             // kebutuhan di form employee has parent bagian proyek dan job order
