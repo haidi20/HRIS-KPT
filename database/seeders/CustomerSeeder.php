@@ -20,28 +20,29 @@ class CustomerSeeder extends Seeder
     public function run()
     {
         // Bumdes::truncate();
+        DB::unprepared(file_get_contents(database_path('data/customers.sql')));
 
-        $csvFile = fopen(base_path("database/data/customer.csv"), "r");
+        // $csvFile = fopen(base_path("database/data/customer.csv"), "r");
 
-        $firstline = true;
-        while (($data = fgetcsv($csvFile, 2000, ",")) !== FALSE) {
-            if (!$firstline) {
-                $customer = new Customer([
-                    "code" => $data[0],
-                    "name" => $data[1],
-                    "address" => $data[2],
-                    "terms" => $data[3],
-                    "credit_limits" => $data[4],
-                    "contact_person" => $data[5],
-                    "handphone" => $data[6],
-                    "telephone" => $data[7],
-                ]);
-                $customer->save();
-                // break;
-            }
-            $firstline = false;
-        }
+        // $firstline = true;
+        // while (($data = fgetcsv($csvFile, 2000, ",")) !== FALSE) {
+        //     if (!$firstline) {
+        //         $customer = new Customer([
+        //             "code" => $data[0],
+        //             "name" => $data[1],
+        //             "address" => $data[2],
+        //             "terms" => $data[3],
+        //             "credit_limits" => $data[4],
+        //             "contact_person" => $data[5],
+        //             "handphone" => $data[6],
+        //             "telephone" => $data[7],
+        //         ]);
+        //         $customer->save();
+        //         // break;
+        //     }
+        //     $firstline = false;
+        // }
 
-        fclose($csvFile);
+        // fclose($csvFile);
     }
 }
