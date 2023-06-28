@@ -16,6 +16,24 @@ use Yajra\DataTables\DataTables;
 
 class CustomerController extends Controller
 {
+    public function getLastCode()
+    {
+        $lastCustomer = Customer::latest('id')->first();
+
+        if ($lastCustomer) {
+            $lastCode = $lastCustomer->code;
+            $newCode = substr($lastCode, 0, 3) . (intval(substr($lastCode, 3)) + 1);
+            return response()->json([
+                'lastCode' => $newCode,
+            ]);
+        } else {
+            return response()->json([
+                'lastCode' => null,
+            ]);
+        }
+    }
+
+
     public function index(Datatables $datatables)
     {
         $columns = [
@@ -34,13 +52,13 @@ class CustomerController extends Controller
         ];
 
         if ($datatables->getRequest()->ajax()) {
-            $departmen = Customer::query()
+            $customer = Customer::query()
                 ->select('customers.*', 'companies.name as company_name', 'barges.name as barge_name')
                 ->with('company', 'barge')
                 ->leftJoin('companies', 'customers.company_id', '=', 'companies.id')
                 ->leftJoin('barges', 'customers.barge_id', '=', 'barges.id');
 
-            return $datatables->eloquent($departmen)
+            return $datatables->eloquent($customer)
                 ->filterColumn('code', function (Builder $query, $keyword) {
                     $sql = "customers.code  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -132,15 +150,32 @@ class CustomerController extends Controller
                 $customer = Customer::find(request("id"));
                 $customer->updated_by = Auth::user()->id;
 
+                $customer->code = $customer->code;
+
                 $message = "diperbaharui";
             } else {
                 $customer = new Customer;
                 $customer->created_by = Auth::user()->id;
 
+                $lastCustomer = Customer::latest('id')->first();
+
+                if ($lastCustomer) {
+                    $lastCode = $lastCustomer->code;
+                    // Mendapatkan nomor dari code terakhir
+                    $lastCodeNumber = intval(substr($lastCode, -1));
+                    // Increment nomor
+                    $nextCodeNumber = $lastCodeNumber + 1;
+                    // Membentuk code baru dengan nomor yang diincrement
+                    $nextCode = substr($lastCode, 0, -1) . $nextCodeNumber;
+                    $customer->code = $nextCode;
+                } else {
+                    // Jika tabel kosong, set code awal
+                    $customer->code = $lastCustomer . '1';
+                }
+
                 $message = "ditambahkan";
             }
 
-            $customer->code = request("code");
             $customer->name = request("name");
             $customer->address = request("address");
             $customer->terms = request("terms");

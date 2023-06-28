@@ -55,10 +55,10 @@
         ...initialState
     };
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.dataTable').DataTable();
 
-        state.customers = {!! json_encode($customers) !!};
+        state.customers = {!!json_encode($customers) !!};
         setupSelect();
         // setupDateFilter();
         send();
@@ -66,6 +66,10 @@
 
     function onCreate() {
         clearForm();
+        getLastCode();
+        $("#code-new").show();
+        $("#code-last").hide();
+
         $("#titleForm").html("Tambah Pelanggan");
         onModalAction("formModal", "show");
     }
@@ -74,7 +78,9 @@
         clearForm();
 
         $("#id").val(data.id);
-        $("#code").val(data.code);
+        $("#code-last").val(data.code);
+        $("#code-last").show();
+        $("#code-new").hide();
         $("#name").val(data.name);
         $("#address").val(data.address);
         $("#terms").val(data.terms);
@@ -90,7 +96,7 @@
     }
 
     function send() {
-        $("#form").submit(function(e) {
+        $("#form").submit(function (e) {
             e.preventDefault();
             let fd = new FormData(this);
 
@@ -102,7 +108,7 @@
                 contentType: false,
                 processData: false,
                 dataType: 'json',
-                success: function(responses) {
+                success: function (responses) {
 
                     // console.info(responses);
 
@@ -125,10 +131,10 @@
                         });
 
                         window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                        function(json) {});
+                            function (json) {});
                     }
                 },
-                error: function(err) {
+                error: function (err) {
                     console.log(err.responseJSON.message);
                     const Toast = Swal.mixin({
                         toast: true,
@@ -170,7 +176,7 @@
                     data: {
                         id: data.id
                     },
-                    success: function(responses) {
+                    success: function (responses) {
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -189,9 +195,9 @@
                         });
 
                         window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                        function(json) {});
+                            function (json) {});
                     },
-                    error: function(err) {
+                    error: function (err) {
                         // console.log(err.responseJSON.message);
                         const Toast = Swal.mixin({
                             toast: true,
@@ -232,5 +238,42 @@
         $("#company_id").val("");
         $("#barge_id").val("");
     }
+
+    function getLastCode() {
+        var codeInput = document.getElementById("code-new");
+        var initialCode = "C-00";
+        // Kirim permintaan HTTP ke endpoint getLastCode()
+        // Ganti "URL_API" dengan URL yang sesuai untuk memanggil fungsi getLastCode() di sisi server
+        fetch('customer/get-last-code')
+            .then(response => response.json())
+            .then(data => {
+                // Mendapatkan code terakhir dari respons
+                var lastCode = data.lastCode;
+
+                if (lastCode) { // Jika data terisi, tampilkan langsung pada input #code
+                    // Mengambil nomor dari code terakhir
+                    var lastCodeNumber = parseInt(lastCode.match(/\d+$/)[0]);
+
+                    // Increment nomor
+                    var nextCodeNumber = initialCode + lastCodeNumber;
+                    codeInput.value = nextCodeNumber;
+                    console.log(nextCodeNumber);
+                } else { // Jika data kosong, buatkan kode baru
+                    // Mengambil nomor dari code terakhir
+                    var lastCodeNumber = parseInt(lastCode.match(/\d+$/)[0]);
+
+                    // Increment nomor
+                    var nextCodeNumber = lastCodeNumber + 1;
+
+                    // Membentuk code baru dengan nomor yang diincrement
+                    var nextCode = initialCode + nextCodeNumber;
+
+                    // Memasukkan code baru ke dalam input
+                    codeInput.value = nextCode;
+                }
+            })
+            .catch(error => console.log(error));
+    }
+
 </script>
 @endsection

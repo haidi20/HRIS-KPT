@@ -191,6 +191,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('customer')->name("customer.")->group(function () {
             Route::get('', [CustomerController::class, "index"])->name("index");
+            Route::get('get-last-code', [CustomerController::class, "getLastCode"])->name("getLastCode");
             Route::post('store', [CustomerController::class, "store"])->name("store");
             Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
         });
