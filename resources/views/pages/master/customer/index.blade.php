@@ -74,7 +74,14 @@
         clearForm();
 
         $("#id").val(data.id);
+        $("#code").val(data.code);
         $("#name").val(data.name);
+        $("#address").val(data.address);
+        $("#terms").val(data.terms);
+        $("#credit_limits").val(data.credit_limits);
+        $("#contact_person").val(data.contact_person);
+        $("#handphone").val(data.handphone);
+        $("#telephone").val(data.telephone);
         $("#company_id").val(data.company_id).trigger("change");
         $("#barge_id").val(data.barge_id).trigger("change");
 
@@ -214,8 +221,16 @@
 
     function clearForm() {
         $("#id").val("");
+        $("#code").val("");
         $("#name").val("");
-        $("#description").val("");
+        $("#address").val("");
+        $("#terms").val("");
+        $("#credit_limits").val("");
+        $("#contact_person").val("");
+        $("#handphone").val("");
+        $("#telephone").val("");
+        $("#company_id").val("");
+        $("#barge_id").val("");
     }
 </script>
 @endsection
