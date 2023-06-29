@@ -29,6 +29,7 @@ use App\DataTables\EmployeesDataTable;
 use App\DataTables\EmployeesExpDataTable;
 use App\Models\Departmen;
 use App\Models\salaryAdjustment;
+use App\Models\salaryAdjustmentDetail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
@@ -247,10 +248,11 @@ class EmployeeController extends Controller
                 $finger->save();
             }
 
-            // $salary_adjustment = SalaryAdjustment::create([
-            //     'name' => $request->name,
-            // ]);
-            // $salary_adjustment->save();
+            $salary_adjustment_detail = salaryAdjustmentDetail::firstOrCreate([
+                'employee_id' => $employee->id,
+                'amount' => request('name')
+            ]);
+            $salary_adjustment_detail->save();
 
             DB::commit();
 

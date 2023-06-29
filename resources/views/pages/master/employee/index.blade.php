@@ -131,9 +131,7 @@
     $(document).ready(function () {
         // $('.dataTable').DataTable();
 
-        state.employees = {
-            !!json_encode($employees) !!
-        };
+        state.employees = {!!json_encode($employees) !!};
 
         setupSelect();
         // setupDateFilter();

@@ -27,7 +27,7 @@ class CreateSalaryAdjustmentsTable extends Migration
                 'choose_employee',
             ])->default('all');
             // end employee form
-            $table->string("name");
+            $table->string("name")->nullable();
             $table->enum('type_time', ['forever', 'base_time'])->default('forever');
             $table->boolean("is_month_end")->default(false);
             $table->boolean("is_thr")->default(false);
