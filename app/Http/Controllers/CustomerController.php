@@ -16,13 +16,34 @@ use Yajra\DataTables\DataTables;
 
 class CustomerController extends Controller
 {
+    public function getLastCode()
+    {
+        $lastCustomer = Customer::latest('id')->first();
+
+        if ($lastCustomer) {
+            $lastCode = $lastCustomer->code;
+            $newCode = substr($lastCode, 0, 3) . (intval(substr($lastCode, 3)) + 1);
+            return response()->json([
+                'lastCode' => $newCode,
+            ]);
+        } else {
+            return response()->json([
+                'lastCode' => null,
+            ]);
+        }
+    }
+
+
     public function index(Datatables $datatables)
     {
         $columns = [
             'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
                 return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
             }],
+            'code' => ['name' => 'code', 'title' =>'Kode', 'width' => '50px'],
             'name' => ['name' => 'name', 'title' => 'Nama'],
+            'contact_person' => ['name' => 'contact_person', 'title' => 'Kontak Person'],
+            'handphone' => ['name' => 'handphone', 'title' => 'Handphone'],
             'company_name' => ['name' => 'company_name', 'title' => 'Nama Perusahaan'],
             'barge_name' => ['name' => 'barge_name', 'title' => 'Nama Kapal'],
             'aksi' => [
@@ -31,15 +52,31 @@ class CustomerController extends Controller
         ];
 
         if ($datatables->getRequest()->ajax()) {
-            $departmen = Customer::query()
+            $customer = Customer::query()
                 ->select('customers.*', 'companies.name as company_name', 'barges.name as barge_name')
                 ->with('company', 'barge')
                 ->leftJoin('companies', 'customers.company_id', '=', 'companies.id')
                 ->leftJoin('barges', 'customers.barge_id', '=', 'barges.id');
 
-            return $datatables->eloquent($departmen)
+            return $datatables->eloquent($customer)
+                ->filterColumn('code', function (Builder $query, $keyword) {
+                    $sql = "customers.code  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
                 ->filterColumn('name', function (Builder $query, $keyword) {
                     $sql = "customers.name  like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('contact_person', function (Builder $query, $keyword) {
+                    $sql = "customers.contact_person like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('handphone', function (Builder $query, $keyword) {
+                    $sql = "customers.handphone like ?";
+                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                })
+                ->filterColumn('company_name', function (Builder $query, $keyword) {
+                    $sql = "companies.name like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
                 })
                 ->filterColumn('company_name', function (Builder $query, $keyword) {
@@ -72,7 +109,7 @@ class CustomerController extends Controller
         $html = $datatables->getHtmlBuilder()
             ->columns($columns)
             ->parameters([
-                'order' => [[1, 'desc']],
+                'order' => [[1, 'asc']],
                 'responsive' => true,
                 'autoWidth' => false,
                 'dom' => 'lfrtip',
@@ -113,15 +150,39 @@ class CustomerController extends Controller
                 $customer = Customer::find(request("id"));
                 $customer->updated_by = Auth::user()->id;
 
+                $customer->code = $customer->code;
+
                 $message = "diperbaharui";
             } else {
                 $customer = new Customer;
                 $customer->created_by = Auth::user()->id;
 
+                $lastCustomer = Customer::latest('id')->first();
+
+                if ($lastCustomer) {
+                    $lastCode = $lastCustomer->code;
+                    // Mendapatkan nomor dari code terakhir
+                    $lastCodeNumber = intval(substr($lastCode, -1));
+                    // Increment nomor
+                    $nextCodeNumber = $lastCodeNumber + 1;
+                    // Membentuk code baru dengan nomor yang diincrement
+                    $nextCode = substr($lastCode, 0, -1) . $nextCodeNumber;
+                    $customer->code = $nextCode;
+                } else {
+                    // Jika tabel kosong, set code awal
+                    $customer->code = $lastCustomer . '1';
+                }
+
                 $message = "ditambahkan";
             }
 
             $customer->name = request("name");
+            $customer->address = request("address");
+            $customer->terms = request("terms");
+            $customer->credit_limits = request("credit_limits");
+            $customer->contact_person = request("contact_person");
+            $customer->handphone = request("handphone");
+            $customer->telephone = request("telephone");
             $customer->company_id = request("company_id");
             $customer->barge_id = request("barge_id");
             $customer->save();
