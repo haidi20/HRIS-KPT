@@ -105,6 +105,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('vacation')->name('vacation.')->group(function () {
         Route::get('fetch-data', [VacationController::class, "fetchData"])->name('fetchData');
         Route::post('store', [VacationController::class, "store"])->name('store');
+        Route::post('storeApproval', [VacationController::class, "storeApproval"])->name('storeApproval');
         Route::post('delete', [VacationController::class, "destroy"])->name('delete');
     });
     Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {

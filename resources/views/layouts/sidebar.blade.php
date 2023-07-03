@@ -163,7 +163,7 @@
                     <li class="sidebar-title has-sub">Laporan</li>
                 @endcanany
                 @can('lihat laporan job order')
-                    <li class="sidebar-item {{ isActive('job-order-report') }} ">
+                    <li class="sidebar-item {{ isActive('report/job-order') }} ">
                         <a href="{{ route('report.jobOrder.index') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-bar-graph"></i>
                             <span>Laporan Job Order</span>
@@ -171,7 +171,7 @@
                     </li>
                 @endcan
                 @can('lihat laporan kasbon')
-                    <li class="sidebar-item {{ isActive('salary-advance-report') }} ">
+                    <li class="sidebar-item {{ isActive('report/salary-advance') }} ">
                         <a href="{{ route('report.salaryAdvance.index') }}" class='sidebar-link'>
                             <i class="bi bi-file-earmark-bar-graph"></i>
                             <span>Laporan Kasbon</span>
@@ -179,7 +179,7 @@
                     </li>
                 @endcan
                 @can('lihat laporan surat perintah lembur')
-                    <li class="sidebar-item {{ isActive('overtime-report') }} ">
+                    <li class="sidebar-item {{ isActive('report/overtime') }} ">
                         <a href="{{ route('report.overtime.index') }}" class='sidebar-link'>
                             {{-- <i class="bi bi-cloud-moon"></i> --}}
                             <i class="bi bi-file-earmark-bar-graph"></i>
@@ -188,7 +188,7 @@
                     </li>
                 @endcan
                 @can('lihat laporan cuti')
-                    <li class="sidebar-item {{ isActive('vacation-report') }} ">
+                    <li class="sidebar-item {{ isActive('report/vacation') }} ">
                         <a href="{{ route('report.vacation.index') }}" class='sidebar-link'>
                             {{-- <i class="bi bi-cloud-moon"></i> --}}
                             <i class="bi bi-file-earmark-bar-graph"></i>

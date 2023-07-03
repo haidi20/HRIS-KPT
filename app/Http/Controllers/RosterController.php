@@ -286,13 +286,41 @@ class RosterController extends Controller
         }
     }
 
-    private function storeVacation($getData)
+    public function storeRoster($getData)
+    {
+        $data = [
+            "date_vacation_start" => $getData->date_vacation != null ? $getData->date_vacation[0] : null,
+            "date_vacation_end" => $getData->date_vacation != null ? $getData->date_vacation[1] : null,
+        ];
+
+        if (isset($getData->day_off_one)) {
+            $data['day_off_one'] = $getData->day_off_one;
+        }
+        if (isset($getData->day_off_one)) {
+            $data['day_off_two'] = $getData->day_off_two;
+        }
+
+        Roster::updateOrCreate([
+            "employee_id" => $getData->employee_id,
+            "month" => Carbon::parse($getData->month)->startOfMonth(),
+        ], $data);
+    }
+
+    public function storeVacation($getData)
     {
         $rosterStatusId = RosterStatus::where("initial", "C")->first()->id;
         $rosterDailyData = [];
 
         $start = Carbon::parse($getData->date_vacation[0]);
         $end = Carbon::parse($getData->date_vacation[1]);
+
+        $rosterDaily = RosterDaily::where([
+            "employee_id" => $getData->employee_id,
+            "roster_status_id" => $rosterStatusId,
+        ])
+            ->whereYear("date", $start->format("Y"))
+            ->whereMonth("date", $start->format("m"));
+        $rosterDaily->delete();
 
         while ($start->lte($end)) {
             $rosterDailyData[] = ["date" => $start->format('Y-m-d')];
@@ -311,6 +339,38 @@ class RosterController extends Controller
                 ]
             );
         }
+    }
+
+    public function destroyVacation($getData)
+    {
+        $rosterDailyData = [];
+
+        $start = Carbon::parse($getData->date_vacation[0]);
+        $end = Carbon::parse($getData->date_vacation[1]);
+
+        while ($start->lte($end)) {
+            $rosterDailyData[] = ["date" => $start->format('Y-m-d')];
+            $start->addDay();
+        }
+
+        foreach ($rosterDailyData as $index => $item) {
+            $rosterDaily = RosterDaily::where(
+                [
+                    "employee_id" => $getData->employee_id,
+                    "date" => $item["date"],
+                ],
+            );
+
+            $rosterDaily->delete();
+        }
+
+        Roster::updateOrCreate([
+            "employee_id" => $getData->employee_id,
+            "month" => Carbon::parse($getData->month),
+        ], [
+            "date_vacation_start" => null,
+            "date_vacation_end" => null,
+        ]);
     }
 
     private function storeOff($getData, $nameObject)
@@ -358,18 +418,5 @@ class RosterController extends Controller
                 ]
             );
         }
-    }
-
-    private function storeRoster($getData)
-    {
-        Roster::updateOrCreate([
-            "employee_id" => $getData->employee_id,
-            "month" => Carbon::parse($getData->month),
-        ], [
-            "day_off_one" => $getData->day_off_one,
-            "day_off_two" => $getData->day_off_two,
-            "date_vacation_start" => $getData->date_vacation != null ? $getData->date_vacation[0] : null,
-            "date_vacation_end" => $getData->date_vacation != null ? $getData->date_vacation[1] : null,
-        ]);
     }
 }

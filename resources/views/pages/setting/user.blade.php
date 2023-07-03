@@ -227,6 +227,7 @@
 
         function clearForm() {
 
+            $("#id").val("");
             $("#name").val("");
             $("#email").val("");
             $("#role_id").val("").trigger("change");
