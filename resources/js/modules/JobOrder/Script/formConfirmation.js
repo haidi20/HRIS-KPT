@@ -40,7 +40,14 @@ export default {
             return this.$store.state.jobOrder.options.categories.find(item => item.id == this.form.category)?.name;
         },
         jobName() {
-            return this.$store.state.master.data.jobs.find(item => item.id == this.form.job_id)?.name;
+            const job = this.$store.state.master.data.jobs.find(item => item.id == this.form.job_id);
+            let jobName = job?.name;
+
+            if (job == null) {
+                jobName = this.$store.state.jobOrder.form.job_another_name;
+            }
+
+            return jobName;
         },
         jobLevelName() {
             return this.$store.state.jobOrder.options.job_levels.find(item => item.id == this.form.job_level)?.name;

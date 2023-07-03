@@ -17,8 +17,11 @@ class CreateJobOrderHistoriesTable extends Migration
             $table->id();
             $table->foreignId('job_order_id');
             $table->foreignId('project_id');
-            $table->foreignId('job_id');
+            $table->foreignId('job_id')->nullable();
             $table->enum('job_level', ['hard', 'middle', 'easy']);
+            // gambar di store table image_has_parent
+            // $table->string('image')->nullable();
+            $table->string('job_another_name')->nullable();
             $table->text('job_note')->nullable();
             $table->datetime('datetime_start');
             $table->datetime('datetime_end')->nullable();
@@ -28,8 +31,9 @@ class CreateJobOrderHistoriesTable extends Migration
             // reguler = reguler, daily = harian, fixed_price = borongan
             $table->enum('category', ['reguler', 'daily', 'fixed_price']);
             $table->enum('status', [
-                'active', 'pending', 'finish',
-                'overtime', 'correction', 'assessment',
+                'active', 'pending',
+                'overtime', 'correction',
+                'finish', 'assessment',
             ]);
             $table->text('status_note')->nullable();
             $table->text('note')->nullable();

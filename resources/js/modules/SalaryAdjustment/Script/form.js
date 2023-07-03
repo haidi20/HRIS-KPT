@@ -38,6 +38,9 @@ export default {
         getOptionTypeAdjustments() {
             return this.$store.state.salaryAdjustment.options.type_adjustments;
         },
+        getOptionHolidayAllowances() {
+            return this.$store.state.salaryAdjustment.options.holiday_allowances;
+        },
         getEmployeeHasParentForm() {
             return this.$store.state.employeeHasParent.form;
         },

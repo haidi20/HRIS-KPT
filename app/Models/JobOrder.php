@@ -128,6 +128,8 @@ class JobOrder extends Model
     {
         if ($this->job) {
             return $this->job->name;
+        } else if ($this->job_another_name != null) {
+            return $this->job_another_name;
         }
     }
 

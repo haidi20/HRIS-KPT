@@ -94,6 +94,9 @@ export default {
                 form_type: status,
                 form_type_parent: status,
             });
+            this.$store.commit("employeeHasParent/UPDATE_IS_DISABLED_BTN_SAVE", {
+                value: true,
+            });
             this.$bvModal.show("data_employee");
             this.$bvModal.hide("action_list");
         },
@@ -189,6 +192,9 @@ export default {
             });
             this.$store.commit("jobOrder/UPDATE_IS_ACTIVE_FORM", {
                 value: true,
+            });
+            this.$store.commit("jobOrder/UPDATE_IS_DISABLED_BTN_SEND", {
+                value: false,
             });
             this.$store.commit("employeeHasParent/INSERT_FORM_FORM_TYPE", {
                 form_type: "edit",

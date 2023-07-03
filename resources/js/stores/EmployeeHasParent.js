@@ -95,6 +95,7 @@ const EmployeeHasParent = {
                     if (value.employee_id == item.employee_id) {
                         return {
                             ...value,
+                            is_add_information: true,
                             job_order_id: item.job_order_id,
                             project_name: item.project_name,
                             creator_name: item.creator_name,

@@ -121,6 +121,7 @@ class SalaryAdjustmentController extends Controller
             $salaryAdjustment->amount = request("amount");
             $salaryAdjustment->type_adjustment = request("type_adjustment");
             $salaryAdjustment->note = request("note");
+            $salaryAdjustment->is_thr = request("is_thr");
             $salaryAdjustment->save();
 
             $this->storeSalaryAdjustmentDetail($salaryAdjustment, $employeeBase, $employeeSelecteds);
@@ -229,6 +230,7 @@ class SalaryAdjustmentController extends Controller
                 "type_time" => $salaryAdjustment->type_time,
                 "month_start" => $salaryAdjustment->month_start,
                 "month_end" => $salaryAdjustment->month_end,
+                "is_thr" => $salaryAdjustment->is_thr,
             ]);
 
             $this->storeSalaryAdjustmentDetailHistory($salaryAdjustmentDetail);

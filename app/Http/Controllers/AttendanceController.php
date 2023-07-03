@@ -33,7 +33,7 @@ class AttendanceController extends Controller
 
     public function fetchDataMain()
     {
-        $result = [];
+        $data = [];
         $positionId = request("position_id");
         $month = Carbon::parse(request("month"));
         // $dateRange = $this->dateRange($month->format("Y-m"));
@@ -46,7 +46,7 @@ class AttendanceController extends Controller
 
         $employees = $employees->orderBy("name", "desc")->get();
 
-        $result = $employees->map(function ($employee) use ($dateRange, $month) {
+        $data = $employees->map(function ($employee) use ($dateRange, $month) {
             $mainData = [
                 'id_finger' => $employee->id_finger,
                 'employee_name' => $employee->name,
@@ -80,7 +80,7 @@ class AttendanceController extends Controller
         });
 
         return response()->json([
-            "data" => $result,
+            "data" => $data,
             "dateRange" => $dateRange,
             "request" => request()->all(),
         ]);
@@ -335,6 +335,25 @@ class AttendanceController extends Controller
         $dateSecond = Carbon::parse($dateSecond)->format("Y-m-d");
         $dateRange = $this->dateRange($month->format("Y-m"));
 
+        $conditionHourEnd = function ($item) {
+            $result = $item->hour_end;
+
+            if ($item->hour_overtime_start != null) {
+                if ($item->hour_end > $item->hour_overtime_start) {
+                    return $item->hour_overtime_start;
+                }
+            }
+
+            return $result;
+        };
+
+        $differentMinuteWork = function ($item, $hourEnd) {
+            $hourStart = Carbon::parse($item->hour_start);
+            $hourEnd = Carbon::parse($hourEnd);
+
+            return $hourStart->diffInMinutes($hourEnd);
+        };
+
         // return $getAttendance;
 
         // $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
@@ -353,8 +372,9 @@ class AttendanceController extends Controller
                         ],
                         [
                             "hour_start" => $item->hour_start,
-                            "hour_end" => $item->hour_end,
-                            "duration_work" => $item->duration_work,
+                            "hour_end" => $conditionHourEnd($item),
+                            // "duration_work" => $item->duration_work,
+                            "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                             "hour_rest_start" => $item->hour_rest_start,
                             "hour_rest_end" => $item->hour_rest_end,
                             "duration_rest" => $item->duration_rest,
@@ -385,8 +405,8 @@ class AttendanceController extends Controller
                     ],
                     [
                         "hour_start" => $item->hour_start,
-                        "hour_end" => $item->hour_end,
-                        "duration_work" => $item->duration_work,
+                        "hour_end" => $conditionHourEnd($item),
+                        "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                         "hour_rest_start" => $item->hour_rest_start,
                         "hour_rest_end" => $item->hour_rest_end,
                         "duration_rest" => $item->duration_rest,
@@ -418,8 +438,8 @@ class AttendanceController extends Controller
                     ],
                     [
                         "hour_start" => $item->hour_start,
-                        "hour_end" => $item->hour_end,
-                        "duration_work" => $item->duration_work,
+                        "hour_end" => $conditionHourEnd($item),
+                        "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                         "hour_rest_start" => $item->hour_rest_start,
                         "hour_rest_end" => $item->hour_rest_end,
                         "duration_rest" => $item->duration_rest,
@@ -461,10 +481,10 @@ class AttendanceController extends Controller
 
     private function setTime($time, $isNull = false)
     {
+        $result = "00:00";
+
         if ($isNull) {
             $result = null;
-        } else {
-            $result = "00:00";
         }
 
         if ($time != null) {

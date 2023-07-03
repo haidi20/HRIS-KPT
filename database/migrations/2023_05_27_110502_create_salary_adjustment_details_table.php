@@ -22,6 +22,7 @@ class CreateSalaryAdjustmentDetailsTable extends Migration
             $table->enum('type_time', ['forever', 'base_time']);
             $table->date("month_start")->nullable();
             $table->date("month_end")->nullable();
+            $table->boolean("is_thr")->default(false);
 
             $table->string("name_salary_adjustment")->nullable();
             $table->text("note_salary_adjustment")->nullable();

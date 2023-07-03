@@ -4,6 +4,7 @@ import moment from "moment";
 
 import FormConfirmation from "../View/formConfirmation";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
+import { checkNull } from "../../../utils";
 
 export default {
     data() {
@@ -11,6 +12,7 @@ export default {
             label_image: null,
             is_image: false,
             is_loading: false,
+            is_show_another_job: false,
         };
     },
     mounted() {
@@ -38,7 +40,17 @@ export default {
             return this.$store.state.jobOrder.options.categories;
         },
         getOptionJobs() {
-            return this.$store.state.master.data.jobs;
+            let jobs = this.$store.state.master.data.jobs;
+
+            jobs = [
+                ...jobs,
+                {
+                    id: 'another',
+                    name: 'Lainnya'
+                }
+            ];
+
+            return jobs;
         },
         getOptionJobLevels() {
             return this.$store.state.jobOrder.options.job_levels;
@@ -60,7 +72,13 @@ export default {
         },
         job_id: {
             get() {
-                return this.$store.state.jobOrder.form.job_id;
+                let jobId = this.$store.state.jobOrder.form.job_id;
+
+                if (checkNull(jobId) == null) {
+                    jobId = 'another';
+                }
+
+                return jobId;
             },
             set(value) {
                 this.$store.commit("jobOrder/INSERT_FORM_JOB_ID", {

@@ -40,7 +40,7 @@
                       </b-row>
                       <b-row>
                         <b-col cols>
-                          <span>{{item.job_code}} - {{item.job_name}}</span>
+                          <span>{{item.job_code}} {{item.job_code ? '-' : null}} {{item.job_name}}</span>
                         </b-col>
                       </b-row>
                       <b-row>

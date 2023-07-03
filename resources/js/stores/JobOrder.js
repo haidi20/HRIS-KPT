@@ -68,7 +68,7 @@ const defaultForm = {
     // end form action
     // form_kind: 'create',
     form_kind: null, // kebutuhan logika kirim data dari modal karyawan
-    form_title: "Job Order v1.1",
+    form_title: "Job Order v1.2",
     hour_start: moment().format("HH:mm"),
     date_start: null,
     datetime_start: null,

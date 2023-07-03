@@ -56,6 +56,9 @@
               <b-th>Jam Mulai Lembur</b-th>
               <b-th>Jam Selesai Lembur</b-th>
               <b-th>Durasi Lembur</b-th>
+              <!-- <b-th>Jam Mulai Lembur Job Order</b-th>
+              <b-th>Jam Selesai Lembur Job Order</b-th>
+              <b-th>Durasi Lembur Job Order</b-th>-->
             </b-tr>
           </b-thead>
           <b-tbody>
@@ -74,12 +77,12 @@
                 <b-td>{{data?.hour_rest_start}}</b-td>
                 <b-td>{{data?.hour_rest_end}}</b-td>
                 <b-td>{{data?.duration_rest}}</b-td>
-                <b-td>{{data?.hour_overtime_start}}</b-td>
+                <!-- <b-td>{{data?.hour_overtime_start}}</b-td>
                 <b-td>{{data?.hour_overtime_end}}</b-td>
-                <b-td>{{data?.duration_overtime}}</b-td>
-                <!-- <b-td>{{data?.hour_overtime_job_order_start}}</b-td>
+                <b-td>{{data?.duration_overtime}}</b-td>-->
+                <b-td>{{data?.hour_overtime_job_order_start}}</b-td>
                 <b-td>{{data?.hour_overtime_job_order_end}}</b-td>
-                <b-td>{{data?.duration_overtime_job_order}}</b-td>-->
+                <b-td>{{data?.duration_overtime_job_order}}</b-td>
               </b-tr>
             </template>
           </b-tbody>

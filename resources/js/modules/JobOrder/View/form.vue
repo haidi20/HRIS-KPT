@@ -36,7 +36,18 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="job_id == 'another'">
+      <b-col cols>
+        <b-form-group label="Nama Pekeraan lainnya" label-for="job_another_name" class>
+          <b-form-input
+            v-model="form.job_another_name"
+            id="job_another_name"
+            name="job_another_name"
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row v-if="job_id != 'another'">
       <b-col cols>
         <b-form-group label="Kode" label-for="job_code" class>
           <b-form-input v-model="form.job_code" id="job_code" name="job_code" disabled></b-form-input>

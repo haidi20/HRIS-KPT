@@ -111,29 +111,48 @@ class JobOrderController extends Controller
     {
         $actives = [];
         $result = false;
+        $dataSelecteds = request("data_selecteds");
 
-        foreach (request("data_selecteds") as $index => $item) {
-            $findData = JobOrderHasEmployee::where([
-                "employee_id" => $item["employee_id"],
-                "datetime_end" => null,
-            ])->where("status", "!=", "pending")
-                ->where("job_order_id", "!=", request("job_order_id"));
+        try {
+            if ($dataSelecteds != null) {
+                foreach (request("data_selecteds") as $index => $item) {
+                    $findData = JobOrderHasEmployee::where([
+                        "employee_id" => $item["employee_id"],
+                        "datetime_end" => null,
+                    ])->where("status", "!=", "pending")
+                        ->where("job_order_id", "!=", request("job_order_id"));
 
-            if ($findData->count() > 0) {
-                $result = true;
-                $getData = $findData
-                    ->select("employee_id", "job_order_id", "status")
-                    ->first();
+                    if ($findData->count() > 0) {
+                        $result = true;
+                        $getData = $findData
+                            ->select("employee_id", "job_order_id", "status")
+                            ->first();
 
-                array_push($actives, $getData);
+                        array_push($actives, $getData);
+                    }
+                }
             }
-        }
 
-        return response()->json([
-            "actives" => $actives,
-            "request" => request()->all(),
-            "result" => $result,
-        ]);
+            return response()->json([
+                "actives" => $actives,
+                "request" => request()->all(),
+                "result" => $result,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal cari status karyawan",
+            ], 500);
+        }
     }
 
     public function store()
@@ -142,6 +161,11 @@ class JobOrderController extends Controller
 
         $imageController = new ImageController;
         $jobStatusController = new JobStatusController;
+        $user = User::find(request("user_id"));
+        $image = request("image");
+        $date = Carbon::now();
+        $date = $date->setTimeFromTimeString(request("hour_start"));
+        // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
         if (count(request("employee_selecteds")) == 0) {
             return response()->json([
@@ -164,14 +188,17 @@ class JobOrderController extends Controller
                 $jobOrder->status = "active";
             }
 
-            $user = User::find(request("user_id"));
-            $image = request("image");
-            $date = Carbon::now();
-            $date = $date->setTimeFromTimeString(request("hour_start"));
-            // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
+            $jobOrder->job_id = null;
+            $jobOrder->job_another_name = null;
+
+            // kondisi pekerjaan pilih yang "lainnya"
+            if (request("job_id") != 'another') {
+                $jobOrder->job_id = request("job_id");
+            } else {
+                $jobOrder->job_another_name = request("job_another_name");
+            }
 
             $jobOrder->project_id = request("project_id");
-            $jobOrder->job_id = request("job_id");
             $jobOrder->job_level = request("job_level");
             $jobOrder->job_note = request("job_note");
             //note: datetime_end inputnya di storeAction
@@ -542,6 +569,7 @@ class JobOrderController extends Controller
         $jobOrderHistory->job_order_id = $jobOrder->id;
         $jobOrderHistory->project_id = $jobOrder->project_id;
         $jobOrderHistory->job_id = $jobOrder->job_id;
+        $jobOrderHistory->job_another_name = $jobOrder->job_another_name;
         $jobOrderHistory->job_level = $jobOrder->job_level;
         $jobOrderHistory->job_note = $jobOrder->job_note;
         $jobOrderHistory->status = $jobOrder->status;

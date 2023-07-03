@@ -127,7 +127,18 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols="4">
+        <b-col cols="6">
+          <b-form-checkbox
+            id="is_thr"
+            v-model="form.is_thr"
+            name="is_thr"
+            :value="true"
+            :unchecked-value="false"
+          >
+            <span style="margin-left: 10px">Tunjangan Hari raya</span>
+          </b-form-checkbox>
+        </b-col>
+        <b-col cols="6">
           <b-form-group label="Pilih Karyawan" label-for="image" class>
             <b-button variant="success" @click="onShowEmployee()">Data Karyawan</b-button>
           </b-form-group>
