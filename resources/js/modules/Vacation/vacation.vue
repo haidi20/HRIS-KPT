@@ -4,7 +4,7 @@
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
         <h3 style="display: inline">Cuti</h3>
-        <Table />
+        <Data />
       </b-col>
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
     </b-row>
@@ -15,7 +15,7 @@
 <script>
 import { isMobile } from "../../utils";
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
-import Table from "./table";
+import Data from "./data";
 // import Form from "./form";
 
 export default {
@@ -29,7 +29,7 @@ export default {
     };
   },
   components: {
-    Table,
+    Data,
     // Form,
     VueBottomSheet,
   },

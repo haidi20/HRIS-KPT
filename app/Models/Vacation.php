@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Config;
 
 class Vacation extends Model
 {
@@ -14,7 +15,7 @@ class Vacation extends Model
 
     protected $appends = [
         'employee_name', 'creator_name', 'date_start_readable', 'date_end_readable',
-        'duration_readable', 'position_name',
+        'duration_readable', 'position_name', 'position_id', 'status_color', 'status_readable',
     ];
 
     protected $fillable = [];
@@ -88,5 +89,28 @@ class Vacation extends Model
         } else {
             return null;
         }
+    }
+
+    public function getPositionIdAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_id;
+        } else {
+            return null;
+        }
+    }
+
+    public function getStatusColorAttribute()
+    {
+        $statusApprovalLibrary = Config::get("library.status.{$this->status}");
+
+        return $statusApprovalLibrary["color"];
+    }
+
+    public function getStatusReadableAttribute()
+    {
+        $statusApprovalLibrary = Config::get("library.status.{$this->status}");
+
+        return $statusApprovalLibrary["readable"];
     }
 }
