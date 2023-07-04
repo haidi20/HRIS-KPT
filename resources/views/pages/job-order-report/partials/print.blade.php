@@ -69,9 +69,8 @@
     </style>
 </head>
 
-{{-- <body onload="window.print()"> --}}
-
-<body>
+<body onload="window.print()">
+    {{-- <body> --}}
     {{-- <div class="header">
         <img src="{{ asset('assets/img/logo.png') }}" id="logo" alt="">
         <span>CV. KARYA PACIFIC TEHNIK</span>
