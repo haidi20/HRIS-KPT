@@ -42,6 +42,7 @@ export default {
     };
   },
   mounted() {
+    const user = JSON.parse(this.user);
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
@@ -55,7 +56,7 @@ export default {
     this.$store.dispatch("master/fetchJob");
     this.$store.dispatch("master/fetchPosition");
     this.$store.dispatch("employeeHasParent/fetchOption");
-    this.$store.dispatch("project/fetchDataBaseDateEnd");
+    this.$store.dispatch("project/fetchDataBaseDateEnd", { user_id: user.id });
     this.$store.dispatch("jobOrder/fetchDataReport");
   },
 };

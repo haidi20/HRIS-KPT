@@ -319,6 +319,8 @@ const Project = {
         fetchDataBaseDateEnd: async (context, payload) => {
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
+            console.info(payload);
+
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),

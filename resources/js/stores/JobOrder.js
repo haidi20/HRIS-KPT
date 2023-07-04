@@ -517,7 +517,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    // console.info(responses);
+                    console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

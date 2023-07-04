@@ -126,6 +126,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("report")->name("report.")->group(function () {
         Route::prefix("job-order")->name("jobOrder.")->group(function () {
             Route::get('', [JobOrderReportController::class, "index"])->name("index");
+            Route::get('print', [JobOrderReportController::class, "print"])->name("print");
             Route::get('export', [JobOrderReportController::class, "export"])->name("export");
             Route::get('download', [JobOrderReportController::class, "download"])->name("download");
         });
