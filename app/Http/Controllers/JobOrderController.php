@@ -349,6 +349,7 @@ class JobOrderController extends Controller
         $status = request("status");
         $jobOrderId = request("id");
         $jobOrder = JobOrder::find($jobOrderId);
+        $isAssessmentQc = request("is_assessment_qc");
         $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
 
         try {
@@ -366,10 +367,11 @@ class JobOrderController extends Controller
                 "job_order_id" => $jobOrderId,
             ]);
 
-            if ($allJobOrderAssessmentHasEmployee->count() >= 2) {
+            if ($allJobOrderAssessmentHasEmployee->count() >= 2 || $isAssessmentQc == false) {
 
                 $jobOrder->status = "finish";
                 $jobOrder->datetime_end = $date;
+                $jobOrder->is_assessment_qc = false;
                 $jobOrder->save();
 
                 $this->storeActionJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");

@@ -86,6 +86,7 @@ const defaultForm = {
     job_order_id: null, // kebutuhan penyesuaian gaji
     duration: null,
     duration_readable: null,
+    is_assessment_qc: true,
 }
 
 const JobOrder = {
@@ -215,10 +216,11 @@ const JobOrder = {
             state.data = [...dataClone];
         },
         INSERT_FORM(state, payload) {
-            // console.info(payload);
+            // console.info(payload.form.is_assessment_qc);
             state.form = {
                 ...state.form,
                 ...payload.form,
+                is_assessment_qc: payload.form.is_assessment_qc ? true : false,
             };
 
             if (checkNull(payload.form.datetime_start) != null) {

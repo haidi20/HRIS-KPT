@@ -21,6 +21,9 @@ export default {
         getUserId() {
             return this.$store.state.user?.id;
         },
+        getUserGroupName() {
+            return this.$store.state.user?.group_name;
+        },
         getTitleForm() {
             return this.$store.state.jobOrder.form.form_title;
         },
@@ -80,6 +83,7 @@ export default {
                 status_last: this.form.status_last,
                 status_finish: this.form.status_finish,
                 status_note: this.form.status_note,
+                is_assessment_qc: this.form.is_assessment_qc,
                 employee_selecteds: [...getEmployeeSelecteds],
                 user_id: this.getUserId,
             };
@@ -94,14 +98,14 @@ export default {
                 urlAction = "store-action-assessment";
             }
 
-            console.info(request);
+            // console.info(request);
             // return false;
             this.is_loading = true;
 
             await axios
                 .post(`${this.getBaseUrl}/api/v1/job-order/${urlAction}`, request)
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     this.is_loading = false;
                     const data = responses.data;
 

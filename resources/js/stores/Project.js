@@ -319,7 +319,7 @@ const Project = {
         fetchDataBaseDateEnd: async (context, payload) => {
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
-            console.info(payload);
+            // console.info(payload);
 
             const params = {
                 ...context.state.params,

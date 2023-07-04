@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         onOpenAction(form) {
-            //   console.info(id);
+            // console.info(form);
             this.$store.commit("jobOrder/INSERT_FORM", {
                 form
             });

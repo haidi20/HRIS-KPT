@@ -20,6 +20,20 @@
         </b-form-group>
       </b-col>
     </b-row>
+    <b-row v-if="getUserGroupName != 'Quality Control'">
+      <!-- {{getUserGroupName}} -->
+      <b-col>
+        <b-form-checkbox
+          id="is_assessment_qc"
+          v-model="form.is_assessment_qc"
+          name="is_assessment_qc"
+          :value="true"
+        >
+          <span style="margin-left: 8px">Penilaian QC</span>
+        </b-form-checkbox>
+      </b-col>
+    </b-row>
+    <br />
     <b-row v-if="getConditionImage()">
       <b-col cols>
         <b-form-group label="Masukkan Foto" label-for="image" class>
