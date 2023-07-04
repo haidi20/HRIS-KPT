@@ -142,7 +142,15 @@
                             <h3>Tingkat Kesulitan</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->job_level_name }}</span>
+                            <span>: {{ $data->job_level_readable }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Status</h3>
+                        </td>
+                        <td>
+                            <span>: {{ $data->status_readable }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -164,10 +172,18 @@
                     </tr>
                     <tr>
                         <td>
-                            <h3>Waktu Selesai</h3>
+                            <h3>Estimasi Waktu Selesai</h3>
                         </td>
                         <td>
                             <span>: {{ $data->datetime_estimation_end_readable }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Waktu Selesai</h3>
+                        </td>
+                        <td>
+                            <span>: {{ $data->datetime_end_readable }}</span>
                         </td>
                     </tr>
                 </table>

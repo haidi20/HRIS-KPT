@@ -18,7 +18,7 @@ class JobOrder extends Model
     protected $appends = [
         "status_color", "status_readable", 'status_clone',
         "project_name", "job_name", "job_code", "hour_start", "category_name",
-        "creator_name", "creator_group_name",
+        "creator_name", "creator_group_name", "job_level_readable",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
         "datetime_estimation_end_readable", "datetime_end_readable", "datetime_start_readable",
     ];
@@ -140,6 +140,13 @@ class JobOrder extends Model
         }
     }
 
+    public function getJobLevelReadableAttribute()
+    {
+        $statusJobLevel = Config::get("library.job_level.{$this->job_level}");
+
+        return $statusJobLevel;
+    }
+
     // datetime_estimation_end_readable
     public function getDatetimeEstimationEndReadableAttribute()
     {
@@ -154,7 +161,11 @@ class JobOrder extends Model
 
     public function getDatetimeEndReadableAttribute()
     {
-        return Carbon::parse($this->datetime_end)->locale('id')->isoFormat("dddd, D MMMM YYYY HH:mm");
+        if ($this->datetime_end != null) {
+            return Carbon::parse($this->datetime_end)->locale('id')->isoFormat("dddd, D MMMM YYYY HH:mm");
+        } else {
+            return "-";
+        }
     }
 
     public function getDatetimeStartReadableAttribute()

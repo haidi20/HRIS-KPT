@@ -70,6 +70,11 @@ return [
         'daily' => "Harian",
         'fixed_price' => "Borongan",
     ],
+    "job_level" => [
+        'easy' => "Mudah / Ringan",
+        'middle' => "Sedang / Menengah",
+        'hard' => "Sulit / Berat",
+    ],
     "status" => [
         "review" => [
             "readable" => "menunggu persetujuan",
