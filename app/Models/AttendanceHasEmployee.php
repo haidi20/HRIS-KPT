@@ -13,6 +13,7 @@ class AttendanceHasEmployee extends Model
 
     protected $appends = [
         "duration_work_readable",  "duration_rest_readable",  "duration_overtime_readable",
+        "duration_overtime_job_order_readable",
     ];
 
     protected $guarded = [];
@@ -45,6 +46,17 @@ class AttendanceHasEmployee extends Model
 
         if ($this->hour_overtime_start != null && $this->hour_overtime_end != null) {
             $result = dateTimeDuration($this->hour_overtime_start, $this->hour_overtime_end, true);
+        }
+
+        return $result;
+    }
+
+    public function getDurationOvertimeJobOrderReadableAttribute()
+    {
+        $result = null;
+
+        if ($this->hour_overtime_job_order_start != null && $this->hour_overtime_job_order_end != null) {
+            $result = dateTimeDuration($this->hour_overtime_job_order_start, $this->hour_overtime_job_order_end, true);
         }
 
         return $result;
