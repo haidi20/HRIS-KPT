@@ -124,6 +124,11 @@ class JobStatusController extends Controller
         $jobStatusHasParent->datetime_start = $parent->datetime_start;
         $jobStatusHasParent->note_start = $parent->note_start;
         $jobStatusHasParent->save();
+
+        return (object) [
+            'error' => false,
+            'data' => $jobStatusHasParent,
+        ];
     }
 
     public function destroyJobStatusHasParent($jobOrder, $nameModel)
