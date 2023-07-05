@@ -192,5 +192,16 @@ export default {
 
             return result;
         },
+        getConditionIsAssessmentQc() {
+            let result = false;
+
+            console.info(this.form);
+
+            if (this.getUserGroupName != 'Quality Control' && this.form.form_kind == 'assessment') {
+                result = true;
+            }
+
+            return result;
+        },
     },
 };

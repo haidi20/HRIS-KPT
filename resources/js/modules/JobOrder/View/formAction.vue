@@ -20,8 +20,8 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="getUserGroupName != 'Quality Control'">
-      <!-- {{getUserGroupName}} -->
+    <!-- {{getUserGroupName}} -->
+    <b-row v-if="getConditionIsAssessmentQc()">
       <b-col>
         <b-form-checkbox
           id="is_assessment_qc"
