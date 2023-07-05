@@ -194,7 +194,8 @@ class JobOrder extends Model
     {
         $count =  $this->jobOrderAssessments->count();
 
-        return $count <= 2 ? 2 : $count;
+        // return $count <= 2 ? 2 : $count;
+        return $this->is_assessment_qc ? 2 : 1;
     }
 
     public function getCategoryNameAttribute()

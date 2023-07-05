@@ -63,6 +63,11 @@ class JobStatusController extends Controller
 
             $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
         }
+
+        return (object) [
+            'error' => false,
+            'data' => $jobStatusHasParent,
+        ];
     }
 
     public function storeOvertimeRevision()

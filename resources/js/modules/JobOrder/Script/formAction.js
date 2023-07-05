@@ -195,7 +195,7 @@ export default {
         getConditionIsAssessmentQc() {
             let result = false;
 
-            console.info(this.form);
+            // console.info(this.form);
 
             if (this.getUserGroupName != 'Quality Control' && this.form.form_kind == 'assessment') {
                 result = true;
