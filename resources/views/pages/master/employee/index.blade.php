@@ -249,9 +249,9 @@
         clearFormCreate();
         $("#personal-tab").tab("show");
         $("#titleForm").html("Tambah Karyawan");
-        $("#kepegawaian-tab").hide();
-        $("#salary-tab").hide();
-        $("#finger-tab").hide();
+        // $("#kepegawaian-tab").hide();
+        // $("#salary-tab").hide();
+        // $("#finger-tab").hide();
         // $("#kepegawaian").hide();
 
         $('#birth_date').each(function () {
@@ -281,9 +281,9 @@
         clearForm();
 
         // MEMUNCULKAN TAB
-        $("#kepegawaian-tab").show();
-        $("#salary-tab").show();
-        $("#finger-tab").show();
+        // $("#kepegawaian-tab").show();
+        // $("#salary-tab").show();
+        // $("#finger-tab").show();
 
         // SETUP FORMAT UNTUK TANGGAL MASUK
         function formatEnterDate(dateString) {
