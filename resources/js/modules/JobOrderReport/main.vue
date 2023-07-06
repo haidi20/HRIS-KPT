@@ -47,6 +47,7 @@
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <a href="#" @click="onRead(item)">Lihat</a>
+                <a href="#" @click="onPrint(item)">Cetak</a>
                 <!-- <a href="#" @click="onRead(item)">Lihat</a> -->
               </template>
             </ButtonAction>
@@ -173,6 +174,14 @@ export default {
         form_type_parent: "read",
       });
       this.$bvModal.show("job_order_modal");
+    },
+    onPrint(data) {
+      //   console.info(data);
+
+      const params = `id=${data.id}`;
+      const linkPrint = `${this.getBaseUrl}/report/job-order/print?${params}`;
+      //   console.info(linkPrint);
+      window.open(`${linkPrint}`, "_blank");
     },
     async onExport() {
       const Swal = this.$swal;

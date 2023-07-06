@@ -143,7 +143,7 @@
         </b-form-group>
       </b-col>
       <b-col cols="7" md="6">
-        <b-form-group label="Waktu Selesai " label-for="time_type" class>
+        <b-form-group label="Estimasi Waktu Selesai" label-for="time_type" class>
           <span>
             {{
             form.datetime_estimation_end_readable

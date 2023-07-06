@@ -39,6 +39,14 @@ class JobOrderReportController extends Controller
         ]);
     }
 
+    public function print()
+    {
+        $data = JobOrder::find(request("id"));
+
+        return view("pages.job-order-report.partials.print", compact("data"));
+    }
+
+
     public function export()
     {
         $data = $this->fetchData()->original["jobOrders"];

@@ -26,6 +26,7 @@ class CreateJobOrdersTable extends Migration
             $table->datetime('datetime_end')->nullable();
             $table->datetime('datetime_estimation_end');
             $table->integer('estimation');
+            $table->boolean('is_assessment_qc')->default(true); // true jika perlu penilaian dari QC
             $table->enum('time_type', ['minutes', 'hours', 'days']);
             // reguler = reguler, daily = harian, fixed_price = borongan
             $table->enum('category', ['reguler', 'daily', 'fixed_price']);
