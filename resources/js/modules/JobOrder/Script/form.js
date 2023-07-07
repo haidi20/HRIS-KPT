@@ -171,7 +171,7 @@ export default {
             this.$bvModal.show("job_order_confirmation");
         },
         onChangeIsNotExistsJob() {
-            console.info(this.form.is_not_exists_job);
+            // console.info(this.form.is_not_exists_job);
         },
         getReadOnly() {
             const readOnly = this.$store.getters["jobOrder/getReadOnly"];
