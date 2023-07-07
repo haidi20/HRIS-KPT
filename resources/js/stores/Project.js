@@ -405,11 +405,19 @@ const Project = {
         },
         // proyek yang sedang aktif
         fetchDataBaseRunning: async (context, payload) => {
-            context.commit("UPDATE_LOADING_TABLE", { value: true });
+            // context.commit("UPDATE_LOADING_TABLE", { value: true });
+            context.commit("INSERT_DATA_OPTION", {
+                projects: [
+                    {
+                        id: "loading",
+                        name: "loading...",
+                    }
+                ],
+            });
 
             const params = {
                 ...context.state.params,
-                month: moment(context.state.params.month).format("Y-MM"),
+                month: moment(payload.month).format("Y-MM"),
             }
 
             await axios

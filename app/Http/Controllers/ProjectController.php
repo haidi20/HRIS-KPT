@@ -90,7 +90,13 @@ class ProjectController extends Controller
 
     public function fetchDataBaseRunning()
     {
-        $getProjectIdFromJobOrder = JobOrder::whereNull("datetime_end")->pluck("project_id");
+        $month = Carbon::parse(request("month"));
+
+        $getProjectIdFromJobOrder = JobOrder::whereNull("datetime_end")
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->pluck("project_id");
+
         $projects = Project::whereIn("id", $getProjectIdFromJobOrder)->get();
 
         return response()->json([

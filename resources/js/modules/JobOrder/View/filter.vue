@@ -18,6 +18,7 @@
               type="month"
               placeholder="pilih Bulan"
               style="width: 100%"
+              @change="onChangeMonth()"
             />
           </b-form-group>
         </b-col>
@@ -138,6 +139,13 @@ export default {
     },
     onCloseModal() {
       this.$bvModal.hide("job_order_filter");
+    },
+    onChangeMonth() {
+      //   console.info(this.params.month);
+
+      this.$store.dispatch("project/fetchDataBaseRunning", {
+        month: this.params.month,
+      });
     },
   },
 };

@@ -42,11 +42,15 @@ export default {
         getForm() {
             return this.$store.state.jobOrder.form;
         },
+        getParams() {
+            return this.$store.state.jobOrder.params;
+        },
     },
     watch: {
         getBaseUrl(value) {
             if (value != null) {
                 this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+                this.$store.dispatch("project/fetchDataBaseRunning", { month: this.getParams.month });
             }
         },
         getUserGroupName(value) {
