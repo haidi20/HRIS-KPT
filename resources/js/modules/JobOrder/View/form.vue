@@ -18,7 +18,22 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row style="margin-bottom: 10px;">
+      <b-col cols>
+        <b-col>
+          <b-form-checkbox
+            id="is_not_exists_job"
+            v-model="form.is_not_exists_job"
+            name="is_not_exists_job"
+            :value="true"
+            @change="onChangeIsNotExistsJob"
+          >
+            <span style="margin-left: 8px">Tidak ditemukan Jenis Pekerjaan</span>
+          </b-form-checkbox>
+        </b-col>
+      </b-col>
+    </b-row>
+    <b-row v-if="!form.is_not_exists_job">
       <b-col cols>
         <b-form-group label=" Jenis Pekerjaan" label-for="job_id" class>
           <VueSelect
@@ -33,12 +48,32 @@
             style="min-width: 180px"
             :disabled="getReadOnly()"
           />
+          <!-- <b-form-input
+            list="my-list-id"
+            id="job_id"
+            class="cursor-pointer"
+            v-model="job_id"
+            placeholder="Pilih jenis Pekerjaan"
+            style="min-width: 180px"
+            :disabled="getReadOnly()"
+          ></b-form-input>
+
+          <datalist id="my-list-id">
+            <option v-for="(job, index) in getOptionJobs" :key="index">{{ job.name }}</option>
+          </datalist>-->
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="job_id == 'another'">
+    <b-row v-if="!form.is_not_exists_job">
       <b-col cols>
-        <b-form-group label="Nama Pekeraan lainnya" label-for="job_another_name" class>
+        <b-form-group label="Kode" label-for="job_code" class>
+          <b-form-input v-model="form.job_code" id="job_code" name="job_code" disabled></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row v-if="form.is_not_exists_job">
+      <b-col cols>
+        <b-form-group label="Nama Pekerjaan lainnya" label-for="job_another_name" class>
           <b-form-input
             v-model="form.job_another_name"
             id="job_another_name"
@@ -47,23 +82,25 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row v-if="job_id != 'another'">
-      <b-col cols>
-        <b-form-group label="Kode" label-for="job_code" class>
-          <b-form-input v-model="form.job_code" id="job_code" name="job_code" disabled></b-form-input>
-        </b-form-group>
-      </b-col>
-    </b-row>
     <b-row>
       <b-col cols>
         <b-form-group label="Keterangan Jenis Pekerjaan" label-for="job_note" class>
-          <b-form-input
+          <!-- <b-form-input
             v-model="form.job_note"
             id="job_note"
             name="job_note"
             :disabled="getReadOnly()"
             autocomplete="off"
-          ></b-form-input>
+          ></b-form-input>-->
+          <b-form-textarea
+            v-model="form.job_note"
+            id="job_note"
+            name="job_note"
+            :disabled="getReadOnly()"
+            autocomplete="off"
+            rows="3"
+            max-rows="6"
+          ></b-form-textarea>
         </b-form-group>
       </b-col>
     </b-row>

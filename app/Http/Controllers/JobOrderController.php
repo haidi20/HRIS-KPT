@@ -170,11 +170,20 @@ class JobOrderController extends Controller
         $date = $date->setTimeFromTimeString(request("hour_start"));
         // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
+        $getStoreValidation = $this->storeValidation();
+
+        if ($getStoreValidation) {
+            return response()->json([
+                'success' => false,
+                'message' => $this->storeValidation("result"),
+            ], 400);
+        }
+
         if (count(request("employee_selecteds")) == 0) {
             return response()->json([
                 'success' => false,
                 'message' => "Maaf, harus pilih karyawan terlebih dahulu",
-            ], 500);
+            ], 400);
         }
 
         try {
@@ -195,7 +204,7 @@ class JobOrderController extends Controller
             $jobOrder->job_another_name = null;
 
             // kondisi pekerjaan pilih yang "lainnya"
-            if (request("job_id") != 'another') {
+            if (!request("is_not_exists_job")) {
                 $jobOrder->job_id = request("job_id");
             } else {
                 $jobOrder->job_another_name = request("job_another_name");
@@ -708,5 +717,46 @@ class JobOrderController extends Controller
         }
 
         $jobOrderHasEmployee->delete();
+    }
+
+    private function storeValidation($type = null)
+    {
+        $isError = false;
+        $message = null;
+
+        $lstFormValidations = [
+            (object) [
+                "field" => "project_id",
+                "name" => "Proyek",
+            ],
+            (object) [
+                "field" => "category",
+                "name" => "Kategori",
+            ],
+            (object) [
+                "field" => "estimation",
+                "name" => "Estimasi Waktu",
+            ],
+            (object) [
+                "field" => "job_level",
+                "name" => "Tingkat Kesulitan",
+            ],
+
+        ];
+
+        foreach ($lstFormValidations as $index => $item) {
+            if (request("{$item->field}") == null) {
+                $isError = true;
+                $message = "Maaf, {$item->name} harus di masukkan";
+
+                break;
+            }
+        }
+
+        if ($type == "result") {
+            return $message;
+        }
+
+        return $isError;
     }
 }

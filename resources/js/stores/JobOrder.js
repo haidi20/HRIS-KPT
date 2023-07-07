@@ -87,6 +87,7 @@ const defaultForm = {
     duration: null,
     duration_readable: null,
     is_assessment_qc: true,
+    is_not_exists_job: false,
 }
 
 const JobOrder = {
@@ -222,6 +223,7 @@ const JobOrder = {
                 ...state.form,
                 ...payload.form,
                 is_assessment_qc: payload.form.is_assessment_qc ? true : false,
+                is_not_exists_job: payload.form.job_another_name != null ? true : false,
             };
 
             if (checkNull(payload.form.datetime_start) != null) {
