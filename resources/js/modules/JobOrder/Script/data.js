@@ -331,6 +331,15 @@ export default {
 
             return result;
         },
+        getNameLabelAssessment() {
+            // console.info(this.getUserGroupName);
+
+            if (this.getUserGroupName == 'Pengawas') {
+                return "Selesai";
+            } else {
+                return "Penilaian";
+            }
+        },
         getCheckEmployeeStatus(isShowAlert) {
             const result = this.getDataEmployeeSelected.some(item => item.status != "active");
 
