@@ -341,7 +341,7 @@ export default {
             }
         },
         getCheckEmployeeStatus(isShowAlert) {
-            const result = this.getDataEmployeeSelected.some(item => item.status != "active");
+            const result = this.getDataEmployeeSelected.some(item => item.status == "pending");
 
             // console.info(this.getData);
 

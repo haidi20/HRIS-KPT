@@ -426,6 +426,7 @@ class JobOrderController extends Controller
     // di pakai langsung di menu karyawan ubah status per karyawan
     public function storeActionHasEmployee()
     {
+        $datetime = Carbon::now();
         $dataEmployees = request("data_employees");
         $jobStatusController = new JobStatusController;
 
@@ -433,13 +434,18 @@ class JobOrderController extends Controller
             DB::beginTransaction();
 
             foreach ($dataEmployees as $index => $item) {
-                if ($item["status"] == 'pending') {
-                    $datetime = Carbon::now();
-                } else if (array_key_exists('status_last', $item)) {
-                    if ($item["status_last"] == 'pending') {
-                        $datetime = Carbon::now();
-                    }
-                } else {
+                // coding backupan
+                // if ($item["status"] == 'pending') {
+                //     // $datetime = Carbon::now();
+                // } else if (array_key_exists('status_last', $item)) {
+                //     if ($item["status_last"] == 'pending') {
+                //         // $datetime = Carbon::now();
+                //     }
+                // } else {
+                //     $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
+                // }
+
+                if (!array_key_exists('status_last', $item)) {
                     $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
                 }
 
@@ -462,12 +468,12 @@ class JobOrderController extends Controller
             DB::commit();
 
             if ($statusLast == "overtime") {
-                $checkStillExistsOvertime = JobOrderHasEmployee::where([
+                $checkExistsEmployeeOvertime = JobOrderHasEmployee::where([
                     "status" => "overtime",
                     "job_order_id" => request("job_order_id"),
                 ])->count();
 
-                if ($checkStillExistsOvertime == 0) {
+                if ($checkExistsEmployeeOvertime == 0) {
                     $jobOrder = JobOrder::find(request("job_order_id"));
                     $jobOrder->status = "active";
                     $jobOrder->save();
