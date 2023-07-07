@@ -81,7 +81,9 @@ class JobOrderController extends Controller
             $jobOrders = $jobOrders->where("status", $status);
         }
 
-        if ($projectId != null) {
+        $listNotProject = ["all", "loading"];
+
+        if (!in_array($projectId, $listNotProject)) {
             $jobOrders = $jobOrders->where("project_id", $projectId);
         }
 

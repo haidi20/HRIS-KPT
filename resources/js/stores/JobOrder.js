@@ -68,7 +68,7 @@ const defaultForm = {
     // end form action
     // form_kind: 'create',
     form_kind: null, // kebutuhan logika kirim data dari modal karyawan
-    form_title: "Job Order v1.2",
+    form_title: "Job Order v1.3",
     hour_start: moment().format("HH:mm"),
     date_start: null,
     datetime_start: null,
@@ -104,6 +104,7 @@ const JobOrder = {
             created_by: "creator",
             project_id: null,
             search: null,
+            project_id: "loading",
         },
         form: { ...defaultForm },
         is_active_form: false,
@@ -519,7 +520,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

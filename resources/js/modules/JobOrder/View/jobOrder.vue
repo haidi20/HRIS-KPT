@@ -68,6 +68,7 @@ export default {
     this.$store.dispatch("master/fetchPosition");
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("project/fetchDataBaseDateEnd", { user_id: user.id });
+    this.$store.dispatch("project/fetchDataBaseRunning");
 
     this.$store.commit("employeeHasParent/INSERT_FORM_PARENT_NAME", {
       parent_name: "job_order",
