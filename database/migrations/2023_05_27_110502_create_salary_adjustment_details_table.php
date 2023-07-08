@@ -15,11 +15,11 @@ class CreateSalaryAdjustmentDetailsTable extends Migration
     {
         Schema::create('salary_adjustment_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('salary_adjustment_id');
-            $table->foreignId('employee_id');
-            $table->enum('type_amount', ['nominal', 'percent']);
-            $table->double("amount");
-            $table->enum('type_time', ['forever', 'base_time']);
+            $table->foreignId('salary_adjustment_id')->nullable();
+            $table->foreignId('employee_id')->nullable();
+            $table->enum('type_amount', ['nominal', 'percent'])->default('nominal');
+            $table->double("amount")->nullable();
+            $table->enum('type_time', ['forever', 'base_time'])->default('forever');
             $table->date("month_start")->nullable();
             $table->date("month_end")->nullable();
             $table->boolean("is_thr")->default(false);

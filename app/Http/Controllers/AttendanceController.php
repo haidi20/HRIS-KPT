@@ -121,6 +121,9 @@ class AttendanceController extends Controller
                     $row->hour_overtime_start = $this->setTime($attendanceHasEmployee->hour_overtime_start, true);
                     $row->hour_overtime_end = $this->setTime($attendanceHasEmployee->hour_overtime_end, true);
                     $row->duration_overtime = $attendanceHasEmployee->duration_overtime_readable;
+                    $row->hour_overtime_job_order_start = $this->setTime($attendanceHasEmployee->hour_overtime_job_order_start, true);
+                    $row->hour_overtime_job_order_end = $this->setTime($attendanceHasEmployee->hour_overtime_job_order_end, true);
+                    $row->duration_overtime_job_order = $attendanceHasEmployee->duration_overtime_job_order_readable;
                 } else {
                     $row->is_exists = false;
                 }
@@ -328,6 +331,8 @@ class AttendanceController extends Controller
 
         if (request("date_start") != null) {
             $date = request("date_start");
+        }
+        if (request("date_end") != null) {
             $dateSecond = request("date_end");
         }
 
@@ -358,7 +363,7 @@ class AttendanceController extends Controller
 
         // $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
         // $attendanceFingerspot->map(function ($query) {
-        if ($month != null) {
+        if (request("month") != null) {
             foreach ($dateRange as $index => $date) {
                 $spAttendance = "CALL sp_attendance('{$date}')";
                 $getAttendance = DB::select($spAttendance);

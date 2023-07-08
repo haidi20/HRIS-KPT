@@ -6,6 +6,7 @@ use App\Exports\VacationReportExport;
 use App\Models\Vacation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,10 +18,11 @@ class VacationReportController extends Controller
 {
     public function index()
     {
-        $dateStart = Carbon::now()->startOfMonth();
-        $dateEnd = Carbon::now()->endOfMonth();
+        $vue = true;
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
 
-        return view("pages.vacation-report.index", compact("dateStart", "dateEnd"));
+        return view("pages.vacation-report.index", compact("vue", "user", "baseUrl"));
     }
 
     public function fetchData()

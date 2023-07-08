@@ -78,7 +78,7 @@
         </b-col>
         <b-col cols>
           <span>
-            <b>Waktu Selesai :</b>
+            <b>Estimasi Waktu Selesai :</b>
           </span>
           <br />
           <span>{{form.datetime_estimation_end_readable ? form.datetime_estimation_end_readable : "-"}}</span>

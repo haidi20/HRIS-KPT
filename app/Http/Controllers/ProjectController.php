@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ProjectExport;
 use App\Models\Contractor;
 use App\Models\ContractorHasParent;
+use App\Models\JobOrder;
 use App\Models\OrdinarySeamanHasParent;
 use App\Models\Project;
 use App\Models\User;
@@ -81,6 +82,22 @@ class ProjectController extends Controller
         }
 
         $projects = $projects->orderBy("date_end", "asc")->get();
+
+        return response()->json([
+            "projects" => $projects,
+        ]);
+    }
+
+    public function fetchDataBaseRunning()
+    {
+        $month = Carbon::parse(request("month"));
+
+        $getProjectIdFromJobOrder = JobOrder::whereNull("datetime_end")
+            ->whereYear("datetime_start", $month->format("Y"))
+            ->whereMonth("datetime_start", $month->format("m"))
+            ->pluck("project_id");
+
+        $projects = Project::whereIn("id", $getProjectIdFromJobOrder)->get();
 
         return response()->json([
             "projects" => $projects,

@@ -42,13 +42,13 @@ export default {
         getOptionJobs() {
             let jobs = this.$store.state.master.data.jobs;
 
-            jobs = [
-                ...jobs,
-                {
-                    id: 'another',
-                    name: 'Lainnya'
-                }
-            ];
+            // jobs = [
+            //     ...jobs,
+            //     {
+            //         id: 'another',
+            //         name: 'Lainnya'
+            //     }
+            // ];
 
             return jobs;
         },
@@ -74,9 +74,9 @@ export default {
             get() {
                 let jobId = this.$store.state.jobOrder.form.job_id;
 
-                if (checkNull(jobId) == null) {
-                    jobId = 'another';
-                }
+                // if (checkNull(jobId) == null) {
+                //     jobId = 'another';
+                // }
 
                 return jobId;
             },
@@ -125,7 +125,7 @@ export default {
                 // console.info(findJob);
 
                 this.$store.commit("jobOrder/INSERT_FORM_JOB_CODE", {
-                    job_code: findJob.code,
+                    job_code: findJob?.code,
                 });
             }
         },
@@ -169,6 +169,9 @@ export default {
         },
         onConfirmation() {
             this.$bvModal.show("job_order_confirmation");
+        },
+        onChangeIsNotExistsJob() {
+            // console.info(this.form.is_not_exists_job);
         },
         getReadOnly() {
             const readOnly = this.$store.getters["jobOrder/getReadOnly"];

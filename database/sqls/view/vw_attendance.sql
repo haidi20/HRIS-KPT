@@ -64,6 +64,7 @@ CREATE VIEW VW_ATTENDANCE AS
 	    AND em.deleted_at IS NULL
 	    LEFT JOIN job_status_has_parents jt ON fi.employee_id = jt.employee_id
 	    AND jt.deleted_at IS NULL
+	    AND parent_model = 'App\\Models\\JobOrderHasEmployee'
 	    AND DATE_FORMAT(jt.datetime_start, "%Y-%m-%d") = DATE_FORMAT(af.scan_date, "%Y-%m-%d")
 	    AND jt.status = "overtime"
 	    LEFT JOIN (
@@ -249,6 +250,7 @@ CREATE VIEW VW_ATTENDANCE AS
 	    )
 	WHERE
 	    -- af.pin = 23
+	    -- fi.employee_id = 28
 	    -- AND
 	    DATE_FORMAT(af.scan_date, "%H:%i") >= wh.start_time
 	GROUP BY

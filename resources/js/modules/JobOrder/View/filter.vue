@@ -18,6 +18,23 @@
               type="month"
               placeholder="pilih Bulan"
               style="width: 100%"
+              @change="onChangeMonth()"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Pilih Proyek" label-for="project_id" class>
+            <VueSelect
+              id="project_id"
+              class="cursor-pointer"
+              v-model="params.project_id"
+              :options="getOptionProjects"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 180px"
             />
           </b-form-group>
         </b-col>
@@ -100,8 +117,18 @@ export default {
     getOptionCreateByes() {
       return this.$store.state.jobOrder.options.create_byes;
     },
+    getOptionProjects() {
+      return this.$store.state.project.data_options;
+    },
     params() {
       return this.$store.state.jobOrder.params;
+    },
+  },
+  watch: {
+    getOptionProjects(newValue, oldValue) {
+      this.$store.commit("jobOrder/INSERT_PARAM_PROJECT_ID", {
+        project_id: "all",
+      });
     },
   },
   methods: {
@@ -112,6 +139,13 @@ export default {
     },
     onCloseModal() {
       this.$bvModal.hide("job_order_filter");
+    },
+    onChangeMonth() {
+      //   console.info(this.params.month);
+
+      this.$store.dispatch("project/fetchDataBaseRunning", {
+        month: this.params.month,
+      });
     },
   },
 };

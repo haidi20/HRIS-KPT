@@ -95,6 +95,60 @@ class VacationController extends Controller
         }
     }
 
+    public function storeApproval()
+    {
+        // return request()->all();
+
+        $rosterController = new RosterController;
+        try {
+            DB::beginTransaction();
+
+            $vacation = Vacation::find(request("id"));
+            $vacation->status = request("status");
+            $vacation->date_start = request("date_start");
+            $vacation->date_end = request("date_end");
+            $vacation->save();
+
+            $data = (object) [
+                "date_vacation" => [
+                    request("date_start"),
+                    request("date_end"),
+                ],
+                "month" => request("date_start"),
+                "employee_id" => request("employee_id"),
+                "position_id" => request("position_id"),
+            ];
+
+            if (request("status") == 'accept') {
+                $rosterController->storeRoster($data);
+                $rosterController->storeVacation($data);
+            } else if (request("status") == 'reject') {
+                $rosterController->destroyVacation($data);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => "Berhasil persetujuan cuti",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal persetujuan cuti",
+            ], 500);
+        }
+    }
+
     public function destroy()
     {
         try {

@@ -12,9 +12,52 @@
                <div class="modal-body">
                     <input type="hidden" id="id" name="id" class="form-control">
                     <div class="form-group row">
-                        <label for="name" class="col-sm-4 col-form-label">Nama Pelanggan</label>
+                        <label for=code class="col-sm-4 col-form-label">Kode Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="code-new" name="code" class="form-control" readonly>
+                            <input type="text" id="code-last" name="code" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-4 col-form-label">Nama Perusahaan Pelanggan</label>
                         <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-4 col-form-label">Alamat Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="address" name="address" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="terms" class="col-sm-4 col-form-label">Ketentuan Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="terms" name="terms" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="credit_limits" class="col-sm-4 col-form-label">Batas Kredit Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="number" id="credit_limits" name="credit_limits" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="contact_person" class="col-sm-4 col-form-label">Kontak Person Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="contact_person" name="contact_person" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="handphone" class="col-sm-4 col-form-label">Nomor Handphone Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="number" id="handphone" name="handphone" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="telepon" class="col-sm-4 col-form-label">Nomor Telepon Perusahaan Pelanggan</label>
+                        <div class="col-sm-8">
+                            <input type="number" id="telepon" name="telepon" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">

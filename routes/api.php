@@ -105,6 +105,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('vacation')->name('vacation.')->group(function () {
         Route::get('fetch-data', [VacationController::class, "fetchData"])->name('fetchData');
         Route::post('store', [VacationController::class, "store"])->name('store');
+        Route::post('storeApproval', [VacationController::class, "storeApproval"])->name('storeApproval');
         Route::post('delete', [VacationController::class, "destroy"])->name('delete');
     });
     Route::prefix('salary-advance')->name('salaryAdvance.')->group(function () {
@@ -117,6 +118,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get('fetch-data', [ProjectController::class, "fetchData"])->name('fetchData');
         Route::get('fetch-data-base-joborder-finish', [ProjectController::class, "fetchDataBaseJobOrderFinish"])->name('fetchDataBaseJobOrderFinish');
         Route::get('fetch-data-base-date-end', [ProjectController::class, "fetchDataBaseDateEnd"])->name('fetchDataBaseDateEnd');
+        Route::get('fetch-data-base-running', [ProjectController::class, "fetchDataBaseRunning"])->name('fetchDataBaseRunning');
         Route::post('store', [ProjectController::class, "store"])->name('store');
         Route::post('delete', [ProjectController::class, "destroy"])->name('delete');
     });

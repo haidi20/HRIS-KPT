@@ -24,7 +24,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form id="form" enctype="multipart/form-data" >
+                        <form id="form" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" id="id" name="id" class="form-control" value="{{ $id[0] ?? '' }}">
                             <div class="row">
@@ -156,131 +156,128 @@
 @section('script')
 <script src="{{ asset('assets-mazer/extensions/backup/js/bootstrap-timepicker.min.js') }}"></script>
 <script>
-    $(document).ready(function() {
-            $('.dataTable').DataTable();
-            clearForm();
-            setupSelect();
-            setupTimepicker();
-            send();
-        });
+    $(document).ready(function () {
+        $('.dataTable').DataTable();
+        clearForm();
+        setupSelect();
+        setupTimepicker();
+        send();
+    });
 
-        function onCreate() {
-            clearForm();
-            $("#id").val(data.id);
-            $("#start_time").val(data.start_time);
-            $("#after_work").val(data.after_work);
-            $("#after_work_limit").val(data.after_work_limit);
-            $("#start_rest").val(data.start_rest);
-            $("#end_rest").val(data.end_rest);
-            $("#maximum_delay").val(data.maximum_delay);
-            $("#fastest_time").val(data.fastest_time);
-            $("#overtime_work").val(data.overtime_work);
-            $("#saturday_work_hour").val(data.saturday_work_hour);
-            // $("#titleForm").html("Tambah Pengguna");
-            onModalAction("formModal", "show");
-        }
+    function onCreate() {
+        clearForm();
+        $("#id").val(data.id);
+        $("#start_time").val(data.start_time);
+        $("#after_work").val(data.after_work);
+        $("#after_work_limit").val(data.after_work_limit);
+        $("#start_rest").val(data.start_rest);
+        $("#end_rest").val(data.end_rest);
+        $("#maximum_delay").val(data.maximum_delay);
+        $("#fastest_time").val(data.fastest_time);
+        $("#overtime_work").val(data.overtime_work);
+        $("#saturday_work_hour").val(data.saturday_work_hour);
+        // $("#titleForm").html("Tambah Pengguna");
+        onModalAction("formModal", "show");
+    }
 
-        function onEdit(id) {
-            console.info(id);
-        }
+    function onEdit(id) {
+        console.info(id);
+    }
 
-        function onDelete(id) {
-            console.info(id);
-        }
+    function onDelete(id) {
+        console.info(id);
+    }
 
-        function send() {
-            $("#form").submit(function(e) {
-                e.preventDefault();
-                let fd = new FormData(this);
+    function send() {
+        $("#form").submit(function (e) {
+            e.preventDefault();
+            let fd = new FormData(this);
 
-                $.ajax({
-                    url: "{{ route('master.workingHour.store') }}",
-                    method: 'POST',
-                    data: fd,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(responses) {
+            $.ajax({
+                url: "{{ route('master.workingHour.store') }}",
+                method: 'POST',
+                data: fd,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (responses) {
 
-                        // console.info(responses);
+                    // console.info(responses);
 
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 2500,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                        if (responses.success == true) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: responses.message
-                            });
-
-                            window.location.reload();
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
                         }
-                    },
-                    error: function(err) {
-                        console.log(err.responseJSON.message);
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 4000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-
+                    });
+                    if (responses.success == true) {
                         Toast.fire({
-                            icon: 'error',
-                            title: err.responseJSON.message
+                            icon: 'success',
+                            title: responses.message
                         });
+
+                        window.location.reload();
                     }
-                });
-            });
-        }
+                },
+                error: function (err) {
+                    console.log(err.responseJSON.message);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 4000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
 
-        function setupSelect() {
-            $(".select2").select2();
-        }
-
-        function setupTimepicker() {
-            $('.datetime').timepicker({
-                timeFormat: 'HH:mm',
-                interval: 30,
-                dropdown: true,
-                scrollbar: true,
-                showMeridian: false,
-                snapToStep: true,
-                icons: {
-                    time: 'far fa-clock',
-                    date: 'far fa-calendar',
-                    up: 'fas fa-arrow-up',
-                    down: 'fas fa-arrow-down',
-                    previous: 'fas fa-chevron-left',
-                    next: 'fas fa-chevron-right',
-                    today: 'fas fa-calendar-check',
-                    clear: 'far fa-trash-alt',
-                    close: 'far fa-times-circle'
+                    Toast.fire({
+                        icon: 'error',
+                        title: err.responseJSON.message
+                    });
                 }
             });
+        });
+    }
 
-            var currentdate = new Date();
-            var hours = ('0' + currentdate.getHours()).slice(-2);
-            var minutes = ('0' + currentdate.getMinutes()).slice(-2);
-            var datetime = hours + ":" + minutes;
-        }
+    function setupSelect() {
+        $(".select2").select2();
+    }
 
-        function clearForm() {
-            //
-        }
+    function setupTimepicker() {
+        $('.datetime').timepicker({
+            timeFormat: 'HH:mm',
+            dropdown: true,
+            scrollbar: true,
+            showMeridian: false,
+            snapToStep: true,
+            minuteStep: 1,
+            secondStep: 1,
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'fas fa-arrow-up',
+                down: 'fas fa-arrow-down',
+                previous: 'fas fa-chevron-left',
+                next: 'fas fa-chevron-right',
+                today: 'fas fa-calendar-check',
+                clear: 'far fa-trash-alt',
+                close: 'far fa-times-circle'
+            }
+        });
+    }
+
+    function clearForm() {
+        //
+    }
+
 </script>
 @endsection

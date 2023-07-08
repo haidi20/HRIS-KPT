@@ -82,11 +82,11 @@
           class="action-item"
           @click="onAction('active', 'Aktif Kembali')"
         >Aktif Kembali</div>
-        <!-- <div
+        <div
           v-if="getConditionActionFinish()"
           class="action-item"
           @click="onAction('finish', 'Selesai')"
-        >selesai</div>-->
+        >selesai</div>
         <div
           v-if="getConditionOvertime()"
           class="action-item"

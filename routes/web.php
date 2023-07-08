@@ -126,6 +126,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix("report")->name("report.")->group(function () {
         Route::prefix("job-order")->name("jobOrder.")->group(function () {
             Route::get('', [JobOrderReportController::class, "index"])->name("index");
+            Route::get('print', [JobOrderReportController::class, "print"])->name("print");
             Route::get('export', [JobOrderReportController::class, "export"])->name("export");
             Route::get('download', [JobOrderReportController::class, "download"])->name("download");
         });
@@ -191,6 +192,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::prefix('customer')->name("customer.")->group(function () {
             Route::get('', [CustomerController::class, "index"])->name("index");
+            Route::get('get-last-code', [CustomerController::class, "getLastCode"])->name("getLastCode");
             Route::post('store', [CustomerController::class, "store"])->name("store");
             Route::delete('delete', [CustomerController::class, "destroy"])->name("delete");
         });

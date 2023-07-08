@@ -29,6 +29,12 @@ const Project = {
     state: {
         base_url: null,
         data: [],
+        data_options: [
+            {
+                id: "loading",
+                name: 'loading...',
+            },
+        ],
         params: {
             month: new Date(),
         },
@@ -70,6 +76,10 @@ const Project = {
         },
         INSERT_DATA(state, payload) {
             state.data = [...payload.projects];
+        },
+        INSERT_DATA_OPTION(state, payload) {
+            state.data_options = [];
+            state.data_options = [...payload.projects];
         },
         INSERT_DATA_SELECTED(state, payload) {
             let dataClone = [...state.data];
@@ -319,6 +329,8 @@ const Project = {
         fetchDataBaseDateEnd: async (context, payload) => {
             context.commit("UPDATE_LOADING_TABLE", { value: true });
 
+            // console.info(payload);
+
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
@@ -382,6 +394,51 @@ const Project = {
                     }
 
                     context.commit("INSERT_DATA", {
+                        projects: projects,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
+        // proyek yang sedang aktif
+        fetchDataBaseRunning: async (context, payload) => {
+            // context.commit("UPDATE_LOADING_TABLE", { value: true });
+            context.commit("INSERT_DATA_OPTION", {
+                projects: [
+                    {
+                        id: "loading",
+                        name: "loading...",
+                    }
+                ],
+            });
+
+            const params = {
+                ...context.state.params,
+                month: moment(payload.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/project/fetch-data-base-running`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+                    let projects = data.projects;
+
+                    projects = [
+                        {
+                            id: "all",
+                            name: "semua",
+                        },
+                        ...projects,
+                    ];
+
+                    context.commit("INSERT_DATA_OPTION", {
                         projects: projects,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });

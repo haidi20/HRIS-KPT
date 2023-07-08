@@ -68,7 +68,7 @@ const defaultForm = {
     // end form action
     // form_kind: 'create',
     form_kind: null, // kebutuhan logika kirim data dari modal karyawan
-    form_title: "Job Order v1.2",
+    form_title: "Job Order v1.4",
     hour_start: moment().format("HH:mm"),
     date_start: null,
     datetime_start: null,
@@ -86,6 +86,8 @@ const defaultForm = {
     job_order_id: null, // kebutuhan penyesuaian gaji
     duration: null,
     duration_readable: null,
+    is_assessment_qc: true,
+    is_not_exists_job: false,
 }
 
 const JobOrder = {
@@ -103,6 +105,7 @@ const JobOrder = {
             created_by: "creator",
             project_id: null,
             search: null,
+            project_id: "loading",
         },
         form: { ...defaultForm },
         is_active_form: false,
@@ -215,10 +218,12 @@ const JobOrder = {
             state.data = [...dataClone];
         },
         INSERT_FORM(state, payload) {
-            // console.info(payload);
+            // console.info(payload.form.is_assessment_qc);
             state.form = {
                 ...state.form,
                 ...payload.form,
+                is_assessment_qc: payload.form.is_assessment_qc ? true : false,
+                is_not_exists_job: payload.form.job_another_name != null ? true : false,
             };
 
             if (checkNull(payload.form.datetime_start) != null) {

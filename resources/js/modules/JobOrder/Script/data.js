@@ -42,11 +42,15 @@ export default {
         getForm() {
             return this.$store.state.jobOrder.form;
         },
+        getParams() {
+            return this.$store.state.jobOrder.params;
+        },
     },
     watch: {
         getBaseUrl(value) {
             if (value != null) {
                 this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+                this.$store.dispatch("project/fetchDataBaseRunning", { month: this.getParams.month });
             }
         },
         getUserGroupName(value) {
@@ -59,7 +63,7 @@ export default {
     },
     methods: {
         onOpenAction(form) {
-            //   console.info(id);
+            // console.info(form);
             this.$store.commit("jobOrder/INSERT_FORM", {
                 form
             });
@@ -327,8 +331,17 @@ export default {
 
             return result;
         },
+        getNameLabelAssessment() {
+            // console.info(this.getUserGroupName);
+
+            if (this.getUserGroupName == 'Pengawas') {
+                return "Selesai";
+            } else {
+                return "Penilaian";
+            }
+        },
         getCheckEmployeeStatus(isShowAlert) {
-            const result = this.getDataEmployeeSelected.some(item => item.status != "active");
+            const result = this.getDataEmployeeSelected.some(item => item.status == "pending");
 
             // console.info(this.getData);
 

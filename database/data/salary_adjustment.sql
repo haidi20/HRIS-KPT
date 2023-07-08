@@ -15,9 +15,9 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Dumping data for table hris_kpt.salary_adjustments: ~2 rows (approximately)
-INSERT INTO `salary_adjustments` (`id`, `position_id`, `job_order_id`, `employee_base`, `name`, `type_time`, `is_date_end`, `date_start`, `date_end`, `type_amount`, `amount`, `type_adjustment`, `note`, `created_by`, `updated_by`, `deleted_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-	(1, NULL, NULL, 'all', 'Uang Makan Lembur', 'forever', 0, NULL, NULL, 'nominal', 10000, 'addition', NULL, 1, NULL, NULL, '2023-05-29 02:53:44', '2023-05-29 02:53:44', NULL),
-	(2, NULL, NULL, 'all', 'Uang Lembur', 'forever', 0, NULL, NULL, 'nominal', 12000, 'addition', NULL, 1, NULL, NULL, '2023-05-29 02:54:02', '2023-05-29 02:54:02', NULL);
+INSERT INTO `salary_adjustments` (`id`, `position_id`, `job_order_id`, `project_id`, `employee_base`, `name`, `type_time`, `is_month_end`, `is_thr`, `month_start`, `month_end`, `month_filter_has_parent`, `type_amount`, `amount`, `type_adjustment`, `note`, `created_by`, `updated_by`, `deleted_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+	(1, NULL, NULL, NULL, 'all', 'Uang Makan Lembur', 'forever', 0, 0, NULL, NULL, NULL, 'nominal', 10000, 'addition', NULL, 1, NULL, NULL, '2023-05-29 02:53:44', '2023-05-29 02:53:44', NULL),
+	(2, NULL, NULL, NULL, 'all', 'Uang Lembur', 'forever', 0, 0, NULL, NULL, NULL, 'nominal', 12000, 'addition', NULL, 1, NULL, NULL, '2023-05-29 02:54:02', '2023-05-29 02:54:02', NULL);
 
 -- Dumping data for table hris_kpt.salary_adjustment_details: ~0 rows (approximately)
 INSERT INTO `salary_adjustment_details` (`id`, `salary_adjustment_id`, `employee_id`, `created_by`, `updated_by`, `deleted_by`, `created_at`, `updated_at`, `deleted_at`) VALUES

@@ -49,8 +49,9 @@ class DatabaseSeeder extends Seeder
         // di ganti dengan mysql data/attendance.sql
         // $this->call(AttendanceFingerspotSeeder::class);
         // $this->call(AttendanceHasEmployeeSeeder::class);
-        $this->call(AttendanceSeeder::class);
+        // $this->call(AttendanceSeeder::class);
         $this->call(ProjectSeeder::class);
+        $this->call(CustomerSeeder::class);
 
         // end master
 
@@ -62,6 +63,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(ContractorSeeder::class);
         // $this->call(OrdinarySeamanSeeder::class);
         // $this->call(SalaryAdvanceSeeder::class);
+        $this->call(JobOrderSeeder::class);
         // end data biasa
     }
 }

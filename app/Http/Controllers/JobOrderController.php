@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 class JobOrderController extends Controller
 {
     private $nameModel = "App\Models\JobOrder";
+    private $nameModelJobStatusHasParent = "App\Models\JobStatusHasParent";
     private $nameModelJobOrderHasEmployee = "App\Models\JobOrderHasEmployee";
 
     public function index()
@@ -80,7 +81,9 @@ class JobOrderController extends Controller
             $jobOrders = $jobOrders->where("status", $status);
         }
 
-        if ($projectId != null) {
+        $listNotProject = ["all", "loading"];
+
+        if (!in_array($projectId, $listNotProject)) {
             $jobOrders = $jobOrders->where("project_id", $projectId);
         }
 
@@ -167,11 +170,20 @@ class JobOrderController extends Controller
         $date = $date->setTimeFromTimeString(request("hour_start"));
         // $date = Carbon::createFromFormat("h:m", request("hour_start"))->format("Y-m-d h:m");
 
+        $getStoreValidation = $this->storeValidation();
+
+        if ($getStoreValidation) {
+            return response()->json([
+                'success' => false,
+                'message' => $this->storeValidation("result"),
+            ], 400);
+        }
+
         if (count(request("employee_selecteds")) == 0) {
             return response()->json([
                 'success' => false,
                 'message' => "Maaf, harus pilih karyawan terlebih dahulu",
-            ], 500);
+            ], 400);
         }
 
         try {
@@ -192,7 +204,7 @@ class JobOrderController extends Controller
             $jobOrder->job_another_name = null;
 
             // kondisi pekerjaan pilih yang "lainnya"
-            if (request("job_id") != 'another') {
+            if (!request("is_not_exists_job")) {
                 $jobOrder->job_id = request("job_id");
             } else {
                 $jobOrder->job_another_name = request("job_another_name");
@@ -211,10 +223,10 @@ class JobOrderController extends Controller
             $jobOrder->save();
 
             if (request("id") != null) {
-                $jobStatusController->updateJobStatusHasParent($jobOrder, $this->nameModel);
+                $jobStatusHasParent = $jobStatusController->updateJobStatusHasParent($jobOrder, $this->nameModel);
             } else {
                 // tambah data jobOrderHasStatus hanya ketika data baru
-                $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
+                $jobStatusHasParent = $jobStatusController->storeJobStatusHasParent($jobOrder, null, $date, $this->nameModel);
             }
 
             $this->storeJobOrderHasEmployee($jobOrder, $jobOrder->status, $jobOrder->datetime_start);
@@ -224,9 +236,9 @@ class JobOrderController extends Controller
                 $storeImage = $imageController->storeSingle(
                     $user,
                     $image,
-                    $jobOrder,
-                    $this->nameModel,
-                    "job_orders",
+                    $jobStatusHasParent->data,
+                    $this->nameModelJobStatusHasParent,
+                    "job_has_parents",
                     "_active",
                 );
 
@@ -302,15 +314,15 @@ class JobOrderController extends Controller
                 ], 500);
             }
 
-            $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
-            if (isset($getValidation->error)) {
+            $jobStatusHasParent = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
+            if ($jobStatusHasParent->error) {
                 return response()->json([
                     'success' => false,
-                    'message' => $getValidation->message,
+                    'message' => $jobStatusHasParent->message,
                 ], 500);
             }
 
-            $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
+            $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobStatusHasParent->data);
 
             DB::commit();
 
@@ -348,6 +360,7 @@ class JobOrderController extends Controller
         $statusLast = request("status_last");
         $status = request("status");
         $jobOrderId = request("id");
+        $isAssessmentQc = request("is_assessment_qc");
         $jobOrder = JobOrder::find($jobOrderId);
         $date = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
 
@@ -366,21 +379,23 @@ class JobOrderController extends Controller
                 "job_order_id" => $jobOrderId,
             ]);
 
-            if ($allJobOrderAssessmentHasEmployee->count() >= 2) {
+            if ($allJobOrderAssessmentHasEmployee->count() >= 2 || $isAssessmentQc == false) {
 
                 $jobOrder->status = "finish";
                 $jobOrder->datetime_end = $date;
+                $jobOrder->is_assessment_qc = false;
                 $jobOrder->save();
 
                 $this->storeActionJobOrderHasEmployee($jobOrder, "assessment_finish", $date, "active");
-                $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
+                $jobStatusHasParent = $jobStatusController->storeJobStatusHasParent($jobOrder, "active", $date, $this->nameModel);
+
+                $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobStatusHasParent->data);
             } else {
                 $jobOrder->status = "assessment";
                 $jobOrder->save();
             }
 
             $this->storeJobOrderHistory($jobOrder);
-            $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder);
 
             DB::commit();
 
@@ -411,6 +426,7 @@ class JobOrderController extends Controller
     // di pakai langsung di menu karyawan ubah status per karyawan
     public function storeActionHasEmployee()
     {
+        $datetime = Carbon::now();
         $dataEmployees = request("data_employees");
         $jobStatusController = new JobStatusController;
 
@@ -418,13 +434,18 @@ class JobOrderController extends Controller
             DB::beginTransaction();
 
             foreach ($dataEmployees as $index => $item) {
-                if ($item["status"] == 'pending') {
-                    $datetime = Carbon::now();
-                } else if (array_key_exists('status_last', $item)) {
-                    if ($item["status_last"] == 'pending') {
-                        $datetime = Carbon::now();
-                    }
-                } else {
+                // coding backupan
+                // if ($item["status"] == 'pending') {
+                //     // $datetime = Carbon::now();
+                // } else if (array_key_exists('status_last', $item)) {
+                //     if ($item["status_last"] == 'pending') {
+                //         // $datetime = Carbon::now();
+                //     }
+                // } else {
+                //     $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
+                // }
+
+                if (!array_key_exists('status_last', $item)) {
                     $datetime = Carbon::parse(request("date") . ' ' . request("hour"))->format("Y-m-d H:i");
                 }
 
@@ -447,12 +468,12 @@ class JobOrderController extends Controller
             DB::commit();
 
             if ($statusLast == "overtime") {
-                $checkStillExistsOvertime = JobOrderHasEmployee::where([
+                $checkExistsEmployeeOvertime = JobOrderHasEmployee::where([
                     "status" => "overtime",
                     "job_order_id" => request("job_order_id"),
                 ])->count();
 
-                if ($checkStillExistsOvertime == 0) {
+                if ($checkExistsEmployeeOvertime == 0) {
                     $jobOrder = JobOrder::find(request("job_order_id"));
                     $jobOrder->status = "active";
                     $jobOrder->save();
@@ -532,7 +553,7 @@ class JobOrderController extends Controller
         }
     }
 
-    private function storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrder)
+    private function storeImage($image, $status, $statusLast, $statusFinish, $user, $jobOrderHasParent)
     {
         $imageController = new ImageController;
 
@@ -547,9 +568,9 @@ class JobOrderController extends Controller
             $storeImage = $imageController->storeSingle(
                 $user,
                 $image,
-                $jobOrder,
-                $this->nameModel,
-                "job_orders",
+                $jobOrderHasParent,
+                $this->nameModelJobStatusHasParent,
+                "job_status_has_parents",
                 "_" . $addNameFolder
             );
 
@@ -573,6 +594,7 @@ class JobOrderController extends Controller
         $jobOrderHistory->job_level = $jobOrder->job_level;
         $jobOrderHistory->job_note = $jobOrder->job_note;
         $jobOrderHistory->status = $jobOrder->status;
+        $jobOrderHistory->is_assessment_qc = $jobOrder->is_assessment_qc;
         $jobOrderHistory->datetime_start = $jobOrder->datetime_start;
         $jobOrderHistory->datetime_end = $jobOrder->datetime_end;
         $jobOrderHistory->datetime_estimation_end = $jobOrder->datetime_estimation_end;
@@ -701,5 +723,46 @@ class JobOrderController extends Controller
         }
 
         $jobOrderHasEmployee->delete();
+    }
+
+    private function storeValidation($type = null)
+    {
+        $isError = false;
+        $message = null;
+
+        $lstFormValidations = [
+            (object) [
+                "field" => "project_id",
+                "name" => "Proyek",
+            ],
+            (object) [
+                "field" => "category",
+                "name" => "Kategori",
+            ],
+            (object) [
+                "field" => "estimation",
+                "name" => "Estimasi Waktu",
+            ],
+            (object) [
+                "field" => "job_level",
+                "name" => "Tingkat Kesulitan",
+            ],
+
+        ];
+
+        foreach ($lstFormValidations as $index => $item) {
+            if (request("{$item->field}") == null) {
+                $isError = true;
+                $message = "Maaf, {$item->name} harus di masukkan";
+
+                break;
+            }
+        }
+
+        if ($type == "result") {
+            return $message;
+        }
+
+        return $isError;
     }
 }

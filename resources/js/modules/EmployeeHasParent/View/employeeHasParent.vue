@@ -140,7 +140,7 @@ export default {
         user_id: this.getUserId,
       };
 
-      console.info(request);
+      //   console.info(request);
       //   return false;
       this.is_loading = true;
 
@@ -150,7 +150,7 @@ export default {
           request
         )
         .then((responses) => {
-          console.info(responses);
+          //   console.info(responses);
           this.is_loading = false;
           // return false;
           const data = responses.data;

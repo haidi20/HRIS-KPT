@@ -19,7 +19,7 @@ class CreateVacationsTable extends Migration
             $table->date('date_start');
             $table->date('date_end');
             $table->text('note')->nullable();
-            $table->enum('status', ['accept', 'reject', 'review'])->default('accept');
+            $table->enum('status', ['accept', 'reject', 'review'])->default('review');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
