@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogsTable extends Migration
+class AddDayVacationToEmployeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logsx', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->nullable();
-            $table->text("message", 500);
-            $table->string("location", 50);
-            $table->timestamps();
+        Schema::table('employees', function (Blueprint $table) {
+            $table->integer('day_vacation')->default(0);
         });
     }
 
@@ -29,6 +25,8 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logsx');
+        Schema::table('employees', function (Blueprint $table) {
+            //
+        });
     }
 }

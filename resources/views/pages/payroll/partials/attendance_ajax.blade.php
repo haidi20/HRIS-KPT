@@ -64,19 +64,19 @@
                                 <td><br></td>
                                 <td>{{round($tanggal->translatedFormat('d'))}}</td>
                                 <td>{{$tanggal->translatedFormat('l')}}</td>
-                                <td>{{\Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i')}}</td>
-                                <td>{{\Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i')}}</td>
+                                <td>{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
+                                <td>{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
                                 <td>{{$d_hour}} : {{$d_minute}}</td>
                                 <td><br></td>
                                 <td>{{\floor($employee->duration_rest/60)}}</td>
                                 <td>{{\floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)}}</td>
                                 <td>{{\floor($employee->working_hour/60)}} </td>
-                                <td><br></td>
-                                <td><br></td>
-                                <td><br></td>
-                                <td><br></td>
+                                <td>{{$a->lembur_kali_satu_lima}}</td>
+                                <td>{{$a->lembur_kali_dua}}</td>
+                                <td>{{$a->lembur_kali_tiga}}</td>
+                                <td>{{$a->lembur_kali_empat}}</td>
                                 <td>
-                                    <a href="#" class="btn icon btn-primary"><i class="bi bi-pencil"></i></a>
+                                    <a href="#" class="btn icon btn-primary edit_modal_attendance" data-href="{{\URL::to('/')}}/payroll/{{$a->id}}/edit_attendance" data-container=".attendance_modal"><i class="bi bi-pencil"></i></a>
                                 </td>
                             </tr>
                       

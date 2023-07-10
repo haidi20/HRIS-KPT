@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PayrollController extends Controller
@@ -18,7 +19,7 @@ class PayrollController extends Controller
         $month = Carbon::now();
         $monthNow = $month->format("Y-m");
         $monthReadAble = $month->isoFormat("MMMM YYYY");
-        $employees =  Employee::select('id','name')->get();
+        $employees =  Employee::select('id', 'name')->get();
 
         $data = (object) [
             //
@@ -51,9 +52,9 @@ class PayrollController extends Controller
     {
         $employee_id = request("employee_id");
 
-        $month_filter  = request('month_filter').'-01';
-       
-        $data = Payroll::whereDate('bulan',$month_filter)->where('employee_id',$employee_id)->firstOrFail();
+        $month_filter  = request('month_filter') . '-01';
+
+        $data = Payroll::whereDate('bulan', $month_filter)->where('employee_id', $employee_id)->firstOrFail();
 
 
         // Payroll::whereDate('')
@@ -100,35 +101,35 @@ class PayrollController extends Controller
         ];
 
         $jaminanSosial = [
-            (object)[
+            (object) [
                 "nama" => "Hari Tua (JHT)",
                 "perusahaan_persen" => "3,70",
                 "perusahaan_nominal" => "125.597",
                 "karyawan_persen" => "2,00",
                 "karyawan_nominal" => "67.890",
             ],
-            (object)[
+            (object) [
                 "nama" => "Kecelakaan (JKK)",
                 "perusahaan_persen" => "1,74",
                 "perusahaan_nominal" => "59.065",
                 "karyawan_persen" => "0,00",
                 "karyawan_nominal" => "0",
             ],
-            (object)[
+            (object) [
                 "nama" => "Kematian (JKM)",
                 "perusahaan_persen" => "0,30",
                 "perusahaan_nominal" => "10.184",
                 "karyawan_persen" => "0,00",
                 "karyawan_nominal" => "0",
             ],
-            (object)[
+            (object) [
                 "nama" => "Pensiun (JP)",
                 "perusahaan_persen" => "2,00",
                 "perusahaan_nominal" => "67.890",
                 "karyawan_persen" => "1,00",
                 "karyawan_nominal" => "33.945",
             ],
-            (object)[
+            (object) [
                 "nama" => "Kesehatan (BPJS)",
                 "perusahaan_persen" => "4,00",
                 "perusahaan_nominal" => "135.781",
@@ -198,48 +199,49 @@ class PayrollController extends Controller
         ]);
     }
 
-    function attendance(){
+    function attendance()
+    {
         // return request()->all();
-        
+
         $employee_id = request()->get('employee_id') ?? '';
 
         $employee = Employee::findOrFail($employee_id);
         $month_filter = request()->get('month_filter') ?? '';
 
-        $end_date = Carbon::parse($month_filter.'-25')->format('Y-m-d');
-        $start_date = Carbon::parse($month_filter.'-26')->addMonth(-1)->format('Y-m-d');
+        $end_date = Carbon::parse($month_filter . '-25')->format('Y-m-d');
+        $start_date = Carbon::parse($month_filter . '-26')->addMonth(-1)->format('Y-m-d');
 
         // return [$start_date,$end_date];
 
         // 
-        $attende_fingers = AttendanceHasEmployee::where('employee_id',$employee_id)
-        ->whereDate('date', '>=',$start_date)
-        ->whereDate('date', '<=',$end_date)
-        ->groupBy('date')
-        ->orderBy('date','asc')
-        ->get();
+        $attende_fingers = AttendanceHasEmployee::where('employee_id', $employee_id)
+            ->whereDate('date', '>=', $start_date)
+            ->whereDate('date', '<=', $end_date)
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
 
         // return $sql = Str::replaceArray('?', $attende_fingers->getBindings(), $attende_fingers->toSql());
 
         foreach ($attende_fingers as $key => $v) {
             $new_at  = AttendancePayrol::firstOrCreate([
-                'employee_id'=>$employee_id,
-                'date'=>$v->date,
+                'employee_id' => $employee_id,
+                'date' => $v->date,
             ]);
 
-            if($new_at->is_koreksi == 0){
+            if ($new_at->is_koreksi == 0) {
                 $new_at->update([
-                    'hour_start'=>$v->hour_start,
-                    'hour_end'=>$v->hour_end,
-                    'duration_work'=>$v->duration_work,
+                    'hour_start' => $v->hour_start,
+                    'hour_end' => $v->hour_end,
+                    'duration_work' => $v->duration_work,
 
-                    'hour_rest_start'=>$v->hour_rest_start,
-                    'hour_rest_end'=>$v->hour_rest_end,
-                    'duration_rest'=>$v->duration_rest,
-                    
-                    'hour_overtime_start'=>$v->hour_overtime_start,
-                    'hour_overtime_end'=>$v->hour_overtime_end,
-                    'duration_overtime'=>$v->duration_overtime,
+                    'hour_rest_start' => $v->hour_rest_start,
+                    'hour_rest_end' => $v->hour_rest_end,
+                    'duration_rest' => $v->duration_rest,
+
+                    'hour_overtime_start' => $v->hour_overtime_start,
+                    'hour_overtime_end' => $v->hour_overtime_end,
+                    'duration_overtime' => $v->duration_overtime,
                 ]);
             }
         }
@@ -251,15 +253,115 @@ class PayrollController extends Controller
         // for laravel 5.8^
         //  return $sql = Str::replaceArray('?', $query->getBindings(), $query->toSql());
         // \dd($sql);
-        
-        
-        $attendance = AttendancePayrol::where('employee_id',$employee_id)
-        ->whereDate('date', '>=',$start_date)
-        ->whereDate('date', '<=',$end_date)
-        ->get();
 
-        $data = compact('attendance','employee');
+
+        $attendance = AttendancePayrol::where('employee_id', $employee_id)
+            ->whereDate('date', '>=', $start_date)
+            ->whereDate('date', '<=', $end_date)
+            ->get();
+
+        $data = compact('attendance', 'employee');
 
         return view("pages.payroll.partials.attendance_ajax", $data);
+    }
+
+    function edit_attendance($id)
+    {
+        $attendance = AttendancePayrol::with('employee')->findOrFail($id);
+
+        $data = compact('attendance');
+        return view("pages.payroll.partials.edit_attendance_ajax", $data);
+    }
+
+
+    function update_attendance($id)
+    {
+// DB
+        // DB::enableQueryLog();
+        $attendance = AttendancePayrol::findOrFail($id);
+
+        if (request()->ajax()) {
+            try {
+
+                // return [
+                //     'hour_start'=>\explode(':',request()->get('hour_start'))[0],
+                //     'hour_end'=>\explode(':',request()->get('hour_end'))[0],
+                // ];
+
+                $total_minutes_start = (\explode(':',request()->get('hour_start'))[0] * 60) + \explode(':',request()->get('hour_start'))[1];
+                $total_minutes_end = (\explode(':',request()->get('hour_end'))[0] * 60) + \explode(':',request()->get('hour_end'))[1];
+
+
+                // $time_start = Carbon::createFromTimeString(request()->get('hour_start').":00");
+                // $start_of_day_start = Carbon::createFromTimeString(request()->get('hour_start').":00")->startOfDay();
+                // $total_minutes_start = $time_start->diffInMinutes($start_of_day_start);
+
+                // $time_end = Carbon::createFromTimeString(request()->get('hour_end').":00");
+                // $end_of_day_end = Carbon::createFromTimeString(request()->get('hour_end').":00")->endOfDay();
+                // $total_minutes_end = $time_end->diffInMinutes($end_of_day_end);
+
+                if($total_minutes_end <= $total_minutes_start){
+                    $new_hour_end = Carbon::parse($attendance->date)->addDays(1)->format('Y-m-d')." ".request()->get('hour_end').":00";
+
+                    
+
+
+                }else{
+                    $new_hour_end = Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_end').":00";
+
+                    // $time_duration = Carbon::createFromTimeString($attendance->date." ".request()->get('hour_duration').":00");
+                    // $end_of_day_duration = Carbon::createFromTimeString($new_hour_end);
+                    // $total_minutes_duration = $time_duration->diffInMinutes($end_of_day_duration);
+                }
+
+                $time_duration = Carbon::createFromTimeString($attendance->date." ".request()->get('hour_start').":00");
+                $end_of_day_duration = Carbon::createFromTimeString($new_hour_end);
+                $total_minutes_duration = $time_duration->diffInMinutes($end_of_day_duration);
+
+
+
+
+
+
+               $attendance->update([
+                    'hour_start'=>Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_start').":00",
+                    'hour_end'=>$new_hour_end,
+                    'duration_work'=>$total_minutes_duration,
+
+                    'lembur_kali_satu_lima'=>request()->get('lembur_kali_satu_lima'),
+                    'lembur_kali_dua'=>request()->get('lembur_kali_dua'),
+                    'lembur_kali_tiga'=>request()->get('lembur_kali_tiga'),
+                    'lembur_kali_empat'=>request()->get('lembur_kali_empat'),
+
+                    'keterangan'=>request()->get('keterangan'),
+                    'is_koreksi'=>1,
+               ]);
+
+            //    $data = [
+            //     'hour_start'=>Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_start').":00",
+            //         'hour_end'=>$new_hour_end,
+
+            //         'lembur_kali_satu_lima'=>request()->get('lembur_kali_satu_lima'),
+            //         'lembur_kali_dua'=>request()->get('lembur_kali_dua'),
+            //         'lembur_kali_tiga'=>request()->get('lembur_kali_tiga'),
+            //         'lembur_kali_empat'=>request()->get('lembur_kali_empat'),
+
+            //         'keterangan'=>request()->get('keterangan'),
+            //    ];
+
+            //    return dd($attendance);
+
+                $output = ['success' => true, 'msg' => 'Berhasil Edit Absensi','data'=>[$total_minutes_end,$total_minutes_start]];
+            } catch (\Exception $e) {
+                \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+                $output = ['success' => false, 'msg' => 'Gagal Edit Absensi','error'=>[$e->getLine(),$e->getMessage(), $e->getTrace()]];
+            }
+
+            return $output;
+        }
+
+
+        // $data = compact('attendance');
+        // return view("pages.payroll.partials.edit_attendance_ajax", $data);
     }
 }

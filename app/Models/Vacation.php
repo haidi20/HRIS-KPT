@@ -18,7 +18,7 @@ class Vacation extends Model
         'duration_readable', 'position_name', 'position_id', 'status_color', 'status_readable',
     ];
 
-    protected $fillable = [];
+    protected $guarded = [];
 
     public function __construct(array $attributes = [])
     {
