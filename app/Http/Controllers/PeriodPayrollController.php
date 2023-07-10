@@ -11,8 +11,10 @@ use App\Models\BpjsCalculation;
 use App\Models\Employee;
 use App\Models\Payroll;
 use App\Models\PeriodPayroll;
+use App\Models\RosterDaily;
 use App\Models\salaryAdjustmentDetail;
 use App\Models\SalaryAdvanceDetail;
+use App\Models\Vacation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -186,7 +188,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $employees = Employee::orderBy('name', 'asc')->limit(1)->get();
+            $employees = Employee::orderBy('name', 'asc')->limit(3)->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -265,6 +267,9 @@ class PeriodPayrollController extends Controller
                 foreach ($period as $key => $p) {
                     $new_old_d = $data_absens->where('date', $p->format('Y-m-d'))->first();
 
+                    $roster_daily = RosterDaily::where('employee_id',$employee->id)
+                    ->whereDate('date',$p->format('Y-m-d'))
+                    ->first();
                     //  if( $p->format('Y-m-d')=='2023-06-19'){
                     //     return $new_old_d;
                     //  }
@@ -321,15 +326,58 @@ class PeriodPayrollController extends Controller
                             'lembur_kali_dua' => $kali_2,
                             'lembur_kali_tiga' => $kali_3,
                             'lembur_kali_empat' => $kali_4,
+                            'roster_daily_id'=>$roster_daily->id ?? null,
+                            'roster_status_initial'=>$roster_daily->roster_status_initial ?? null
                         ]);
                     } else {
-                        $jumlah_hari_tidak_masuk_tmp += 1;
+
+                        $is_weekend = 0;
+                        $is_vacation = 0;
+
+                        if(isset($roster_daily->id)){
+                            if($roster_daily->roster_status_initial == 'M'){
+                                
+
+                                $vacations = Vacation::where('employee_id',$employee->id)
+                                ->whereYear('date_start',Carbon::now()->format('Y'))
+                                ->where('status','accept')
+                                ->select(
+                                    DB::raw('DATEDIFF(date_start, date_end) AS jumlah_hari_cuti')
+                                )
+                                ->get();
+
+                                $jumlah_hari_cuti = 0;
+
+                                foreach ($vacations as $key => $v) {
+                                    $jumlah_hari_cuti += $v->jumlah_hari_cuti;
+                                }
+
+                                if(($jumlah_hari_cuti + 1) > $employee->day_vacation){
+                                    $jumlah_hari_tidak_masuk_tmp += 1;
+                                }
+
+                                Vacation::create([
+                                    'employee_id'=>$employee->id,
+                                    'date_start'=>$p->format('Y-m-d'),
+                                    'date_end'=>$p->format('Y-m-d'),
+                                    'note'=>'CUTI AUTO APPROVE SYSTEM',
+                                    'status'=>'accept'
+                                ]);
+
+                                // $jumlah_hari_cuti
+
+                                //cari cutinya belum
+                            }
+                        }
+                        
 
                         AttendancePayrol::create([
                             'employee_id'=>$employee->id,
                             'date'=>$p->format('Y-m-d'),
                             'cloud_id'=>'TIDAK HADIR',
-                            'pin'=>'TIDAK HADIR'
+                            'pin'=>'TIDAK HADIR',
+                            'roster_daily_id'=>$roster_daily->id ?? null,
+                            'roster_status_initial'=>$roster_daily->roster_status_initial ?? null
                         ]);
                         // AttendancePayrol::create([
                         //     ''

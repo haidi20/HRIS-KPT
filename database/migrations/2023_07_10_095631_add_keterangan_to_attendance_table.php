@@ -16,6 +16,10 @@ class AddKeteranganToAttendanceTable extends Migration
         Schema::table('attendance', function (Blueprint $table) {
             $table->integer('is_warning')->default(0);
             $table->integer('is_koreksi')->default(0);
+
+            $table->foreignId('roster_daily_id')->nullable();
+            $table->string('roster_status_initial')->nullable();
+
             $table->text('keterangan')->nullable();
         });
     }
