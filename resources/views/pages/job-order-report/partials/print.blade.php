@@ -8,14 +8,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style>
         table {
-            border-collapse: collapse;
-            page-break-inside: auto;
+            /* border-collapse: collapse;
+            page-break-inside: auto; */
             width: 100%;
         }
 
         tr {
-            page-break-inside: avoid;
-            page-break-after: auto;
+            /* page-break-inside: avoid;
+            page-break-after: auto; */
         }
 
         thead {
@@ -25,9 +25,8 @@
         th,
         td {
             /* border: black 1px solid; */
-            padding-left: 5px;
-            padding-right: 5px;
             /* min-width: 50px; */
+            padding: 5px;
         }
 
         @page {
@@ -66,6 +65,11 @@
         table span {
             font-size: 20px;
         }
+
+        /* .row {
+            padding-top: 100px;
+            padding-bottom: 100px;
+        } */
     </style>
 </head>
 
@@ -104,9 +108,11 @@
         <tr style="vertical-align: top;">
             <td>
                 <table>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Proyek </h3>
+                            <span>
+                                <b>Proyek</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -115,9 +121,11 @@
                             <span>{{ $data->project_name }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Pekerjaan</h3>
+                            <span>
+                                <b>Pekerjaan</b>
+                            </span>
                         </td>
                         <td>
                             <span>: </span>
@@ -129,9 +137,11 @@
                             </span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Keterangan Pekerjaan</h3>
+                            <span>
+                                <b>Keterangan Pekerjaan</b>
+                            </span>
                         </td>
                         <td>
                             <span>: </span>
@@ -142,9 +152,11 @@
                             </span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Kategori</h3>
+                            <span>
+                                <b>Kategori</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -153,9 +165,11 @@
                             <span>{{ $data->category_name }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Tingkat Kesulitan</h3>
+                            <span>
+                                <b>Tingkat Kesulitan</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -164,9 +178,11 @@
                             <span>{{ $data->job_level_readable }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Status</h3>
+                            <span>
+                                <b>Status</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -175,9 +191,11 @@
                             <span>{{ $data->status_readable }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Catatan</h3>
+                            <span>
+                                <b>Catatan</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -186,9 +204,11 @@
                             <span>{{ $data->note }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Jam Mulai</h3>
+                            <span>
+                                <b>Jam Mulai</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -198,9 +218,11 @@
                         </td>
 
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Estimasi Waktu Selesai</h3>
+                            <span>
+                                <b>Estimasi Waktu Selesai</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -209,9 +231,11 @@
                             <span>{{ $data->datetime_estimation_end_readable }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="row">
                         <td>
-                            <h3>Waktu Selesai</h3>
+                            <span>
+                                <b>Waktu Selesai</b>
+                            </span>
                         </td>
                         <td>
                             <span>:</span>
@@ -220,10 +244,23 @@
                             <span>{{ $data->datetime_end_readable }}</span>
                         </td>
                     </tr>
+                    <tr class="row">
+                        <td>
+                            <span>
+                                <b>Di setujuin oleh</b>
+                            </span>
+                        </td>
+                        <td>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>Fadil (QC), Yosep (Pengawas), Tono (OS)</span>
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td>
-                <h3>Karyawan : </h3>
+                <span>Karyawan : </span>
 
                 <table border="1">
                     <thead>
