@@ -12,6 +12,7 @@ const Attendance = {
         data: {
             main: [],
             detail: [],
+            finger: [],
         },
         params: {
             main: {
@@ -23,6 +24,9 @@ const Attendance = {
                 employee_id: null,
                 month: new Date(),
             },
+            finger: {
+                month: new Date(),
+            },
         },
         form: { ...defaultForm },
         options: {
@@ -31,6 +35,7 @@ const Attendance = {
         loading: {
             main: false,
             detail: false,
+            finger: false,
         },
         date_range: [],
     },
@@ -44,6 +49,9 @@ const Attendance = {
         INSERT_DATA_DETAIL(state, payload) {
             state.data.detail = payload.data;
         },
+        INSERT_DATA_FINGER(state, payload) {
+            state.data.finger = payload.data;
+        },
         INSERT_DATE_RANGE(state, payload) {
             state.date_range = payload.date_range;
         },
@@ -52,6 +60,9 @@ const Attendance = {
         },
         UPDATE_LOADING_DETAIL(state, payload) {
             state.loading.detail = payload.value;
+        },
+        UPDATE_LOADING_FINGER(state, payload) {
+            state.loading.finger = payload.value;
         },
     },
     actions: {
@@ -111,6 +122,38 @@ const Attendance = {
                 })
                 .catch((err) => {
                     context.commit("UPDATE_LOADING_DETAIL", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchDataBaseFinger: async (context, payload) => {
+            context.commit("UPDATE_LOADING_FINGER", { value: true });
+
+            const params = {
+                ...context.state.params.finger,
+                month: moment(context.state.params.finger.month).format("Y-MM"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/attendance/fetch-data-finger`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+                    // console.info(typeof data.data, typeof data.dateRange);
+                    // const data_fingers = Object.keys(data.data).map(key => ({ key, value: data.data[key] }));
+
+                    // console.info(data.data);
+
+                    context.commit("INSERT_DATA_FINGER", {
+                        data: data.data,
+                    });
+
+                    context.commit("UPDATE_LOADING_FINGER", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_FINGER", { value: false });
                     console.info(err);
                 });
         },

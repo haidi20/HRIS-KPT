@@ -17,6 +17,9 @@
           <b-tab title="Berdasarkan Karyawan">
             <Detail />
           </b-tab>
+          <b-tab title="Berdasarkan Alat Finger">
+            <fingerTool />
+          </b-tab>
         </b-tabs>
       </div>
     </div>
@@ -26,6 +29,7 @@
 <script>
 import Main from "./main.vue";
 import Detail from "./detail.vue";
+import FingerTool from "./fingerTool.vue";
 export default {
   props: {
     user: String,
@@ -37,7 +41,11 @@ export default {
       version: "v1.2",
     };
   },
-  components: { Main, Detail },
+  components: {
+    Main,
+    Detail,
+    FingerTool,
+  },
   mounted() {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
@@ -54,8 +62,10 @@ export default {
 
     this.$store.dispatch("attendance/fetchData");
     this.$store.dispatch("attendance/fetchDetail");
+    this.$store.dispatch("attendance/fetchDataBaseFinger");
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("master/fetchFingerTool");
     this.$store.dispatch("master/fetchCompany", { type: "use all" });
   },
 };

@@ -89,6 +89,16 @@ class FingerToolController extends Controller
         ];
     }
 
+    public function fetchData()
+    {
+        $fingerTools = FingerTool::all();
+
+        return response()->json([
+            'success' => true,
+            'fingerTools' => $fingerTools,
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         // return request()->all();

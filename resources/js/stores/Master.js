@@ -15,6 +15,7 @@ const example = {
             positions: [],
             companies: [],
             locations: [],
+            finger_tools: [],
         },
         params: {
             month: new Date(),
@@ -48,6 +49,9 @@ const example = {
         },
         INSERT_DATA_LOCATION(state, payload) {
             state.data.locations = payload.locations;
+        },
+        INSERT_DATA_FINGER_TOOL(state, payload) {
+            state.data.finger_tools = payload.finger_tools;
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
@@ -125,6 +129,25 @@ const example = {
 
                     context.commit("INSERT_DATA_COMPANY", {
                         companies: data.companies,
+                    });
+                })
+                .catch((err) => {
+                    console.info(err);
+                });
+        },
+        fetchFingerTool: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/finger-tool/fetch-data`, {
+                    params: {},
+                }
+                )
+                .then((responses) => {
+                    // console.info(responses);
+                    let data = responses.data;
+
+                    context.commit("INSERT_DATA_FINGER_TOOL", {
+                        finger_tools: data.fingerTools,
                     });
                 })
                 .catch((err) => {
