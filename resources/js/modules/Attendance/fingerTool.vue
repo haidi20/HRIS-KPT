@@ -25,9 +25,17 @@
             variant="success"
             size="sm"
             @click="onFilter()"
-            :disabled="getIsLoadingData"
+            :disabled="getIsLoadingData || is_loading_pull_data"
           >Kirim</b-button>
           <span v-if="getIsLoadingData">Loading...</span>
+          <b-button
+            class="place_filter_table"
+            variant="info"
+            size="sm"
+            @click="onShowFormPullData()"
+            :disabled="getIsLoadingData || is_loading_pull_data"
+          >Tarik Data Finger</b-button>
+          <span v-if="is_loading_pull_data">Loading...</span>
         </b-col>
       </template>
       <template v-slot:thead>
@@ -44,6 +52,42 @@
         </b-tr>
       </template>
     </DatatableClient>
+
+    <b-modal
+      id="form_pull_data"
+      ref="form_pull_data"
+      title="Tarik Data Finger"
+      size="md"
+      class="modal-custom"
+      hide-footer
+    >
+      <b-row>
+        <b-col cols>
+          <b-form-group label="Tanggal" label-for="date">
+            <DatePicker
+              id="date"
+              v-model="params.date"
+              format="YYYY-MM-DD"
+              type="date"
+              placeholder="pilih tanggal"
+            />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+        </b-col>
+        <b-col style="text-align: -webkit-right;">
+          <span v-if="is_loading_pull_data">Loading...</span>
+          <b-button
+            :disabled="getIsLoadingData || is_loading_pull_data"
+            variant="success"
+            @click="onPullData()"
+          >Kirim</b-button>
+        </b-col>
+      </b-row>
+    </b-modal>
   </div>
 </template>
 
@@ -58,7 +102,7 @@ import DatatableClient from "../../components/DatatableClient";
 export default {
   data() {
     return {
-      is_loading_export: false,
+      is_loading_pull_data: false,
       options: {
         perPage: 10,
         // perPageValues: [5, 10, 25, 50, 100],
@@ -107,6 +151,46 @@ export default {
   methods: {
     onFilter() {
       this.$store.dispatch("attendance/fetchDataBaseFinger");
+    },
+    onShowFormPullData() {
+      this.$bvModal.show("form_pull_data");
+    },
+    async onPullData() {
+      const Swal = this.$swal;
+      this.is_loading_pull_data = true;
+
+      await axios
+        .get(`${this.getBaseUrl}/api/v1/attendance/store`, {
+          params: {
+            user_id: this.getUserId,
+            date_start: moment(this.params.date).format("Y-MM-DD"),
+          },
+        })
+        .then((responses) => {
+          //   console.info(responses);
+          this.is_loading_pull_data = false;
+
+          this.$store.dispatch("attendance/fetchDataBaseFinger");
+        })
+        .catch((err) => {
+          this.is_loading_pull_data = false;
+          console.info(err);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.response.data.message,
+          });
+        });
     },
     setLabelDate(date) {
       return moment(date).format("DD");

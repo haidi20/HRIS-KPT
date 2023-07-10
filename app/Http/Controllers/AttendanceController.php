@@ -159,7 +159,8 @@ class AttendanceController extends Controller
                 $data[$index]["date_readable"] = Carbon::parse($date->date_full)->locale('id')->isoFormat("dddd, D MMMM YYYY");
                 $data[$index][$finger->id] = AttendanceFingerspot::where("cloud_id", $finger->cloud_id)
                     ->whereDate("scan_date", $date->date_full)
-                    ->count();
+                    ->distinct("pin")
+                    ->count("pin");
             }
         }
 

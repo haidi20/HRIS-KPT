@@ -26,6 +26,7 @@ const Attendance = {
             },
             finger: {
                 month: new Date(),
+                date: new Date(),
             },
         },
         form: { ...defaultForm },
