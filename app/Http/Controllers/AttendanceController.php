@@ -34,6 +34,7 @@ class AttendanceController extends Controller
     public function fetchDataMain()
     {
         $data = [];
+        $companyId = request("company_id");
         $positionId = request("position_id");
         $month = Carbon::parse(request("month"));
         // $dateRange = $this->dateRange($month->format("Y-m"));
@@ -44,7 +45,11 @@ class AttendanceController extends Controller
             $employees = $employees->where("position_id", $positionId);
         }
 
-        $employees = $employees->orderBy("name", "desc")->get();
+        if ($companyId != 'all') {
+            $employees = $employees->where("company_id", $companyId);
+        }
+
+        $employees = $employees->orderBy("name", "asc")->get();
 
         $data = $employees->map(function ($employee) use ($dateRange, $month) {
             $mainData = [
@@ -136,6 +141,33 @@ class AttendanceController extends Controller
             "data" => $result,
             "monthReadAble" => $monthReadAble,
             "employee" => $employee,
+            "request" => request()->all(),
+        ]);
+    }
+
+    public function fetchDataFinger()
+    {
+        $data = (array) [];
+        $fingerTools = FingerTool::all();
+        $month = Carbon::parse(request("month"));
+        $dateRange = $this->dateRangeCustom($month, "d", "object", true);
+
+        foreach ($dateRange as $index => $date) {
+            $dataFinger = [];
+            //data berdasarkan tanggal dan finger tool
+            foreach ($fingerTools as $key => $finger) {
+                $data[$index]["date_readable"] = Carbon::parse($date->date_full)->locale('id')->isoFormat("dddd, D MMMM YYYY");
+                $data[$index][$finger->id] = AttendanceFingerspot::where("cloud_id", $finger->cloud_id)
+                    ->whereDate("scan_date", $date->date_full)
+                    ->count();
+            }
+        }
+
+        // $data = AttendanceHasEmployee::
+
+        return response()->json([
+            "data" => $data,
+            "dateRange" => $dateRange,
             "request" => request()->all(),
         ]);
     }

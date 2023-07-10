@@ -39,6 +39,7 @@ class JobStatusController extends Controller
             if ($getValidationDatetime) {
                 return (object) [
                     'error' => true,
+                    'data' => [],
                     'message' => "Maaf, waktu selesai tidak boleh kurang dari waktu mulai",
                 ];
             }

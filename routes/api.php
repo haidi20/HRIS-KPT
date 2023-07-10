@@ -7,6 +7,7 @@ use App\Http\Controllers\BargeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FingerToolController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\JobOrderReportController;
@@ -76,6 +77,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('fetch-data-main', [AttendanceController::class, "fetchDataMain"])->name('fetchDataMain');
         Route::get('fetch-data-detail', [AttendanceController::class, "fetchDataDetail"])->name('fetchDataDetail');
+        Route::get('fetch-data-finger', [AttendanceController::class, "fetchDataFinger"])->name('fetchDataFinger');
 
         Route::get('store', [AttendanceController::class, "store"])->name('store');
         Route::get('store-finger-spot', [AttendanceController::class, "storeFingerSpot"])->name('storeFingerSpot');
@@ -101,6 +103,9 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('position')->name('position.')->group(function () {
         Route::get('fetch-data', [PositionController::class, "fetchData"])->name('fetchData');
+    });
+    Route::prefix('finger-tool')->name('fingerTool.')->group(function () {
+        Route::get('fetch-data', [FingerToolController::class, "fetchData"])->name('fetchData');
     });
     Route::prefix('vacation')->name('vacation.')->group(function () {
         Route::get('fetch-data', [VacationController::class, "fetchData"])->name('fetchData');

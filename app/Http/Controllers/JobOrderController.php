@@ -320,9 +320,9 @@ class JobOrderController extends Controller
                     'success' => false,
                     'message' => $jobStatusHasParent->message,
                 ], 500);
+            } else {
+                $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobStatusHasParent->data);
             }
-
-            $this->storeImage($image, $status, $statusLast, $statusFinish, $user, $jobStatusHasParent->data);
 
             DB::commit();
 
