@@ -5,7 +5,7 @@
       :columns="columns"
       :options="options"
       nameStore="attendance"
-      nameLoading="main"
+      nameLoading="finger"
       :filter="true"
       bordered
     >

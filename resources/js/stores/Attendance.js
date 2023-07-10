@@ -128,6 +128,10 @@ const Attendance = {
         fetchDataBaseFinger: async (context, payload) => {
             context.commit("UPDATE_LOADING_FINGER", { value: true });
 
+            context.commit("INSERT_DATA_FINGER", {
+                data: [],
+            });
+
             const params = {
                 ...context.state.params.finger,
                 month: moment(context.state.params.finger.month).format("Y-MM"),

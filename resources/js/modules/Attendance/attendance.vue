@@ -17,7 +17,7 @@
           <b-tab title="Berdasarkan Karyawan">
             <Detail />
           </b-tab>
-          <b-tab title="Berdasarkan Alat Finger">
+          <b-tab title="Total data berdasarkan Alat Finger">
             <fingerTool />
           </b-tab>
         </b-tabs>
