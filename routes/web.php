@@ -109,6 +109,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix("payroll")->name("payroll.")->group(function () {
         Route::get('', [PayrollController::class, "monthly"])->name("monthly");
+        Route::get('/{id}/edit_attendance', [PayrollController::class, "edit_attendance"])->name("edit_attendance");
+        Route::put('/{id}/update_attendance', [PayrollController::class, "update_attendance"])->name("update_attendance");
     });
     Route::prefix("project")->name("project.")->group(function () {
         Route::get('', [ProjectController::class, "index"])->name("index");

@@ -13,7 +13,7 @@ class CreateAttendanceTable extends Migration
      */
     public function up()
     {
-        Schema::create('attendance', function (Blueprint $table) {
+        Schema::create('attendancex', function (Blueprint $table) {
             $table->id();
             $table->string('pin')->nullable();
             $table->foreignId('employee_id')->nullable();
@@ -52,6 +52,6 @@ class CreateAttendanceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendance');
+        Schema::dropIfExists('attendancex');
     }
 }
