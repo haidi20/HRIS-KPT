@@ -186,7 +186,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $employees = Employee::orderBy('name', 'asc')->get();
+            $employees = Employee::orderBy('name', 'asc')->limit(1)->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -324,6 +324,13 @@ class PeriodPayrollController extends Controller
                         ]);
                     } else {
                         $jumlah_hari_tidak_masuk_tmp += 1;
+
+                        AttendancePayrol::create([
+                            'employee_id'=>$employee->id,
+                            'date'=>$p->format('Y-m-d'),
+                            'cloud_id'=>'TIDAK HADIR',
+                            'pin'=>'TIDAK HADIR'
+                        ]);
                         // AttendancePayrol::create([
                         //     ''
                         // ]);
@@ -681,9 +688,9 @@ class PeriodPayrollController extends Controller
                 AttendancePayrol::whereDate('date', '>=', $period_payroll->date_start)
                     ->whereDate('date', '<=', $period_payroll->date_end)
                     ->where('employee_id', $employee->id)
-                    ->where(function ($query) {
-                        $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
-                    })
+                    // ->where(function ($query) {
+                    //     $query->where('hour_start', '!=', NULL)->orWhere('hour_end', '!=', NULL);
+                    // })
                     ->update([
                         'payroll_id' => $new_payroll->id
                     ]);

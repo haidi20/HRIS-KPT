@@ -283,15 +283,24 @@ class PayrollController extends Controller
         if (request()->ajax()) {
             try {
 
-                $time_start = Carbon::createFromTimeString(request()->get('hour_start').":00");
-                $start_of_day_start = Carbon::createFromTimeString(request()->get('hour_start').":00")->startOfDay();
-                $total_minutes_start = $time_start->diffInMinutes($start_of_day_start);
+                // return [
+                //     'hour_start'=>\explode(':',request()->get('hour_start'))[0],
+                //     'hour_end'=>\explode(':',request()->get('hour_end'))[0],
+                // ];
 
-                $time_end = Carbon::createFromTimeString(request()->get('hour_end').":00");
-                $end_of_day_end = Carbon::createFromTimeString(request()->get('hour_end').":00")->endOfDay();
-                $total_minutes_end = $time_end->diffInMinutes($end_of_day_end);
+                $total_minutes_start = (\explode(':',request()->get('hour_start'))[0] * 60) + \explode(':',request()->get('hour_start'))[1];
+                $total_minutes_end = (\explode(':',request()->get('hour_end'))[0] * 60) + \explode(':',request()->get('hour_end'))[1];
 
-                if($total_minutes_end > $total_minutes_start){
+
+                // $time_start = Carbon::createFromTimeString(request()->get('hour_start').":00");
+                // $start_of_day_start = Carbon::createFromTimeString(request()->get('hour_start').":00")->startOfDay();
+                // $total_minutes_start = $time_start->diffInMinutes($start_of_day_start);
+
+                // $time_end = Carbon::createFromTimeString(request()->get('hour_end').":00");
+                // $end_of_day_end = Carbon::createFromTimeString(request()->get('hour_end').":00")->endOfDay();
+                // $total_minutes_end = $time_end->diffInMinutes($end_of_day_end);
+
+                if($total_minutes_end <= $total_minutes_start){
                     $new_hour_end = Carbon::parse($attendance->date)->addDays(1)->format('Y-m-d')." ".request()->get('hour_end').":00";
 
                     
@@ -342,7 +351,7 @@ class PayrollController extends Controller
 
             //    return dd($attendance);
 
-                $output = ['success' => true, 'msg' => 'Berhasil Edit Absensi'];
+                $output = ['success' => true, 'msg' => 'Berhasil Edit Absensi','data'=>[$total_minutes_end,$total_minutes_start]];
             } catch (\Exception $e) {
                 \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
                 $output = ['success' => false, 'msg' => 'Gagal Edit Absensi','error'=>[$e->getLine(),$e->getMessage(), $e->getTrace()]];

@@ -184,8 +184,8 @@
             <td><br></td>
             <td>{{round($tanggal->translatedFormat('d'))}}</td>
             <td>{{$tanggal->translatedFormat('l')}}</td>
-            <td>{{\Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i')}}</td>
-            <td>{{\Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i')}}</td>
+            <td>{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
+            <td>{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
             <td>{{$d_hour}} : {{$d_minute}}</td>
             <td><br></td>
             <td> <br></td>
