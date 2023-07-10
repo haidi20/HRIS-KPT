@@ -10,7 +10,7 @@
       bordered
     >
       <template v-slot:filter>
-        <b-col cols>
+        <b-col cols style="margin-bottom: 15px">
           <b-form-group label="Bulan" label-for="month" class="place_filter_table">
             <DatePicker
               id="month"
@@ -31,6 +31,19 @@
               label="name"
               searchable
               style="min-width: 180px"
+            />
+          </b-form-group>
+          <b-form-group label="Perusahaan" label-for="company_id" class="place_filter_table">
+            <VueSelect
+              id="company_id"
+              class="cursor-pointer"
+              v-model="params.company_id"
+              placeholder="Pilih Perusahaan"
+              :options="getOptionCompanies"
+              :reduce="(data) => data.id"
+              label="name"
+              searchable
+              style="min-width: 350px"
             />
           </b-form-group>
           <b-button
@@ -154,6 +167,9 @@ export default {
     },
     getOptionPositions() {
       return this.$store.state.master.data.positions;
+    },
+    getOptionCompanies() {
+      return this.$store.state.master.data.companies;
     },
     params() {
       return this.$store.state.attendance.params.main;

@@ -34,6 +34,7 @@ class AttendanceController extends Controller
     public function fetchDataMain()
     {
         $data = [];
+        $companyId = request("company_id");
         $positionId = request("position_id");
         $month = Carbon::parse(request("month"));
         // $dateRange = $this->dateRange($month->format("Y-m"));
@@ -44,7 +45,11 @@ class AttendanceController extends Controller
             $employees = $employees->where("position_id", $positionId);
         }
 
-        $employees = $employees->orderBy("name", "desc")->get();
+        if ($companyId != 'all') {
+            $employees = $employees->where("company_id", $companyId);
+        }
+
+        $employees = $employees->orderBy("name", "asc")->get();
 
         $data = $employees->map(function ($employee) use ($dateRange, $month) {
             $mainData = [

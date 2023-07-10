@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       title: "Absensi",
-      version: "v1.1",
+      version: "v1.2",
     };
   },
   components: { Main, Detail },
@@ -56,6 +56,7 @@ export default {
     this.$store.dispatch("attendance/fetchDetail");
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("master/fetchCompany", { type: "use all" });
   },
 };
 </script>

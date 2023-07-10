@@ -16,6 +16,7 @@ const Attendance = {
         params: {
             main: {
                 position_id: 'all',
+                company_id: 'all',
                 month: new Date(),
             },
             detail: {

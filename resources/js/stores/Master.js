@@ -116,6 +116,13 @@ const example = {
                     // console.info(responses);
                     let data = responses.data;
 
+                    if (payload?.type == "use all") {
+                        data.companies = [
+                            { id: "all", name: "Semua" },
+                            ...data.companies,
+                        ];
+                    }
+
                     context.commit("INSERT_DATA_COMPANY", {
                         companies: data.companies,
                     });
