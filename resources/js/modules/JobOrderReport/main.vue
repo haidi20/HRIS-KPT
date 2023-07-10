@@ -43,14 +43,17 @@
       </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <b-td style="text-align: center">
+          <!-- <b-td style="text-align: center">
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <a href="#" @click="onRead(item)">Lihat</a>
                 <a href="#" @click="onPrint(item)">Cetak</a>
-                <!-- <a href="#" @click="onRead(item)">Lihat</a> -->
               </template>
             </ButtonAction>
+          </b-td>-->
+          <b-td style="text-align: center">
+            <i class="bi bi-eye cursor-pointer" @click="onRead(item)" style="color: #28A745;"></i>
+            <i class="bi bi-printer cursor-pointer" @click="onPrint(item)" style="color: #C82333;"></i>
           </b-td>
           <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>
@@ -87,12 +90,12 @@ export default {
         {
           label: "",
           field: "",
-          width: "10px",
+          width: "5px",
         },
         {
           label: "Pengawas",
           field: "creator_name",
-          width: "100px",
+          width: "5px",
           class: "",
         },
         {

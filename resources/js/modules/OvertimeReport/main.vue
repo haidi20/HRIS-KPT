@@ -43,13 +43,15 @@
       </template>
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <b-td style="text-align: center">
+          <!-- <b-td style="text-align: center">
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <a href="#" @click="onEdit(item)">Ubah</a>
-                <!-- <a href="#" @click="onRead(item)">Lihat</a> -->
               </template>
             </ButtonAction>
+          </b-td>-->
+          <b-td style="text-align: center">
+            <i class="bi bi-pencil cursor-pointer" @click="onEdit(item)" style="color: #31D2F2;"></i>
           </b-td>
           <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>

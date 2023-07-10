@@ -11,7 +11,7 @@
     >
       <template v-slot:tbody="{ filteredData }">
         <b-tr v-for="(item, index) in filteredData" :key="index">
-          <b-td style="text-align: center" @click="onApproval(item)">
+          <b-td style="text-align: center">
             <!-- <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <a href="#" @click="onApproval(item)">Persetujuan</a>
@@ -19,8 +19,8 @@
               </template>
             </ButtonAction>-->
             <span class="cursor-pointer">
-              <!-- <i class="fas fa-edit" style="color: #31D2F2;"></i> -->
-              <i class="bi bi-pencil" style="color: #31D2F2;"></i>
+              <i class="bi bi-pencil" @click="onApproval(item)" style="color: #31D2F2;"></i>
+              <!-- <i class="bi bi-eye cursor-pointer" @click="onRead(item)" style="color: #28A745;"></i> -->
             </span>
           </b-td>
           <template v-for="(column, index) in getColumns()">
@@ -65,7 +65,7 @@ export default {
         {
           label: "",
           field: "",
-          width: "10px",
+          width: "50px",
           class: "",
         },
         {

@@ -27,7 +27,7 @@
             /* border: black 1px solid; */
             padding-left: 5px;
             padding-right: 5px;
-            min-width: 50px;
+            /* min-width: 50px; */
         }
 
         @page {
@@ -109,7 +109,10 @@
                             <h3>Proyek </h3>
                         </td>
                         <td>
-                            <span>: {{ $data->project_name }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->project_name }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -117,7 +120,13 @@
                             <h3>Pekerjaan</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->job_name }}</span>
+                            <span>: </span>
+
+                        </td>
+                        <td>
+                            <span>
+                                {{ $data->job_name }}
+                            </span>
                         </td>
                     </tr>
                     <tr>
@@ -125,7 +134,12 @@
                             <h3>Keterangan Pekerjaan</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->job_note }}</span>
+                            <span>: </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ $data->job_note }}
+                            </span>
                         </td>
                     </tr>
                     <tr>
@@ -133,7 +147,10 @@
                             <h3>Kategori</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->category_name }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->category_name }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -141,7 +158,10 @@
                             <h3>Tingkat Kesulitan</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->job_level_readable }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->job_level_readable }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -149,7 +169,10 @@
                             <h3>Status</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->status_readable }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->status_readable }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -157,7 +180,10 @@
                             <h3>Catatan</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->note }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->note }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -165,7 +191,10 @@
                             <h3>Jam Mulai</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->hour_start }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->hour_start }}</span>
                         </td>
 
                     </tr>
@@ -174,7 +203,10 @@
                             <h3>Estimasi Waktu Selesai</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->datetime_estimation_end_readable }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->datetime_estimation_end_readable }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -182,7 +214,10 @@
                             <h3>Waktu Selesai</h3>
                         </td>
                         <td>
-                            <span>: {{ $data->datetime_end_readable }}</span>
+                            <span>:</span>
+                        </td>
+                        <td>
+                            <span>{{ $data->datetime_end_readable }}</span>
                         </td>
                     </tr>
                 </table>
