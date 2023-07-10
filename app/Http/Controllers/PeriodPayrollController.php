@@ -720,6 +720,7 @@ class PeriodPayrollController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Gagal {$message} {$e->getMessage()}",
+                'error'=>[$e->getMessage(),$e->getTrace(),$e->getLine()]
             ], 500);
         }
     }

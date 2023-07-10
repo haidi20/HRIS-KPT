@@ -94,10 +94,14 @@
 
         </section>
     </div>
+
+    <div class="modal fade attendance_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel"></div>
+
 @endsection
 
 @section('style')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css">
 
     <style>
         .head-color {
@@ -117,9 +121,12 @@
             border-bottom: 1px solid gray;
         }
     </style>
+
+    
 @endsection
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/nocss/litepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
     <script>
 
@@ -378,5 +385,74 @@
         function setupSelect() {
             $(".select2").select2();
         }
+
+
+        $(document).on("click",".edit_modal_attendance",function(e) {
+            // clearForm();
+            $('div.attendance_modal').load($(this).data('href'), function() {
+                $(this).modal('show');
+
+                $('form#attendance_edit_form').submit(function(e) {
+                    e.preventDefault();
+                    $(this)
+                        .find('button[type="submit"]')
+                        .attr('disabled', true);
+                    var data = $(this).serialize();
+
+                    $.ajax({
+                        method: 'PUT',
+                        url: $(this).attr('action'),
+                        dataType: 'json',
+                        data: data,
+                        success: function(result) {
+                            if (result.success == true) {
+                                $('div.attendance_modal').modal('hide');
+                                fetchAttendance();
+                                // toastr.success(result.msg);
+                                // area_table.ajax.reload();
+                            } else {
+                                // toastr.error(result.msg);
+                            }
+                        },
+                    });
+                });
+            });
+    });
+
+
+    $('body').on('shown.bs.modal', '.modal', function() {
+            $('.datepicker').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd'
+            });
+
+            $('.datepicker_hour_and_minute').timepicker({
+                minuteStep: 1,  
+                showMeridian: false,
+                defaultTime: '00:00' 
+                });
+
+                
+
+            $(this).find('select').each(function() {
+                console.log($(this).attr('class'));
+                var dropdownParent = $(document.body);
+                if ($(this).parents('.modal.in:first').length !== 0)
+                    dropdownParent = $(this).parents('.modal.in:first');
+                $(this).select2({
+                    dropdownParent: dropdownParent,
+                    allowClear: true
+                    // ...
+                });
+
+
+            });
+        });
+
+   
+
+
+
+
     </script>
 @endsection

@@ -81,7 +81,7 @@
         <td><br></td>
         <td>Posisi</td>
         <td><br></td>
-        <td colspan="2">{{$employee->position->name}}</td>
+        <td colspan="2">{{$employee->position->name ?? ''}}</td>
         <td><br></td>
         <td><br></td>
         <td><br></td>

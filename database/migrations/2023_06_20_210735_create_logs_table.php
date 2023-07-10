@@ -13,7 +13,7 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('logsx', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->text("message", 500);
@@ -29,6 +29,6 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('logsx');
     }
 }

@@ -71,12 +71,12 @@
                                 <td>{{\floor($employee->duration_rest/60)}}</td>
                                 <td>{{\floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)}}</td>
                                 <td>{{\floor($employee->working_hour/60)}} </td>
-                                <td><br></td>
-                                <td><br></td>
-                                <td><br></td>
-                                <td><br></td>
+                                <td>{{$a->lembur_kali_satu_lima}}</td>
+                                <td>{{$a->lembur_kali_dua}}</td>
+                                <td>{{$a->lembur_kali_tiga}}</td>
+                                <td>{{$a->lembur_kali_empat}}</td>
                                 <td>
-                                    <a href="#" class="btn icon btn-primary"><i class="bi bi-pencil"></i></a>
+                                    <a href="#" class="btn icon btn-primary edit_modal_attendance" data-href="{{\URL::to('/')}}/payroll/{{$a->id}}/edit_attendance" data-container=".attendance_modal"><i class="bi bi-pencil"></i></a>
                                 </td>
                             </tr>
                       
