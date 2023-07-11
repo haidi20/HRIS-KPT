@@ -3,7 +3,7 @@
     <b-row style="height: 100%">
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
-        <h4 onclick="onTestNotification()">{{getTitle}}</h4>
+        <h4 @click="onTestNotification()">{{getTitle}}</h4>
         <div style="margin-top: 15px">
           <template v-if="!getIsActiveForm">
             <Data />
