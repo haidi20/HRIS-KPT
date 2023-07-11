@@ -11,6 +11,7 @@
               class="ml-4"
               @click="onTestNotification()"
             >test notif</b-button>
+            {{messageNotif}}
           </b-col>
           <b-col cols style="align-item: right">
             <b-button

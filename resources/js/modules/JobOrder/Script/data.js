@@ -11,6 +11,7 @@ export default {
         return {
             isChecked: true,
             title: "",
+            messageNotif: null,
         };
     },
     components: { FilterData, EmployeeHasParent },
@@ -92,6 +93,7 @@ export default {
                         if (permission === 'granted') {
                             // Permission has been granted, you can display notifications
                             console.log('Notification permission granted');
+                            new Notification('Test Notif!');
                         } else if (permission === 'denied') {
                             // Permission has been denied
                             console.log('Notification permission denied');
