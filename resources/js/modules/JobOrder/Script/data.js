@@ -90,17 +90,23 @@ export default {
             if ('Notification' in window) {
                 Notification.requestPermission()
                     .then(function (permission) {
+                        let messageNotif = null;
                         if (permission === 'granted') {
                             // Permission has been granted, you can display notifications
                             console.log('Notification permission granted');
                             new Notification('Test Notif!');
+                            messageNotif = "granted";
                         } else if (permission === 'denied') {
                             // Permission has been denied
                             console.log('Notification permission denied');
+                            messageNotif = "denied";
                         } else if (permission === 'default') {
                             // The user closed the permission prompt without granting or denying permission
                             console.log('Notification permission dismissed');
+                            messageNotif = "dismissed";
                         }
+
+                        alert(messageNotif);
                     })
                     .catch(function (error) {
                         // An error occurred while requesting permission
