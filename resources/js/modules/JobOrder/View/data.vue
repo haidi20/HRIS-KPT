@@ -5,6 +5,12 @@
         <b-row style="margin-top: 10px">
           <b-col cols>
             <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
+            <b-button
+              variant="warning"
+              size="sm"
+              class="ml-4"
+              @click="onTestNotification()"
+            >test notif</b-button>
           </b-col>
           <b-col cols style="align-item: right">
             <b-button

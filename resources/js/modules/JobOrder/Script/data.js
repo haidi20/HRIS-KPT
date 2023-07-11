@@ -78,6 +78,37 @@ export default {
             });
             this.$bvModal.show("action_list");
         },
+        onTestNotification() {
+            // if ('Notification' in window) {
+            //     Notification.requestPermission().then(function (permission) {
+            //         if (permission === 'granted') {
+            //             new Notification('Test Notif!');
+            //         }
+            //     });
+            // }
+            if ('Notification' in window) {
+                Notification.requestPermission()
+                    .then(function (permission) {
+                        if (permission === 'granted') {
+                            // Permission has been granted, you can display notifications
+                            console.log('Notification permission granted');
+                        } else if (permission === 'denied') {
+                            // Permission has been denied
+                            console.log('Notification permission denied');
+                        } else if (permission === 'default') {
+                            // The user closed the permission prompt without granting or denying permission
+                            console.log('Notification permission dismissed');
+                        }
+                    })
+                    .catch(function (error) {
+                        // An error occurred while requesting permission
+                        console.error('Error requesting notification permission:', error);
+                    });
+            } else {
+                // The browser does not support the Notification API
+                console.log('Notifications not supported');
+            }
+        },
         onShowEmployee() {
             let status = null;
 
