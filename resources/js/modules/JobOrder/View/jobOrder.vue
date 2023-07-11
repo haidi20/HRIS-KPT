@@ -127,6 +127,7 @@ export default {
       } else {
         // The browser does not support the Notification API
         console.log("Notifications not supported");
+        alert("not supported");
       }
     },
     getConditionForm() {
