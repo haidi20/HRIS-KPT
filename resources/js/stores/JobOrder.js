@@ -97,15 +97,13 @@ const JobOrder = {
         data: [],
         params: {
             month: new Date(),
-            date: [
-                new Date(moment().startOf("month")),
-                new Date(),
-            ],
+            date: new Date(),
             status: "all",
             created_by: "creator",
             project_id: null,
             search: null,
             project_id: "loading",
+            is_date_filter: false,
         },
         form: { ...defaultForm },
         is_active_form: false,
@@ -439,6 +437,7 @@ const JobOrder = {
             const params = {
                 ...context.state.params,
                 month: moment(context.state.params.month).format("Y-MM"),
+                date: moment(context.state.params.date).format("Y-MM-DD"),
                 user_id: context.state.user_id,
                 project_id: context.state.params.project_id,
             }

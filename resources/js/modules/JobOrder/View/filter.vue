@@ -9,8 +9,32 @@
       hide-footer
     >
       <b-row>
+        <b-col cols class="place-switch-button">
+          <span style="margin-right: 5px">Bulan</span>
+          <input
+            type="checkbox"
+            id="switch"
+            v-model="params.is_date_filter"
+            @click="onChangeTypeTime"
+          />
+          <label for="switch">Toggle</label>
+          <span style="margin-left: 5px">Tanggal</span>
+        </b-col>
+      </b-row>
+      <b-row>
         <b-col cols>
-          <b-form-group label="Bulan" label-for="month">
+          <b-form-group label="Tanggal" label-for="date" v-if="params.is_date_filter">
+            <DatePicker
+              id="date"
+              v-model="params.date"
+              format="YYYY-MM-DD"
+              type="date"
+              placeholder="pilih Tanggal"
+              style="width: 100%"
+              @change="onChangeMonth()"
+            />
+          </b-form-group>
+          <b-form-group label="Bulan" label-for="month" v-else>
             <DatePicker
               id="month"
               v-model="params.month"
@@ -140,6 +164,9 @@ export default {
     onCloseModal() {
       this.$bvModal.hide("job_order_filter");
     },
+    onChangeTypeTime() {
+      //   console.info(this.params.is_date_filter);
+    },
     onChangeMonth() {
       //   console.info(this.params.month);
 
@@ -152,7 +179,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#job_order_filter {
-  //z-index: 10;
+input[type="checkbox"] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 40px;
+  height: 20px;
+  background: grey;
+  display: block;
+  border-radius: 10px;
+  position: relative;
+}
+
+label:after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 9px;
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: #bada55;
+}
+
+input:checked + label:after {
+  left: calc(100% - 1px);
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 24px;
+}
+
+.place-switch-button {
+  display: inline-flex;
 }
 </style>

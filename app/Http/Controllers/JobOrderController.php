@@ -47,9 +47,14 @@ class JobOrderController extends Controller
         $month = Carbon::parse(request("month"));
 
         $jobOrders = JobOrder::with(["jobOrderHasEmployees", "jobOrderAssessments"])
-            ->whereYear("datetime_start", $month->format("Y"))
-            ->whereMonth("datetime_start", $month->format("m"))
             ->orderBy("created_at", "desc");
+
+        if (request("is_date_filter") == "true") {
+            $jobOrders = $jobOrders->whereDate("datetime_start", request("date"));
+        } else {
+            $jobOrders = $jobOrders->whereYear("datetime_start", $month->format("Y"))
+                ->whereMonth("datetime_start", $month->format("m"));
+        }
 
         // jika pengawas, secara default menampilkan datanya berdasarkan dia yang buat
         // terkecuali di filter data pilih dari 'pengawas lain' baru muncul job order dari pengawas lain

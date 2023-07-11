@@ -55,14 +55,6 @@
                           </span>
                           <span>{{item.assessment_count}} / {{item.assessment_total}}</span>
                           <br />
-                          <!-- <div>
-                        <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
-                        <span>QC</span>
-                      </div>
-                      <div>
-                        <b-form-checkbox class="display-inline" value="true" disabled></b-form-checkbox>
-                        <span>Pengawas</span>
-                          </div>-->
                           <div v-for="(assessment, key) in item.job_order_assessments" :key="key">
                             <b-form-checkbox class="display-inline" v-model="isChecked" disabled></b-form-checkbox>
                             <span>{{assessment.group_name}}</span>
@@ -85,6 +77,11 @@
                           </span>
                           <br />
                           <span>{{item.creator_name}}</span>
+                        </b-col>
+                      </b-row>
+                      <b-row>
+                        <b-col cols>
+                          <span style="font-size: 12px">{{item.datetime_start_readable}}</span>
                         </b-col>
                       </b-row>
                     </b-col>
