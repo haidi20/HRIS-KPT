@@ -99,7 +99,9 @@ export default {
       //         }
       //     });
       // }
+      alert("click notif 1");
       if ("Notification" in window) {
+        alert("click notif 2");
         Notification.requestPermission()
           .then(function (permission) {
             let messageNotif = null;
