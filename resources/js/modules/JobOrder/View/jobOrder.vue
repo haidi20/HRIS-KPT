@@ -99,28 +99,21 @@ export default {
       //         }
       //     });
       // }
-      alert("click notif 1");
+      //   alert("click notif 1");
       if ("Notification" in window) {
         alert("click notif 2");
         Notification.requestPermission()
-          .then(function (permission) {
-            let messageNotif = null;
-            if (permission === "granted") {
-              // Permission has been granted, you can display notifications
-              console.log("Notification permission granted");
-              new Notification("Test Notif!");
-              messageNotif = "granted";
-            } else if (permission === "denied") {
-              // Permission has been denied
-              console.log("Notification permission denied");
-              messageNotif = "denied";
-            } else if (permission === "default") {
-              // The user closed the permission prompt without granting or denying permission
-              console.log("Notification permission dismissed");
-              messageNotif = "dismissed";
+          .then(function (result) {
+            if (result === "granted") {
+              navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification("Vibration Sample", {
+                  body: "Buzz! Buzz!",
+                  //   icon: "../images/touch/chrome-touch-icon-192x192.png",
+                  vibrate: [200, 100, 200, 100, 200, 100, 200],
+                  tag: "vibration-sample",
+                });
+              });
             }
-
-            alert(messageNotif);
           })
           .catch(function (error) {
             // An error occurred while requesting permission
