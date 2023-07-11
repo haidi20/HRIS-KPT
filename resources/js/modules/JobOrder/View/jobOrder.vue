@@ -3,7 +3,7 @@
     <b-row style="height: 100%">
       <b-col v-if="!getIsMobile" col md="3" class></b-col>
       <b-col col :md="getIsMobile ? 12 : 6" id="main-content">
-        <h4>{{getTitle}}</h4>
+        <h4 onclick="onTestNotification()">{{getTitle}}</h4>
         <div style="margin-top: 15px">
           <template v-if="!getIsActiveForm">
             <Data />
@@ -90,6 +90,44 @@ export default {
   methods: {
     onClose() {
       this.$refs.myBottomSheet.close();
+    },
+    onTestNotification() {
+      // if ('Notification' in window) {
+      //     Notification.requestPermission().then(function (permission) {
+      //         if (permission === 'granted') {
+      //             new Notification('Test Notif!');
+      //         }
+      //     });
+      // }
+      if ("Notification" in window) {
+        Notification.requestPermission()
+          .then(function (permission) {
+            let messageNotif = null;
+            if (permission === "granted") {
+              // Permission has been granted, you can display notifications
+              console.log("Notification permission granted");
+              new Notification("Test Notif!");
+              messageNotif = "granted";
+            } else if (permission === "denied") {
+              // Permission has been denied
+              console.log("Notification permission denied");
+              messageNotif = "denied";
+            } else if (permission === "default") {
+              // The user closed the permission prompt without granting or denying permission
+              console.log("Notification permission dismissed");
+              messageNotif = "dismissed";
+            }
+
+            alert(messageNotif);
+          })
+          .catch(function (error) {
+            // An error occurred while requesting permission
+            console.error("Error requesting notification permission:", error);
+          });
+      } else {
+        // The browser does not support the Notification API
+        console.log("Notifications not supported");
+      }
     },
     getConditionForm() {
       return (
