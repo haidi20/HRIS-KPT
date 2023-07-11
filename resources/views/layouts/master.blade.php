@@ -465,7 +465,7 @@
     {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script> --}}
     @isset($vue)
         {{-- di kasih angka supaya di vps terupdate --}}
-        <script src="{{ asset('js/app-100723.js') }}"></script>
+        <script src="{{ asset('js/app-110723.js') }}"></script>
     @endisset
     <script>
         $.ajaxSetup({
