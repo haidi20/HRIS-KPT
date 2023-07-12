@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class DashboardController extends Controller
 {
@@ -13,9 +17,10 @@ class DashboardController extends Controller
 
     public function index()
     {
-        // return auth()->user()->getAllPermissions();
-
         $vue = true;
-        return view("pages.dashboard.index", compact("vue"));
+        $baseUrl = Url::to('/');
+        $user = auth()->user();
+
+        return view("pages.dashboard.index", compact("vue", "user", "baseUrl"));
     }
 }

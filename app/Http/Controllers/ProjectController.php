@@ -37,7 +37,7 @@ class ProjectController extends Controller
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
             // ->whereYear("created_at", $month->format("Y"))
             // ->whereMonth("created_at", $month->format("m"))
-            ->orderBy("created_at", "asc")->get();
+            ->orderBy("created_at", "desc")->get();
 
         return response()->json([
             "projects" => $projects,
