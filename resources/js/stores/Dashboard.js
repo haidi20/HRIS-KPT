@@ -31,8 +31,10 @@ const Dashboard = {
         INSERT_BASE_URL(state, payload) {
             state.base_url = payload.base_url;
         },
-        INSERT_DATA(state, payload) {
-            state.data = payload.vacations;
+        INSERT_TABLE(state, payload) {
+            state.data.positions = payload.positions;
+            state.data.employee_not_have_job_orders = payload.employee_not_have_job_orders;
+            state.data.five_employee_highest_job_orders = payload.five_employee_highest_job_orders;
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
@@ -45,11 +47,13 @@ const Dashboard = {
         },
     },
     actions: {
-        fetchData: async (context, payload) => {
-            context.commit("INSERT_DATA", {
-                vacations: [],
-            });
-            context.commit("UPDATE_LOADING_TABLE", { value: true });
+        fetchTotal: async (context, payload) => {
+            // context.commit("INSERT_TABLE", {
+            //     positions: [],
+            //     employee_not_have_job_orders: [],
+            //     five_employee_highest_job_orders: [],
+            // });
+            // context.commit("UPDATE_LOADING_TABLE", { value: true });
 
             const params = {
                 ...context.state.params,
@@ -58,20 +62,20 @@ const Dashboard = {
 
             await axios
                 .get(
-                    `${context.state.base_url}/api/v1/vacation/fetch-data`, {
+                    `${context.state.base_url}/api/v1/dashboard/fetch-total`, {
                     params: { ...params },
                 })
                 .then((responses) => {
                     console.info(responses);
                     const data = responses.data;
 
-                    context.commit("INSERT_DATA", {
-                        vacations: data.vacations,
-                    });
-                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    // context.commit("INSERT_TABLE", {
+                    //     total: data.total,
+                    // });
+                    // context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })
                 .catch((err) => {
-                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    // context.commit("UPDATE_LOADING_TABLE", { value: false });
                     console.info(err);
                 });
         },

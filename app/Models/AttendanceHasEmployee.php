@@ -13,10 +13,32 @@ class AttendanceHasEmployee extends Model
 
     protected $appends = [
         "duration_work_readable",  "duration_rest_readable",  "duration_overtime_readable",
-        "duration_overtime_job_order_readable",
+        "duration_overtime_job_order_readable", "employee_name", "position_name",
     ];
 
     protected $guarded = [];
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, "employee_id", "id")
+            ->select("id", "name", "position_id");
+    }
+
+    // nama user yang approval
+    public function getEmployeeNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->name;
+        }
+    }
+
+    // departemen user yang approval
+    public function getPositionNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_name;
+        }
+    }
 
     public function getDurationWorkReadableAttribute()
     {
