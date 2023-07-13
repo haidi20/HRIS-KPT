@@ -2,8 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\PeriodPayrollController;
 use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\JobOrder;
+use App\Models\JobOrderHasEmployee;
+use App\Models\JobStatusHasParent;
+// use App\Models\JobStatusHasParent;
 use App\Models\Position;
 use App\Models\Roster;
 use App\Models\RosterDaily;
@@ -24,6 +29,11 @@ class DummyPayrollSeeder extends Seeder
 
         RosterDaily::truncate();
         Attendance::truncate();
+
+        JobOrder::truncate();
+        JobOrderHasEmployee::truncate();
+        JobStatusHasParent::truncate();
+
 
 
 
@@ -143,25 +153,59 @@ class DummyPayrollSeeder extends Seeder
                         $duration_work = 0;
                         // $status_roster_id = 0;
                     } else {
-                        if ($name_day == 'saturday') { 
+                        if ($name_day == 'saturday') {
                             $hour_start = $p->format('Y-m-d') . " 09:00:00";
                             $hour_end = $p->format('Y-m-d') . " 14:00:00";
-                            $duration_work = 4 * 60;
+                            $duration_work = 4;
                         } else {
                             $hour_start = $p->format('Y-m-d') . " 09:00:00";
                             $hour_end = $p->format('Y-m-d') . " 17:00:00";
-                            $duration_work = 7 * 60;
+                            $duration_work = 7;
 
-                            $duration_overtime = \mt_rand(0, 15) * 60;
-                            // print("==============");
-                            // print($duration_overtime . "\n");
-                            // print("==============");
-
-                            $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
+                            $duration_overtime = \mt_rand(0, 15);
 
                             if ($duration_overtime > 0) {
+
+                                $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
                                 $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
                                 $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
+
+                                $job_order = JobOrder::create([
+                                    'project_id' => 1,
+                                    'job_id' => 1,
+                                    'job_level' => 'middle',
+                                    'job_note' => 'TES PAYROLL',
+                                    'datetime_start' => $hour_overtime_start,
+                                    'datetime_end' => $hour_overtime_end,
+                                    'datetime_estimation_end' => $hour_overtime_end,
+                                    'estimation' => $duration_overtime * 60,
+                                    'time_type' => 'minutes',
+                                    'category' => 'reguler',
+                                    'status' => 'overtime',
+                                    'status_note' => 'TEST PAYROLL',
+                                    'note' => 'TEST PAYROLL',
+
+
+                                ]);
+
+                                $job_order_has_employee = JobOrderHasEmployee::create([
+                                    'employee_id' => $e->id,
+                                    'project_id' => $job_order->project_id,
+                                    'job_order_id' => $job_order->id,
+                                ]);
+
+                                $job_status_has_parent = JobStatusHasParent::create([
+                                    'parent_id' => $job_order_has_employee->id,
+                                    'parent_model' => 'App\\Models\\JobOrderHasEmployee',
+                                    'employee_id' => $job_order_has_employee->employee_id,
+                                    'job_order_id' => $job_order->id,
+                                    'status' => 'overtime',
+                                    'datetime_start' => $hour_overtime_start,
+                                    'datetime_end' => $hour_overtime_end,
+                                    'note_end' => 'TES PAYROLL'
+
+
+                                ]);
                             }
                         }
                     }
@@ -174,17 +218,54 @@ class DummyPayrollSeeder extends Seeder
                     } else {
                         $hour_start = $p->format('Y-m-d') . " 08:00:00";
                         $hour_end = $p->format('Y-m-d') . " 17:00:00";
-                        $duration_work = 8 * 60;
+                        $duration_work = 8;
 
                         $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
 
-                        $duration_overtime = \mt_rand(0, 24) * 60;
-                        // print("==============");
-                        // print($duration_overtime . "\n");
-                        // print("==============");
+                        $duration_overtime = \mt_rand(0, 15);
+
                         if ($duration_overtime > 0) {
+                            $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
                             $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
                             $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
+
+
+                            $job_order = JobOrder::create([
+                                'project_id' => 1,
+                                'job_id' => 1,
+                                'job_level' => 'middle',
+                                'job_note' => 'TES PAYROLL',
+                                'datetime_start' => $hour_overtime_start,
+                                'datetime_end' => $hour_overtime_end,
+                                'datetime_estimation_end' => $hour_overtime_end,
+                                'estimation' => $duration_overtime * 60,
+                                'time_type' => 'minutes',
+                                'category' => 'reguler',
+                                'status' => 'overtime',
+                                'status_note' => 'TEST PAYROLL',
+                                'note' => 'TEST PAYROLL',
+
+
+                            ]);
+
+                            $job_order_has_employee = JobOrderHasEmployee::create([
+                                'employee_id' => $e->id,
+                                'project_id' => $job_order->project_id,
+                                'job_order_id' => $job_order->id,
+                            ]);
+
+                            $job_status_has_parent = JobStatusHasParent::create([
+                                'parent_id' => $job_order_has_employee->id,
+                                'parent_model' => 'App\\Models\\JobOrderHasEmployee',
+                                'employee_id' => $job_order_has_employee->employee_id,
+                                'job_order_id' => $job_order->id,
+                                'status' => 'overtime',
+                                'datetime_start' => $hour_overtime_start,
+                                'datetime_end' => $hour_overtime_end,
+                                'note_end' => 'TES PAYROLL'
+
+
+                            ]);
                         }
                     }
                 }
@@ -211,9 +292,22 @@ class DummyPayrollSeeder extends Seeder
 
                     'hour_overtime_start' => $hour_overtime_start,
                     'hour_overtime_end' => $hour_overtime_end,
-                    'duration_overtime' => $duration_overtime,
+                    'duration_overtime' => $duration_overtime * 60,
                 ]);
 
+
+                if ($p->endOfMonth()->format('Y-m-d') == $p->format('Y-m-d')) {
+                    print("-----GENERATE PAYROLL " .$p->format('d F Y')."---------------".$p->endOfMonth()->format('Y-m-d')."\n" );
+                    $data_period_payroll =  [
+                        "period" => $p->format('Y-m'),
+                        "date_start" => $p->startOfMonth()->addMonths(-1)->format('Y-m') . "26",
+                        "date_end" => $p->startOfMonth()->format('Y-m') . "25",
+                    ];
+
+                    $period_payroll =  new PeriodPayrollController($data_period_payroll);
+
+                    $period_payroll->store();
+                }
             }
 
 

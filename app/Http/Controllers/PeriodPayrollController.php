@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+// use ___PHPSTORM_HELPERS\object;
 use App\Exports\PayrollExport;
 use App\Models\Attendance;
 use App\Models\AttendanceHasEmployee;
@@ -31,9 +32,9 @@ use Illuminate\Support\Str;
 class PeriodPayrollController extends Controller
 {
     public $period_payrol_month_year;
-    public function __construct($period_payrol_month_year = null)
+    public function __construct($period_payrol_month_year = [])
     {
-        $this->$period_payrol_month_year = $period_payrol_month_year;
+        $this->period_payrol_month_year = $period_payrol_month_year;
     }
     public function index(Datatables $datatables)
     {
@@ -59,7 +60,7 @@ class PeriodPayrollController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $period_payroll = PeriodPayroll::query()
-                ->select('period_payrolls.last_excel','period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
+                ->select('period_payrolls.last_excel', 'period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
 
             return $datatables->eloquent($period_payroll)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -77,10 +78,10 @@ class PeriodPayrollController extends Controller
                     $button = '';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="'.url()->current()."/export?a=".$data->last_excel.'" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
                     }
 
-                   
+
 
                     return $button;
                 })
@@ -131,37 +132,80 @@ class PeriodPayrollController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store()
     {
 
         try {
             DB::beginTransaction();
 
-            $n = PeriodPayroll::where('period', request("period") . "-01")->count();
+            if ($this->period_payrol_month_year != null) {
 
-            if ($n > 0) {
-                $period_payroll = PeriodPayroll::where('period', request("period") . "-01")->first();
-                $message = "diperbaharui";
-            } else {
-                if (request("id")) {
-                    $period_payroll = PeriodPayroll::find(request("id"));
-                    $period_payroll->updated_by = Auth::user()->id ?? null;
+                $n = PeriodPayroll::where('period', $this->period_payrol_month_year->periode . "-01")->count();
 
+                if ($n > 0) {
+                    $period_payroll = PeriodPayroll::where('period', $this->period_payrol_month_year->periode. "-01")->first();
                     $message = "diperbaharui";
                 } else {
-                    $period_payroll = new PeriodPayroll;
-                    $period_payroll->created_by = Auth::user()->id ?? null;
+                    if (request("id")) {
+                        $period_payroll = PeriodPayroll::find(request("id"));
+                        $period_payroll->updated_by = Auth::user()->id ?? null;
 
-                    $message = "ditambahkan";
+                        $message = "diperbaharui";
+                    } else {
+                        $period_payroll = new PeriodPayroll;
+                        $period_payroll->created_by = Auth::user()->id ?? null;
+
+                        $message = "ditambahkan";
+                    }
                 }
+
+
+                $period_payroll->period = $this->period_payrol_month_year->periode."-01";
+                $period_payroll->date_start = $this->period_payrol_month_year->periode->date_start;
+                $period_payroll->date_end = $this->period_payrol_month_year->periode->date_end;
+
+
+
+
+             } else {
+                $n = PeriodPayroll::where('period', request("period") . "-01")->count();
+
+                if ($n > 0) {
+                    $period_payroll = PeriodPayroll::where('period', request("period") . "-01")->first();
+                    $message = "diperbaharui";
+                } else {
+                    if (request("id")) {
+                        $period_payroll = PeriodPayroll::find(request("id"));
+                        $period_payroll->updated_by = Auth::user()->id ?? null;
+
+                        $message = "diperbaharui";
+                    } else {
+                        $period_payroll = new PeriodPayroll;
+                        $period_payroll->created_by = Auth::user()->id ?? null;
+
+                        $message = "ditambahkan";
+                    }
+                }
+
+
+
+
+                $period_payroll->period = request("period") . "-01";
+                $period_payroll->date_start = request("date_start");
+                $period_payroll->date_end = request("date_end");
             }
 
-
-
-
-            $period_payroll->period = request("period") . "-01";
-            $period_payroll->date_start = request("date_start");
-            $period_payroll->date_end = request("date_end");
+            if($period_payroll->is_final == 1){
+                if ($this->period_payrol_month_year != null) {
+                    Log::error('sudah ada');
+                    print("Sudah Ada");
+                    return false;
+                }else{
+                    Log::error('sudah ada');
+                    print("Sudah Ada");
+                    return false;
+                }
+            }
             $period_payroll->save();
 
 
@@ -267,9 +311,9 @@ class PeriodPayrollController extends Controller
                 foreach ($period as $key => $p) {
                     $new_old_d = $data_absens->where('date', $p->format('Y-m-d'))->first();
 
-                    $roster_daily = RosterDaily::where('employee_id',$employee->id)
-                    ->whereDate('date',$p->format('Y-m-d'))
-                    ->first();
+                    $roster_daily = RosterDaily::where('employee_id', $employee->id)
+                        ->whereDate('date', $p->format('Y-m-d'))
+                        ->first();
                     //  if( $p->format('Y-m-d')=='2023-06-19'){
                     //     return $new_old_d;
                     //  }
@@ -326,25 +370,25 @@ class PeriodPayrollController extends Controller
                             'lembur_kali_dua' => $kali_2,
                             'lembur_kali_tiga' => $kali_3,
                             'lembur_kali_empat' => $kali_4,
-                            'roster_daily_id'=>$roster_daily->id ?? null,
-                            'roster_status_initial'=>$roster_daily->roster_status_initial ?? null
+                            'roster_daily_id' => $roster_daily->id ?? null,
+                            'roster_status_initial' => $roster_daily->roster_status_initial ?? null
                         ]);
                     } else {
 
                         $is_weekend = 0;
                         $is_vacation = 0;
 
-                        if(isset($roster_daily->id)){
-                            if($roster_daily->roster_status_initial == 'M'){
-                                
+                        if (isset($roster_daily->id)) {
+                            if ($roster_daily->roster_status_initial == 'M') {
 
-                                $vacations = Vacation::where('employee_id',$employee->id)
-                                ->whereYear('date_start',Carbon::now()->format('Y'))
-                                ->where('status','accept')
-                                ->select(
-                                    DB::raw('DATEDIFF(date_start, date_end) AS jumlah_hari_cuti')
-                                )
-                                ->get();
+
+                                $vacations = Vacation::where('employee_id', $employee->id)
+                                    ->whereYear('date_start', Carbon::now()->format('Y'))
+                                    ->where('status', 'accept')
+                                    ->select(
+                                        DB::raw('DATEDIFF(date_start, date_end) AS jumlah_hari_cuti')
+                                    )
+                                    ->get();
 
                                 $jumlah_hari_cuti = 0;
 
@@ -352,16 +396,16 @@ class PeriodPayrollController extends Controller
                                     $jumlah_hari_cuti += $v->jumlah_hari_cuti;
                                 }
 
-                                if(($jumlah_hari_cuti + 1) > $employee->day_vacation){
+                                if (($jumlah_hari_cuti + 1) > $employee->day_vacation) {
                                     $jumlah_hari_tidak_masuk_tmp += 1;
                                 }
 
                                 Vacation::create([
-                                    'employee_id'=>$employee->id,
-                                    'date_start'=>$p->format('Y-m-d'),
-                                    'date_end'=>$p->format('Y-m-d'),
-                                    'note'=>'CUTI AUTO APPROVE SYSTEM',
-                                    'status'=>'accept'
+                                    'employee_id' => $employee->id,
+                                    'date_start' => $p->format('Y-m-d'),
+                                    'date_end' => $p->format('Y-m-d'),
+                                    'note' => 'CUTI AUTO APPROVE SYSTEM',
+                                    'status' => 'accept'
                                 ]);
 
                                 // $jumlah_hari_cuti
@@ -369,15 +413,15 @@ class PeriodPayrollController extends Controller
                                 //cari cutinya belum
                             }
                         }
-                        
+
 
                         AttendancePayrol::create([
-                            'employee_id'=>$employee->id,
-                            'date'=>$p->format('Y-m-d'),
-                            'cloud_id'=>'TIDAK HADIR',
-                            'pin'=>'TIDAK HADIR',
-                            'roster_daily_id'=>$roster_daily->id ?? null,
-                            'roster_status_initial'=>$roster_daily->roster_status_initial ?? null
+                            'employee_id' => $employee->id,
+                            'date' => $p->format('Y-m-d'),
+                            'cloud_id' => 'TIDAK HADIR',
+                            'pin' => 'TIDAK HADIR',
+                            'roster_daily_id' => $roster_daily->id ?? null,
+                            'roster_status_initial' => $roster_daily->roster_status_initial ?? null
                         ]);
                         // AttendancePayrol::create([
                         //     ''
@@ -745,10 +789,10 @@ class PeriodPayrollController extends Controller
             }
 
 
-            $unik_name_excel = 'Periode_'.$period_payroll->period.'_'.Str::uuid().'.xlsx';
+            $unik_name_excel = 'Periode_' . $period_payroll->period . '_' . Str::uuid() . '.xlsx';
 
             $period_payroll->update([
-                'last_excel'=>$unik_name_excel
+                'last_excel' => $unik_name_excel
             ]);
 
 
@@ -758,10 +802,11 @@ class PeriodPayrollController extends Controller
             Excel::store(new PayrollExport($period_payroll, $employees), $unik_name_excel, 'local');
 
 
-            return response()->json([
-                'success' => true,
-                'message' => "Berhasil {$message}",
-            ], 200);
+            return true;
+            // return response()->json([
+            //     'success' => true,
+            //     'message' => "Berhasil {$message}",
+            // ], 200);
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -771,12 +816,14 @@ class PeriodPayrollController extends Controller
             $log = new LogController;
             $log->store($e->getMessage(), $routeAction);
 
+            return false;
 
-            return response()->json([
-                'success' => false,
-                'message' => "Gagal {$message} {$e->getMessage()}",
-                'error'=>[$e->getMessage(),$e->getTrace(),$e->getLine()]
-            ], 500);
+
+            // return response()->json([
+            //     'success' => false,
+            //     'message' => "Gagal {$message} {$e->getMessage()}",
+            //     'error' => [$e->getMessage(), $e->getTrace(), $e->getLine()]
+            // ], 500);
         }
     }
 
@@ -816,7 +863,7 @@ class PeriodPayrollController extends Controller
 
     function export()
     {
-        $path = storage_path('app\\'.request()->get('a'));
+        $path = storage_path('app\\' . request()->get('a'));
         return response()->download($path);
     }
 }
