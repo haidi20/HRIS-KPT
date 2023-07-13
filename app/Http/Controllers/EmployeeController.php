@@ -214,13 +214,27 @@ class EmployeeController extends Controller
             $employee->reason = request("reason");
 
             // DATA GAJI DAN REKENING
-            $employee->basic_salary = request("basic_salary");
-            $employee->allowance = request("allowance");
-            $employee->meal_allowance_per_attend = request("meal_allowance_per_attend");
-            $employee->transport_allowance_per_attend = request("transport_allowance_per_attend");
-            $employee->attend_allowance_per_attend = request("attend_allowance_per_attend");
-            $employee->overtime_rate_per_hour = request("overtime_rate_per_hour");
-            $employee->vat_per_year = request("vat_per_year");
+            $basic_salary = str_replace('Rp. ', '', request("basic_salary"));
+            $employee->basic_salary = str_replace('.', '', $basic_salary);
+
+            $allowance = str_replace('Rp. ', '', request("allowance"));
+            $employee->allowance =  str_replace('.', '', $allowance);
+
+            $meal_allowance_per_attend = str_replace('Rp. ', '', request("meal_allowance_per_attend"));
+            $employee->meal_allowance_per_attend = str_replace('.', '', $meal_allowance_per_attend);
+
+            $transport_allowance_per_attend = str_replace('Rp. ', '', request("transport_allowance_per_attend"));
+            $employee->transport_allowance_per_attend = str_replace('.', '', $transport_allowance_per_attend);
+
+            $attend_allowance_per_attend = str_replace('Rp. ', '', request("attend_allowance_per_attend"));
+            $employee->attend_allowance_per_attend = str_replace('.', '', $attend_allowance_per_attend);
+
+            $overtime_rate_per_hour = str_replace('Rp. ', '', request("overtime_rate_per_hour"));
+            $employee->overtime_rate_per_hour = str_replace('.', '', $overtime_rate_per_hour);
+
+            $vat_per_year = str_replace('Rp. ', '', request("vat_per_year"));
+            $employee->vat_per_year = str_replace('.', '', $vat_per_year);
+
             $employee->rekening_number = request("rekening_number");
             $employee->rekening_name = request("rekening_name");
             $employee->bank_name = request("bank_name");
