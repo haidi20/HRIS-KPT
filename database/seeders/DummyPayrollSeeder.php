@@ -95,7 +95,7 @@ class DummyPayrollSeeder extends Seeder
             // print("GENERATE EMLOYEE_ID : ".$e->id." | Tipe Karyawan : ".$tipe_karyawan."\n");
 
             foreach ($period as $key => $p) {
-                
+
 
                 $name_day = strtolower($p->format('l'));
 
@@ -117,9 +117,9 @@ class DummyPayrollSeeder extends Seeder
                 }
 
 
-                print("GENERATE EMLOYEE_ID : " . $e->id . " ||  PERIOD : " . $p->format('d F Y') ." | ROSTER : ".$status_roster." | WORKING ->".$e->working_hour. "\n");
+                print("GENERATE EMLOYEE_ID : " . $e->id . " ||  PERIOD : " . $p->format('d F Y') . " | ROSTER : " . $status_roster . " | WORKING ->" . $e->working_hour . "\n");
 
-                
+
 
                 // print($name_day."\n");
                 $roster = RosterDaily::firstOrcreate([
@@ -143,20 +143,26 @@ class DummyPayrollSeeder extends Seeder
                         $duration_work = 0;
                         // $status_roster_id = 0;
                     } else {
-                        $hour_start = $p->format('Y-m-d') . " 09:00:00";
-                        $hour_end = $p->format('Y-m-d') . " 17:00:00";
-                        $duration_work = 7*60;
+                        if ($name_day == 'saturday') { 
+                            $hour_start = $p->format('Y-m-d') . " 09:00:00";
+                            $hour_end = $p->format('Y-m-d') . " 14:00:00";
+                            $duration_work = 4 * 60;
+                        } else {
+                            $hour_start = $p->format('Y-m-d') . " 09:00:00";
+                            $hour_end = $p->format('Y-m-d') . " 17:00:00";
+                            $duration_work = 7 * 60;
 
-                        $duration_overtime = \mt_rand(0, 15)*60;
-                        // print("==============");
-                        // print($duration_overtime . "\n");
-                        // print("==============");
+                            $duration_overtime = \mt_rand(0, 15) * 60;
+                            // print("==============");
+                            // print($duration_overtime . "\n");
+                            // print("==============");
 
-                        $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
+                            $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
 
-                        if ($duration_overtime > 0) {
-                            $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
-                            $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
+                            if ($duration_overtime > 0) {
+                                $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
+                                $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
+                            }
                         }
                     }
                 } else {
@@ -168,7 +174,7 @@ class DummyPayrollSeeder extends Seeder
                     } else {
                         $hour_start = $p->format('Y-m-d') . " 08:00:00";
                         $hour_end = $p->format('Y-m-d') . " 17:00:00";
-                        $duration_work = 8*60;
+                        $duration_work = 8 * 60;
 
                         $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
 
@@ -193,8 +199,8 @@ class DummyPayrollSeeder extends Seeder
                 ]);
 
                 $attendance->update([
-                    'roster_daily_id'=>$status_roster_id,
-                    'roster_status_initial'=>$status_roster,
+                    'roster_daily_id' => $status_roster_id,
+                    'roster_status_initial' => $status_roster,
                     'hour_start' => $hour_start,
                     'hour_end' => $hour_end,
                     'duration_work' => $duration_work,
@@ -208,20 +214,8 @@ class DummyPayrollSeeder extends Seeder
                     'duration_overtime' => $duration_overtime,
                 ]);
 
-
-
-                // Attendance::create([
-
-                // ]);
-                # code...
             }
 
-
-
-
-
-
-            # code...
 
             if ($karyawan_tipe_1 >  3 && $karyawan_tipe_2 >  3 && $karyawan_tipe_3 >  3) {
                 break;
