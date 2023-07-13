@@ -359,6 +359,7 @@
     <link href="{{ asset('assets-mazer/extensions/select2/css/select2.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet"
         href="{{ asset('assets-mazer/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets\extensions\@fortawesome\fontawesome-free\css\all.css') }}">
 
     {{-- BACKUP CSS --}}
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
@@ -372,9 +373,9 @@
 
 <body class="full-height">
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
-    <div id="app" class="full-height">
+    <div id="app" style="height: 100%">
         @include('layouts.sidebar')
-        <div id="main" class='layout-navbar full-height'>
+        <div id="main" class='layout-navbar' style="height: 100%">
             @include('layouts.header')
             <div id="main-content" class="pt-0">
                 @yield('content')

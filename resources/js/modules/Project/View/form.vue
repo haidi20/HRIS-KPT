@@ -13,13 +13,13 @@
         </b-form-group>
       </b-col>
       <b-col cols>
-        <b-form-group label="Kapal" label-for="barge_id" class>
+        <b-form-group label="Lokasi" label-for="location_id" class>
           <VueSelect
-            id="barge_id"
+            id="location_id"
             class="cursor-pointer"
-            v-model="form.barge_id"
-            placeholder="Pilih Kapal"
-            :options="getOptionBarges"
+            v-model="form.location_id"
+            placeholder="Pilih Lokasi"
+            :options="getOptionLocations"
             :reduce="(data) => data.id"
             label="name"
             searchable
@@ -28,6 +28,7 @@
           />
         </b-form-group>
       </b-col>
+
       <!-- <b-col cols>
         <b-form-group label="Jenis Pekerjaan" label-for="work_type" class>
           <VueSelect
@@ -62,13 +63,13 @@
         </b-form-group>
       </b-col>
       <b-col cols>
-        <b-form-group label="Lokasi" label-for="location_id" class>
+        <b-form-group label="Kapal" label-for="barge_id" class>
           <VueSelect
-            id="location_id"
+            id="barge_id"
             class="cursor-pointer"
-            v-model="form.location_id"
-            placeholder="Pilih Lokasi"
-            :options="getOptionLocations"
+            v-model="form.barge_id"
+            placeholder="Pilih Kapal"
+            :options="getOptionBarges"
             :reduce="(data) => data.id"
             label="name"
             searchable

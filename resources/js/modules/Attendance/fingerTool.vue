@@ -152,6 +152,9 @@ export default {
     onFilter() {
       this.$store.dispatch("attendance/fetchDataBaseFinger");
     },
+    onCloseModal() {
+      this.$bvModal.hide("form_pull_data");
+    },
     onShowFormPullData() {
       this.$bvModal.show("form_pull_data");
     },

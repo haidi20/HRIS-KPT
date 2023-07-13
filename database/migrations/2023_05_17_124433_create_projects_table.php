@@ -19,7 +19,7 @@ class CreateProjectsTable extends Migration
             // $table->foreignId('company_id')->nullable(); // perusahaan
             $table->foreignId('foreman_id')->nullable(); // pengawas
             $table->foreignId('barge_id')->nullable(); // kapal
-            $table->string("code"); // kode proyek
+            // $table->string("code"); // kode proyek
             $table->string("name"); // nama proyek
             $table->date('date_end')->nullable(); // tanggal selesai
             $table->integer('day_duration')->nullable(); // berapa lama hari pengerjaan

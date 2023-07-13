@@ -8,6 +8,7 @@ use App\Models\ContractorHasParent;
 use App\Models\JobOrder;
 use App\Models\OrdinarySeamanHasParent;
 use App\Models\Project;
+use App\Models\ProjectHistory;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,7 @@ class ProjectController extends Controller
         $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
             // ->whereYear("created_at", $month->format("Y"))
             // ->whereMonth("created_at", $month->format("m"))
-            ->orderBy("created_at", "asc")->get();
+            ->orderBy("created_at", "desc")->get();
 
         return response()->json([
             "projects" => $projects,
@@ -142,8 +143,6 @@ class ProjectController extends Controller
     {
         // return request()->all();
 
-        $dateEnd = null;
-
         $checkDuplicateContractor = $this->detectDuplicateData(request("contractors"), ['contractor_id']);
 
         if ($checkDuplicateContractor) {
@@ -164,6 +163,15 @@ class ProjectController extends Controller
             ], 401);
         }
 
+        $getStoreValidation = $this->storeValidation();
+
+        if ($getStoreValidation) {
+            return response()->json([
+                'success' => false,
+                'message' => $this->storeValidation("result"),
+            ], 400);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -177,6 +185,7 @@ class ProjectController extends Controller
                 $message = "ditambahkan";
             }
 
+            $dateEnd = null;
             if (request("date_end") != null) {
                 $dateEnd = Carbon::parse(request("date_end"))->format("Y-m-d");
             }
@@ -197,12 +206,14 @@ class ProjectController extends Controller
 
             $this->storeContractors($project);
             $this->storeOrdinarySeamans($project);
+            $this->storeProjectHistories($project);
+
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'checkDuplicateContractor' => $checkDuplicateContractor,
+                'requests' => request()->all(),
                 'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
@@ -232,6 +243,8 @@ class ProjectController extends Controller
             ]);
             $project->delete();
 
+            $this->storeProjectHistories($project, true);
+
             DB::commit();
 
             return response()->json([
@@ -252,6 +265,31 @@ class ProjectController extends Controller
                 'message' => 'Gagal dihapus',
             ], 500);
         }
+    }
+
+    private function storeProjectHistories($project, $isDelete = false)
+    {
+        $projectHistory = new ProjectHistory;
+        $projectHistory->project_id = $project->id;
+        $projectHistory->foreman_id = $project->foreman_id;
+        $projectHistory->barge_id = $project->barge_id;
+        $projectHistory->name = $project->name;
+        $projectHistory->date_end = $project->date_end;
+        $projectHistory->day_duration = $project->day_duration;
+        $projectHistory->price = $project->price;
+        $projectHistory->down_payment = $project->down_payment;
+        $projectHistory->remaining_payment = $project->remaining_payment;
+        $projectHistory->type = $project->type;
+        $projectHistory->note = $project->note;
+        $projectHistory->created_by = $project->created_by;
+        $projectHistory->updated_by = $project->updated_by;
+        $projectHistory->created_at = $project->created_at;
+        $projectHistory->updated_at = $project->updated_at;
+        if ($isDelete) {
+            $projectHistory->deleted_by = $project->deleted_by;
+            $projectHistory->deleted_at = Carbon::now();
+        }
+        $projectHistory->save();
     }
 
     private function storeContractors($project)
@@ -313,6 +351,39 @@ class ProjectController extends Controller
         }
 
         return $duplicates;
+    }
+
+    private function storeValidation($type = null)
+    {
+        $isError = false;
+        $message = null;
+
+        $lstFormValidations = [
+            (object) [
+                "field" => "name",
+                "name" => "Nama proyek",
+            ],
+            (object) [
+                "field" => "location_id",
+                "name" => "Lokasi",
+            ],
+
+        ];
+
+        foreach ($lstFormValidations as $index => $item) {
+            if (request("{$item->field}") == null) {
+                $isError = true;
+                $message = "Maaf, {$item->name} harus di masukkan";
+
+                break;
+            }
+        }
+
+        if ($type == "result") {
+            return $message;
+        }
+
+        return $isError;
     }
 
     private function fetchDataOld()

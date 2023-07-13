@@ -6,6 +6,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BargeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContractorController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FingerToolController;
 use App\Http\Controllers\JobController;
@@ -62,6 +63,9 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     // END LAPORAN
 
+    Route::prefix("dashboard")->name("dashboard.")->group(function () {
+        Route::get("fetch-total", [DashboardController::class, "fetchTotal"])->name("fetchTotal");
+    });
     Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
         Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");
         Route::get("select-autorizeds", [ApprovalLevelController::class, "selectAuthorizeds"])->name("selectAuthorizeds");
