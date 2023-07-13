@@ -60,6 +60,7 @@ const Dashboard = {
             employee_not_have_job_orders: [],
             five_employee_highest_job_orders: [],
             total: [],
+            selected: [],
         },
         params: {
             month: new Date(),
@@ -97,6 +98,9 @@ const Dashboard = {
             }
 
             // console.info(state.data.total);
+        },
+        INSERT_DATA_SELECTED(state, payload) {
+            state.data.selected = [...payload.data];
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
