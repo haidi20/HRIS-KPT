@@ -88,13 +88,35 @@ class DummyPayrollSeeder extends Seeder
                 continue;
             }
 
+            if ($tipe_karyawan == 1 && $karyawan_tipe_1 == 2) {
+                $e->update([
+                    'enter_date'=>'2022-06-01'
+                ]);// continue;
+            }
+
+
+
             if ($tipe_karyawan == 2 && $karyawan_tipe_2 > 4) {
                 continue;
+            }
+
+             if ($tipe_karyawan == 2 && $karyawan_tipe_2 == 2) {
+                $e->update([
+                    'enter_date'=>'2022-06-15'
+                ]);// continue;
             }
 
             if ($tipe_karyawan == 3 && $karyawan_tipe_3 > 4) {
                 continue;
             }
+
+             if ($tipe_karyawan == 3 && $karyawan_tipe_3 == 2) {
+                $e->update([
+                    'enter_date'=>'2022-06-20'
+                ]);// continue;
+            }
+
+
 
             // if($karyawan_tipe_1 >  3 || $karyawan_tipe_2 >  3 || $karyawan_tipe_3 >  3 ){
             //     print("karyawan_tipe_1 -> ".$karyawan_tipe_1." | karyawan_2 -> ".$karyawan_tipe_2." | karyawan_3 -> ".$karyawan_tipe_3."\n");
