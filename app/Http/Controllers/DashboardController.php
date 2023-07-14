@@ -179,7 +179,7 @@ class DashboardController extends Controller
         try {
             DB::beginTransaction();
 
-            $dashboardHasPosition = DashboardHasPosition::find(request("position_id"));
+            $dashboardHasPosition = DashboardHasPosition::where("position_id", request("position_id"));
             $dashboardHasPosition->delete();
 
             DB::commit();

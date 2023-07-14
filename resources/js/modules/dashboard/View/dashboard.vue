@@ -193,7 +193,7 @@
     <b-modal
       id="data_setting_position"
       ref="data_setting_position"
-      title="Jabatan yang menggunakan job order"
+      title="Jabatan yang Menggunakan Job Order"
       size="md"
       class="modal-custom"
       hide-footer
@@ -214,18 +214,18 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="3" style="align-self: center;">
-          <b-button variant="success" @click="onSend()">Tambah</b-button>
+        <b-col cols="3">
+          <b-button variant="success" @click="onSendHasPosition()">Tambah</b-button>
         </b-col>
       </b-row>
       <b-row>
         <b-col cols>
           <DatatableClient
             :data="getDataDashboardHasPositions"
-            :columns="setting_position_columns"
+            :columns="dashboard_has_position_columns"
             :options="options"
             nameStore="dashboard"
-            nameLoading="setting_position"
+            nameLoading="dashboard_has_position"
             :filter="false"
             :footer="false"
             bordered
@@ -233,6 +233,9 @@
             <template v-slot:tbody="{ filteredData }">
               <b-tr v-for="(item, index) in filteredData" :key="index">
                 <b-td>{{item.position_name}}</b-td>
+                <b-td style="text-align-last: center;">
+                  <b-button variant="danger" size="sm" @click="onDeleteHasPosition(item)">Hapus</b-button>
+                </b-td>
               </b-tr>
             </template>
           </DatatableClient>

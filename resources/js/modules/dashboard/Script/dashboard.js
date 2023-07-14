@@ -68,11 +68,17 @@ export default {
                     class: "",
                 },
             ],
-            setting_position_columns: [
+            dashboard_has_position_columns: [
                 {
                     label: "Nama Jabatan",
                     field: "name",
                     width: "200px",
+                    class: "",
+                },
+                {
+                    label: "",
+                    field: "",
+                    width: "1px",
                     class: "",
                 },
             ],
@@ -139,7 +145,7 @@ export default {
     watch: {
         getBaseUrl(value) {
             if (value != null) {
-                console.info(value);
+                // console.info(value);
                 this.$store.dispatch("dashboard/fetchTotal");
             }
         },
@@ -159,7 +165,7 @@ export default {
             this.$bvModal.hide("data_total");
             this.$bvModal.hide("data_setting_position");
         },
-        async onSend() {
+        async onSendHasPosition() {
             const Swal = this.$swal;
 
             // mengambil data hexa saja
@@ -216,6 +222,71 @@ export default {
                         title: err.response.data.message,
                     });
                 });
+        },
+        async onDeleteHasPosition(data) {
+            const Swal = this.$swal;
+            await Swal.fire({
+                title: "Perhatian!!!",
+                html: `Anda yakin ingin hapus jabatan <h2><b>${data.position_name}</b> ?</h2>`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya hapus",
+                cancelButtonText: "Batal",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await axios
+                        .post(`${this.getBaseUrl}/api/v1/dashboard/delete-has-position`, {
+                            position_id: data.position_id,
+                        })
+                        .then((responses) => {
+                            //   console.info(responses);
+                            const data = responses.data;
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                                },
+                            });
+
+                            if (data.success == true) {
+                                Toast.fire({
+                                    icon: "success",
+                                    title: data.message,
+                                });
+
+                                this.$store.dispatch("dashboard/fetchDashboardHasPosition");
+                            }
+                        })
+                        .catch((err) => {
+                            console.info(err);
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                                },
+                            });
+
+                            Toast.fire({
+                                icon: "error",
+                                title: err.response.data.message,
+                            });
+                        });
+                }
+            });
         },
         getColumns(nameColumn) {
             const columns = this[nameColumn].filter((item) => item.label != "");

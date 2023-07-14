@@ -69,7 +69,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::get("fetch-has-position", [DashboardController::class, "fetchHasPosition"])->name("fetchHasPosition");
 
         Route::post("store-has-position", [DashboardController::class, "storeHasPosition"])->name("storeHasPosition");
-        Route::delete("delete-has-position", [DashboardController::class, "destroyHasPosition"])->name("destroyHasPosition");
+        Route::post("delete-has-position", [DashboardController::class, "destroyHasPosition"])->name("destroyHasPosition");
     });
     Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
         Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");
