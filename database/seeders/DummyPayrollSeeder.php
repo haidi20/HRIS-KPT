@@ -8,6 +8,8 @@ use App\Models\Employee;
 use App\Models\JobOrder;
 use App\Models\JobOrderHasEmployee;
 use App\Models\JobStatusHasParent;
+use App\Models\Payroll;
+use App\Models\PeriodPayroll;
 // use App\Models\JobStatusHasParent;
 use App\Models\Position;
 use App\Models\Roster;
@@ -25,7 +27,11 @@ class DummyPayrollSeeder extends Seeder
      */
     public function run()
     {
-        $employees = Employee::with('position')->get();
+        $employees = Employee::where('id',1)->with('position')->get();
+
+        Employee::where('id',1)->update([
+            'basic_salary'=>3700000
+        ]);
 
         RosterDaily::truncate();
         Attendance::truncate();
@@ -33,6 +39,8 @@ class DummyPayrollSeeder extends Seeder
         JobOrder::truncate();
         JobOrderHasEmployee::truncate();
         JobStatusHasParent::truncate();
+        PeriodPayroll::truncate();
+        Payroll::truncate();
 
 
 
@@ -90,8 +98,8 @@ class DummyPayrollSeeder extends Seeder
 
             if ($tipe_karyawan == 1 && $karyawan_tipe_1 == 2) {
                 $e->update([
-                    'enter_date'=>'2022-06-01'
-                ]);// continue;
+                    'enter_date' => '2022-06-01'
+                ]); // continue;
             }
 
 
@@ -100,20 +108,20 @@ class DummyPayrollSeeder extends Seeder
                 continue;
             }
 
-             if ($tipe_karyawan == 2 && $karyawan_tipe_2 == 2) {
+            if ($tipe_karyawan == 2 && $karyawan_tipe_2 == 2) {
                 $e->update([
-                    'enter_date'=>'2022-06-15'
-                ]);// continue;
+                    'enter_date' => '2022-06-15'
+                ]); // continue;
             }
 
             if ($tipe_karyawan == 3 && $karyawan_tipe_3 > 4) {
                 continue;
             }
 
-             if ($tipe_karyawan == 3 && $karyawan_tipe_3 == 2) {
+            if ($tipe_karyawan == 3 && $karyawan_tipe_3 == 2) {
                 $e->update([
-                    'enter_date'=>'2022-06-20'
-                ]);// continue;
+                    'enter_date' => '2022-06-20'
+                ]); // continue;
             }
 
 
@@ -295,40 +303,49 @@ class DummyPayrollSeeder extends Seeder
 
 
 
-                $attendance  = Attendance::firstOrCreate([
-                    'employee_id' => $e->id,
-                    'cloud_id' => 12,
-                    'date' => $p->format('Y-m-d'),
-                ]);
+                if ($e->employee_status == 'aktif') {
+                    $attendance  = Attendance::firstOrCreate([
+                        'employee_id' => $e->id,
+                        'cloud_id' => 12,
+                        'date' => $p->format('Y-m-d'),
+                    ]);
 
-                $attendance->update([
-                    'roster_daily_id' => $status_roster_id,
-                    'roster_status_initial' => $status_roster,
-                    'hour_start' => $hour_start,
-                    'hour_end' => $hour_end,
-                    'duration_work' => $duration_work,
+                    $attendance->update([
+                        'roster_daily_id' => $status_roster_id,
+                        'roster_status_initial' => $status_roster,
+                        'hour_start' => $hour_start,
+                        'hour_end' => $hour_end,
+                        'duration_work' => $duration_work * 60,
+                        'is_koreksi'=>1,
 
-                    'hour_rest_start' => null,
-                    'hour_rest_end' => null,
-                    'duration_rest' => null,
+                        'hour_rest_start' => null,
+                        'hour_rest_end' => null,
+                        'duration_rest' => null,
 
-                    'hour_overtime_start' => $hour_overtime_start,
-                    'hour_overtime_end' => $hour_overtime_end,
-                    'duration_overtime' => $duration_overtime * 60,
-                ]);
+                        'hour_overtime_start' => $hour_overtime_start,
+                        'hour_overtime_end' => $hour_overtime_end,
+                        'duration_overtime' => $duration_overtime * 60,
+                    ]);
 
 
-                if ($p->endOfMonth()->format('Y-m-d') == $p->format('Y-m-d')) {
-                    print("-----GENERATE PAYROLL " .$p->format('d F Y')."---------------".$p->endOfMonth()->format('Y-m-d')."\n" );
-                    $data_period_payroll =  [
-                        "period" => $p->format('Y-m'),
-                        "date_start" => $p->startOfMonth()->addMonths(-1)->format('Y-m') . "26",
-                        "date_end" => $p->startOfMonth()->format('Y-m') . "25",
-                    ];
+                    // if ($e->id == 1 && ($p->format('Y-m-d') == '2022-06-06')) {
+                    //     print("\n\n\t\t UPDATE GAJI POKOK \n\n");
+                    //     $e->update([
+                    //         'basic_salary' => 4000000
+                    //     ]);
+                    // }
 
-                    $period_payroll =  new PeriodPayrollController($data_period_payroll);
+                    // if ($e->id == 50 && ($p->format('Y-m-d') == '2022-08-06')) {
+                    //     $e->update([
+                    //         'basic_salary' => 4000000
+                    //     ]);
+                    // }
 
-                    $period_payroll->store();
+                    // if ($e->id == 50 && ($p->format('Y-m-d') == '2022-08-06')) {
+                    //     $e->update([
+                    //         'employee_status' => 'tidak_aktif'
+                    //     ]);
+                    // }
                 }
             }
 
@@ -338,6 +355,27 @@ class DummyPayrollSeeder extends Seeder
             }
 
             $iter++;
+            // break;
+        }
+
+
+
+        for ($i = 1; $i <= 12; $i++) {
+
+            $p = Carbon::parse('2022-' . $i . "-01");
+            print("-----GENERATE PAYROLL " . $p->format('d F Y') . "---------------\n");
+            $data_period_payroll = (object) [
+                "periode" => $p->format('Y-m'),
+                "date_end" => $p->startOfMonth()->format('Y-m') . "-25",
+                "date_start" => $p->startOfMonth()->addMonths(-1)->format('Y-m') . "-26",
+
+            ];
+
+            print_r($data_period_payroll);
+
+            $period_payroll =  new PeriodPayrollController($data_period_payroll);
+
+            $period_payroll->store();
         }
     }
 }

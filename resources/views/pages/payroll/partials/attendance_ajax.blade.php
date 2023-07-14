@@ -14,6 +14,7 @@
                         <td>Koreksi Jam</td>
                         <td>Istirahat</td>
                         <td>Jam Kerja</td>
+                        <td>Jam Lembur</td>
                         <td>Normal</td>
                         <td colspan="4">Perhitungan Lembur</td>
                        
@@ -21,6 +22,7 @@
                     </tr>
 
                     <tr>
+                        <td><br></td>
                         <td><br></td>
                         <td><br></td>
                         <td><br></td>
@@ -70,6 +72,7 @@
                                 <td><br></td>
                                 <td>{{\floor($a->duration_rest/60)}}</td>
                                 <td>{{\floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)}}</td>
+                                <td>{{\floor(((0 + $a->duration_overtime) - 0)/60)}}</td>
                                 <td>{{\floor($a->working_hour/60)}} </td>
                                 <td>{{$a->lembur_kali_satu_lima}}</td>
                                 <td>{{$a->lembur_kali_dua}}</td>
