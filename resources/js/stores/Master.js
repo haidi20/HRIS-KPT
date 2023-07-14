@@ -3,6 +3,7 @@ import moment from "moment";
 
 const defaultForm = {
     id: null,
+    position_id: null,
 }
 
 const example = {
@@ -77,10 +78,12 @@ const example = {
                     // console.info(responses);
                     let data = responses.data;
 
-                    data.positions = [
-                        { id: "all", name: "Semua" },
-                        ...data.positions,
-                    ];
+                    if (payload?.type == "use all") {
+                        data.positions = [
+                            { id: "all", name: "Semua" },
+                            ...data.positions,
+                        ];
+                    }
 
                     context.commit("INSERT_DATA_POSITION", {
                         positions: data.positions,

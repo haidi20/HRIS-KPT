@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceHasEmployee;
+use App\Models\DashboardHasPosition;
 use App\Models\Employee;
 use App\Models\JobOrderHasEmployee;
 use App\Models\Position;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
 class DashboardController extends Controller
@@ -92,13 +94,11 @@ class DashboardController extends Controller
         $dateNowSimulation = Carbon::now()->format("Y-m-11");
         $dateNow = Carbon::now();
 
-        $listNamePositionField = ["Mekanik", "Help Mekanik", "Electric", "Kebun", "Helper", "Rep. Balon"];
-        // jabatan pegawai lapangan
-        $positionField = Position::whereIn("name", $listNamePositionField)->pluck("id");
+        $dashboardHasPosition = DashboardHasPosition::pluck("position_id");
         $employeeHaveJobOrder = JobOrderHasEmployee::whereDate("datetime_start", $dateNowSimulation)->pluck("employee_id");
         $employeeNotYetJobOrder = Employee::active()
             ->select("id", "name", "position_id")
-            ->whereIn("position_id", $positionField)
+            ->whereIn("position_id", $dashboardHasPosition)
             ->whereNotIn("id", $employeeHaveJobOrder)
             ->get();
 
@@ -117,5 +117,91 @@ class DashboardController extends Controller
             "employeeNotYetJobOrder" => $employeeNotYetJobOrder,
             "fiveEmployeeHighestJobOrder" => $fiveEmployeeHighestJobOrder,
         ]);
+    }
+
+    public function fetchHasPosition()
+    {
+        $data = DashboardHasPosition::all();
+
+        return response()->json([
+            "success" => true,
+            "data" => $data,
+        ]);
+    }
+
+    public function storeHasPosition()
+    {
+        $checkExistsData = DashboardHasPosition::where("position_id", request("position_id"));
+
+        if ($checkExistsData->count() > 0) {
+            $position = Position::find(request("position_id"));
+
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, jabatan {$position->name} sudah ada.",
+            ], 409);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $message = "ditambahkan";
+            $dashboardHasPosition = new DashboardHasPosition;
+            $dashboardHasPosition->position_id = request("position_id");
+            $dashboardHasPosition->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => "Berhasil {$message}",
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal {$message}",
+            ], 500);
+        }
+    }
+
+    public function destroyHasPosition()
+    {
+        try {
+            DB::beginTransaction();
+
+            $dashboardHasPosition = DashboardHasPosition::find(request("position_id"));
+            $dashboardHasPosition->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus',
+            ], 500);
+        }
     }
 }

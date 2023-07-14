@@ -57,6 +57,7 @@ const Dashboard = {
         base_url: null,
         data: {
             positions: [],
+            dashboard_has_positions: [],
             employee_not_have_job_orders: [],
             five_employee_highest_job_orders: [],
             total: [],
@@ -72,6 +73,7 @@ const Dashboard = {
         loading: {
             position: false,
             selected: false,
+            setting_position: false,
             employee_not_have_job_order: false,
             five_employee_highest_job_order: false,
         },
@@ -105,6 +107,9 @@ const Dashboard = {
             state.data.selecteds = [...payload.data];
 
             // console.info(state.data.selecteds);
+        },
+        INSERT_DATA_DASHBOARD_HAS_POSITION(state, payload) {
+            state.data.dashboard_has_positions = [...payload.data];
         },
         INSERT_FORM(state, payload) {
             state.form = { ...state.form, ...payload.form };
@@ -178,7 +183,27 @@ const Dashboard = {
                     console.info(err);
                 });
         },
+        fetchDashboardHasPosition: async (context, payload) => {
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/dashboard/fetch-has-position`, {
+                    params: {},
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
 
+                    // console.info(data);
+
+                    context.commit("INSERT_DATA_DASHBOARD_HAS_POSITION", {
+                        data: data.data,
+                    });
+                })
+                .catch((err) => {
+                    // context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
     },
     getters: {
         //

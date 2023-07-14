@@ -64,7 +64,7 @@ export default {
     this.$store.dispatch("attendance/fetchDetail");
     this.$store.dispatch("attendance/fetchDataBaseFinger");
     this.$store.dispatch("employeeHasParent/fetchOption");
-    this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("master/fetchPosition", { type: "use all" });
     this.$store.dispatch("master/fetchFingerTool");
     this.$store.dispatch("master/fetchCompany", { type: "use all" });
   },

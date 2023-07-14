@@ -105,6 +105,10 @@ div.dt-buttons {
     float: left;
 }
 
+.dropdown-toggle:after {
+    margin-left: -10px !important;
+}
+
 /* .dataTables_length {
     position: relative;
     float: none !important;
