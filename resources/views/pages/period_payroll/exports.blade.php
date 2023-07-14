@@ -1,3 +1,6 @@
+@php
+    $rosters = \App\Models\RosterStatus::all();
+@endphp
 <table>
     <tr>
         <td><br></td>
@@ -178,23 +181,52 @@
 
     $d_hour = \floor($a->duration_work / 60);
     $d_minute = $a->duration_work%60 ;
+
+    $jam_kerja_kotor_hour = \floor((($a->duration_work + $a->duration_overtime))/60);
+    $jam_kerja_kotor_minute = ((($a->duration_work + $a->duration_overtime))/60)%60;
+
+
+    $jam_kerja_bersih_hour = \floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60);
+    $jam_kerja_bersih_minute = ((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)%60;
+
+    $jam_istirahat_hour = \floor(( $a->duration_rest)/60);
+    $jam_istirahat_minute = (( $a->duration_rest)/60)%60;
+
+
 @endphp
-        <tr>
+        <tr style="background-color:red">
+
+            @php
+            $background_color = 'white';
+
+            
+            if(\strtolower($a->roster_status_initial) == 'off'){
+                $background_color = 'red';
+            }
+            @endphp
             <td><br></td>
-            <td><br></td>
-            <td>{{round($tanggal->translatedFormat('d'))}}</td>
-            <td>{{$tanggal->translatedFormat('l')}}</td>
-            <td>{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
-            <td>{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
-            <td>{{$d_hour}} : {{$d_minute}}</td>
-            <td><br></td>
-            <td> <br></td>
-            <td> <br></td>
-            <td><br></td>
-            <td><br></td>
-            <td><br></td>
-            <td><br></td>
-            <td><br></td>
+            <td style="background-color: {{$background_color}}">{{$a->roster_status_initial}}</td>
+            <td style="background-color: {{$background_color}}">{{round($tanggal->translatedFormat('d'))}}</td>
+            <td style="background-color: {{$background_color}}">{{$tanggal->translatedFormat('l')}}</td>
+            <td style="background-color: {{$background_color}}">{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
+
+            @if ($a->hour_overtime_end != null)
+            <td style="background-color: {{$background_color}}">{{ $a->hour_overtime_end != null ? \Carbon\Carbon::parse($a->hour_overtime_end)->translatedFormat('H:i') : ''}}</td>
+            @else
+            <td style="background-color: {{$background_color}}">{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
+            @endif
+            
+            <td style="background-color: {{$background_color}}">{{$jam_kerja_kotor_hour}} : {{$jam_kerja_kotor_minute}}</td>
+            {{-- <td style="background-color: {{$background_color}}">{{$d_hour}} : {{$d_minute}}</td> --}}
+            <td style="background-color: {{$background_color}}"><br></td>
+            <td style="background-color: {{$background_color}}">{{$jam_istirahat_hour}} : {{$jam_istirahat_minute}}</td>
+            <td style="background-color: {{$background_color}}">{{$jam_kerja_bersih_hour}} : {{$jam_kerja_bersih_minute}}</td>
+            
+            <td style="background-color: {{$background_color}}">---</td>
+            <td style="background-color: {{$background_color}}">{{$a->lembur_kali_satu_lima}}</td>
+            <td style="background-color: {{$background_color}}">{{$a->lembur_kali_dua}}</td>
+            <td style="background-color: {{$background_color}}">{{$a->lembur_kali_tiga}}</td>
+            <td style="background-color: {{$background_color}}">{{$a->lembur_kali_empat}}</td>
             <td><br></td>
         </tr>
     @endif
