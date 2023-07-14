@@ -65,6 +65,7 @@ Route::prefix("v1")->name("api.")->group(function () {
 
     Route::prefix("dashboard")->name("dashboard.")->group(function () {
         Route::get("fetch-total", [DashboardController::class, "fetchTotal"])->name("fetchTotal");
+        Route::get("fetch-table", [DashboardController::class, "fetchTable"])->name("fetchTable");
     });
     Route::prefix("approval-level")->name("approvalLevel.")->group(function () {
         Route::get("edit", [ApprovalLevelController::class, "edit"])->name("edit");

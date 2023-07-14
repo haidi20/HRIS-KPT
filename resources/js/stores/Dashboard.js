@@ -9,7 +9,7 @@ const defaultTotal = [
     {
         field: "employee",
         title: "Karyawan",
-        value: 1,
+        value: 0,
         color: "pink",
         //   icon: "fas fa-chalkboard-teacher",
         icon: "fas fa-user",
@@ -18,7 +18,7 @@ const defaultTotal = [
     {
         field: "absence",
         title: "Absen Masuk",
-        value: 5,
+        value: 0,
         color: "green",
         //   icon: "fas fa-cocktail",
         icon: "fas fa-user",
@@ -26,8 +26,8 @@ const defaultTotal = [
     },
     {
         field: "notAbsence",
-        title: "Belum Absen Datang ",
-        value: 5,
+        title: "Tidak Absen Masuk ",
+        value: 0,
         color: "red",
         icon: "fas fa-user",
         data: [],
@@ -35,7 +35,7 @@ const defaultTotal = [
     {
         field: "absenceLate",
         title: "Terlambat",
-        value: 5,
+        value: 0,
         color: "purple",
         icon: "fas fa-user",
         data: [],
@@ -43,7 +43,7 @@ const defaultTotal = [
     {
         field: "notCombackAfterRest",
         title: "Belum Kembali Istirahat",
-        value: 5,
+        value: 0,
         color: "blue",
         //   icon: "fas fa-cocktail",
         icon: "fas fa-user",
@@ -112,6 +112,9 @@ const Dashboard = {
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
         },
+        DELETE_DATA_TOTAL(state, payload) {
+            state.data.total = [];
+        },
         CLEAR_FORM(state, payload) {
             state.form = { ...defaultForm };
         },
@@ -139,6 +142,9 @@ const Dashboard = {
                     // console.info(responses);
                     const data = responses.data;
 
+                    // console.info(data);
+
+                    context.commit("DELETE_DATA_TOTAL");
                     context.commit("INSERT_DATA_TOTAL");
                     context.commit("INSERT_DATA_TOTAL_VALUE", {
                         field: "employee",

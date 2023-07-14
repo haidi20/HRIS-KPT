@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AttendanceHasEmployee;
 use App\Models\Employee;
+use App\Models\JobOrderHasEmployee;
+use App\Models\Position;
 use App\Models\WorkingHour;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -29,7 +31,7 @@ class DashboardController extends Controller
 
     public function fetchTotal()
     {
-        $dateNow = Carbon::now()->format("Y-m-11");
+        $dateNow = Carbon::now()->format("Y-m-d");
 
         $workingHour = WorkingHour::first();
         $totalEmployee = Employee::active()->count();
@@ -85,6 +87,35 @@ class DashboardController extends Controller
         ]);
     }
 
-    // whereYear("hour_rest_start", $dateNow->format("Y"))
-    //         ->whereMonth("hour_rest_start", $dateNow->format("m"))
+    public function fetchTable()
+    {
+        $dateNowSimulation = Carbon::now()->format("Y-m-11");
+        $dateNow = Carbon::now();
+
+        $listNamePositionField = ["Mekanik", "Help Mekanik", "Electric", "Kebun", "Helper", "Rep. Balon"];
+        // jabatan pegawai lapangan
+        $positionField = Position::whereIn("name", $listNamePositionField)->pluck("id");
+        $employeeHaveJobOrder = JobOrderHasEmployee::whereDate("datetime_start", $dateNowSimulation)->pluck("employee_id");
+        $employeeNotYetJobOrder = Employee::active()
+            ->select("id", "name", "position_id")
+            ->whereIn("position_id", $positionField)
+            ->whereNotIn("id", $employeeHaveJobOrder)
+            ->get();
+
+        $fiveEmployeeHighestJobOrder = JobOrderHasEmployee::whereYear("datetime_start", $dateNow->format("Y"))
+            ->whereMonth("datetime_start", $dateNow->format("m"))
+            ->select(DB::raw("count(id) as total, employee_id"))
+            ->groupBy("employee_id")
+            ->orderBy("total", "desc")
+            ->limit(5)
+            ->get();
+
+        $totalEmployeeBaseOnPosition = [];
+
+        return response()->json([
+            "success" => true,
+            "employeeNotYetJobOrder" => $employeeNotYetJobOrder,
+            "fiveEmployeeHighestJobOrder" => $fiveEmployeeHighestJobOrder,
+        ]);
+    }
 }

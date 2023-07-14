@@ -77,16 +77,20 @@ class JobOrderHasEmployee extends Model
 
     public function getStatusColorAttribute()
     {
-        $statusApprovalLibrary = Config::get("library.status.{$this->status}");
+        if (isset($this->status)) {
+            $statusApprovalLibrary = Config::get("library.status.{$this->status}");
 
-        return $statusApprovalLibrary["color"];
+            return $statusApprovalLibrary["color"];
+        }
     }
 
     public function getStatusReadableAttribute()
     {
-        $statusApprovalLibrary = Config::get("library.status.{$this->status}");
+        if (isset($this->status)) {
+            $statusApprovalLibrary = Config::get("library.status.{$this->status}");
 
-        return $statusApprovalLibrary["short_readable"];
+            return $statusApprovalLibrary["short_readable"];
+        }
     }
 
     public function getProjectNameAttribute()
