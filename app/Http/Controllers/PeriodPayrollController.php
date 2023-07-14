@@ -57,10 +57,13 @@ class PeriodPayrollController extends Controller
                 return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
             }],
             'name_period' => ['name' => 'name', 'title' => 'Periode'],
-            'date_start' => ['name' => 'date_start', 'title' => 'Tanggal Awal Kerja'],
-            'date_end' => ['name' => 'date_end', 'title' => 'Tanggal Akhir Kerja'],
-            'aksi' => [
-                'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '130px', 'exportable' => false
+            // 'date_start' => ['name' => 'date_start', 'title' => 'Tanggal Awal Kerja'],
+            // 'date_end' => ['name' => 'date_end', 'title' => 'Tanggal Akhir Kerja'],
+            'slip_gaji' => [
+                'title'=>"Slip Gaji",'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '50%', 'exportable' => false
+            ],
+            'rekap_gaji' => [
+                'title'=>"Rekap Gaji",'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '50%', 'exportable' => false
             ],
         ];
 
@@ -81,18 +84,62 @@ class PeriodPayrollController extends Controller
                 //     $sql = "period_payrolls.description like ?";
                 //     $query->whereRaw($sql, ["%{$keyword}%"]);
                 // })
-                ->addColumn('aksi', function (PeriodPayroll $data) {
-                    $button = '';
+                ->addColumn('slip_gaji', function (PeriodPayroll $data) {
+                    $button = '<div><div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
+                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-download"></i></a>';
                     }
+
+                    $button .= '</div> <br><br>';
+
+                    $button .= '<div class="btn-group">';
+
+                    if (auth()->user()->can('download payroll')) {
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
+                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
+                    }
+
+                    $button .= '</div><div>';
 
 
 
                     return $button;
                 })
-                ->rawColumns(['aksi'])
+
+                ->addColumn('rekap_gaji', function (PeriodPayroll $data) {
+                    $button = '<div><div class="btn-group">';
+
+                    if (auth()->user()->can('download payroll')) {
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
+                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
+                    }
+
+                    $button .= '</div> <br><br>';
+
+                    $button .= '<div class="btn-group">';
+
+                    if (auth()->user()->can('download payroll')) {
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
+                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-download"></i></a>';
+                    }
+
+                    $button .= '</div><div>';
+
+
+
+                    return $button;
+                })
+                ->rawColumns(['rekap_gaji','slip_gaji'])
                 ->toJson();
         }
 
