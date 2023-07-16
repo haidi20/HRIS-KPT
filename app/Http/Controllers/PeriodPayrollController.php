@@ -742,13 +742,19 @@ class PeriodPayrollController extends Controller
 
                 $pajak_gaji_kotor_kurang_potongan = $jumlah_pendapatan - $pemotongan_potongan_lain_lain;
                 $pajak_bpjs_dibayar_perusahaan = $total_bpjs_perusahaan_rupiah;
+
+
                 $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
+
+
 
 
                 $pajak_biaya_jabatan = min(500000, (0.05 * $pajak_total_penghasilan_kotor)) * 12;
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
                 $pajak_gaji_bersih_setahun = (($pajak_total_penghasilan_kotor * 12)  - $pajak_total_pengurang);
+
+
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
 
 
@@ -763,6 +769,36 @@ class PeriodPayrollController extends Controller
                 $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun / 12;
                 $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
                 $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+
+
+                ///////////////////////////////////////////////////////////////////
+                /////////////////////PERHITUNGAN KHUSUS THR///////////////////////
+                $jumlah_thr = 2000000;
+                $pkp_thr_setahun = $jumlah_thr - $pajak_biaya_jabatan - $ptkp;
+                /////--------------
+                 //menghitung pkp 5%
+                 $pkp_lima_persen_thr  = \max(0, $pkp_thr_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_thr_setahun - 0) * 0.05));
+                 $pkp_lima_belas_persen_thr  = \max(0, $pkp_thr_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_thr_setahun - 60000000) * 0.15));
+                 $pkp_dua_puluh_lima_persen_thr  = \max(0, $pkp_thr_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_thr_setahun - 250000000) * 0.25));
+                 $pkp_tiga_puluh_persen_thr  = \max(0, $pkp_thr_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_thr_setahun - 500000000) * 0.30));
+
+                 $pajak_pph_dua_satu_setahun_thr = $pkp_lima_persen_thr + $pkp_lima_belas_persen_thr + $pkp_dua_puluh_lima_persen_thr + $pkp_tiga_puluh_persen_thr;
+
+
+                 $total_pph_dipotong = $pajak_pph_dua_satu_setahun - $pajak_pph_dua_satu_setahun_thr;
+
+                 ////////////////////////////////////////////////////////////////
+                 ///////////////////////////////////////////////////////////////
+
+
+
+
+                 //////////////////////////////////////////////////////////////
+                 ////// JIKA BULAN DESEMBER //////////////////
+
+                 
+
+
 
                 $new_payroll = Payroll::firstOrCreate([
                     'employee_id' => $employee->id,
