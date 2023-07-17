@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 // use ___PHPSTORM_HELPERS\object;
+use Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PayrollExport;
 use App\Models\Attendance;
 use App\Models\AttendanceHasEmployee;
@@ -16,6 +18,7 @@ use App\Models\RosterDaily;
 use App\Models\salaryAdjustmentDetail;
 use App\Models\SalaryAdvanceDetail;
 use App\Models\Vacation;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -1067,9 +1070,28 @@ class PeriodPayrollController extends Controller
             DB::commit();
 
             Excel::store(new PayrollExport($period_payroll, $employees), $unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
 
-            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
-            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
+
+            $data = compact('period_payroll','employees');
+            // PDF
+
+            $customPaper = array(0,0,567.00,283.80);
+
+
+            $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
+
+            // Stroage
+
+            Storage::put('public/invoice.pdf', $pdf->output());
+
+
+//             $content = $pdf->download()->getOriginalContent();
+
+// Storage::put('public/csv/name.pdf',$content) ;
+
+
 
 
             print("SUUCESS GENERATED \n");
