@@ -463,6 +463,7 @@ class PeriodPayrollController extends Controller
 
                         $is_weekend = 0;
                         $is_vacation = 0;
+                        $is_absen = 0;
 
                         if (isset($roster_daily->id)) {
                             if ($roster_daily->roster_status_initial == 'M') {
@@ -484,15 +485,18 @@ class PeriodPayrollController extends Controller
 
                                 if (($jumlah_hari_cuti + 1) > $employee->day_vacation) {
                                     $jumlah_hari_tidak_masuk_tmp += 1;
+                                    $is_absen = 1;
+                                }else{
+                                    Vacation::create([
+                                        'employee_id' => $employee->id,
+                                        'date_start' => $p->format('Y-m-d'),
+                                        'date_end' => $p->format('Y-m-d'),
+                                        'note' => 'CUTI AUTO APPROVE SYSTEM',
+                                        'status' => 'accept'
+                                    ]);
                                 }
 
-                                Vacation::create([
-                                    'employee_id' => $employee->id,
-                                    'date_start' => $p->format('Y-m-d'),
-                                    'date_end' => $p->format('Y-m-d'),
-                                    'note' => 'CUTI AUTO APPROVE SYSTEM',
-                                    'status' => 'accept'
-                                ]);
+                                
 
                                 // $jumlah_hari_cuti
 
@@ -509,6 +513,7 @@ class PeriodPayrollController extends Controller
 
 
                         $new_at_tidak_hadir->update([
+                            'is_absen'=>$is_absen,
                             // 'employee_id' => $employee->id,
                             // 'date' => $p->format('Y-m-d'),
                             'cloud_id' => 'TIDAK HADIR',

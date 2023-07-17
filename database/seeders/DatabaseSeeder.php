@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(AttendanceFingerspotSeeder::class);
         // $this->call(AttendanceHasEmployeeSeeder::class);
         // $this->call(AttendanceSeeder::class);
-        $this->call(ProjectSeeder::class);
+        // $this->call(ProjectSeeder::class);
         $this->call(CustomerSeeder::class);
 
         // end master

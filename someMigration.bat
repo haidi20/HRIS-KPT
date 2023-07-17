@@ -1,4 +1,5 @@
 
+php artisan migrate:refresh --path=database/migrations/2023_07_14_114452_create_dashboard_has_positions_table.php
 @REM php artisan migrate:refresh --path=database/migrations/2023_05_29_111060_create_job_order_histories_table.php
 @REM php artisan migrate:refresh --path=database/migrations/2023_06_24_211243_create_salary_advance_details_table.php
 @REM php artisan migrate:refresh --path=database/migrations/2023_06_24_211649_add_importtan_detail_to_detail_payrolls_table.php

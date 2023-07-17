@@ -65,7 +65,7 @@ export default {
     this.$store.dispatch("fetchPermission");
     this.$store.dispatch("master/fetchJob");
     // this.$store.dispatch("jobOrder/fetchData");
-    this.$store.dispatch("master/fetchPosition");
+    this.$store.dispatch("master/fetchPosition", { type: "use all" });
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("project/fetchDataBaseDateEnd", { user_id: user.id });
 

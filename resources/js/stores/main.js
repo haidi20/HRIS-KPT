@@ -117,7 +117,7 @@ const store = new Vuex.Store({
     },
     getters: {
         getCan: (state) => (permissionName) => {
-            let result = false;
+            let result = null;
 
             // console.info(state.form.form_type);
             const getPermission = state.permissions.some(item => item.name == permissionName);
