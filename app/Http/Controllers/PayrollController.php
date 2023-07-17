@@ -230,6 +230,58 @@ class PayrollController extends Controller
             ]);
 
             if ($new_at->is_koreksi == 0) {
+
+                //hitung jam.a
+                $hour_lembur_x = $new_at->duration_overtime % 60;
+                $hour_lembur_y =  \floor($new_at->duration_overtime / 60);
+                $jumlah_jam_lembur_tmp = 0;
+                $kali_1 = 0;
+                $kali_2 = 0;
+                $kali_3 = 0;
+                $kali_4 = 0;
+
+
+
+                for ($i = 1; $i <= $hour_lembur_y; $i++) {
+                    if ($i == 1) {
+                        $jumlah_jam_lembur_tmp += 1.5;
+                        $kali_1 += 1.5;
+                    } elseif ($i > 1 && $i < 8) {
+                        $jumlah_jam_lembur_tmp += 2.00;
+                        $kali_2 += 2.00;
+                    } elseif ($i == 8) {
+                        $jumlah_jam_lembur_tmp += 3.00;
+                        $kali_3 += 3.00;
+                    } elseif ($i > 8) {
+                        $jumlah_jam_lembur_tmp += 4.00;
+                        $kali_4 += 4.00;
+                    }
+                }
+
+                if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp == 0)) {
+                    $jumlah_jam_lembur_tmp += 1.5 * 0.5;
+                    $kali_1 += 1.5 * 0.5;
+                }
+
+                if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp == 0)) {
+                    $jumlah_jam_lembur_tmp += 1.5;
+                    $kali_1 += 1.5;
+                }
+
+
+                // if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp > 0)) {
+                //     $jumlah_jam_lembur_tmp += 2 * 0.5;
+                //     $kali_2 += 2 * 0.5;
+                // }
+
+                // if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp > 0)) {
+                //     $jumlah_jam_lembur_tmp += 2.00;
+                //     $kali_2 += 2.00;
+                // }
+
+
+
+
                 $new_at->update([
                     'hour_start' => $v->hour_start,
                     'hour_end' => $v->hour_end,
@@ -242,6 +294,12 @@ class PayrollController extends Controller
                     'hour_overtime_start' => $v->hour_overtime_start,
                     'hour_overtime_end' => $v->hour_overtime_end,
                     'duration_overtime' => $v->duration_overtime,
+
+
+                    'lembur_kali_satu_lima'=> $kali_1,
+                    'lembur_kali_dua'=> $kali_2,
+                    'lembur_kali_tiga'=> $kali_3,
+                    'lembur_kali_empat'=> $kali_4,
                 ]);
             }
         }
@@ -276,7 +334,7 @@ class PayrollController extends Controller
 
     function update_attendance($id)
     {
-// DB
+        // DB
         // DB::enableQueryLog();
         $attendance = AttendancePayrol::findOrFail($id);
 
@@ -288,8 +346,8 @@ class PayrollController extends Controller
                 //     'hour_end'=>\explode(':',request()->get('hour_end'))[0],
                 // ];
 
-                $total_minutes_start = (\explode(':',request()->get('hour_start'))[0] * 60) + \explode(':',request()->get('hour_start'))[1];
-                $total_minutes_end = (\explode(':',request()->get('hour_end'))[0] * 60) + \explode(':',request()->get('hour_end'))[1];
+                $total_minutes_start = (\explode(':', request()->get('hour_start'))[0] * 60) + \explode(':', request()->get('hour_start'))[1];
+                $total_minutes_end = (\explode(':', request()->get('hour_end'))[0] * 60) + \explode(':', request()->get('hour_end'))[1];
 
 
                 // $time_start = Carbon::createFromTimeString(request()->get('hour_start').":00");
@@ -300,61 +358,62 @@ class PayrollController extends Controller
                 // $end_of_day_end = Carbon::createFromTimeString(request()->get('hour_end').":00")->endOfDay();
                 // $total_minutes_end = $time_end->diffInMinutes($end_of_day_end);
 
-                if($total_minutes_end <= $total_minutes_start){
-                    $new_hour_end = Carbon::parse($attendance->date)->addDays(1)->format('Y-m-d')." ".request()->get('hour_end').":00";
-
-                    
-
-
-                }else{
-                    $new_hour_end = Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_end').":00";
+                if ($total_minutes_end <= $total_minutes_start) {
+                    $new_hour_end = Carbon::parse($attendance->date)->addDays(1)->format('Y-m-d') . " " . request()->get('hour_end') . ":00";
+                } else {
+                    $new_hour_end = Carbon::parse($attendance->date)->format('Y-m-d') . " " . request()->get('hour_end') . ":00";
 
                     // $time_duration = Carbon::createFromTimeString($attendance->date." ".request()->get('hour_duration').":00");
                     // $end_of_day_duration = Carbon::createFromTimeString($new_hour_end);
                     // $total_minutes_duration = $time_duration->diffInMinutes($end_of_day_duration);
                 }
 
-                $time_duration = Carbon::createFromTimeString($attendance->date." ".request()->get('hour_start').":00");
+                $time_duration = Carbon::createFromTimeString($attendance->date . " " . request()->get('hour_start') . ":00");
                 $end_of_day_duration = Carbon::createFromTimeString($new_hour_end);
                 $total_minutes_duration = $time_duration->diffInMinutes($end_of_day_duration);
 
 
 
+                if(request()->get('edit_jam_lembur') == 'iya'){
+
+                    $attendance->update([
+                        'lembur_kali_satu_lima' => request()->get('lembur_kali_satu_lima'),
+                        'lembur_kali_dua' => request()->get('lembur_kali_dua'),
+                        'lembur_kali_tiga' => request()->get('lembur_kali_tiga'),
+                        'lembur_kali_empat' => request()->get('lembur_kali_empat'),
+                        'is_koreksi_lembur' => 1,
+                    ]);
+                    
+                }
 
 
+                $attendance->update([
+                    'hour_start' => Carbon::parse($attendance->date)->format('Y-m-d') . " " . request()->get('hour_start') . ":00",
+                    'hour_end' => $new_hour_end,
+                    'duration_work' => $total_minutes_duration,
 
-               $attendance->update([
-                    'hour_start'=>Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_start').":00",
-                    'hour_end'=>$new_hour_end,
-                    'duration_work'=>$total_minutes_duration,
+                    'keterangan' => request()->get('keterangan'),
+                    'is_koreksi' => 1,
+                ]);
 
-                    'lembur_kali_satu_lima'=>request()->get('lembur_kali_satu_lima'),
-                    'lembur_kali_dua'=>request()->get('lembur_kali_dua'),
-                    'lembur_kali_tiga'=>request()->get('lembur_kali_tiga'),
-                    'lembur_kali_empat'=>request()->get('lembur_kali_empat'),
+                //    $data = [
+                //     'hour_start'=>Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_start').":00",
+                //         'hour_end'=>$new_hour_end,
 
-                    'keterangan'=>request()->get('keterangan'),
-                    'is_koreksi'=>1,
-               ]);
+                //         'lembur_kali_satu_lima'=>request()->get('lembur_kali_satu_lima'),
+                //         'lembur_kali_dua'=>request()->get('lembur_kali_dua'),
+                //         'lembur_kali_tiga'=>request()->get('lembur_kali_tiga'),
+                //         'lembur_kali_empat'=>request()->get('lembur_kali_empat'),
 
-            //    $data = [
-            //     'hour_start'=>Carbon::parse($attendance->date)->format('Y-m-d')." ".request()->get('hour_start').":00",
-            //         'hour_end'=>$new_hour_end,
+                //         'keterangan'=>request()->get('keterangan'),
+                //    ];
 
-            //         'lembur_kali_satu_lima'=>request()->get('lembur_kali_satu_lima'),
-            //         'lembur_kali_dua'=>request()->get('lembur_kali_dua'),
-            //         'lembur_kali_tiga'=>request()->get('lembur_kali_tiga'),
-            //         'lembur_kali_empat'=>request()->get('lembur_kali_empat'),
+                //    return dd($attendance);
 
-            //         'keterangan'=>request()->get('keterangan'),
-            //    ];
-
-            //    return dd($attendance);
-
-                $output = ['success' => true, 'msg' => 'Berhasil Edit Absensi','data'=>[$total_minutes_end,$total_minutes_start]];
+                $output = ['success' => true, 'msg' => 'Berhasil Edit Absensi', 'data' => [$total_minutes_end, $total_minutes_start]];
             } catch (\Exception $e) {
                 \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
-                $output = ['success' => false, 'msg' => 'Gagal Edit Absensi','error'=>[$e->getLine(),$e->getMessage(), $e->getTrace()]];
+                $output = ['success' => false, 'msg' => 'Gagal Edit Absensi', 'error' => [$e->getLine(), $e->getMessage(), $e->getTrace()]];
             }
 
             return $output;

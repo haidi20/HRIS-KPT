@@ -399,66 +399,72 @@ class PeriodPayrollController extends Controller
                         $jumlah_hari_kerja_tmp += 1;
                         if (($old_sekali_at->duration_overtime != null) && ($old_sekali_at->duration_overtime > 0)) {
 
-                            $hour_lembur_x = $old_sekali_at->duration_overtime % 60;
-                            $hour_lembur_y =  \floor($old_sekali_at->duration_overtime / 60);
+                            if ($$old_sekali_at->is_koreksi_lembur == 0) {
+                                $hour_lembur_x = $old_sekali_at->duration_overtime % 60;
+                                $hour_lembur_y =  \floor($old_sekali_at->duration_overtime / 60);
 
 
 
-                            for ($i = 1; $i <= $hour_lembur_y; $i++) {
-                                if ($i == 1) {
+                                for ($i = 1; $i <= $hour_lembur_y; $i++) {
+                                    if ($i == 1) {
+                                        $jumlah_jam_lembur_tmp += 1.5;
+                                        $kali_1 += 1.5;
+                                    } elseif ($i > 1 && $i < 8) {
+                                        $jumlah_jam_lembur_tmp += 2.00;
+                                        $kali_2 += 2.00;
+                                    } elseif ($i == 8) {
+                                        $jumlah_jam_lembur_tmp += 3.00;
+                                        $kali_3 += 3.00;
+                                    } elseif ($i > 8) {
+                                        $jumlah_jam_lembur_tmp += 4.00;
+                                        $kali_4 += 4.00;
+                                    }
+                                }
+
+                                if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp == 0)) {
+                                    $jumlah_jam_lembur_tmp += 1.5 * 0.5;
+                                    $kali_1 += 1.5 * 0.5;
+                                }
+
+                                if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp == 0)) {
                                     $jumlah_jam_lembur_tmp += 1.5;
                                     $kali_1 += 1.5;
-                                } elseif ($i > 1 && $i < 8) {
+                                }
+
+
+                                if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp > 0)) {
+                                    $jumlah_jam_lembur_tmp += 2 * 0.5;
+                                    $kali_2 += 2 * 0.5;
+                                }
+
+                                if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp > 0)) {
                                     $jumlah_jam_lembur_tmp += 2.00;
                                     $kali_2 += 2.00;
-                                } elseif ($i == 8) {
-                                    $jumlah_jam_lembur_tmp += 3.00;
-                                    $kali_3 += 3.00;
-                                } elseif ($i > 8) {
-                                    $jumlah_jam_lembur_tmp += 4.00;
-                                    $kali_4 += 4.00;
                                 }
+
+                                Attendance::where('id', $new_old_d->id)->update([
+                                    'lembur_kali_satu_lima' => $kali_1,
+                                    'lembur_kali_dua' => $kali_2,
+                                    'lembur_kali_tiga' => $kali_3,
+                                    'lembur_kali_empat' => $kali_4,
+                                    'roster_daily_id' => $roster_daily->id ?? null,
+                                    'roster_status_initial' => $roster_daily->roster_status_initial ?? null
+                                ]);
+                            }else{
+                                $jumlah_jam_lembur_tmp = $new_old_d->id->lembur_kali_satu_lima + $new_old_d->id->lembur_kali_dua + $new_old_d->id->lembur_kali_tiga + $new_old_d->id->lembur_kali_empat ; 
                             }
 
-                            if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp == 0)) {
-                                $jumlah_jam_lembur_tmp += 1.5 * 0.5;
-                                $kali_1 += 1.5 * 0.5;
-                            }
-
-                            if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp == 0)) {
-                                $jumlah_jam_lembur_tmp += 1.5;
-                                $kali_1 += 1.5;
-                            }
-
-
-                            if (($hour_lembur_x > 29) && ($hour_lembur_x < 45) && ($jumlah_jam_lembur_tmp > 0)) {
-                                $jumlah_jam_lembur_tmp += 2 * 0.5;
-                                $kali_2 += 2 * 0.5;
-                            }
-
-                            if (($hour_lembur_x >= 45) && ($jumlah_jam_lembur_tmp > 0)) {
-                                $jumlah_jam_lembur_tmp += 2.00;
-                                $kali_2 += 2.00;
-                            }
+                            
                         }
 
-                        Attendance::where('id', $new_old_d->id)->update([
-                            'lembur_kali_satu_lima' => $kali_1,
-                            'lembur_kali_dua' => $kali_2,
-                            'lembur_kali_tiga' => $kali_3,
-                            'lembur_kali_empat' => $kali_4,
-                            'roster_daily_id' => $roster_daily->id ?? null,
-                            'roster_status_initial' => $roster_daily->roster_status_initial ?? null
-                        ]);
-
-                        print_r([
-                            'lembur_kali_satu_lima' => $kali_1,
-                            'lembur_kali_dua' => $kali_2,
-                            'lembur_kali_tiga' => $kali_3,
-                            'lembur_kali_empat' => $kali_4,
-                            'roster_daily_id' => $roster_daily->id ?? null,
-                            'roster_status_initial' => $roster_daily->roster_status_initial ?? null
-                        ]);
+                        // print_r([
+                        //     'lembur_kali_satu_lima' => $kali_1,
+                        //     'lembur_kali_dua' => $kali_2,
+                        //     'lembur_kali_tiga' => $kali_3,
+                        //     'lembur_kali_empat' => $kali_4,
+                        //     'roster_daily_id' => $roster_daily->id ?? null,
+                        //     'roster_status_initial' => $roster_daily->roster_status_initial ?? null
+                        // ]);
                     } else {
 
                         $is_weekend = 0;
@@ -486,7 +492,7 @@ class PeriodPayrollController extends Controller
                                 if (($jumlah_hari_cuti + 1) > $employee->day_vacation) {
                                     $jumlah_hari_tidak_masuk_tmp += 1;
                                     $is_absen = 1;
-                                }else{
+                                } else {
                                     Vacation::create([
                                         'employee_id' => $employee->id,
                                         'date_start' => $p->format('Y-m-d'),
@@ -496,7 +502,7 @@ class PeriodPayrollController extends Controller
                                     ]);
                                 }
 
-                                
+
 
                                 // $jumlah_hari_cuti
 
@@ -513,7 +519,7 @@ class PeriodPayrollController extends Controller
 
 
                         $new_at_tidak_hadir->update([
-                            'is_absen'=>$is_absen,
+                            'is_absen' => $is_absen,
                             // 'employee_id' => $employee->id,
                             // 'date' => $p->format('Y-m-d'),
                             'cloud_id' => 'TIDAK HADIR',
@@ -934,14 +940,14 @@ class PeriodPayrollController extends Controller
 
 
 
-                    'jumlah_thr'=>$jumlah_thr,
-                    'pkp_thr_setahun'=>$pkp_thr_setahun,
-                    'pkp_lima_persen_thr'=>$pkp_lima_persen_thr,
-                    'pkp_lima_belas_persen_thr'=>$pkp_lima_belas_persen_thr,
-                    'pkp_dua_puluh_lima_persen_thr'=>$pkp_dua_puluh_lima_persen_thr,
-                    'pkp_tiga_puluh_persen_thr'=>$pkp_tiga_puluh_persen_thr,
-                    'pajak_pph_dua_satu_setahun_thr'=>$pajak_pph_dua_satu_setahun_thr,
-                    'total_pph_dipotong'=>$total_pph_dipotong,
+                    'jumlah_thr' => $jumlah_thr,
+                    'pkp_thr_setahun' => $pkp_thr_setahun,
+                    'pkp_lima_persen_thr' => $pkp_lima_persen_thr,
+                    'pkp_lima_belas_persen_thr' => $pkp_lima_belas_persen_thr,
+                    'pkp_dua_puluh_lima_persen_thr' => $pkp_dua_puluh_lima_persen_thr,
+                    'pkp_tiga_puluh_persen_thr' => $pkp_tiga_puluh_persen_thr,
+                    'pajak_pph_dua_satu_setahun_thr' => $pajak_pph_dua_satu_setahun_thr,
+                    'total_pph_dipotong' => $total_pph_dipotong,
                 ]);
 
                 AttendancePayrol::whereDate('date', '>=', $period_payroll->date_start)
@@ -960,8 +966,8 @@ class PeriodPayrollController extends Controller
 
             $period_payroll->update([
                 'last_excel' => $unik_name_excel,
-                'last_excel_cv_kpt' => "cv_kpt_".$unik_name_excel,
-                'last_excel_pt_kpt' => "cv_kpt_".$unik_name_excel,
+                'last_excel_cv_kpt' => "cv_kpt_" . $unik_name_excel,
+                'last_excel_pt_kpt' => "cv_kpt_" . $unik_name_excel,
 
             ]);
 
@@ -971,8 +977,8 @@ class PeriodPayrollController extends Controller
 
             Excel::store(new PayrollExport($period_payroll, $employees), $unik_name_excel, 'local');
 
-            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_".$unik_name_excel, 'local');
-            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_".$unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
 
 
             print("SUUCESS GENERATED \n");

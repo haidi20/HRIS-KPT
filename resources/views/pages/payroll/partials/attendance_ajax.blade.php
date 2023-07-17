@@ -61,27 +61,71 @@
                         $d_hour = \floor($a->duration_work / 60);
                         $d_minute = $a->duration_work%60 ;
                     @endphp
-                            <tr>
-                                <td><br></td>
-                                <td><br></td>
-                                <td>{{round($tanggal->translatedFormat('d'))}}</td>
-                                <td>{{$tanggal->translatedFormat('l')}}</td>
-                                <td>{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
-                                <td>{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
-                                <td>{{$d_hour}} : {{$d_minute}}</td>
-                                <td><br></td>
-                                <td>{{\floor($a->duration_rest/60)}}</td>
-                                <td>{{\floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)}}</td>
-                                <td>{{\floor(((0 + $a->duration_overtime) - 0)/60)}}</td>
-                                <td>{{\floor($a->working_hour/60)}} </td>
-                                <td>{{$a->lembur_kali_satu_lima}}</td>
-                                <td>{{$a->lembur_kali_dua}}</td>
-                                <td>{{$a->lembur_kali_tiga}}</td>
-                                <td>{{$a->lembur_kali_empat}}</td>
-                                <td>
+                            @if ( $a->hour_start == null or $a->hour_end == null)
+                            <tr style="background-color: #b61e1e">
+                                <td style="color:white"><br></td>
+                                <td style="color:white"><br></td>
+                                <td style="color:white">{{round($tanggal->translatedFormat('d'))}}</td>
+                                <td style="color:white">{{$tanggal->translatedFormat('l')}}</td>
+                                <td style="color:white">{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
+
+                                @if ($a->duration_overtime != null)
+                                <td style="color:white">{{ $a->hour_overtime_end != null ? \Carbon\Carbon::parse($a->hour_overtime_end)->translatedFormat('H:i') : ''}}</td>
+                                @else
+                                <td style="color:white">{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
+                                @endif
+                               
+                                <td style="color:white">{{$d_hour}} : {{$d_minute}}</td>
+                                <td style="color:white"><br></td>
+                                <td style="color:white">{{\floor($a->duration_rest/60)}}</td>
+                                <td style="color:white">{{\floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)}}</td>
+                                <td style="color:white">{{\floor(((0 + $a->duration_overtime) - 0)/60)}}</td>
+                                <td style="color:white">{{\floor($a->working_hour/60)}} </td>
+                                <td style="color:white">{{$a->lembur_kali_satu_lima}}</td>
+                                <td style="color:white">{{$a->lembur_kali_dua}}</td>
+                                <td style="color:white">{{$a->lembur_kali_tiga}}</td>
+                                <td style="color:white">{{$a->lembur_kali_empat}}</td>
+                                <td style="color:white">
+                                    @if ($a->is_final == 0)
                                     <a href="#" class="btn icon btn-primary edit_modal_attendance" data-href="{{\URL::to('/')}}/payroll/{{$a->id}}/edit_attendance" data-container=".attendance_modal"><i class="bi bi-pencil"></i></a>
+                                    @endif
+                                    
                                 </td>
                             </tr>
+                            @else
+
+                            <tr style="background-color: #white">
+                                <td style="color:black"><br></td>
+                                <td style="color:black"><br></td>
+                                <td style="color:black">{{round($tanggal->translatedFormat('d'))}}</td>
+                                <td style="color:black">{{$tanggal->translatedFormat('l')}}</td>
+                                <td style="color:black">{{ $a->hour_start != null ? \Carbon\Carbon::parse($a->hour_start)->translatedFormat('H:i') : ''}}</td>
+
+                                @if ($a->duration_overtime != null)
+                                <td style="color:black">{{ $a->hour_overtime_end != null ? \Carbon\Carbon::parse($a->hour_overtime_end)->translatedFormat('H:i') : ''}}</td>
+                                @else
+                                <td style="color:black">{{ $a->hour_end != null ? \Carbon\Carbon::parse($a->hour_end)->translatedFormat('H:i') : ''}}</td>
+                                @endif
+                               
+                                <td style="color:black">{{$d_hour}} : {{$d_minute}}</td>
+                                <td style="color:black"><br></td>
+                                <td style="color:black">{{\floor($a->duration_rest/60)}}</td>
+                                <td style="color:black">{{\floor((($a->duration_work + $a->duration_overtime) - $a->duration_rest)/60)}}</td>
+                                <td style="color:black">{{\floor(((0 + $a->duration_overtime) - 0)/60)}}</td>
+                                <td style="color:black">{{\floor($a->working_hour/60)}} </td>
+                                <td style="color:black">{{$a->lembur_kali_satu_lima}}</td>
+                                <td style="color:black">{{$a->lembur_kali_dua}}</td>
+                                <td style="color:black">{{$a->lembur_kali_tiga}}</td>
+                                <td style="color:black">{{$a->lembur_kali_empat}}</td>
+                                <td style="color:black">
+                                    @if ($a->is_final == 0)
+                                    <a href="#" class="btn icon btn-primary edit_modal_attendance" data-href="{{\URL::to('/')}}/payroll/{{$a->id}}/edit_attendance" data-container=".attendance_modal"><i class="bi bi-pencil"></i></a>
+                                    @endif
+                                    
+                                </td>
+                            </tr>
+                                
+                            @endif
                       
 
                     

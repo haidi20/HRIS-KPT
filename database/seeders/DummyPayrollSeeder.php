@@ -371,11 +371,16 @@ class DummyPayrollSeeder extends Seeder
 
             ];
 
-            print_r($data_period_payroll);
+            // print_r($data_period_payroll);
 
             $period_payroll =  new PeriodPayrollController($data_period_payroll);
 
             $period_payroll->store();
         }
+
+
+        Attendance::whereDate('date','<',Carbon::now())->update([
+            'is_final'=>1
+        ]);
     }
 }
