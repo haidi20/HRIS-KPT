@@ -75,6 +75,7 @@ class PeriodPayrollController extends Controller
             $period_payroll = PeriodPayroll::query()
                 ->select('period_payrolls.last_excel', 'period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays'
             ,"period_payrolls.last_excel","period_payrolls.last_excel_cv_kpt","period_payrolls.last_excel_pt_kpt","period_payrolls.last_pdf","period_payrolls.last_pdf_pt_kpt","period_payrolls.last_pdf_cv_kpt",
+            "period_payrolls.rekap_last_excel","period_payrolls.rekap_last_excel_cv_kpt","period_payrolls.rekap_last_excel_pt_kpt","period_payrolls.rekap_last_pdf","period_payrolls.rekap_last_pdf_cv_kpt","period_payrolls.rekap_last_pdf_pt_kpt"
             );
 
             return $datatables->eloquent($period_payroll)
@@ -122,10 +123,10 @@ class PeriodPayrollController extends Controller
                     $button = '<div><div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
-                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel_cv_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel_pt_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
+                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
                     }
 
                     $button .= '</div> <br><br>';
@@ -133,9 +134,9 @@ class PeriodPayrollController extends Controller
                     $button .= '<div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_pdf . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_pdf_cv_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_pdf_pt_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
                         // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-download"></i></a>';
                     }
 
@@ -1084,9 +1085,24 @@ class PeriodPayrollController extends Controller
                 'last_excel_pt_kpt' => "cv_kpt_" . $unik_name_excel,
 
 
+                // 'last_pdf'=>"all_".$unik_name_pdf,
+                // 'last_pdf_pt_kpt'=>"pt_".$unik_name_pdf,
+                // 'last_pdf_cv_kpt'=>"cv_".$unik_name_pdf,
+
                 'last_pdf'=>"all_".$unik_name_pdf,
-                'last_pdf_pt_kpt'=>"pt_".$unik_name_pdf,
-                'last_pdf_cv_kpt'=>"cv_".$unik_name_pdf,
+                'last_pdf_pt_kpt'=>"all_".$unik_name_pdf,
+                'last_pdf_cv_kpt'=>"all_".$unik_name_pdf,
+
+
+
+                ////
+                'rekap_last_excel'=>'all_rekap_gaji'.$unik_name_excel,
+                'rekap_last_excel_cv_kpt'=>'cv_rekap_gaji'.$unik_name_excel,
+                'rekap_last_excel_pt_kpt'=>'pt_rekap_gaji'.$unik_name_excel,
+
+                'rekap_last_pdf'=>'all_rekap_gaji'.$unik_name_pdf,
+                'rekap_last_pdf_cv_kpt'=>'cv_rekap_gaji'.$unik_name_pdf,
+                'rekap_last_pdf_pt_kpt'=>'pt_rekap_gaji'.$unik_name_pdf,
 
             ]);
 
@@ -1110,7 +1126,7 @@ class PeriodPayrollController extends Controller
             Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'pt'), "pt_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
 
 
-            $data = compact('period_payroll','employees');
+            
             // PDF
 
             $customPaper = array(0,0,567.00,283.80);
@@ -1118,11 +1134,29 @@ class PeriodPayrollController extends Controller
             print("Generate Slip Gaji");
 
             \ini_set('memory_limit','-1');
+            $data = compact('period_payroll','employees');
             $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
+
+            // $pdf_cv = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji',['period_payroll'=>$period_payroll,'employees'=>Employee::get()])->setPaper('A4', 'landscape');
+            // $pdf_pt = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji',['period_payroll'=>$period_payroll,'employees'=>Employee::get()])->setPaper('A4', 'landscape');
+
+
+            // $employees = Employee::where('company_id',2)->get();
+            // $data_cv = compact('period_payroll','employees');
+            // $pdf_cv = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data_cv)->setPaper('A4', 'landscape');
+
+
+            // $employees = Employee::where('company_id',1)->get();
+            // $data_pt = compact('period_payroll','employees');
+            // $pdf_pt = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data_pt)->setPaper('A4', 'landscape');
 
             // Stroage
 
-            Storage::put('public/'.$unik_name_pdf, $pdf->output());
+            Storage::disk('local')->put("all_".$unik_name_pdf, $pdf->output());
+            // Storage::disk('local')->put("cv_".$unik_name_pdf, $pdf_cv->output());
+            // Storage::disk('local')->put("pt_".$unik_name_pdf, $pdf_pt->output());
+            // Storage::disk('local')->put("cv_".$unik_name_pdf, $pdf_cv->output());
+            // Storage::disk('local')->put("pt_".$unik_name_pdf, $pdf_pt->output());
 
 
 //             $content = $pdf->download()->getOriginalContent();
