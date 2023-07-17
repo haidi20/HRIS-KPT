@@ -73,7 +73,9 @@ class PeriodPayrollController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $period_payroll = PeriodPayroll::query()
-                ->select('period_payrolls.last_excel', 'period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
+                ->select('period_payrolls.last_excel', 'period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays'
+            ,"period_payrolls.last_excel","period_payrolls.last_excel_cv_kpt","period_payrolls.last_excel_pt_kpt","period_payrolls.last_pdf","period_payrolls.last_pdf_pt_kpt","period_payrolls.last_pdf_cv_kpt",
+            );
 
             return $datatables->eloquent($period_payroll)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -93,8 +95,8 @@ class PeriodPayrollController extends Controller
 
                     if (auth()->user()->can('download payroll')) {
                         $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel_cv_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel_pt_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
                         // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-download"></i></a>';
                     }
 
@@ -103,9 +105,9 @@ class PeriodPayrollController extends Controller
                     $button .= '<div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_pdf . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_pdf_cv_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_pdf_pt_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
                         // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
                     }
 
@@ -1108,19 +1110,19 @@ class PeriodPayrollController extends Controller
             Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'pt'), "pt_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
 
 
-            // $data = compact('period_payroll','employees');
-            // // PDF
+            $data = compact('period_payroll','employees');
+            // PDF
 
-            // $customPaper = array(0,0,567.00,283.80);
+            $customPaper = array(0,0,567.00,283.80);
 
-            // print("Generate Slip Gaji");
+            print("Generate Slip Gaji");
 
-            // \ini_set('memory_limit','-1');
-            // $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
+            \ini_set('memory_limit','-1');
+            $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
 
-            // // Stroage
+            // Stroage
 
-            // Storage::put('public/'.$unik_name_pdf, $pdf->output());
+            Storage::put('public/'.$unik_name_pdf, $pdf->output());
 
 
 //             $content = $pdf->download()->getOriginalContent();
