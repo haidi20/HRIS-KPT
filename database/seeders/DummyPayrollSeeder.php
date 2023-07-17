@@ -27,7 +27,9 @@ class DummyPayrollSeeder extends Seeder
      */
     public function run()
     {
-        $employees = Employee::where('id',1)->with('position')->get();
+        // $employees = Employee::where('id',1)->with('position')->get();
+
+        $employees = Employee::with('position')->get();
 
         Employee::where('id',1)->update([
             'basic_salary'=>15000000,

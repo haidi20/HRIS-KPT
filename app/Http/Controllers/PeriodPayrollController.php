@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PayrollExport;
+use App\Exports\RekapGajiPayrollExportPerEmployee;
 use App\Models\Attendance;
 use App\Models\AttendanceHasEmployee;
 use App\Models\AttendancePayrol;
@@ -287,7 +288,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $employees = Employee::where('id', 1)->orderBy('name', 'asc')->get();
+            $employees = Employee::whereIn('id',[1,2])->orderBy('name', 'asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -845,11 +846,27 @@ class PeriodPayrollController extends Controller
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
 
 
-                //menghitung pkp 5%
-                $pkp_lima_persen  = \max(0, $pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
-                $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
-                $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
-                $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                $pkp_lima_persen =0;
+                $pkp_lima_belas_persen=0;
+                $pkp_dua_puluh_lima_persen=0;
+                $pkp_tiga_puluh_persen=0;
+
+                
+
+
+                if($pkp_setahun > 0){
+                    print("EMPLOYE ID".$employee->id."MASUK PKP => ".$pkp_setahun."\n ");
+                    //menghitung pkp 5%
+                    $pkp_lima_persen  = \max(0, $pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                    $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
+                    $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
+                    $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                }else{
+                    $pkp_setahun = 0;
+                }
+
+
+                
 
                 $pajak_pph_dua_satu_setahun = $pkp_lima_persen + $pkp_lima_belas_persen + $pkp_dua_puluh_lima_persen + $pkp_tiga_puluh_persen;
 
@@ -1057,11 +1074,17 @@ class PeriodPayrollController extends Controller
 
 
             $unik_name_excel = 'Periode_' . $period_payroll->period . '_' . Str::uuid() . '.xlsx';
+            $unik_name_pdf = 'Periode_' . $period_payroll->period . '_' . Str::uuid() . '.pdf';
 
             $period_payroll->update([
                 'last_excel' => $unik_name_excel,
                 'last_excel_cv_kpt' => "cv_kpt_" . $unik_name_excel,
                 'last_excel_pt_kpt' => "cv_kpt_" . $unik_name_excel,
+
+
+                'last_pdf'=>"all_".$unik_name_pdf,
+                'last_pdf_pt_kpt'=>"pt_".$unik_name_pdf,
+                'last_pdf_cv_kpt'=>"cv_".$unik_name_pdf,
 
             ]);
 
@@ -1074,17 +1097,30 @@ class PeriodPayrollController extends Controller
             Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
 
 
-            $data = compact('period_payroll','employees');
-            // PDF
 
-            $customPaper = array(0,0,567.00,283.80);
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'all'), "all_rekap_gaji" . $unik_name_excel, 'local');
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'cv'), "cv_rekap_gaji" . $unik_name_excel, 'local');
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'pt'), "pt_rekap_gaji" . $unik_name_excel, 'local');
 
 
-            $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'all'), "all_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'cv'), "cv_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'pt'), "pt_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
 
-            // Stroage
 
-            Storage::put('public/invoice.pdf', $pdf->output());
+            // $data = compact('period_payroll','employees');
+            // // PDF
+
+            // $customPaper = array(0,0,567.00,283.80);
+
+            // print("Generate Slip Gaji");
+
+            // \ini_set('memory_limit','-1');
+            // $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
+
+            // // Stroage
+
+            // Storage::put('public/'.$unik_name_pdf, $pdf->output());
 
 
 //             $content = $pdf->download()->getOriginalContent();
