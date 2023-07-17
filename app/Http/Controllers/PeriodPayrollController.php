@@ -399,7 +399,7 @@ class PeriodPayrollController extends Controller
                         $jumlah_hari_kerja_tmp += 1;
                         if (($old_sekali_at->duration_overtime != null) && ($old_sekali_at->duration_overtime > 0)) {
 
-                            if ($$old_sekali_at->is_koreksi_lembur == 0) {
+                            if ($old_sekali_at->is_koreksi_lembur == 0) {
                                 $hour_lembur_x = $old_sekali_at->duration_overtime % 60;
                                 $hour_lembur_y =  \floor($old_sekali_at->duration_overtime / 60);
 
@@ -450,11 +450,9 @@ class PeriodPayrollController extends Controller
                                     'roster_daily_id' => $roster_daily->id ?? null,
                                     'roster_status_initial' => $roster_daily->roster_status_initial ?? null
                                 ]);
-                            }else{
-                                $jumlah_jam_lembur_tmp = $new_old_d->id->lembur_kali_satu_lima + $new_old_d->id->lembur_kali_dua + $new_old_d->id->lembur_kali_tiga + $new_old_d->id->lembur_kali_empat ; 
+                            } else {
+                                $jumlah_jam_lembur_tmp = $new_old_d->id->lembur_kali_satu_lima + $new_old_d->id->lembur_kali_dua + $new_old_d->id->lembur_kali_tiga + $new_old_d->id->lembur_kali_empat;
                             }
-
-                            
                         }
 
                         // print_r([
@@ -597,7 +595,7 @@ class PeriodPayrollController extends Controller
 
 
                 $jumlah_thr = 0;
-                $sa_percents =  salaryAdjustmentDetail::where('is_thr',1)->whereDate('month_start', '>=', $tanggal_tambahan_lain)
+                $sa_percents =  salaryAdjustmentDetail::where('is_thr', 1)->whereDate('month_start', '>=', $tanggal_tambahan_lain)
                     ->whereDate('month_end', '<=', $tanggal_tambahan_lain)
                     // ->where('type_amount','percent')
                     ->where('type_time', 'base_time')
@@ -762,7 +760,7 @@ class PeriodPayrollController extends Controller
 
                 $pemotongan_bpjs_dibayar_karyawan  = $total_bpjs_karyawan_rupiah;
 
-                $pemotongan_tidak_hadir  = $jumlah_hari_tidak_masuk_tmp *  ($employee->basic_salary / 26);
+                $pemotongan_tidak_hadir  = $jumlah_hari_tidak_masuk_tmp * ($employee->basic_salary / 26);
 
                 $pemotongan_potongan_lain_lain = 0;
 
@@ -780,16 +778,16 @@ class PeriodPayrollController extends Controller
                 $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
 
                 $n_tahun_enter = Carbon::parse($employee->enter_date)->format('Y');
-                $n_tahun_now = Carbon::now()->format('Y'); 
+                $n_tahun_now = Carbon::now()->format('Y');
 
                 $jumlah_bulan_kerja = 12;
 
 
                 // 2023  < 2022
-                if($n_tahun_now <= $n_tahun_enter ){
-                    $jumlah_bulan_kerja  = 13 - Carbon::parse($employee->enter_date)->format('m') ;
+                if ($n_tahun_now <= $n_tahun_enter) {
+                    $jumlah_bulan_kerja  = 13 - Carbon::parse($employee->enter_date)->format('m');
                 }
-                
+
                 // $enter_month = ;
 
                 // if($enter_month > 1){
@@ -801,7 +799,7 @@ class PeriodPayrollController extends Controller
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
 
-                 //////////////////////////////////////////////////////////////
+                //////////////////////////////////////////////////////////////
                 ////// JIKA BULAN DESEMBER //////////////////
 
 
@@ -813,15 +811,32 @@ class PeriodPayrollController extends Controller
                 $now_bulan = Carbon::parse($period_payroll->period)->format('m');
                 $now_tahun = Carbon::parse($period_payroll->period)->format('Y');
                 if ($now_bulan == '12') {
-                    Payroll::whereDate('date', '>=', $now_tahun.'-01-01')
-                    ->whereDate('date', '<=', $now_tahun.'-11-30')
-                    ->get();
-                }else{
+                    $pajak_gaji_bersih_setahun = 0;
+                    $gaji_des = (($pajak_total_penghasilan_kotor * 1)  - $pajak_total_pengurang);
+                    $des = Payroll::whereIn('period_payroll_id', function ($q) use ($now_tahun) {
+                        $q->select('id')
+                            ->from(with(new PeriodPayroll())->getTable())
+                            ->whereDate('date', '>=', $now_tahun . '-01-01')
+                            ->whereDate('date', '<=', $now_tahun . '-11-30');
+                    })
+                    ->where('employee_id',$employee->id)
+                    
+                        ->get();
+
+                        // $gaji_jan_nov = 0;
+                    foreach ($des as $key => $d) {
+                        $gaji_jan_nov += ($d->pajak_total_penghasilan_kotor - $d->pajak_total_pengurang);
+                    } 
+                    
+                    $pajak_gaji_bersih_setahun = $gaji_des + $gaji_jan_nov;
+
+                    
+                } else {
                     $pajak_gaji_bersih_setahun = (($pajak_total_penghasilan_kotor * $jumlah_bulan_kerja)  - $pajak_total_pengurang);
                 }
 
 
-                
+
 
 
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
@@ -875,7 +890,7 @@ class PeriodPayrollController extends Controller
 
 
 
-               
+
 
 
 
@@ -1007,13 +1022,13 @@ class PeriodPayrollController extends Controller
                     'total_pph_dipotong' => $total_pph_dipotong,
 
 
-                    'gaji_jan_nov'=>$gaji_jan_nov,
-                    'gaji_des'=>$gaji_des,
-                    'pph_yang_dipotong_jan_nov'=>$pph_yang_dipotong_jan_nov,
-                    'pph_yang_dipotong_des'=>$pph_yang_dipotong_des,
+                    'gaji_jan_nov' => $gaji_jan_nov,
+                    'gaji_des' => $gaji_des,
+                    'pph_yang_dipotong_jan_nov' => $pph_yang_dipotong_jan_nov,
+                    'pph_yang_dipotong_des' => $pph_yang_dipotong_des,
 
-                    'jumlah_hutang'=>$jumlah_hutang,
-                    'pemotongan_tidak_hadir'=>$pemotongan_tidak_hadir,
+                    'jumlah_hutang' => $jumlah_hutang,
+                    'pemotongan_tidak_hadir' => $pemotongan_tidak_hadir,
                 ]);
 
                 AttendancePayrol::whereDate('date', '>=', $period_payroll->date_start)

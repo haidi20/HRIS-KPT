@@ -23,10 +23,10 @@
         <div class="card">
             <div class="card-header">
                 <span class="fs-4 fw-bold">Data Periode Gaji</span>
-                <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
+                {{-- <button onclick="onCreate()" class="btn btn-sm btn-success shadow-sm float-end" id="addData"
                 data-toggle="modal">
                 <i class="fas fa-plus text-white-50"></i> Tambah Periode Gaji
-            </button>
+            </button> --}}
         </div>
         <div class="card-body">
             <div class="row">

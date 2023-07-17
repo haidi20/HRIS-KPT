@@ -30,6 +30,13 @@ class AddThrToPayrollsTable extends Migration
             $table->unsignedBigInteger('pph_yang_dipotong_jan_nov')->nullable();
             $table->unsignedBigInteger('pph_yang_dipotong_des')->nullable();
 
+            $table->unsignedBigInteger('jumlah_hutang')->nullable();
+            $table->unsignedBigInteger('pemotongan_tidak_hadir')->nullable();
+
+            
+
+
+            
 
 
 
