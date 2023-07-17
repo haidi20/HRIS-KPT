@@ -71,314 +71,314 @@ class DummyPayrollSeeder extends Seeder
 
         $iter = 0;
 
-        // foreach ($employees as $key => $e) {
+        foreach ($employees as $key => $e) {
 
-        //     if (isset($e->position->is_office) && ($e->position->is_office == 1)) {
-        //         $e->working_hour = '5,2';
-        //         $e->save();
-        //         $karyawan_tipe_1++;
-        //         $tipe_karyawan = "1";
-        //     } else {
+            if (isset($e->position->is_office) && ($e->position->is_office == 1)) {
+                $e->working_hour = '5,2';
+                $e->save();
+                $karyawan_tipe_1++;
+                $tipe_karyawan = "1";
+            } else {
 
-        //         // $iter = 1;
+                // $iter = 1;
 
-        //         if ($iter % 2 == 0) {
-        //             $e->working_hour = '6,1';
-        //             $karyawan_tipe_2++;
-        //             $tipe_karyawan = "2";
-        //         } else {
-        //             $e->working_hour = '5,2';
-        //             $karyawan_tipe_3++;
-        //             $tipe_karyawan = "3";
-        //         }
+                if ($iter % 2 == 0) {
+                    $e->working_hour = '6,1';
+                    $karyawan_tipe_2++;
+                    $tipe_karyawan = "2";
+                } else {
+                    $e->working_hour = '5,2';
+                    $karyawan_tipe_3++;
+                    $tipe_karyawan = "3";
+                }
 
-        //         $e->save();
-        //     }
+                $e->save();
+            }
 
-        //     if ($tipe_karyawan == 1 && $karyawan_tipe_1 > 4) {
-        //         continue;
-        //     }
+            if ($tipe_karyawan == 1 && $karyawan_tipe_1 > 4) {
+                continue;
+            }
 
-        //     if ($tipe_karyawan == 1 && $karyawan_tipe_1 == 2) {
-        //         $e->update([
-        //             'enter_date' => '2022-06-01'
-        //         ]); // continue;
-        //     }
-
-
-
-        //     if ($tipe_karyawan == 2 && $karyawan_tipe_2 > 4) {
-        //         continue;
-        //     }
-
-        //     if ($tipe_karyawan == 2 && $karyawan_tipe_2 == 2) {
-        //         $e->update([
-        //             'enter_date' => '2022-06-15'
-        //         ]); // continue;
-        //     }
-
-        //     if ($tipe_karyawan == 3 && $karyawan_tipe_3 > 4) {
-        //         continue;
-        //     }
-
-        //     if ($tipe_karyawan == 3 && $karyawan_tipe_3 == 2) {
-        //         $e->update([
-        //             'enter_date' => '2022-06-20'
-        //         ]); // continue;
-        //     }
+            if ($tipe_karyawan == 1 && $karyawan_tipe_1 == 2) {
+                $e->update([
+                    'enter_date' => '2022-06-01'
+                ]); // continue;
+            }
 
 
 
-        //     // if($karyawan_tipe_1 >  3 || $karyawan_tipe_2 >  3 || $karyawan_tipe_3 >  3 ){
-        //     //     print("karyawan_tipe_1 -> ".$karyawan_tipe_1." | karyawan_2 -> ".$karyawan_tipe_2." | karyawan_3 -> ".$karyawan_tipe_3."\n");
-        //     //     continue;
-        //     // }
+            if ($tipe_karyawan == 2 && $karyawan_tipe_2 > 4) {
+                continue;
+            }
 
-        //     $period = CarbonPeriod::create('2021-12-26', '2022-12-25');
-        //     // print("GENERATE EMLOYEE_ID : ".$e->id." | Tipe Karyawan : ".$tipe_karyawan."\n");
+            if ($tipe_karyawan == 2 && $karyawan_tipe_2 == 2) {
+                $e->update([
+                    'enter_date' => '2022-06-15'
+                ]); // continue;
+            }
 
-        //     foreach ($period as $key => $p) {
+            if ($tipe_karyawan == 3 && $karyawan_tipe_3 > 4) {
+                continue;
+            }
 
-
-        //         $name_day = strtolower($p->format('l'));
-
-        //         if ($name_day == 'saturday' and $e->working_hour  == '5,2') {
-        //             $status_roster = 'OFF';
-        //             $status_roster_id = 5;
-        //             // print("\t\t---------------------\n");
-        //         } elseif ($name_day == 'sunday' and $e->working_hour  == '5,2') {
-        //             $status_roster = 'OFF';
-        //             $status_roster_id = 5;
-        //             // print("\t\t---------------------\n");
-        //         } elseif ($name_day == 'sunday' and $e->working_hour  == '6,1') {
-        //             $status_roster = 'OFF';
-        //             $status_roster_id = 5;
-        //             // print("\t\t---------------------\n");
-        //         } else {
-        //             $status_roster = 'M';
-        //             $status_roster_id = 3;
-        //         }
-
-
-        //         print("GENERATE EMLOYEE_ID : " . $e->id . " ||  PERIOD : " . $p->format('d F Y') . " | ROSTER : " . $status_roster . " | WORKING ->" . $e->working_hour . "\n");
+            if ($tipe_karyawan == 3 && $karyawan_tipe_3 == 2) {
+                $e->update([
+                    'enter_date' => '2022-06-20'
+                ]); // continue;
+            }
 
 
 
-        //         // print($name_day."\n");
-        //         $roster = RosterDaily::firstOrcreate([
-        //             'date' => $p,
-        //             'employee_id' => $e->id,
-        //             'position_id' => $e->position->id ?? null,
-        //             // 'month'=>$p->startOfMonth(),
-        //             'roster_status_id' => $status_roster_id
-        //         ]);
+            // if($karyawan_tipe_1 >  3 || $karyawan_tipe_2 >  3 || $karyawan_tipe_3 >  3 ){
+            //     print("karyawan_tipe_1 -> ".$karyawan_tipe_1." | karyawan_2 -> ".$karyawan_tipe_2." | karyawan_3 -> ".$karyawan_tipe_3."\n");
+            //     continue;
+            // }
+
+            $period = CarbonPeriod::create('2021-12-26', '2022-12-25');
+            // print("GENERATE EMLOYEE_ID : ".$e->id." | Tipe Karyawan : ".$tipe_karyawan."\n");
+
+            foreach ($period as $key => $p) {
+
+
+                $name_day = strtolower($p->format('l'));
+
+                if ($name_day == 'saturday' and $e->working_hour  == '5,2') {
+                    $status_roster = 'OFF';
+                    $status_roster_id = 5;
+                    // print("\t\t---------------------\n");
+                } elseif ($name_day == 'sunday' and $e->working_hour  == '5,2') {
+                    $status_roster = 'OFF';
+                    $status_roster_id = 5;
+                    // print("\t\t---------------------\n");
+                } elseif ($name_day == 'sunday' and $e->working_hour  == '6,1') {
+                    $status_roster = 'OFF';
+                    $status_roster_id = 5;
+                    // print("\t\t---------------------\n");
+                } else {
+                    $status_roster = 'M';
+                    $status_roster_id = 3;
+                }
+
+
+                print("GENERATE EMLOYEE_ID : " . $e->id . " ||  PERIOD : " . $p->format('d F Y') . " | ROSTER : " . $status_roster . " | WORKING ->" . $e->working_hour . "\n");
 
 
 
-        //         $hour_overtime_start = null;
-        //         $hour_overtime_end = null;
-        //         $duration_overtime = null;
-
-        //         if ($e->working_hour == '6,1') {
-        //             if ($status_roster_id == '5') {
-        //                 $hour_start = null;
-        //                 $hour_end = null;
-        //                 $duration_work = 0;
-        //                 // $status_roster_id = 0;
-        //             } else {
-        //                 if ($name_day == 'saturday') {
-        //                     $hour_start = $p->format('Y-m-d') . " 09:00:00";
-        //                     $hour_end = $p->format('Y-m-d') . " 14:00:00";
-        //                     $duration_work = 4;
-        //                 } else {
-        //                     $hour_start = $p->format('Y-m-d') . " 09:00:00";
-        //                     $hour_end = $p->format('Y-m-d') . " 17:00:00";
-        //                     $duration_work = 7;
-
-        //                     $duration_overtime = \mt_rand(0, 15);
-
-        //                     if ($duration_overtime > 0) {
-
-        //                         $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
-        //                         $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
-        //                         $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
-
-        //                         $job_order = JobOrder::create([
-        //                             'project_id' => 1,
-        //                             'job_id' => 1,
-        //                             'job_level' => 'middle',
-        //                             'job_note' => 'TES PAYROLL',
-        //                             'datetime_start' => $hour_overtime_start,
-        //                             'datetime_end' => $hour_overtime_end,
-        //                             'datetime_estimation_end' => $hour_overtime_end,
-        //                             'estimation' => $duration_overtime * 60,
-        //                             'time_type' => 'minutes',
-        //                             'category' => 'reguler',
-        //                             'status' => 'overtime',
-        //                             'status_note' => 'TEST PAYROLL',
-        //                             'note' => 'TEST PAYROLL',
-
-
-        //                         ]);
-
-        //                         $job_order_has_employee = JobOrderHasEmployee::create([
-        //                             'employee_id' => $e->id,
-        //                             'project_id' => $job_order->project_id,
-        //                             'job_order_id' => $job_order->id,
-        //                         ]);
-
-        //                         $job_status_has_parent = JobStatusHasParent::create([
-        //                             'parent_id' => $job_order_has_employee->id,
-        //                             'parent_model' => 'App\\Models\\JobOrderHasEmployee',
-        //                             'employee_id' => $job_order_has_employee->employee_id,
-        //                             'job_order_id' => $job_order->id,
-        //                             'status' => 'overtime',
-        //                             'datetime_start' => $hour_overtime_start,
-        //                             'datetime_end' => $hour_overtime_end,
-        //                             'note_end' => 'TES PAYROLL'
-
-
-        //                         ]);
-        //                     }
-        //                 }
-        //             }
-        //         } else {
-        //             if ($status_roster_id == '5') {
-        //                 $hour_start = null;
-        //                 $hour_end = null;
-        //                 $duration_work = 0;
-        //                 // $status_roster_id = 0;
-        //             } else {
-        //                 $hour_start = $p->format('Y-m-d') . " 08:00:00";
-        //                 $hour_end = $p->format('Y-m-d') . " 17:00:00";
-        //                 $duration_work = 8;
-
-        //                 $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
-
-        //                 $duration_overtime = \mt_rand(0, 15);
-
-        //                 if ($duration_overtime > 0) {
-        //                     $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
-        //                     $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
-        //                     $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
-
-
-        //                     $job_order = JobOrder::create([
-        //                         'project_id' => 1,
-        //                         'job_id' => 1,
-        //                         'job_level' => 'middle',
-        //                         'job_note' => 'TES PAYROLL',
-        //                         'datetime_start' => $hour_overtime_start,
-        //                         'datetime_end' => $hour_overtime_end,
-        //                         'datetime_estimation_end' => $hour_overtime_end,
-        //                         'estimation' => $duration_overtime * 60,
-        //                         'time_type' => 'minutes',
-        //                         'category' => 'reguler',
-        //                         'status' => 'overtime',
-        //                         'status_note' => 'TEST PAYROLL',
-        //                         'note' => 'TEST PAYROLL',
-
-
-        //                     ]);
-
-        //                     $job_order_has_employee = JobOrderHasEmployee::create([
-        //                         'employee_id' => $e->id,
-        //                         'project_id' => $job_order->project_id,
-        //                         'job_order_id' => $job_order->id,
-        //                     ]);
-
-        //                     $job_status_has_parent = JobStatusHasParent::create([
-        //                         'parent_id' => $job_order_has_employee->id,
-        //                         'parent_model' => 'App\\Models\\JobOrderHasEmployee',
-        //                         'employee_id' => $job_order_has_employee->employee_id,
-        //                         'job_order_id' => $job_order->id,
-        //                         'status' => 'overtime',
-        //                         'datetime_start' => $hour_overtime_start,
-        //                         'datetime_end' => $hour_overtime_end,
-        //                         'note_end' => 'TES PAYROLL'
-
-
-        //                     ]);
-        //                 }
-        //             }
-        //         }
+                // print($name_day."\n");
+                $roster = RosterDaily::firstOrcreate([
+                    'date' => $p,
+                    'employee_id' => $e->id,
+                    'position_id' => $e->position->id ?? null,
+                    // 'month'=>$p->startOfMonth(),
+                    'roster_status_id' => $status_roster_id
+                ]);
 
 
 
+                $hour_overtime_start = null;
+                $hour_overtime_end = null;
+                $duration_overtime = null;
 
-        //         if ($e->employee_status == 'aktif') {
-        //             $attendance  = Attendance::firstOrCreate([
-        //                 'employee_id' => $e->id,
-        //                 'cloud_id' => 12,
-        //                 'date' => $p->format('Y-m-d'),
-        //             ]);
+                if ($e->working_hour == '6,1') {
+                    if ($status_roster_id == '5') {
+                        $hour_start = null;
+                        $hour_end = null;
+                        $duration_work = 0;
+                        // $status_roster_id = 0;
+                    } else {
+                        if ($name_day == 'saturday') {
+                            $hour_start = $p->format('Y-m-d') . " 09:00:00";
+                            $hour_end = $p->format('Y-m-d') . " 14:00:00";
+                            $duration_work = 4;
+                        } else {
+                            $hour_start = $p->format('Y-m-d') . " 09:00:00";
+                            $hour_end = $p->format('Y-m-d') . " 17:00:00";
+                            $duration_work = 7;
 
-        //             $attendance->update([
-        //                 'roster_daily_id' => $status_roster_id,
-        //                 'roster_status_initial' => $status_roster,
-        //                 'hour_start' => $hour_start,
-        //                 'hour_end' => $hour_end,
-        //                 'duration_work' => $duration_work * 60,
-        //                 'is_koreksi'=>1,
+                            $duration_overtime = \mt_rand(0, 15);
 
-        //                 'hour_rest_start' => null,
-        //                 'hour_rest_end' => null,
-        //                 'duration_rest' => null,
+                            if ($duration_overtime > 0) {
 
-        //                 // 'hour_overtime_start' => $hour_overtime_start,
-        //                 // 'hour_overtime_end' => $hour_overtime_end,
-        //                 // 'duration_overtime' => $duration_overtime * 60,
-        //             ]);
+                                $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
+                                $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
+                                $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
 
-        //             if($is_lembur){
-        //                 $attendance->update([
-        //                     // 'roster_daily_id' => $status_roster_id,
-        //                     // 'roster_status_initial' => $status_roster,
-        //                     // 'hour_start' => $hour_start,
-        //                     // 'hour_end' => $hour_end,
-        //                     // 'duration_work' => $duration_work * 60,
-        //                     // 'is_koreksi'=>1,
+                                $job_order = JobOrder::create([
+                                    'project_id' => 1,
+                                    'job_id' => 1,
+                                    'job_level' => 'middle',
+                                    'job_note' => 'TES PAYROLL',
+                                    'datetime_start' => $hour_overtime_start,
+                                    'datetime_end' => $hour_overtime_end,
+                                    'datetime_estimation_end' => $hour_overtime_end,
+                                    'estimation' => $duration_overtime * 60,
+                                    'time_type' => 'minutes',
+                                    'category' => 'reguler',
+                                    'status' => 'overtime',
+                                    'status_note' => 'TEST PAYROLL',
+                                    'note' => 'TEST PAYROLL',
+
+
+                                ]);
+
+                                $job_order_has_employee = JobOrderHasEmployee::create([
+                                    'employee_id' => $e->id,
+                                    'project_id' => $job_order->project_id,
+                                    'job_order_id' => $job_order->id,
+                                ]);
+
+                                $job_status_has_parent = JobStatusHasParent::create([
+                                    'parent_id' => $job_order_has_employee->id,
+                                    'parent_model' => 'App\\Models\\JobOrderHasEmployee',
+                                    'employee_id' => $job_order_has_employee->employee_id,
+                                    'job_order_id' => $job_order->id,
+                                    'status' => 'overtime',
+                                    'datetime_start' => $hour_overtime_start,
+                                    'datetime_end' => $hour_overtime_end,
+                                    'note_end' => 'TES PAYROLL'
+
+
+                                ]);
+                            }
+                        }
+                    }
+                } else {
+                    if ($status_roster_id == '5') {
+                        $hour_start = null;
+                        $hour_end = null;
+                        $duration_work = 0;
+                        // $status_roster_id = 0;
+                    } else {
+                        $hour_start = $p->format('Y-m-d') . " 08:00:00";
+                        $hour_end = $p->format('Y-m-d') . " 17:00:00";
+                        $duration_work = 8;
+
+                        $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
+
+                        $duration_overtime = \mt_rand(0, 15);
+
+                        if ($duration_overtime > 0) {
+                            $hour_overtime = Carbon::parse($p->format('Y-m-d') . " 17:00:59");
+                            $hour_overtime_start = $hour_overtime->format('Y-m-d H:i:s');
+                            $hour_overtime_end = $hour_overtime->addHours($duration_overtime)->format('Y-m-d H:i:s');
+
+
+                            $job_order = JobOrder::create([
+                                'project_id' => 1,
+                                'job_id' => 1,
+                                'job_level' => 'middle',
+                                'job_note' => 'TES PAYROLL',
+                                'datetime_start' => $hour_overtime_start,
+                                'datetime_end' => $hour_overtime_end,
+                                'datetime_estimation_end' => $hour_overtime_end,
+                                'estimation' => $duration_overtime * 60,
+                                'time_type' => 'minutes',
+                                'category' => 'reguler',
+                                'status' => 'overtime',
+                                'status_note' => 'TEST PAYROLL',
+                                'note' => 'TEST PAYROLL',
+
+
+                            ]);
+
+                            $job_order_has_employee = JobOrderHasEmployee::create([
+                                'employee_id' => $e->id,
+                                'project_id' => $job_order->project_id,
+                                'job_order_id' => $job_order->id,
+                            ]);
+
+                            $job_status_has_parent = JobStatusHasParent::create([
+                                'parent_id' => $job_order_has_employee->id,
+                                'parent_model' => 'App\\Models\\JobOrderHasEmployee',
+                                'employee_id' => $job_order_has_employee->employee_id,
+                                'job_order_id' => $job_order->id,
+                                'status' => 'overtime',
+                                'datetime_start' => $hour_overtime_start,
+                                'datetime_end' => $hour_overtime_end,
+                                'note_end' => 'TES PAYROLL'
+
+
+                            ]);
+                        }
+                    }
+                }
+
+
+
+
+                if ($e->employee_status == 'aktif') {
+                    $attendance  = Attendance::firstOrCreate([
+                        'employee_id' => $e->id,
+                        'cloud_id' => 12,
+                        'date' => $p->format('Y-m-d'),
+                    ]);
+
+                    $attendance->update([
+                        'roster_daily_id' => $status_roster_id,
+                        'roster_status_initial' => $status_roster,
+                        'hour_start' => $hour_start,
+                        'hour_end' => $hour_end,
+                        'duration_work' => $duration_work * 60,
+                        'is_koreksi'=>1,
+
+                        'hour_rest_start' => null,
+                        'hour_rest_end' => null,
+                        'duration_rest' => null,
+
+                        // 'hour_overtime_start' => $hour_overtime_start,
+                        // 'hour_overtime_end' => $hour_overtime_end,
+                        // 'duration_overtime' => $duration_overtime * 60,
+                    ]);
+
+                    if($is_lembur){
+                        $attendance->update([
+                            // 'roster_daily_id' => $status_roster_id,
+                            // 'roster_status_initial' => $status_roster,
+                            // 'hour_start' => $hour_start,
+                            // 'hour_end' => $hour_end,
+                            // 'duration_work' => $duration_work * 60,
+                            // 'is_koreksi'=>1,
     
-        //                     // 'hour_rest_start' => null,
-        //                     // 'hour_rest_end' => null,
-        //                     // 'duration_rest' => null,
+                            // 'hour_rest_start' => null,
+                            // 'hour_rest_end' => null,
+                            // 'duration_rest' => null,
     
-        //                     'hour_overtime_start' => $hour_overtime_start,
-        //                     'hour_overtime_end' => $hour_overtime_end,
-        //                     'duration_overtime' => $duration_overtime * 60,
-        //                 ]);
-        //             }
+                            'hour_overtime_start' => $hour_overtime_start,
+                            'hour_overtime_end' => $hour_overtime_end,
+                            'duration_overtime' => $duration_overtime * 60,
+                        ]);
+                    }
 
 
-        //             // if ($e->id == 1 && ($p->format('Y-m-d') == '2022-06-06')) {
-        //             //     print("\n\n\t\t UPDATE GAJI POKOK \n\n");
-        //             //     $e->update([
-        //             //         'basic_salary' => 4000000
-        //             //     ]);
-        //             // }
+                    // if ($e->id == 1 && ($p->format('Y-m-d') == '2022-06-06')) {
+                    //     print("\n\n\t\t UPDATE GAJI POKOK \n\n");
+                    //     $e->update([
+                    //         'basic_salary' => 4000000
+                    //     ]);
+                    // }
 
-        //             // if ($e->id == 50 && ($p->format('Y-m-d') == '2022-08-06')) {
-        //             //     $e->update([
-        //             //         'basic_salary' => 4000000
-        //             //     ]);
-        //             // }
+                    // if ($e->id == 50 && ($p->format('Y-m-d') == '2022-08-06')) {
+                    //     $e->update([
+                    //         'basic_salary' => 4000000
+                    //     ]);
+                    // }
 
-        //             // if ($e->id == 50 && ($p->format('Y-m-d') == '2022-08-06')) {
-        //             //     $e->update([
-        //             //         'employee_status' => 'tidak_aktif'
-        //             //     ]);
-        //             // }
-        //         }
-        //     }
+                    // if ($e->id == 50 && ($p->format('Y-m-d') == '2022-08-06')) {
+                    //     $e->update([
+                    //         'employee_status' => 'tidak_aktif'
+                    //     ]);
+                    // }
+                }
+            }
 
 
-        //     if ($karyawan_tipe_1 >  3 && $karyawan_tipe_2 >  3 && $karyawan_tipe_3 >  3) {
-        //         break;
-        //     }
+            if ($karyawan_tipe_1 >  3 && $karyawan_tipe_2 >  3 && $karyawan_tipe_3 >  3) {
+                break;
+            }
 
-        //     $iter++;
-        //     // break;
-        // }
+            $iter++;
+            // break;
+        }
 
 
 
@@ -398,7 +398,6 @@ class DummyPayrollSeeder extends Seeder
             $period_payroll =  new PeriodPayrollController($data_period_payroll);
 
             $period_payroll->store();
-            break;
         }
 
 
