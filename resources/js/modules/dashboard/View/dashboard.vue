@@ -11,10 +11,11 @@
       </div>
     </div>
     <div class="page-content">
-      <section class="row">
-        <div class="col-12 col-lg-12">
-          <div class="row">
-            <!-- <template v-if="getDataTotal.length > 0">
+      <template v-if="getCan('lihat dashboard')">
+        <section class="row">
+          <div class="col-12 col-lg-12">
+            <div class="row">
+              <!-- <template v-if="getDataTotal.length > 0">
               <div
                 :class="`col-6 col-md-6 col-lg-3`"
                 v-for="(total, index) in getDataTotal"
@@ -39,121 +40,122 @@
             </template>
             <template v-else>
               <span style="margin-bottom: 20px">Loading...</span>
-            </template>-->
-            <div
-              :class="`col-6 col-md-6 col-lg-3`"
-              v-for="(total, index) in getDataTotal"
-              :key="index"
-            >
-              <div class="card cursor-pointer" @click="onShowData(total)">
-                <div class="card-body py-3-5">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div :class="`stats-icon ${total.color}`">
-                        <i :class="total.icon"></i>
+              </template>-->
+              <div
+                :class="`col-6 col-md-6 col-lg-3`"
+                v-for="(total, index) in getDataTotal"
+                :key="index"
+              >
+                <div class="card cursor-pointer" @click="onShowData(total)">
+                  <div class="card-body py-3-5">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div :class="`stats-icon ${total.color}`">
+                          <i :class="total.icon"></i>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-md-8">
-                      <h6 class="text-muted font-semibold">{{total.title}}</h6>
-                      <h6 class="font-extrabold mb-0">{{total.value}}</h6>
+                      <div class="col-md-8">
+                        <h6 class="text-muted font-semibold">{{total.title}}</h6>
+                        <h6 class="font-extrabold mb-0">{{total.value}}</h6>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-lg-4 col-md-12">
-              <div class="card">
-                <div class="card-body px-3 py-3-5">
-                  <DatatableClient
-                    :data="getDataEmployeeNotHaveJobOrder"
-                    :columns="employee_notyet_columns"
-                    :options="options"
-                    nameStore="dashboard"
-                    nameLoading="employee_not_have_job_order"
-                    :filter="true"
-                    :footer="false"
-                    bordered
-                  >
-                    <template v-slot:filter>
-                      <b-col cols @click="onShowSettingPosition" class="cursor-pointer">
-                        Karyawan Belum Punya Job Order
-                        <!-- <i class="fas fa-cogs"></i> -->
-                      </b-col>
-                    </template>
-                    <template v-slot:tbody="{ filteredData }">
-                      <b-tr v-for="(item, index) in filteredData" :key="index">
-                        <b-td
-                          v-for="column in getColumns()"
-                          :key="column.label"
-                        >{{ item[column.field] }}</b-td>
-                      </b-tr>
-                    </template>
-                  </DatatableClient>
+            <div class="row">
+              <div class="col-12 col-lg-4 col-md-12">
+                <div class="card">
+                  <div class="card-body px-3 py-3-5">
+                    <DatatableClient
+                      :data="getDataEmployeeNotYetJobOrder"
+                      :columns="employee_notyet_columns"
+                      :options="options"
+                      nameStore="dashboard"
+                      nameLoading="table"
+                      :filter="true"
+                      :footer="false"
+                      bordered
+                    >
+                      <template v-slot:filter>
+                        <b-col cols @click="onShowSettingPosition" class="cursor-pointer">
+                          Karyawan Belum Punya Job Order
+                          <!-- <i class="fas fa-cogs"></i> -->
+                        </b-col>
+                      </template>
+                      <template v-slot:tbody="{ filteredData }">
+                        <b-tr v-for="(item, index) in filteredData" :key="index">
+                          <b-td>{{item.name}}</b-td>
+                          <b-td>{{item.position_name}}</b-td>
+                        </b-tr>
+                      </template>
+                    </DatatableClient>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-12 col-lg-4 col-md-12">
-              <div class="card">
-                <div class="card-body px-3 py-3-5">
-                  <DatatableClient
-                    :data="getDataFiveEmployeeHighestJobOrder"
-                    :columns="employee_columns"
-                    :options="options"
-                    nameStore="dashboard"
-                    nameLoading="five_employee_highest_job_order"
-                    :filter="true"
-                    :footer="false"
-                    bordered
-                  >
-                    <template v-slot:filter>
-                      <b-col cols>5 Karyawan Dengan Job Order Terbanyak</b-col>
-                    </template>
-                    <template v-slot:tbody="{ filteredData }">
-                      <b-tr v-for="(item, index) in filteredData" :key="index">
-                        <b-td
-                          v-for="column in getColumns()"
-                          :key="column.label"
-                        >{{ item[column.field] }}</b-td>
-                      </b-tr>
-                    </template>
-                  </DatatableClient>
+              <div class="col-12 col-lg-4 col-md-12">
+                <div class="card">
+                  <div class="card-body px-3 py-3-5">
+                    <DatatableClient
+                      :data="getDataFiveEmployeeHighestJobOrder"
+                      :columns="employee_columns"
+                      :options="options"
+                      nameStore="dashboard"
+                      nameLoading="table"
+                      :filter="true"
+                      :footer="false"
+                      bordered
+                    >
+                      <template v-slot:filter>
+                        <b-col cols>5 Karyawan Dengan Job Order Terbanyak</b-col>
+                      </template>
+                      <template v-slot:tbody="{ filteredData }">
+                        <b-tr v-for="(item, index) in filteredData" :key="index">
+                          <b-td>{{item.employee_name}}</b-td>
+                          <b-td>{{item.position_name}}</b-td>
+                          <b-td>{{item.total}}</b-td>
+                        </b-tr>
+                      </template>
+                    </DatatableClient>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-12 col-lg-4 col-md-12">
-              <div class="card">
-                <div class="card-body px-3 py-3-5">
-                  <DatatableClient
-                    :data="getDataPosition"
-                    :columns="position_columns"
-                    :options="options"
-                    nameStore="dashboard"
-                    nameLoading="position"
-                    :filter="true"
-                    :footer="false"
-                    bordered
-                  >
-                    <template v-slot:filter>
-                      <b-col cols>Total Karyawan Berdasarkan Jabatan</b-col>
-                    </template>
-                    <template v-slot:tbody="{ filteredData }">
-                      <b-tr v-for="(item, index) in filteredData" :key="index">
-                        <b-td
-                          v-for="column in getColumns('position_columns')"
-                          :key="column.label"
-                        >{{ item[column.field] }}</b-td>
-                      </b-tr>
-                    </template>
-                  </DatatableClient>
+              <div class="col-12 col-lg-4 col-md-12">
+                <div class="card">
+                  <div class="card-body px-3 py-3-5">
+                    <DatatableClient
+                      :data="getDataTotalEmployeeBaseonPosition"
+                      :columns="position_columns"
+                      :options="options"
+                      nameStore="dashboard"
+                      nameLoading="table"
+                      :filter="true"
+                      :footer="false"
+                      bordered
+                    >
+                      <template v-slot:filter>
+                        <b-col cols>Total Karyawan Berdasarkan Jabatan</b-col>
+                      </template>
+                      <template v-slot:tbody="{ filteredData }">
+                        <b-tr v-for="(item, index) in filteredData" :key="index">
+                          <b-td>{{item.name}}</b-td>
+                          <b-td>{{item.minimum_employee}}</b-td>
+                          <b-td>{{item.actual}}</b-td>
+                        </b-tr>
+                      </template>
+                    </DatatableClient>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </template>
+      <template v-else-if="getLengthPermissions.length > 0 && !getCan('lihat dashboard')">
+        <h1>Selamat Datang di Aplikasi HRIS - KPT</h1>
+      </template>
     </div>
+    <!-- start modal -->
     <b-modal
       id="data_total"
       ref="data_total"
@@ -248,6 +250,7 @@
         </b-col>
       </b-row>
     </b-modal>
+    <!-- end modal -->
   </div>
 </template>
 

@@ -106,6 +106,7 @@ export default {
         this.$store.dispatch("fetchPermission");
         // this.$store.dispatch("dashboard/fetchTotal");
         this.$store.dispatch("master/fetchPosition");
+        this.$store.dispatch("dashboard/fetchTable");
         this.$store.dispatch("dashboard/fetchDashboardHasPosition");
 
         this.$store.commit("dashboard/INSERT_DATA_TOTAL");
@@ -126,17 +127,23 @@ export default {
         getDataPosition() {
             return this.$store.state.dashboard.data.positions;
         },
-        getDataDashboardHasPositions() {
-            return this.$store.state.dashboard.data.dashboard_has_positions;
+        getDataTotalEmployeeBaseonPosition() {
+            return this.$store.state.dashboard.data.total_employee_baseon_positions;
         },
-        getDataEmployeeNotHaveJobOrder() {
-            return this.$store.state.dashboard.data.employee_not_have_job_orders;
+        getDataEmployeeNotYetJobOrder() {
+            return this.$store.state.dashboard.data.employee_not_yet_job_orders;
         },
         getDataFiveEmployeeHighestJobOrder() {
             return this.$store.state.dashboard.data.five_employee_highest_job_orders;
         },
+        getDataDashboardHasPositions() {
+            return this.$store.state.dashboard.data.dashboard_has_positions;
+        },
         getOptionPositions() {
-            return this.$store.state.master.data.positions;
+            return this.$store.state.positions;
+        },
+        getLengthPermissions() {
+            return this.$store.state.permissions;
         },
         form() {
             return this.$store.state.master.form;
@@ -291,6 +298,11 @@ export default {
         getColumns(nameColumn) {
             const columns = this[nameColumn].filter((item) => item.label != "");
             return columns;
+        },
+        getCan(permissionName) {
+            const getPermission = this.$store.getters["getCan"](permissionName);
+
+            return getPermission;
         },
     }
 };

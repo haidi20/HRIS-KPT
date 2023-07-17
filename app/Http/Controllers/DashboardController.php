@@ -95,14 +95,14 @@ class DashboardController extends Controller
         $dateNow = Carbon::now();
 
         $dashboardHasPosition = DashboardHasPosition::pluck("position_id");
-        $employeeHaveJobOrder = JobOrderHasEmployee::whereDate("datetime_start", $dateNowSimulation)->pluck("employee_id");
-        $employeeNotYetJobOrder = Employee::active()
+        $employeeHaveJobOrder = JobOrderHasEmployee::whereDate("datetime_start", $dateNow)->pluck("employee_id");
+        $employeeNotYetJobOrders = Employee::active()
             ->select("id", "name", "position_id")
             ->whereIn("position_id", $dashboardHasPosition)
             ->whereNotIn("id", $employeeHaveJobOrder)
             ->get();
 
-        $fiveEmployeeHighestJobOrder = JobOrderHasEmployee::whereYear("datetime_start", $dateNow->format("Y"))
+        $fiveEmployeeHighestJobOrders = JobOrderHasEmployee::whereYear("datetime_start", $dateNow->format("Y"))
             ->whereMonth("datetime_start", $dateNow->format("m"))
             ->select(DB::raw("count(id) as total, employee_id"))
             ->groupBy("employee_id")
@@ -110,12 +110,21 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $totalEmployeeBaseOnPosition = [];
+        $totalEmployeeBaseOnPositions = Position::where('minimum_employee', '>', 0)->get();
+        $totalEmployeeBaseOnPositions->map(function ($query) use ($dateNow) {
+            $positionId = $query->id;
+            $query["actual"] = AttendanceHasEmployee::whereHas('employee', function ($queryEmployee) use ($positionId) {
+                $queryEmployee->where("position_id", $positionId);
+            })
+                ->whereDate("date", $dateNow)
+                ->count();
+        });
 
         return response()->json([
             "success" => true,
-            "employeeNotYetJobOrder" => $employeeNotYetJobOrder,
-            "fiveEmployeeHighestJobOrder" => $fiveEmployeeHighestJobOrder,
+            "employeeNotYetJobOrders" => $employeeNotYetJobOrders,
+            "totalEmployeeBaseOnPositions" => $totalEmployeeBaseOnPositions,
+            "fiveEmployeeHighestJobOrders" => $fiveEmployeeHighestJobOrders,
         ]);
     }
 

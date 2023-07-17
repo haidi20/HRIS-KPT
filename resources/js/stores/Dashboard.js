@@ -58,7 +58,8 @@ const Dashboard = {
         data: {
             positions: [],
             dashboard_has_positions: [],
-            employee_not_have_job_orders: [],
+            total_employee_baseon_positions: [],
+            employee_not_yet_job_orders: [],
             five_employee_highest_job_orders: [],
             total: [],
             selecteds: [],
@@ -71,6 +72,7 @@ const Dashboard = {
             //
         },
         loading: {
+            table: false,
             position: false,
             selected: false,
             dashboard_has_position: false,
@@ -83,9 +85,12 @@ const Dashboard = {
             state.base_url = payload.base_url;
         },
         INSERT_TABLE_ALL(state, payload) {
-            state.data.positions = payload.positions;
-            state.data.employee_not_have_job_orders = payload.employee_not_have_job_orders;
-            state.data.five_employee_highest_job_orders = payload.five_employee_highest_job_orders;
+            state.data.total_employee_baseon_positions = payload.totalEmployeeBaseOnPositions;
+            state.data.employee_not_yet_job_orders = payload.employeeNotYetJobOrders;
+            state.data.five_employee_highest_job_orders = payload.fiveEmployeeHighestJobOrders;
+        },
+        INSERT_DATA_EMPLOYEE_NOT_HAVE_JOB_ORDER(state, payload) {
+            state.data.employee_not_have_job_orders = [...payload.data];
         },
         INSERT_DATA_TOTAL(state, payload) {
             state.data.total = [...defaultTotal];
@@ -116,6 +121,9 @@ const Dashboard = {
         },
         UPDATE_LOADING_TABLE(state, payload) {
             state.loading.table = payload.value;
+        },
+        UPDATE_LOADING_EMPLOYEE_NOT_HAVE_JOB_ORDER(state, payload) {
+            state.loading.employee_not_have_job_order = payload.value;
         },
         UPDATE_LOADING_DASHBOARD_HAS_POSITION(state, payload) {
             state.loading.dashboard_has_position = payload.value;
@@ -183,6 +191,31 @@ const Dashboard = {
                 })
                 .catch((err) => {
                     // context.commit("UPDATE_LOADING_TABLE", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchTable: async (context, payload) => {
+            context.commit("UPDATE_LOADING_TABLE", { value: true });
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/dashboard/fetch-table`, {
+                    params: {},
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    // console.info(data);
+
+                    context.commit("INSERT_TABLE_ALL", {
+                        employeeNotYetJobOrders: data.employeeNotYetJobOrders,
+                        totalEmployeeBaseOnPositions: data.totalEmployeeBaseOnPositions,
+                        fiveEmployeeHighestJobOrders: data.fiveEmployeeHighestJobOrders,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE", { value: false });
                     console.info(err);
                 });
         },
