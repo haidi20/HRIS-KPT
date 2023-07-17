@@ -29,6 +29,17 @@ class AddThrToPayrollsTable extends Migration
 
             $table->unsignedBigInteger('pph_yang_dipotong_jan_nov')->nullable();
             $table->unsignedBigInteger('pph_yang_dipotong_des')->nullable();
+
+
+
+
+            // $table->text('last_pdf')->nullable();
+            // $table->text('last_pdf_pt_kpt')->nullable();
+            // $table->text('last_pdf_cv_kpt')->nullable();
+
+            // // $table->text('last_excel')->nullable();
+            // $table->text('last_excel_pt_kpt')->nullable();
+            // $table->text('last_excel_cv_kpt')->nullable();
         });
     }
 

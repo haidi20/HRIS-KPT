@@ -60,10 +60,10 @@ class PeriodPayrollController extends Controller
             // 'date_start' => ['name' => 'date_start', 'title' => 'Tanggal Awal Kerja'],
             // 'date_end' => ['name' => 'date_end', 'title' => 'Tanggal Akhir Kerja'],
             'slip_gaji' => [
-                'title'=>"Slip Gaji",'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '50%', 'exportable' => false
+                'title' => "Slip Gaji", 'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '50%', 'exportable' => false
             ],
             'rekap_gaji' => [
-                'title'=>"Rekap Gaji",'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '50%', 'exportable' => false
+                'title' => "Rekap Gaji", 'orderable' => false, 'width' => '110px', 'searchable' => false, 'printable' => false, 'class' => 'text-center', 'width' => '50%', 'exportable' => false
             ],
         ];
 
@@ -76,7 +76,7 @@ class PeriodPayrollController extends Controller
                     $sql = "period_payrolls.name  like ?";
                     $query->whereRaw($sql, ["%{$keyword}%"]);
                 })
-                ->removeColumn(['last_excel','period','name','number_of_workdays'])
+                ->removeColumn(['last_excel', 'period', 'name', 'number_of_workdays'])
                 ->addColumn('name_period', function (PeriodPayroll $data) {
                     return Carbon::parse($data->period)->format('F Y');
                 })
@@ -139,7 +139,7 @@ class PeriodPayrollController extends Controller
 
                     return $button;
                 })
-                ->rawColumns(['rekap_gaji','slip_gaji'])
+                ->rawColumns(['rekap_gaji', 'slip_gaji'])
                 ->toJson();
         }
 
@@ -284,7 +284,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $employees = Employee::where('id',1)->orderBy('name', 'asc')->get();
+            $employees = Employee::where('id', 1)->orderBy('name', 'asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -301,7 +301,7 @@ class PeriodPayrollController extends Controller
             // print("\n\n\n FFFFFFFFFFFFFFFFFFFFF \n");
 
 
-            $tanggal_tambahan_lain =  Carbon::parse($period_payroll->period."-30");
+            $tanggal_tambahan_lain =  Carbon::parse($period_payroll->period . "-30");
 
             // print_r([$period_payroll->date_start,$period_payroll->date_end]);
 
@@ -355,9 +355,9 @@ class PeriodPayrollController extends Controller
                     ->whereDate('date', '<=', $period_payroll->date_end)
                     ->get();
 
-                    // print("-----------");
-                    // print_r(json_encode($data_absens->pluck('date')));
-                    // print("-----------");
+                // print("-----------");
+                // print_r(json_encode($data_absens->pluck('date')));
+                // print("-----------");
 
                 $jumlah_jam_lembur_tmp = 0;
                 $jumlah_hari_kerja_tmp = 0;
@@ -376,10 +376,10 @@ class PeriodPayrollController extends Controller
 
                 foreach ($period as $key => $p) {
                     $new_old_d = $data_absens->where('date', $p->format('Y-m-d'))->first();
-                    if($new_old_d != null){
+                    if ($new_old_d != null) {
                         // print_r(json_encode($data_absens->pluck('date')));
                     }
-                    
+
 
                     $roster_daily = RosterDaily::where('employee_id', $employee->id)
                         ->whereDate('date', $p->format('Y-m-d'))
@@ -408,14 +408,13 @@ class PeriodPayrollController extends Controller
                                 if ($i == 1) {
                                     $jumlah_jam_lembur_tmp += 1.5;
                                     $kali_1 += 1.5;
-                                }elseif ($i > 1 && $i < 8) {
+                                } elseif ($i > 1 && $i < 8) {
                                     $jumlah_jam_lembur_tmp += 2.00;
                                     $kali_2 += 2.00;
-                                }elseif ($i == 8) {
+                                } elseif ($i == 8) {
                                     $jumlah_jam_lembur_tmp += 3.00;
                                     $kali_3 += 3.00;
-                                }
-                                elseif ($i > 8) {
+                                } elseif ($i > 8) {
                                     $jumlah_jam_lembur_tmp += 4.00;
                                     $kali_4 += 4.00;
                                 }
@@ -773,30 +772,44 @@ class PeriodPayrollController extends Controller
 
                 ///////////////////////////////////////////////////////////////////
                 /////////////////////PERHITUNGAN KHUSUS THR///////////////////////
-                $jumlah_thr = 2000000;
-                $pkp_thr_setahun = $jumlah_thr - $pajak_biaya_jabatan - $ptkp;
-                /////--------------
-                 //menghitung pkp 5%
-                 $pkp_lima_persen_thr  = \max(0, $pkp_thr_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_thr_setahun - 0) * 0.05));
-                 $pkp_lima_belas_persen_thr  = \max(0, $pkp_thr_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_thr_setahun - 60000000) * 0.15));
-                 $pkp_dua_puluh_lima_persen_thr  = \max(0, $pkp_thr_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_thr_setahun - 250000000) * 0.25));
-                 $pkp_tiga_puluh_persen_thr  = \max(0, $pkp_thr_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_thr_setahun - 500000000) * 0.30));
 
-                 $pajak_pph_dua_satu_setahun_thr = $pkp_lima_persen_thr + $pkp_lima_belas_persen_thr + $pkp_dua_puluh_lima_persen_thr + $pkp_tiga_puluh_persen_thr;
-
-
-                 $total_pph_dipotong = $pajak_pph_dua_satu_setahun - $pajak_pph_dua_satu_setahun_thr;
-
-                 ////////////////////////////////////////////////////////////////
-                 ///////////////////////////////////////////////////////////////
+                $jumlah_thr = 0;
+                $pkp_thr_setahun = 0;
+                $pkp_lima_persen_thr = 0;
+                $pkp_lima_belas_persen_thr = 0;
+                $pkp_dua_puluh_lima_persen_thr = 0;
+                $pkp_tiga_puluh_persen_thr = 0;
+                $pajak_pph_dua_satu_setahun_thr = 0;
+                $total_pph_dipotong = 0;
 
 
+                if ($jumlah_thr > 0) {
+                    $jumlah_thr = 2000000;
+                    $pkp_thr_setahun = $jumlah_thr - $pajak_biaya_jabatan - $ptkp;
+                    /////--------------
+                    //menghitung pkp 5%
+                    $pkp_lima_persen_thr  = \max(0, $pkp_thr_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_thr_setahun - 0) * 0.05));
+                    $pkp_lima_belas_persen_thr  = \max(0, $pkp_thr_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_thr_setahun - 60000000) * 0.15));
+                    $pkp_dua_puluh_lima_persen_thr  = \max(0, $pkp_thr_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_thr_setahun - 250000000) * 0.25));
+                    $pkp_tiga_puluh_persen_thr  = \max(0, $pkp_thr_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_thr_setahun - 500000000) * 0.30));
+
+                    $pajak_pph_dua_satu_setahun_thr = $pkp_lima_persen_thr + $pkp_lima_belas_persen_thr + $pkp_dua_puluh_lima_persen_thr + $pkp_tiga_puluh_persen_thr;
 
 
-                 //////////////////////////////////////////////////////////////
-                 ////// JIKA BULAN DESEMBER //////////////////
+                    $total_pph_dipotong = $pajak_pph_dua_satu_setahun - $pajak_pph_dua_satu_setahun_thr;
+                }
 
-                 
+
+                ////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////
+
+
+
+
+                //////////////////////////////////////////////////////////////
+                ////// JIKA BULAN DESEMBER //////////////////
+
+
 
 
 
@@ -808,7 +821,7 @@ class PeriodPayrollController extends Controller
 
                 /////////simulasi naik gaji
 
-                if($period_payroll->period == '2022-06-01' && $employee->id == 1){
+                if ($period_payroll->period == '2022-06-01' && $employee->id == 1) {
                     $employee->basic_salary = 4000000;
                     $employee->save();
                 }
@@ -913,6 +926,17 @@ class PeriodPayrollController extends Controller
                     'pkp_lima_belas_persen' => $pkp_lima_belas_persen,
                     'pkp_dua_puluh_lima_persen' => $pkp_dua_puluh_lima_persen,
                     'pkp_tiga_puluh_persen' => $pkp_tiga_puluh_persen,
+
+
+
+                    'jumlah_thr'=>$jumlah_thr,
+                    'pkp_thr_setahun'=>$pkp_thr_setahun,
+                    'pkp_lima_persen_thr'=>$pkp_lima_persen_thr,
+                    'pkp_lima_belas_persen_thr'=>$pkp_lima_belas_persen_thr,
+                    'pkp_dua_puluh_lima_persen_thr'=>$pkp_dua_puluh_lima_persen_thr,
+                    'pkp_tiga_puluh_persen_thr'=>$pkp_tiga_puluh_persen_thr,
+                    'pajak_pph_dua_satu_setahun_thr'=>$pajak_pph_dua_satu_setahun_thr,
+                    'total_pph_dipotong'=>$total_pph_dipotong,
                 ]);
 
                 AttendancePayrol::whereDate('date', '>=', $period_payroll->date_start)
@@ -930,7 +954,10 @@ class PeriodPayrollController extends Controller
             $unik_name_excel = 'Periode_' . $period_payroll->period . '_' . Str::uuid() . '.xlsx';
 
             $period_payroll->update([
-                'last_excel' => $unik_name_excel
+                'last_excel' => $unik_name_excel,
+                'last_excel_cv_kpt' => "cv_kpt_".$unik_name_excel,
+                'last_excel_pt_kpt' => "cv_kpt_".$unik_name_excel,
+
             ]);
 
 
@@ -938,6 +965,9 @@ class PeriodPayrollController extends Controller
             DB::commit();
 
             Excel::store(new PayrollExport($period_payroll, $employees), $unik_name_excel, 'local');
+
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_".$unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_".$unik_name_excel, 'local');
 
 
             print("SUUCESS GENERATED \n");
