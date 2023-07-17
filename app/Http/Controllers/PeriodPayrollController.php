@@ -811,26 +811,26 @@ class PeriodPayrollController extends Controller
                 $now_bulan = Carbon::parse($period_payroll->period)->format('m');
                 $now_tahun = Carbon::parse($period_payroll->period)->format('Y');
                 if ($now_bulan == '12') {
+                    $pemotongan_pph_dua_satu_jan_nov = 0;
                     $pajak_gaji_bersih_setahun = 0;
                     $gaji_des = (($pajak_total_penghasilan_kotor * 1)  - $pajak_total_pengurang);
                     $des = Payroll::whereIn('period_payroll_id', function ($q) use ($now_tahun) {
                         $q->select('id')
                             ->from(with(new PeriodPayroll())->getTable())
-                            ->whereDate('date', '>=', $now_tahun . '-01-01')
-                            ->whereDate('date', '<=', $now_tahun . '-11-30');
+                            ->whereDate('period', '>=', $now_tahun . '-01-01')
+                            ->whereDate('period', '<=', $now_tahun . '-11-30');
                     })
-                    ->where('employee_id',$employee->id)
-                    
+                        ->where('employee_id', $employee->id)
+
                         ->get();
 
-                        // $gaji_jan_nov = 0;
+                    // $gaji_jan_nov = 0;
                     foreach ($des as $key => $d) {
                         $gaji_jan_nov += ($d->pajak_total_penghasilan_kotor - $d->pajak_total_pengurang);
-                    } 
-                    
-                    $pajak_gaji_bersih_setahun = $gaji_des + $gaji_jan_nov;
+                        $pemotongan_pph_dua_satu_jan_nov += $d->pemotongan_pph_dua_satu;
+                    }
 
-                    
+                    $pajak_gaji_bersih_setahun = $gaji_des + $gaji_jan_nov;
                 } else {
                     $pajak_gaji_bersih_setahun = (($pajak_total_penghasilan_kotor * $jumlah_bulan_kerja)  - $pajak_total_pengurang);
                 }
@@ -850,9 +850,17 @@ class PeriodPayrollController extends Controller
 
                 $pajak_pph_dua_satu_setahun = $pkp_lima_persen + $pkp_lima_belas_persen + $pkp_dua_puluh_lima_persen + $pkp_tiga_puluh_persen;
 
-                $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun / $jumlah_bulan_kerja;
-                $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
-                $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+
+                if ($now_bulan == '12') {
+                    $pemotongan_pph_dua_satu =  \abs($pajak_pph_dua_satu_setahun - $pemotongan_pph_dua_satu_jan_nov);
+                    $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
+                    $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+                 } else {
+                    $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun / $jumlah_bulan_kerja;
+                    $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
+                    $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+                }
+
 
 
                 ///////////////////////////////////////////////////////////////////
@@ -881,6 +889,8 @@ class PeriodPayrollController extends Controller
                     $pajak_pph_dua_satu_setahun_thr = $pkp_lima_persen_thr + $pkp_lima_belas_persen_thr + $pkp_dua_puluh_lima_persen_thr + $pkp_tiga_puluh_persen_thr;
 
                     $total_pph_dipotong = $pajak_pph_dua_satu_setahun - $pajak_pph_dua_satu_setahun_thr;
+
+                    $pemotongan_pph_dua_satu = $total_pph_dipotong;
                 }
 
 
@@ -904,10 +914,10 @@ class PeriodPayrollController extends Controller
 
                 /////////simulasi naik gaji
 
-                if ($period_payroll->period == '2022-06-01' && $employee->id == 1) {
-                    $employee->basic_salary = 4000000;
-                    $employee->save();
-                }
+                // if ($period_payroll->period == '2022-06-01' && $employee->id == 1) {
+                //     $employee->basic_salary = 4000000;
+                //     $employee->save();
+                // }
 
 
                 $new_payroll->update([
