@@ -298,7 +298,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'jk')->first()->nominal ?? 0;
+            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'tk')->first()->nominal ?? 0;
             $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code', 'kes')->first()->nominal ?? 0;
 
             // print("\n\n\n FFFFFFFFFFFFFFFFFFFFF \n");
