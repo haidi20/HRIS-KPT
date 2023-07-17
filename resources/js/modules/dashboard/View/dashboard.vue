@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="page-content">
-      <template v-if="getCan('lihat dashboard')">
+      <template v-if="getCan('hrd dashboard')">
         <section class="row">
           <div class="col-12 col-lg-12">
             <div class="row">
@@ -151,7 +151,7 @@
           </div>
         </section>
       </template>
-      <template v-else-if="getLengthPermissions.length > 0 && !getCan('lihat dashboard')">
+      <template v-else-if="getLengthPermissions.length > 0 && !getCan('hrd dashboard')">
         <h1>Selamat Datang di Aplikasi HRIS - KPT</h1>
       </template>
     </div>
