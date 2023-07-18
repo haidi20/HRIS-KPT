@@ -196,6 +196,7 @@ class EmployeeController extends Controller
             $employee->enter_date = Carbon::parse($employee->created_at);
             $employee->npwp = request("npwp");
             $employee->no_bpjs = request("no_bpjs");
+            $employee->no_bpjs_tenaga_kerja = request("no_bpjs_tenaga_kerja");
             $employee->company_id = request("company_id");
             $employee->position_id = request("position_id");
             $employee->location_id = request("location_id");

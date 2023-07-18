@@ -64,6 +64,11 @@ class EmployeesExpDataTable extends DataTable
         $endDate = now()->addMonth()->toDateString(); // Get the end date one month from now
 
         return $employee->newQuery()
+            ->selectRaw("
+                GROUP_CONCAT(position_id) as position_id,
+                GROUP_CONCAT(location_id) as location_id,
+                GROUP_CONCAT(company_id) as company_id,
+            ")
             ->select('employees.*', 'positions.name as position_name', 'locations.name as location_name', 'companies.name as company_name')
             ->with('company', 'location', 'position')
             ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')

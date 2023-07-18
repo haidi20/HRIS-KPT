@@ -130,6 +130,7 @@ export default {
   },
   methods: {
     onEdit(data) {
+      //   console.info(data);
       this.$store.commit("roster/INSERT_FORM", { data });
       this.$bvModal.show("roster_form");
     },

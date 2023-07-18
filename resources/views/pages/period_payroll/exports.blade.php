@@ -266,7 +266,8 @@
         <td><br></td>
         <td><br></td>
         <td><br></td>
-        <td>t1</td>
+        <td><br></td> 
+        {{-- ini t1 --}}
         <td><br></td>
         <td><br></td>
         <td><br></td>
