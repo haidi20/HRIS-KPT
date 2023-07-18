@@ -19,7 +19,7 @@
 
 - Tekan tombol tambah yang terdapat di halaman penyesuaikan gaji
 - Isi lah seluruh data yang diperlukan
-![Total Karyawan Image](/dokumentasi/menu/penyesuaian-gaji/2.png)
+![Total Karyawan Image](/dokumentasi/menu/penyesuaian-gaji/2-new.png)
 - Lalu tekan tombol simpan yang berada dibawah
 
 <a name="ubah-penyesuaian-gaji"></a>
@@ -29,7 +29,7 @@
 - Pilih penyesuaian gaji yang ingin di Ubah datanya
 - Tekan tombol Ubah yang terdapat dipilihan Tombol Aksi
 - Isi lah seluruh data yang diperlukan
-![Total Penyesuaian Gaji Image](/dokumentasi/menu/penyesuaian-gaji/4.png)
+![Total Penyesuaian Gaji Image](/dokumentasi/menu/penyesuaian-gaji/3-new.png)
 - Lalu tekan tombol simpan yang berada dibawah untuk menyimpan data
 
 <a name="detail-penyesuaian-gaji"></a>
@@ -37,7 +37,7 @@
 ## Detail Penyesuaian Gaji
 
 - Pilih penyesuaian gaji yang ingin di Lihat detail datanya
-![Total Penyesuaian Gaji Image](/dokumentasi/menu/penyesuaian-gaji/3.png)
+![Total Penyesuaian Gaji Image](/dokumentasi/menu/penyesuaian-gaji/4-new.png)
 - Maka akan tampil seluruh penyesuaian gaji dari data yang dipilih
 
 <a name="hapus-penyesuaian-gaji"></a>

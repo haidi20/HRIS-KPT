@@ -255,7 +255,7 @@
         rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
         return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
     }
-    
+
 
     function formatDate(date) {
         var day = date.getDate();
@@ -275,9 +275,243 @@
         $("#titleForm").html("Tambah Karyawan");
         // $("#kepegawaian-tab").hide();
         // $("#salary-tab").hide();
-        // $("#finger-tab").hide();
+        $("#finger-tab").hide();
         // $("#kepegawaian").hide();
 
+        // SETUP FORMAT UNTUK TANGGAL MASUK
+        function formatEnterDate(dateString) {
+            var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            var date = new Date(dateString);
+            var dayName = days[date.getDay()];
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var formattedDate = dayName + ', ' + day + '-' + month + '-' + year;
+            return formattedDate;
+        }
+
+        // SETUP FORMAT UNTUK TANGGAL KELUAR
+        $('#out_date').each(function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: "yyyy-mm-dd",
+                // viewMode: "months",
+                // minViewMode: "months"
+            });
+            $(this).datepicker('setDate', new Date());
+        });
+
+        // SETUP FORMAT UNTUK TANGGAL ULANG TAHUN
+        $('#birth_date').each(function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: "yyyy-mm-dd",
+                // viewMode: "months",
+                // minViewMode: "months"
+            });
+            $(this).datepicker('clearDates');
+        });
+
+        // SETUP FORMAT UNTUK KONTRAK
+        $('#contract_range input').each(function () {
+            $(this).datepicker({
+                autoclose: true,
+                format: "dd-mm-yyyy",
+                // viewMode: "months",
+                // minViewMode: "months"
+            });
+            $(this).datepicker('contract_range');
+        });
+
+        // SETUP KONDISI UNTUK JENIS KARYAWAN
+        $("#employee_type_id").change(function () {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === "1") {
+                $("#contract_range_row").hide();
+                $("#contract_start").val("");
+                $("#contract_end").val("");
+            } else if (selectedValue === "2") {
+                $("#contract_range_row").show();
+                $("#contract_start").val("");
+                $("#contract_end").val("");
+                $("#titleContactRange").html("Jangka Waktu Kontrak");
+            } else if (selectedValue === "3") {
+                $("#contract_range_row").show();
+                $("#contract_start").val("");
+                $("#contract_end").val("");
+                $("#titleContactRange").html("Jangka Waktu Harian");
+            } else {
+                $("#contract_range_row").hide();
+            }
+        });
+
+        // SETUP KONDISI UNTUK STATUS KARYAWAN
+        // $("#employee_status").change(function () {
+        //     var employeeStatus = $(this).val();
+
+        //     if (employeeStatus === "aktif") {
+        //         $("#out_date_row").hide();
+        //         $("#reason_row").hide();
+        //         $("#reason").val("");
+        //         $("#out_date").val("");
+        //     } else if (employeeStatus === "tidak_aktif") {
+        //         $("#out_date_row").show();
+        //         $("#reason_row").show();
+        //     }
+        // });
+
+        // CHECK SLIDER CONDITION
+        $('.bpjsTKCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsTK') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsTKPTCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsTKPT') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsKESCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsKES') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsKESPTCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsKESPT') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsTRAININGCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsTRAINING') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
 
         $('#birth_date').each(function () {
             $(this).datepicker({
@@ -942,6 +1176,8 @@
     }
 
     function clearFormCreate() {
+
+        // DATA PERSONAL
         $("#id").val("");
         $("#nip").val("");
         $("#nik").val("");
@@ -954,6 +1190,39 @@
         $("#photo").val("");
         $("#photoPreview").val("");
         $("#photoPreviewReady").hide();
+
+        // DATA KEPEGAWAIAN
+        $("#enter_date").val("");
+        $("#npwp").val("");
+        $("#company_id").val("");
+        $("#position_id").val("");
+        $("#location_id").val("");
+        $("#employee_type_id").val("");
+        $("#contract_range_row").hide();
+        $("#finger_tool_id").val("");
+        $("#contract_start").val("");
+        $("#contract_end").val("");
+        $("#latest_education").val("");
+        $("#working_hour").val("");
+        $("#married_status").val("");
+
+        $("#employee_status").val("aktif").prop("disabled", true).trigger("change");        $("#reason_row").hide();
+        $("#out_date_row").hide();
+        $("#reason").hide();
+        $("#out_date").hide();
+
+        // DATA GAJI DAN REKENING
+        $("#basic_salary").val("");
+        $("#allowance").val("");
+        $("#meal_allowance_per_attend").val("");
+        $("#transport_allowance_per_attend").val("");
+        $("#attend_allowance_per_attend").val("");
+        $("#overtime_rate_per_hour").val("");
+        $("#vat_per_year").val("");
+        $("#rekening_number").val("");
+        $("#rekening_name").val("");
+        $("#bank_name").val("");
+        $("#branch").val("");
     }
 
 </script>

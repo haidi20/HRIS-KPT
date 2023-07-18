@@ -7,7 +7,7 @@
     - [Roster](/{{route}}/{{version}}/menu/roster)
     - [Absensi](/{{route}}/{{version}}/menu/absensi)
     - [Periode Gaji](/{{route}}/{{version}}/menu/periode-gaji)
-    - [Slip Gaji Karyawan](/{{route}}/{{version}}/menu/slip-gaji-karyawan)
+    <!-- - [Slip Gaji Karyawan](/{{route}}/{{version}}/menu/slip-gaji-karyawan) -->
     - [Penggajian Bulanan](/{{route}}/{{version}}/menu/penggajian-bulanan)
     - [Penyesuaian Gaji](/{{route}}/{{version}}/menu/penyesuaian-gaji)
 

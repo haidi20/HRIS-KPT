@@ -3,8 +3,8 @@
 ---
 
 - [Menu Penggajian Bulanan](#menu-penggajian-bulanan)
-- [informasi Penggajian Bulanan](#informasi-penggajian-bulanan)
-- [perhitungan Penggajian Bulanan](#perhitungan-penggajian-bulanan)
+- [Informasi Penggajian Bulanan](#informasi-penggajian-bulanan)
+- [Perhitungan Penggajian Bulanan](#perhitungan-penggajian-bulanan)
 - [Absensi Penggajian Bulanan](#absensi-penggajian-bulanan)
 - [Perhitungan BPJS Penggajian Bulanan](#perhitungan-bpjs-penggajian-bulanan)
 - [Perhitungan Pajak Penggajian Bulanan](#perhitungan-pajak-penggajian-bulanan)
@@ -40,8 +40,10 @@
 
 - Pilih bulan dan karyawan yang ingin ditampilkan datanya
 - Lalu tekan tombol kirim
-![Total Penggajian Bulanan Image](/dokumentasi/menu/penggajian-bulanan/5.png)
+![Total Penggajian Bulanan Image](/dokumentasi/menu/penggajian-bulanan/5-new.png)
 - Maka akan tampil keseluruhan absensi dari karyawan yang dipilih
+- Silahkan tekan tombol edit, untuk merubah Data Absensi pada karyawan yang dipilih, dan setelah selesai melakukan pengeditan, tekan tombol kirim
+![Edit Absensi Bulanan Image](/dokumentasi/menu/penggajian-bulanan/5-edit.png)
 
 <a name="perhitungan-bpjs-penggajian-bulanan"></a>
 
