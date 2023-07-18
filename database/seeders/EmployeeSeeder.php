@@ -39,7 +39,7 @@ class EmployeeSeeder extends Seeder
                     "nip" => $data[1],
                     "nik" => $data[2],
                     "name" => $data[3],
-                    "photo" => 'employee/default-icon.png',
+                    "photo" => NULL,
                     "enter_date" => Carbon::now(),
                     "company_id" => $data[4],
                     "position_id" => $data[5],
