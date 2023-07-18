@@ -653,7 +653,13 @@
             reader.readAsDataURL(file);
         });
         $("#photoPreviewReady").show();
-        var photoUrl = "{{ Storage::url('') }}" + data.photo;
+        var photoUrl;
+
+        if (data.photo === null) {
+        photoUrl = "{{ asset('assets/img/default-icon.png')}}";
+        } else {
+        photoUrl = "{{ Storage::url('') }}" + data.photo;
+        }
 
         var imageElement = document.createElement("img");
         imageElement.src = photoUrl;
