@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\AttendanceFingerspot;
 use App\Models\AttendanceHasEmployee;
 use App\Models\AttendancePayrol;
 use App\Models\Employee;
+use App\Models\Finger;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -215,10 +217,10 @@ class PayrollController extends Controller
 
         // 
         $attende_fingers = AttendanceHasEmployee::where('employee_id', $employee_id)
-            ->whereDate('date', '>=', $start_date)
-            ->whereDate('date', '<=', $end_date)
-            ->groupBy('date')
-            ->orderBy('date', 'asc')
+            ->whereDate('scan_date', '>=', $start_date)
+            ->whereDate('scan_date', '<=', $end_date)
+            ->groupBy('scan_date')
+            ->orderBy('scan_date', 'asc')
             ->get();
 
         // return $sql = Str::replaceArray('?', $attende_fingers->getBindings(), $attende_fingers->toSql());
@@ -228,6 +230,35 @@ class PayrollController extends Controller
                 'employee_id' => $employee_id,
                 'date' => $v->date,
             ]);
+
+
+            $fingers =  AttendanceFingerspot::whereIn('pin', function ($q)use($employee_id ) {
+                $q->select('id_finger')
+                    ->from(with(new Finger())->getTable())
+                    ->where('employee_id',$employee_id);
+            })
+            ->whereDate('scan_date',$v->date)
+            ->get();
+
+            $jam_kerja_masuk = null;
+            $jam_kerja_keluar = null;
+
+            foreach ($fingers as $key => $f) {
+                # code...
+
+                $nxx = Carbon::parse($f->scan_date)->format('H');
+                if($nxx > 6 && $nxx < 11){
+                    $jam_kerja_masuk = Carbon::parse($f->scan_date)->format('H:i');
+                }
+
+
+                if($nxx > 10 && $nxx < 19){
+                    $jam_kerja_keluar = Carbon::parse($f->scan_date)->format('H:i');
+                }
+
+
+            }
+
 
             if ($new_at->is_koreksi == 0) {
 
@@ -283,8 +314,8 @@ class PayrollController extends Controller
 
 
                 $new_at->update([
-                    'hour_start' => $v->hour_start,
-                    'hour_end' => $v->hour_end,
+                    'hour_start' => $jam_kerja_masuk,
+                    'hour_end' => $jam_kerja_masuk,
                     'duration_work' => $v->duration_work,
 
                     'hour_rest_start' => $v->hour_rest_start,
@@ -296,10 +327,10 @@ class PayrollController extends Controller
                     'duration_overtime' => $v->duration_overtime,
 
 
-                    'lembur_kali_satu_lima'=> $kali_1,
-                    'lembur_kali_dua'=> $kali_2,
-                    'lembur_kali_tiga'=> $kali_3,
-                    'lembur_kali_empat'=> $kali_4,
+                    'lembur_kali_satu_lima' => $kali_1,
+                    'lembur_kali_dua' => $kali_2,
+                    'lembur_kali_tiga' => $kali_3,
+                    'lembur_kali_empat' => $kali_4,
                 ]);
             }
         }
@@ -374,7 +405,7 @@ class PayrollController extends Controller
 
 
 
-                if(request()->get('edit_jam_lembur') == 'iya'){
+                if (request()->get('edit_jam_lembur') == 'iya') {
 
                     $attendance->update([
                         'lembur_kali_satu_lima' => request()->get('lembur_kali_satu_lima'),
@@ -383,7 +414,6 @@ class PayrollController extends Controller
                         'lembur_kali_empat' => request()->get('lembur_kali_empat'),
                         'is_koreksi_lembur' => 1,
                     ]);
-                    
                 }
 
 

@@ -126,9 +126,15 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="no_bpjs" class="col-sm-4 col-form-label">Nomor BPJS</label>
+                                <label for="no_bpjs" class="col-sm-4 col-form-label">Nomor BPJS KESEHATAN</label>
                                 <div class="col-sm-8">
                                     <input type="number" class="form-control" id="no_bpjs" name="no_bpjs">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="no_bpjs_tenaga_kerja" class="col-sm-4 col-form-label">Nomor BPJS TENAGA KERJA</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="no_bpjs_tenaga_kerja" name="no_bpjs_tenaga_kerja">
                                 </div>
                             </div>
                             <div class="form-group row">

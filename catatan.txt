@@ -1,2 +1,20 @@
 //jika tidak absen datang atau pulang maka dianggap tidak hadir
+//jika penginputan penyesuaian gaji diatas tanggal 26
+// tambah hari limbur kalender nasional
+
+
 //
+// tambah hari kerja, pokoknya dibagi 26, KHUSUS
+//off masuk, dikali 2
+
+//8 off, turun 2,
+
+//2 x 2 
+
+
+
+
+
+
+// perbaiki
+// data karyawan
