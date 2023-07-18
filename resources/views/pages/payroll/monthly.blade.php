@@ -386,6 +386,37 @@
             $(".select2").select2();
         }
 
+        
+
+        $(document).on("change","#edit_jam_lembur_select",function(e) {
+            // alert();
+
+            if($(this).val() == 'iya'){
+                $('#lembur_kali_satu_lima').removeAttr('readonly');
+                $('#lembur_kali_dua').removeAttr('readonly');
+                $('#lembur_kali_tiga').removeAttr('readonly');
+                $('#lembur_kali_empat').removeAttr('readonly');
+
+                ////////
+                $('#lembur_kali_satu_lima').attr('required','required');
+                $('#lembur_kali_dua').attr('required','required');
+                $('#lembur_kali_tiga').attr('required','required');
+                $('#lembur_kali_empat').attr('required','required');
+
+
+            }else{
+                $('#lembur_kali_satu_lima').attr('readonly','readonly');
+                $('#lembur_kali_dua').attr('readonly','readonly');
+                $('#lembur_kali_tiga').attr('readonly','readonly');
+                $('#lembur_kali_empat').attr('readonly','readonly');
+
+                $('#lembur_kali_satu_lima').removeAttr('required');
+                $('#lembur_kali_dua').removeAttr('required');
+                $('#lembur_kali_tiga').removeAttr('required');
+                $('#lembur_kali_empat').removeAttr('required');
+
+            }
+        });
 
         $(document).on("click",".edit_modal_attendance",function(e) {
             // clearForm();

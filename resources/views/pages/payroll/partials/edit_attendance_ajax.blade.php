@@ -55,30 +55,41 @@
 
 
                 <div class="form-group row">
+                    <label for="lembur_x1" class="col-sm-4 col-form-label">Edit Jam Lembur</label>
+                    <div class="col-sm-8">
+                        <select  class="form-control" name="edit_jam_lembur" id="edit_jam_lembur_select" >
+                            <option value="iya">IYA</option>
+                            <option value="tidak" selected>Tidak</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
                     <label for="lembur_x1" class="col-sm-4 col-form-label">Lembur X1.5</label>
                     <div class="col-sm-8">
-                        <input type="text" id="lembur_kali_satu_lima" name="lembur_kali_satu_lima" class="form-control" autocomplete="off" value="{{$attendance->lembur_kali_satu_lima}}" required>
+                        <input type="text" id="lembur_kali_satu_lima" name="lembur_kali_satu_lima" class="form-control form_jam_lembur" autocomplete="off" value="{{$attendance->lembur_kali_satu_lima}}" readonly>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="lembur_x2" class="col-sm-4 col-form-label">Lembur X2</label>
                     <div class="col-sm-8">
-                        <input type="text" id="lembur_kali_dua" name="lembur_kali_dua" class="form-control" autocomplete="off" value="{{$attendance->lembur_kali_dua}}" required>
+                        <input type="text" id="lembur_kali_dua" name="lembur_kali_dua" class="form-control form_jam_lembur" autocomplete="off" value="{{$attendance->lembur_kali_dua}}" readonly>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="lembur_x3" class="col-sm-4 col-form-label">Lembur X3</label>
                     <div class="col-sm-8">
-                        <input type="text" id="lembur_kali_tiga" name="lembur_kali_tiga" class="form-control" autocomplete="off" value="{{$attendance->lembur_kali_tiga}}" required>
+                        <input type="text" id="lembur_kali_tiga" name="lembur_kali_tiga" class="form-control form_jam_lembur" autocomplete="off" value="{{$attendance->lembur_kali_tiga}}" readonly>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="lembur_x4" class="col-sm-4 col-form-label">Lembur X4</label>
                     <div class="col-sm-8">
-                        <input type="text" id="lembur_kali_empat" name="lembur_kali_empat" class="form-control" autocomplete="off" value="{{$attendance->lembur_kali_empat}}" required>
+                        <input type="text" id="lembur_kali_empat" name="lembur_kali_empat" class="form-control form_jam_lembur" autocomplete="off" value="{{$attendance->lembur_kali_empat}}" readonly>
                     </div>
                 </div>
 

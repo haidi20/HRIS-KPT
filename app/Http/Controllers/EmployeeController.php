@@ -264,7 +264,6 @@ class EmployeeController extends Controller
 
             $salary_adjustment_detail = salaryAdjustmentDetail::firstOrCreate([
                 'employee_id' => $employee->id,
-                'amount' => request('name')
             ]);
             $salary_adjustment_detail->save();
 
