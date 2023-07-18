@@ -40,7 +40,7 @@
       <b-row>
         <b-col cols="6">
           <b-form-group
-            :label="`Hari Off ${form.work_schedule == '5,2' ? 'Pertama': ''}`"
+            :label="`Hari Off ${form.working_hour == '5,2' ? 'Pertama': ''}`"
             label-for="day_off_one"
           >
             <VueSelect
@@ -56,7 +56,7 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="6" v-if="form.work_schedule == '5,2'">
+        <b-col cols="6" v-if="form.working_hour == '5,2'">
           <b-form-group label="Hari Off Kedua" label-for="day_off_two">
             <VueSelect
               id="day_off_two"
