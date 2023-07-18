@@ -255,7 +255,7 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_tk"
                                                         class="form-check-input bpjsTKCheck" data-toggle="toggle"
-                                                        id="bpjs_tk" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jht" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
@@ -266,7 +266,7 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_tk_pt"
                                                         class="form-check-input bpjsTKPTCheck" data-toggle="toggle"
-                                                        id="bpjs_tk_pt" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jkk" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
@@ -277,7 +277,7 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_kes"
                                                         class="form-check-input bpjsKESCheck" data-toggle="toggle"
-                                                        id="bpjs_kes" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jkm" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
@@ -288,7 +288,7 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_kes_pt"
                                                         class="form-check-input bpjsKESPTCheck" data-toggle="toggle"
-                                                        id="bpjs_kes_pt" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jp" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
@@ -299,7 +299,7 @@
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_training"
                                                         class="form-check-input bpjsTRAININGCheck" data-toggle="toggle"
-                                                        id="bpjs_training" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_kes" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
