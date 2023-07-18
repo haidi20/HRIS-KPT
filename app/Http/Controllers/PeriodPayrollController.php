@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 // use ___PHPSTORM_HELPERS\object;
+use Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PayrollExport;
+use App\Exports\RekapGajiPayrollExportPerEmployee;
 use App\Models\Attendance;
 use App\Models\AttendanceHasEmployee;
 use App\Models\AttendancePayrol;
@@ -16,6 +19,7 @@ use App\Models\RosterDaily;
 use App\Models\salaryAdjustmentDetail;
 use App\Models\SalaryAdvanceDetail;
 use App\Models\Vacation;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,7 +73,10 @@ class PeriodPayrollController extends Controller
 
         if ($datatables->getRequest()->ajax()) {
             $period_payroll = PeriodPayroll::query()
-                ->select('period_payrolls.last_excel', 'period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays');
+                ->select('period_payrolls.last_excel', 'period_payrolls.period', 'period_payrolls.id', 'period_payrolls.name', 'period_payrolls.date_start', 'period_payrolls.date_end', 'period_payrolls.number_of_workdays'
+            ,"period_payrolls.last_excel","period_payrolls.last_excel_cv_kpt","period_payrolls.last_excel_pt_kpt","period_payrolls.last_pdf","period_payrolls.last_pdf_pt_kpt","period_payrolls.last_pdf_cv_kpt",
+            "period_payrolls.rekap_last_excel","period_payrolls.rekap_last_excel_cv_kpt","period_payrolls.rekap_last_excel_pt_kpt","period_payrolls.rekap_last_pdf","period_payrolls.rekap_last_pdf_cv_kpt","period_payrolls.rekap_last_pdf_pt_kpt"
+            );
 
             return $datatables->eloquent($period_payroll)
                 ->filterColumn('name', function (Builder $query, $keyword) {
@@ -89,8 +96,8 @@ class PeriodPayrollController extends Controller
 
                     if (auth()->user()->can('download payroll')) {
                         $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel_cv_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel_pt_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
                         // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-download"></i></a>';
                     }
 
@@ -99,9 +106,9 @@ class PeriodPayrollController extends Controller
                     $button .= '<div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_pdf . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_pdf_cv_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_pdf_pt_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
                         // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
                     }
 
@@ -116,10 +123,10 @@ class PeriodPayrollController extends Controller
                     $button = '<div><div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
-                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel_cv_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel_pt_kpt . '" class="btn-download btn btn-sm btn-success me-2"><i class="bi bi-filetype-csv"></i> PT KPT</a>';
+                        // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_excel . '" class="btn-download btn btn-sm btn-warning me-2"><i class="bi bi-download"></i></a>';
                     }
 
                     $button .= '</div> <br><br>';
@@ -127,9 +134,9 @@ class PeriodPayrollController extends Controller
                     $button .= '<div class="btn-group">';
 
                     if (auth()->user()->can('download payroll')) {
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
-                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_pdf . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"> PT & CV KPT</i></a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_pdf_cv_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> CV KPT</a>';
+                        $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->rekap_last_pdf_pt_kpt . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-filetype-pdf"></i> PT KPT</a>';
                         // $button .= '<a href="javascript:void(0)" data-download="' . url()->current() . "/export?a=" . $data->last_excel . '" class="btn-download btn btn-sm btn-danger me-2"><i class="bi bi-download"></i></a>';
                     }
 
@@ -284,7 +291,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $employees = Employee::where('id', 1)->orderBy('name', 'asc')->get();
+            $employees = Employee::whereIn('id',[1,2])->orderBy('name', 'asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -295,7 +302,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'jk')->first()->nominal ?? 0;
+            $bpjs_dasar_updah_bpjs_tk = BaseWagesBpjs::where('code', 'tk')->first()->nominal ?? 0;
             $dasar_updah_bpjs_kes = BaseWagesBpjs::where('code', 'kes')->first()->nominal ?? 0;
 
             // print("\n\n\n FFFFFFFFFFFFFFFFFFFFF \n");
@@ -399,7 +406,7 @@ class PeriodPayrollController extends Controller
                         $jumlah_hari_kerja_tmp += 1;
                         if (($old_sekali_at->duration_overtime != null) && ($old_sekali_at->duration_overtime > 0)) {
 
-                            if ($$old_sekali_at->is_koreksi_lembur == 0) {
+                            if ($old_sekali_at->is_koreksi_lembur == 0) {
                                 $hour_lembur_x = $old_sekali_at->duration_overtime % 60;
                                 $hour_lembur_y =  \floor($old_sekali_at->duration_overtime / 60);
 
@@ -450,11 +457,9 @@ class PeriodPayrollController extends Controller
                                     'roster_daily_id' => $roster_daily->id ?? null,
                                     'roster_status_initial' => $roster_daily->roster_status_initial ?? null
                                 ]);
-                            }else{
-                                $jumlah_jam_lembur_tmp = $new_old_d->id->lembur_kali_satu_lima + $new_old_d->id->lembur_kali_dua + $new_old_d->id->lembur_kali_tiga + $new_old_d->id->lembur_kali_empat ; 
+                            } else {
+                                $jumlah_jam_lembur_tmp = $new_old_d->id->lembur_kali_satu_lima + $new_old_d->id->lembur_kali_dua + $new_old_d->id->lembur_kali_tiga + $new_old_d->id->lembur_kali_empat;
                             }
-
-                            
                         }
 
                         // print_r([
@@ -597,7 +602,7 @@ class PeriodPayrollController extends Controller
 
 
                 $jumlah_thr = 0;
-                $sa_percents =  salaryAdjustmentDetail::where('is_thr',1)->whereDate('month_start', '>=', $tanggal_tambahan_lain)
+                $sa_percents =  salaryAdjustmentDetail::where('is_thr', 1)->whereDate('month_start', '>=', $tanggal_tambahan_lain)
                     ->whereDate('month_end', '<=', $tanggal_tambahan_lain)
                     // ->where('type_amount','percent')
                     ->where('type_time', 'base_time')
@@ -762,7 +767,7 @@ class PeriodPayrollController extends Controller
 
                 $pemotongan_bpjs_dibayar_karyawan  = $total_bpjs_karyawan_rupiah;
 
-                $pemotongan_tidak_hadir  = $jumlah_hari_tidak_masuk_tmp *  ($employee->basic_salary / 26);
+                $pemotongan_tidak_hadir  = $jumlah_hari_tidak_masuk_tmp * ($employee->basic_salary / 26);
 
                 $pemotongan_potongan_lain_lain = 0;
 
@@ -780,16 +785,16 @@ class PeriodPayrollController extends Controller
                 $pajak_total_penghasilan_kotor = $pajak_gaji_kotor_kurang_potongan + $pajak_bpjs_dibayar_perusahaan;
 
                 $n_tahun_enter = Carbon::parse($employee->enter_date)->format('Y');
-                $n_tahun_now = Carbon::now()->format('Y'); 
+                $n_tahun_now = Carbon::now()->format('Y');
 
                 $jumlah_bulan_kerja = 12;
 
 
                 // 2023  < 2022
-                if($n_tahun_now <= $n_tahun_enter ){
-                    $jumlah_bulan_kerja  = 13 - Carbon::parse($employee->enter_date)->format('m') ;
+                if ($n_tahun_now <= $n_tahun_enter) {
+                    $jumlah_bulan_kerja  = 13 - Carbon::parse($employee->enter_date)->format('m');
                 }
-                
+
                 // $enter_month = ;
 
                 // if($enter_month > 1){
@@ -801,7 +806,7 @@ class PeriodPayrollController extends Controller
                 $pajak_bpjs_dibayar_karyawan = $total_bpjs_karyawan_rupiah;
                 $pajak_total_pengurang = $pajak_biaya_jabatan + $pajak_bpjs_dibayar_karyawan;
 
-                 //////////////////////////////////////////////////////////////
+                //////////////////////////////////////////////////////////////
                 ////// JIKA BULAN DESEMBER //////////////////
 
 
@@ -813,31 +818,72 @@ class PeriodPayrollController extends Controller
                 $now_bulan = Carbon::parse($period_payroll->period)->format('m');
                 $now_tahun = Carbon::parse($period_payroll->period)->format('Y');
                 if ($now_bulan == '12') {
-                    Payroll::whereDate('date', '>=', $now_tahun.'-01-01')
-                    ->whereDate('date', '<=', $now_tahun.'-11-30')
-                    ->get();
-                }else{
+                    $pemotongan_pph_dua_satu_jan_nov = 0;
+                    $pajak_gaji_bersih_setahun = 0;
+                    $gaji_des = (($pajak_total_penghasilan_kotor * 1)  - $pajak_total_pengurang);
+                    $des = Payroll::whereIn('period_payroll_id', function ($q) use ($now_tahun) {
+                        $q->select('id')
+                            ->from(with(new PeriodPayroll())->getTable())
+                            ->whereDate('period', '>=', $now_tahun . '-01-01')
+                            ->whereDate('period', '<=', $now_tahun . '-11-30');
+                    })
+                        ->where('employee_id', $employee->id)
+
+                        ->get();
+
+                    // $gaji_jan_nov = 0;
+                    foreach ($des as $key => $d) {
+                        $gaji_jan_nov += ($d->pajak_total_penghasilan_kotor - $d->pajak_total_pengurang);
+                        $pemotongan_pph_dua_satu_jan_nov += $d->pemotongan_pph_dua_satu;
+                    }
+
+                    $pajak_gaji_bersih_setahun = $gaji_des + $gaji_jan_nov;
+                } else {
                     $pajak_gaji_bersih_setahun = (($pajak_total_penghasilan_kotor * $jumlah_bulan_kerja)  - $pajak_total_pengurang);
                 }
 
 
-                
+
 
 
                 $pkp_setahun = $pajak_gaji_bersih_setahun - $ptkp;
 
 
-                //menghitung pkp 5%
-                $pkp_lima_persen  = \max(0, $pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
-                $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
-                $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
-                $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                $pkp_lima_persen =0;
+                $pkp_lima_belas_persen=0;
+                $pkp_dua_puluh_lima_persen=0;
+                $pkp_tiga_puluh_persen=0;
+
+                
+
+
+                if($pkp_setahun > 0){
+                    print("EMPLOYE ID".$employee->id."MASUK PKP => ".$pkp_setahun."\n ");
+                    //menghitung pkp 5%
+                    $pkp_lima_persen  = \max(0, $pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
+                    $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
+                    $pkp_dua_puluh_lima_persen  = \max(0, $pkp_setahun > 500000000 ? ((500000000 - 250000000) * 0.25) : (($pkp_setahun - 250000000) * 0.25));
+                    $pkp_tiga_puluh_persen  = \max(0, $pkp_setahun > 1000000000 ? ((1000000000 - 500000000) * 0.30) : (($pkp_setahun - 500000000) * 0.30));
+                }else{
+                    $pkp_setahun = 0;
+                }
+
+
+                
 
                 $pajak_pph_dua_satu_setahun = $pkp_lima_persen + $pkp_lima_belas_persen + $pkp_dua_puluh_lima_persen + $pkp_tiga_puluh_persen;
 
-                $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun / $jumlah_bulan_kerja;
-                $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
-                $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+
+                if ($now_bulan == '12') {
+                    $pemotongan_pph_dua_satu =  \abs($pajak_pph_dua_satu_setahun - $pemotongan_pph_dua_satu_jan_nov);
+                    $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
+                    $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+                 } else {
+                    $pemotongan_pph_dua_satu = $pajak_pph_dua_satu_setahun / $jumlah_bulan_kerja;
+                    $jumlah_pemotongan = $pemotongan_bpjs_dibayar_karyawan + $pemotongan_pph_dua_satu + $pemotongan_potongan_lain_lain;
+                    $gaji_bersih = $jumlah_pendapatan - $jumlah_pemotongan;
+                }
+
 
 
                 ///////////////////////////////////////////////////////////////////
@@ -866,6 +912,8 @@ class PeriodPayrollController extends Controller
                     $pajak_pph_dua_satu_setahun_thr = $pkp_lima_persen_thr + $pkp_lima_belas_persen_thr + $pkp_dua_puluh_lima_persen_thr + $pkp_tiga_puluh_persen_thr;
 
                     $total_pph_dipotong = $pajak_pph_dua_satu_setahun - $pajak_pph_dua_satu_setahun_thr;
+
+                    $pemotongan_pph_dua_satu = $total_pph_dipotong;
                 }
 
 
@@ -875,7 +923,7 @@ class PeriodPayrollController extends Controller
 
 
 
-               
+
 
 
 
@@ -889,10 +937,10 @@ class PeriodPayrollController extends Controller
 
                 /////////simulasi naik gaji
 
-                if ($period_payroll->period == '2022-06-01' && $employee->id == 1) {
-                    $employee->basic_salary = 4000000;
-                    $employee->save();
-                }
+                // if ($period_payroll->period == '2022-06-01' && $employee->id == 1) {
+                //     $employee->basic_salary = 4000000;
+                //     $employee->save();
+                // }
 
 
                 $new_payroll->update([
@@ -1007,13 +1055,13 @@ class PeriodPayrollController extends Controller
                     'total_pph_dipotong' => $total_pph_dipotong,
 
 
-                    'gaji_jan_nov'=>$gaji_jan_nov,
-                    'gaji_des'=>$gaji_des,
-                    'pph_yang_dipotong_jan_nov'=>$pph_yang_dipotong_jan_nov,
-                    'pph_yang_dipotong_des'=>$pph_yang_dipotong_des,
+                    'gaji_jan_nov' => $gaji_jan_nov,
+                    'gaji_des' => $gaji_des,
+                    'pph_yang_dipotong_jan_nov' => $pph_yang_dipotong_jan_nov,
+                    'pph_yang_dipotong_des' => $pph_yang_dipotong_des,
 
-                    'jumlah_hutang'=>$jumlah_hutang,
-                    'pemotongan_tidak_hadir'=>$pemotongan_tidak_hadir,
+                    'jumlah_hutang' => $jumlah_hutang,
+                    'pemotongan_tidak_hadir' => $pemotongan_tidak_hadir,
                 ]);
 
                 AttendancePayrol::whereDate('date', '>=', $period_payroll->date_start)
@@ -1029,11 +1077,32 @@ class PeriodPayrollController extends Controller
 
 
             $unik_name_excel = 'Periode_' . $period_payroll->period . '_' . Str::uuid() . '.xlsx';
+            $unik_name_pdf = 'Periode_' . $period_payroll->period . '_' . Str::uuid() . '.pdf';
 
             $period_payroll->update([
                 'last_excel' => $unik_name_excel,
                 'last_excel_cv_kpt' => "cv_kpt_" . $unik_name_excel,
                 'last_excel_pt_kpt' => "cv_kpt_" . $unik_name_excel,
+
+
+                // 'last_pdf'=>"all_".$unik_name_pdf,
+                // 'last_pdf_pt_kpt'=>"pt_".$unik_name_pdf,
+                // 'last_pdf_cv_kpt'=>"cv_".$unik_name_pdf,
+
+                'last_pdf'=>"all_".$unik_name_pdf,
+                'last_pdf_pt_kpt'=>"all_".$unik_name_pdf,
+                'last_pdf_cv_kpt'=>"all_".$unik_name_pdf,
+
+
+
+                ////
+                'rekap_last_excel'=>'all_rekap_gaji'.$unik_name_excel,
+                'rekap_last_excel_cv_kpt'=>'cv_rekap_gaji'.$unik_name_excel,
+                'rekap_last_excel_pt_kpt'=>'pt_rekap_gaji'.$unik_name_excel,
+
+                'rekap_last_pdf'=>'all_rekap_gaji'.$unik_name_pdf,
+                'rekap_last_pdf_cv_kpt'=>'cv_rekap_gaji'.$unik_name_pdf,
+                'rekap_last_pdf_pt_kpt'=>'pt_rekap_gaji'.$unik_name_pdf,
 
             ]);
 
@@ -1042,9 +1111,59 @@ class PeriodPayrollController extends Controller
             DB::commit();
 
             Excel::store(new PayrollExport($period_payroll, $employees), $unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
+            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
 
-            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
-            Excel::store(new PayrollExport($period_payroll, $employees), "cv_kpt_" . $unik_name_excel, 'local');
+
+
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'all'), "all_rekap_gaji" . $unik_name_excel, 'local');
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'cv'), "cv_rekap_gaji" . $unik_name_excel, 'local');
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'pt'), "pt_rekap_gaji" . $unik_name_excel, 'local');
+
+
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'all'), "all_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'cv'), "cv_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
+            Excel::store(new RekapGajiPayrollExportPerEmployee($period_payroll, 'pt'), "pt_rekap_gaji" . $unik_name_pdf, 'local', \Maatwebsite\Excel\Excel::DOMPDF);
+
+
+            
+            // PDF
+
+            $customPaper = array(0,0,567.00,283.80);
+
+            print("Generate Slip Gaji");
+
+            \ini_set('memory_limit','-1');
+            $data = compact('period_payroll','employees');
+            $pdf = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data)->setPaper('A4', 'landscape');
+
+            // $pdf_cv = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji',['period_payroll'=>$period_payroll,'employees'=>Employee::get()])->setPaper('A4', 'landscape');
+            // $pdf_pt = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji',['period_payroll'=>$period_payroll,'employees'=>Employee::get()])->setPaper('A4', 'landscape');
+
+
+            // $employees = Employee::where('company_id',2)->get();
+            // $data_cv = compact('period_payroll','employees');
+            // $pdf_cv = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data_cv)->setPaper('A4', 'landscape');
+
+
+            // $employees = Employee::where('company_id',1)->get();
+            // $data_pt = compact('period_payroll','employees');
+            // $pdf_pt = PDF::loadView('pages.period_payroll.export_pdf_slip_gaji', $data_pt)->setPaper('A4', 'landscape');
+
+            // Stroage
+
+            Storage::disk('local')->put("all_".$unik_name_pdf, $pdf->output());
+            // Storage::disk('local')->put("cv_".$unik_name_pdf, $pdf_cv->output());
+            // Storage::disk('local')->put("pt_".$unik_name_pdf, $pdf_pt->output());
+            // Storage::disk('local')->put("cv_".$unik_name_pdf, $pdf_cv->output());
+            // Storage::disk('local')->put("pt_".$unik_name_pdf, $pdf_pt->output());
+
+
+//             $content = $pdf->download()->getOriginalContent();
+
+// Storage::put('public/csv/name.pdf',$content) ;
+
+
 
 
             print("SUUCESS GENERATED \n");

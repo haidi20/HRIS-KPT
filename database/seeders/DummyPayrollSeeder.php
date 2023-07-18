@@ -27,10 +27,13 @@ class DummyPayrollSeeder extends Seeder
      */
     public function run()
     {
-        $employees = Employee::where('id',1)->with('position')->get();
+        // $employees = Employee::where('id',1)->with('position')->get();
+
+        $employees = Employee::with('position')->get();
 
         Employee::where('id',1)->update([
-            'basic_salary'=>3700000
+            'basic_salary'=>15000000,
+            'ptkp'=>'K/0'
         ]);
 
         RosterDaily::truncate();
@@ -45,7 +48,7 @@ class DummyPayrollSeeder extends Seeder
 
 
 
-
+        $is_lembur = 0;
 
         $karyawan_tipe_1 = 0;
         $karyawan_tipe_2 = 0;
@@ -322,10 +325,29 @@ class DummyPayrollSeeder extends Seeder
                         'hour_rest_end' => null,
                         'duration_rest' => null,
 
-                        'hour_overtime_start' => $hour_overtime_start,
-                        'hour_overtime_end' => $hour_overtime_end,
-                        'duration_overtime' => $duration_overtime * 60,
+                        // 'hour_overtime_start' => $hour_overtime_start,
+                        // 'hour_overtime_end' => $hour_overtime_end,
+                        // 'duration_overtime' => $duration_overtime * 60,
                     ]);
+
+                    if($is_lembur){
+                        $attendance->update([
+                            // 'roster_daily_id' => $status_roster_id,
+                            // 'roster_status_initial' => $status_roster,
+                            // 'hour_start' => $hour_start,
+                            // 'hour_end' => $hour_end,
+                            // 'duration_work' => $duration_work * 60,
+                            // 'is_koreksi'=>1,
+    
+                            // 'hour_rest_start' => null,
+                            // 'hour_rest_end' => null,
+                            // 'duration_rest' => null,
+    
+                            'hour_overtime_start' => $hour_overtime_start,
+                            'hour_overtime_end' => $hour_overtime_end,
+                            'duration_overtime' => $duration_overtime * 60,
+                        ]);
+                    }
 
 
                     // if ($e->id == 1 && ($p->format('Y-m-d') == '2022-06-06')) {

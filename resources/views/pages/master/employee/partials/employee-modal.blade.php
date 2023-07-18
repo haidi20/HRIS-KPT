@@ -126,9 +126,15 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="no_bpjs" class="col-sm-4 col-form-label">Nomor BPJS</label>
+                                <label for="no_bpjs" class="col-sm-4 col-form-label">Nomor BPJS KESEHATAN</label>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" id="no_bpjs" name="no_bpjs">
+                                    <input type="text" class="form-control" id="no_bpjs" name="no_bpjs">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="no_bpjs_tenaga_kerja" class="col-sm-4 col-form-label">Nomor BPJS TENAGA KERJA</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="no_bpjs_tenaga_kerja" name="no_bpjs_tenaga_kerja">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -249,57 +255,57 @@
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label for="bpjs_tk" class="col-form-label">TK</label>
+                                            <label for="bpjs_tk" class="col-form-label">JHT (JAMINAN HARI TUA)</label>
                                             <div class="form-check form-switch">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_tk"
                                                         class="form-check-input bpjsTKCheck" data-toggle="toggle"
-                                                        id="bpjs_tk" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jht" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="bpjs_tk_pt" class="col-form-label">TK PT</label>
+                                            <label for="bpjs_tk_pt" class="col-form-label">JKK (JAMINAN KECELAKAAN KERJA)</label>
                                             <div class="form-check form-switch">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_tk_pt"
                                                         class="form-check-input bpjsTKPTCheck" data-toggle="toggle"
-                                                        id="bpjs_tk_pt" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jkk" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="bpjs_kes" class="col-form-label">KES</label>
+                                            <label for="bpjs_kes" class="col-form-label">JKM (JAMINAN KEMATIAN)</label>
                                             <div class="form-check form-switch">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_kes"
                                                         class="form-check-input bpjsKESCheck" data-toggle="toggle"
-                                                        id="bpjs_kes" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jkm" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="bpjs_kes_pt" class="col-form-label">KES PT</label>
+                                            <label for="bpjs_kes_pt" class="col-form-label">JP (JAMINAN PENSIUN)</label>
                                             <div class="form-check form-switch">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_kes_pt"
                                                         class="form-check-input bpjsKESPTCheck" data-toggle="toggle"
-                                                        id="bpjs_kes_pt" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_jp" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <label for="bpjs_training" class="col-form-label">TRAINING</label>
+                                            <label for="bpjs_training" class="col-form-label">BPJS KESEHATAN</label>
                                             <div class="form-check form-switch">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
                                                     for="flexSwitchCheckChecked">
                                                     <input type="checkbox" name="bpjs_training"
                                                         class="form-check-input bpjsTRAININGCheck" data-toggle="toggle"
-                                                        id="bpjs_training" data-off="Disabled" data-on="Enabled">
+                                                        id="bpjs_kes" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
                                         </div>
@@ -343,7 +349,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="allowance" class="col-sm-4 col-form-label">Uang Saku</label>
+                                <label for="allowance" class="col-sm-4 col-form-label">Tunjangan Tetap</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="allowance" name="allowance" class="form-control rupiah">
                                 </div>
@@ -390,7 +396,7 @@
                             <div class="form-group row">
                                 <label for="rekening_name" class="col-sm-4 col-form-label">Nama Rekening</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="rekening_name" name="rekening_name" class="form-control">
+                                    <input type="text" id="rekening_name" name="rekening_name" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
