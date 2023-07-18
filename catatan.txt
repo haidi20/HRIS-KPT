@@ -1,0 +1,2 @@
+//jika tidak absen datang atau pulang maka dianggap tidak hadir
+//
