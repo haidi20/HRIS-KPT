@@ -64,13 +64,16 @@ class EmployeesDataTable extends DataTable
     public function query(Employee $employee)
     {
         return $employee->newQuery()
-            ->select('employees.*', 'positions.name as position_name', 'locations.name as location_name', 'companies.name as company_name','fingers.id_finger as finger_employee', 'fingers.finger_tool_id as finger_tool')
+            ->select('employees.*', 'positions.name as position_name', 'locations.name as location_name', 'companies.name as company_name', 'fingers.id_finger as finger_employee', 'fingers.finger_tool_id as finger_tool')
             ->with('company', 'location', 'position', 'finger') // Include the 'fingers' relationship
             ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
             ->leftJoin('locations', 'employees.location_id', '=', 'locations.id')
             ->leftJoin('companies', 'employees.company_id', '=', 'companies.id')
-            ->leftJoin('fingers', 'fingers.employee_id', '=', 'employees.id');
+            ->leftJoin('fingers', 'fingers.employee_id', '=', 'employees.id')
+            ->groupBy('employees.nip')
+            ->orderBy('employees.id');
     }
+
 
 
     public function html()
@@ -81,7 +84,7 @@ class EmployeesDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->parameters([
-                'order' => [[0, 'asc']],
+                'order' => [[1, 'asc']],
                 'responsive' => true,
                 'autoWidth' => false,
                 'dom' => 'lBfrtip',
@@ -110,7 +113,7 @@ class EmployeesDataTable extends DataTable
                 return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
             }],
             // ['data' => 'id', 'name' => 'id', 'title' => 'No.', 'orderable' => true, 'order' => [0, 'asc'],],
-            ['data' => 'nip', 'name' => 'nip', 'title' => 'NIP','orderable' => false, 'searchable' => false, 'exportable' => false],
+            ['data' => 'nip', 'name' => 'nip', 'title' => 'NIP','exportable' => false],
             ['data' => 'name', 'name' => 'name', 'title' => 'Nama'],
             ['data' => 'position_name', 'name' => 'position_name', 'title' => 'Nama Jabatan'],
             ['data' => 'location_name', 'name' => 'location_name', 'title' => 'Nama Lokasi'],
