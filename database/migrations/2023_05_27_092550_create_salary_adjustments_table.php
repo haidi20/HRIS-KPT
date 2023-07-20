@@ -36,13 +36,6 @@ class CreateSalaryAdjustmentsTable extends Migration
             // kebutuhan di form employee has parent bagian proyek dan job order
             $table->date("month_filter_has_parent")->nullable();
             $table->enum('type_amount', ['nominal', 'percent'])->default('nominal');
-            /* type_incentive :
-                - another = lain - lain
-                - incentive = insentif
-                - deduction = potongan
-                - overtime = lembur
-            */
-            $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
             $table->double("amount")->nullable();
             $table->enum('type_adjustment', ['deduction', 'addition'])->default('deduction');
             $table->text("note")->nullable();
