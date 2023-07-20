@@ -205,8 +205,10 @@ class ProjectController extends Controller
                 $message = "ditambahkan";
             }
 
+            $dateStart = null;
             $dateEnd = null;
             if (request("date_end") != null) {
+                $dateStart = Carbon::parse(request("date_start"))->format("Y-m-d");
                 $dateEnd = Carbon::parse(request("date_end"))->format("Y-m-d");
             }
 
@@ -215,6 +217,7 @@ class ProjectController extends Controller
             $project->barge_id = request("barge_id");
             $project->location_id = request("location_id");
             $project->name = request("name");
+            $project->date_start = $dateStart;
             $project->date_end = $dateEnd;
             $project->day_duration = request("day_duration");
             $project->price = request("price");
@@ -294,6 +297,7 @@ class ProjectController extends Controller
         $projectHistory->foreman_id = $project->foreman_id;
         $projectHistory->barge_id = $project->barge_id;
         $projectHistory->name = $project->name;
+        $projectHistory->date_start = $project->date_start;
         $projectHistory->date_end = $project->date_end;
         $projectHistory->day_duration = $project->day_duration;
         $projectHistory->price = $project->price;

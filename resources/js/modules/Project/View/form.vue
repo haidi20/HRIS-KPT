@@ -78,6 +78,22 @@
           />
         </b-form-group>
       </b-col>
+      <b-col cols>
+        <b-form-group label="Pengawas" label-for="foreman_id" class>
+          <VueSelect
+            id="foreman_id"
+            class="cursor-pointer"
+            v-model="form.foreman_id"
+            placeholder="Pilih Pengawas"
+            :options="getOptionForemans"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+            :disabled="getReadOnly()"
+          />
+        </b-form-group>
+      </b-col>
       <!-- <b-col cols>
         <b-form-group label="Perusahaan" label-for="company_id" class>
           <VueSelect
@@ -97,22 +113,19 @@
     </b-row>
     <b-row>
       <b-col cols>
-        <b-form-group label="Pengawas" label-for="foreman_id" class>
-          <VueSelect
-            id="foreman_id"
-            class="cursor-pointer"
-            v-model="form.foreman_id"
-            placeholder="Pilih Pengawas"
-            :options="getOptionForemans"
-            :reduce="(data) => data.id"
-            label="name"
-            searchable
-            style="min-width: 180px"
+        <b-form-group label="Tanggal Mulai" label-for="date_start">
+          <DatePicker
+            id="date_start"
+            v-model="date_start"
+            format="YYYY-MM-DD"
+            type="date"
+            style="width: 100%"
             :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
       <b-col cols>
+        <!-- :disabled-date="(date, currentValue) => disabledDate(date, currentValue)" -->
         <b-form-group label="Tanggal Selesai" label-for="date_end">
           <DatePicker
             id="date_end"
@@ -120,14 +133,13 @@
             format="YYYY-MM-DD"
             type="date"
             style="width: 100%"
-            :disabled-date="(date, currentValue) => disabledDate(date, currentValue)"
             :disabled="getReadOnly()"
           />
         </b-form-group>
       </b-col>
       <b-col cols>
         <b-form-group label="Lama Pengerjaan" label-for="date_end">
-          <span>{{form.day_duration}} Hari</span>
+          <span>{{form.day_duration}} {{form.day_duration && "Hari"}}</span>
         </b-form-group>
       </b-col>
     </b-row>

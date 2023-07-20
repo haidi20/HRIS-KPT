@@ -21,6 +21,7 @@ class CreateProjectsTable extends Migration
             $table->foreignId('barge_id')->nullable(); // kapal
             // $table->string("code"); // kode proyek
             $table->string("name"); // nama proyek
+            $table->date('date_start')->nullable(); // tanggal selesai
             $table->date('date_end')->nullable(); // tanggal selesai
             $table->integer('day_duration')->nullable(); // berapa lama hari pengerjaan
             $table->double('price')->nullable(); // biaya proyek

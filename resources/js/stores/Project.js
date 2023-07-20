@@ -5,6 +5,7 @@ import { numbersOnly, formatCurrency, checkNull, dateDuration } from "../utils";
 
 const defaultForm = {
     id: null,
+    date_start: null,
     date_end: null,
     day_duration: null,
     // biaya
@@ -112,6 +113,7 @@ const Project = {
                 ...payload.form,
                 // contractors: [...payload.contractors],
                 // ordinary_seamans: [...payload.ordinary_seamans],
+                date_start: checkNull(payload.form.date_start) != null ? new Date(payload.form.date_start) : null,
                 date_end: checkNull(payload.form.date_end) != null ? new Date(payload.form.date_end) : null,
             };
 
@@ -217,6 +219,10 @@ const Project = {
                 state.form.remaining_payment_readable = null;
             }
         },
+        INSERT_FORM_DATE_START(state, payload) {
+            // console.info(payload.date_end);
+            state.form.date_start = checkNull(payload.date_start) != null ? payload.date_start : null;
+        },
         INSERT_FORM_DATE_END(state, payload) {
             // console.info(payload.date_end);
             state.form.date_end = checkNull(payload.date_end) != null ? payload.date_end : null;
@@ -228,11 +234,13 @@ const Project = {
         INSERT_FORM_DAY_DURATION(state, payload) {
             // console.info(state.form.date_end);
             if (
-                checkNull(state.form.date_end) != null
-                && moment(state.form.date_end).format("YYYY-mm-dd") != moment(new Date()).format("YYYY-mm-dd")
+                checkNull(state.form.date_start) != null
+                && checkNull(state.form.date_end) != null
+                && moment(state.form.date_end).format("YYYY-MM-DD") != moment(new Date()).format("YYYY-MM-DD")
             ) {
-                const dateNow = moment().format("YYYY-MM-DD");
-                const dayDuration = dateDuration(dateNow, state.form.date_end);
+                const dateStart = moment(state.form.date_start).format("YYYY-MM-DD");
+                // tambahkan 1 untuk terhitungnya dari tanggal awal.
+                const dayDuration = dateDuration(dateStart, state.form.date_end) + 1;
 
                 // console.info(day_duration);
                 state.form.day_duration = `${dayDuration}`;

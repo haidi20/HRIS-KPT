@@ -27,8 +27,14 @@ export default {
                     class: "",
                 },
                 {
+                    label: "Tanggal Mulai",
+                    field: "date_start_readable",
+                    width: "200px",
+                    class: "",
+                },
+                {
                     label: "Tanggal Selesai",
-                    field: "date_end",
+                    field: "date_end_readable",
                     width: "200px",
                     class: "",
                 },

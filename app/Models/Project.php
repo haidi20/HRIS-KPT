@@ -14,7 +14,7 @@ class Project extends Model
 
     protected $fillable = [];
     protected $appends = [
-        "location_name", "job_order_total", "date_end_readable",
+        "location_name", "job_order_total", "date_start_readable", "date_end_readable",
         "job_order_finish_total",
     ];
 
@@ -108,6 +108,15 @@ class Project extends Model
     {
         if ($this->jobOrders) {
             return count($this->jobOrders);
+        }
+    }
+
+    public function getDateStartReadableAttribute()
+    {
+        if ($this->date_start != null) {
+            return dateReadable($this->date_start);
+        } else {
+            return null;
         }
     }
 

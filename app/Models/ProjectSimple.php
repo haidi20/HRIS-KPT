@@ -20,6 +20,7 @@ class ProjectSimple extends Model
 
     protected $appends = [
         "location_name",
+        "date_start_readable",
         "date_end_readable",
     ];
 
@@ -36,6 +37,16 @@ class ProjectSimple extends Model
             return null;
         }
     }
+
+    public function getDateStartReadableAttribute()
+    {
+        if ($this->date_start != null) {
+            return dateReadable($this->date_start);
+        } else {
+            return null;
+        }
+    }
+
 
     public function getDateEndReadableAttribute()
     {

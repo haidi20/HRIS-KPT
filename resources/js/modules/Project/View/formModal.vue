@@ -105,6 +105,14 @@ export default {
       // mengambil data hexa saja
       const request = {
         ...this.form,
+        date_start:
+          checkNull(this.form.date_start) != null
+            ? moment(this.form.date_start).format("YYYY-MM-DD")
+            : null,
+        date_end:
+          checkNull(this.form.date_end) != null
+            ? moment(this.form.date_end).format("YYYY-MM-DD")
+            : null,
         user_id: this.getUserId,
       };
 

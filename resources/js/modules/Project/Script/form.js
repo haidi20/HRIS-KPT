@@ -59,6 +59,16 @@ export default {
                 });
             },
         },
+        date_start: {
+            get() {
+                return this.$store.state.project.form.date_start;
+            },
+            set(value) {
+                this.$store.commit("project/INSERT_FORM_DATE_START", {
+                    date_start: value,
+                });
+            },
+        },
         date_end: {
             get() {
                 return this.$store.state.project.form.date_end;
@@ -81,6 +91,9 @@ export default {
         down_payment(value, oldValue) {
             // console.info(value);
             this.$store.commit("project/INSERT_FORM_REMAINING_PAYMENT");
+        },
+        date_start(value, oldValue) {
+            this.$store.commit("project/INSERT_FORM_DAY_DURATION");
         },
         date_end(value, oldValue) {
             this.$store.commit("project/INSERT_FORM_DAY_DURATION");

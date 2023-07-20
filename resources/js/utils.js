@@ -80,7 +80,8 @@ export const dateDuration = (date_start, date_end) => {
     let duration = moment.duration(getDateEnd.diff(getDateStart));
     let days = duration.asDays();
 
-    return days;
+    // return days;
+    return Math.floor(days);
 }
 
 export const datetimeDuration = (datetime_start, datetime_end, is_readable = false) => {
