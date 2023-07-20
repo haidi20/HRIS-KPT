@@ -38,6 +38,9 @@ export default {
         getOptionTypeAdjustments() {
             return this.$store.state.salaryAdjustment.options.type_adjustments;
         },
+        getOptionTypeIncentives() {
+            return this.$store.state.salaryAdjustment.options.type_incentives;
+        },
         getOptionHolidayAllowances() {
             return this.$store.state.salaryAdjustment.options.holiday_allowances;
         },
@@ -125,7 +128,7 @@ export default {
                 user_id: this.getUserId,
             };
 
-            console.info(request);
+            // console.info(request);
             // return false;
             this.is_loading = true;
 

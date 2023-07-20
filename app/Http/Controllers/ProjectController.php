@@ -9,6 +9,7 @@ use App\Models\JobOrder;
 use App\Models\OrdinarySeamanHasParent;
 use App\Models\Project;
 use App\Models\ProjectHistory;
+use App\Models\ProjectSimple;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,7 @@ class ProjectController extends Controller
         //     ->whereYear("created_at", $month->format("Y"))
         //     ->whereMonth("created_at", $month->format("m"))
         //     ->orderBy("created_at", "asc")->get();
-        $projects = Project::orderBy('created_at')->get();
+        $projects = ProjectSimple::select('id', 'name')->orderBy('created_at')->get();
 
         return response()->json([
             "month" => $month->format("m"),
@@ -168,7 +169,7 @@ class ProjectController extends Controller
         if ($getStoreValidation) {
             return response()->json([
                 'success' => false,
-                'message' => $this->storeValidation("result"),
+                'message' => $this->storeValidation("message"),
             ], 400);
         }
 
@@ -379,7 +380,7 @@ class ProjectController extends Controller
             }
         }
 
-        if ($type == "result") {
+        if ($type == "message") {
             return $message;
         }
 

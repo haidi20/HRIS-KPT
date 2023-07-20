@@ -115,6 +115,27 @@
           />
         </b-col>
         <b-col cols="6">
+          <label for="type_incentive" style="display:inline-block; ">
+            <!-- <span>penambahan / pengurangan</span> -->
+            <span>Jenis Tambahan Insentif</span>
+          </label>
+          <VueSelect
+            id="type_incentive"
+            class="cursor-pointer"
+            v-model="form.type_incentive"
+            placeholder="Pilih Jenis Penyesuaian"
+            :options="getOptionTypeIncentives"
+            :reduce="(data) => data.id"
+            label="name"
+            searchable
+            style="min-width: 180px"
+            :disabled="getReadOnly()"
+          />
+        </b-col>
+      </b-row>
+      <br />
+      <b-row>
+        <b-col cols>
           <b-form-group label="Keterangan" label-for="note" class>
             <b-form-input
               v-model="form.note"

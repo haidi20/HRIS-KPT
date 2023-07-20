@@ -19,6 +19,7 @@ class salaryAdjustmentDetail extends Model
         'salary_adjustment_id',
         'employee_id',
         'type_amount',
+        'type_incentive',
         'amount',
         'type_time',
         'month_start',

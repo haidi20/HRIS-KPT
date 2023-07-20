@@ -45,32 +45,13 @@ class SalaryAdjustmentController extends Controller
         $employeeBase = request("employee_base");
         $employeeSelecteds = request("employee_selecteds");
 
-        if (count($employeeSelecteds) == 0 && $employeeBase == "choose_employee") {
-            return response()->json([
-                'success' => false,
-                'message' => "Maaf, minimal 1 karyawan yang dipilih",
-            ], 500);
-        }
+        $getStoreValidation = $this->storeValidation($employeeSelecteds, $employeeBase);
 
-        if ($employeeBase == "position" && request("position_id") == null) {
+        if ($getStoreValidation) {
             return response()->json([
                 'success' => false,
-                'message' => "Maaf, harus pilih salah satu jabatan",
-            ], 500);
-        }
-
-        if ($employeeBase == "job_order" && request("job_order_id") == null) {
-            return response()->json([
-                'success' => false,
-                'message' => "Maaf, harus pilih salah satu job order",
-            ], 500);
-        }
-
-        if ($employeeBase == "project" && request("project_id") == null) {
-            return response()->json([
-                'success' => false,
-                'message' => "Maaf, harus pilih salah satu proyek",
-            ], 500);
+                'message' => $this->storeValidation($employeeSelecteds, $employeeBase, "message"),
+            ], 400);
         }
 
         try {
@@ -120,6 +101,7 @@ class SalaryAdjustmentController extends Controller
             $salaryAdjustment->type_amount = request("type_amount");
             $salaryAdjustment->amount = request("amount");
             $salaryAdjustment->type_adjustment = request("type_adjustment");
+            $salaryAdjustment->type_incentive = request("type_incentive");
             $salaryAdjustment->note = request("note");
             $salaryAdjustment->is_thr = request("is_thr");
             $salaryAdjustment->save();
@@ -226,6 +208,7 @@ class SalaryAdjustmentController extends Controller
                 "employee_id" => $item->id,
                 "salary_adjustment_id" => $salaryAdjustment->id,
                 "type_amount" => $salaryAdjustment->type_amount,
+                "type_incentive" => $salaryAdjustment->type_incentive,
                 "amount" => $salaryAdjustment->amount,
                 "type_time" => $salaryAdjustment->type_time,
                 "month_start" => $salaryAdjustment->month_start,
@@ -258,6 +241,7 @@ class SalaryAdjustmentController extends Controller
         $salaryAdjustmentDetailHistory->salary_adjustment_id = $data->salary_adjustment_id;
         $salaryAdjustmentDetailHistory->employee_id = $data->employee_id;
         $salaryAdjustmentDetailHistory->type_amount = $data->type_amount;
+        $salaryAdjustmentDetailHistory->type_incentive = $data->type_incentive;
         $salaryAdjustmentDetailHistory->type_time = $data->type_time;
         $salaryAdjustmentDetailHistory->amount = $data->amount;
         $salaryAdjustmentDetailHistory->month_start = $data->month_start;
@@ -269,6 +253,38 @@ class SalaryAdjustmentController extends Controller
         $salaryAdjustmentDetailHistory->updated_at = $data->updated_at;
         $salaryAdjustmentDetailHistory->deleted_at = Carbon::now();
         $salaryAdjustmentDetailHistory->save();
+    }
+
+    private function storeValidation($employeeSelecteds, $employeeBase, $type = null)
+    {
+        $isError = false;
+        $message = null;
+
+        if (count($employeeSelecteds) == 0 && $employeeBase == "choose_employee") {
+            $isError = true;
+            $message = "Maaf, minimal 1 karyawan yang dipilih";
+        }
+
+        if ($employeeBase == "position" && request("position_id") == null) {
+            $isError = true;
+            $message = "Maaf, harus pilih salah satu jabatan";
+        }
+
+        if ($employeeBase == "job_order" && request("job_order_id") == null) {
+            $isError = true;
+            $message = "Maaf, harus pilih salah satu job order";
+        }
+
+        if ($employeeBase == "project" && request("project_id") == null) {
+            $isError = true;
+            $message = "Maaf, harus pilih salah satu proyek";
+        }
+
+        if ($type == "message") {
+            return $message;
+        }
+
+        return $isError;
     }
 
     private function fetchDataOld()

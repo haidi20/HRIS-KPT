@@ -13,6 +13,7 @@ const defaultForm = {
     month_start: new Date(),
     month_end: new Date(),
     type_adjustment: "addition",
+    type_incentive: "incentive",
     note: null,
     is_month_end: false,
     is_thr: false,
@@ -61,6 +62,24 @@ const SalaryAdjustment = {
                 {
                     id: "addition",
                     name: "penambahan",
+                },
+            ],
+            type_incentives: [
+                {
+                    id: "incentive",
+                    name: "Insentif",
+                },
+                {
+                    id: "deduction",
+                    name: "Potongan",
+                },
+                {
+                    id: "overtime",
+                    name: "Lembur",
+                },
+                {
+                    id: "another",
+                    name: "Lain - lain",
                 },
             ],
         },
@@ -133,7 +152,7 @@ const SalaryAdjustment = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_DATA", {

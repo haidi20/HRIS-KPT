@@ -28,6 +28,14 @@ class CreateSalaryAdjustmentDetailsTable extends Migration
             $table->text("note_salary_adjustment")->nullable();
             $table->integer("is_payroll_use")->default(0); // menandakan sudah terpakai di payroll
 
+            /* type_incentive :
+                - another = lain - lain
+                - incentive = insentif
+                - deduction = potongan
+                - overtime = lembur
+            */
+            $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();

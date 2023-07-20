@@ -21,6 +21,7 @@ class salaryAdjustmentDetailHistory extends Model
         'employee_id',
         'amount',
         'type_time',
+        'type_incentive',
         'month_start',
         'month_end',
         'created_by',
