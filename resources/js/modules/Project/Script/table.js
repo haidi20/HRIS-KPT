@@ -99,7 +99,7 @@ export default {
             });
 
             this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
-            this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+            this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId, project_id: item.id });
 
             this.$bvModal.show("project_form");
         },
@@ -113,7 +113,7 @@ export default {
             });
 
             this.$store.commit("jobOrder/INSERT_PARAM", { project_id: item.id });
-            this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId });
+            this.$store.dispatch("jobOrder/fetchData", { user_id: this.getUserId, project_id: item.id });
 
             // console.info(this.getForm);
 

@@ -17,4 +17,32 @@ class ProjectSimple extends Model
     // ada kemungkinan pengaruh pada relation table
 
     protected $table = "projects";
+
+    protected $appends = [
+        "location_name",
+        "date_end_readable",
+    ];
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, "location_id", "id");
+    }
+
+    public function getLocationNameAttribute()
+    {
+        if ($this->location) {
+            return $this->location->name;
+        } else {
+            return null;
+        }
+    }
+
+    public function getDateEndReadableAttribute()
+    {
+        if ($this->date_end != null) {
+            return dateReadable($this->date_end);
+        } else {
+            return null;
+        }
+    }
 }

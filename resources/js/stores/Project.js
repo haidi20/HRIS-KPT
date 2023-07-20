@@ -68,6 +68,7 @@ const Project = {
         loading: {
             table: false,
             position: false,
+            data_relation: false,
         },
     },
     mutations: {
@@ -104,18 +105,23 @@ const Project = {
             let getCloneForm = state.form;
 
             // console.info(payload.form.date_end);
+            // console.info(checkNull(payload.form.date_end));
 
             getCloneForm = {
                 ...getCloneForm,
                 ...payload.form,
-                contractors: [...payload.contractors],
-                ordinary_seamans: [...payload.ordinary_seamans],
+                // contractors: [...payload.contractors],
+                // ordinary_seamans: [...payload.ordinary_seamans],
                 date_end: checkNull(payload.form.date_end) != null ? new Date(payload.form.date_end) : null,
             };
 
             state.form = { ...getCloneForm };
 
             // console.info(payload.form.contractors, state.form.contractors);
+        },
+        INSERT_FORM_RELATION(state, payload) {
+            state.form.contractors = [...payload.contractors];
+            state.form.ordinary_seamans = [...payload.ordinary_seamans];
         },
         INSERT_FORM_ID(state, payload) {
             state.form.id = payload.id;
@@ -246,6 +252,9 @@ const Project = {
         UPDATE_LOADING_POSITION(state, payload) {
             state.loading.position = payload.value;
         },
+        UPDATE_LOADING_DATA_RELATION(state, payload) {
+            state.loading.data_relation = payload.value;
+        },
         UPDATE_DATA_IS_SELECTED_FALSE(state, payload) {
             let dataClone = [...state.data];
             dataClone = dataClone.map(item => ({ ...item, is_selected: false }));
@@ -315,9 +324,21 @@ const Project = {
                 .then((responses) => {
                     // console.info(responses);
                     const data = responses.data;
+                    const projects = data.projects.map(item => {
+                        const newItem = { ...item };
+                        if (checkNull(item.contractors) == null) {
+                            newItem.contractors = [];
+                        }
+
+                        if (checkNull(item.ordinary_seamans) == null) {
+                            newItem.ordinary_seamans = [];
+                        }
+
+                        return newItem;
+                    });
 
                     context.commit("INSERT_DATA", {
-                        projects: data.projects,
+                        projects: projects,
                     });
                     context.commit("UPDATE_LOADING_TABLE", { value: false });
                 })
@@ -448,6 +469,32 @@ const Project = {
                     console.info(err);
                 });
         },
+        fetchDataRelation: async (context, payload) => {
+            context.commit("UPDATE_LOADING_DATA_RELATION", { value: true });
+            const params = {
+                project_id: payload.project_id,
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/project/fetch-data-relation`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_FORM_RELATION", {
+                        contractors: data.contractors,
+                        ordinary_seamans: data.ordinarySeamans,
+                    });
+                    context.commit("UPDATE_LOADING_DATA_RELATION", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DATA_RELATION", { value: false });
+                    console.info(err);
+                });
+        },
         /**
          * Perform an action asynchronously.
          *
@@ -459,16 +506,19 @@ const Project = {
          * @returns {Promise} A promise that resolves after the action is performed.
          */
         onAction: async (context, payload) => {
+            // console.info(payload.form);
             const getCloneForm = { ...payload.form };
-            const getCloneFormContractors = [...payload.form.contractors];
-            const getCloneFormOrdinarySeamans = [...payload.form.ordinary_seamans];
+            // const getCloneFormContractors = [...payload.form.contractors];
+            // const getCloneFormOrdinarySeamans = [...payload.form.ordinary_seamans];
 
             // console.info(context.state.data);
 
+            context.dispatch("fetchDataRelation", { project_id: payload.form.id });
+
             context.commit("INSERT_FORM", {
                 form: { ...getCloneForm },
-                contractors: [...getCloneFormContractors],
-                ordinary_seamans: [...getCloneFormOrdinarySeamans],
+                // contractors: [...getCloneFormContractors],
+                // ordinary_seamans: [...getCloneFormOrdinarySeamans],
             });
             context.commit("INSERT_FORM_FORM_TYPE", {
                 form_type: payload.form_type,

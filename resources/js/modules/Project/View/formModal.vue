@@ -12,6 +12,11 @@
       <hr />
       <b-row>
         <b-col cols>
+          <span v-if="getLoadingDataRelation">Loading...</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols>
           <b-tabs content-class="mt-3">
             <b-tab title="Kepala Pemborong" @click="onChangeTab('contractor')">
               <ContractorHasParent />
@@ -75,6 +80,9 @@ export default {
     },
     getFormTitle() {
       return this.$store.state.project.form.form_title;
+    },
+    getLoadingDataRelation() {
+      return this.$store.state.project.loading.data_relation;
     },
     form() {
       return this.$store.state.project.form;

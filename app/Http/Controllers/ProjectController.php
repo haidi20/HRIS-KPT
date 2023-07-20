@@ -35,13 +35,31 @@ class ProjectController extends Controller
         $month = Carbon::parse(request("month"));
         $monthReadAble = $month->isoFormat("MMMM YYYY");
 
-        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
-            // ->whereYear("created_at", $month->format("Y"))
-            // ->whereMonth("created_at", $month->format("m"))
-            ->orderBy("created_at", "desc")->get();
+        // $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"])
+        // ->whereYear("created_at", $month->format("Y"))
+        // ->whereMonth("created_at", $month->format("m"))
+        // ->orderBy("created_at", "desc")->get();
+
+        $projects = ProjectSimple::orderBy("created_at", "desc")->get();
 
         return response()->json([
             "projects" => $projects,
+        ]);
+    }
+
+    public function fetchDataRelation()
+    {
+        $contractors = ContractorHasParent::where("parent_model", "App\Models\Project")
+            ->where("parent_id", request("project_id"))
+            ->get();
+        $ordinarySeamans = OrdinarySeamanHasParent::where("parent_model", "App\Models\Project")
+            ->where("parent_id", request("project_id"))
+            ->get();
+
+        return response()->json([
+            "requests" => request()->all(),
+            "contractors" => $contractors,
+            "ordinarySeamans" => $ordinarySeamans,
         ]);
     }
 
@@ -70,7 +88,8 @@ class ProjectController extends Controller
             $user = User::find(request("user_id"));
         }
 
-        $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"]);
+        // $projects = Project::with(["contractors", "ordinarySeamans", "jobOrders"]);
+        $projects = new ProjectSimple;
         // ->whereDate("date_end", ">=", $date);
 
         // data proyek berdasarkan lokasi pengguna,

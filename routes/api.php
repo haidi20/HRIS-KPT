@@ -130,6 +130,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     });
     Route::prefix('project')->name('project.')->group(function () {
         Route::get('fetch-data', [ProjectController::class, "fetchData"])->name('fetchData');
+        Route::get('fetch-data-relation', [ProjectController::class, "fetchDataRelation"])->name('fetchDataRelation');
         Route::get('fetch-data-base-joborder-finish', [ProjectController::class, "fetchDataBaseJobOrderFinish"])->name('fetchDataBaseJobOrderFinish');
         Route::get('fetch-data-base-date-end', [ProjectController::class, "fetchDataBaseDateEnd"])->name('fetchDataBaseDateEnd');
         Route::get('fetch-data-base-running', [ProjectController::class, "fetchDataBaseRunning"])->name('fetchDataBaseRunning');
