@@ -68,7 +68,8 @@
                 @can('lihat proyek')
                     <li class="sidebar-item {{ isActive('project') }} ">
                         <a href="{{ route('project.index') }}" class='sidebar-link'>
-                            <i class="bi bi-pencil"></i>
+                            {{-- <i class="bi bi-pencil"></i> --}}
+                            <i class="fas fa-clipboard"></i>
                             <span>Proyek</span>
                         </a>
                     </li>

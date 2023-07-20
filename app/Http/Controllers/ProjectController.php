@@ -403,6 +403,16 @@ class ProjectController extends Controller
             }
         }
 
+        if (request("date_start") != null && request("date_end") != null) {
+            $start = Carbon::parse(request("date_start"));
+            $end = Carbon::parse(request("date_end"));
+
+            if ($end->lessThan($start)) {
+                $isError = true;
+                $message = "Maaf, tanggal selesai tidak boleh sebelum tanggal selesai harus di masukkan";
+            }
+        }
+
         if ($type == "message") {
             return $message;
         }
