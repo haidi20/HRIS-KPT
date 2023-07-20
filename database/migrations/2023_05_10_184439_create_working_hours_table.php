@@ -16,6 +16,8 @@ class CreateWorkingHoursTable extends Migration
         Schema::create('working_hours', function (Blueprint $table) {
             $table->id();
             $table->time('start_time')->nullable(); // jam mulai kerja
+            $table->time('late_five_two')->nullable(); // jam telat karyawan 5 - 2
+            $table->time('late_six_one')->nullable(); // jam telat karyawan 6 - 1
             $table->time('after_work')->nullable(); // jam pulang kerja
             $table->time('after_work_limit')->nullable(); // batas maksimal jam pulang
             $table->time('start_rest')->nullable(); // jam mulai istirahat

@@ -19,7 +19,9 @@ class WorkingHourSeeder extends Seeder
         DB::table('working_hours')->insert(
             [
                 [
-                    'start_time' => '08:00',
+                    'start_time' => '06:00',
+                    'late_five_two' => '08:00',
+                    'late_six_one' => '09:00',
                     'after_work' => '17:00',
                     'after_work_limit' => '20:00',
                     'start_rest' => '11:30',

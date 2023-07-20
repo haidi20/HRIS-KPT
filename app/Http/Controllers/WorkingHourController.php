@@ -16,6 +16,8 @@ class WorkingHourController extends Controller
     {
         $id = WorkingHour::pluck('id');
         $startTime = WorkingHour::pluck('start_time');
+        $lateFiveTwo = WorkingHour::pluck('late_five_two');
+        $lateSixOne = WorkingHour::pluck('late_six_one');
         $afterWork = WorkingHour::pluck('after_work');
         $afterWorkLimit = WorkingHour::pluck('after_work_limit');
         $startRest = WorkingHour::pluck('start_rest');
@@ -25,7 +27,19 @@ class WorkingHourController extends Controller
         $overtimeWork = WorkingHour::pluck('overtime_work');
         $saturdayWorkHour = WorkingHour::pluck('saturday_work_hour');
 
-        return view("pages.master.working-hour.index", compact("id", "startTime", "afterWork", "afterWorkLimit", "startRest", "endRest", "fastestTime", "overtimeWork", "saturdayWorkHour"));
+        return view("pages.master.working-hour.index", compact(
+            "id",
+            "startTime",
+            "lateFiveTwo",
+            "lateSixOne",
+            "afterWork",
+            "afterWorkLimit",
+            "startRest",
+            "endRest",
+            "fastestTime",
+            "overtimeWork",
+            "saturdayWorkHour"
+        ));
     }
 
     public function store(Request $request)
@@ -46,6 +60,8 @@ class WorkingHourController extends Controller
             }
 
             $start_time = Carbon::createFromFormat('H:i', request('start_time'))->format('H:i');
+            $lateFiveTwo = Carbon::createFromFormat('H:i', request('late_five_two'))->format('H:i');
+            $lateSixOne = Carbon::createFromFormat('H:i', request('late_six_one'))->format('H:i');
             $after_work = Carbon::createFromFormat('H:i', request('after_work'))->format('H:i');
             $after_work_limit = Carbon::createFromFormat('H:i', request('after_work_limit'))->format('H:i');
             $start_rest = Carbon::createFromFormat('H:i', request('start_rest'))->format('H:i');
@@ -56,6 +72,8 @@ class WorkingHourController extends Controller
             $saturday_work_hour = Carbon::createFromFormat('H:i', request('saturday_work_hour'))->format('H:i');
 
             $workingHour->start_time = $start_time;
+            $workingHour->late_five_two = $lateFiveTwo;
+            $workingHour->late_six_one = $lateSixOne;
             $workingHour->after_work = $after_work;
             $workingHour->after_work_limit = $after_work_limit;
             $workingHour->start_rest = $start_rest;
