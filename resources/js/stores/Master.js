@@ -13,8 +13,18 @@ const example = {
         data: {
             jobs: [],
             barges: [],
-            positions: [],
-            companies: [],
+            positions: [
+                {
+                    id: 'all',
+                    name: 'Semua',
+                },
+            ],
+            companies: [
+                {
+                    id: 'all',
+                    name: 'Semua',
+                },
+            ],
             locations: [],
             finger_tools: [],
         },
