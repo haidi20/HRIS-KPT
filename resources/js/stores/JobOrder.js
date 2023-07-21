@@ -577,6 +577,9 @@ const JobOrder = {
         },
         fetchJobStatusHasParent: async (context, payload) => {
             context.commit("UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT", { value: true });
+            context.commit("INSERT_FORM_JOB_ORDER_HAS_PARENT", {
+                data: [],
+            });
 
             const params = {
                 job_order_id: payload.job_order_id,
@@ -589,7 +592,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_FORM_JOB_ORDER_HAS_PARENT", {

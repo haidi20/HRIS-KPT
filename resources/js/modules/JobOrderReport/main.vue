@@ -204,7 +204,7 @@ export default {
       window.open(`${linkPrint}`, "_blank");
     },
     onShowImage(data) {
-      console.info(data);
+      //   console.info(data);
       this.$store.dispatch("jobOrder/fetchJobStatusHasParent", {
         job_order_id: data.id,
       });
