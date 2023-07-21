@@ -11,5 +11,6 @@ const mix = require('laravel-mix');
  |
  */
 mix.js('resources/js/app-210723.js', 'public/js').vue()
+    .js('resources/js/app-notification.js', 'public/js').vue()
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps();

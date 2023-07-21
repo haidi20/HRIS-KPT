@@ -254,7 +254,9 @@
                             <span>:</span>
                         </td>
                         <td>
-                            <span>Fadil (QC), Yosep (Pengawas), Tono (OS)</span>
+                            <span>
+                                {{ $data->list_approved }}
+                            </span>
                         </td>
                     </tr>
                 </table>

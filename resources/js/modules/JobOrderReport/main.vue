@@ -164,7 +164,7 @@ export default {
       return this.$store.state.jobOrder.data;
     },
     getIsLoadingData() {
-      return this.$store.state.jobOrder.loading.table;
+      return this.$store.state.jobOrder.loading.data;
     },
     params() {
       return this.$store.state.jobOrder.params;

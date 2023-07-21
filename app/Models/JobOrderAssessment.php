@@ -21,7 +21,7 @@ class JobOrderAssessment extends Model
     ];
 
     protected $appends = [
-        "group_name",
+        "group_name", "employee_name", "position_name",
     ];
 
     protected static function boot()
@@ -43,12 +43,31 @@ class JobOrderAssessment extends Model
         return $this->belongsTo(User::class, "created_by", "id");
     }
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, "employee_id", "id");
+    }
+
     public function getGroupNameAttribute()
     {
         if ($this->creator) {
             $groupName = $this->creator->group_name;
 
             return $groupName == "Quality Control" ? "QC" : $groupName;
+        }
+    }
+
+    public function getEmployeeNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->name;
+        }
+    }
+
+    public function getPositionNameAttribute()
+    {
+        if ($this->employee) {
+            return $this->employee->position_name;
         }
     }
 }
