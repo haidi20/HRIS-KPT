@@ -374,6 +374,27 @@ class RosterController extends Controller
         ]);
     }
 
+    public function storeWorkDay($getData)
+    {
+        $rosterStatusId = RosterStatus::where("initial", "M")->first()->id;
+        $dateRange = $this->dateRangeCustom(Carbon::parse($getData->month), "Y-m-d", "string", true);
+
+        $employee = Employee::find($getData->employee_id);
+
+        foreach ($dateRange as $index => $date) {
+            RosterDaily::updateOrCreate(
+                [
+                    "employee_id" => $getData->employee_id,
+                    "date" => $date,
+                ],
+                [
+                    "position_id" => $getData->position_id,
+                    "roster_status_id" => $rosterStatusId,
+                ]
+            );
+        }
+    }
+
     private function storeOff($getData, $nameObject)
     {
         $getDateOff = [];
@@ -391,27 +412,6 @@ class RosterController extends Controller
                 [
                     "employee_id" => $getData->employee_id,
                     "date" => Carbon::parse($item)->format("Y-m-d"),
-                ],
-                [
-                    "position_id" => $getData->position_id,
-                    "roster_status_id" => $rosterStatusId,
-                ]
-            );
-        }
-    }
-
-    private function storeWorkDay($getData)
-    {
-        $rosterStatusId = RosterStatus::where("initial", "M")->first()->id;
-        $dateRange = $this->dateRangeCustom(Carbon::parse($getData->month), "Y-m-d", "string", true);
-
-        $employee = Employee::find($getData->employee_id);
-
-        foreach ($dateRange as $index => $date) {
-            RosterDaily::updateOrCreate(
-                [
-                    "employee_id" => $getData->employee_id,
-                    "date" => $date,
                 ],
                 [
                     "position_id" => $getData->position_id,

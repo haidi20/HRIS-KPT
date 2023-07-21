@@ -120,6 +120,7 @@ class VacationController extends Controller
             ];
 
             if (request("status") == 'accept') {
+                $rosterController->storeWorkDay($data);
                 $rosterController->storeRoster($data);
                 $rosterController->storeVacation($data);
             } else if (request("status") == 'reject') {
