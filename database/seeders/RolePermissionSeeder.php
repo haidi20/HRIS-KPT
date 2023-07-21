@@ -15,6 +15,7 @@ class RolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        DB::unprepared(file_get_contents(database_path('data/role_permission.sql')));
+        DB::unprepared(file_get_contents(database_path('data/user_permission_role_feature.sql')));
+        // DB::unprepared(file_get_contents(database_path('data/role_permission.sql')));
     }
 }
