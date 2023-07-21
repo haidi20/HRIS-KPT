@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       title: "Laporan Job Order",
-      version: "v1.2",
+      version: "v1.3",
     };
   },
   mounted() {
