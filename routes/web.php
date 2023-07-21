@@ -43,6 +43,7 @@ use App\Http\Controllers\WorkingHourController;
 use App\Http\Controllers\FingerToolController;
 use App\Http\Controllers\BpjsCalculationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobStatusController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\VacationReportController;
 use Illuminate\Support\Facades\Auth;
@@ -119,6 +120,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("job-order")->name("jobOrder.")->group(function () {
         Route::get('', [JobOrderController::class, "index"])->name("index");
+    });
+    Route::prefix("job-status-has-parent")->name("jobOrder.")->group(function () {
+        Route::get('download-image', [JobStatusController::class, "downloadImage"])->name("downloadImage");
     });
     // vacation = cuti kerja
     Route::prefix("vacation")->name("vacation.")->group(function () {

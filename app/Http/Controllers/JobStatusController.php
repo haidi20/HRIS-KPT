@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImageHasParent;
 use App\Models\JobStatusHasParent;
 use App\Models\JobStatusHasParentHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class JobStatusController extends Controller
 {
@@ -25,6 +28,34 @@ class JobStatusController extends Controller
             "jobStatusHasParents" => $jobStatusHasParents,
             "requests" => request()->all(),
         ]);
+    }
+
+    public function downloadImage()
+    {
+        try {
+            $imageHasParent = ImageHasParent::find(request("image_has_parent_id"));
+            $path = $imageHasParent->path_name;
+            $name = $imageHasParent->name;
+
+            return response()->download(
+                storage_path($path),
+                $name
+            );
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Maaf, gagal download gambar'
+            ], 500);
+        }
     }
 
     public function storeJobStatusHasParent($parent, $statusLast = null, $date, $nameModel)

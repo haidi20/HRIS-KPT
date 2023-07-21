@@ -62,6 +62,12 @@ export default {
     //
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getJobStatusHasParent() {
       return this.$store.state.jobOrder.form.job_status_has_parent;
     },
@@ -74,7 +80,12 @@ export default {
       this.$bvModal.hide("job_order_modal_image");
     },
     onDownloadImage(data) {
-      console.info(data);
+      //   console.info(data);
+      const url =
+        this.getBaseUrl +
+        `/job-status-has-parent/download-image?image_has_parent_id=${data.id}`;
+
+      window.open(url, "_blank");
     },
   },
 };
