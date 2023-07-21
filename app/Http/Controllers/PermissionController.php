@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
@@ -41,6 +42,9 @@ class PermissionController extends Controller
             $permission->feature_id = request("feature_id");
             $permission->description = request("description");
             $permission->save();
+
+            $roleSuperAdmin = Role::where(['name' => 'Super Admin'])->first();
+            $roleSuperAdmin->givePermissionTo(Permission::all());
 
             DB::commit();
 

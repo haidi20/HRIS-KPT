@@ -99,7 +99,7 @@ const JobOrder = {
             month: new Date(),
             date: new Date(),
             date_range: [
-                new Date().setDate(1),
+                new Date(),
                 new Date()
             ],
             status: "all",

@@ -13,6 +13,7 @@
           :disabled="getIsLoadingData || is_loading_export"
         >Kirim</b-button>
         <b-button
+          v-if="getCan('ekspor excel laporan cuti')"
           class="place_filter_table ml-4"
           variant="success"
           size="sm"
@@ -106,6 +107,11 @@ export default {
             title: err.response.data.message,
           });
         });
+    },
+    getCan(permissionName) {
+      const getPermission = this.$store.getters["getCan"](permissionName);
+
+      return getPermission;
     },
   },
 };

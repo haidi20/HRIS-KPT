@@ -29,6 +29,7 @@
             :disabled="getIsLoadingData || is_loading_export"
           >Kirim</b-button>
           <b-button
+            v-if="getCan('export excel laporan surat perintah lembur')"
             class="place_filter_table ml-4"
             variant="success"
             size="sm"
@@ -51,7 +52,12 @@
             </ButtonAction>
           </b-td>-->
           <b-td style="text-align: center">
-            <i class="bi bi-pencil cursor-pointer" @click="onEdit(item)" style="color: #31D2F2;"></i>
+            <i
+              v-if="getCan('ubah laporan surat perintah lembur')"
+              class="bi bi-pencil cursor-pointer"
+              @click="onEdit(item)"
+              style="color: #31D2F2;"
+            ></i>
           </b-td>
           <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>

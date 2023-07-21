@@ -1,1 +1,1 @@
-php artisan db:seed --class=WorkingHourSeeder
+php artisan db:seed --class=RoleSeeder

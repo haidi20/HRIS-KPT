@@ -19,7 +19,12 @@
               </template>
             </ButtonAction>-->
             <span class="cursor-pointer">
-              <i class="bi bi-pencil" @click="onApproval(item)" style="color: #31D2F2;"></i>
+              <i
+                v-if="getCan('persetujuan laporan cuti')"
+                class="bi bi-pencil"
+                @click="onApproval(item)"
+                style="color: #31D2F2;"
+              ></i>
               <!-- <i class="bi bi-eye cursor-pointer" @click="onRead(item)" style="color: #28A745;"></i> -->
             </span>
           </b-td>

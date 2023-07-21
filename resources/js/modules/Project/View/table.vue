@@ -29,7 +29,7 @@
             :disabled="getIsLoadingData"
           >Kirim</b-button>-->
           <b-button
-            v-if="getCan('ekspor proyek')"
+            v-if="getCan('export excel proyek')"
             class="place_filter_table ml-4"
             variant="success"
             size="sm"
@@ -58,8 +58,8 @@
             <ButtonAction class="cursor-pointer" type="click">
               <template v-slot:list_detail_button>
                 <a
+                  v-if="getCan('detail proyek')"
                   href="#"
-                  v-if="getCan('lihat proyek')"
                   @click="onDetail(item, index)"
                 >Informasi Lengkap</a>
                 <a href="#" v-if="getCan('ubah proyek')" @click="onEdit(item)">Ubah</a>

@@ -29,6 +29,7 @@
             :disabled="getIsLoadingData || is_loading_export"
           >Kirim</b-button>
           <b-button
+            v-if="getCan('export excel laporan job order')"
             class="place_filter_table ml-4"
             variant="success"
             size="sm"
@@ -52,8 +53,18 @@
             </ButtonAction>
           </b-td>-->
           <b-td style="text-align: center">
-            <i class="bi bi-eye cursor-pointer" @click="onRead(item)" style="color: #28A745;"></i>
-            <i class="bi bi-printer cursor-pointer" @click="onPrint(item)" style="color: #C82333;"></i>
+            <i
+              v-if="getCan('detail laporan job order')"
+              class="bi bi-eye cursor-pointer"
+              @click="onRead(item)"
+              style="color: #28A745;"
+            ></i>
+            <i
+              v-if="getCan('print laporan job order')"
+              class="bi bi-printer cursor-pointer"
+              @click="onPrint(item)"
+              style="color: #C82333;"
+            ></i>
           </b-td>
           <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>
