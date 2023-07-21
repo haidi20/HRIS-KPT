@@ -32,7 +32,7 @@
                   </b-col>
                 </template>
                 <template v-else>
-                  <h4>Tidak ada gambar</h4>
+                  <span>Tidak ada gambar</span>
                 </template>
               </b-row>
             </b-col>
