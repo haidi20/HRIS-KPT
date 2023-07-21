@@ -12,6 +12,21 @@ use Illuminate\Support\Facades\Route;
 
 class JobStatusController extends Controller
 {
+    public function fetchDataBaseJobOrder()
+    {
+        $jobOrderId = request("job_order_id");
+        $jobStatusHasParents = JobStatusHasParent::with("images")
+            ->where([
+                "parent_id" => $jobOrderId,
+                "parent_model" => "App\Models\JobOrder"
+            ])->get();
+
+        return response()->json([
+            "jobStatusHasParents" => $jobStatusHasParents,
+            "requests" => request()->all(),
+        ]);
+    }
+
     public function storeJobStatusHasParent($parent, $statusLast = null, $date, $nameModel)
     {
         // $statusLast = request("status_last");

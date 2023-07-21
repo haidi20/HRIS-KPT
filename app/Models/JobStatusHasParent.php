@@ -56,6 +56,12 @@ class JobStatusHasParent extends Model
         return $this->belongsTo(JobOrder::class, "job_order_id", "id");
     }
 
+    public function images()
+    {
+        return $this->hasMany(ImageHasParent::class, "parent_id", "id")
+            ->where("parent_model", "App\Models\JobStatusHasParent");
+    }
+
     public function getEmployeeNameAttribute()
     {
         if ($this->employee) {

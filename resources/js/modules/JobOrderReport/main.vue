@@ -55,15 +55,21 @@
           <b-td style="text-align: center">
             <i
               v-if="getCan('detail laporan job order')"
-              class="bi bi-eye cursor-pointer"
+              class="bi bi-eye cursor-pointer icon-custom"
               @click="onRead(item)"
               style="color: #28A745;"
             ></i>
             <i
               v-if="getCan('print laporan job order')"
-              class="bi bi-printer cursor-pointer"
+              class="bi bi-printer cursor-pointer icon-custom"
               @click="onPrint(item)"
               style="color: #C82333;"
+            ></i>
+            <i
+              v-if="getCan('gambar laporan job order')"
+              class="fas fa-images cursor-pointer icon-custom"
+              style="color: #2845A7;"
+              @click="onShowImage(item)"
             ></i>
           </b-td>
           <template v-for="(column, index) in getColumns()">
@@ -89,7 +95,7 @@ export default {
     return {
       is_loading_export: false,
       options: {
-        perPage: 20,
+        perPage: 5,
         // perPageValues: [5, 10, 25, 50, 100],
         filterByColumn: true,
         texts: {
@@ -197,6 +203,13 @@ export default {
       //   console.info(linkPrint);
       window.open(`${linkPrint}`, "_blank");
     },
+    onShowImage(data) {
+      console.info(data);
+      this.$store.dispatch("jobOrder/fetchJobStatusHasParent", {
+        job_order_id: data.id,
+      });
+      this.$bvModal.show("job_order_modal_image");
+    },
     async onExport() {
       const Swal = this.$swal;
 
@@ -268,5 +281,10 @@ export default {
 
 .table-wrapper {
   overflow-x: auto;
+}
+
+.icon-custom {
+  font-size: 20px;
+  padding: 2px;
 }
 </style>

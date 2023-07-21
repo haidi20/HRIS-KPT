@@ -179,6 +179,7 @@ Route::prefix("v1")->name("api.")->group(function () {
         Route::post('delete', [JobOrderController::class, "destroy"])->name('delete');
     });
     Route::prefix('job-status-has-parent')->name('jobStatusHasParent.')->group(function () {
+        Route::get('fetch-data-base-job-order', [JobStatusController::class, "fetchDataBaseJobOrder"])->name('fetchDataBaseJobOrder');
         Route::post('store-overtime-revision', [JobStatusController::class, "storeOvertimeRevision"])->name('storeOvertimeRevision');
     });
     Route::prefix('salary-adjustment')->name('salaryAdjustment.')->group(function () {

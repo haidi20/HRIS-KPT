@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImageHasParent;
 use App\Models\JobOrder;
 use App\Models\JobOrderAssessment;
 use App\Models\JobOrderHasEmployee;

@@ -88,6 +88,7 @@ const defaultForm = {
     duration_readable: null,
     is_assessment_qc: true,
     is_not_exists_job: false,
+    job_status_has_parent: [],
 }
 
 const JobOrder = {
@@ -99,7 +100,7 @@ const JobOrder = {
             month: new Date(),
             date: new Date(),
             date_range: [
-                new Date(),
+                new Date(moment().day(1)),
                 new Date()
             ],
             status: "all",
@@ -198,6 +199,7 @@ const JobOrder = {
         },
         loading: {
             data: false,
+            job_status_has_parent: false,
         },
         user_id: null,
     },
@@ -371,6 +373,9 @@ const JobOrder = {
                 state.form.status_finish = null;
             }
         },
+        INSERT_FORM_JOB_ORDER_HAS_PARENT(state, payload) {
+            state.form.job_status_has_parent = payload.data;
+        },
         INSERT_PARAM(state, payload) {
             state.params = {
                 ...state.params,
@@ -409,6 +414,9 @@ const JobOrder = {
         },
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
+        },
+        UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT(state, payload) {
+            state.loading.job_status_has_parent = payload.value;
         },
         CLEAR_FORM(state, payload) {
             state.form = {
@@ -564,6 +572,33 @@ const JobOrder = {
                 })
                 .catch((err) => {
                     context.commit("UPDATE_LOADING_DATA", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchJobStatusHasParent: async (context, payload) => {
+            context.commit("UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT", { value: true });
+
+            const params = {
+                job_order_id: payload.job_order_id,
+                user_id: context.state.user_id,
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/job-status-has-parent/fetch-data-base-job-order`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_FORM_JOB_ORDER_HAS_PARENT", {
+                        data: data.jobStatusHasParents,
+                    });
+                    context.commit("UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT", { value: false });
                     console.info(err);
                 });
         },

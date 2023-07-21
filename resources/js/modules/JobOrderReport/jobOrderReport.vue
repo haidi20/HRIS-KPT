@@ -19,12 +19,14 @@
       </div>
     </div>
     <Modal />
+    <modalImage />
   </div>
 </template>
 
 <script>
 import Main from "./main";
 import Modal from "../jobOrder/View/modal";
+import ModalImage from "./modalImage.vue";
 export default {
   props: {
     user: String,
@@ -34,6 +36,7 @@ export default {
   components: {
     Main,
     Modal,
+    ModalImage,
   },
   data() {
     return {

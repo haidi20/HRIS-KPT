@@ -23,7 +23,7 @@
                 v-if="getCan('persetujuan laporan cuti')"
                 class="bi bi-pencil"
                 @click="onApproval(item)"
-                style="color: #31D2F2;"
+                style="color: #DC3545;"
               ></i>
               <!-- <i class="bi bi-eye cursor-pointer" @click="onRead(item)" style="color: #28A745;"></i> -->
             </span>
