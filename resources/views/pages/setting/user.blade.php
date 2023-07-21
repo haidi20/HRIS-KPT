@@ -130,8 +130,7 @@
                                 title: responses.message
                             });
 
-                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                                function(json) {});
+                            window.location.reload();
                         }
                     },
                     error: function(err) {
