@@ -14,21 +14,26 @@
             <b-col>
               <h4>{{jobStatusHasParent.status}}</h4>
               <b-row>
-                <b-col
-                  cols="3"
-                  v-for="(data, index) in jobStatusHasParent?.images"
-                  :key="index"
-                  class="place-image"
-                >
-                  <img :src="data.image_review" alt class="image-review" />
-                  <br />
-                  <b-button
-                    variant="success"
-                    size="sm"
-                    @click="onDownloadImage(data)"
-                    style="margin-top: 10px"
-                  >Download</b-button>
-                </b-col>
+                <template v-if="jobStatusHasParent?.images.length > 0">
+                  <b-col
+                    cols="3"
+                    v-for="(data, index) in jobStatusHasParent?.images"
+                    :key="index"
+                    class="place-image"
+                  >
+                    <img :src="data.image_review" alt class="image-review" />
+                    <br />
+                    <b-button
+                      variant="success"
+                      size="sm"
+                      @click="onDownloadImage(data)"
+                      style="margin-top: 10px"
+                    >Download</b-button>
+                  </b-col>
+                </template>
+                <template v-else>
+                  <h4>Tidak ada gambar</h4>
+                </template>
               </b-row>
             </b-col>
           </b-row>
@@ -39,7 +44,7 @@
         <h4>Loading...</h4>
       </template>
       <template v-else>
-        <h4>Tidak ada gambar</h4>
+        <h4>Tidak ada data</h4>
       </template>
       <br />
       <b-row class="float-right">
