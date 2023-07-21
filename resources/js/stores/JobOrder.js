@@ -98,6 +98,10 @@ const JobOrder = {
         params: {
             month: new Date(),
             date: new Date(),
+            date_range: [
+                new Date().setDate(1),
+                new Date()
+            ],
             status: "all",
             created_by: "creator",
             project_id: null,
@@ -511,8 +515,8 @@ const JobOrder = {
 
             const params = {
                 ...context.state.params,
-                date_start: moment(context.state.params.date[0]).format("Y-MM-DD"),
-                date_end: moment(context.state.params.date[1]).format("Y-MM-DD"),
+                date_start: moment(context.state.params.date_range[0]).format("Y-MM-DD"),
+                date_end: moment(context.state.params.date_range[1]).format("Y-MM-DD"),
             }
 
             await axios

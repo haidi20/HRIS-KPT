@@ -14,7 +14,7 @@
           <b-form-group label="Tanggal" label-for="date" class="place_filter_table">
             <DatePicker
               id="date"
-              v-model="params.date"
+              v-model="params.date_range"
               format="YYYY-MM-DD"
               type="date"
               range

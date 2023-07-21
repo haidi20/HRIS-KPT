@@ -130,14 +130,13 @@
                                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                                 }
                             });
-                             $('#formModal').modal('hide');
-                        Toast.fire({
-                            icon: 'success',
-                            title: responses.message
-                        });
+                            $('#formModal').modal('hide');
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
 
-                        window.LaravelDataTables["dataTableBuilder"].ajax.reload(
-                        function(json) {});
+                            window.location.reload();
                         },
                         error: function(err) {
                             // console.log(err.responseJSON.message);
