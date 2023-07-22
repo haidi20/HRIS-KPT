@@ -105,6 +105,17 @@
                         </a>
                     </li>
                 @endcan --}}
+
+                @can('lihat tanggal_merah')
+                <li class="sidebar-item {{ isActive('tanggal_merah') }} ">
+                    <a href="{{ route('tanggal_merah.index') }}" class='sidebar-link'>
+                        <i class="bi bi-list-check"></i>
+                        <span>Tanggal Merah</span>
+                    </a>
+                </li>
+            @endcan
+
+
                 @can('lihat roster')
                     <li class="sidebar-item {{ isActive('roster') }} ">
                         <a href="{{ route('roster.index') }}" class='sidebar-link'>

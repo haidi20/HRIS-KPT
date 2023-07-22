@@ -106,6 +106,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('delete', [PeriodPayrollController::class, "destroy"])->name("delete");
     });
 
+    Route::prefix("tanggal_merah")->name("tanggal_merah.")->group(function () {
+        Route::get('', [PayrollController::class, "index"])->name("index");
+        Route::get('/{id}/edit_attendance', [PayrollController::class, "edit_attendance"])->name("edit_attendance");
+        Route::put('/{id}/update_attendance', [PayrollController::class, "update_attendance"])->name("update_attendance");
+    });
+
+
+
 
     Route::prefix("payroll")->name("payroll.")->group(function () {
         Route::get('', [PayrollController::class, "monthly"])->name("monthly");
