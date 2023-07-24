@@ -217,10 +217,10 @@ class PayrollController extends Controller
 
         // 
         $attende_fingers = AttendanceHasEmployee::where('employee_id', $employee_id)
-            ->whereDate('scan_date', '>=', $start_date)
-            ->whereDate('scan_date', '<=', $end_date)
-            ->groupBy('scan_date')
-            ->orderBy('scan_date', 'asc')
+            ->whereDate('date', '>=', $start_date)
+            ->whereDate('date', '<=', $end_date)
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
             ->get();
 
         // return $sql = Str::replaceArray('?', $attende_fingers->getBindings(), $attende_fingers->toSql());
@@ -314,8 +314,8 @@ class PayrollController extends Controller
 
 
                 $new_at->update([
-                    'hour_start' => $jam_kerja_masuk,
-                    'hour_end' => $jam_kerja_masuk,
+                    'hour_start' => $v->hour_start,
+                    'hour_end' => $v->hour_end,
                     'duration_work' => $v->duration_work,
 
                     'hour_rest_start' => $v->hour_rest_start,
@@ -347,6 +347,7 @@ class PayrollController extends Controller
         $attendance = AttendancePayrol::where('employee_id', $employee_id)
             ->whereDate('date', '>=', $start_date)
             ->whereDate('date', '<=', $end_date)
+            ->orderBy('date','asc')
             ->get();
 
         $data = compact('attendance', 'employee');

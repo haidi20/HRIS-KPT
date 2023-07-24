@@ -693,7 +693,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "PENGAWAS",
               "basic_salaray": 3794000,
               "allowance": 2000000,
-              "meal_allowance_per_attend": 480000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 2,
@@ -709,7 +709,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "ASS MEKANIK",
               "basic_salaray": 5000000,
               "allowance": "",
-              "meal_allowance_per_attend": 300000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 9,
@@ -717,7 +717,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "LOGISTIC/GUDANG",
               "basic_salaray": 4694000,
               "allowance": 500000,
-              "meal_allowance_per_attend": 1400000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 10,
@@ -725,7 +725,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "LOGISTIC/GUDANG",
               "basic_salaray": 3394000,
               "allowance": 0,
-              "meal_allowance_per_attend": 228000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 11,
@@ -733,7 +733,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "LOGISTIC/GUDANG",
               "basic_salaray": 3394000,
               "allowance": 0,
-              "meal_allowance_per_attend": 264000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 12,
@@ -741,7 +741,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "LOGISTIC/GUDANG",
               "basic_salaray": 3394000,
               "allowance": 0,
-              "meal_allowance_per_attend": 276000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 33,
@@ -813,7 +813,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "OPERATOR",
               "basic_salaray": 3394000,
               "allowance": 500000,
-              "meal_allowance_per_attend": 36000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 36,
@@ -853,7 +853,7 @@ class GajiRealSeeder extends Seeder
               "jabatan": "ELECTRIC",
               "basic_salaray": 3394000,
               "allowance": 800000,
-              "meal_allowance_per_attend": 192000
+              "meal_allowance_per_attend": 12000
             },
             {
               "id": 20,
@@ -892,11 +892,20 @@ class GajiRealSeeder extends Seeder
 
           foreach ($datas as $key => $d) {
             // Karyawa
+
+            $overtime_rate_per_hour = \round(($d->basic_salaray+$d->allowance)/173);
+
+            if($d->meal_allowance_per_attend > 0){
+                $d->meal_allowance_per_attend = 12000;
+            }
             Employee::where('id',$d->id)
             ->update([
                 'basic_salary'=>$d->basic_salaray,
                 'allowance'=>$d->allowance,
-                'meal_allowance_per_attend'=>$d->meal_allowance_per_attend
+                'meal_allowance_per_attend'=>$d->meal_allowance_per_attend,
+                'transport_allowance_per_attend'=>0,
+                'attend_allowance_per_attend'=>0,
+                'overtime_rate_per_hour'=>$overtime_rate_per_hour
             ]);
             print("UPDATE karyawan id=>".$d->id." \n");
           }
