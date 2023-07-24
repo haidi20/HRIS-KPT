@@ -1,14 +1,14 @@
-const express = require('express');
 const http = require('http');
-// const socketIo = require('socket.io');
-const { Server } = require("socket.io");
 const cors = require('cors');
+const moment = require('moment');
+const express = require('express');
+const { Op } = require('sequelize');
+const { Server } = require("socket.io");
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
 
+const JobOrder = require('./models/jobOrder');
 const socketioModule = require('./socketioModule');
 const NotificationController = require("./controllers/NotificationController");
-
 
 const app = express();
 const server = http.createServer(app);
@@ -16,14 +16,6 @@ const server = http.createServer(app);
 
 app.use(cors());
 app.use(bodyParser.json());
-
-// Database connection
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'hris_kpt'
-});
 
 const io = new Server(server, {
     cors: {
@@ -34,14 +26,43 @@ const io = new Server(server, {
 
 let userSockets = new Map();
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('a user connected');
 
+    // const now = moment().format('YYYY-MM-DD HH:mm:ss');
+    const now = moment().set({ date: 24, hour: 22 });
     const userId = socket.handshake.query['user_id'];
-    setInterval(() => {
-        const message = 'Hello every 5 seconds';
-        io.emit('get-notification', { user_id: userId });
-    }, 5000);
+    // setInterval(async () => {
+    const jobOrders = await JobOrder.findAll({
+        where: {
+            datetime_estimation_end: {
+                [Op.lte]: now,
+            },
+            status: 'active',
+            created_by: userId,
+            // deleted_at: {
+            //     [Op.is]: null,
+            // }
+        },
+        // limit: 5,
+        order: [
+            ['datetime_estimation_end', 'DESC'] // Opsional: Mengurutkan berdasarkan datetime_estimation_end secara descending
+        ],
+    });
+
+    io.emit('get-notification', {
+        data: jobOrders,
+        now: now,
+    });
+    // }, 5000);
+
+    // socket.on('notification', (message) => {
+    //     console.log('message: ' + message);
+    //     io.emit('send-notification', {
+    //         message,
+    //         user_id: userId,
+    //     });
+    // });
 
     socket.on('disconnect', () => {
         console.log('user disconnected');

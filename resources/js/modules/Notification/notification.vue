@@ -13,7 +13,7 @@
           <span
             class="badge bg-danger rounded-circle top-0 start-100 translate-middle"
             style="padding: 0.4rem 0.6rem!important;"
-          >10</span>
+          >{{count_data}}</span>
         </a>
         <ul
           class="dropdown-menu dropdown-menu-end notification-dropdown"
@@ -43,10 +43,13 @@
 import io from "socket.io-client";
 
 export default {
+  data() {
+    return {
+      count_data: 3,
+    };
+  },
   created() {
-    this.socket = io.connect("http://localhost:3000", { query: `user_id=20` }); // replace with your server URL
-
-    this.socket.emit("notification", "message client");
+    this.socket = io.connect("http://localhost:3000", { query: `user_id=9` }); // replace with your server URL
 
     // listen to events from server
     this.socket.on("get-notification", (data) => {

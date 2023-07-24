@@ -7,7 +7,7 @@ exports.sendMessage = (req, res, params) => {
 
     const io = socketioModule.getIo();
     // Emit the message to all connected clients
-    io.emit('get-notification', {
+    io.emit('notification', {
         message
     });
 
