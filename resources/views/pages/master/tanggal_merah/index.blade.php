@@ -71,7 +71,7 @@
                             <div class="form-group row">
                                 
                                 <div class="col-sm-12">
-                                    <button class="btn btn-success">Tambah</button>
+                                    <button class="btn btn-success" id="btn_tambah">Tambah</button>
                                 </div>
                             </div>
 
@@ -175,6 +175,81 @@
             //     },
             // });
 
+            
+
+            $(document).on('click', '#btn_tambah', function() {
+                var tanggal = $('#form_add_tanggal').val();
+                var keterangan = $('#form_add_keterangan').val();
+
+                if(tanggal == ''  || keterangan == ''){
+                     alert("Wajib DIisi");
+                     return;
+                }
+                console.log([tanggal,keterangan]);
+                $.ajax({
+                    url: "{{ route('tanggal_merah.store') }}",
+                    method: 'POST',
+                    data: {
+                        tanggal:tanggal,
+                        keterangan:keterangan
+                    },
+                    cache: false,
+                    dataType: 'json',
+                    success: function(responses) {
+
+                        // console.info(responses);
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        if (responses.success == true) {
+                            $('#formModal').modal('hide');
+                            Toast.fire({
+                                icon: 'success',
+                                title: responses.message
+                            });
+
+                            window.LaravelDataTables["dataTableBuilder"].ajax.reload(
+                            function(json) {});
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err.responseJSON.message);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: err.responseJSON.message
+                        });
+                    }
+                });
+
+
+            });
+                
+           
+
+
+        // Does some stuff and logs the event to the console
+        // });
 
 
         $(document).on('change', '#month_filter', function() {
