@@ -8,8 +8,8 @@ import VueEvents from "vue-events";
 import BootstrapVue from "bootstrap-vue";
 import VueSweetalert2 from "vue-sweetalert2";
 import VueBottomSheet from "@webzlodimir/vue-bottom-sheet";
-import { ServerTable, ClientTable, Event } from "vue-tables-2";
 import clickOutside from './vue-directive-clickOutside';
+// select2
 
 import 'vue2-datepicker/index.css';
 import "vue-select/dist/vue-select.css";
@@ -45,6 +45,16 @@ Vue.component("salary-advance-report", require("./modules/SalaryAdvanceReport/Vi
 Vue.directive('click-outside', clickOutside);
 Vue.config.productionTip = false;
 
+// if ("serviceWorker" in navigator) {
+//     navigator.serviceWorker.register("js/service-worker.js")
+//         .then(() => {
+//             console.log("Service Worker registered successfully.");
+//         })
+//         .catch((error) => {
+//             console.error("Error registering Service Worker:", error);
+//         });
+// }
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -55,8 +65,6 @@ Vue.use(VueBottomSheet);
 Vue.use(VueEvents);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
-Vue.use(ServerTable);
-Vue.use(ClientTable);
 
 new Vue({
     store,
