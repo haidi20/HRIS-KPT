@@ -1,7 +1,7 @@
 <template>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ms-auto mb-lg-0">
-      <li class="nav-item dropdown me-3">
+      <!-- <li class="nav-item dropdown me-3">
         <a
           class="nav-link active dropdown-toggle text-gray-600"
           href="#"
@@ -32,12 +32,7 @@
                 <p class="notification-subtitle font-thin text-sm">Tersisa 10 Menit Lagi</p>
               </div>
             </a>
-          </li>
-          <!-- <li>
-            <p class="text-center py-2 mb-0">
-              <a href="#">See all notification</a>
-            </p>
-          </li>-->
+          </li> -->
         </ul>
       </li>
     </ul>
