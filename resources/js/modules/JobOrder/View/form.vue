@@ -18,7 +18,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-row style="margin-bottom: 10px;">
+    <!-- <b-row style="margin-bottom: 10px;">
       <b-col cols>
         <b-col>
           <b-form-checkbox
@@ -32,7 +32,7 @@
           </b-form-checkbox>
         </b-col>
       </b-col>
-    </b-row>
+    </b-row>-->
     <b-row v-if="!form.is_not_exists_job">
       <b-col cols>
         <b-form-group label=" Jenis Pekerjaan" label-for="job_id" class>

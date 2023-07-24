@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,7 +22,7 @@ class JobOrderAssessment extends Model
     ];
 
     protected $appends = [
-        "group_name", "employee_name", "position_name",
+        "group_name", "employee_name", "position_name", "datetime_readable",
     ];
 
     protected static function boot()
@@ -69,5 +70,10 @@ class JobOrderAssessment extends Model
         if ($this->employee) {
             return $this->employee->position_name;
         }
+    }
+
+    public function getDatetimeReadableAttribute()
+    {
+        return Carbon::parse($this->datetime)->locale('id')->isoFormat("dddd, D MMMM YYYY HH:mm");
     }
 }

@@ -254,9 +254,16 @@
                             <span>:</span>
                         </td>
                         <td>
-                            <span>
-                                {{ $data->list_approved }}
-                            </span>
+                            <ul style="margin-top: 10px">
+                                @foreach ($data->jobOrderAssessments as $index => $jobOrderAssessment)
+                                    <li>
+                                        {{ $jobOrderAssessment->employee_name }}
+                                        ({{ $jobOrderAssessment->position_name }})
+                                        -
+                                        {{ $jobOrderAssessment->datetime_readable }}
+                                    </li>
+                                @endforeach
+                            </ul>
                         </td>
                     </tr>
                 </table>
