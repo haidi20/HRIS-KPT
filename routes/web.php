@@ -99,6 +99,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::prefix("payslip")->name("payslip.")->group(function () {
         Route::get('', [PayslipController::class, "index"])->name("index");
+        Route::post('', [PayslipController::class, "store"])->name("store");
     });
 
     Route::prefix("period_payroll")->name("period_payroll.")->group(function () {

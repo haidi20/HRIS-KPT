@@ -124,7 +124,7 @@ class SalaryAdjustmentController extends Controller
             $log->store($e->getMessage(), $routeAction);
             return response()->json([
                 'success' => false,
-                'message' => "Gagal " . $message,
+                'message' => "Gagal 1" . $e->getMessage(),
             ], 500);
         }
     }

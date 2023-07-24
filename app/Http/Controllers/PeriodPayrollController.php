@@ -291,7 +291,7 @@ class PeriodPayrollController extends Controller
 
 
 
-            $employees = Employee::whereIn('id',[1,2])->orderBy('name', 'asc')->get();
+            $employees = Employee::whereIn('id',[14])->orderBy('name', 'asc')->get();
 
             $bpjs_jht = BpjsCalculation::where('code', 'jht')->first();
             $bpjs_jkk = BpjsCalculation::where('code', 'jkk')->first();
@@ -319,6 +319,14 @@ class PeriodPayrollController extends Controller
                 $employee_id = $employee->id;
                 $start_date = $period_payroll->date_start;
                 $end_date =  $period_payroll->date_end;
+
+                $new_payroll = Payroll::firstOrCreate([
+                    'employee_id' => $employee->id,
+                    'period_payroll_id' => $period_payroll->id,
+                ]);
+
+
+
                 // AttendanceHasEmployee
                 $attende_fingers = AttendanceHasEmployee::where('employee_id', $employee_id)
                     ->whereDate('date', '>=', $start_date)
@@ -380,6 +388,10 @@ class PeriodPayrollController extends Controller
                 $jumlah_hutang =  SalaryAdvanceDetail::whereDate('date_start', '<=', $period_payroll->date_end)
                     ->whereDate('date_end', '>=', $period_payroll->date_end)
                     ->sum('amount');
+
+                  //////////////////////////////////////////
+                  /////// DETAI PAYROL TENTANG HUTANG////////
+                  ///////////////////////////////////////////  
 
                 foreach ($period as $key => $p) {
                     $new_old_d = $data_absens->where('date', $p->format('Y-m-d'))->first();
@@ -548,6 +560,12 @@ class PeriodPayrollController extends Controller
 
                 foreach ($sa_percents as $key => $v) {
 
+                    //////////////////////////////////////////////////
+                  /////// DETAI PAYROL TENTANG TAMBAHAN non thr////////
+                  //////////////////////////////////////////////////////  
+
+
+
                     if ($v->type_amount == 'nominal') {
                         $total_tambahan_dari_sa += $v->amount;
                     } else {
@@ -577,6 +595,12 @@ class PeriodPayrollController extends Controller
 
                 foreach ($sa_percents as $key => $v) {
 
+                    //////////////////////////////////////////////////
+                  /////// DETAI PAYROL TENTANG TAMBAHAN non thr////////
+                  //////////////////////////////////////////////////////  
+
+
+
                     if ($v->type_amount == 'nominal') {
                         $total_tambahan_dari_sa += $v->amount;
                     } else {
@@ -592,6 +616,12 @@ class PeriodPayrollController extends Controller
                     ->get();
 
                 foreach ($sa_percents as $key => $v) {
+
+                    //////////////////////////////////////////////////
+                  /////// DETAI PAYROL TENTANG TAMBAHAN thr////////
+                  //////////////////////////////////////////////////////  
+
+
 
                     if ($v->type_amount == 'nominal') {
                         $total_tambahan_dari_sa += $v->amount;
@@ -858,7 +888,7 @@ class PeriodPayrollController extends Controller
 
 
                 if($pkp_setahun > 0){
-                    print("EMPLOYE ID".$employee->id."MASUK PKP => ".$pkp_setahun."\n ");
+                    // print("EMPLOYE ID".$employee->id."MASUK PKP => ".$pkp_setahun."\n ");
                     //menghitung pkp 5%
                     $pkp_lima_persen  = \max(0, $pkp_setahun > 60000000 ? ((60000000 - 0) * 0.05) : (($pkp_setahun - 0) * 0.05));
                     $pkp_lima_belas_persen  = \max(0, $pkp_setahun > 250000000 ? ((250000000 - 60000000) * 0.15) : (($pkp_setahun - 60000000) * 0.15));
@@ -929,10 +959,7 @@ class PeriodPayrollController extends Controller
 
 
 
-                $new_payroll = Payroll::firstOrCreate([
-                    'employee_id' => $employee->id,
-                    'period_payroll_id' => $period_payroll->id,
-                ]);
+                
 
 
                 /////////simulasi naik gaji
