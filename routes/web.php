@@ -26,6 +26,8 @@ use App\Http\Controllers\OvertimeReportController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PayslipController;
 
+
+use App\Http\Controllers\TanggalMerahController;
 use App\Http\Controllers\PeriodPayrollController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PositionController;
@@ -106,6 +108,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('', [PeriodPayrollController::class, "store"])->name("store");
         Route::delete('delete', [PeriodPayrollController::class, "destroy"])->name("delete");
     });
+
+    Route::prefix("tanggal_merah")->name("tanggal_merah.")->group(function () {
+        Route::get('', [TanggalMerahController::class, "index"])->name("index");
+        Route::post('', [TanggalMerahController::class, "store"])->name("store");
+        // Route::get('/{id}/edit_attendance', [PayrollController::class, "edit_attendance"])->name("edit_attendance");
+        // Route::put('/{id}/update_attendance', [PayrollController::class, "update_attendance"])->name("update_attendance");
+    });
+
+
 
 
     Route::prefix("payroll")->name("payroll.")->group(function () {
