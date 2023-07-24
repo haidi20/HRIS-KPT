@@ -1,5 +1,6 @@
 
-php artisan migrate:refresh --path=database/migrations/2023_05_10_184439_create_working_hours_table.php
+php artisan migrate:refresh --path=database/migrations/2023_07_22_223648_create_tanggal_merahs_table.php
+@REM php artisan migrate:refresh --path=database/migrations/2023_05_10_184439_create_working_hours_table.php
 @REM php artisan migrate:refresh --path=database/migrations/2023_07_20_110504_add_salary_adjustment_table.php
 @REM php artisan migrate:refresh --path=database/migrations/2023_07_14_114452_create_dashboard_has_positions_table.php
 @REM php artisan migrate:refresh --path=database/migrations/2023_05_29_111060_create_job_order_histories_table.php

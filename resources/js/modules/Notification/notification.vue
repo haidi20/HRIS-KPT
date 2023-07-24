@@ -1,7 +1,7 @@
 <template>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ms-auto mb-lg-0">
-      <!-- <li class="nav-item dropdown me-3">
+      <li class="nav-item dropdown me-3">
         <a
           class="nav-link active dropdown-toggle text-gray-600"
           href="#"
@@ -32,7 +32,7 @@
                 <p class="notification-subtitle font-thin text-sm">Tersisa 10 Menit Lagi</p>
               </div>
             </a>
-          </li> -->
+          </li>
         </ul>
       </li>
     </ul>
@@ -40,7 +40,25 @@
 </template>
 
 <script>
-export default {};
+import io from "socket.io-client";
+
+export default {
+  created() {
+    this.socket = io.connect("http://localhost:3000", { query: `user_id=20` }); // replace with your server URL
+
+    this.socket.emit("notification", "message client");
+
+    // listen to events from server
+    this.socket.on("get-notification", (data) => {
+      console.info(data);
+      //   this.message = data;
+    });
+  },
+  beforeDestroy() {
+    // disconnect when component is unmounted
+    this.socket.disconnect();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

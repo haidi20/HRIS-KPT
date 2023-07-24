@@ -468,7 +468,7 @@
         {{-- di kasih angka supaya di vps terupdate --}}
         <script src="{{ asset('js/app-210723.js') }}"></script>
     @endisset
-    <script src="{{ asset('js/app-notification.js') }}"></script>
+    <script src="{{ asset('js/notif-240723.js') }}"></script>
     <script>
         $.ajaxSetup({
             headers: {
