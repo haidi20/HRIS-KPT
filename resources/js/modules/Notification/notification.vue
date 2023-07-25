@@ -1,7 +1,7 @@
 <template>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ms-auto mb-lg-0">
-      <li class="nav-item dropdown me-3">
+      <li class="nav-item dropdown me-3" v-if="is_show">
         <a
           class="nav-link active dropdown-toggle text-gray-600"
           href="#"
@@ -43,17 +43,27 @@
 import io from "socket.io-client";
 
 export default {
+  props: {
+    user_id: String,
+  },
   data() {
     return {
-      count_data: 3,
+      is_show: false,
+      count_data: 0,
     };
   },
+  mounted() {
+    // console.info(this.user_id);
+  },
   created() {
-    this.socket = io.connect("http://localhost:3000", { query: `user_id=9` }); // replace with your server URL
+    this.socket = io.connect("http://localhost:3000", {
+      query: `user_id=${this.user_id}`,
+    }); // replace with your server URL
 
     // listen to events from server
     this.socket.on("get-notification", (data) => {
       console.info(data);
+      this.count_data = data.data.length;
       //   this.message = data;
     });
   },

@@ -18,7 +18,7 @@ class CreateNotificationsTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('parent_id');
             $table->string('parent_model');
-            $table->dateTime('readed_at');
+            $table->dateTime('readed_at')->nullable();
             $table->boolean('is_show')->default(false);
             $table->timestamps();
         });

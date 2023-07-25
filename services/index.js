@@ -7,8 +7,11 @@ const { Server } = require("socket.io");
 const bodyParser = require('body-parser');
 
 const JobOrder = require('./models/jobOrder');
+const Notification = require('./models/notification');
+
 const socketioModule = require('./socketioModule');
 const NotificationController = require("./controllers/NotificationController");
+const { updateOrCreate } = require("./utils");
 
 const app = express();
 const server = http.createServer(app);
@@ -50,9 +53,37 @@ io.on('connection', async (socket) => {
         ],
     });
 
-    io.emit('get-notification', {
-        data: jobOrders,
-        now: now,
+    Promise.all(jobOrders.map(async jobOrder => {
+        const newItem = {
+            user_id: userId,
+            parent_id: jobOrder.id,
+            parent_model: "App\\Models\\JobOrder",
+        };
+
+        const foundItem = await Notification.findOne({
+            where: newItem,
+        });
+
+        if (!foundItem) {
+            await Notification.create(newItem);
+        }
+    })).then(async (process) => {
+        if (process) {
+            const notifications = await Notification.findAll({
+                where: {
+                    is_show: false,
+                },
+                // limit: 5,
+            });
+
+            io.emit('get-notification', {
+                data: notifications,
+                now: now,
+            });
+        }
+    }).catch(error => {
+        // handle error
+        console.log(error);
     });
     // }, 5000);
 
