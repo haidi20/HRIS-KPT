@@ -505,12 +505,12 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 -- Dumping data for table hris_kpt.users: ~22 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `role_id`, `password`, `status`, `remember_token`, `created_by`, `updated_by`, `deleted_by`, `created_at`, `updated_at`, `deleted_at`, `location_id`) VALUES
-	(1, 'superadmin', 'superadmin@email.com', NULL, 1, '$2y$10$.Ezmpa8y5PQUO1YUN4M/p.PSpWZa.W1y4gYtthjex6lYPI6BId7pi', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-06-19 00:14:34', NULL, NULL),
-	(2, 'admin', 'admin@email.com', NULL, 2, '$2y$10$khFVuZSVuOSBuGgWSh43re6Ha4balo.ZZlWBPDhfhAIUk.MwSqzJS', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-06-19 00:14:34', NULL, NULL),
-	(3, 'arini', 'hrd@email.com', NULL, 3, '$2y$10$HAzalEbYu.trWLumGOG7NeeG0nswP6Lvym1t5889o0z7tI8SQdNfa', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-06-20 12:54:10', '2023-06-20 12:54:10', NULL),
-	(4, 'indah', 'cashier@email.com', NULL, 4, '$2y$10$Rwjj0P99ZIuUz3JS7JxPreSN66qSoN3Lx380Ea9RINWmOoNeFrC4q', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-07-10 10:45:21', '2023-07-10 10:45:21', NULL),
-	(5, 'pengawas', 'foreman@email.com', NULL, 5, '$2y$10$0H73Ctkl3Zx5dyTkWH49Bu5P8z26s4rQWSrvmcXhyCdoEl50hOVgi', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:35', '2023-06-20 12:55:00', NULL, 2),
-	(6, 'qc', 'qualityControl@email.com', NULL, 6, '$2y$10$1wkpBGF9dG8aHLPmiJim8.xef7u6KRUuyUMcZS9OPJL9m6PZBjB9u', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:35', '2023-06-19 00:14:35', NULL, NULL),
+	-- (1, 'superadmin', 'superadmin@email.com', NULL, 1, '$2y$10$.Ezmpa8y5PQUO1YUN4M/p.PSpWZa.W1y4gYtthjex6lYPI6BId7pi', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-06-19 00:14:34', NULL, NULL),
+	-- (2, 'admin', 'admin@email.com', NULL, 2, '$2y$10$khFVuZSVuOSBuGgWSh43re6Ha4balo.ZZlWBPDhfhAIUk.MwSqzJS', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-06-19 00:14:34', NULL, NULL),
+	-- (3, 'arini', 'hrd@email.com', NULL, 3, '$2y$10$HAzalEbYu.trWLumGOG7NeeG0nswP6Lvym1t5889o0z7tI8SQdNfa', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-06-20 12:54:10', '2023-06-20 12:54:10', NULL),
+	-- (4, 'indah', 'cashier@email.com', NULL, 4, '$2y$10$Rwjj0P99ZIuUz3JS7JxPreSN66qSoN3Lx380Ea9RINWmOoNeFrC4q', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:34', '2023-07-10 10:45:21', '2023-07-10 10:45:21', NULL),
+	-- (5, 'pengawas', 'foreman@email.com', NULL, 5, '$2y$10$0H73Ctkl3Zx5dyTkWH49Bu5P8z26s4rQWSrvmcXhyCdoEl50hOVgi', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:35', '2023-06-20 12:55:00', NULL, 2),
+	-- (6, 'qc', 'qualityControl@email.com', NULL, 6, '$2y$10$1wkpBGF9dG8aHLPmiJim8.xef7u6KRUuyUMcZS9OPJL9m6PZBjB9u', 1, NULL, NULL, NULL, NULL, '2023-06-19 00:14:35', '2023-06-19 00:14:35', NULL, NULL),
 	(7, 'adam', 'adam@gmail.com', NULL, 5, '$2y$10$/odwA5TnZq3JEq4M.c.a8.iWk.rI7vi5PSs.vKAVfniXXSbciEhLe', 1, NULL, NULL, NULL, NULL, '2023-06-19 08:49:57', '2023-06-20 12:54:54', NULL, 2),
 	(8, 'ardhi', 'ardhi@gmail.com', NULL, 5, '$2y$10$awjKxv30a4.e79POlImlmeUK/QSBirrF.e9VueURfth4NZBH2eHGW', 1, NULL, NULL, NULL, NULL, '2023-06-19 08:50:23', '2023-06-20 12:54:16', NULL, 2),
 	(9, 'yosep', 'yosep@gmail.com', NULL, 5, '$2y$10$zlA2VcfJdlsl4DFFQ2wQU.S5W9VqoF1GOEn/tdp.iOhoYWwtWWuK2', 1, NULL, NULL, NULL, NULL, '2023-06-19 08:50:48', '2023-06-20 12:55:09', NULL, 2),

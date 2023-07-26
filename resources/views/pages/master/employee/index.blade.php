@@ -278,6 +278,19 @@
         $("#finger-tab").hide();
         // $("#kepegawaian").hide();
 
+        // Fungsi untuk mendapatkan tanggal hari ini dengan format "YYYY-MM-DD"
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Set nilai tanggal hari ini ke input field dengan id "enter_date"
+        const enterDateInput = document.getElementById('enter_date');
+        enterDateInput.value = getCurrentDate();
+
         // SETUP FORMAT UNTUK TANGGAL MASUK
         function formatEnterDate(dateString) {
             var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -656,9 +669,9 @@
         var photoUrl;
 
         if (data.photo === null) {
-        photoUrl = "{{ asset('assets/img/default-icon.png')}}";
+            photoUrl = "{{ asset('assets/img/default-icon.png')}}";
         } else {
-        photoUrl = "{{ Storage::url('') }}" + data.photo;
+            photoUrl = "{{ Storage::url('') }}" + data.photo;
         }
 
         var imageElement = document.createElement("img");
@@ -1212,7 +1225,8 @@
         $("#working_hour").val("");
         $("#married_status").val("");
 
-        $("#employee_status").val("aktif").prop("disabled", true).trigger("change");        $("#reason_row").hide();
+        $("#employee_status").val("aktif").prop("disabled", true).trigger("change");
+        $("#reason_row").hide();
         $("#out_date_row").hide();
         $("#reason").hide();
         $("#out_date").hide();

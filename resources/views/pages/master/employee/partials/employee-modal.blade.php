@@ -116,7 +116,7 @@
                                 <label for="enter_date" class="col-sm-4 col-form-label">Tanggal Masuk</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control datepicker" id="enter_date" name="enter_date"
-                                        readonly>
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -253,63 +253,73 @@
                             <div class="form-group row">
                                 <label for="bpjs" class="col-sm-4 col-form-label">Status BPJS</label>
                                 <div class="col-sm-8">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label for="bpjs_tk" class="col-form-label">JHT (JAMINAN HARI TUA)</label>
-                                            <div class="form-check form-switch">
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="bpjs_tk"
-                                                        class="form-check-input bpjsTKCheck" data-toggle="toggle"
+                                   <table class="table">
+                                    <tr>
+                                        <td>
+                                            <label for="bpjs_jht">JHT (JAMINAN HARI TUA):</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch ml-4 mt-2">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jht">
+                                                    <input type="checkbox" name="bpjs_tk" class="form-check-input bpjsTKCheck" data-toggle="toggle"
                                                         id="bpjs_jht" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="bpjs_tk_pt" class="col-form-label">JKK (JAMINAN KECELAKAAN KERJA)</label>
-                                            <div class="form-check form-switch">
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="bpjs_tk_pt"
-                                                        class="form-check-input bpjsTKPTCheck" data-toggle="toggle"
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="bpjs_jkk">JKK (JAMINAN KECELAKAAN KERJA):</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch ml-4 mt-2">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jkk">
+                                                    <input type="checkbox" name="bpjs_tk_pt" class="form-check-input bpjsTKPTCheck" data-toggle="toggle"
                                                         id="bpjs_jkk" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="bpjs_kes" class="col-form-label">JKM (JAMINAN KEMATIAN)</label>
-                                            <div class="form-check form-switch">
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="bpjs_kes"
-                                                        class="form-check-input bpjsKESCheck" data-toggle="toggle"
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="bpjs_jkm">JKM (JAMINAN KEMATIAN):</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch ml-4 mt-2">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jkm">
+                                                    <input type="checkbox" name="bpjs_kes" class="form-check-input bpjsKESCheck" data-toggle="toggle"
                                                         id="bpjs_jkm" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="bpjs_kes_pt" class="col-form-label">JP (JAMINAN PENSIUN)</label>
-                                            <div class="form-check form-switch">
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="bpjs_kes_pt"
-                                                        class="form-check-input bpjsKESPTCheck" data-toggle="toggle"
-                                                        id="bpjs_jp" data-off="Disabled" data-on="Enabled">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="bpjs_jp">JP (JAMINAN PENSIUN):</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch ml-4 mt-2">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jp">
+                                                    <input type="checkbox" name="bpjs_kes_pt" class="form-check-input bpjsKESPTCheck"
+                                                        data-toggle="toggle" id="bpjs_jp" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="bpjs_training" class="col-form-label">BPJS KESEHATAN</label>
-                                            <div class="form-check form-switch">
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP"
-                                                    for="flexSwitchCheckChecked">
-                                                    <input type="checkbox" name="bpjs_training"
-                                                        class="form-check-input bpjsTRAININGCheck" data-toggle="toggle"
-                                                        id="bpjs_kes" data-off="Disabled" data-on="Enabled">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="bpjs_kes">BPJS KESEHATAN:</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch ml-4 mt-2">
+                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_kes">
+                                                    <input type="checkbox" name="bpjs_training" class="form-check-input bpjsTRAININGCheck"
+                                                        data-toggle="toggle" id="bpjs_kes" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </td>
+                                    </tr>
+                                </table>
                                 </div>
                             </div>
                             <hr>

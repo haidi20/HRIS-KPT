@@ -31,6 +31,7 @@ class CreateEmployeesTable extends Migration
             $table->date('enter_date')->nullable();
             $table->string('npwp')->nullable();
             $table->string('no_bpjs')->nullable();
+            $table->string('no_bpjs_tenaga_kerja')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('position_id')->nullable();
             $table->unsignedBigInteger('location_id')->nullable();
