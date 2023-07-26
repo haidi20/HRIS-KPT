@@ -34,7 +34,9 @@ class JobStatusController extends Controller
     public function fetchDataOvertimeBaseUser()
     {
         $employeeId = User::find(request("user_id"))->employee_id;
-        $overtimes = JobStatusHasParent::where("employee_id", $employeeId)->get();
+        $overtimes = JobStatusHasParent::where("employee_id", $employeeId)
+            ->orderBy("created_at", "desc")
+            ->get();
 
         return response()->json([
             "overtimes" => $overtimes,

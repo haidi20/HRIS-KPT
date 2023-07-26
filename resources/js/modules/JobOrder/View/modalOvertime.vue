@@ -212,7 +212,9 @@ export default {
             });
 
             this.$bvModal.hide("overtime_modal");
-            this.$store.dispatch("jobOrder/fetchDataOvertimeByUser");
+            this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
+              user_id: this.getUserId,
+            });
           }
 
           this.is_loading = false;
