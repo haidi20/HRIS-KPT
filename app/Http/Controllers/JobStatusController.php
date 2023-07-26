@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ImageHasParent;
 use App\Models\JobStatusHasParent;
 use App\Models\JobStatusHasParentHistory;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,17 @@ class JobStatusController extends Controller
 
         return response()->json([
             "jobStatusHasParents" => $jobStatusHasParents,
+            "requests" => request()->all(),
+        ]);
+    }
+
+    public function fetchDataOvertimeBaseUser()
+    {
+        $employeeId = User::find(request("user_id"))->employee_id;
+        $overtimes = JobStatusHasParent::where("employee_id", $employeeId)->get();
+
+        return response()->json([
+            "overtimes" => $overtimes,
             "requests" => request()->all(),
         ]);
     }
@@ -129,19 +141,42 @@ class JobStatusController extends Controller
             ], 500);
         }
 
+        $user = User::find(request("user_id"));
+
+        if ($user->employee_id == null) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, akun anda belum di ketahui data karyawan {$user->employee_id}",
+            ], 500);
+        }
+
         try {
             DB::beginTransaction();
 
-            // $jobStatusHasParent = JobStatusHasParent::find(request("id"));
-            // $jobStatusHasParent->datetime_start = request("datetime_start");
-            // $jobStatusHasParent->datetime_end = request("datetime_end");
-            // $jobStatusHasParent->save();
+            if (request("id")) {
+                $jobStatusHasParent = JobStatusHasParent::find(request("id"));
+
+                $message = "Diperbaharui";
+            } else {
+                $jobStatusHasParent = new JobStatusHasParent;
+
+                $message = "Ditambahkan";
+            }
+
+            $jobStatusHasParent->employee_id = $user->employee_id;
+            $jobStatusHasParent->status = "overtime";
+            $jobStatusHasParent->datetime_start = $datetimeStart;
+            $jobStatusHasParent->datetime_end = $datetimeEnd;
+            $jobStatusHasParent->note_start = request("note");
+            $jobStatusHasParent->save();
+
+            $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
 
             DB::commit();
             return response()->json([
                 'success' => true,
                 'request' => request()->all(),
-                'message' => 'Berhasil Perbaharui Data'
+                'message' => "Berhasil {$message}",
             ], 200);
         } catch (\Exception $e) {
             DB::rollback();
@@ -155,7 +190,7 @@ class JobStatusController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Maaf, gagal Perbaharui data'
+                'message' => "Maaf, Gagal {$message}",
             ], 500);
         }
     }
@@ -179,6 +214,8 @@ class JobStatusController extends Controller
             $jobStatusHasParent->datetime_start = request("datetime_start");
             $jobStatusHasParent->datetime_end = request("datetime_end");
             $jobStatusHasParent->save();
+
+            $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
 
             DB::commit();
             return response()->json([

@@ -41,6 +41,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="employee_id" class="col-sm-4 col-form-label">Data Karyawan </label>
+                        <div class="col-sm-8">
+                            <select id="employee_id" name="employee_id" class="select2 form-select" style="width: 100%">
+                                <option value="">tidak ada</option>
+                                @foreach ($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="role_id" class="col-sm-4 col-form-label">Grup Pengguna </label>
                         <div class="col-sm-8">
                             <select id="role_id" name="role_id" class="select2 form-select" style="width: 100%">

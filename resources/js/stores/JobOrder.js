@@ -98,6 +98,9 @@ const JobOrder = {
     state: {
         base_url: null,
         data: [],
+        table: {
+            overtime_base_user: [],
+        },
         params: {
             month: new Date(),
             date: new Date(),
@@ -201,6 +204,7 @@ const JobOrder = {
         },
         loading: {
             data: false,
+            table_overtime_base_user: false,
             job_status_has_parent: false,
         },
         user_id: null,
@@ -211,6 +215,9 @@ const JobOrder = {
         },
         INSERT_DATA(state, payload) {
             state.data = payload.data;
+        },
+        INSERT_TABLE_OVERTIME_BASE_USER(state, payload) {
+            state.table.overtime_base_user = payload.data;
         },
         INSERT_DATA_SELECTED(state, payload) {
             let dataClone = [...state.data];
@@ -417,6 +424,9 @@ const JobOrder = {
         UPDATE_LOADING_DATA(state, payload) {
             state.loading.data = payload.value;
         },
+        UPDATE_LOADING_TABLE_OVERTIME_BASE_USER(state, payload) {
+            state.loading.table_overtime_base_user = payload.value;
+        },
         UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT(state, payload) {
             state.loading.job_status_has_parent = payload.value;
         },
@@ -549,8 +559,31 @@ const JobOrder = {
                 });
         },
         // data lembur berdasarkan user pengawas atau qc
-        fetchDataOvertimeByUser: async (context, payload) => {
+        fetchDataOvertimeBaseUser: async (context, payload) => {
+            context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_USER", { value: true });
 
+            const params = {
+                user_id: payload.user_id,
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/job-status-has-parent/fetch-data-overtime-base-user`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_TABLE_OVERTIME_BASE_USER", {
+                        data: data.overtimes,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_USER", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_USER", { value: false });
+                    console.info(err);
+                });
         },
         fetchDataOvertimeReport: async (context, payload) => {
             context.commit("UPDATE_LOADING_DATA", { value: true });

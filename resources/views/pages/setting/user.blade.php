@@ -72,6 +72,8 @@
         $(document).ready(function() {
             $('.dataTable').DataTable();
 
+            $(".select2").select2();
+
             state.users = {!! json_encode($users) !!};
             send();
         });
@@ -89,6 +91,7 @@
             $("#name").val(data.name);
             $("#email").val(data.email);
             $("#location_id").val(data.location_id).trigger("change");
+            $("#employee_id").val(data.employee_id).trigger("change");
             $("#role_id").val(data.role_id).trigger("change");
 
             $("#titleForm").html("Ubah Pengguna");
