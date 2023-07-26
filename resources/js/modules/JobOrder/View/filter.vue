@@ -135,6 +135,12 @@ export default {
     VueSelect,
   },
   computed: {
+    getBaseUrl() {
+      return this.$store.state.base_url;
+    },
+    getUserId() {
+      return this.$store.state.user?.id;
+    },
     getOptionStatuses() {
       return this.$store.state.jobOrder.options.statuses;
     },
@@ -160,6 +166,9 @@ export default {
       this.$bvModal.hide("job_order_filter");
 
       this.$store.dispatch("jobOrder/fetchData");
+      this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
+        user_id: this.getUserId,
+      });
     },
     onCloseModal() {
       this.$bvModal.hide("job_order_filter");

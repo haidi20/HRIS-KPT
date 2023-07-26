@@ -563,6 +563,8 @@ const JobOrder = {
             context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_USER", { value: true });
 
             const params = {
+                month: moment(context.state.params.month).format("Y-MM"),
+                date: moment(context.state.params.date).format("Y-MM-DD"),
                 user_id: payload.user_id,
             }
 

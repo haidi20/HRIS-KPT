@@ -70,16 +70,6 @@
               </b-row>
             </b-col>
           </b-row>
-          <br />
-          <b-row>
-            <b-col>
-              <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-            </b-col>
-            <b-col style="text-align: right;">
-              <span v-if="is_loading">Loading...</span>
-              <b-button variant="success" @click="onSend()" :disabled="is_loading">Kirim</b-button>
-            </b-col>
-          </b-row>
         </b-tab>
         <b-tab title="data">
           <DatatableClient
@@ -106,6 +96,16 @@
           </DatatableClient>
         </b-tab>
       </b-tabs>
+      <br />
+      <b-row>
+        <b-col>
+          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+        </b-col>
+        <b-col style="text-align: right;">
+          <span v-if="is_loading">Loading...</span>
+          <b-button variant="success" @click="onSend()" :disabled="is_loading">Kirim</b-button>
+        </b-col>
+      </b-row>
     </b-modal>
   </div>
 </template>
