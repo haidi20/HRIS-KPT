@@ -117,6 +117,49 @@ class JobStatusController extends Controller
         ];
     }
 
+    public function storeOvertime()
+    {
+        $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
+        $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
+
+        if ($datetimeStart->greaterThan($datetimeEnd)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur",
+            ], 500);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // $jobStatusHasParent = JobStatusHasParent::find(request("id"));
+            // $jobStatusHasParent->datetime_start = request("datetime_start");
+            // $jobStatusHasParent->datetime_end = request("datetime_end");
+            // $jobStatusHasParent->save();
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'request' => request()->all(),
+                'message' => 'Berhasil Perbaharui Data'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Maaf, gagal Perbaharui data'
+            ], 500);
+        }
+    }
+
     public function storeOvertimeRevision()
     {
         $datetimeStart = Carbon::parse(request("datetime_start"));

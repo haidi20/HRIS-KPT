@@ -70,10 +70,12 @@ const defaultForm = {
     form_kind: null, // kebutuhan logika kirim data dari modal karyawan
     form_title: "Job Order v1.7",
     hour_start: moment().format("HH:mm"),
-    date_start: null,
+    hour_start_overtime: null,
+    date_start: new Date(),
     datetime_start: null,
     hour_end: moment().format("HH:mm"),
-    date_end: null,
+    hour_end_overtime: null,
+    date_end: new Date(),
     datetime_end: null,
     datetime_end_readable: null,
     datetime_estimation_end: null,
@@ -103,7 +105,7 @@ const JobOrder = {
                 new Date(moment().day(1)),
                 new Date()
             ],
-            status: "all",
+            status: "active",
             created_by: "creator",
             project_id: null,
             search: null,
@@ -545,6 +547,10 @@ const JobOrder = {
                     context.commit("UPDATE_LOADING_DATA", { value: false });
                     console.info(err);
                 });
+        },
+        // data lembur berdasarkan user pengawas atau qc
+        fetchDataOvertimeByUser: async (context, payload) => {
+
         },
         fetchDataOvertimeReport: async (context, payload) => {
             context.commit("UPDATE_LOADING_DATA", { value: true });

@@ -14,7 +14,9 @@ class AddTypeIsentifToSalaryAdjustmentsTable extends Migration
     public function up()
     {
         Schema::table('salary_adjustments', function (Blueprint $table) {
-            $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            if (!Schema::hasColumn('salary_adjustments', 'type_incentive')) {
+                $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            }
         });
     }
 
@@ -26,7 +28,9 @@ class AddTypeIsentifToSalaryAdjustmentsTable extends Migration
     public function down()
     {
         Schema::table('salary_adjustments', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('salary_adjustments', 'type_incentive')) {
+                $table->dropColumn('type_incentive');
+            }
         });
     }
 }
