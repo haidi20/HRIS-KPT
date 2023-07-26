@@ -273,11 +273,11 @@
         clearFormCreate();
         $("#personal-tab").tab("show");
         $("#titleForm").html("Tambah Karyawan");
-        // $('#bpjs_jht').prop('checked', true);
-        // $('#bpjs_jkk').prop('checked', true);
-        // $('#bpjs_jkm').prop('checked', true);
-        // $('#bpjs_jp').prop('checked', true);
-        // $('#bpjs_kes').prop('checked', true);
+        $('#bpjs_jht').prop('checked', true);
+        $('#bpjs_jkk').prop('checked', true);
+        $('#bpjs_jkm').prop('checked', true);
+        $('#bpjs_jp').prop('checked', true);
+        $('#bpjs_kes').prop('checked', true);
         // $("#kepegawaian-tab").hide();
         // $("#salary-tab").hide();
         $("#finger-tab").hide();
@@ -367,19 +367,19 @@
         });
 
         // SETUP KONDISI UNTUK STATUS KARYAWAN
-        // $("#employee_status").change(function () {
-        //     var employeeStatus = $(this).val();
+        $("#employee_status").change(function () {
+            var employeeStatus = $(this).val();
 
-        //     if (employeeStatus === "aktif") {
-        //         $("#out_date_row").hide();
-        //         $("#reason_row").hide();
-        //         $("#reason").val("");
-        //         $("#out_date").val("");
-        //     } else if (employeeStatus === "tidak_aktif") {
-        //         $("#out_date_row").show();
-        //         $("#reason_row").show();
-        //     }
-        // });
+            if (employeeStatus === "aktif") {
+                $("#out_date_row").hide();
+                $("#reason_row").hide();
+                $("#reason").val("");
+                $("#out_date").val("");
+            } else if (employeeStatus === "tidak_aktif") {
+                $("#out_date_row").show();
+                $("#reason_row").show();
+            }
+        });
 
         $('#birth_date').each(function () {
             $(this).datepicker({
@@ -591,154 +591,154 @@
         $("#titleForm").html("Ubah Karyawan");
 
         // CHECK SLIDER CONDITION
-        $('.bpjsJHTCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
+        // $('.bpjsJHTCheck').change(function () {
+        //     var mode = $(this).prop('checked');
+        //     var id = $(this).attr('data-target');
+        //     var _token = "{{ csrf_token() }}";
 
-            var dataHide = $(this).attr('data-hide');
+        //     var dataHide = $(this).attr('data-hide');
 
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsJHT') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         url: "{{ route('master.employee.bpjsJHT') }}",
+        //         data: {
+        //             id: id,
+        //             mode: mode,
+        //             _token: _token
+        //         },
 
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
+        //         success: function (data) {
+        //             if (mode) {
+        //                 $(dataHide).css('display', 'block');
+        //                 console.log("Data Berhasil Diaktifkan");
+        //             } else {
+        //                 $(dataHide).css("display", "none");
+        //                 console.log("Data Berhasil Dinonaktifkan");
+        //             }
+        //         }
+        //     });
+        // });
 
-        $('.bpjsJKKCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
+        // $('.bpjsJKKCheck').change(function () {
+        //     var mode = $(this).prop('checked');
+        //     var id = $(this).attr('data-target');
+        //     var _token = "{{ csrf_token() }}";
 
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsJKK') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsJKMCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
+        //     var dataHide = $(this).attr('data-hide');
 
 
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsJKM') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         url: "{{ route('master.employee.bpjsJKK') }}",
+        //         data: {
+        //             id: id,
+        //             mode: mode,
+        //             _token: _token
+        //         },
 
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
+        //         success: function (data) {
+        //             if (mode) {
+        //                 $(dataHide).css('display', 'block');
+        //                 console.log("Data Berhasil Diaktifkan");
+        //             } else {
+        //                 $(dataHide).css("display", "none");
+        //                 console.log("Data Berhasil Dinonaktifkan");
+        //             }
+        //         }
+        //     });
+        // });
 
-        $('.bpjsJPCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
+        // $('.bpjsJKMCheck').change(function () {
+        //     var mode = $(this).prop('checked');
+        //     var id = $(this).attr('data-target');
+        //     var _token = "{{ csrf_token() }}";
 
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsJP') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsKESCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
+        //     var dataHide = $(this).attr('data-hide');
 
 
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsKES') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         url: "{{ route('master.employee.bpjsJKM') }}",
+        //         data: {
+        //             id: id,
+        //             mode: mode,
+        //             _token: _token
+        //         },
 
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
+        //         success: function (data) {
+        //             if (mode) {
+        //                 $(dataHide).css('display', 'block');
+        //                 console.log("Data Berhasil Diaktifkan");
+        //             } else {
+        //                 $(dataHide).css("display", "none");
+        //                 console.log("Data Berhasil Dinonaktifkan");
+        //             }
+        //         }
+        //     });
+        // });
+
+        // $('.bpjsJPCheck').change(function () {
+        //     var mode = $(this).prop('checked');
+        //     var id = $(this).attr('data-target');
+        //     var _token = "{{ csrf_token() }}";
+
+        //     var dataHide = $(this).attr('data-hide');
+
+
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         url: "{{ route('master.employee.bpjsJP') }}",
+        //         data: {
+        //             id: id,
+        //             mode: mode,
+        //             _token: _token
+        //         },
+
+        //         success: function (data) {
+        //             if (mode) {
+        //                 $(dataHide).css('display', 'block');
+        //                 console.log("Data Berhasil Diaktifkan");
+        //             } else {
+        //                 $(dataHide).css("display", "none");
+        //                 console.log("Data Berhasil Dinonaktifkan");
+        //             }
+        //         }
+        //     });
+        // });
+
+        // $('.bpjsKESCheck').change(function () {
+        //     var mode = $(this).prop('checked');
+        //     var id = $(this).attr('data-target');
+        //     var _token = "{{ csrf_token() }}";
+
+        //     var dataHide = $(this).attr('data-hide');
+
+
+        //     $.ajax({
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         url: "{{ route('master.employee.bpjsKES') }}",
+        //         data: {
+        //             id: id,
+        //             mode: mode,
+        //             _token: _token
+        //         },
+
+        //         success: function (data) {
+        //             if (mode) {
+        //                 $(dataHide).css('display', 'block');
+        //                 console.log("Data Berhasil Diaktifkan");
+        //             } else {
+        //                 $(dataHide).css("display", "none");
+        //                 console.log("Data Berhasil Dinonaktifkan");
+        //             }
+        //         }
+        //     });
+        // });
 
         $(document).ready(function () {
             var employeeId = data.id;
@@ -1080,7 +1080,8 @@
         $("#working_hour").val("");
         $("#married_status").val("");
 
-        $("#employee_status").val("aktif").prop("disabled", true).trigger("change");
+        // $("#employee_status").val("aktif").prop("disabled", true).trigger("change");
+        $("#employee_status").val("aktif").trigger("change");
         $("#reason_row").hide();
         $("#out_date_row").hide();
         $("#reason").hide();

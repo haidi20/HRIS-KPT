@@ -61,7 +61,7 @@ class CreateEmployeesTable extends Migration
             // $table->string('wife_phone')->nullable();
 
             $table->string('married_status')->nullable();
-            $table->enum('employee_status', ['aktif', 'tidak_aktif'])->default('Aktif');
+            $table->enum('employee_status', ['aktif', 'tidak_aktif'])->default('aktif')->nullable();
             $table->date('out_date')->nullable();
             $table->string('reason')->nullable();
 
