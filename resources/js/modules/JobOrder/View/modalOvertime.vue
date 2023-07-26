@@ -70,19 +70,42 @@
               </b-row>
             </b-col>
           </b-row>
-          <br />
-          <b-row>
-            <b-col>
-              <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
-            </b-col>
-            <b-col style="text-align: right;">
-              <span v-if="is_loading">Loading...</span>
-              <b-button variant="success" @click="onSend()" :disabled="is_loading">Kirim</b-button>
-            </b-col>
-          </b-row>
         </b-tab>
-        <b-tab title="data">data overtime</b-tab>
+        <b-tab title="data">
+          <DatatableClient
+            :data="getDataOvertime"
+            :columns="columns"
+            :options="options"
+            nameStore="jobOrder"
+            nameLoading="table_overtime_base_user"
+            :filter="true"
+            :footer="false"
+            bordered
+          >
+            <template v-slot:filter>
+              <b-col cols>
+                Data SPL
+                <!-- <i class="fas fa-cogs"></i> -->
+              </b-col>
+            </template>
+            <template v-slot:tbody="{ filteredData }">
+              <b-tr v-for="(item, index) in filteredData" :key="index">
+                <b-td v-for="column in getColumns()" :key="column.label">{{ item[column.field] }}</b-td>
+              </b-tr>
+            </template>
+          </DatatableClient>
+        </b-tab>
       </b-tabs>
+      <br />
+      <b-row>
+        <b-col>
+          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+        </b-col>
+        <b-col style="text-align: right;">
+          <span v-if="is_loading">Loading...</span>
+          <b-button variant="success" @click="onSend()" :disabled="is_loading">Kirim</b-button>
+        </b-col>
+      </b-row>
     </b-modal>
   </div>
 </template>
@@ -91,15 +114,41 @@
 import axios from "axios";
 import moment from "moment";
 
+import DatatableClient from "../../../components/DatatableClient";
+
 export default {
   data() {
     return {
       is_loading: false,
       title_form: "SPL (surat perintah lembur)",
+      options: {
+        perPage: 5,
+        // perPageValues: [5, 10, 25, 50, 100],
+      },
+      columns: [
+        {
+          label: "Waktu Mulai",
+          field: "datetime_start_readable",
+          width: "200px",
+          class: "",
+        },
+        {
+          label: "Waktu Selesai",
+          field: "datetime_end_readable",
+          width: "200px",
+          class: "",
+        },
+        {
+          label: "Durasi",
+          field: "duration_readable",
+          width: "200px",
+          class: "",
+        },
+      ],
     };
   },
   components: {
-    //
+    DatatableClient,
   },
   computed: {
     getBaseUrl() {
@@ -107,6 +156,9 @@ export default {
     },
     getUserId() {
       return this.$store.state.user?.id;
+    },
+    getDataOvertime() {
+      return this.$store.state.jobOrder.table.overtime_base_user;
     },
     form() {
       return this.$store.state.jobOrder.form;
@@ -120,6 +172,7 @@ export default {
       const Swal = this.$swal;
 
       const request = {
+        id: this.form.id,
         date_start: moment(this.form.date_start).format("YYYY-MM-DD"),
         hour_start: this.form.hour_start_overtime,
         date_end: moment(this.form.date_end).format("YYYY-MM-DD"),
@@ -158,7 +211,10 @@ export default {
               title: data.message,
             });
 
-            this.$store.dispatch("jobOrder/fetchDataOvertimeByUser");
+            this.$bvModal.hide("overtime_modal");
+            this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
+              user_id: this.getUserId,
+            });
           }
 
           this.is_loading = false;
@@ -185,6 +241,10 @@ export default {
             title: err.response.data.message,
           });
         });
+    },
+    getColumns() {
+      const columns = this.columns.filter((item) => item.label != "");
+      return columns;
     },
   },
 };

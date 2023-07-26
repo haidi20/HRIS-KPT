@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,7 +36,7 @@ class UserController extends Controller
         if ($datatables->getRequest()->ajax()) {
             $userRoleId = auth()->user()->role_id;
             $users = User::query()
-                ->select('users.id', 'users.location_id', 'users.name', 'users.role_id', 'users.email', 'roles.name as role_name')
+                ->select('users.id', 'users.location_id', 'users.name', 'users.role_id', 'users.email', 'users.employee_id', 'roles.name as role_name')
                 ->with('role')
                 ->leftJoin('roles', 'users.role_id', '=', 'roles.id');
 
@@ -105,9 +106,10 @@ class UserController extends Controller
         $roles = $roles->get();
 
         $users = User::paginate(10);
+        $employees = Employee::select("id", "name", "position_id")->get();
         $locations = Location::all();
 
-        $compact = compact('html', 'roles', 'users', 'locations');
+        $compact = compact('html', 'roles', 'users', 'locations', 'employees');
 
         return view("pages.setting.user", $compact);
     }
@@ -160,6 +162,10 @@ class UserController extends Controller
 
             if (request("password") != null) {
                 $user->password = bcrypt(request("password"));
+            }
+
+            if (request("employee_id") != null) {
+                $user->employee_id = request("employee_id");
             }
 
             $user->name = request("name");
