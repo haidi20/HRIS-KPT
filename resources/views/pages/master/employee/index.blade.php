@@ -273,6 +273,11 @@
         clearFormCreate();
         $("#personal-tab").tab("show");
         $("#titleForm").html("Tambah Karyawan");
+        // $('#bpjs_jht').prop('checked', true);
+        // $('#bpjs_jkk').prop('checked', true);
+        // $('#bpjs_jkm').prop('checked', true);
+        // $('#bpjs_jp').prop('checked', true);
+        // $('#bpjs_kes').prop('checked', true);
         // $("#kepegawaian-tab").hide();
         // $("#salary-tab").hide();
         $("#finger-tab").hide();
@@ -376,156 +381,6 @@
         //     }
         // });
 
-        // CHECK SLIDER CONDITION
-        $('.bpjsTKCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsTK') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsTKPTCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsTKPT') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsKESCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsKES') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsKESPTCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsKESPT') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsTRAININGCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsTRAINING') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
         $('#birth_date').each(function () {
             $(this).datepicker({
                 autoclose: true,
@@ -557,7 +412,7 @@
         // MEMUNCULKAN TAB
         // $("#kepegawaian-tab").show();
         // $("#salary-tab").show();
-        // $("#finger-tab").show();
+        $("#finger-tab").show();
 
         // SETUP FORMAT UNTUK TANGGAL MASUK
         function formatEnterDate(dateString) {
@@ -697,22 +552,22 @@
         $("#working_hour").val(data.working_hour).trigger("change");
         $("#married_status").val(data.married_status).trigger("change");
 
-        $("#bpjs_tk").prop("checked", data.bpjs_tk === "Y");
-        $("#bpjs_tk").attr("data-target", data.id);
+        $("#bpjs_jht").prop("checked", data.bpjs_jht === "Y");
+        $("#bpjs_jht").attr("data-target", data.id);
 
-        $("#bpjs_tk_pt").prop("checked", data.bpjs_tk_pt === "Y");
-        $("#bpjs_tk_pt").attr("data-target", data.id);
+        $("#bpjs_jkk").prop("checked", data.bpjs_jkk === "Y");
+        $("#bpjs_jkk").attr("data-target", data.id);
+
+        $("#bpjs_jkm").prop("checked", data.bpjs_jkm === "Y");
+        $("#bpjs_jkm").attr("data-target", data.id);
+
+        $("#bpjs_jp").prop("checked", data.bpjs_jp === "Y");
+        $("#bpjs_jp").attr("data-target", data.id);
 
         $("#bpjs_kes").prop("checked", data.bpjs_kes === "Y");
         $("#bpjs_kes").attr("data-target", data.id);
 
-        $("#bpjs_kes_pt").prop("checked", data.bpjs_kes_pt === "Y");
-        $("#bpjs_kes_pt").attr("data-target", data.id);
-
-        $("#bpjs_training").prop("checked", data.bpjs_training === "Y");
-        $("#bpjs_training").attr("data-target", data.id);
-
-        $("#employee_status").val(data.employee_status).trigger("change");
+        $("#employee_status").val(data.employee_status).prop("disabled", false).trigger("change");
         $("#reason").val(data.reason);
         $("#out_date").val(data.out_date);
 
@@ -736,7 +591,7 @@
         $("#titleForm").html("Ubah Karyawan");
 
         // CHECK SLIDER CONDITION
-        $('.bpjsTKCheck').change(function () {
+        $('.bpjsJHTCheck').change(function () {
             var mode = $(this).prop('checked');
             var id = $(this).attr('data-target');
             var _token = "{{ csrf_token() }}";
@@ -746,7 +601,7 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsTK') }}",
+                url: "{{ route('master.employee.bpjsJHT') }}",
                 data: {
                     id: id,
                     mode: mode,
@@ -765,7 +620,7 @@
             });
         });
 
-        $('.bpjsTKPTCheck').change(function () {
+        $('.bpjsJKKCheck').change(function () {
             var mode = $(this).prop('checked');
             var id = $(this).attr('data-target');
             var _token = "{{ csrf_token() }}";
@@ -776,7 +631,67 @@
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsTKPT') }}",
+                url: "{{ route('master.employee.bpjsJKK') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsJKMCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsJKM') }}",
+                data: {
+                    id: id,
+                    mode: mode,
+                    _token: _token
+                },
+
+                success: function (data) {
+                    if (mode) {
+                        $(dataHide).css('display', 'block');
+                        console.log("Data Berhasil Diaktifkan");
+                    } else {
+                        $(dataHide).css("display", "none");
+                        console.log("Data Berhasil Dinonaktifkan");
+                    }
+                }
+            });
+        });
+
+        $('.bpjsJPCheck').change(function () {
+            var mode = $(this).prop('checked');
+            var id = $(this).attr('data-target');
+            var _token = "{{ csrf_token() }}";
+
+            var dataHide = $(this).attr('data-hide');
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: "{{ route('master.employee.bpjsJP') }}",
                 data: {
                     id: id,
                     mode: mode,
@@ -807,66 +722,6 @@
                 type: 'POST',
                 dataType: 'JSON',
                 url: "{{ route('master.employee.bpjsKES') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsKESPTCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsKESPT') }}",
-                data: {
-                    id: id,
-                    mode: mode,
-                    _token: _token
-                },
-
-                success: function (data) {
-                    if (mode) {
-                        $(dataHide).css('display', 'block');
-                        console.log("Data Berhasil Diaktifkan");
-                    } else {
-                        $(dataHide).css("display", "none");
-                        console.log("Data Berhasil Dinonaktifkan");
-                    }
-                }
-            });
-        });
-
-        $('.bpjsTRAININGCheck').change(function () {
-            var mode = $(this).prop('checked');
-            var id = $(this).attr('data-target');
-            var _token = "{{ csrf_token() }}";
-
-            var dataHide = $(this).attr('data-hide');
-
-
-            $.ajax({
-                type: 'POST',
-                dataType: 'JSON',
-                url: "{{ route('master.employee.bpjsTRAINING') }}",
                 data: {
                     id: id,
                     mode: mode,

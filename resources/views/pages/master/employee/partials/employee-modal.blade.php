@@ -260,10 +260,8 @@
                                         </td>
                                         <td>
                                             <div class="form-check form-switch ml-4 mt-2">
-                                                <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jht">
-                                                    <input type="checkbox" name="bpjs_tk" class="form-check-input bpjsTKCheck" data-toggle="toggle"
-                                                        id="bpjs_jht" data-off="Disabled" data-on="Enabled">
-                                                </label>
+                                                <input class="form-check-input" type="checkbox"  name="bpjs_jht" id="bpjs_jht" checked>
+                                                <label class="form-check-label" for="bpjs_jht"></label>
                                             </div>
                                         </td>
                                     </tr>
@@ -273,11 +271,15 @@
                                         </td>
                                         <td>
                                             <div class="form-check form-switch ml-4 mt-2">
+                                                <input class="form-check-input" type="checkbox" name="bpjs_jkk" id="bpjs_jkk" checked>
+                                                <label class="form-check-label" for="bpjs_jkk"></label>
+                                            </div>
+                                            {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jkk">
-                                                    <input type="checkbox" name="bpjs_tk_pt" class="form-check-input bpjsTKPTCheck" data-toggle="toggle"
+                                                    <input type="checkbox" name="bpjs_jkk" class="form-check-input bpjsJKKCheck" data-toggle="toggle"
                                                         id="bpjs_jkk" data-off="Disabled" data-on="Enabled">
                                                 </label>
-                                            </div>
+                                            </div> --}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -286,11 +288,15 @@
                                         </td>
                                         <td>
                                             <div class="form-check form-switch ml-4 mt-2">
+                                                <input class="form-check-input" type="checkbox" name="bpjs_jkm" id="bpjs_jkm" checked>
+                                                <label class="form-check-label" for="bpjs_jkm"></label>
+                                            </div>
+                                            {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jkm">
-                                                    <input type="checkbox" name="bpjs_kes" class="form-check-input bpjsKESCheck" data-toggle="toggle"
+                                                    <input type="checkbox" name="bpjs_jkm" class="form-check-input bpjsJKMCheck" data-toggle="toggle"
                                                         id="bpjs_jkm" data-off="Disabled" data-on="Enabled">
                                                 </label>
-                                            </div>
+                                            </div> --}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -299,11 +305,15 @@
                                         </td>
                                         <td>
                                             <div class="form-check form-switch ml-4 mt-2">
+                                                <input class="form-check-input" type="checkbox" name="bpjs_jp" id="bpjs_jp" checked>
+                                                <label class="form-check-label" for="bpjs_jp"></label>
+                                            </div>
+                                            {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jp">
-                                                    <input type="checkbox" name="bpjs_kes_pt" class="form-check-input bpjsKESPTCheck"
+                                                    <input type="checkbox" name="bpjs_jp" class="form-check-input bpjsJPCheck"
                                                         data-toggle="toggle" id="bpjs_jp" data-off="Disabled" data-on="Enabled">
                                                 </label>
-                                            </div>
+                                            </div> --}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -312,11 +322,15 @@
                                         </td>
                                         <td>
                                             <div class="form-check form-switch ml-4 mt-2">
+                                                <input class="form-check-input" type="checkbox" name="bpjs_kes" id="bpjs_kes" checked>
+                                                <label class="form-check-label" for="bpjs_kes"></label>
+                                            </div>
+                                            {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_kes">
-                                                    <input type="checkbox" name="bpjs_training" class="form-check-input bpjsTRAININGCheck"
+                                                    <input type="checkbox" name="bpjs_kes" class="form-check-input bpjsKESCheck"
                                                         data-toggle="toggle" id="bpjs_kes" data-off="Disabled" data-on="Enabled">
                                                 </label>
-                                            </div>
+                                            </div> --}}
                                         </td>
                                     </tr>
                                 </table>

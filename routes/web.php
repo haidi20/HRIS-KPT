@@ -231,11 +231,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::delete('delete-fingers/{employeeId}', [EmployeeController::class, "deleteEmployeeFingers"])->name("deleteEmployeeFingers");
             Route::get('exportExcelPosition/{position_id}', [EmployeeController::class, 'exportExcelPositionEmployee'])->name('exportExcelPosition');
             Route::get('exportExcelLocation/{location_id}', [EmployeeController::class, 'exportExcelLocationEmployee'])->name('exportExcelLocation');
-            Route::post('bpjs-tk', [EmployeeController::class, "bpjsTK"])->name("bpjsTK");
-            Route::post('bpjs-tk-pt', [EmployeeController::class, "bpjsTKPT"])->name("bpjsTKPT");
+            Route::post('bpjs-jht', [EmployeeController::class, "bpjsJHT"])->name("bpjsJHT");
+            Route::post('bpjs-jkk', [EmployeeController::class, "bpjsJKK"])->name("bpjsJKK");
+            Route::post('bpjs-jkm', [EmployeeController::class, "bpjsJKM"])->name("bpjsJKM");
+            Route::post('bpjs-jp', [EmployeeController::class, "bpjsJP"])->name("bpjsJP");
             Route::post('bpjs-kes', [EmployeeController::class, "bpjsKES"])->name("bpjsKES");
-            Route::post('bpjs-kes-pt', [EmployeeController::class, "bpjsKESPT"])->name("bpjsKESPT");
-            Route::post('bpjs-training', [EmployeeController::class, "bpjsTRAINING"])->name("bpjsTRAINING");
             Route::post('store', [EmployeeController::class, "store"])->name("store");
             Route::delete('delete', [EmployeeController::class, "destroy"])->name("delete");
         });
