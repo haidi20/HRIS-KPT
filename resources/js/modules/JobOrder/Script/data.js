@@ -4,6 +4,7 @@ import moment from "moment";
 import { checkNull, isMobile } from "../../../utils";
 import FilterData from "../View/filter";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
+import ModalOvertime from "../View/modalOvertime";
 import { stubArray } from "lodash";
 
 export default {
@@ -14,7 +15,11 @@ export default {
             messageNotif: null,
         };
     },
-    components: { FilterData, EmployeeHasParent },
+    components: {
+        FilterData,
+        EmployeeHasParent,
+        ModalOvertime
+    },
     computed: {
         getBaseUrl() {
             return this.$store.state.base_url;
@@ -207,6 +212,12 @@ export default {
             });
             this.$bvModal.hide("action_list");
         },
+        onOpenOvertime() {
+            this.$bvModal.show("overtime_modal");
+        },
+        onFilter() {
+            this.$bvModal.show("job_order_filter");
+        },
         async onDelete() {
             const data = this.getForm;
             // console.info(data);
@@ -276,9 +287,6 @@ export default {
                         });
                 }
             });
-        },
-        onFilter() {
-            this.$bvModal.show("job_order_filter");
         },
         onLimitSentence(sentence) {
             const maxLength = 35;

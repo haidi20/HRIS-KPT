@@ -1,7 +1,7 @@
 <template>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ms-auto mb-lg-0">
-      <li class="nav-item dropdown me-3">
+      <li class="nav-item dropdown me-3" v-if="is_show">
         <a
           class="nav-link active dropdown-toggle text-gray-600"
           href="#"
@@ -13,7 +13,7 @@
           <span
             class="badge bg-danger rounded-circle top-0 start-100 translate-middle"
             style="padding: 0.4rem 0.6rem!important;"
-          >10</span>
+          >{{count_data}}</span>
         </a>
         <ul
           class="dropdown-menu dropdown-menu-end notification-dropdown"
@@ -33,11 +33,6 @@
               </div>
             </a>
           </li>
-          <!-- <li>
-            <p class="text-center py-2 mb-0">
-              <a href="#">See all notification</a>
-            </p>
-          </li>-->
         </ul>
       </li>
     </ul>
@@ -45,7 +40,38 @@
 </template>
 
 <script>
-export default {};
+import io from "socket.io-client";
+
+export default {
+  props: {
+    user_id: String,
+  },
+  data() {
+    return {
+      is_show: false,
+      count_data: 0,
+    };
+  },
+  mounted() {
+    // console.info(this.user_id);
+  },
+  created() {
+    this.socket = io.connect("http://localhost:3000", {
+      query: `user_id=${this.user_id}`,
+    }); // replace with your server URL
+
+    // listen to events from server
+    this.socket.on("get-notification", (data) => {
+      console.info(data);
+      this.count_data = data.data.length;
+      //   this.message = data;
+    });
+  },
+  beforeDestroy() {
+    // disconnect when component is unmounted
+    this.socket.disconnect();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

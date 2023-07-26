@@ -91,38 +91,24 @@ export default {
     onClose() {
       this.$refs.myBottomSheet.close();
     },
-    onTestNotification() {
-      // if ('Notification' in window) {
-      //     Notification.requestPermission().then(function (permission) {
-      //         if (permission === 'granted') {
-      //             new Notification('Test Notif!');
-      //         }
-      //     });
-      // }
-      //   alert("click notif 1");
-      if ("Notification" in window) {
-        alert("click notif 2");
-        Notification.requestPermission()
-          .then(function (result) {
-            if (result === "granted") {
-              navigator.serviceWorker.ready.then((registration) => {
-                registration.showNotification("Vibration Sample", {
-                  body: "Buzz! Buzz!",
-                  //   icon: "../images/touch/chrome-touch-icon-192x192.png",
-                  vibrate: [200, 100, 200, 100, 200, 100, 200],
-                  tag: "vibration-sample",
-                });
-              });
-            }
-          })
-          .catch(function (error) {
-            // An error occurred while requesting permission
-            console.error("Error requesting notification permission:", error);
+    async onTestNotification() {
+      //   if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+      if ("serviceWorker" in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register(
+            "js/service-worker.js"
+          );
+          await navigator.serviceWorker.ready;
+          console.info("click notif");
+
+          const delay = 5000; // 5 seconds delay
+          registration.active.postMessage({
+            action: "showAlertAfterDelay",
+            delay: delay,
           });
-      } else {
-        // The browser does not support the Notification API
-        console.log("Notifications not supported");
-        alert("not supported");
+        } catch (error) {
+          console.error("Error registering Service Worker:", error);
+        }
       }
     },
     getConditionForm() {

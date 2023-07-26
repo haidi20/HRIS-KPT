@@ -18,7 +18,7 @@ class JobOrder extends Model
     protected $appends = [
         "status_color", "status_readable", 'status_clone',
         "project_name", "job_name", "job_code", "hour_start", "category_name",
-        "creator_name", "creator_group_name", "job_level_readable", "list_approved",
+        "creator_name", "creator_group_name", "job_level_readable",
         "employee_total", "employee_active_total", "assessment_count", "assessment_total",
         "datetime_estimation_end_readable", "datetime_end_readable", "datetime_start_readable",
     ];
@@ -204,20 +204,5 @@ class JobOrder extends Model
         $categoryName = Config::get("library.category.{$this->category}");
 
         return $categoryName;
-    }
-
-    public function getListApprovedAttribute()
-    {
-        if ($this->jobOrderAssessments) {
-            $result = "";
-
-            foreach ($this->jobOrderAssessments as $index => $item) {
-                $result .= $item->employee_name . " ({$item->position_name}), ";
-            }
-
-            return $result;
-        } else {
-            return null;
-        }
     }
 }

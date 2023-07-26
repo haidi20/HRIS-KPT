@@ -12,7 +12,8 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 </ul>
                 <div id="notif">
-                    <notification />
+                    {{-- <notification user_id="{{ auth()->user()->id }}" /> --}}
+                    <notification user_id="9" />
                 </div>
                 <div class="dropdown">
                     <a href="#" data-bs-toggle="dropdown" aria-expanded="false">

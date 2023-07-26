@@ -186,9 +186,9 @@ export default {
       await axios
         .get(`${this.getBaseUrl}/attendance/export`, {
           params: {
+            ...this.params,
             user_id: this.getUserId,
             month: moment(this.params.month).format("Y-MM"),
-            position_id: this.params.position_id,
           },
         })
         .then((responses) => {

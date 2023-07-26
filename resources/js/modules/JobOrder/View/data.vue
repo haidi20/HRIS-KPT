@@ -3,17 +3,25 @@
     <b-tabs content-class="mt-3">
       <b-tab title="Data" active>
         <b-row style="margin-top: 10px">
-          <b-col cols>
+          <b-col cols="4">
             <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
           </b-col>
-          <b-col cols style="align-item: right">
+          <b-col cols="8" style="align-item: right">
             <b-button
               v-if="getCan('tambah job order')"
               variant="success"
               size="sm"
               class="float-end"
               @click="onCreate()"
+              style="margin-left: 30px"
             >Tambah</b-button>
+            <b-button
+              v-if="getCan('lembur job order')"
+              variant="warning"
+              size="sm"
+              class="float-end"
+              @click="onOpenOvertime()"
+            >SPL</b-button>
           </b-col>
         </b-row>
         <br />
@@ -163,6 +171,7 @@
 
     <FilterData />
     <EmployeeHasParent />
+    <ModalOvertime />
   </div>
 </template>
 

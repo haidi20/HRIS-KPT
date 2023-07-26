@@ -60,11 +60,18 @@
                         $iter++;
                         $tanggal  = \Carbon\Carbon::parse($a->date);
 
-                        $d_hour = \floor($a->duration_work / 60);
+                        if($a->hour_start == null or $a->hour_end == null){
+                            $d_hour = 0;
+                            $d_minute = 0;
+                        }else{
+                            $d_hour = \floor($a->duration_work / 60);
                         $d_minute = $a->duration_work%60 ;
+                        }
+
+                       
                     @endphp
 
-                                @if ( $a->roster_status_initial =='OFF')
+                                @if ( $a->roster_status_initial =='OFF' or $a->roster_status_initial =='C')
                                 <tr style="background-color: #white">
                                     <td style="color:red"> {{$a->roster_status_initial}}</td>
 

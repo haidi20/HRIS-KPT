@@ -27,6 +27,20 @@ class DummyPayrollSeeder extends Seeder
      */
     public function run()
     {
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        //rusli nur
+        Karyawan::where('id','40')->update(['basic_salary'=>20000000,'allowance'=>0,'meal_allowance_per_attend'=>0]);
+
+        //evie
+        Karyawan::where('id','44')->update(['basic_salary'=>3394000,'allowance'=>500000,'meal_allowance_per_attend'=>12000]);
+
+        //evie
+        Karyawan::where('id','44')->update(['basic_salary'=>10000000,'allowance'=>0,'meal_allowance_per_attend'=>0]);
+
+
+        ///////////////////////////////////////////////////////////////////////////
         // $employees = Employee::where('id',1)->with('position')->get();
 
         $employees = Employee::with('position')->get();

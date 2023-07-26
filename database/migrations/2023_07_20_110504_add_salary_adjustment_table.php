@@ -20,13 +20,19 @@ class AddSalaryAdjustmentTable extends Migration
             - overtime = lembur
         */
         Schema::table('salary_adjustments', function (Blueprint $table) {
-            $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            if (!Schema::hasColumn('salary_adjustments', 'type_incentive')) {
+                $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            }
         });
         Schema::table('salary_adjustment_details', function (Blueprint $table) {
-            $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            if (!Schema::hasColumn('salary_adjustment_details', 'type_incentive')) {
+                $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            }
         });
         Schema::table('salary_adjustment_detail_histories', function (Blueprint $table) {
-            $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            if (!Schema::hasColumn('salary_adjustment_detail_histories', 'type_incentive')) {
+                $table->enum('type_incentive', ['another', 'incentive', 'deduction', 'overtime']);
+            }
         });
     }
 
@@ -38,7 +44,19 @@ class AddSalaryAdjustmentTable extends Migration
     public function down()
     {
         Schema::table('salary_adjustments', function (Blueprint $table) {
-            $table->dropColumn('type_incentive');
+            if (Schema::hasColumn('salary_adjustments', 'type_incentive')) {
+                $table->dropColumn('type_incentive');
+            }
+        });
+        Schema::table('salary_adjustment_details', function (Blueprint $table) {
+            if (Schema::hasColumn('salary_adjustment_details', 'type_incentive')) {
+                $table->dropColumn('type_incentive');
+            }
+        });
+        Schema::table('salary_adjustment_detail_histories', function (Blueprint $table) {
+            if (Schema::hasColumn('salary_adjustment_detail_histories', 'type_incentive')) {
+                $table->dropColumn('type_incentive');
+            }
         });
     }
 }

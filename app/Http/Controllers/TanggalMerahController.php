@@ -45,15 +45,7 @@ class TanggalMerahController extends Controller
         // return "a";
         $columns = [
 
-            // name
-            // number_of_workdays
-
-
-
-
-            // 'id' => ['title' => 'No.', 'orderable' => false, 'searchable' => false, 'render' => function () {
-            //     return 'function(data,type,fullData,meta){return meta.settings._iDisplayStart+meta.row+1;}';
-            // }],
+   
             'tanggal' => ['name' => 'tanggal', 'title' => 'Tanggal'],
             'keterangan' => ['name' => 'keterangan', 'title' => 'Keterangan'],
 
@@ -128,5 +120,32 @@ class TanggalMerahController extends Controller
             ['extend' => 'excel', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Export Excel'],
             ['extend' => 'print', 'className' => 'btn btn-sm btn-secondary', 'text' => 'Print'],
         ];
+    }
+
+    function store() {
+        $tanggal  = request()->get('tanggal');
+        $keterangan  = request()->get('keterangan');
+
+        $tanggal_merah  = TanggalMerah::create([
+            'tanggal'=>$tanggal,
+            'keterangan'=>$keterangan,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Sukses",
+        ], 200);
+    }
+
+
+    function destroy($id) {
+        
+
+        TanggalMerah::where('id',$id)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Sukses",
+        ], 200);
     }
 }
