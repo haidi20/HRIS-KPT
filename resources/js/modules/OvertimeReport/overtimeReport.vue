@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       title: "Laporan SPL",
-      version: "v1.1",
+      version: "v1.2",
     };
   },
   components: {

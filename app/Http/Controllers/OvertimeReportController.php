@@ -33,6 +33,7 @@ class OvertimeReportController extends Controller
         $overtimes = JobStatusHasParent::where(["status" => "overtime"])
             ->whereDate("datetime_start", ">=", $dateStart)
             ->whereDate("datetime_start", "<=", $dateEnd)
+            ->orderBy("datetime_start", "desc")
             ->get();
 
         return response()->json([

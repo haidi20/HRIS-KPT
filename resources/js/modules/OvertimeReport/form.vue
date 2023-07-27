@@ -96,7 +96,7 @@ import VueSelect from "vue-select";
 export default {
   data() {
     return {
-      getFormTitle: "Revisi Tanggal Lembur",
+      getFormTitle: "Revisi tanggal dan waktu lembur",
       is_loading: false,
     };
   },

@@ -536,7 +536,7 @@ class JobOrderController extends Controller
                 'deleted_by' => request("user_id"),
             ]);
             $this->destroyJobOrderHasEmployee($jobOrder);
-            $jobStatusController->destroyJobStatusHasParent($jobOrder, $this->nameModel);
+            $jobStatusController->destroyJobStatusHasParentBaseJobOrder($jobOrder, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder, true);
 
             $jobOrder->delete();

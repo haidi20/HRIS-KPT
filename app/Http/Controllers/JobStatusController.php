@@ -267,7 +267,41 @@ class JobStatusController extends Controller
         ];
     }
 
-    public function destroyJobStatusHasParent($jobOrder, $nameModel)
+    public function destroyJobStatusHasParent()
+    {
+        try {
+            DB::beginTransaction();
+
+            $jobStatusHasParent = JobStatusHasParent::find(request("id"));
+            $jobStatusHasParent->update([
+                'deleted_by' => request("user_id"),
+            ]);
+            $jobStatusHasParent->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus',
+            ], 500);
+        }
+    }
+
+    public function destroyJobStatusHasParentBaseJobOrder($jobOrder, $nameModel)
     {
         $jobStatusHasParent = JobStatusHasParent::where([
             "parent_id" => $jobOrder->id,
