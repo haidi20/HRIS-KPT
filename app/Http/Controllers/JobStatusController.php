@@ -278,6 +278,8 @@ class JobStatusController extends Controller
             ]);
             $jobStatusHasParent->delete();
 
+            $this->storeJobStatusHasParentHistory($jobStatusHasParent, true);
+
             DB::commit();
 
             return response()->json([
