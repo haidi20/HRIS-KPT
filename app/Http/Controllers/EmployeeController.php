@@ -158,7 +158,6 @@ class EmployeeController extends Controller
                 // Logika saat mengubah data
                 $employee = Employee::find(request("id"));
                 $employee->updated_by = Auth::user()->id;
-                $employee->employee_status = request("employee_status");
 
                 $message = "diperbaharui";
             } else {
@@ -206,11 +205,20 @@ class EmployeeController extends Controller
             $employee->latest_education = request("latest_education");
             $employee->working_hour = request("working_hour");
             $employee->married_status = request("married_status");
-            $employee->update(['bpjsTK' => $employee->bpjs_tk]);
-            $employee->update(['bpjsTKPT' => $employee->bpjs_tk_pt]);
-            $employee->update(['bpjsKES' => $employee->bpjs_kes]);
-            $employee->update(['bpjsKESPT' => $employee->bpjs_kes_pt]);
-            $employee->update(['bpjsTRAINING' => $employee->bpjs_training]);
+            $checkboxFields = ['bpjs_jht', 'bpjs_jkk', 'bpjs_jkm', 'bpjs_jp', 'bpjs_kes'];
+
+            foreach ($checkboxFields as $field) {
+                $employee->$field = $request->has($field) ? 'Y' : 'N';
+            }
+
+            // $employee->update(['bpjsJHT' => $employee->bpjs_jht]);
+            // $employee->update(['bpjsJKK' => $employee->bpjs_jkk]);
+            // $employee->update(['bpjsJKM' => $employee->bpjs_jkm]);
+            // $employee->update(['bpjsJP' => $employee->bpjs_jp]);
+            // $employee->update(['bpjsKES' => $employee->bpjs_kes]);
+
+            $employee->employee_status = request("employee_status");
+
             $employee->out_date = request("out_date");
             $employee->reason = request("reason");
 
@@ -291,16 +299,37 @@ class EmployeeController extends Controller
         }
     }
 
-    public function bpjsTK(Request $request)
+    public function bpjsJHT(Request $request)
+    {
+        $id = $request->id;
+        $mode = $request->mode;
+
+        // If $id is empty, it means this is a new employee, so we need to get the last inserted ID
+        if (empty($id)) {
+            $lastEmployeeId = DB::table('employees')->orderBy('id')->value('id');
+            // Add the last employee ID to the response to update the checkbox's data-employee-id attribute in the frontend
+            return response()->json(['lastEmployeeId' => $lastEmployeeId], 200);
+        }
+
+        $employee = Employee::find($id);
+
+        // Instead of checking for "true" or "false", directly set the value to "Y" or "N"
+        $employee->bpjs_jht = $mode === "Y" ? 'Y' : 'N';
+        $employee->update();
+
+        return response()->json($employee, 200);
+    }
+
+    public function bpjsJKK(Request $request)
     {
         $id = $request->id;
         $mode = $request->mode;
         $employee = Employee::find($id);
         if ($mode == "true") {
-            $employee->bpjs_tk = 'Y';
+            $employee->bpjs_jkk = 'Y';
             // return 1;
         } elseif ($mode == "false") {
-            $employee->bpjs_tk = 'N';
+            $employee->bpjs_jkk = 'N';
             // return 2;
         }
         $employee->update();
@@ -308,16 +337,33 @@ class EmployeeController extends Controller
         return response()->json($employee, 200);
     }
 
-    public function bpjsTKPT(Request $request)
+    public function bpjsJKM(Request $request)
     {
         $id = $request->id;
         $mode = $request->mode;
         $employee = Employee::find($id);
         if ($mode == "true") {
-            $employee->bpjs_tk_pt = 'Y';
+            $employee->bpjs_jkm = 'Y';
             // return 1;
         } elseif ($mode == "false") {
-            $employee->bpjs_tk_pt = 'N';
+            $employee->bpjs_jkm = 'N';
+            // return 2;
+        }
+        $employee->update();
+
+        return response()->json($employee, 200);
+    }
+
+    public function bpjsJP(Request $request)
+    {
+        $id = $request->id;
+        $mode = $request->mode;
+        $employee = Employee::find($id);
+        if ($mode == "true") {
+            $employee->bpjs_jp = 'Y';
+            // return 1;
+        } elseif ($mode == "false") {
+            $employee->bpjs_jp = 'N';
             // return 2;
         }
         $employee->update();
@@ -335,40 +381,6 @@ class EmployeeController extends Controller
             // return 1;
         } elseif ($mode == "false") {
             $employee->bpjs_kes = 'N';
-            // return 2;
-        }
-        $employee->update();
-
-        return response()->json($employee, 200);
-    }
-
-    public function bpjsKESPT(Request $request)
-    {
-        $id = $request->id;
-        $mode = $request->mode;
-        $employee = Employee::find($id);
-        if ($mode == "true") {
-            $employee->bpjs_kes_pt = 'Y';
-            // return 1;
-        } elseif ($mode == "false") {
-            $employee->bpjs_kes_pt = 'N';
-            // return 2;
-        }
-        $employee->update();
-
-        return response()->json($employee, 200);
-    }
-
-    public function bpjsTRAINING(Request $request)
-    {
-        $id = $request->id;
-        $mode = $request->mode;
-        $employee = Employee::find($id);
-        if ($mode == "true") {
-            $employee->bpjs_training = 'Y';
-            // return 1;
-        } elseif ($mode == "false") {
-            $employee->bpjs_training = 'N';
             // return 2;
         }
         $employee->update();
