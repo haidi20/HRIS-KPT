@@ -146,23 +146,17 @@ class JobStatusController extends Controller
 
     public function storeOvertime()
     {
+        $user = User::find(request("user_id"));
         $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
         $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
 
-        if ($datetimeStart->greaterThan($datetimeEnd)) {
+        $getStoreValidation = $this->storeOvertimeValidation();
+
+        if ($getStoreValidation) {
             return response()->json([
                 'success' => false,
-                'message' => "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur",
-            ], 500);
-        }
-
-        $user = User::find(request("user_id"));
-
-        if ($user->employee_id == null) {
-            return response()->json([
-                'success' => false,
-                'message' => "Maaf, akun anda belum di ketahui data karyawan {$user->employee_id}",
-            ], 500);
+                'message' => $this->storeOvertimeValidation("result"),
+            ], 400);
         }
 
         try {
@@ -319,5 +313,32 @@ class JobStatusController extends Controller
         }
 
         return false;
+    }
+
+    private function storeOvertimeValidation($type = null)
+    {
+        $isError = false;
+        $message = null;
+
+        $user = User::find(request("user_id"));
+        $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
+        $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
+
+        if ($datetimeStart->greaterThan($datetimeEnd)) {
+            $isError = true;
+            $message = "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur";
+        } else if ($user->employee_id == null) {
+            $isError = true;
+            $message = "Maaf, akun anda belum di ketahui data karyawan";
+        } else if (request("hour_start") == null || request("hour_end") == null) {
+            $isError = true;
+            $message = "Maaf, jam tidak boleh kosong";
+        }
+
+        if ($type == "result") {
+            return $message;
+        }
+
+        return $isError;
     }
 }

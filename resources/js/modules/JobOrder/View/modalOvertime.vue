@@ -70,6 +70,20 @@
               </b-row>
             </b-col>
           </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group label="Keterangan" label-for="note">
+                <b-form-textarea
+                  v-model="form.note"
+                  id="note"
+                  name="note"
+                  autocomplete="off"
+                  rows="3"
+                  max-rows="6"
+                ></b-form-textarea>
+              </b-form-group>
+            </b-col>
+          </b-row>
         </b-tab>
         <b-tab title="data">
           <DatatableClient
@@ -173,6 +187,7 @@ export default {
 
       const request = {
         id: this.form.id,
+        note: this.form.note,
         date_start: moment(this.form.date_start).format("YYYY-MM-DD"),
         hour_start: this.form.hour_start_overtime,
         date_end: moment(this.form.date_end).format("YYYY-MM-DD"),
@@ -228,7 +243,7 @@ export default {
             toast: true,
             position: "top-end",
             showConfirmButton: false,
-            timer: 4000,
+            timer: 5000,
             timerProgressBar: true,
             didOpen: (toast) => {
               toast.addEventListener("mouseenter", Swal.stopTimer);

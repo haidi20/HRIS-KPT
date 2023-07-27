@@ -20,6 +20,9 @@
           <label for="switch">Toggle</label>
           <span style="margin-left: 5px">Tanggal</span>
         </b-col>
+        <b-col style="text-align: right;">
+          <b-button variant="danger" size="sm" @click="onResetFilter()">Bersihkan Filter</b-button>
+        </b-col>
       </b-row>
       <b-row>
         <b-col cols>
@@ -114,7 +117,7 @@
       <br />
       <b-row>
         <b-col>
-          <b-button variant="info" @click="onCloseModal()">Tutup</b-button>
+          <b-button variant="info" size="sm" @click="onCloseModal()">Tutup</b-button>
           <b-button variant="success" size="sm" class="float-end" @click="onSend()">Kirim</b-button>
         </b-col>
       </b-row>
@@ -162,13 +165,8 @@ export default {
     },
   },
   methods: {
-    onSend() {
-      this.$bvModal.hide("job_order_filter");
-
-      this.$store.dispatch("jobOrder/fetchData");
-      this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
-        user_id: this.getUserId,
-      });
+    onResetFilter() {
+      this.$store.commit("jobOrder/RESET_FILTER");
     },
     onCloseModal() {
       this.$bvModal.hide("job_order_filter");
@@ -181,6 +179,14 @@ export default {
 
       this.$store.dispatch("project/fetchDataBaseRunning", {
         month: this.params.month,
+      });
+    },
+    onSend() {
+      this.$bvModal.hide("job_order_filter");
+
+      this.$store.dispatch("jobOrder/fetchData");
+      this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
+        user_id: this.getUserId,
       });
     },
   },

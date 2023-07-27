@@ -93,6 +93,21 @@ const defaultForm = {
     job_status_has_parent: [],
 }
 
+const defaultParams = {
+    month: new Date(),
+    date: new Date(),
+    date_range: [
+        new Date(moment().day(1)),
+        new Date()
+    ],
+    status: "active",
+    created_by: "creator",
+    project_id: null,
+    search: null,
+    project_id: "loading",
+    is_date_filter: false,
+}
+
 const JobOrder = {
     namespaced: true,
     state: {
@@ -101,20 +116,7 @@ const JobOrder = {
         table: {
             overtime_base_user: [],
         },
-        params: {
-            month: new Date(),
-            date: new Date(),
-            date_range: [
-                new Date(moment().day(1)),
-                new Date()
-            ],
-            status: "active",
-            created_by: "creator",
-            project_id: null,
-            search: null,
-            project_id: "loading",
-            is_date_filter: false,
-        },
+        params: { ...defaultParams },
         form: { ...defaultForm },
         is_active_form: false,
         options: {
@@ -444,6 +446,9 @@ const JobOrder = {
                 status_note: null,
             };
         },
+        RESET_FILTER(state, payload) {
+            state.params = { ...defaultParams };
+        },
     },
     actions: {
         fetchData: async (context, payload) => {
@@ -574,7 +579,7 @@ const JobOrder = {
                     params: { ...params },
                 })
                 .then((responses) => {
-                    console.info(responses);
+                    // console.info(responses);
                     const data = responses.data;
 
                     context.commit("INSERT_TABLE_OVERTIME_BASE_USER", {

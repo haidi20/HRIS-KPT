@@ -41,6 +41,8 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        set_time_limit(840); // 14 menit
+
         $status = request("status");
         $search = request("search");
         $projectId = request("project_id");
@@ -69,6 +71,16 @@ class JobOrderController extends Controller
             $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
         }
 
+        if ($status != "all") {
+            $jobOrders = $jobOrders->where("status", $status);
+        }
+
+        $listNotProject = ["all", "loading"];
+
+        if (!in_array($projectId, $listNotProject)) {
+            $jobOrders = $jobOrders->where("project_id", $projectId);
+        }
+
         if ($search != null) {
             $jobOrders = $jobOrders->where(function ($query) use ($search) {
                 $query->orWhereHas("project", function ($queryProject) use ($search) {
@@ -80,17 +92,8 @@ class JobOrderController extends Controller
                     $queryProject->where("name", "like", "%" . $search . "%");
                 });
             });
+
             $jobOrders = $jobOrders->orWhere("job_note", "like", "%" . $search . "%");
-        }
-
-        if ($status != "all") {
-            $jobOrders = $jobOrders->where("status", $status);
-        }
-
-        $listNotProject = ["all", "loading"];
-
-        if (!in_array($projectId, $listNotProject)) {
-            $jobOrders = $jobOrders->where("project_id", $projectId);
         }
 
         $jobOrders = $jobOrders->get();
