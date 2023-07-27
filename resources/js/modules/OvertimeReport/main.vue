@@ -28,7 +28,7 @@
             @click="onFilter()"
             :disabled="getIsLoadingData || is_loading_export"
           >Kirim</b-button>
-          <span v-if="getIsLoadingData">Loading...</span>
+          <!-- <span v-if="getIsLoadingData">Loading...</span> -->
           <b-button
             v-if="getCan('export excel laporan surat perintah lembur')"
             class="place_filter_table ml-4"
