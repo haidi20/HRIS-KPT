@@ -14,7 +14,7 @@
           <b-form-group label="Tanggal" label-for="date" class="place_filter_table">
             <DatePicker
               id="date"
-              v-model="params.date"
+              v-model="params.date_range"
               format="YYYY-MM-DD"
               type="date"
               range
@@ -89,7 +89,7 @@ export default {
     return {
       is_loading_export: false,
       options: {
-        perPage: 20,
+        perPage: 10,
         // perPageValues: [5, 10, 25, 50, 100],
         filterByColumn: true,
         texts: {

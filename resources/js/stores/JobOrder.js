@@ -115,6 +115,7 @@ const JobOrder = {
         data: [],
         table: {
             overtime_base_user: [],
+            overtime_base_employee: [],
         },
         params: { ...defaultParams },
         form: { ...defaultForm },
@@ -207,6 +208,7 @@ const JobOrder = {
         loading: {
             data: false,
             table_overtime_base_user: false,
+            table_overtime_base_employee: false,
             job_status_has_parent: false,
         },
         user_id: null,
@@ -220,6 +222,9 @@ const JobOrder = {
         },
         INSERT_TABLE_OVERTIME_BASE_USER(state, payload) {
             state.table.overtime_base_user = payload.data;
+        },
+        INSERT_TABLE_OVERTIME_BASE_EMPLOYEE(state, payload) {
+            state.table.overtime_base_employee = payload.data;
         },
         INSERT_DATA_SELECTED(state, payload) {
             let dataClone = [...state.data];
@@ -429,6 +434,9 @@ const JobOrder = {
         UPDATE_LOADING_TABLE_OVERTIME_BASE_USER(state, payload) {
             state.loading.table_overtime_base_user = payload.value;
         },
+        UPDATE_LOADING_TABLE_OVERTIME_BASE_EMPLOYEE(state, payload) {
+            state.loading.table_overtime_base_employee = payload.value;
+        },
         UPDATE_LOADING_DATA_JOB_STATUS_HAS_PARENT(state, payload) {
             state.loading.job_status_has_parent = payload.value;
         },
@@ -568,6 +576,7 @@ const JobOrder = {
             context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_USER", { value: true });
 
             const params = {
+                is_date_filter: context.state.params.is_date_filter,
                 month: moment(context.state.params.month).format("Y-MM"),
                 date: moment(context.state.params.date).format("Y-MM-DD"),
                 user_id: payload.user_id,
@@ -592,13 +601,43 @@ const JobOrder = {
                     console.info(err);
                 });
         },
+        // data lembur berdasarkan karyawan dan si pembuat datanya
+        fetchDataOvertimeBaseEmployee: async (context, payload) => {
+            context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_EMPLOYEE", { value: true });
+
+            const params = {
+                is_date_filter: context.state.params.is_date_filter,
+                month: moment(context.state.params.month).format("Y-MM"),
+                date: moment(context.state.params.date).format("Y-MM-DD"),
+                user_id: payload.user_id,
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/job-status-has-parent/fetch-data-overtime-base-employee`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_TABLE_OVERTIME_BASE_EMPLOYEE", {
+                        data: data.overtimes,
+                    });
+                    context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_EMPLOYEE", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_TABLE_OVERTIME_BASE_EMPLOYEE", { value: false });
+                    console.info(err);
+                });
+        },
         fetchDataOvertimeReport: async (context, payload) => {
             context.commit("UPDATE_LOADING_DATA", { value: true });
 
             const params = {
                 ...context.state.params,
-                date_start: moment(context.state.params.date[0]).format("Y-MM-DD"),
-                date_end: moment(context.state.params.date[1]).format("Y-MM-DD"),
+                date_start: moment(context.state.params.date_range[0]).format("Y-MM-DD"),
+                date_range_end: moment(context.state.params.date_range[1]).format("Y-MM-DD"),
                 user_id: context.state.user_id,
             }
 

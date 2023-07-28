@@ -9,8 +9,8 @@
             format="YYYY-MM-DD"
             type="date"
             placeholder="pilih tanggal"
-            :disabled="getConditionDisableDate()"
           />
+          <!-- :disabled="getConditionDisableDate()" -->
         </b-form-group>
       </b-col>
       <b-col cols>

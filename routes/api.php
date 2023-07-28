@@ -181,6 +181,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('job-status-has-parent')->name('jobStatusHasParent.')->group(function () {
         Route::get('fetch-data-base-job-order', [JobStatusController::class, "fetchDataBaseJobOrder"])->name('fetchDataBaseJobOrder');
         Route::get('fetch-data-overtime-base-user', [JobStatusController::class, "fetchDataOvertimeBaseUser"])->name('fetchDataOvertimeBaseUser');
+        Route::get('fetch-data-overtime-base-employee', [JobStatusController::class, "fetchDataOvertimeBaseEmployee"])->name('fetchDataOvertimeBaseEmployee');
         Route::post('store-overtime-revision', [JobStatusController::class, "storeOvertimeRevision"])->name('storeOvertimeRevision');
         Route::post('store-overtime', [JobStatusController::class, "storeOvertime"])->name('storeOvertime');
         Route::post('delete', [JobStatusController::class, "destroyJobStatusHasParent"])->name('destroyJobStatusHasParent');

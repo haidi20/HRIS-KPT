@@ -318,7 +318,7 @@ class JobOrderController extends Controller
             $this->storeJobOrderHistory($jobOrder);
 
             $storeActionJobOrderHasEmployee = $this->storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
-            if (isset($storeActionJobOrderHasEmployee->error)) {
+            if (isset($storeActionJobOrderHasEmployee->error) && $storeActionJobOrderHasEmployee->error) {
                 return response()->json([
                     'success' => false,
                     'message' => $storeActionJobOrderHasEmployee->message,
@@ -326,7 +326,7 @@ class JobOrderController extends Controller
             }
 
             $jobStatusHasParent = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
-            if ($jobStatusHasParent->error) {
+            if (isset($jobStatusHasParent->error) && $jobStatusHasParent->error) {
                 return response()->json([
                     'success' => false,
                     'message' => $jobStatusHasParent->message,
@@ -492,7 +492,7 @@ class JobOrderController extends Controller
                     $this->storeJobOrderHistory($jobOrder);
 
                     $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $datetime, $this->nameModel);
-                    if (isset($getValidation->error)) {
+                    if (isset($getValidation->error) && $getValidation->error) {
                         return response()->json([
                             'success' => false,
                             'message' => $getValidation->message,

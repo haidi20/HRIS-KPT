@@ -111,6 +111,8 @@ class ProjectController extends Controller
 
     public function fetchDataBaseRunning()
     {
+        set_time_limit(840); // 14 menit
+
         $month = Carbon::parse(request("month"));
 
         $getProjectIdFromJobOrder = JobOrder::whereNull("datetime_end")
@@ -118,7 +120,7 @@ class ProjectController extends Controller
             ->whereMonth("datetime_start", $month->format("m"))
             ->pluck("project_id");
 
-        $projects = Project::whereIn("id", $getProjectIdFromJobOrder)->get();
+        $projects = ProjectSimple::select("id", "name")->whereIn("id", $getProjectIdFromJobOrder)->get();
 
         return response()->json([
             "projects" => $projects,

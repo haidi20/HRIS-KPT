@@ -106,7 +106,7 @@ export default {
             const getEmployeeStatusActive = this.getData.some(item => item.status == 'active');
             // console.info(this.getJobOrderStatus);
 
-
+            console.info(this.getJobOrderStatus);
             if (this.getJobOrderStatus == 'overtime' && getEmployeeStatusActive) {
                 result = true;
             }

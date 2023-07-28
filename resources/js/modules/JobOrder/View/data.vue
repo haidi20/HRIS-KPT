@@ -164,9 +164,44 @@
           </b-col>
         </b-row>
       </b-tab>
-      <!-- <b-tab title="Karyawan">
-        <h1>karyawan</h1>
-      </b-tab>-->
+      <b-tab title="SPL Karyawan">
+        <b-row style="margin-top: 10px">
+          <b-col cols="4">
+            <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
+          </b-col>
+          <b-col cols="4">
+            <b-button
+              v-if="getCan('lembur job order')"
+              variant="warning"
+              size="sm"
+              class="float-end"
+              @click="onOpenOvertime()"
+            >SPL</b-button>
+          </b-col>
+        </b-row>
+        <b-row>
+          <DatatableClient
+            :data="getDataOvertimeBaseEmployee"
+            :columns="columns"
+            :options="options"
+            nameStore="jobOrder"
+            nameLoading="table_overtime_base_employee"
+            :filter="false"
+            :footer="false"
+            bordered
+          >
+            <template v-slot:tbody="{ filteredData }">
+              <b-tr v-for="(item, index) in filteredData" :key="index">
+                <b-td
+                  v-for="column in getColumns()"
+                  nowrap
+                  :key="column.label"
+                >{{ item[column.field] }}</b-td>
+              </b-tr>
+            </template>
+          </DatatableClient>
+        </b-row>
+      </b-tab>
     </b-tabs>
 
     <FilterData />

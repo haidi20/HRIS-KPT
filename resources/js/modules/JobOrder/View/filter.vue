@@ -188,6 +188,9 @@ export default {
       this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
         user_id: this.getUserId,
       });
+      this.$store.dispatch("jobOrder/fetchDataOvertimeBaseEmployee", {
+        user_id: this.getUserId,
+      });
     },
   },
 };

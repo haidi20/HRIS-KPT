@@ -38,7 +38,8 @@ class JobStatusController extends Controller
         $employeeId = User::find(request("user_id"))->employee_id;
 
         if ($employeeId != null) {
-            $overtimes = JobStatusHasParent::where("employee_id", $employeeId);
+            $overtimes = JobStatusHasParent::where("employee_id", $employeeId)
+                ->where("status", "overtime");
 
             if (request("is_date_filter") == "true") {
                 $overtimes = $overtimes->whereDate("datetime_start", request("date"));
@@ -47,8 +48,34 @@ class JobStatusController extends Controller
                     ->whereMonth("datetime_start", $month->format("m"));
             }
 
-            $overtimes = $overtimes->orderBy("created_at", "desc")
-                ->get();
+            $overtimes = $overtimes->orderBy("datetime_start", "desc")->get();
+        }
+
+        return response()->json([
+            "overtimes" => $overtimes,
+            "requests" => request()->all(),
+        ]);
+    }
+
+    public function fetchDataOvertimeBaseEmployee()
+    {
+        $overtimes = [];
+        $month = Carbon::parse(request("month"));
+        $employeeId = User::find(request("user_id"))->employee_id;
+
+        if ($employeeId != null) {
+            $overtimes = JobStatusHasParent::where("employee_id", "!=", $employeeId)
+                ->where("created_by", request("user_id"))
+                ->where("status", "overtime");
+
+            if (request("is_date_filter") == "true") {
+                $overtimes = $overtimes->whereDate("datetime_start", request("date"));
+            } else {
+                $overtimes = $overtimes->whereYear("datetime_start", $month->format("Y"))
+                    ->whereMonth("datetime_start", $month->format("m"));
+            }
+
+            $overtimes = $overtimes->orderBy("datetime_start", "desc")->get();
         }
 
         return response()->json([
@@ -115,9 +142,10 @@ class JobStatusController extends Controller
                     'data' => [],
                     'message' => "Maaf, waktu selesai tidak boleh kurang dari waktu mulai",
                 ];
+            } else {
+                $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
             }
 
-            $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
             // }
         } else {
             $jobStatusHasParent = new JobStatusHasParent;
