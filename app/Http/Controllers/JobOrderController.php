@@ -41,6 +41,8 @@ class JobOrderController extends Controller
 
     public function fetchData()
     {
+        set_time_limit(840); // 14 menit
+
         $status = request("status");
         $search = request("search");
         $projectId = request("project_id");
@@ -69,6 +71,16 @@ class JobOrderController extends Controller
             $jobOrders = $jobOrders->where("created_by", "!=", $user->id);
         }
 
+        if ($status != "all") {
+            $jobOrders = $jobOrders->where("status", $status);
+        }
+
+        $listNotProject = ["all", "loading"];
+
+        if (!in_array($projectId, $listNotProject)) {
+            $jobOrders = $jobOrders->where("project_id", $projectId);
+        }
+
         if ($search != null) {
             $jobOrders = $jobOrders->where(function ($query) use ($search) {
                 $query->orWhereHas("project", function ($queryProject) use ($search) {
@@ -80,17 +92,8 @@ class JobOrderController extends Controller
                     $queryProject->where("name", "like", "%" . $search . "%");
                 });
             });
+
             $jobOrders = $jobOrders->orWhere("job_note", "like", "%" . $search . "%");
-        }
-
-        if ($status != "all") {
-            $jobOrders = $jobOrders->where("status", $status);
-        }
-
-        $listNotProject = ["all", "loading"];
-
-        if (!in_array($projectId, $listNotProject)) {
-            $jobOrders = $jobOrders->where("project_id", $projectId);
         }
 
         $jobOrders = $jobOrders->get();
@@ -315,7 +318,7 @@ class JobOrderController extends Controller
             $this->storeJobOrderHistory($jobOrder);
 
             $storeActionJobOrderHasEmployee = $this->storeActionJobOrderHasEmployee($jobOrder, $status, $date, $statusLast);
-            if (isset($storeActionJobOrderHasEmployee->error)) {
+            if (isset($storeActionJobOrderHasEmployee->error) && $storeActionJobOrderHasEmployee->error) {
                 return response()->json([
                     'success' => false,
                     'message' => $storeActionJobOrderHasEmployee->message,
@@ -323,7 +326,7 @@ class JobOrderController extends Controller
             }
 
             $jobStatusHasParent = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $date, $this->nameModel);
-            if ($jobStatusHasParent->error) {
+            if (isset($jobStatusHasParent->error) && $jobStatusHasParent->error) {
                 return response()->json([
                     'success' => false,
                     'message' => $jobStatusHasParent->message,
@@ -489,7 +492,7 @@ class JobOrderController extends Controller
                     $this->storeJobOrderHistory($jobOrder);
 
                     $getValidation = $jobStatusController->storeJobStatusHasParent($jobOrder, $statusLast, $datetime, $this->nameModel);
-                    if (isset($getValidation->error)) {
+                    if (isset($getValidation->error) && $getValidation->error) {
                         return response()->json([
                             'success' => false,
                             'message' => $getValidation->message,
@@ -533,7 +536,7 @@ class JobOrderController extends Controller
                 'deleted_by' => request("user_id"),
             ]);
             $this->destroyJobOrderHasEmployee($jobOrder);
-            $jobStatusController->destroyJobStatusHasParent($jobOrder, $this->nameModel);
+            $jobStatusController->destroyJobStatusHasParentBaseJobOrder($jobOrder, $this->nameModel);
             $this->storeJobOrderHistory($jobOrder, true);
 
             $jobOrder->delete();

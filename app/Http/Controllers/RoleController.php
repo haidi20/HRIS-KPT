@@ -45,7 +45,7 @@ class RoleController extends Controller
                     $button = '';
 
                     if (auth()->user()->can('detail grup pengguna')) {
-                        $button .= '<a href="/setting/role-permission/' . $data->id . '" class="btn btn-sm btn-info me-2"><i class="bi bi-card-checklist"></i></a>';
+                        $button .= "<a href='" . route('setting.rolePermission.index', $data->id) . "' class='btn btn-sm btn-info me-2'><i class='bi bi-card-checklist'></i></a>";
                     }
 
                     if (auth()->user()->can('ubah grup pengguna')) {

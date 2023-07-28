@@ -3,6 +3,7 @@ import moment from "moment";
 
 import { checkNull, isMobile } from "../../../utils";
 import FilterData from "../View/filter";
+import DatatableClient from "../../../components/DatatableClient";
 import EmployeeHasParent from "../../EmployeeHasParent/view/employeeHasParent";
 import ModalOvertime from "../View/modalOvertime";
 import { stubArray } from "lodash";
@@ -13,12 +14,49 @@ export default {
             isChecked: true,
             title: "",
             messageNotif: null,
+            options: {
+                perPage: 5,
+                // perPageValues: [5, 10, 25, 50, 100],
+            },
+            columns: [
+                {
+                    label: "Nama",
+                    field: "employee_name",
+                    width: "200px",
+                    class: "",
+                },
+                {
+                    label: "Jabatan",
+                    field: "position_name",
+                    width: "200px",
+                    class: "",
+                },
+                {
+                    label: "Durasi",
+                    field: "duration_readable",
+                    width: "200px",
+                    class: "",
+                },
+                {
+                    label: "Waktu Mulai",
+                    field: "datetime_start_readable",
+                    width: "200px",
+                    class: "",
+                },
+                {
+                    label: "Waktu Selesai",
+                    field: "datetime_end_readable",
+                    width: "200px",
+                    class: "",
+                },
+            ],
         };
     },
     components: {
         FilterData,
+        ModalOvertime,
+        DatatableClient,
         EmployeeHasParent,
-        ModalOvertime
     },
     computed: {
         getBaseUrl() {
@@ -35,6 +73,9 @@ export default {
         },
         getDataEmployeeSelected() {
             return this.$store.state.employeeHasParent.data.selecteds;
+        },
+        getDataOvertimeBaseEmployee() {
+            return this.$store.state.jobOrder.table.overtime_base_employee;
         },
         getLoadingData() {
             return this.$store.state.jobOrder.loading.data;
@@ -376,6 +417,10 @@ export default {
             }
 
             return result;
+        },
+        getColumns() {
+            const columns = this.columns.filter((item) => item.label != "");
+            return columns;
         },
         getCan(permissionName) {
             const getPermission = this.$store.getters["getCan"](permissionName);

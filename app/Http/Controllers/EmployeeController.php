@@ -294,6 +294,7 @@ class EmployeeController extends Controller
 
             return response()->json([
                 'success' => false,
+                'requests' => request()->all(),
                 'message' => "Gagal {$message}",
             ], 500);
         }

@@ -33,19 +33,50 @@ class JobStatusController extends Controller
 
     public function fetchDataOvertimeBaseUser()
     {
+        $overtimes = [];
         $month = Carbon::parse(request("month"));
         $employeeId = User::find(request("user_id"))->employee_id;
-        $overtimes = JobStatusHasParent::where("employee_id", $employeeId);
 
-        if (request("is_date_filter") == "true") {
-            $overtimes = $overtimes->whereDate("datetime_start", request("date"));
-        } else {
-            $overtimes = $overtimes->whereYear("datetime_start", $month->format("Y"))
-                ->whereMonth("datetime_start", $month->format("m"));
+        if ($employeeId != null) {
+            $overtimes = JobStatusHasParent::where("employee_id", $employeeId)
+                ->where("status", "overtime");
+
+            if (request("is_date_filter") == "true") {
+                $overtimes = $overtimes->whereDate("datetime_start", request("date"));
+            } else {
+                $overtimes = $overtimes->whereYear("datetime_start", $month->format("Y"))
+                    ->whereMonth("datetime_start", $month->format("m"));
+            }
+
+            $overtimes = $overtimes->orderBy("datetime_start", "desc")->get();
         }
 
-        $overtimes = $overtimes->orderBy("created_at", "desc")
-            ->get();
+        return response()->json([
+            "overtimes" => $overtimes,
+            "requests" => request()->all(),
+        ]);
+    }
+
+    public function fetchDataOvertimeBaseEmployee()
+    {
+        $overtimes = [];
+        $month = Carbon::parse(request("month"));
+        $employeeId = User::find(request("user_id"))->employee_id;
+
+        if ($employeeId != null) {
+            $overtimes = JobStatusHasParent::where("employee_id", "!=", $employeeId)
+                ->where("created_by", request("user_id"))
+                ->where("status", "overtime");
+
+            if (request("is_date_filter") == "true") {
+                $overtimes = $overtimes->whereDate("datetime_start", request("date"));
+            } else {
+                $overtimes = $overtimes->whereYear("datetime_start", $month->format("Y"))
+                    ->whereMonth("datetime_start", $month->format("m"));
+            }
+
+            $overtimes = $overtimes->orderBy("datetime_start", "desc")->get();
+        }
 
         return response()->json([
             "overtimes" => $overtimes,
@@ -111,9 +142,10 @@ class JobStatusController extends Controller
                     'data' => [],
                     'message' => "Maaf, waktu selesai tidak boleh kurang dari waktu mulai",
                 ];
+            } else {
+                $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
             }
 
-            $this->storeJobStatusHasParentHistory($jobStatusHasParent, false);
             // }
         } else {
             $jobStatusHasParent = new JobStatusHasParent;
@@ -142,23 +174,17 @@ class JobStatusController extends Controller
 
     public function storeOvertime()
     {
+        $user = User::find(request("user_id"));
         $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
         $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
 
-        if ($datetimeStart->greaterThan($datetimeEnd)) {
+        $getStoreValidation = $this->storeOvertimeValidation();
+
+        if ($getStoreValidation) {
             return response()->json([
                 'success' => false,
-                'message' => "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur",
-            ], 500);
-        }
-
-        $user = User::find(request("user_id"));
-
-        if ($user->employee_id == null) {
-            return response()->json([
-                'success' => false,
-                'message' => "Maaf, akun anda belum di ketahui data karyawan {$user->employee_id}",
-            ], 500);
+                'message' => $this->storeOvertimeValidation("result"),
+            ], 400);
         }
 
         try {
@@ -269,7 +295,43 @@ class JobStatusController extends Controller
         ];
     }
 
-    public function destroyJobStatusHasParent($jobOrder, $nameModel)
+    public function destroyJobStatusHasParent()
+    {
+        try {
+            DB::beginTransaction();
+
+            $jobStatusHasParent = JobStatusHasParent::find(request("id"));
+            $jobStatusHasParent->update([
+                'deleted_by' => request("user_id"),
+            ]);
+            $jobStatusHasParent->delete();
+
+            $this->storeJobStatusHasParentHistory($jobStatusHasParent, true);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil dihapus',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal dihapus',
+            ], 500);
+        }
+    }
+
+    public function destroyJobStatusHasParentBaseJobOrder($jobOrder, $nameModel)
     {
         $jobStatusHasParent = JobStatusHasParent::where([
             "parent_id" => $jobOrder->id,
@@ -315,5 +377,32 @@ class JobStatusController extends Controller
         }
 
         return false;
+    }
+
+    private function storeOvertimeValidation($type = null)
+    {
+        $isError = false;
+        $message = null;
+
+        $user = User::find(request("user_id"));
+        $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
+        $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
+
+        if ($datetimeStart->greaterThan($datetimeEnd)) {
+            $isError = true;
+            $message = "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur";
+        } else if ($user->employee_id == null) {
+            $isError = true;
+            $message = "Maaf, akun anda belum di ketahui data karyawan";
+        } else if (request("hour_start") == null || request("hour_end") == null) {
+            $isError = true;
+            $message = "Maaf, jam tidak boleh kosong";
+        }
+
+        if ($type == "result") {
+            return $message;
+        }
+
+        return $isError;
     }
 }

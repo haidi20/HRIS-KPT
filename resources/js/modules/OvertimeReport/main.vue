@@ -14,7 +14,7 @@
           <b-form-group label="Tanggal" label-for="date" class="place_filter_table">
             <DatePicker
               id="date"
-              v-model="params.date"
+              v-model="params.date_range"
               format="YYYY-MM-DD"
               type="date"
               range
@@ -28,6 +28,7 @@
             @click="onFilter()"
             :disabled="getIsLoadingData || is_loading_export"
           >Kirim</b-button>
+          <!-- <span v-if="getIsLoadingData">Loading...</span> -->
           <b-button
             v-if="getCan('export excel laporan surat perintah lembur')"
             class="place_filter_table ml-4"
@@ -58,6 +59,12 @@
               @click="onEdit(item)"
               style="color: #31D2F2;"
             ></i>
+            <i
+              v-if="getCan('hapus laporan surat perintah lembur')"
+              class="bi bi-trash cursor-pointer"
+              @click="onDelete(item)"
+              style="color: #C82333; margin-left: 10px"
+            ></i>
           </b-td>
           <template v-for="(column, index) in getColumns()">
             <b-td :key="`col-${index}`">{{ item[column.field] }}</b-td>
@@ -82,7 +89,7 @@ export default {
     return {
       is_loading_export: false,
       options: {
-        perPage: 20,
+        perPage: 10,
         // perPageValues: [5, 10, 25, 50, 100],
         filterByColumn: true,
         texts: {
@@ -158,7 +165,7 @@ export default {
       return this.$store.state.jobOrder.data;
     },
     getIsLoadingData() {
-      return this.$store.state.jobOrder.loading.table;
+      return this.$store.state.jobOrder.loading.data;
     },
     params() {
       return this.$store.state.jobOrder.params;
@@ -174,6 +181,74 @@ export default {
     },
     onRead(data) {
       //
+    },
+    async onDelete(data) {
+      // console.info(data);
+
+      const Swal = this.$swal;
+      await Swal.fire({
+        title: "Perhatian!!!",
+        html: `Anda yakin ingin hapus SPL karyawan <h2><b>${data.employee_name}</b> ?</h2>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios
+            .post(`${this.getBaseUrl}/api/v1/job-status-has-parent/delete`, {
+              id: data.id,
+              user_id: this.getUserId,
+            })
+            .then((responses) => {
+              console.info(responses);
+              const data = responses.data;
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              if (data.success == true) {
+                Toast.fire({
+                  icon: "success",
+                  title: data.message,
+                });
+
+                this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
+              }
+            })
+            .catch((err) => {
+              console.info(err);
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
+              Toast.fire({
+                icon: "error",
+                title: err.response.data.message,
+              });
+            });
+        }
+      });
     },
     async onExport() {
       const Swal = this.$swal;

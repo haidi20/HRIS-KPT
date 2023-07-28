@@ -75,6 +75,9 @@ export default {
     this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
       user_id: user.id,
     });
+    this.$store.dispatch("jobOrder/fetchDataOvertimeBaseEmployee", {
+      user_id: user.id,
+    });
   },
   computed: {
     getIsMobile() {
