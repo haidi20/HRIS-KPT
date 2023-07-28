@@ -169,15 +169,6 @@
           <b-col cols="4">
             <b-button variant="info" size="sm" class @click="onFilter()">Filter</b-button>
           </b-col>
-          <b-col cols="4">
-            <b-button
-              v-if="getCan('lembur job order')"
-              variant="warning"
-              size="sm"
-              class="float-end"
-              @click="onOpenOvertime()"
-            >SPL</b-button>
-          </b-col>
         </b-row>
         <b-row>
           <DatatableClient
