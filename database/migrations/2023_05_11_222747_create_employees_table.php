@@ -19,7 +19,7 @@ class CreateEmployeesTable extends Migration
             // DATA PERSONAL
             $table->string('nip')->nullable();
             $table->string('nik')->nullable();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('phone')->nullable();
@@ -61,7 +61,7 @@ class CreateEmployeesTable extends Migration
             // $table->string('wife_phone')->nullable();
 
             $table->string('married_status')->nullable();
-            $table->enum('employee_status', ['aktif', 'tidak_aktif'])->default('aktif')->nullable();
+            $table->enum('employee_status', ['aktif', 'tidak_aktif'])->default('aktif');
             $table->date('out_date')->nullable();
             $table->string('reason')->nullable();
 
