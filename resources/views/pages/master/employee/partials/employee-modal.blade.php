@@ -1,5 +1,4 @@
-<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel"
-    aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="formModal" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,8 +18,8 @@
                                 role="tab" aria-controls="personal" aria-selected="true">Data Personal</a>
                         </li>
                         <li class="nav-item" role="presentation" id="tab-kepegawaian">
-                            <a class="nav-link" id="kepegawaian-tab" data-bs-toggle="tab" href="#kepegawaian" role="tab"
-                                aria-controls="kepegawaian" aria-selected="false">Data Kepegawaian</a>
+                            <a class="nav-link" id="kepegawaian-tab" data-bs-toggle="tab" href="#kepegawaian"
+                                role="tab" aria-controls="kepegawaian" aria-selected="false">Data Kepegawaian</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="salary-tab" data-bs-toggle="tab" href="#salary" role="tab"
@@ -63,8 +62,8 @@
                             <div class="form-group row">
                                 <label for="birth_date" class="col-sm-4 col-form-label">Tanggal Lahir</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="birth_date" name="birth_date" class="form-control" readonly
-                                        style="cursor: pointer;">
+                                    <input type="text" id="birth_date" name="birth_date" class="form-control"
+                                        readonly style="cursor: pointer;">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -96,8 +95,7 @@
                                 <label for="address" class="col-sm-4 col-form-label">Alamat</label>
                                 <div class="col-sm-8">
                                     {{-- <input type="text" id="address" name="address" class="form-control"> --}}
-                                    <textarea name="address" id="address" cols="60" rows="5"
-                                        class="form-control"></textarea>
+                                    <textarea name="address" id="address" cols="60" rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -111,12 +109,13 @@
                         </div>
 
                         {{-- DATA KEPEGAWAIAN --}}
-                        <div class="tab-pane fade" id="kepegawaian" role="tabpanel" aria-labelledby="kepegawaian-tab">
+                        <div class="tab-pane fade" id="kepegawaian" role="tabpanel"
+                            aria-labelledby="kepegawaian-tab">
                             <div class="form-group row">
                                 <label for="enter_date" class="col-sm-4 col-form-label">Tanggal Masuk</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control datepicker" id="enter_date" name="enter_date"
-                                        disabled>
+                                    <input type="text" class="form-control datepicker" id="enter_date"
+                                        name="enter_date" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -132,9 +131,11 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="no_bpjs_tenaga_kerja" class="col-sm-4 col-form-label">Nomor BPJS TENAGA KERJA</label>
+                                <label for="no_bpjs_tenaga_kerja" class="col-sm-4 col-form-label">Nomor BPJS TENAGA
+                                    KERJA</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="no_bpjs_tenaga_kerja" name="no_bpjs_tenaga_kerja">
+                                    <input type="text" class="form-control" id="no_bpjs_tenaga_kerja"
+                                        name="no_bpjs_tenaga_kerja">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -144,9 +145,9 @@
                                         style="width: 100%;">
                                         <option value="">-- Pilih Perusahaan --</option>
                                         @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">
-                                            {{ $company->name }}
-                                        </option>
+                                            <option value="{{ $company->id }}">
+                                                {{ $company->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -158,8 +159,8 @@
                                         style="width: 100%;">
                                         <option value="">-- Pilih Jabatan --</option>
                                         @foreach ($positions as $position)
-                                        <option value="{{ $position->id }}">{{ $position->name }}
-                                        </option>
+                                            <option value="{{ $position->id }}">{{ $position->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -172,8 +173,8 @@
                                         style="width: 100%">
                                         <option value="">-- Pilih Lokasi Karyawan --</option>
                                         @foreach ($locations as $location)
-                                        <option value="{{ $location->id }}">{{ $location->name }}
-                                        </option>
+                                            <option value="{{ $location->id }}">{{ $location->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -186,8 +187,8 @@
                                         style="width: 100%">
                                         <option value="">-- Pilih Jenis Karyawan --</option>
                                         @foreach ($employee_types as $employee_type)
-                                        <option value="{{ $employee_type->id }}">{{ $employee_type->name }}
-                                        </option>
+                                            <option value="{{ $employee_type->id }}">{{ $employee_type->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -200,8 +201,8 @@
                                         <input type="text" class="form-control" name="contract_start"
                                             id="contract_start" autocomplete="off">
                                         <div class="input-group-addon" style="padding-right: 8px;">S/D</div>
-                                        <input type="text" class="form-control" name="contract_end" id="contract_end"
-                                            autocomplete="off">
+                                        <input type="text" class="form-control" name="contract_end"
+                                            id="contract_end" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -209,8 +210,8 @@
                                 <label for="latest_education" class="col-sm-4 col-form-label">Pendidikan
                                     Terakhir</label>
                                 <div class="col-sm-8">
-                                    <select name="latest_education" id="latest_education" class="form-control select2"
-                                        style="width: 100%;">
+                                    <select name="latest_education" id="latest_education"
+                                        class="form-control select2" style="width: 100%;">
                                         <option value="">-- Pilih Pendidikan Terakhir --</option>
                                         <option value="sd">SD</option>
                                         <option value="smp">SMP</option>
@@ -253,87 +254,92 @@
                             <div class="form-group row">
                                 <label for="bpjs" class="col-sm-4 col-form-label">Status BPJS</label>
                                 <div class="col-sm-8">
-                                   <table class="table">
-                                    <tr>
-                                        <td>
-                                            <label for="bpjs_jht">JHT (JAMINAN HARI TUA):</label>
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch ml-4 mt-2">
-                                                <input class="form-check-input" type="checkbox"  name="bpjs_jht" id="bpjs_jht" checked>
-                                                <label class="form-check-label" for="bpjs_jht"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="bpjs_jkk">JKK (JAMINAN KECELAKAAN KERJA):</label>
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch ml-4 mt-2">
-                                                <input class="form-check-input" type="checkbox" name="bpjs_jkk" id="bpjs_jkk" checked>
-                                                <label class="form-check-label" for="bpjs_jkk"></label>
-                                            </div>
-                                            {{-- <div class="form-check form-switch ml-4 mt-2">
+                                    <table class="table">
+                                        <tr>
+                                            <td>
+                                                <label for="bpjs_jht">JHT (JAMINAN HARI TUA):</label>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch ml-4 mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="bpjs_jht"
+                                                        id="bpjs_jht" checked>
+                                                    <label class="form-check-label" for="bpjs_jht"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="bpjs_jkk">JKK (JAMINAN KECELAKAAN KERJA):</label>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch ml-4 mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="bpjs_jkk"
+                                                        id="bpjs_jkk" checked>
+                                                    <label class="form-check-label" for="bpjs_jkk"></label>
+                                                </div>
+                                                {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jkk">
                                                     <input type="checkbox" name="bpjs_jkk" class="form-check-input bpjsJKKCheck" data-toggle="toggle"
                                                         id="bpjs_jkk" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div> --}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="bpjs_jkm">JKM (JAMINAN KEMATIAN):</label>
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch ml-4 mt-2">
-                                                <input class="form-check-input" type="checkbox" name="bpjs_jkm" id="bpjs_jkm" checked>
-                                                <label class="form-check-label" for="bpjs_jkm"></label>
-                                            </div>
-                                            {{-- <div class="form-check form-switch ml-4 mt-2">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="bpjs_jkm">JKM (JAMINAN KEMATIAN):</label>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch ml-4 mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="bpjs_jkm"
+                                                        id="bpjs_jkm" checked>
+                                                    <label class="form-check-label" for="bpjs_jkm"></label>
+                                                </div>
+                                                {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jkm">
                                                     <input type="checkbox" name="bpjs_jkm" class="form-check-input bpjsJKMCheck" data-toggle="toggle"
                                                         id="bpjs_jkm" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div> --}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="bpjs_jp">JP (JAMINAN PENSIUN):</label>
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch ml-4 mt-2">
-                                                <input class="form-check-input" type="checkbox" name="bpjs_jp" id="bpjs_jp" checked>
-                                                <label class="form-check-label" for="bpjs_jp"></label>
-                                            </div>
-                                            {{-- <div class="form-check form-switch ml-4 mt-2">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="bpjs_jp">JP (JAMINAN PENSIUN):</label>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch ml-4 mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="bpjs_jp"
+                                                        id="bpjs_jp" checked>
+                                                    <label class="form-check-label" for="bpjs_jp"></label>
+                                                </div>
+                                                {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_jp">
                                                     <input type="checkbox" name="bpjs_jp" class="form-check-input bpjsJPCheck"
                                                         data-toggle="toggle" id="bpjs_jp" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div> --}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="bpjs_kes">BPJS KESEHATAN:</label>
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch ml-4 mt-2">
-                                                <input class="form-check-input" type="checkbox" name="bpjs_kes" id="bpjs_kes" checked>
-                                                <label class="form-check-label" for="bpjs_kes"></label>
-                                            </div>
-                                            {{-- <div class="form-check form-switch ml-4 mt-2">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="bpjs_kes">BPJS KESEHATAN:</label>
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch ml-4 mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="bpjs_kes"
+                                                        id="bpjs_kes" checked>
+                                                    <label class="form-check-label" for="bpjs_kes"></label>
+                                                </div>
+                                                {{-- <div class="form-check form-switch ml-4 mt-2">
                                                 <label class="switch form-check-label" title="Aktif / Non-Aktif : IP" for="bpjs_kes">
                                                     <input type="checkbox" name="bpjs_kes" class="form-check-input bpjsKESCheck"
                                                         data-toggle="toggle" id="bpjs_kes" data-off="Disabled" data-on="Enabled">
                                                 </label>
                                             </div> --}}
-                                        </td>
-                                    </tr>
-                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                             <hr>
@@ -357,8 +363,8 @@
                             <div class="form-group row" id="out_date_row">
                                 <label for="out_date" class="col-sm-4 col-form-label">Tanggal Keluar</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="out_date" name="out_date" class="form-control" readonly
-                                        style="cursor: pointer;">
+                                    <input type="text" id="out_date" name="out_date" class="form-control"
+                                        readonly style="cursor: pointer;">
                                 </div>
                             </div>
                         </div>
@@ -369,45 +375,54 @@
                             <div class="form-group row">
                                 <label for="basic_salary" class="col-sm-4 col-form-label">Gaji Pokok</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="basic_salary" name="basic_salary" class="form-control rupiah">
+                                    <input type="text" id="basic_salary" name="basic_salary"
+                                        class="form-control rupiah">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="allowance" class="col-sm-4 col-form-label">Tunjangan Tetap</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="allowance" name="allowance" class="form-control rupiah">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="meal_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Makan Per Hadir</label>
-                                <div class="col-sm-8">
-                                    <input type="text" id="meal_allowance_per_attend" name="meal_allowance_per_attend" class="form-control rupiah">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="transport_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Transport Per Hadir</label>
-                                <div class="col-sm-8">
-                                    <input type="text" id="transport_allowance_per_attend" name="transport_allowance_per_attend"
+                                    <input type="text" id="allowance" name="allowance"
                                         class="form-control rupiah">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="attend_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Kehadiran Per Hadir</label>
+                                <label for="meal_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan Makan
+                                    Per Hadir</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="attend_allowance_per_attend" name="attend_allowance_per_attend"
-                                        class="form-control rupiah">
+                                    <input type="text" id="meal_allowance_per_attend"
+                                        name="meal_allowance_per_attend" class="form-control rupiah">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="overtime_rate_per_hour" class="col-sm-4 col-form-label">Tunjangan Lembur Per Jam</label>
+                                <label for="transport_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan
+                                    Transport Per Hadir</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="overtime_rate_per_hour" name="overtime_rate_per_hour" class="form-control rupiah">
+                                    <input type="text" id="transport_allowance_per_attend"
+                                        name="transport_allowance_per_attend" class="form-control rupiah">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="attend_allowance_per_attend" class="col-sm-4 col-form-label">Tunjangan
+                                    Kehadiran Per Hadir</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="attend_allowance_per_attend"
+                                        name="attend_allowance_per_attend" class="form-control rupiah">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="overtime_rate_per_hour" class="col-sm-4 col-form-label">Tunjangan Lembur
+                                    Per Jam</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="overtime_rate_per_hour" name="overtime_rate_per_hour"
+                                        class="form-control rupiah">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="vat_per_year" class="col-sm-4 col-form-label">PPN Per Tahun</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="vat_per_year" name="vat_per_year" class="form-control rupiah">
+                                    <input type="text" id="vat_per_year" name="vat_per_year"
+                                        class="form-control rupiah">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -420,7 +435,8 @@
                             <div class="form-group row">
                                 <label for="rekening_name" class="col-sm-4 col-form-label">Nama Rekening</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="rekening_name" name="rekening_name" class="form-control">
+                                    <input type="text" id="rekening_name" name="rekening_name"
+                                        class="form-control">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -449,10 +465,11 @@
                             <div class="form-group row">
                                 <label for="finger_tool_id" class="col-sm-4 col-form-label">Pilih</label>
                                 <div class="col-sm-8">
-                                    <select id="finger_tool_id" name="finger_tool_id" class="select2 form-select" style="width: 100%">
+                                    <select id="finger_tool_id" name="finger_tool_id" class="select2 form-select"
+                                        style="width: 100%">
                                         <option value="">-- Pilih Lokasi Absen --</option>
                                         @foreach ($finger_tools as $finger_tool)
-                                        <option value="{{ $finger_tool->id }}">{{ $finger_tool->name }}</option>
+                                            <option value="{{ $finger_tool->id }}">{{ $finger_tool->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
