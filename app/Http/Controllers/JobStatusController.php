@@ -200,7 +200,7 @@ class JobStatusController extends Controller
                 $message = "Ditambahkan";
             }
 
-            $jobStatusHasParent->employee_id = $user->employee_id;
+            $jobStatusHasParent->employee_id = $user ? $user->employee_id : null;
             $jobStatusHasParent->status = "overtime";
             $jobStatusHasParent->datetime_start = $datetimeStart;
             $jobStatusHasParent->datetime_end = $datetimeEnd;
