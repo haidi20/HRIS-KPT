@@ -133,6 +133,7 @@ class JobOrderController extends Controller
                         "datetime_end" => null,
                     ])
                         ->where("status", "!=", "pending")
+                        ->where("status", "!=", "finish")
                         ->whereNull("deleted_at")
                         ->where("job_order_id", "!=", request("job_order_id"));
 

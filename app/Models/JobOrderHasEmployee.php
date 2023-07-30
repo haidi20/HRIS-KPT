@@ -24,6 +24,7 @@ class JobOrderHasEmployee extends Model
         'status',
         'datetime_start',
         'datetime_end',
+        'deleted_at',
     ];
 
     protected static function boot()
