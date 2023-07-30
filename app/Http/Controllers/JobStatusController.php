@@ -178,12 +178,12 @@ class JobStatusController extends Controller
         $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
         $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
 
-        $getStoreValidation = $this->storeOvertimeValidation();
+        $getStoreValidation = $this->storeOvertimeValidation($user);
 
         if ($getStoreValidation) {
             return response()->json([
                 'success' => false,
-                'message' => $this->storeOvertimeValidation("result"),
+                'message' => $this->storeOvertimeValidation($user, "result"),
             ], 400);
         }
 
@@ -379,19 +379,18 @@ class JobStatusController extends Controller
         return false;
     }
 
-    private function storeOvertimeValidation($type = null)
+    private function storeOvertimeValidation($user, $type = null)
     {
         $isError = false;
         $message = null;
 
-        $user = User::find(request("user_id"));
         $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
         $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
 
         if ($datetimeStart->greaterThan($datetimeEnd)) {
             $isError = true;
             $message = "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur";
-        } else if ($user->employee_id == null) {
+        } else if ($user && $user->employee_id == null) {
             $isError = true;
             $message = "Maaf, akun anda belum di ketahui data karyawan";
         } else if (request("hour_start") == null || request("hour_end") == null) {

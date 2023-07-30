@@ -169,7 +169,7 @@ export default {
       return this.$store.state.base_url;
     },
     getUserId() {
-      return this.$store.state.user?.id;
+      return this.$store.state.user.id;
     },
     getDataOvertime() {
       return this.$store.state.jobOrder.table.overtime_base_user;
@@ -193,6 +193,7 @@ export default {
         date_end: moment(this.form.date_end).format("YYYY-MM-DD"),
         hour_end: this.form.hour_end_overtime,
         user_id: this.getUserId,
+        // user_id: 1000,
       };
 
       this.is_loading = true;
