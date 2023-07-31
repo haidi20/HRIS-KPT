@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS `SP_ATTENDANCE`;
 DELIMITER /
 
 CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
-(25)) BEGIN
+(25)) BEGIN 
 	SELECT
 	    date,
 	    employee_id,
@@ -97,7 +97,6 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	            LEFT JOIN (
 	                SELECT
 	                    af.pin,
-	                    af.cloud_id,
 	                    DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
 	                    DATE_FORMAT(min(af.scan_date), "%H:%i") as hour_rest_start,
 	                    min(af.scan_date) as datetime_start, (
@@ -122,14 +121,12 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	                            1
 	                    ) as wh ON 1 = 1
 	                WHERE
-	                    DATE_FORMAT(af.scan_date, "%H:%i") >= DATE_FORMAT(wh.start_rest, "%H:%i")
+	                    DATE_FORMAT(wh.start_rest, "%H:%i") <= DATE_FORMAT(af.scan_date, "%H:%i")
 	                    AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.end_rest, "%H:%i")
 	                GROUP BY
 	                    af.pin,
-	                    af.cloud_id,
 	                    date
 	            ) AS af_hour_rest ON af.pin = af_hour_rest.pin
-	            AND af.cloud_id = af_hour_rest.cloud_id
 	            AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = af_hour_rest.date
 	            LEFT JOIN (
 	                SELECT
@@ -162,7 +159,6 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	                SELECT
 	                    af.pin,
 	                    em.name,
-	                    af.cloud_id,
 	                    -- DATE_FORMAT(rd.date, "%Y-%m-%d") as roster_date,
 	                    -- rd.roster_status_id,
 	                    DATE_FORMAT(af.scan_date, "%Y-%m-%d") AS "date",
@@ -187,9 +183,13 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	                    ) as wh ON 1 = 1
 	                WHERE
 	                    CASE -- roster_status_id = 'OFF'
-	                        WHEN rd.roster_status_id = 5 THEN (
-	                            "10:00" <= DATE_FORMAT(af.scan_date, "%H:%i")
-	                            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.after_work, "%H:%i")
+	                        WHEN rd.roster_status_id = 5
+	                        AND em.working_hour != '5,2' THEN (
+	                            DATE_FORMAT(af.scan_date, "%H:%i") >= "10:00"
+	                            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(
+	                                DATE_ADD(wh.after_work, INTERVAL 3 HOUR),
+	                                "%H:%i"
+	                            )
 	                        )
 	                        WHEN DAYOFWEEK(af.scan_date) = 7 THEN (
 	                            DATE_FORMAT(
@@ -199,11 +199,17 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	                                ),
 	                                "%H:%i"
 	                            ) <= DATE_FORMAT(af.scan_date, "%H:%i")
-	                            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.after_work, "%H:%i")
+	                            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(
+	                                DATE_ADD(wh.after_work, INTERVAL 3 HOUR),
+	                                "%H:%i"
+	                            )
 	                        )
 	                        ELSE (
-	                            DATE_FORMAT(wh.fastest_time, "%H:%i") <= DATE_FORMAT(af.scan_date, "%H:%i")
-	                            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(wh.after_work_limit, "%H:%i")
+	                            DATE_FORMAT(af.scan_date, "%H:%i") >= DATE_FORMAT(wh.fastest_time, "%H:%i")
+	                            AND DATE_FORMAT(af.scan_date, "%H:%i") <= DATE_FORMAT(
+	                                DATE_ADD(wh.after_work, INTERVAL 3 HOUR),
+	                                "%H:%i"
+	                            )
 	                        )
 	                    END
 	                GROUP BY
@@ -211,10 +217,8 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	                    em.id,
 	                    -- rd.roster_status_id,
 	                    -- DATE_FORMAT(rd.date, "%Y-%m-%d"),
-	                    af.cloud_id,
 	                    DATE_FORMAT(af.scan_date, "%Y-%m-%d")
 	            ) AS af_hour_end ON af.pin = af_hour_end.pin
-	            AND af.cloud_id = af_hour_end.cloud_id
 	            AND DATE_FORMAT(af.scan_date, "%Y-%m-%d") = af_hour_end.date
 	            LEFT JOIN (
 	                SELECT
@@ -337,7 +341,7 @@ CREATE PROCEDURE SP_ATTENDANCE(IN `DATE_FILTER` VARCHAR
 	            duration_overtime_job_order -- af.cloud_id,
 	            -- em.name
 	    ) AS ahe;
-	END /
+	END / 
 
 
 DELIMITER ;

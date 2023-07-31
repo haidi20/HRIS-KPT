@@ -63,6 +63,7 @@ class AttendanceController extends Controller
                     ->firstWhere('date', $date);
 
                 if ($attendanceHasEmployee) {
+                    $mainData["pin"] = $employee->fingers;
                     $mainData[$date] = (object) [
                         "is_exists" => true,
                         "hour_start" => $this->setTime($attendanceHasEmployee->hour_start),
@@ -91,7 +92,7 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function fetchDataDetail()
+    public function fetchDataBaseEmployee()
     {
         $result = [];
         $employeeId = request("employee_id");
@@ -141,6 +142,19 @@ class AttendanceController extends Controller
             "data" => $result,
             "monthReadAble" => $monthReadAble,
             "employee" => $employee,
+            "request" => request()->all(),
+        ]);
+    }
+
+    public function fetchDataDetail()
+    {
+        $data = AttendanceFingerspot::whereDate("scan_date", request("date"))
+            ->whereIn("pin", request("pin"))
+            ->orderBy("scan_date", "asc")
+            ->get();
+
+        return response()->json([
+            "data" => $data,
             "request" => request()->all(),
         ]);
     }

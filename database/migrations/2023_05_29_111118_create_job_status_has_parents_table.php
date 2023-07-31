@@ -37,7 +37,7 @@ class CreateJobStatusHasParentsTable extends Migration
             $table->datetime('datetime_end')->nullable();
             $table->text('note_start')->nullable();
             $table->text('note_end')->nullable();
-            $table->foreignId('created_by')->nullable();
+            $table->foreignId('created_by');
             $table->foreignId('updated_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
             $table->timestamps();

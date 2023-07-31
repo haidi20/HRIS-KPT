@@ -15,7 +15,7 @@
             <Main />
           </b-tab>
           <b-tab title="Berdasarkan Karyawan">
-            <Detail />
+            <BaseEmployee />
           </b-tab>
           <b-tab title="Total Karyawan yang Absen">
             <fingerTool />
@@ -28,7 +28,7 @@
 
 <script>
 import Main from "./main.vue";
-import Detail from "./detail.vue";
+import BaseEmployee from "./baseEmployee.vue";
 import FingerTool from "./fingerTool.vue";
 export default {
   props: {
@@ -38,12 +38,12 @@ export default {
   data() {
     return {
       title: "Absensi",
-      version: "v1.2",
+      version: "v1.3",
     };
   },
   components: {
     Main,
-    Detail,
+    BaseEmployee,
     FingerTool,
   },
   mounted() {
@@ -61,7 +61,7 @@ export default {
     });
 
     this.$store.dispatch("attendance/fetchData");
-    this.$store.dispatch("attendance/fetchDetail");
+    this.$store.dispatch("attendance/fetchBaseEmployee");
     this.$store.dispatch("attendance/fetchDataBaseFinger");
     this.$store.dispatch("employeeHasParent/fetchOption");
     this.$store.dispatch("master/fetchPosition", { type: "use all" });

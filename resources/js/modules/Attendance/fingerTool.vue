@@ -173,6 +173,23 @@ export default {
           //   console.info(responses);
           this.is_loading_pull_data = false;
 
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 6000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "Berhasil tarik data",
+          });
+
           this.$store.dispatch("attendance/fetchDataBaseFinger");
         })
         .catch((err) => {

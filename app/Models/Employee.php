@@ -39,6 +39,11 @@ class Employee extends Model
         return $this->hasMany(RosterDaily::class);
     }
 
+    public function fingers()
+    {
+        return $this->hasMany(Finger::class, "employee_id", "id")->select("id", "employee_id", "id_finger");
+    }
+
     public function attendanceHasEmployees()
     {
         return $this->hasMany(AttendanceHasEmployee::class);

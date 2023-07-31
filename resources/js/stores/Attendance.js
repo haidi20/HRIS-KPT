@@ -11,8 +11,9 @@ const Attendance = {
         base_url: null,
         data: {
             main: [],
-            detail: [],
+            base_employee: [],
             finger: [],
+            detail: [],
         },
         params: {
             main: {
@@ -20,7 +21,7 @@ const Attendance = {
                 company_id: 'all',
                 month: new Date(),
             },
-            detail: {
+            base_employee: {
                 employee_id: null,
                 month: new Date(),
             },
@@ -35,8 +36,9 @@ const Attendance = {
         },
         loading: {
             main: false,
-            detail: false,
+            base_employee: false,
             finger: false,
+            detail: false,
         },
         date_range: [],
     },
@@ -47,11 +49,14 @@ const Attendance = {
         INSERT_DATA_MAIN(state, payload) {
             state.data.main = payload.data;
         },
-        INSERT_DATA_DETAIL(state, payload) {
-            state.data.detail = payload.data;
+        INSERT_DATA_BASE_EMPLOYEE(state, payload) {
+            state.data.base_employee = payload.data;
         },
         INSERT_DATA_FINGER(state, payload) {
             state.data.finger = payload.data;
+        },
+        INSERT_DATA_DETAIL(state, payload) {
+            state.data.detail = payload.data;
         },
         INSERT_DATE_RANGE(state, payload) {
             state.date_range = payload.date_range;
@@ -59,11 +64,14 @@ const Attendance = {
         UPDATE_LOADING_MAIN(state, payload) {
             state.loading.main = payload.value;
         },
-        UPDATE_LOADING_DETAIL(state, payload) {
-            state.loading.detail = payload.value;
+        UPDATE_LOADING_BASE_EMPLOYEE(state, payload) {
+            state.loading.base_employee = payload.value;
         },
         UPDATE_LOADING_FINGER(state, payload) {
             state.loading.finger = payload.value;
+        },
+        UPDATE_LOADING_DETAIL(state, payload) {
+            state.loading.detail = payload.value;
         },
     },
     actions: {
@@ -98,17 +106,17 @@ const Attendance = {
                     console.info(err);
                 });
         },
-        fetchDetail: async (context, payload) => {
-            context.commit("UPDATE_LOADING_DETAIL", { value: true });
+        fetchBaseEmployee: async (context, payload) => {
+            context.commit("UPDATE_LOADING_BASE_EMPLOYEE", { value: true });
 
             const params = {
-                ...context.state.params.detail,
-                month: moment(context.state.params.detail.month).format("Y-MM"),
+                ...context.state.params.base_employee,
+                month: moment(context.state.params.base_employee.month).format("Y-MM"),
             }
 
             await axios
                 .get(
-                    `${context.state.base_url}/api/v1/attendance/fetch-data-detail`, {
+                    `${context.state.base_url}/api/v1/attendance/fetch-data-base-employee`, {
                     params: { ...params },
                 }
                 )
@@ -116,13 +124,13 @@ const Attendance = {
                     // console.info(responses);
                     const data = responses.data;
 
-                    context.commit("INSERT_DATA_DETAIL", {
+                    context.commit("INSERT_DATA_BASE_EMPLOYEE", {
                         data: data.data,
                     });
-                    context.commit("UPDATE_LOADING_DETAIL", { value: false });
+                    context.commit("UPDATE_LOADING_BASE_EMPLOYEE", { value: false });
                 })
                 .catch((err) => {
-                    context.commit("UPDATE_LOADING_DETAIL", { value: false });
+                    context.commit("UPDATE_LOADING_BASE_EMPLOYEE", { value: false });
                     console.info(err);
                 });
         },
@@ -159,6 +167,35 @@ const Attendance = {
                 })
                 .catch((err) => {
                     context.commit("UPDATE_LOADING_FINGER", { value: false });
+                    console.info(err);
+                });
+        },
+        fetchDataDetail: async (context, payload) => {
+            context.commit("UPDATE_LOADING_DETAIL", { value: true });
+            const pin = payload.pin.map(item => item?.id_finger);
+
+            const params = {
+                pin: pin,
+                date: moment(payload.date).format("Y-MM-DD"),
+            }
+
+            await axios
+                .get(
+                    `${context.state.base_url}/api/v1/attendance/fetch-data-detail`, {
+                    params: { ...params },
+                })
+                .then((responses) => {
+                    // console.info(responses);
+                    const data = responses.data;
+
+                    context.commit("INSERT_DATA_DETAIL", {
+                        data: data.data,
+                    });
+
+                    context.commit("UPDATE_LOADING_DETAIL", { value: false });
+                })
+                .catch((err) => {
+                    context.commit("UPDATE_LOADING_DETAIL", { value: false });
                     console.info(err);
                 });
         },

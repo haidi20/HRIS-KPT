@@ -86,6 +86,7 @@ Route::prefix("v1")->name("api.")->group(function () {
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('fetch-data-main', [AttendanceController::class, "fetchDataMain"])->name('fetchDataMain');
         Route::get('fetch-data-detail', [AttendanceController::class, "fetchDataDetail"])->name('fetchDataDetail');
+        Route::get('fetch-data-base-employee', [AttendanceController::class, "fetchDataBaseEmployee"])->name('fetchDataBaseEmployee');
         Route::get('fetch-data-finger', [AttendanceController::class, "fetchDataFinger"])->name('fetchDataFinger');
 
         Route::get('store', [AttendanceController::class, "store"])->name('store');

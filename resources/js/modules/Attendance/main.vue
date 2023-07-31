@@ -90,6 +90,7 @@
             style="font-size: 12px"
             v-for="(date, subIndex) in getDateRange"
             :key="`date-${subIndex}`"
+            @click="onShowDetail(item, date)"
           >
             <!-- is_exists -->
             <template v-if="item[date]?.is_exists">
@@ -102,6 +103,7 @@
         </b-tr>
       </template>
     </DatatableClient>
+    <Detail />
   </div>
 </template>
 
@@ -112,6 +114,7 @@ import moment from "moment";
 import VueSelect from "vue-select";
 import DatePicker from "vue2-datepicker";
 import DatatableClient from "../../components/DatatableClient";
+import Detail from "./detail.vue";
 
 export default {
   data() {
@@ -148,6 +151,7 @@ export default {
     DatePicker,
     DatatableClient,
     VueSelect,
+    Detail,
   },
   computed: {
     getBaseUrl() {
@@ -178,6 +182,14 @@ export default {
   methods: {
     onFilter() {
       this.$store.dispatch("attendance/fetchData");
+    },
+    onShowDetail(data, date) {
+      //   console.info(data, date);
+      this.$store.dispatch("attendance/fetchDataDetail", {
+        pin: data.pin,
+        date,
+      });
+      this.$bvModal.show("detail_modal");
     },
     async onExport() {
       const Swal = this.$swal;
