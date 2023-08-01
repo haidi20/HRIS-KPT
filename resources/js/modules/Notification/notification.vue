@@ -11,6 +11,7 @@
         >
           <i class="bi bi-bell bi-sub fs-4"></i>
           <span
+            v-if="count_data > 0"
             class="badge bg-danger rounded-circle top-0 start-100 translate-middle"
             style="padding: 0.4rem 0.6rem!important;"
           >{{count_data}}</span>
@@ -22,7 +23,7 @@
           <li class="dropdown-header">
             <h6>Notifications</h6>
           </li>
-          <li class="dropdown-item notification-item">
+          <!-- <li class="dropdown-item notification-item">
             <a class="d-flex align-items-center" href="#">
               <div class="notification-icon bg-success">
                 <i class="bi bi-file-earmark-check"></i>
@@ -32,7 +33,31 @@
                 <p class="notification-subtitle font-thin text-sm">Tersisa 10 Menit Lagi</p>
               </div>
             </a>
-          </li>
+          </li>-->
+          <template v-if="data.length > 0">
+            <li v-for="(item, index) in data" :key="index" class="dropdown-item notification-item">
+              <a class="d-flex align-items-center" href="#">
+                <div class="notification-icon bg-success">
+                  <i class="bi bi-file-earmark-check"></i>
+                </div>
+                <div class="notification-text ms-4">
+                  <p class="notification-title font-bold">Job Order : {{item.project_name}}</p>
+                  <p class="notification-subtitle font-thin text-sm">Tersisa 10 Menit Lagi</p>
+                  <p
+                    class="notification-subtitle font-thin text-sm"
+                  >{{item.datetime_estimation_end_readable}}</p>
+                  <p
+                    class="notification-subtitle font-thin text-sm"
+                  >{{item.datetime_estimation_end_before}}</p>
+                </div>
+              </a>
+            </li>
+          </template>
+          <template v-else>
+            <div class="notification-text ms-4">
+              <span>tidak ada notif</span>
+            </div>
+          </template>
         </ul>
       </li>
     </ul>
@@ -48,22 +73,32 @@ export default {
   },
   data() {
     return {
-      is_show: false,
+      is_show: true,
       count_data: 0,
+      data: [],
     };
   },
   mounted() {
-    // console.info(this.user_id);
+    console.info(`userId = ${this.user_id}`);
   },
   created() {
-    this.socket = io.connect("http://localhost:3000", {
-      query: `user_id=${this.user_id}`,
-    }); // replace with your server URL
+    const timestamp = Date.now();
+    const options = {
+      //   autoConnect: false,
+      //   query: `user_id=${this.user_id}`,
+      query: {
+        user_id: this.user_id,
+        timestamp,
+      },
+    };
+
+    this.socket = io.connect("http://localhost:3000", options); // replace with your server URL
 
     // listen to events from server
     this.socket.on("get-notification", (data) => {
       console.info(data);
       this.count_data = data.data.length;
+      this.data = data.data;
       //   this.message = data;
     });
   },

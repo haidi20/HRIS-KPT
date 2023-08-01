@@ -18,9 +18,12 @@ class CreateNotificationsTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('parent_id');
             $table->string('parent_model');
-            $table->dateTime('readed_at')->nullable();
+            $table->dateTime('readed_at')->nullable(); // ketika sudah di baca, maka tanda merah hilang
             $table->boolean('is_show')->default(false);
             $table->timestamps();
+
+            // Add a unique constraint on parent_id and parent_model columns
+            $table->unique(['parent_id', 'parent_model']);
         });
     }
 

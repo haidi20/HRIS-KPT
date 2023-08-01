@@ -1,8 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../database');
 const moment = require('moment');
+const Project = require('./project');
 
-const jobOrder = db.define('JobOrder', {
+const JobOrder = db.define('JobOrder', {
     id: {
         type: DataTypes.BIGINT,
         autoIncrement: true,
@@ -11,6 +12,15 @@ const jobOrder = db.define('JobOrder', {
     project_id: {
         type: DataTypes.BIGINT,
         allowNull: false
+    },
+    project_name: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.project?.get().name;
+        },
+        set(/*value*/) {
+            throw new Error('Do not try to set the `project_name` value!');
+        }
     },
     job_id: {
         type: DataTypes.INTEGER,
@@ -38,6 +48,16 @@ const jobOrder = db.define('JobOrder', {
                 return moment.utc(value).format('YYYY-MM-DD HH:mm');
             }
             return value;
+        },
+    },
+    datetime_estimation_end_before: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            const datetimeEstimationEnd = this.getDataValue('datetime_estimation_end');
+            if (datetimeEstimationEnd) {
+                return moment.utc(datetimeEstimationEnd).subtract(15, 'minutes').format('YYYY-MM-DD HH:mm');
+            }
+            return null;
         },
     },
     datetime_estimation_end_readable: {
@@ -103,6 +123,11 @@ const jobOrder = db.define('JobOrder', {
     timestamps: false   // this option states that we are not using Sequelize's built-in timestamps.
 });
 
+// Create the association with JobOrder model and define the scope
+JobOrder.belongsTo(Project, {
+    as: 'project',
+    foreignKey: 'project_id', // The column in the "Notification" table that references the "JobOrder" table
+    constraints: false, // Set to false if you don't want to enforce foreign key constraints
+});
 
-
-module.exports = jobOrder;
+module.exports = JobOrder;

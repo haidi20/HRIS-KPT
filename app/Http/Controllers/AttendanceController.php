@@ -247,35 +247,6 @@ class AttendanceController extends Controller
         $dateStart = request("date_start", $dateNow);
         $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
 
-        // try {
-        //     // DB::beginTransaction();
-
-        //     $this->storeFingerSpot();
-
-        //     $this->storeHasEmployee();
-
-        //     // DB::commit();
-
-        //     return response()->json([
-        //         'success' => true,
-        //         'dateStart' => $dateStart,
-        //         'message' => "Berhasil Proses Data Finger",
-        //     ], 200);
-        // } catch (\Exception $e) {
-        //     // DB::rollback();
-
-        //     Log::error($e);
-
-        //     $routeAction = Route::currentRouteAction();
-        //     $log = new LogController;
-        //     $log->store($e->getMessage(), $routeAction);
-
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => "Gagal Proses Data Finger",
-        //     ], 500);
-        // }
-
         $this->storeFingerSpot();
 
         $this->storeHasEmployee();

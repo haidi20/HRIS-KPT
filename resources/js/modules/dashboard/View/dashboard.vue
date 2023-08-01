@@ -152,7 +152,13 @@
         </section>
       </template>
       <template v-else-if="getLengthPermissions.length > 0 && !getCan('hrd dashboard')">
-        <h1>Selamat Datang di Aplikasi HRIS - KPT</h1>
+        <section class="row" style="height: 600px">
+          <div class="col-12 col-lg-12">
+            <div class="row">
+              <h1>Selamat Datang di Aplikasi HRIS - KPT</h1>
+            </div>
+          </div>
+        </section>
       </template>
     </div>
     <!-- start modal -->

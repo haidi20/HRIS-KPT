@@ -33,9 +33,8 @@
             variant="info"
             size="sm"
             @click="onShowFormPullData()"
-            :disabled="getIsLoadingData || is_loading_pull_data"
+            :disabled="getIsLoadingData"
           >Tarik Data Finger</b-button>
-          <span v-if="is_loading_pull_data">Loading...</span>
         </b-col>
       </template>
       <template v-slot:thead>

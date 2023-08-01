@@ -1,5 +1,7 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Op } = require('sequelize');
 const db = require('../database');
+const JobOrder = require('./jobOrder');
+const sequelize = require('../database');
 
 const Notification = db.define('Notification', {
     id: {
@@ -41,6 +43,18 @@ const Notification = db.define('Notification', {
     timestamps: true,   // this option states that we are using Sequelize's built-in timestamps.
     createdAt: 'created_at',
     updatedAt: 'updated_at'
+});
+
+// Create the association with JobOrder model and define the scope
+Notification.belongsTo(JobOrder, {
+    as: 'parent',
+    foreignKey: 'parent_id', // The column in the "Notification" table that references the "JobOrder" table
+    constraints: false, // Set to false if you don't want to enforce foreign key constraints
+    scope: {
+        [Op.and]: [
+            { '$Notification.parent_model$': 'jobOrder' }, // Set the condition for parent_model = 'jobOrder'
+        ],
+    },
 });
 
 module.exports = Notification;
