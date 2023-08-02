@@ -66,6 +66,7 @@
 
 <script>
 import io from "socket.io-client";
+import moment from "moment";
 
 export default {
   props: {
@@ -73,32 +74,38 @@ export default {
   },
   data() {
     return {
-      is_show: false,
+      is_show: true,
       count_data: 0,
       data: [],
     };
   },
-  mounted() {},
+  mounted() {
+    //
+  },
   created() {
     if (!this.is_show) return false;
     console.info(`userId = ${this.user_id}`);
 
-    const timestamp = Date.now();
+    const timestamp = moment().format("YYYY-MM-DD HH:mm");
     const options = {
       //   autoConnect: false,
       //   query: `user_id=${this.user_id}`,
       query: {
-        user_id: this.user_id,
-        timestamp,
+        // user_id: this.user_id,
+        // timestamp: timestamp,
       },
     };
 
     this.socket = io.connect("http://localhost:3000", options); // replace with your server URL
 
+    this.socket.emit(`send_user_id`, {
+      user_id: this.user_id,
+    });
+
     // listen to events from server
-    this.socket.on("get-notification", (data) => {
+    this.socket.on(`get_notification`, (data) => {
       console.info(data);
-      this.count_data = data.data.length;
+      this.count_data = data?.data?.length;
       this.data = data.data;
       //   this.message = data;
     });

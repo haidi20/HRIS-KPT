@@ -6,10 +6,8 @@ const { Op, literal } = require('sequelize');
 const Project = require('../models/project');
 const sequelize = require('../database');
 
-exports.getJobOrderNotFinish = async ({ userId }) => {
-    // const now = moment().format('YYYY-MM-DD HH:mm:ss');
+exports.getJobOrderNotFinish = async ({ now, userId }) => {
     let jobOrders = [];
-    let now = moment().format('Y-MM-DD HH:mm:ss');
 
     jobOrders = await JobOrder.findAll({
         where: {
