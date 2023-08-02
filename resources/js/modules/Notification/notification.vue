@@ -73,15 +73,16 @@ export default {
   },
   data() {
     return {
-      is_show: true,
+      is_show: false,
       count_data: 0,
       data: [],
     };
   },
-  mounted() {
-    console.info(`userId = ${this.user_id}`);
-  },
+  mounted() {},
   created() {
+    if (!this.is_show) return false;
+    console.info(`userId = ${this.user_id}`);
+
     const timestamp = Date.now();
     const options = {
       //   autoConnect: false,
