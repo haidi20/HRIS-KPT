@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../database');
 const moment = require('moment');
 const Project = require('./project');
+const Job = require('./Job');
 
 const JobOrder = db.define('JobOrder', {
     id: {
@@ -24,6 +25,15 @@ const JobOrder = db.define('JobOrder', {
     },
     job_id: {
         type: DataTypes.INTEGER,
+    },
+    job_name: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.job?.get().name;
+        },
+        set(/*value*/) {
+            throw new Error('Do not try to set the `job_name` value!');
+        }
     },
     job_level: {
         type: DataTypes.ENUM('hard', 'middle', 'easy'),
@@ -119,8 +129,9 @@ const JobOrder = db.define('JobOrder', {
     },
 }, {
     tableName: 'job_orders',
+    paranoid: true, // Enable soft deletion (paranoid mode)
     underscored: true,  // this option sets field names and relation keys in underscored format instead of camelCase.
-    timestamps: false   // this option states that we are not using Sequelize's built-in timestamps.
+    timestamps: true,   // this option states that we are not using Sequelize's built-in timestamps.
 });
 
 // Create the association with JobOrder model and define the scope
@@ -128,6 +139,11 @@ JobOrder.belongsTo(Project, {
     as: 'project',
     foreignKey: 'project_id', // The column in the "Notification" table that references the "JobOrder" table
     constraints: false, // Set to false if you don't want to enforce foreign key constraints
+});
+JobOrder.belongsTo(Job, {
+    as: 'job',
+    foreignKey: 'job_id',
+    constraints: false,
 });
 
 module.exports = JobOrder;

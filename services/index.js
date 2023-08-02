@@ -26,13 +26,10 @@ const io = new Server(server, {
 io.on('connection', async (socket) => {
     console.log('a user connected');
 
-    // const timeInterval = 60000;
-    const timeInterval = 5000;
-    // const userId = socket.handshake.query.user_id;
-    const timestampServer = moment().format('Y-MM-DD HH:mm');
-    const timestamp = socket.handshake.query.timestamp;
-    // const now = moment().format('YYYY-MM-DD HH:mm:ss');
-    let now = moment().set({ month: 6, date: 27, hour: 22, minute: 30 }).format('Y-MM-DD HH:mm:ss');
+    // const timeInterval = 60000; // 1 menit
+    const timeInterval = 5000; // 5 detik
+    const now = moment().format('YYYY-MM-DD HH:mm:ss');
+    // let now = moment().set({ month: 6, date: 27, hour: 22, minute: 30 }).format('Y-MM-DD HH:mm:ss');
 
     socket.on('send_user_id', (responses, callback) => {
         setInterval(async () => {
@@ -44,8 +41,6 @@ io.on('connection', async (socket) => {
             io.to(userId).emit(`get_notification`, {
                 data: getJobOrder,
                 now,
-                timestamp,
-                timestampServer,
                 userId,
             });
         }, timeInterval);

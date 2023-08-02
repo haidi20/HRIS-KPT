@@ -9,7 +9,7 @@
           data-bs-display="static"
           aria-expanded="false"
         >
-          <i class="bi bi-bell bi-sub fs-4"></i>
+          <i class="bi bi-bell bi-sub fs-4" style="padding-right: 5px;"></i>
           <span
             v-if="count_data > 0"
             class="badge bg-danger rounded-circle top-0 start-100 translate-middle"
@@ -21,7 +21,7 @@
           aria-labelledby="dropdownMenuButton"
         >
           <li class="dropdown-header">
-            <h6>Notifications</h6>
+            <h6>Pemberitahuan</h6>
           </li>
           <!-- <li class="dropdown-item notification-item">
             <a class="d-flex align-items-center" href="#">
@@ -41,14 +41,14 @@
                   <i class="bi bi-file-earmark-check"></i>
                 </div>
                 <div class="notification-text ms-4">
-                  <p class="notification-title font-bold">Job Order : {{item.project_name}}</p>
-                  <p class="notification-subtitle font-thin text-sm">Tersisa 10 Menit Lagi</p>
+                  <p class="notification-title font-bold">Proyek : {{item.project_name}}</p>
+                  <p class="notification-subtitle font-thin text-sm">
+                    Jenis Pekerjaan :
+                    {{item.job_name}}
+                  </p>
                   <p
                     class="notification-subtitle font-thin text-sm"
-                  >{{item.datetime_estimation_end_readable}}</p>
-                  <p
-                    class="notification-subtitle font-thin text-sm"
-                  >{{item.datetime_estimation_end_before}}</p>
+                  >{{getDifferentTimeReadable(item)}}</p>
                 </div>
               </a>
             </li>
@@ -113,6 +113,46 @@ export default {
   beforeDestroy() {
     // disconnect when component is unmounted
     this.socket.disconnect();
+  },
+  methods: {
+    getDifferentTimeReadable(data) {
+      const now = moment();
+      const timeEnd = moment(
+        data.datetime_estimation_end,
+        "dddd, DD MMMM YYYY HH:mm"
+      );
+      const isAfter = timeEnd.isAfter(now);
+
+      const diffDuration = isAfter
+        ? moment.duration(timeEnd.diff(now))
+        : moment.duration(now.diff(timeEnd));
+      const days = diffDuration.days();
+      const hours = diffDuration.hours();
+      const minutes = diffDuration.minutes();
+      const seconds = diffDuration.seconds();
+
+      let result = "";
+
+      if (days > 0) {
+        result += `${days} Hari `;
+      } else {
+        if (hours > 0) {
+          result += `${hours} Jam `;
+        }
+
+        if (minutes > 0) {
+          result += `${minutes} Menit `;
+        }
+      }
+
+      //   if (seconds > 0) {
+      //     result += `${seconds} Detik`;
+      //   }
+
+      return isAfter
+        ? `Tersisa ${result} Lagi selesai`
+        : `Sudah lewat ${result} yang lalu. Status masih aktif`;
+    },
   },
 };
 </script>
