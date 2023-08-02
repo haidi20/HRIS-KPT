@@ -5,14 +5,9 @@ const express = require('express');
 const { Server } = require("socket.io");
 const bodyParser = require('body-parser');
 
-const JobOrder = require('./models/jobOrder');
-const Notification = require('./models/notification');
-
 const JobOrderController = require("./controllers/JobOrderController");
 
 const socketioModule = require('./socketioModule');
-const { updateOrCreate } = require("./utils");
-const { includes } = require('lodash');
 
 const app = express();
 const server = http.createServer(app);
@@ -57,10 +52,6 @@ io.on('connection', async (socket) => {
 });
 
 socketioModule.setIo(io);
-
-// Express route for sending a message
-app.post('/notification',
-    (req, res) => NotificationController.sendMessage(req, res));
 
 server.listen(3000, () => {
     console.log('listening on *:3000');

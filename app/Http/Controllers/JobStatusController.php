@@ -387,7 +387,10 @@ class JobStatusController extends Controller
         $datetimeStart = Carbon::parse(request("date_start") . request("hour_start"));
         $datetimeEnd = Carbon::parse(request("date_end") . request("hour_end"));
 
-        if ($datetimeStart->greaterThan($datetimeEnd)) {
+        if (request("user_id") == null) {
+            $isError = true;
+            $message = "Maaf, anda harus login ulang";
+        } else if ($datetimeStart->greaterThan($datetimeEnd)) {
             $isError = true;
             $message = "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur";
         } else if ($user && $user->employee_id == null) {

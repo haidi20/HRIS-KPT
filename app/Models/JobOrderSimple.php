@@ -17,7 +17,7 @@ class JobOrderSimple extends Model
     protected $fillable = [];
     // status_clone untuk bisa membandingkan status setelah perubahan dan yang di database
     protected $appends = [
-        "project_name", "creator_name",
+        "project_name", "creator_name", "job_name",
     ];
 
     public function __construct(array $attributes = [])
@@ -45,6 +45,19 @@ class JobOrderSimple extends Model
     {
         return $this->belongsTo(ProjectSimple::class, "project_id", "id");
     }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class, "job_id", "id");
+    }
+
+    public function getJobNameAttribute()
+    {
+        if ($this->job) {
+            return $this->job->name;
+        }
+    }
+
 
     public function creator()
     {

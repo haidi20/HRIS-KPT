@@ -30,7 +30,15 @@ class OvertimeReportController extends Controller
         $dateStart = Carbon::parse(request("date_start"));
         $dateEnd = Carbon::parse(request("date_end"));
 
-        $overtimes = JobStatusHasParent::where(["status" => "overtime"])
+        $overtimes = JobStatusHasParent::select(
+            "id",
+            "employee_id",
+            "job_order_id",
+            "datetime_start",
+            "datetime_end",
+            "note_start",
+        )
+            ->where(["status" => "overtime"])
             ->whereDate("datetime_start", ">=", $dateStart)
             ->whereDate("datetime_start", "<=", $dateEnd)
             ->whereNotNull("employee_id");

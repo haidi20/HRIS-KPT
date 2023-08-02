@@ -48,12 +48,14 @@ class JobStatusHasParent extends Model
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class, "employee_id", "id");
+        return $this->belongsTo(Employee::class, "employee_id", "id")
+            ->select("id", "name", "position_id");
     }
 
     public function jobOrder()
     {
-        return $this->belongsTo(JobOrder::class, "job_order_id", "id");
+        return $this->belongsTo(JobOrderSimple::class, "job_order_id", "id")
+            ->select("id", "job_id");
     }
 
     public function images()
