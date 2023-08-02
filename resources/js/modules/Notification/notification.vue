@@ -71,6 +71,7 @@ import moment from "moment";
 export default {
   props: {
     user_id: String,
+    baseUrl: String,
   },
   data() {
     return {
@@ -84,9 +85,7 @@ export default {
   },
   created() {
     if (!this.is_show) return false;
-    // console.info(`userId = ${this.user_id}`);
 
-    const timestamp = moment().format("YYYY-MM-DD HH:mm");
     const options = {
       //   autoConnect: false,
       //   query: `user_id=${this.user_id}`,
@@ -96,7 +95,9 @@ export default {
       },
     };
 
-    this.socket = io.connect("http://localhost:3000", options); // replace with your server URL
+    // console.info(this.baseUrl);
+
+    this.socket = io.connect(`${this.baseUrl}:3000`, options); // replace with your server URL
 
     this.socket.emit(`send_user_id`, {
       user_id: this.user_id,

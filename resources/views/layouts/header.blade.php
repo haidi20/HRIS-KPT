@@ -12,7 +12,13 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 </ul>
                 <div id="notif">
-                    <notification user_id="{{ auth()->user()->id }}" />
+                    @php
+                        $fullUrl = url('/');
+                        $parsedUrl = parse_url($fullUrl);
+                        $domain = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+                    @endphp
+
+                    <notification user_id="{{ auth()->user()->id }}" base-url="{{ $domain }}" />
                     {{-- <notification user_id="10" /> --}}
                 </div>
                 <div class="dropdown">
