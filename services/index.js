@@ -54,6 +54,10 @@ io.on('connection', async (socket) => {
 
 socketioModule.setIo(io);
 
+app.get('/test-connection', (req, res) => {
+    res.send('running');
+});
+
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });

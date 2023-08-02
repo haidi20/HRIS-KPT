@@ -84,7 +84,7 @@ export default {
   },
   created() {
     if (!this.is_show) return false;
-    console.info(`userId = ${this.user_id}`);
+    // console.info(`userId = ${this.user_id}`);
 
     const timestamp = moment().format("YYYY-MM-DD HH:mm");
     const options = {
@@ -104,7 +104,7 @@ export default {
 
     // listen to events from server
     this.socket.on(`get_notification`, (data) => {
-      console.info(data);
+      //   console.info(data);
       this.count_data = data?.data?.length;
       this.data = data.data;
       //   this.message = data;
