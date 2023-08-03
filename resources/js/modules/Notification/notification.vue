@@ -48,6 +48,9 @@
                   </p>
                   <p
                     class="notification-subtitle font-thin text-sm"
+                  >{{item.datetime_estimation_end_readable}}</p>
+                  <p
+                    class="notification-subtitle font-thin text-sm"
                   >{{getDifferentTimeReadable(item)}}</p>
                 </div>
               </a>
@@ -123,19 +126,15 @@ export default {
   methods: {
     getDifferentTimeReadable(data) {
       const now = moment();
-      const timeEnd = moment(
-        data.datetime_estimation_end,
-        "dddd, DD MMMM YYYY HH:mm"
-      );
+      const timeEnd = moment(data.datetime_estimation_end);
       const isAfter = timeEnd.isAfter(now);
-
       const diffDuration = isAfter
         ? moment.duration(timeEnd.diff(now))
         : moment.duration(now.diff(timeEnd));
       const days = diffDuration.days();
       const hours = diffDuration.hours();
       const minutes = diffDuration.minutes();
-      const seconds = diffDuration.seconds();
+      //   const seconds = diffDuration.seconds();
 
       let result = "";
 
@@ -150,10 +149,6 @@ export default {
           result += `${minutes} Menit `;
         }
       }
-
-      //   if (seconds > 0) {
-      //     result += `${seconds} Detik`;
-      //   }
 
       return isAfter
         ? `Tersisa ${result} Lagi selesai`
