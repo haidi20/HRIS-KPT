@@ -34,8 +34,8 @@ class DashboardController extends Controller
 
     public function fetchTotal()
     {
-        // $dateNow = Carbon::now()->format("Y-m-d");
-        $dateNow = Carbon::parse('2023-07-07')->format("Y-m-d");
+        $dateNow = Carbon::now()->format("Y-m-d");
+        // $dateNow = Carbon::parse('2023-07-07')->format("Y-m-d");
 
         $workingHour = WorkingHour::first();
         $totalEmployee = Employee::active()->count();

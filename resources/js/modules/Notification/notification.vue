@@ -78,7 +78,7 @@ export default {
   },
   data() {
     return {
-      is_show: true,
+      is_show: false,
       count_data: 0,
       data: [],
     };
