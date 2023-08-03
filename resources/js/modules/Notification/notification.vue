@@ -95,7 +95,7 @@ export default {
       },
     };
 
-    const baseUrl = url.replace("https://", "http://");
+    const baseUrl = this.baseUrl.replace("https://", "http://");
 
     console.info(`${baseUrl}:3003`);
 
