@@ -46,9 +46,9 @@
                     Jenis Pekerjaan :
                     {{item.job_name}}
                   </p>
-                  <p
+                  <!-- <p
                     class="notification-subtitle font-thin text-sm"
-                  >{{item.datetime_estimation_end_readable}}</p>
+                  >{{item.datetime_estimation_end_readable}}</p>-->
                   <p
                     class="notification-subtitle font-thin text-sm"
                   >{{getDifferentTimeReadable(item)}}</p>
@@ -101,11 +101,9 @@ export default {
     // const baseUrl = this.baseUrl.replace("https://", "http://");
     const baseUrl = this.baseUrl;
 
-    console.info(`${baseUrl}:3003`);
+    // console.info(`${baseUrl}:3003`);
 
     this.socket = io.connect(`${baseUrl}:3003`, options); // replace with your server URL
-
-    console.info(this.socket);
 
     this.socket.emit(`send_user_id`, {
       user_id: this.user_id,

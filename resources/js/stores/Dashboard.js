@@ -158,7 +158,7 @@ const Dashboard = {
                     // console.info(responses);
                     const data = responses.data;
 
-                    // console.info(data);
+                    console.info(data);
 
                     context.commit("DELETE_DATA_TOTAL");
                     context.commit("INSERT_DATA_TOTAL");

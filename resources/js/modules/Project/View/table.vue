@@ -29,6 +29,16 @@
             :disabled="getIsLoadingData"
           >Kirim</b-button>-->
           <b-button
+            v-if="getCan('tambah proyek') && getParentType != 'create'"
+            variant="success"
+            class="place_filter_table ml-4"
+            size="sm"
+            @click="onCreate()"
+          >
+            <i class="fas fa-plus"></i>
+            Tambah
+          </b-button>
+          <b-button
             v-if="getCan('export excel proyek')"
             class="place_filter_table ml-4"
             variant="success"
@@ -40,16 +50,6 @@
             Export
           </b-button>
           <span v-if="is_loading_export">Loading...</span>
-          <b-button
-            v-if="getCan('tambah proyek') && getParentType != 'create'"
-            variant="success"
-            class="place_filter_table ml-4"
-            size="sm"
-            @click="onCreate()"
-          >
-            <i class="fas fa-plus"></i>
-            Tambah
-          </b-button>
         </b-col>
       </template>
       <template v-slot:tbody="{ filteredData }">

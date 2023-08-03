@@ -14,6 +14,7 @@ export default {
     },
     data() {
         return {
+            type_table_total: null,
             employee_columns: [
                 {
                     label: "Nama",
@@ -79,6 +80,26 @@ export default {
                     label: "",
                     field: "",
                     width: "1px",
+                    class: "",
+                },
+            ],
+            employee_total_columns: [
+                {
+                    label: "Nama",
+                    field: "employee_name",
+                    width: "200px",
+                    class: "",
+                },
+                {
+                    label: "Jabatan",
+                    field: "position_name",
+                    width: "200px",
+                    class: "",
+                },
+                {
+                    label: "Waktu",
+                    field: "hour_start",
+                    width: "200px",
                     class: "",
                 },
             ],
@@ -159,6 +180,10 @@ export default {
     },
     methods: {
         onShowData(item) {
+            // console.info(item);
+
+            this.type_table_total = item.field;
+
             if (item.data.length > 0) {
                 // console.info("show");
                 this.$bvModal.show("data_total");
@@ -294,6 +319,9 @@ export default {
                         });
                 }
             });
+        },
+        getTime(time) {
+            return moment(time).format("HH:mm");
         },
         getColumns(nameColumn) {
             const columns = this[nameColumn].filter((item) => item.label != "");

@@ -15,32 +15,6 @@
         <section class="row">
           <div class="col-12 col-lg-12">
             <div class="row">
-              <!-- <template v-if="getDataTotal.length > 0">
-              <div
-                :class="`col-6 col-md-6 col-lg-3`"
-                v-for="(total, index) in getDataTotal"
-                :key="index"
-              >
-                <div class="card cursor-pointer" @click="onShowData(total)">
-                  <div class="card-body py-3-5">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div :class="`stats-icon ${total.color}`">
-                          <i :class="total.icon"></i>
-                        </div>
-                      </div>
-                      <div class="col-md-8">
-                        <h6 class="text-muted font-semibold">{{total.title}}</h6>
-                        <h6 class="font-extrabold mb-0">{{total.value}}</h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <template v-else>
-              <span style="margin-bottom: 20px">Loading...</span>
-              </template>-->
               <div
                 :class="`col-6 col-md-6 col-lg-3`"
                 v-for="(total, index) in getDataTotal"
@@ -166,7 +140,7 @@
       id="data_total"
       ref="data_total"
       title="Data Karyawan"
-      size="md"
+      size="lg"
       class="modal-custom"
       hide-footer
     >
@@ -174,7 +148,7 @@
         <b-col cols>
           <DatatableClient
             :data="getDataSelecteds"
-            :columns="employee_notyet_columns"
+            :columns="employee_total_columns"
             :options="options"
             nameStore="dashboard"
             nameLoading="selected"
@@ -186,6 +160,24 @@
               <b-tr v-for="(item, index) in filteredData" :key="index">
                 <b-td>{{item.name != undefined ? item.name : item.employee_name}}</b-td>
                 <b-td>{{item.position_name}}</b-td>
+                <b-td nowrap>
+                  <span v-if="type_table_total != 'notAbsence'">
+                    Jam
+                    {{
+                    type_table_total != 'notCombackAfterRest' ? 'Datang' : 'Mulai Istirahat'
+                    }}
+                    :
+                    {{
+                    type_table_total != 'notCombackAfterRest'
+                    ? getTime(item.hour_start)
+                    : getTime(item.hour_rest_start)
+                    }}
+                  </span>
+                  <br />
+                  <span
+                    v-if="type_table_total == 'absenceLate'"
+                  >Maks. Jam Terlambat : {{item.working_hour_late}}</span>
+                </b-td>
               </b-tr>
             </template>
           </DatatableClient>

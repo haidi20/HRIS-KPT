@@ -13,15 +13,17 @@ class AttendanceHasEmployee extends Model
 
     protected $appends = [
         "duration_work_readable",  "duration_rest_readable",  "duration_overtime_readable",
-        "duration_overtime_job_order_readable", "employee_name", "position_name",
+        "duration_overtime_job_order_readable", "employee_name", "position_name", "working_hour_late",
     ];
+
+    protected $fillable = ['employee_id'];
 
     protected $guarded = [];
 
     public function employee()
     {
         return $this->belongsTo(Employee::class, "employee_id", "id")
-            ->select("id", "name", "position_id");
+            ->select("id", "name", "position_id", "working_hour");
     }
 
     // nama user yang approval
@@ -82,5 +84,18 @@ class AttendanceHasEmployee extends Model
         }
 
         return $result;
+    }
+
+    public function getWorkingHourLateAttribute()
+    {
+        if ($this->employee) {
+            $workingHour = WorkingHour::first()->late_five_two;
+
+            if ($this->employee->working_hour == '6,1') {
+                $workingHour = WorkingHour::first()->late_six_one;
+            }
+
+            return $workingHour;
+        }
     }
 }

@@ -7,6 +7,7 @@ use App\Models\DashboardHasPosition;
 use App\Models\Employee;
 use App\Models\JobOrderHasEmployee;
 use App\Models\Position;
+use App\Models\VwEmployeeAbsenceLate;
 use App\Models\WorkingHour;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -33,22 +34,19 @@ class DashboardController extends Controller
 
     public function fetchTotal()
     {
-        $dateNow = Carbon::now()->format("Y-m-d");
+        // $dateNow = Carbon::now()->format("Y-m-d");
+        $dateNow = Carbon::parse('2023-07-07')->format("Y-m-d");
 
         $workingHour = WorkingHour::first();
         $totalEmployee = Employee::active()->count();
-        $queryEmployeeNotCombackAfterRest = AttendanceHasEmployee::whereDate("hour_rest_start", $dateNow)
-            ->whereNull("hour_rest_end")
-            ->distinct("employee_id");
-        $queryEmployeeAbsence = AttendanceHasEmployee::whereDate("date", $dateNow)
+        $queryAttendanceHasEmployee = AttendanceHasEmployee::whereDate("date", $dateNow)
             ->whereNotNull("employee_id")
-            ->whereNotNull("hour_start")
             ->distinct("employee_id");
+        $queryEmployeeNotCombackAfterRest = clone $queryAttendanceHasEmployee;
+        $queryEmployeeAbsence = clone $queryAttendanceHasEmployee;
+        $queryEmployeeAbsenceLate = VwEmployeeAbsenceLate::whereDate("date", $dateNow);
 
-        $hourMaxLatePresent = Carbon::parse($workingHour->start_time)->addMinutes(90)->format("H:i");
-        $queryEmployeeAbsenceLate = clone $queryEmployeeAbsence;
-        $queryEmployeeAbsenceLate = $queryEmployeeAbsenceLate->whereTime("hour_start", ">=", $hourMaxLatePresent);
-
+        $queryEmployeeNotCombackAfterRest = $queryEmployeeNotCombackAfterRest->whereNotNull("hour_rest_start")->whereNull("hour_rest_end");
         $dataNotCombackAfterRests = $queryEmployeeNotCombackAfterRest->get();
         $totalNotCombackAfterRest = $queryEmployeeNotCombackAfterRest->count();
 
@@ -74,7 +72,7 @@ class DashboardController extends Controller
         return response()->json([
             "success" => true,
             "dateNow" => $dateNow,
-            "hourMaxLatePresent" => $hourMaxLatePresent,
+            // "hourMaxLatePresent" => $hourMaxLatePresent,
             // total
             "totalEmployee" => $totalEmployee,
             "totalEmployeeAbsence" => $totalEmployeeAbsence,

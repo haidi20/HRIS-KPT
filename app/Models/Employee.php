@@ -15,7 +15,9 @@ class Employee extends Model
         "company_name", "position_name", "departmen_name",
         "location_name", "employee_type_name", "name_and_position",
     ];
-    protected $fillable = [];
+    protected $fillable = [
+        "working_hour",
+    ];
 
     public function __construct(array $attributes = [])
     {
