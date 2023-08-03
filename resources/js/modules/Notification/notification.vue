@@ -95,9 +95,11 @@ export default {
       },
     };
 
-    console.info(`${this.baseUrl}:3003`);
+    const baseUrl = url.replace("https://", "http://");
 
-    this.socket = io.connect(`${this.baseUrl}:3003`, options); // replace with your server URL
+    console.info(`${baseUrl}:3003`);
+
+    this.socket = io.connect(`${baseUrl}:3003`, options); // replace with your server URL
 
     console.info(this.socket);
 
