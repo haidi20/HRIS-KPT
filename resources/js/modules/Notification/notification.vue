@@ -95,9 +95,9 @@ export default {
       },
     };
 
-    console.info(`${this.baseUrl}:3000`);
+    // console.info(`${this.baseUrl}:3003`);
 
-    this.socket = io.connect(`${this.baseUrl}:3000`, options); // replace with your server URL
+    this.socket = io.connect(`${this.baseUrl}:3003`, options); // replace with your server URL
 
     this.socket.emit(`send_user_id`, {
       user_id: this.user_id,
