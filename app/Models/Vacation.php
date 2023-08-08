@@ -79,7 +79,7 @@ class Vacation extends Model
     {
         $dateStart = Carbon::parse($this->date_start);
         $dateEnd = Carbon::parse($this->date_end);
-        return $dateStart->diffInDays($dateEnd, false) . " Hari";
+        return $dateStart->diffInDays($dateEnd, false) + 1 . " Hari";
     }
 
     public function getPositionNameAttribute()

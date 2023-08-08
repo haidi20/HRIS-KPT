@@ -89,7 +89,7 @@ class DashboardController extends Controller
 
     public function fetchTable()
     {
-        $dateNowSimulation = Carbon::now()->format("Y-m-11");
+        // $dateNowSimulation = Carbon::now()->format("Y-m-11");
         $dateNow = Carbon::now();
 
         $dashboardHasPosition = DashboardHasPosition::pluck("position_id");
