@@ -34,8 +34,8 @@ io.on('connection', async (socket) => {
 
     io.emit('test_send', { data: "send" });
 
-    socket.on('send_user_id', (responses, callback) => {
-        setInterval(async () => {
+    socket.on('send_user_id', async (responses, callback) => {
+        await setInterval(async () => {
             const userId = responses.user_id;
             const getJobOrder = await JobOrderController.getJobOrderNotFinish({ now, userId: userId });
 
