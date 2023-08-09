@@ -46,7 +46,7 @@ export default {
     this.$store.commit("INSERT_BASE_URL", { base_url: this.baseUrl });
     this.$store.commit("INSERT_USER", { user: JSON.parse(this.user) });
 
-    ["jobOrder", "master"].map((item) => {
+    ["jobOrder", "master", "employeeHasParent"].map((item) => {
       this.$store.commit(`${item}/INSERT_BASE_URL`, {
         base_url: this.baseUrl,
       });
@@ -54,6 +54,7 @@ export default {
     this.$store.dispatch("fetchPermission");
 
     this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
+    this.$store.dispatch("employeeHasParent/fetchOption");
   },
   computed: {
     getBaseUrl() {

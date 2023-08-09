@@ -91,6 +91,7 @@ const defaultForm = {
     is_assessment_qc: true,
     is_not_exists_job: false,
     job_status_has_parent: [],
+    employee_id: null, // kebutuhan SPL di laporan SPL
 }
 
 const defaultParams = {

@@ -10,6 +10,23 @@
     >
       <b-tabs content-class="mt-3">
         <b-tab title="input" active>
+          <b-row v-if="getCan('pilih karyawan laporan surat perintah lembur')">
+            <b-col cols>
+              <b-form-group label="Karyawan" label-for="employee_id" class>
+                <VueSelect
+                  id="employee_id"
+                  class="cursor-pointer"
+                  v-model="form.employee_id"
+                  placeholder="Pilih Karyawan"
+                  :options="getOptionEmployees"
+                  :reduce="(data) => data.id"
+                  label="name_and_position"
+                  searchable
+                  style="min-width: 180px"
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
           <b-row>
             <b-col cols>
               <b-row>
@@ -127,6 +144,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import VueSelect from "vue-select";
 
 import DatatableClient from "../../../components/DatatableClient";
 
@@ -162,6 +180,7 @@ export default {
     };
   },
   components: {
+    VueSelect,
     DatatableClient,
   },
   computed: {
@@ -173,6 +192,9 @@ export default {
     },
     getDataOvertime() {
       return this.$store.state.jobOrder.table.overtime_base_user;
+    },
+    getOptionEmployees() {
+      return this.$store.state.employeeHasParent.data.options;
     },
     form() {
       return this.$store.state.jobOrder.form;
@@ -188,6 +210,7 @@ export default {
       const request = {
         id: this.form.id,
         note: this.form.note,
+        employee_id: this.form.employee_id,
         date_start: moment(this.form.date_start).format("YYYY-MM-DD"),
         hour_start: this.form.hour_start_overtime,
         date_end: moment(this.form.date_end).format("YYYY-MM-DD"),
@@ -198,7 +221,7 @@ export default {
 
       this.is_loading = true;
 
-      // console.info(request);
+      //   console.info(request);
 
       await axios
         .post(
@@ -231,6 +254,7 @@ export default {
             this.$store.dispatch("jobOrder/fetchDataOvertimeBaseUser", {
               user_id: this.getUserId,
             });
+            this.$store.dispatch("jobOrder/fetchDataOvertimeReport");
           }
 
           this.is_loading = false;
@@ -261,6 +285,11 @@ export default {
     getColumns() {
       const columns = this.columns.filter((item) => item.label != "");
       return columns;
+    },
+    getCan(permissionName) {
+      const getPermission = this.$store.getters["getCan"](permissionName);
+
+      return getPermission;
     },
   },
 };

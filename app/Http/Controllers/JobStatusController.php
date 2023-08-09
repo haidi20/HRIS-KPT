@@ -200,7 +200,11 @@ class JobStatusController extends Controller
                 $message = "Ditambahkan";
             }
 
-            $jobStatusHasParent->employee_id = $user ? $user->employee_id : null;
+            $userEmployeeId = $user ? $user->employee_id : null;
+
+            $employeeId = request("employee_id", $userEmployeeId);
+
+            $jobStatusHasParent->employee_id = $employeeId;
             $jobStatusHasParent->status = "overtime";
             $jobStatusHasParent->datetime_start = $datetimeStart;
             $jobStatusHasParent->datetime_end = $datetimeEnd;
@@ -393,7 +397,7 @@ class JobStatusController extends Controller
         } else if ($datetimeStart->greaterThan($datetimeEnd)) {
             $isError = true;
             $message = "Maaf, Waktu mulai lembur lebih besar dari waktu selesai lembur";
-        } else if ($user && $user->employee_id == null) {
+        } else if ($user && $user->employee_id == null && request("employee_id") == null) {
             $isError = true;
             $message = "Maaf, akun anda belum di ketahui data karyawan";
         } else if (request("hour_start") == null || request("hour_end") == null) {

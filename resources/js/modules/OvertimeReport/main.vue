@@ -41,6 +41,13 @@
             Export
           </b-button>
           <span v-if="is_loading_export">Loading...</span>
+          <b-button
+            v-if="getCan('lembur job order')"
+            variant="warning"
+            size="sm"
+            class="ml-4"
+            @click="onOpenOvertime()"
+          >SPL</b-button>
         </b-col>
       </template>
       <template v-slot:tbody="{ filteredData }">
@@ -72,6 +79,7 @@
         </b-tr>
       </template>
     </DatatableClientSide>
+    <modalOvertime />
   </div>
 </template>
 
@@ -83,6 +91,7 @@ import DatePicker from "vue2-datepicker";
 
 import ButtonAction from "../../components/ButtonAction";
 import DatatableClientSide from "../../components/DatatableClient";
+import ModalOvertime from "../JobOrder/View/modalOvertime.vue";
 
 export default {
   data() {
@@ -153,6 +162,7 @@ export default {
     DatePicker,
     ButtonAction,
     DatatableClientSide,
+    ModalOvertime,
   },
   computed: {
     getBaseUrl() {
@@ -181,6 +191,9 @@ export default {
     },
     onRead(data) {
       //
+    },
+    onOpenOvertime() {
+      this.$bvModal.show("overtime_modal");
     },
     async onDelete(data) {
       // console.info(data);
