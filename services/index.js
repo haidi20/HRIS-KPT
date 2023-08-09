@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const JobOrderController = require("./controllers/JobOrderController");
 
 const socketioModule = require('./socketioModule');
+const JobOrder = require('./models/jobOrder');
 
 const app = express();
 const server = http.createServer(app);
@@ -54,8 +55,12 @@ io.on('connection', async (socket) => {
 
 socketioModule.setIo(io);
 
-app.get('/test-connection', (req, res) => {
-    res.send('running');
+app.get('/test-connection', async (req, res) => {
+    const data = await JobOrder.findAll({
+        limit: 1,
+    });
+
+    res.send({ data: data, });
 });
 
 server.listen(3003, () => {
