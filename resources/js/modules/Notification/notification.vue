@@ -99,8 +99,8 @@ export default {
     };
 
     // const baseUrl = this.baseUrl.replace("https://", "http://");
-    const baseUrl = "http://localhost:3003";
-    // const baseUrl = "https://kpt.aplikasipelayaran.com";
+    // const baseUrl = "http://localhost:3003";
+    const baseUrl = "https://kpt.aplikasipelayaran.com";
 
     // console.info(`${baseUrl}:3003`);
 
