@@ -254,135 +254,187 @@ class AttendanceController extends Controller
 
     public function storeFingerSpot()
     {
-        set_time_limit(840); // 14 menit
-        $fingerTools = FingerTool::all();
-        $dateNow = Carbon::now()->format("Y-m-d");
-        $dateStart = request("date_start", $dateNow);
-        $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
-        $dateEnd = request(
-            "date_end",
-            $dateStart
-        );
-        $dateEnd = Carbon::parse($dateEnd)->format("Y-m-d");
+        try {
+            set_time_limit(840); // 14 menit
+            $fingerTools = FingerTool::all();
+            $dateNow = Carbon::now()->format("Y-m-d");
+            $dateStart = request("date_start", $dateNow);
+            $dateStart = Carbon::parse($dateStart)->format("Y-m-d");
+            $dateEnd = request(
+                "date_end",
+                $dateStart
+            );
+            $dateEnd = Carbon::parse($dateEnd)->format("Y-m-d");
 
-        $responseData = [];
-        $url = "https://developer.fingerspot.io/api/get_attlog";
+            $responseData = [];
+            $url = "https://developer.fingerspot.io/api/get_attlog";
 
-        foreach ($fingerTools as $index => $item) {
-            if ($item->cloud_id == null) {
-                continue;
-            }
-
-            $data = [
-                "trans_id" => "1",
-                "cloud_id" => $item->cloud_id,
-                "start_date" => $dateStart,
-                "end_date" => $dateEnd,
-            ];
-            $headers = [
-                "Authorization: Bearer R7Y9BW9KPPT36P36",
-                "Content-Type: application/json"
-            ];
-
-            $options = [
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => json_encode($data),
-                CURLOPT_HTTPHEADER => $headers,
-            ];
-
-            $curl = curl_init();
-            curl_setopt_array($curl, $options);
-
-            $response = curl_exec($curl);
-            curl_close($curl);
-
-            if ($response === false) {
-                // Error occurred
-                $error = curl_error($curl);
-                echo "Error: " . $error;
-            } else {
-                // Process the response
-                // $responseData = json_decode($response, true);
-                $response = json_decode($response, true);
-                foreach ($response["data"] as $key => $value) {
-                    $data = [
-                        "pin" => $value["pin"],
-                        "scan_date" => $value["scan_date"],
-                        "cloud_id" => $item->cloud_id,
-                        "status_scan" => $value["status_scan"],
-                        "verify" => $value["verify"],
-                    ];
-
-                    array_push($responseData, $data);
+            foreach ($fingerTools as $index => $item) {
+                if ($item->cloud_id == null) {
+                    continue;
                 }
-                // Handle the response data accordingly
+
+                $data = [
+                    "trans_id" => "1",
+                    "cloud_id" => $item->cloud_id,
+                    "start_date" => $dateStart,
+                    "end_date" => $dateEnd,
+                ];
+                $headers = [
+                    "Authorization: Bearer R7Y9BW9KPPT36P36",
+                    "Content-Type: application/json"
+                ];
+
+                $options = [
+                    CURLOPT_URL => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => json_encode($data),
+                    CURLOPT_HTTPHEADER => $headers,
+                ];
+
+                $curl = curl_init();
+                curl_setopt_array($curl, $options);
+
+                $response = curl_exec($curl);
+                curl_close($curl);
+
+                if ($response === false) {
+                    // Error occurred
+                    $error = curl_error($curl);
+                    echo "Error: " . $error;
+                } else {
+                    // Process the response
+                    // $responseData = json_decode($response, true);
+                    $response = json_decode($response, true);
+                    foreach ($response["data"] as $key => $value) {
+                        $data = [
+                            "pin" => $value["pin"],
+                            "scan_date" => $value["scan_date"],
+                            "cloud_id" => $item->cloud_id,
+                            "status_scan" => $value["status_scan"],
+                            "verify" => $value["verify"],
+                        ];
+
+                        array_push($responseData, $data);
+                    }
+                    // Handle the response data accordingly
+                }
             }
-        }
 
-        foreach ($responseData as $index => $item) {
-            AttendanceFingerspot::updateOrCreate([
-                "pin" => $item['pin'],
-                "scan_date" => $item['scan_date'],
-                "cloud_id" => $item['cloud_id'],
-            ], [
-                "status_scan" => $item['status_scan'],
-                "verify" => $item['verify'],
-            ]);
-        }
 
-        // return response()->json([
-        //     "dateStart" => $dateStart,
-        //     "data" => $responseData,
-        // ]);
+            foreach ($responseData as $index => $item) {
+                AttendanceFingerspot::updateOrCreate([
+                    "pin" => $item['pin'],
+                    "scan_date" => $item['scan_date'],
+                    "cloud_id" => $item['cloud_id'],
+                ], [
+                    "status_scan" => $item['status_scan'],
+                    "verify" => $item['verify'],
+                ]);
+            }
+
+            // return response()->json([
+            //     "dateStart" => $dateStart,
+            //     "data" => $responseData,
+            // ]);
+
+        } catch (\Exception $e) {
+
+            Log::error($e);
+
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal store fingerspot",
+            ], 500);
+        }
     }
 
     public function storeHasEmployee()
     {
-        set_time_limit(840); // 14 menit
-        $dateNow = Carbon::now()->format("Y-m-d");
-        $monthNow = Carbon::now()->format("Y-m");
-        $date = request("date", $dateNow);
-        $month = Carbon::parse(request("month", $monthNow));
-        $dateSecond = request("date_second", $dateNow);
+        try {
 
-        if (request("date_start") != null) {
-            $date = request("date_start");
-        }
-        if (request("date_end") != null) {
-            $dateSecond = request("date_end");
-        }
+            set_time_limit(840); // 14 menit
+            $dateNow = Carbon::now()->format("Y-m-d");
+            $monthNow = Carbon::now()->format("Y-m");
+            $date = request("date", $dateNow);
+            $month = Carbon::parse(request("month", $monthNow));
+            $dateSecond = request("date_second", $dateNow);
 
-        $date = Carbon::parse($date)->format("Y-m-d");
-        $dateSecond = Carbon::parse($dateSecond)->format("Y-m-d");
-        $dateRange = $this->dateRange($month->format("Y-m"));
-
-        $conditionHourEnd = function ($item) {
-            $result = $item->hour_end;
-
-            if ($item->hour_overtime_start != null) {
-                if ($item->hour_end > $item->hour_overtime_start) {
-                    return $item->hour_overtime_start;
-                }
+            if (request("date_start") != null) {
+                $date = request("date_start");
+            }
+            if (request("date_end") != null) {
+                $dateSecond = request("date_end");
             }
 
-            return $result;
-        };
+            $date = Carbon::parse($date)->format("Y-m-d");
+            $dateSecond = Carbon::parse($dateSecond)->format("Y-m-d");
+            $dateRange = $this->dateRange($month->format("Y-m"));
 
-        $differentMinuteWork = function ($item, $hourEnd) {
-            $hourStart = Carbon::parse($item->hour_start);
-            $hourEnd = Carbon::parse($hourEnd);
+            $conditionHourEnd = function ($item) {
+                $result = $item->hour_end;
 
-            return $hourStart->diffInMinutes($hourEnd);
-        };
+                if ($item->hour_overtime_start != null) {
+                    if ($item->hour_end > $item->hour_overtime_start) {
+                        return $item->hour_overtime_start;
+                    }
+                }
 
-        // return $getAttendance;
+                return $result;
+            };
 
-        // $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
-        // $attendanceFingerspot->map(function ($query) {
-        if (request("month") != null) {
-            foreach ($dateRange as $index => $date) {
+            $differentMinuteWork = function ($item, $hourEnd) {
+                $hourStart = Carbon::parse($item->hour_start);
+                $hourEnd = Carbon::parse($hourEnd);
+
+                return $hourStart->diffInMinutes($hourEnd);
+            };
+
+            // return $getAttendance;
+
+            // $attendanceFingerspot = VwAttendance::whereDate("date", $date)->get();
+            // $attendanceFingerspot->map(function ($query) {
+            if (request("month") != null) {
+                foreach ($dateRange as $index => $date) {
+                    $spAttendance = "CALL sp_attendance('{$date}')";
+                    $getAttendance = DB::select($spAttendance);
+
+                    foreach ($getAttendance as $index => $item) {
+                        AttendanceHasEmployee::updateOrCreate(
+                            [
+                                // "pin" => $item->pin,
+                                "employee_id" => $item->employee_id,
+                                "date" => $item->date,
+                            ],
+                            [
+                                "hour_start" => $item->hour_start,
+                                "hour_end" => $conditionHourEnd($item),
+                                // "duration_work" => $item->duration_work,
+                                "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
+                                "hour_rest_start" => $item->hour_rest_start,
+                                "hour_rest_end" => $item->hour_rest_end,
+                                "duration_rest" => $item->duration_rest,
+                                "hour_overtime_start" => $item->hour_overtime_start,
+                                "hour_overtime_end" => $item->hour_overtime_end,
+                                "duration_overtime" => $item->duration_overtime,
+                                "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
+                                "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
+                                "duration_overtime_job_order" => $item->duration_overtime_job_order,
+                                // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
+                                // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
+                                // "name" => $item->name,
+                                // "cloud_id" => $item->cloud_id,
+                            ],
+                        );
+                    }
+                }
+            } else {
                 $spAttendance = "CALL sp_attendance('{$date}')";
                 $getAttendance = DB::select($spAttendance);
 
@@ -396,7 +448,6 @@ class AttendanceController extends Controller
                         [
                             "hour_start" => $item->hour_start,
                             "hour_end" => $conditionHourEnd($item),
-                            // "duration_work" => $item->duration_work,
                             "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
                             "hour_rest_start" => $item->hour_rest_start,
                             "hour_rest_end" => $item->hour_rest_end,
@@ -415,70 +466,52 @@ class AttendanceController extends Controller
                     );
                 }
             }
-        } else {
-            $spAttendance = "CALL sp_attendance('{$date}')";
-            $getAttendance = DB::select($spAttendance);
 
-            foreach ($getAttendance as $index => $item) {
-                AttendanceHasEmployee::updateOrCreate(
-                    [
-                        // "pin" => $item->pin,
-                        "employee_id" => $item->employee_id,
-                        "date" => $item->date,
-                    ],
-                    [
-                        "hour_start" => $item->hour_start,
-                        "hour_end" => $conditionHourEnd($item),
-                        "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
-                        "hour_rest_start" => $item->hour_rest_start,
-                        "hour_rest_end" => $item->hour_rest_end,
-                        "duration_rest" => $item->duration_rest,
-                        "hour_overtime_start" => $item->hour_overtime_start,
-                        "hour_overtime_end" => $item->hour_overtime_end,
-                        "duration_overtime" => $item->duration_overtime,
-                        "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
-                        "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
-                        "duration_overtime_job_order" => $item->duration_overtime_job_order,
-                        // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
-                        // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
-                        // "name" => $item->name,
-                        // "cloud_id" => $item->cloud_id,
-                    ],
-                );
+            if ($dateSecond != null) {
+                $spAttendanceSecond = "CALL sp_attendance('{$date}')";
+                $getAttendanceSecond = DB::select($spAttendanceSecond);
+
+                foreach ($getAttendanceSecond as $index => $item) {
+                    AttendanceHasEmployee::updateOrCreate(
+                        [
+                            // "pin" => $item->pin,
+                            "employee_id" => $item->employee_id,
+                            "date" => $item->date,
+                        ],
+                        [
+                            "hour_start" => $item->hour_start,
+                            "hour_end" => $conditionHourEnd($item),
+                            "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
+                            "hour_rest_start" => $item->hour_rest_start,
+                            "hour_rest_end" => $item->hour_rest_end,
+                            "duration_rest" => $item->duration_rest,
+                            "hour_overtime_start" => $item->hour_overtime_start,
+                            "hour_overtime_end" => $item->hour_overtime_end,
+                            "duration_overtime" => $item->duration_overtime,
+                            "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
+                            "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
+                            "duration_overtime_job_order" => $item->duration_overtime_job_order,
+                            // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
+                            // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
+                            // "name" => $item->name,
+                            // "cloud_id" => $item->cloud_id,
+                        ],
+                    );
+                }
             }
-        }
+        } catch (\Exception $e) {
 
-        if ($dateSecond != null) {
-            $spAttendanceSecond = "CALL sp_attendance('{$date}')";
-            $getAttendanceSecond = DB::select($spAttendanceSecond);
+            Log::error($e);
 
-            foreach ($getAttendanceSecond as $index => $item) {
-                AttendanceHasEmployee::updateOrCreate(
-                    [
-                        // "pin" => $item->pin,
-                        "employee_id" => $item->employee_id,
-                        "date" => $item->date,
-                    ],
-                    [
-                        "hour_start" => $item->hour_start,
-                        "hour_end" => $conditionHourEnd($item),
-                        "duration_work" => $differentMinuteWork($item, $conditionHourEnd($item)),
-                        "hour_rest_start" => $item->hour_rest_start,
-                        "hour_rest_end" => $item->hour_rest_end,
-                        "duration_rest" => $item->duration_rest,
-                        "hour_overtime_start" => $item->hour_overtime_start,
-                        "hour_overtime_end" => $item->hour_overtime_end,
-                        "duration_overtime" => $item->duration_overtime,
-                        "hour_overtime_job_order_start" => $item->hour_overtime_job_order_start,
-                        "hour_overtime_job_order_end" => $item->hour_overtime_job_order_end,
-                        "duration_overtime_job_order" => $item->duration_overtime_job_order,
-                        // "date_overtime_job_order_start" => $item->date_overtime_job_order_start,
-                        // "date_overtime_job_order_end" => $item->date_overtime_job_order_end,
-                        // "name" => $item->name,
-                        // "cloud_id" => $item->cloud_id,
-                    ],
-                );
-            }
+            $routeAction = Route::currentRouteAction();
+            $log = new LogController;
+            $log->store($e->getMessage(), $routeAction);
+
+
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal store fingerspot",
+            ], 500);
         }
     }
 
