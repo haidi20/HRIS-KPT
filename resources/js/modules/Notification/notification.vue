@@ -106,9 +106,9 @@ export default {
 
     this.socket = io.connect(`${baseUrl}`, options); // replace with your server URL
 
-    this.socket.on("test_send", (data) => {
-      console.info(data);
-    });
+    // this.socket.on("test_send", (data) => {
+    //   console.info(data);
+    // });
 
     this.socket.emit(`send_user_id`, {
       user_id: this.user_id,
@@ -116,7 +116,7 @@ export default {
 
     // listen to events from server
     this.socket.on(`get_notification`, (data) => {
-      console.info(data);
+      //   console.info(data);
       this.count_data = data?.data?.length;
       this.data = data.data;
       //   this.message = data;
