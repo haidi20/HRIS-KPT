@@ -16,9 +16,32 @@ class AttendanceHasEmployee extends Model
         "duration_overtime_job_order_readable", "employee_name", "position_name", "working_hour_late",
     ];
 
-    protected $fillable = ['employee_id'];
+    protected $fillable = [
+        'date',
+        'employee_id',
+        'hour_start',
+        'hour_end',
+        'duration_work',
+        'hour_rest_start',
+        'hour_rest_end',
+        'duration_rest',
+        'hour_overtime_start',
+        'hour_overtime_end',
+        'duration_overtime',
+        'hour_overtime_job_order_start',
+        'hour_overtime_job_order_end',
+        'duration_overtime_job_order',
+        'lembur_kali_satu_lima',
+        'lembur_kali_dua',
+        'lembur_kali_tiga',
+        'lembur_kali_empat',
+        'is_weekend',
+        'is_vacation',
+        'is_payroll_use',
+        'payroll_id',
+    ];
 
-    protected $guarded = [];
+    // protected $guarded = [];
 
     public function employee()
     {
