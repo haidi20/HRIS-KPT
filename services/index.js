@@ -34,8 +34,8 @@ io.on('connection', async (socket) => {
 
     io.emit('test_send', { data: "send" });
 
-    socket.on('send_user_id', async (responses, callback) => {
-        await setInterval(async () => {
+    socket.on('send_user_id', (responses, callback) => {
+        setInterval(async () => {
             const userId = responses.user_id;
             const getJobOrder = await JobOrderController.getJobOrderNotFinish({ now, userId: userId });
 
@@ -61,9 +61,16 @@ app.get('/', async (req, res) => {
     res.send({ data: "service KPT", });
 });
 app.get('/test-connection', async (req, res) => {
-    const data = await JobOrder.findAll();
+    // const data = await JobOrder.findAll();
+    let result = null;
 
-    res.send({ data: "data", });
+    result = await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve('insert');
+        }, 1000)
+    });
+
+    res.send({ data: result, });
 });
 
 server.listen(3003, () => {
