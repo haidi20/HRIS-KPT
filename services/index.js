@@ -61,16 +61,16 @@ app.get('/', async (req, res) => {
     res.send({ data: "service KPT", });
 });
 app.get('/test-connection', async (req, res) => {
-    // const data = await JobOrder.findAll();
-    let result = null;
+    const data = await JobOrder.findAll();
+    // let result = null;
 
-    result = await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve('insert');
-        }, 1000)
-    });
+    // result = await new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         resolve('insert local');
+    //     }, 1000)
+    // });
 
-    res.send({ data: result, });
+    res.send({ data: data.length, });
 });
 
 server.listen(3003, () => {
