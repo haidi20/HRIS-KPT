@@ -78,7 +78,7 @@ export default {
   },
   data() {
     return {
-      is_show: false,
+      is_show: true,
       count_data: 0,
       data: [],
     };
@@ -99,11 +99,12 @@ export default {
     };
 
     // const baseUrl = this.baseUrl.replace("https://", "http://");
-    const baseUrl = this.baseUrl;
+    // const baseUrl = "http://localhost:3003";
+    const baseUrl = "https://kpt.aplikasipelayaran.com";
 
     // console.info(`${baseUrl}:3003`);
 
-    this.socket = io.connect(`${baseUrl}:3003`, options); // replace with your server URL
+    this.socket = io.connect(`${baseUrl}`, options); // replace with your server URL
 
     this.socket.emit(`send_user_id`, {
       user_id: this.user_id,
