@@ -56,11 +56,9 @@ io.on('connection', async (socket) => {
 socketioModule.setIo(io);
 
 app.get('/test-connection', async (req, res) => {
-    const data = await JobOrder.findAll({
-        limit: 1,
-    });
+    const data = await JobOrder.findAll();
 
-    res.send({ data: data, });
+    res.send({ data: data.length, });
 });
 
 server.listen(3003, () => {
