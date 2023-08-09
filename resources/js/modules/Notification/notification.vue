@@ -99,12 +99,16 @@ export default {
     };
 
     // const baseUrl = this.baseUrl.replace("https://", "http://");
-    // const baseUrl = "http://localhost:3003";
-    const baseUrl = "https://kpt.aplikasipelayaran.com";
+    const baseUrl = "http://localhost:3003";
+    // const baseUrl = "https://kpt.aplikasipelayaran.com";
 
     // console.info(`${baseUrl}:3003`);
 
     this.socket = io.connect(`${baseUrl}`, options); // replace with your server URL
+
+    this.socket.on("test_send", (data) => {
+      console.info(data);
+    });
 
     this.socket.emit(`send_user_id`, {
       user_id: this.user_id,
@@ -112,7 +116,7 @@ export default {
 
     // listen to events from server
     this.socket.on(`get_notification`, (data) => {
-      //   console.info(data);
+      console.info(data);
       this.count_data = data?.data?.length;
       this.data = data.data;
       //   this.message = data;
@@ -126,14 +130,13 @@ export default {
     getDifferentTimeReadable(data) {
       const now = moment();
       const timeEnd = moment(data.datetime_estimation_end);
-      const isAfter = timeEnd.isAfter(now);
-      const diffDuration = isAfter
-        ? moment.duration(timeEnd.diff(now))
-        : moment.duration(now.diff(timeEnd));
-      const days = diffDuration.days();
-      const hours = diffDuration.hours();
-      const minutes = diffDuration.minutes();
+      const diffDuration = moment.duration(timeEnd.diff(now));
+      const days = Math.abs(Math.floor(diffDuration.asDays())); // Use absolute value for days
+      const hours = Math.abs(diffDuration.hours());
+      const minutes = Math.abs(diffDuration.minutes());
       //   const seconds = diffDuration.seconds();
+
+      //   console.log(`Result: ${days} days, ${hours} hours, ${minutes} minutes`);
 
       let result = "";
 
@@ -148,6 +151,8 @@ export default {
           result += `${minutes} Menit `;
         }
       }
+
+      const isAfter = timeEnd.isAfter(now);
 
       return isAfter
         ? `Tersisa ${result} Lagi selesai`

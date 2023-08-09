@@ -32,6 +32,8 @@ io.on('connection', async (socket) => {
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
     // let now = moment().set({ month: 6, date: 27, hour: 22, minute: 30 }).format('Y-MM-DD HH:mm:ss');
 
+    io.emit('test_send', { data: "send" });
+
     socket.on('send_user_id', (responses, callback) => {
         setInterval(async () => {
             const userId = responses.user_id;
