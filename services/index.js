@@ -55,6 +55,9 @@ io.on('connection', async (socket) => {
 
 socketioModule.setIo(io);
 
+app.get('/', async (req, res) => {
+    res.send({ data: "service KPT", });
+});
 app.get('/test-connection', async (req, res) => {
     const data = await JobOrder.findAll();
 
